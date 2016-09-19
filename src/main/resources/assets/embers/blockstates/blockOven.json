@@ -1,0 +1,8 @@
+{
+    "variants":{
+        "facing=north": { "model": "embers:blockOven" },
+        "facing=south": { "model": "embers:blockOven", "y": 180 },
+        "facing=west":  { "model": "embers:blockOven", "y": 270 },
+        "facing=east":  { "model": "embers:blockOven", "y": 90 }
+    }
+}
