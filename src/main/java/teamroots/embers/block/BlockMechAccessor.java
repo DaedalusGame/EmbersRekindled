@@ -23,15 +23,12 @@ import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityEmitter;
 import teamroots.embers.tileentity.TileEntityPipe;
-import teamroots.embers.tileentity.TileEntityStampBase;
-import teamroots.embers.tileentity.TileEntityStamper;
 import teamroots.embers.tileentity.TileEntityTank;
-import teamroots.embers.util.Misc;
 
-public class BlockStampBase extends BlockTEBase {
+public class BlockMechAccessor extends BlockBase {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");
 	
-	public BlockStampBase(Material material, String name, boolean addToTab) {
+	public BlockMechAccessor(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
 	
@@ -52,16 +49,11 @@ public class BlockStampBase extends BlockTEBase {
 	
 	@Override
 	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-		return getDefaultState().withProperty(facing, face.getOpposite());
+		return getDefaultState().withProperty(facing, placer.getHorizontalFacing().getOpposite());
 	}
 	
 	@Override
 	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
 		return side != state.getValue(facing);
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityStampBase();
 	}
 }

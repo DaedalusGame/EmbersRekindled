@@ -20,11 +20,14 @@ import teamroots.embers.block.BlockBase;
 import teamroots.embers.block.BlockBin;
 import teamroots.embers.block.BlockCopperCell;
 import teamroots.embers.block.BlockDeepLine;
+import teamroots.embers.block.BlockEmberBore;
 import teamroots.embers.block.BlockEmberReceiver;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.block.BlockFurnace;
 import teamroots.embers.block.BlockItemPipe;
 import teamroots.embers.block.BlockItemPump;
+import teamroots.embers.block.BlockMechAccessor;
+import teamroots.embers.block.BlockMechEdge;
 import teamroots.embers.block.BlockOven;
 import teamroots.embers.block.BlockPipe;
 import teamroots.embers.block.BlockPump;
@@ -56,6 +59,8 @@ import teamroots.embers.tileentity.TileEntityBin;
 import teamroots.embers.tileentity.TileEntityBinRenderer;
 import teamroots.embers.tileentity.TileEntityCopperCell;
 import teamroots.embers.tileentity.TileEntityDeepLine;
+import teamroots.embers.tileentity.TileEntityEmberBore;
+import teamroots.embers.tileentity.TileEntityEmberBoreRenderer;
 import teamroots.embers.tileentity.TileEntityEmitter;
 import teamroots.embers.tileentity.TileEntityEmitterRenderer;
 import teamroots.embers.tileentity.TileEntityFurnaceBottom;
@@ -84,12 +89,12 @@ public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
 	public static ArrayList<Item> items = new ArrayList<Item>();
 	
-	public static Block stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
-	public static Block itemPump, itemPipe, blockOven, blockMoltenGold, blockMoltenCopper, blockMoltenLead, blockMoltenSilver, blockMoltenIron;
+	public static Block mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
+	public static Block blockMoltenGold, blockMoltenCopper, blockMoltenLead, blockMoltenSilver, blockMoltenIron;
 	
 	public static Fluid fluidMoltenGold, fluidMoltenCopper, fluidMoltenLead, fluidMoltenSilver, fluidMoltenIron;
 	
-	public static Item tinkerHammer, emberGauge, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
+	public static Item stampBar, stampPlate, stampFlat, tinkerHammer, emberGauge, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
 	
 	public static WorldGenOres worldGenOres;
 	
@@ -118,6 +123,9 @@ public class RegistryManager {
 		blocks.add(bin = (new BlockBin(Material.ROCK,"bin",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(stamper = (new BlockStamper(Material.ROCK,"stamper",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(stampBase = (new BlockStampBase(Material.ROCK,"stamperBase",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(mechEdge = (new BlockMechEdge(Material.ROCK,"mechEdge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(emberBore = (new BlockEmberBore(Material.ROCK,"emberBore",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(mechAccessor = (new BlockMechAccessor(Material.ROCK,"mechAccessor",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		
 		FluidRegistry.registerFluid(fluidMoltenIron = new FluidMoltenIron());
 		blocks.add(blockMoltenIron = (new BlockMoltenIron("moltenIron",false)));
@@ -150,6 +158,9 @@ public class RegistryManager {
 		items.add(plateCaminite = new ItemBase("plateCaminite",true));
 		items.add(emberGauge = new ItemEmberGauge());
 		items.add(tinkerHammer = new ItemTinkerHammer());
+		items.add(stampBar = new ItemBase("stampBar",true));
+		items.add(stampFlat = new ItemBase("stampFlat",true));
+		items.add(stampPlate = new ItemBase("stampPlate",true));
 		
 		GameRegistry.registerTileEntity(TileEntityTank.class, Embers.MODID+":tileEntityTank");
 		GameRegistry.registerTileEntity(TileEntityPipe.class, Embers.MODID+":tileEntityPipe");
@@ -166,6 +177,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityBin.class, Embers.MODID+":tileEntityBin");
 		GameRegistry.registerTileEntity(TileEntityStamper.class, Embers.MODID+":tileEntityStamper");
 		GameRegistry.registerTileEntity(TileEntityStampBase.class, Embers.MODID+":tileEntityStampBase");
+		GameRegistry.registerTileEntity(TileEntityEmberBore.class, Embers.MODID+":tileEntityEmberBore");
 		
 		int id = 0;
 		
@@ -189,6 +201,7 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBin.class, new TileEntityBinRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityStamper.class, new TileEntityStamperRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityStampBase.class, new TileEntityStampBaseRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEmberBore.class, new TileEntityEmberBoreRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		

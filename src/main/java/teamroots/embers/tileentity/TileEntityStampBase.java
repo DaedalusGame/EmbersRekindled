@@ -52,11 +52,10 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	public EnumFacing getFacing(){
@@ -114,6 +113,10 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 			}
 		}
 		return false;
+	}
+	
+	public IFluidHandler getTank(){
+		return tank;
 	}
 	
 	public int getCapacity(){

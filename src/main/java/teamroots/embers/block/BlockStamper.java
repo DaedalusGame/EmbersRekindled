@@ -25,6 +25,7 @@ import teamroots.embers.tileentity.TileEntityEmitter;
 import teamroots.embers.tileentity.TileEntityPipe;
 import teamroots.embers.tileentity.TileEntityStamper;
 import teamroots.embers.tileentity.TileEntityTank;
+import teamroots.embers.util.Misc;
 
 public class BlockStamper extends BlockTEBase {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");

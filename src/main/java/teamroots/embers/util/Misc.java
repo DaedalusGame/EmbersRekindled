@@ -16,6 +16,18 @@ public class Misc {
 		return biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS_EDGE.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS_WITH_TREES.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_EXTREME_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_EXTREME_HILLS_WITH_TREES.getBiomeName()) == 0;
 	}
 	
+	public static EnumFacing getOppositeHorizontalFace(EnumFacing face){
+		if (face == EnumFacing.DOWN){
+			return EnumFacing.DOWN;
+		}
+		else if (face == EnumFacing.UP){
+			return EnumFacing.UP;
+		}
+		else {
+			return face.getOpposite();
+		}
+	}
+	
 	public static EnumFacing getOppositeFace(EnumFacing face){
 		if (face == EnumFacing.DOWN){
 			return EnumFacing.UP;

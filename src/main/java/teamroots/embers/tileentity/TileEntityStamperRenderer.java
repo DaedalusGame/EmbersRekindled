@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.Embers;
 import teamroots.embers.block.BlockStamper;
+import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.FluidTextureUtil;
 import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
@@ -33,11 +34,15 @@ import teamroots.embers.util.StructUV;
 
 public class TileEntityStamperRenderer extends TileEntitySpecialRenderer {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/stampTop.png");
+	public ResourceLocation stampBar = new ResourceLocation(Embers.MODID + ":textures/items/stampBar.png");
+	public ResourceLocation stampFlat = new ResourceLocation(Embers.MODID + ":textures/items/stampFlat.png");
+	public ResourceLocation stampPlate = new ResourceLocation(Embers.MODID + ":textures/items/stampPlate.png");
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public StructBox stampX = new StructBox(0,0.25,0.25,1.0,0.75,0.75,new StructUV[]{new StructUV(0,0,8,16,32,32),new StructUV(0,0,8,16,32,32),new StructUV(16,0,32,8,32,32),new StructUV(16,0,32,8,32,32),new StructUV(8,0,16,8,32,32),new StructUV(8,0,16,8,32,32)});
 	public StructBox stampY = new StructBox(0.25,0,0.25,0.75,1.0,0.75,new StructUV[]{new StructUV(8,0,16,8,32,32),new StructUV(8,0,16,8,32,32),new StructUV(0,0,8,16,32,32),new StructUV(0,0,8,16,32,32),new StructUV(0,0,8,16,32,32),new StructUV(0,0,8,16,32,32)});
 	public StructBox stampZ = new StructBox(0.25,0.25,0,0.75,0.75,1.0,new StructUV[]{new StructUV(16,0,32,8,32,32),new StructUV(16,0,32,8,32,32),new StructUV(8,0,16,8,32,32),new StructUV(8,0,16,8,32,32),new StructUV(16,0,32,8,32,32),new StructUV(16,0,32,8,32,32)});
+	public StructBox stampBox = new StructBox(-0.1875,-0.1875,-0.1875,0.1875,0.1875,0.1875, new StructUV[]{new StructUV(3,3,13,13,16,16),new StructUV(3,3,13,13,16,16),new StructUV(3,3,13,13,16,16),new StructUV(3,3,13,13,16,16),new StructUV(3,3,13,13,16,16),new StructUV(3,3,13,13,16,16)});
 	public TileEntityStamperRenderer(){
 		super();
 	}
@@ -101,8 +106,46 @@ public class TileEntityStamperRenderer extends TileEntitySpecialRenderer {
 			if (state.getValue(BlockStamper.facing) == EnumFacing.NORTH || state.getValue(BlockStamper.facing) == EnumFacing.SOUTH){
 				RenderUtil.addBox(buffer, stampZ.x1+x, stampZ.y1+y, stampZ.z1-0.0001+z+offZ, stampZ.x2+x, stampZ.y2+y, stampZ.z2+0.0001+z+offZ, stampZ.textures, new int[]{1,1,1,1,1,1});
 			}
-            tess.draw();
-            GlStateManager.enableCull();
+			
+			tess.draw();
+			EnumStampType type = EnumStampType.getType(((TileEntityStamper) tile).stamp.getStackInSlot(0));
+			if (type != EnumStampType.TYPE_NULL){
+				if (type == EnumStampType.TYPE_BAR){
+					Minecraft.getMinecraft().renderEngine.bindTexture(stampBar);
+				}
+				if (type == EnumStampType.TYPE_PLATE){
+					Minecraft.getMinecraft().renderEngine.bindTexture(stampPlate);
+				}
+				if (type == EnumStampType.TYPE_FLAT){
+					Minecraft.getMinecraft().renderEngine.bindTexture(stampFlat);
+				}
+	            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+	            float addX = 0;
+	            float addY = 0;
+	            float addZ = 0;
+            	if (state.getValue(BlockStamper.facing) == EnumFacing.EAST){
+            		addX = 0.35f;
+            	}
+            	if (state.getValue(BlockStamper.facing) == EnumFacing.WEST){
+            		addX = -0.35f;
+            	}
+            	if (state.getValue(BlockStamper.facing) == EnumFacing.NORTH){
+            		addZ = -0.35f;
+            	}
+            	if (state.getValue(BlockStamper.facing) == EnumFacing.SOUTH){
+            		addZ = 0.35f;
+            	}
+            	if (state.getValue(BlockStamper.facing) == EnumFacing.UP){
+            		addY = 0.35f;
+            	}
+            	if (state.getValue(BlockStamper.facing) == EnumFacing.DOWN){
+            		addY = -0.35f;
+            	}
+				RenderUtil.addBox(buffer, stampBox.x1+0.5+x-0.0001+offX+addX, stampBox.y1+0.5+y+offY+addY, stampBox.z1+0.5+z+offZ+addZ, stampBox.x2+0.5+x+0.0001+offX+addX, stampBox.y2+0.5+y+offY+addY, stampBox.z2+0.5+z+offZ+addZ, stampBox.textures, new int[]{1,1,1,1,1,1});
+				
+	            tess.draw();
+	            GlStateManager.enableCull();
+			}
 		}
 	}
 }
