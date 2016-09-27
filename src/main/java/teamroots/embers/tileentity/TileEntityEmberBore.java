@@ -9,7 +9,9 @@ import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -27,35 +29,74 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.util.Misc;
 import teamroots.embers.world.EmberWorldData;
 
-public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable {
-	public IEmberCapability capability = new DefaultEmberCapability();
+public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
 	Random random = new Random();
 	public long ticksExisted = 0;
 	public float angle = 0;
+	public int ticksFueled = 0;
+	int stackShards = 0;
+	int stackCrystals = 1;
+	int stackGunpowder = 2;
+	int stackFuel = 3;
+	public ItemStackHandler inventory = new ItemStackHandler(4){
+        @Override
+        protected void onContentsChanged(int slot) {
+        	TileEntityEmberBore.this.markDirty();
+        }
+        
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
+        	if (slot == stackCrystals || slot == stackShards){
+        		return insertItem(slot+1,stack,simulate);
+        	}
+        	if (slot == stackGunpowder && !stack.getItem().equals(Items.GUNPOWDER)){
+        		return insertItem(stackFuel,stack,simulate);
+        	}
+        	if (slot == stackFuel && !stack.getItem().equals(Items.COAL)){
+        		return stack;
+        	}
+        	return super.insertItem(slot, stack, simulate);
+        }
+        
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate){
+        	if (slot == stackGunpowder || slot == stackFuel){
+        		return null;
+        	}
+        	return super.extractItem(slot, amount, simulate);
+        }
+        
+	};
 	
 	public TileEntityEmberBore(){
 		super();
-		capability.setEmberCapacity(8000);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		capability.writeToNBT(tag);
+		tag.setTag("inventory", inventory.serializeNBT());
+		tag.setInteger("fueled", ticksFueled);
 		return tag;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		capability.readFromNBT(tag);
+		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+		ticksFueled = tag.getInteger("fueled");
 	}
 
 	@Override
@@ -77,33 +118,96 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		player.addChatMessage(new TextComponentString(""+capability.getEmber()+" / "+capability.getEmberCapacity()));
 		return false;
 	}
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
+		Misc.spawnInventoryInWorld(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
+		world.setBlockToAir(pos.add(1,0,0));
+		world.setBlockToAir(pos.add(0,0,1));
+		world.setBlockToAir(pos.add(-1,0,0));
+		world.setBlockToAir(pos.add(0,0,-1));
+		world.setBlockToAir(pos.add(1,0,-1));
+		world.setBlockToAir(pos.add(-1,0,1));
+		world.setBlockToAir(pos.add(1,0,1));
+		world.setBlockToAir(pos.add(-1,0,-1));
 		world.setTileEntity(pos, null);
 	}
 
 	@Override
 	public void update() {
-		angle += 12.0f;
+		if (ticksFueled > 0){
+			angle += 12.0f;
+		}
 		ticksExisted ++;
-		if (getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
+		if (ticksFueled > 0){
+			ticksFueled --;
+		}
+		if (ticksFueled == 0){
 			EmberWorldData data = EmberWorldData.get(getWorld());
-			if (!getWorld().isRemote && data.emberData.get(""+getPos().getX()/16+" "+getPos().getY()/16) > 0){
-				if (ticksExisted % 20 == 0){
-					this.capability.addAmount(Math.min(10,data.emberData.get(""+getPos().getX()/16+" "+getPos().getY()/16)), true);
-					data.emberData.replace(""+getPos().getX()/16+" "+getPos().getY()/16,Math.max(0, data.emberData.get(""+getPos().getX()/16+" "+getPos().getY()/16)-10.0));
-					data.markDirty();
-					this.markDirty();
-					getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
-					getWorld().spawnParticle(random.nextInt(3) == 0 ? EnumParticleTypes.SMOKE_LARGE : EnumParticleTypes.SMOKE_NORMAL, getPos().getX()+random.nextDouble(), getPos().getY()+random.nextDouble(), getPos().getZ()+random.nextDouble(), 0, 0.05*random.nextDouble(), 0, 0);
+			if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
+				if (inventory.getStackInSlot(stackGunpowder) != null && inventory.getStackInSlot(stackFuel) != null){
+					ticksFueled = 2000;
+					inventory.getStackInSlot(stackFuel).stackSize --;
+					if (inventory.getStackInSlot(stackFuel).stackSize <= 0){
+						inventory.setStackInSlot(stackFuel, null);
+					}
+					markDirty();
+					IBlockState state = getWorld().getBlockState(getPos());
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+					if (random.nextInt(4) == 0){
+						inventory.getStackInSlot(stackGunpowder).stackSize --;
+						if (inventory.getStackInSlot(stackGunpowder).stackSize <= 0){
+							inventory.setStackInSlot(stackGunpowder, null);
+						}
+						markDirty();
+						state = getWorld().getBlockState(getPos());
+						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+					}
 				}
-				for (double i = 0; i < 360; i += 120){
-					ParticleUtil.spawnParticleGlow(getWorld(), (float)(getPos().getX()+0.5+0.5*Math.sin(Math.toRadians(i+((double)ticksExisted%360)))), (float)(getPos().getY()+3.5), (float)(getPos().getZ()+0.5+0.5*Math.cos(Math.toRadians(i+((double)ticksExisted%360)))), 0, 0, 0, 255, 64, 16);
+			}
+		}
+		else if (ticksExisted % 1000 == 0){
+			int chance = random.nextInt(4);
+			EmberWorldData data = EmberWorldData.get(getWorld());
+			if (chance == 0){
+				if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 4500){
+					if (inventory.getStackInSlot(stackCrystals) != null){ 
+						if (inventory.getStackInSlot(stackCrystals).stackSize < inventory.getStackInSlot(stackCrystals).getMaxStackSize()){
+							inventory.getStackInSlot(stackCrystals).stackSize = Math.min(64, inventory.getStackInSlot(stackCrystals).stackSize);
+							data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
+							data.markDirty();
+						}
+					}
+					else {
+						inventory.setStackInSlot(stackCrystals, new ItemStack(RegistryManager.crystalEmber,1));
+						data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
+						data.markDirty();
+					}
+					markDirty();
+					IBlockState state = getWorld().getBlockState(getPos());
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+				}
+			}
+			else {
+				if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
+					if (inventory.getStackInSlot(stackShards) != null){
+						if (inventory.getStackInSlot(stackShards).stackSize < inventory.getStackInSlot(stackShards).getMaxStackSize()){
+							inventory.getStackInSlot(stackShards).stackSize = Math.min(inventory.getStackInSlot(stackShards).getMaxStackSize(), inventory.getStackInSlot(stackShards).stackSize);
+							data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
+							data.markDirty();
+						}
+					}
+					else {
+						inventory.setStackInSlot(stackShards, new ItemStack(RegistryManager.shardEmber,1));
+						data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
+						data.markDirty();
+					}
+					markDirty();
+					IBlockState state = getWorld().getBlockState(getPos());
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 				}
 			}
 		}
@@ -112,7 +216,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
 		super.hasCapability(capability, facing);
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
 		return false;
@@ -121,9 +225,9 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
 		super.getCapability(capability, facing);
-		if (capability == EmberCapabilityProvider.emberCapability){
-			return (T)this.capability;
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			return (T)this.inventory;
 		}
-		return (T)this.capability;
+		return null;
 	}
 }

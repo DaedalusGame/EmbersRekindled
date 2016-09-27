@@ -27,9 +27,9 @@ import teamroots.embers.tileentity.TileEntityEmitter;
 import teamroots.embers.tileentity.TileEntityPipe;
 import teamroots.embers.tileentity.TileEntityTank;
 
-public class BlockEmberBore extends BlockTEBase {
+public class BlockLargeTank extends BlockTEBase {
 	
-	public BlockEmberBore(Material material, String name, boolean addToTab) {
+	public BlockLargeTank(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
 

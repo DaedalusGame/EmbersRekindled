@@ -42,9 +42,14 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             Tessellator tess = Tessellator.getInstance();
             VertexBuffer buffer = tess.getBuffer();
             
+            float pTicksRotation = partialTicks*12.0f;
+            if (tile.ticksFueled <= 0){
+            	pTicksRotation = 0;
+            }
+            
             GlStateManager.pushMatrix();
             GlStateManager.translate(x-0.5, y-0.5, z+0.5);
-            GlStateManager.rotate(tile.angle+partialTicks*12.0f, 1, 0, 0);
+            GlStateManager.rotate(tile.angle+pTicksRotation, 1, 0, 0);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
@@ -52,7 +57,7 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y-0.5, z+0.5);
-            GlStateManager.rotate(tile.angle+partialTicks*12.0f+72.0f, 1, 0, 0);
+            GlStateManager.rotate(tile.angle+pTicksRotation+72.0f, 1, 0, 0);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
@@ -60,7 +65,7 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             
             GlStateManager.pushMatrix();
             GlStateManager.translate(x+0.5, y-0.5, z+0.5);
-            GlStateManager.rotate(tile.angle+partialTicks*12.0f+144.0f, 1, 0, 0);
+            GlStateManager.rotate(tile.angle+pTicksRotation+144.0f, 1, 0, 0);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
@@ -68,7 +73,7 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             
             GlStateManager.pushMatrix();
             GlStateManager.translate(x+1.0, y-0.5, z+0.5);
-            GlStateManager.rotate(tile.angle+partialTicks*12.0f+216.0f, 1, 0, 0);
+            GlStateManager.rotate(tile.angle+pTicksRotation+216.0f, 1, 0, 0);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
@@ -76,7 +81,7 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             
             GlStateManager.pushMatrix();
             GlStateManager.translate(x+1.5, y-0.5, z+0.5);
-            GlStateManager.rotate(tile.angle+partialTicks*12.0f+288.0f, 1, 0, 0);
+            GlStateManager.rotate(tile.angle+pTicksRotation+288.0f, 1, 0, 0);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});
             tess.draw();

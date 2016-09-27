@@ -1,0 +1,12 @@
+{
+    "variants":{
+        "state=0":  { "model": "embers:stoneBorderStraight", "y": 0 },
+        "state=1":  { "model": "embers:stoneBorderCorner", "y": 0 },
+        "state=2":  { "model": "embers:stoneBorderStraight", "y": 270 },
+        "state=3":  { "model": "embers:stoneBorderCorner", "y": 270 },
+        "state=4":  { "model": "embers:stoneBorderStraight", "y": 180 },
+        "state=5":  { "model": "embers:stoneBorderCorner", "y": 180 },
+        "state=6":  { "model": "embers:stoneBorderStraight", "y": 90 },
+        "state=7":  { "model": "embers:stoneBorderCorner", "y": 90 }
+    }
+}

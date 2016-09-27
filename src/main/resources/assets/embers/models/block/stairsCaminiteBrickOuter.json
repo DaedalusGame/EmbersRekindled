@@ -1,0 +1,9 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "bottom": "embers:blocks/blockCaminiteBrick",
+        "top": "embers:blocks/blockCaminiteBrick",
+        "side": "embers:blocks/blockCaminiteBrick",
+        "particle": "embers:blocks/blockCaminiteBrick"
+    }
+}

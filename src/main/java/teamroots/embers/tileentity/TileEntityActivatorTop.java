@@ -1,8 +1,12 @@
 package teamroots.embers.tileentity;
 
+import java.util.List;
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -14,6 +18,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -29,23 +35,30 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
+import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.recipe.ItemMeltingOreRecipe;
+import teamroots.embers.recipe.ItemMeltingRecipe;
+import teamroots.embers.recipe.RecipeRegistry;
 
-public class TileEntityCopperCell extends TileEntity implements ITileEntityBase {
+public class TileEntityActivatorTop extends TileEntity implements ITileEntityBase, ITickable {
 	public IEmberCapability capability = new DefaultEmberCapability();
+	Random random = new Random();
+	int progress = -1;
 	
-	public TileEntityCopperCell(){
+	public TileEntityActivatorTop(){
 		super();
-		capability.setEmberCapacity(64000);
-		capability.setEmber(0);
+		capability.setEmberCapacity(16000);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
 		capability.writeToNBT(tag);
+		tag.setInteger("progress", progress);
 		return tag;
 	}
 	
@@ -53,6 +66,9 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
 		capability.readFromNBT(tag);
+		if (tag.hasKey("progress")){
+			progress = tag.getInteger("progress");
+		}
 	}
 
 	@Override
@@ -94,10 +110,18 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		super.getCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return (T)this.capability;
 		}
-		return (T)this.capability;
+		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public void update() {
+		if (this.capability.getEmber() > 0 && getWorld().isRemote){
+			for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, 0, 0, 255, 64, 16);
+			}
+		}
 	}
 }

@@ -99,7 +99,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null){
-			if (EnumStampType.getType(heldItem) != null){
+			if (EnumStampType.getType(heldItem) != EnumStampType.TYPE_NULL){
 				if (stamp.getStackInSlot(0) == null){
 					ItemStack newStack = new ItemStack(heldItem.getItem(),1,heldItem.getMetadata());
 					if (heldItem.hasTagCompound()){
@@ -134,7 +134,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	public void update() {
 		this.ticksExisted ++;
 		prevPowered = powered;
-		if (getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
+		if (!getWorld().isRemote){
 			EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
 			if (getWorld().getBlockState(getPos().offset(face,2)).getBlock() == RegistryManager.stampBase){
 				if (this.capability.getEmber() > 1.0){
@@ -186,13 +186,13 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 					}
 				}
+				else if (powered){
+					powered = false;
+					markDirty();
+					IBlockState state = getWorld().getBlockState(getPos());
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+				}
 			}
-		}
-		else if (powered){
-			powered = false;
-			markDirty();
-			IBlockState state = getWorld().getBlockState(getPos());
-			getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 		}
 	}
 	

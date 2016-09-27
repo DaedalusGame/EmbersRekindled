@@ -1,12 +1,14 @@
 package teamroots.embers.tileentity;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -14,45 +16,37 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
-import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.block.BlockMechAccessor;
+import teamroots.embers.util.Misc;
 
-public class TileEntityCopperCell extends TileEntity implements ITileEntityBase {
-	public IEmberCapability capability = new DefaultEmberCapability();
+public class TileEntityMechAccessor extends TileEntity implements ITileEntityBase {
+	Random random = new Random();
 	
-	public TileEntityCopperCell(){
+	public TileEntityMechAccessor(){
 		super();
-		capability.setEmberCapacity(64000);
-		capability.setEmber(0);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
-		super.writeToNBT(tag);
-		capability.writeToNBT(tag);
-		return tag;
+		return super.writeToNBT(tag);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		capability.readFromNBT(tag);
 	}
 
 	@Override
@@ -70,6 +64,24 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+		IBlockState state = getWorld().getBlockState(getPos());
+		if (getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite())) instanceof TileEntityMechCore){
+			return ((TileEntityMechCore)getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite()))).hasCapability(capability, facing);
+		}
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
+		IBlockState state = getWorld().getBlockState(getPos());
+		if (getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite())) instanceof TileEntityMechCore){
+			return getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite())).getCapability(capability, facing);
+		}
+		return super.getCapability(capability, facing);
+	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
@@ -81,23 +93,5 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
 		world.setTileEntity(pos, null);
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
-		if (capability == EmberCapabilityProvider.emberCapability){
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		super.getCapability(capability, facing);
-		if (capability == EmberCapabilityProvider.emberCapability){
-			return (T)this.capability;
-		}
-		return (T)this.capability;
 	}
 }

@@ -134,7 +134,6 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		player.addChatMessage(new TextComponentString(""+capability.getEmber()+" / "+capability.getEmberCapacity()));
 		return false;
 	}
 
@@ -167,9 +166,6 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					EntityEmberPacket packet = new EntityEmberPacket(getWorld());
 					IBlockState state = getWorld().getBlockState(getPos());
 					double vx = 0, vy = 0, vz = 0;
-					this.capability.removeAmount(10, true);
-					markDirty();
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 		
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.UP){
 						vy = 0.2;
@@ -194,8 +190,11 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 						vy = -0.01;
 					}
 					
-					packet.initCustom(getPos(), target, vx, vy, vz, 10.0);
+					packet.initCustom(getPos(), target, vx, vy, vz, Math.min(40.0,capability.getEmber()));
+					this.capability.removeAmount(40, true);
 					getWorld().spawnEntityInWorld(packet);
+					markDirty();
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 				}
 			}
 		}

@@ -214,36 +214,38 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile != null){
 								IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
-								ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
-								if (inventory.getStackInSlot(0).hasTagCompound()){
-									passStack.setTagCompound(inventory.getStackInSlot(0).getTagCompound());
-								}
-								int slot = -1;
-								for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-									if (handler.getStackInSlot(j) == null){
-										slot = j;
+								if (handler != null){
+									ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
+									if (inventory.getStackInSlot(0).hasTagCompound()){
+										passStack.setTagCompound(inventory.getStackInSlot(0).getTagCompound());
 									}
-									else {
-										if (handler.getStackInSlot(j).stackSize < handler.getStackInSlot(j).getMaxStackSize() && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
+									int slot = -1;
+									for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
+										if (handler.getStackInSlot(j) == null){
 											slot = j;
 										}
-									}
-								}
-								if (slot != -1){
-									ItemStack added = handler.insertItem(slot, passStack, false);
-									if (added == null){
-										ItemStack extracted = this.inventory.extractItem(0, 1, false);
-										if (extracted != null){
-											if (tile instanceof TileEntityItemPipe){
-												((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
-												((TileEntityItemPipe)tile).lastReceived = getPos();
+										else {
+											if (handler.getStackInSlot(j).stackSize < handler.getStackInSlot(j).getMaxStackSize() && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
+												slot = j;
 											}
-											IBlockState state = getWorld().getBlockState(getPos().offset(face));
-											(tile).markDirty();
-											getWorld().notifyBlockUpdate(getPos().offset(face), state, state, 3);
-											state = getWorld().getBlockState(getPos());
-											markDirty();
-											getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+										}
+									}
+									if (slot != -1){
+										ItemStack added = handler.insertItem(slot, passStack, false);
+										if (added == null){
+											ItemStack extracted = this.inventory.extractItem(0, 1, false);
+											if (extracted != null){
+												if (tile instanceof TileEntityItemPipe){
+													((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
+													((TileEntityItemPipe)tile).lastReceived = getPos();
+												}
+												IBlockState state = getWorld().getBlockState(getPos().offset(face));
+												(tile).markDirty();
+												getWorld().notifyBlockUpdate(getPos().offset(face), state, state, 3);
+												state = getWorld().getBlockState(getPos());
+												markDirty();
+												getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+											}
 										}
 									}
 								}

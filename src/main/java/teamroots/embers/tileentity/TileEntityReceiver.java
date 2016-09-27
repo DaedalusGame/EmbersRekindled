@@ -73,7 +73,6 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		player.addChatMessage(new TextComponentString(""+capability.getEmber()+" / "+capability.getEmberCapacity()));
 		return false;
 	}
 
