@@ -35,10 +35,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
@@ -47,43 +44,28 @@ import teamroots.embers.recipe.ItemMeltingOreRecipe;
 import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 
-public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityBase {
+	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
-	public ItemStackHandler inventory = new ItemStackHandler(1){
-        @Override
-        protected void onContentsChanged(int slot) {
-        	TileEntityActivatorBottom.this.markDirty();
-        }
-        
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (!stack.getItem().equals(RegistryManager.crystalEmber) && !stack.getItem().equals(RegistryManager.shardEmber)){
-        		return stack;
-        	}
-        	return super.insertItem(slot, stack, simulate);
-        }
-	};
 	
-	public TileEntityActivatorBottom(){
+	public TileEntityMixerTop(){
 		super();
+		tank = new FluidTank(8000);
+		capability.setEmberCapacity(8000);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		tag.setTag("inventory", inventory.serializeNBT());
-		tag.setInteger("progress", progress);
+		capability.writeToNBT(tag);
 		return tag;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
-		if (tag.hasKey("progress")){
-			progress = tag.getInteger("progress");
-		}
+		capability.readFromNBT(tag);
 	}
 
 	@Override
@@ -117,53 +99,17 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
 		super.hasCapability(capability, facing);
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+		if (capability == EmberCapabilityProvider.emberCapability){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return (T)this.inventory;
+		if (capability == EmberCapabilityProvider.emberCapability){
+			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public void update() {
-		TileEntityActivatorTop top = (TileEntityActivatorTop)getWorld().getTileEntity(getPos().up());
-		if (top != null){
-			int i = random.nextInt(inventory.getSlots());
-			if (inventory != null){
-				if (inventory.getStackInSlot(i) != null){
-					if (inventory.getStackInSlot(i).getItem() == RegistryManager.shardEmber){
-						if (top.capability.getEmber() <= top.capability.getEmberCapacity()-750){
-							top.capability.addAmount(750, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-							top.markDirty();
-							state = getWorld().getBlockState(getPos().up());
-							getWorld().notifyBlockUpdate(getPos().up(), state, state, 3);
-						}
-					}
-					else if (inventory.getStackInSlot(i).getItem() == RegistryManager.crystalEmber){
-						if (top.capability.getEmber() <= top.capability.getEmberCapacity()-4500){
-							top.capability.addAmount(4500, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-							top.markDirty();
-							state = getWorld().getBlockState(getPos().up());
-							getWorld().notifyBlockUpdate(getPos().up(), state, state, 3);
-						}
-					}
-				}
-			}
-		}
 	}
 }

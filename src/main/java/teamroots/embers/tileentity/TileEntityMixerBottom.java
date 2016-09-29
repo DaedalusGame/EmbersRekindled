@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -35,44 +36,43 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.ItemMeltingOreRecipe;
 import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 
-public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable {
+	public FluidTank north = new FluidTank(8000);
+	public FluidTank south = new FluidTank(8000);
+	public FluidTank east = new FluidTank(8000);
+	public FluidTank west = new FluidTank(8000);
 	Random random = new Random();
 	int progress = -1;
-	public ItemStackHandler inventory = new ItemStackHandler(1){
-        @Override
-        protected void onContentsChanged(int slot) {
-        	TileEntityActivatorBottom.this.markDirty();
-        }
-        
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (!stack.getItem().equals(RegistryManager.crystalEmber) && !stack.getItem().equals(RegistryManager.shardEmber)){
-        		return stack;
-        	}
-        	return super.insertItem(slot, stack, simulate);
-        }
-	};
 	
-	public TileEntityActivatorBottom(){
+	public TileEntityMixerBottom(){
 		super();
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		tag.setTag("inventory", inventory.serializeNBT());
+		NBTTagCompound northTank = new NBTTagCompound();
+		north.writeToNBT(tag);
+		tag.setTag("northTank", northTank);
+		NBTTagCompound southTank = new NBTTagCompound();
+		south.writeToNBT(tag);
+		tag.setTag("southTank", southTank);
+		NBTTagCompound eastTank = new NBTTagCompound();
+		east.writeToNBT(tag);
+		tag.setTag("eastTank", eastTank);
+		NBTTagCompound westTank = new NBTTagCompound();
+		west.writeToNBT(tag);
+		tag.setTag("westTank", westTank);
 		tag.setInteger("progress", progress);
 		return tag;
 	}
@@ -80,7 +80,10 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+		north.readFromNBT(tag.getCompoundTag("northTank"));
+		south.readFromNBT(tag.getCompoundTag("southTank"));
+		east.readFromNBT(tag.getCompoundTag("eastTank"));
+		west.readFromNBT(tag.getCompoundTag("westTank"));
 		if (tag.hasKey("progress")){
 			progress = tag.getInteger("progress");
 		}
@@ -117,7 +120,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
 		super.hasCapability(capability, facing);
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && facing != EnumFacing.UP && facing != EnumFacing.DOWN){
 			return true;
 		}
 		return false;
@@ -125,42 +128,59 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return (T)this.inventory;
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			switch (facing) {
+			case DOWN:
+				//
+			case EAST:
+				return (T)east;
+			case NORTH:
+				return (T)north;
+			case SOUTH:
+				return (T)south;
+			case UP:
+				//
+			case WEST:
+				return (T)west;
+			default:
+				//
+				
+			}
 		}
 		return super.getCapability(capability, facing);
 	}
 
 	@Override
 	public void update() {
-		TileEntityActivatorTop top = (TileEntityActivatorTop)getWorld().getTileEntity(getPos().up());
+		TileEntityMixerTop top = (TileEntityMixerTop)getWorld().getTileEntity(getPos().up());
 		if (top != null){
-			int i = random.nextInt(inventory.getSlots());
-			if (inventory != null){
-				if (inventory.getStackInSlot(i) != null){
-					if (inventory.getStackInSlot(i).getItem() == RegistryManager.shardEmber){
-						if (top.capability.getEmber() <= top.capability.getEmberCapacity()-750){
-							top.capability.addAmount(750, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-							top.markDirty();
-							state = getWorld().getBlockState(getPos().up());
-							getWorld().notifyBlockUpdate(getPos().up(), state, state, 3);
-						}
-					}
-					else if (inventory.getStackInSlot(i).getItem() == RegistryManager.crystalEmber){
-						if (top.capability.getEmber() <= top.capability.getEmberCapacity()-4500){
-							top.capability.addAmount(4500, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-							top.markDirty();
-							state = getWorld().getBlockState(getPos().up());
-							getWorld().notifyBlockUpdate(getPos().up(), state, state, 3);
-						}
+			if (top.capability.getEmber() >= 2.0){
+				ArrayList<FluidStack> fluids = new ArrayList<FluidStack>();
+				if (north.getFluid() != null){
+					fluids.add(north.getFluid());
+				}
+				if (south.getFluid() != null){
+					fluids.add(south.getFluid());
+				}
+				if (east.getFluid() != null){
+					fluids.add(east.getFluid());
+				}
+				if (west.getFluid() != null){
+					fluids.add(west.getFluid());
+				}
+				FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
+				if (recipe != null){
+					IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+					int amount = tank.fill(recipe.output, false);
+					if (amount != 0){
+						tank.fill(recipe.getResult(fluids), true);
+						top.capability.removeAmount(2.0, true);
+						markDirty();
+						IBlockState state = getWorld().getBlockState(getPos());
+						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+						top.markDirty();
+						IBlockState topState = getWorld().getBlockState(getPos().up());
+						getWorld().notifyBlockUpdate(getPos().up(), getWorld().getBlockState(getPos().up()), getWorld().getBlockState(getPos().up()), 3);
 					}
 				}
 			}

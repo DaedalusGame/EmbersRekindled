@@ -21,6 +21,9 @@ fluid.moltenGold=Molten Gold
 fluid.moltenCopper=Molten Copper
 fluid.moltenLead=Molten Lead
 fluid.moltenSilver=Molten Silver
+fluid.moltenAstralite=Molten Astralite
+fluid.moltenDawnstone=Molten Dawnstone
+fluid.moltenUmberSteel=Molten Umber Steel
 
 item.ingotCopper.name=Copper Ingot
 item.ingotSilver.name=Silver Ingot
@@ -36,3 +39,5 @@ item.tinkerHammer.name=Tinker's Hammer
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
+
+embers.jei.recipe.stamp=Stamping Recipe

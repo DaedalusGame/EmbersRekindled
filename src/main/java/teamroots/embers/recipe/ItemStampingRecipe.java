@@ -7,7 +7,7 @@ import teamroots.embers.item.EnumStampType;
 public class ItemStampingRecipe {
 	private ItemStack stack = null;
 	private FluidStack fluid = null;
-	private ItemStack result = null;
+	public ItemStack result = null;
 	private EnumStampType type = EnumStampType.TYPE_NULL;
 	boolean matchMetadata = false;
 	boolean matchNBT = false;

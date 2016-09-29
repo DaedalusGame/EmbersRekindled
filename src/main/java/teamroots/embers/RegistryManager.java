@@ -30,6 +30,7 @@ import teamroots.embers.block.BlockItemPump;
 import teamroots.embers.block.BlockMechAccessor;
 import teamroots.embers.block.BlockMechCore;
 import teamroots.embers.block.BlockMechEdge;
+import teamroots.embers.block.BlockMixer;
 import teamroots.embers.block.BlockOven;
 import teamroots.embers.block.BlockPipe;
 import teamroots.embers.block.BlockPump;
@@ -39,18 +40,24 @@ import teamroots.embers.block.BlockStamper;
 import teamroots.embers.block.BlockTEBase;
 import teamroots.embers.block.BlockTank;
 import teamroots.embers.block.IBlockModel;
+import teamroots.embers.block.fluid.BlockMoltenAstralite;
 import teamroots.embers.block.fluid.BlockMoltenCopper;
+import teamroots.embers.block.fluid.BlockMoltenDawnstone;
 import teamroots.embers.block.fluid.BlockMoltenGold;
 import teamroots.embers.block.fluid.BlockMoltenIron;
 import teamroots.embers.block.fluid.BlockMoltenLead;
 import teamroots.embers.block.fluid.BlockMoltenSilver;
+import teamroots.embers.block.fluid.BlockMoltenUmberSteel;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.entity.RenderEmberPacket;
+import teamroots.embers.fluid.FluidMoltenAstralite;
 import teamroots.embers.fluid.FluidMoltenCopper;
+import teamroots.embers.fluid.FluidMoltenDawnstone;
 import teamroots.embers.fluid.FluidMoltenGold;
 import teamroots.embers.fluid.FluidMoltenIron;
 import teamroots.embers.fluid.FluidMoltenLead;
 import teamroots.embers.fluid.FluidMoltenSilver;
+import teamroots.embers.fluid.FluidMoltenUmberSteel;
 import teamroots.embers.item.ItemBase;
 import teamroots.embers.item.ItemEmberGauge;
 import teamroots.embers.item.ItemTinkerHammer;
@@ -77,6 +84,8 @@ import teamroots.embers.tileentity.TileEntityItemPump;
 import teamroots.embers.tileentity.TileEntityItemPumpRenderer;
 import teamroots.embers.tileentity.TileEntityMechAccessor;
 import teamroots.embers.tileentity.TileEntityMechCore;
+import teamroots.embers.tileentity.TileEntityMixerBottom;
+import teamroots.embers.tileentity.TileEntityMixerTop;
 import teamroots.embers.tileentity.TileEntityOven;
 import teamroots.embers.tileentity.TileEntityOvenRenderer;
 import teamroots.embers.tileentity.TileEntityPipe;
@@ -96,12 +105,12 @@ public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
 	public static ArrayList<Item> items = new ArrayList<Item>();
 	
-	public static Block stoneEdge, emberActivator, mechCore, stairsCaminiteBrick, mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
-	public static Block blockMoltenGold, blockMoltenCopper, blockMoltenLead, blockMoltenSilver, blockMoltenIron;
+	public static Block mixer, stoneEdge, emberActivator, mechCore, stairsCaminiteBrick, mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
+	public static Block blockMoltenAstralite, blockMoltenDawnstone, blockMoltenUmberSteel, blockMoltenGold, blockMoltenCopper, blockMoltenLead, blockMoltenSilver, blockMoltenIron;
 	
-	public static Fluid fluidMoltenGold, fluidMoltenCopper, fluidMoltenLead, fluidMoltenSilver, fluidMoltenIron;
+	public static Fluid fluidMoltenAstralite, fluidMoltenDawnstone, fluidMoltenUmberSteel, fluidMoltenGold, fluidMoltenCopper, fluidMoltenLead, fluidMoltenSilver, fluidMoltenIron;
 	
-	public static Item crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberGauge, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
+	public static Item ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberGauge, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
 	
 	public static WorldGenOres worldGenOres;
 	
@@ -136,6 +145,7 @@ public class RegistryManager {
 		blocks.add(stairsCaminiteBrick = (new BlockStairsBase(RegistryManager.blockCaminiteBrick.getDefaultState(),"stairsCaminiteBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(emberActivator = (new BlockActivator(Material.ROCK,"emberActivator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(stoneEdge = (new BlockMechEdge(Material.ROCK,"stoneEdge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(mixer = (new BlockMixer(Material.ROCK,"mixer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		
 		FluidRegistry.registerFluid(fluidMoltenIron = new FluidMoltenIron());
 		blocks.add(blockMoltenIron = (new BlockMoltenIron("moltenIron",false)));
@@ -157,6 +167,18 @@ public class RegistryManager {
 		blocks.add(blockMoltenSilver = (new BlockMoltenSilver("moltenSilver",false)));
 		FluidRegistry.addBucketForFluid(fluidMoltenSilver);
 		
+		FluidRegistry.registerFluid(fluidMoltenAstralite = new FluidMoltenAstralite());
+		blocks.add(blockMoltenAstralite = (new BlockMoltenAstralite("moltenAstralite",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenAstralite);
+		
+		FluidRegistry.registerFluid(fluidMoltenDawnstone = new FluidMoltenDawnstone());
+		blocks.add(blockMoltenDawnstone = (new BlockMoltenDawnstone("moltenDawnstone",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenDawnstone);
+		
+		FluidRegistry.registerFluid(fluidMoltenUmberSteel = new FluidMoltenUmberSteel());
+		blocks.add(blockMoltenUmberSteel = (new BlockMoltenUmberSteel("moltenUmberSteel",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenUmberSteel);
+		
 		items.add(ingotCopper = new ItemBase("ingotCopper",true));
 		items.add(ingotLead = new ItemBase("ingotLead",true));
 		items.add(ingotSilver = new ItemBase("ingotSilver",true));
@@ -173,6 +195,9 @@ public class RegistryManager {
 		items.add(stampPlate = new ItemBase("stampPlate",true));
 		items.add(shardEmber = new ItemBase("shardEmber",true));
 		items.add(crystalEmber = new ItemBase("crystalEmber",true));
+		items.add(ingotDawnstone = new ItemBase("ingotDawnstone",true));
+		items.add(ingotAstralite = new ItemBase("ingotAstralite",true));
+		items.add(ingotUmberSteel = new ItemBase("ingotUmberSteel",true));
 		
 		GameRegistry.registerTileEntity(TileEntityTank.class, Embers.MODID+":tileEntityTank");
 		GameRegistry.registerTileEntity(TileEntityPipe.class, Embers.MODID+":tileEntityPipe");
@@ -194,6 +219,8 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityMechCore.class, Embers.MODID+":tileEntityMechCore");
 		GameRegistry.registerTileEntity(TileEntityActivatorTop.class, Embers.MODID+":tileEntityActivatorTop");
 		GameRegistry.registerTileEntity(TileEntityActivatorBottom.class, Embers.MODID+":tileEntityActivatorBottom");
+		GameRegistry.registerTileEntity(TileEntityMixerTop.class, Embers.MODID+":tileEntityMixerTop");
+		GameRegistry.registerTileEntity(TileEntityMixerBottom.class, Embers.MODID+":tileEntityMixerBottom");
 		
 		int id = 0;
 		

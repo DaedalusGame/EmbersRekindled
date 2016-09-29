@@ -28,17 +28,17 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.block.IBlockModel;
 import teamroots.embers.util.MeshDefinitionFix;
 
-public class BlockMoltenCopper extends BlockFluidClassic implements IBlockModel {
-	public static FluidStack stack = new FluidStack(RegistryManager.fluidMoltenCopper,1000);
+public class BlockMoltenUmberSteel extends BlockFluidClassic implements IBlockModel {
+	public static FluidStack stack = new FluidStack(RegistryManager.fluidMoltenUmberSteel,1000);
 	
-	public BlockMoltenCopper(String name, boolean addToTab) {
-		super(RegistryManager.fluidMoltenCopper,Material.LAVA);
+	public BlockMoltenUmberSteel(String name, boolean addToTab) {
+		super(RegistryManager.fluidMoltenUmberSteel,Material.LAVA);
 		setRegistryName(Embers.MODID+":"+name);
 		if (addToTab){
 			this.setCreativeTab(Embers.tab);
 		}
 		this.setQuantaPerBlock(6);
-		RegistryManager.fluidMoltenCopper.setBlock(this);
+		RegistryManager.fluidMoltenUmberSteel.setBlock(this);
 		GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
@@ -66,7 +66,7 @@ public class BlockMoltenCopper extends BlockFluidClassic implements IBlockModel 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void initModel(){
-        Block block = RegistryManager.blockMoltenCopper;
+        Block block = RegistryManager.blockMoltenUmberSteel;
         Item item = Item.getItemFromBlock(block);   
 
         ModelBakery.registerItemVariants(item);

@@ -38,6 +38,27 @@
                     "fluid": "moltenlead"
                 }
             }
+        ],
+        "moltenastralite": [
+            {
+                "custom": {
+                    "fluid": "moltenastralite"
+                }
+            }
+        ],
+        "moltendawnstone": [
+            {
+                "custom": {
+                    "fluid": "moltendawnstone"
+                }
+            }
+        ],
+        "moltenumbersteel": [
+            {
+                "custom": {
+                    "fluid": "moltenumbersteel"
+                }
+            }
         ]
     }
 }

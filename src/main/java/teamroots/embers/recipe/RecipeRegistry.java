@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.item.EnumStampType;
@@ -15,8 +16,11 @@ public class RecipeRegistry {
 
 	public static Map<ItemStack,ItemMeltingRecipe> meltingRecipes = new HashMap<ItemStack,ItemMeltingRecipe>();
 	public static Map<String,ItemMeltingOreRecipe> meltingOreRecipes = new HashMap<String,ItemMeltingOreRecipe>();
+	
 	public static ArrayList<ItemStampingRecipe> stampingRecipes = new ArrayList<ItemStampingRecipe>();
 	public static ArrayList<ItemStampingOreRecipe> stampingOreRecipes = new ArrayList<ItemStampingOreRecipe>();
+	
+	public static ArrayList<FluidMixingRecipe> mixingRecipes = new ArrayList<FluidMixingRecipe>();
 	
 	public static void init(){
 		meltingOreRecipes.put("oreIron", new ItemMeltingOreRecipe("oreIron",new FluidStack(RegistryManager.fluidMoltenIron,288)));
@@ -44,6 +48,8 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenLead,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotLead,1),false,false));
 		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenSilver,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotSilver,1),false,false));
 		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenCopper,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotCopper,1),false,false));
+		
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(FluidRegistry.LAVA,1000),new FluidStack(RegistryManager.fluidMoltenIron,1000)}, new FluidStack(FluidRegistry.WATER,1000)));
 	}
 	
 	public static ItemStampingRecipe getStampingRecipe(ItemStack stack, FluidStack fluid, EnumStampType type){
@@ -59,6 +65,15 @@ public class RecipeRegistry {
 		for (int i = 0; i < stampingOreRecipes.size(); i ++){
 			if (stampingOreRecipes.get(i).matches(stack, fluid, type)){
 				return stampingOreRecipes.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public static FluidMixingRecipe getMixingRecipe(ArrayList<FluidStack> fluids){
+		for (int i = 0; i < mixingRecipes.size(); i ++){
+			if (mixingRecipes.get(i).matches(fluids)){
+				return mixingRecipes.get(i);
 			}
 		}
 		return null;

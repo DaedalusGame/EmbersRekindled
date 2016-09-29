@@ -71,7 +71,7 @@ public class BlockMoltenSilver extends BlockFluidClassic implements IBlockModel 
 
         ModelBakery.registerItemVariants(item);
         
-        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Embers.MODID + ":fluid", stack.getFluid().getName());
+        final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Embers.MODID + ":fluid", stack.getFluid().getName());
 
         ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
 

@@ -1,0 +1,6 @@
+{
+    "variants":{
+        "top=true":{"model": "embers:mixerTop"},
+        "top=false":{"model": "embers:mixerBase"}
+    }
+}
