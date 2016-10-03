@@ -138,76 +138,80 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public void update() {
-		if (ticksFueled > 0){
-			angle += 12.0f;
-		}
-		ticksExisted ++;
-		if (ticksFueled > 0){
-			ticksFueled --;
-		}
-		if (ticksFueled == 0){
-			EmberWorldData data = EmberWorldData.get(getWorld());
-			if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
-				if (inventory.getStackInSlot(stackGunpowder) != null && inventory.getStackInSlot(stackFuel) != null){
-					ticksFueled = 2000;
-					inventory.getStackInSlot(stackFuel).stackSize --;
-					if (inventory.getStackInSlot(stackFuel).stackSize <= 0){
-						inventory.setStackInSlot(stackFuel, null);
-					}
-					markDirty();
-					IBlockState state = getWorld().getBlockState(getPos());
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-					if (random.nextInt(4) == 0){
-						inventory.getStackInSlot(stackGunpowder).stackSize --;
-						if (inventory.getStackInSlot(stackGunpowder).stackSize <= 0){
-							inventory.setStackInSlot(stackGunpowder, null);
+		if (getPos().getY() <= 7){
+			if (ticksFueled > 0){
+				angle += 12.0f;
+			}
+			ticksExisted ++;
+			if (ticksFueled > 0){
+				ticksFueled --;
+			}
+			if (ticksFueled == 0){
+				EmberWorldData data = EmberWorldData.get(getWorld());
+				if (data.emberData.containsKey(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)){
+					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
+						if (inventory.getStackInSlot(stackGunpowder) != null && inventory.getStackInSlot(stackFuel) != null){
+							ticksFueled = 2000;
+							inventory.getStackInSlot(stackFuel).stackSize --;
+							if (inventory.getStackInSlot(stackFuel).stackSize <= 0){
+								inventory.setStackInSlot(stackFuel, null);
+							}
+							markDirty();
+							IBlockState state = getWorld().getBlockState(getPos());
+							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+							if (random.nextInt(4) == 0){
+								inventory.getStackInSlot(stackGunpowder).stackSize --;
+								if (inventory.getStackInSlot(stackGunpowder).stackSize <= 0){
+									inventory.setStackInSlot(stackGunpowder, null);
+								}
+								markDirty();
+								state = getWorld().getBlockState(getPos());
+								getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+							}
 						}
-						markDirty();
-						state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 					}
 				}
 			}
-		}
-		else if (ticksExisted % 1000 == 0){
-			int chance = random.nextInt(4);
-			EmberWorldData data = EmberWorldData.get(getWorld());
-			if (chance == 0){
-				if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 4500){
-					if (inventory.getStackInSlot(stackCrystals) != null){ 
-						if (inventory.getStackInSlot(stackCrystals).stackSize < inventory.getStackInSlot(stackCrystals).getMaxStackSize()){
-							inventory.getStackInSlot(stackCrystals).stackSize = Math.min(64, inventory.getStackInSlot(stackCrystals).stackSize);
+			else if (ticksExisted % 1000 == 0){
+				int chance = random.nextInt(4);
+				EmberWorldData data = EmberWorldData.get(getWorld());
+				if (chance == 0){
+					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 4500){
+						if (inventory.getStackInSlot(stackCrystals) != null){ 
+							if (inventory.getStackInSlot(stackCrystals).stackSize < inventory.getStackInSlot(stackCrystals).getMaxStackSize()){
+								inventory.getStackInSlot(stackCrystals).stackSize = Math.min(64, inventory.getStackInSlot(stackCrystals).stackSize);
+								data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
+								data.markDirty();
+							}
+						}
+						else {
+							inventory.setStackInSlot(stackCrystals, new ItemStack(RegistryManager.crystalEmber,1));
 							data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
 							data.markDirty();
 						}
+						markDirty();
+						IBlockState state = getWorld().getBlockState(getPos());
+						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 					}
-					else {
-						inventory.setStackInSlot(stackCrystals, new ItemStack(RegistryManager.crystalEmber,1));
-						data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
-						data.markDirty();
-					}
-					markDirty();
-					IBlockState state = getWorld().getBlockState(getPos());
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 				}
-			}
-			else {
-				if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
-					if (inventory.getStackInSlot(stackShards) != null){
-						if (inventory.getStackInSlot(stackShards).stackSize < inventory.getStackInSlot(stackShards).getMaxStackSize()){
-							inventory.getStackInSlot(stackShards).stackSize = Math.min(inventory.getStackInSlot(stackShards).getMaxStackSize(), inventory.getStackInSlot(stackShards).stackSize);
+				else {
+					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
+						if (inventory.getStackInSlot(stackShards) != null){
+							if (inventory.getStackInSlot(stackShards).stackSize < inventory.getStackInSlot(stackShards).getMaxStackSize()){
+								inventory.getStackInSlot(stackShards).stackSize = Math.min(inventory.getStackInSlot(stackShards).getMaxStackSize(), inventory.getStackInSlot(stackShards).stackSize);
+								data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
+								data.markDirty();
+							}
+						}
+						else {
+							inventory.setStackInSlot(stackShards, new ItemStack(RegistryManager.shardEmber,1));
 							data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
 							data.markDirty();
 						}
+						markDirty();
+						IBlockState state = getWorld().getBlockState(getPos());
+						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 					}
-					else {
-						inventory.setStackInSlot(stackShards, new ItemStack(RegistryManager.shardEmber,1));
-						data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
-						data.markDirty();
-					}
-					markDirty();
-					IBlockState state = getWorld().getBlockState(getPos());
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 				}
 			}
 		}

@@ -17,19 +17,17 @@ import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
 
 public class WorldGenOres implements IWorldGenerator {
-
+	double l = Math.sin(1);
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
 		switch (world.provider.getDimension()) {
 		case 0:{
-			System.out.println("COPPER VEINS: " + ConfigManager.copperVeinSize);
 			WorldGenMinable oreCopper = new WorldGenMinable(RegistryManager.oreCopper.getDefaultState(), ConfigManager.copperVeinSize);
 			for (int i = 0; i < ConfigManager.copperVeinsPerChunk; i ++){
 				int x = chunkX*16+random.nextInt(16);
 				int y = random.nextInt(ConfigManager.copperMaxY-ConfigManager.copperMinY)+ConfigManager.copperMinY;
 				int z = chunkZ*16+random.nextInt(16);
-				System.out.println("{"+x+","+y+","+z+"}");
 				oreCopper.generate(world, random, new BlockPos(x,y,z));
 			}
 			WorldGenMinable oreLead = new WorldGenMinable(RegistryManager.oreLead.getDefaultState(), ConfigManager.leadVeinSize);

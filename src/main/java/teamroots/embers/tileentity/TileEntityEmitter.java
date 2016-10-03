@@ -146,7 +146,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public void update() {
 		this.ticksExisted ++;
-		if (ticksExisted % 10 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
+		if (ticksExisted % 5 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
 			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
 				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
 				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
@@ -160,7 +160,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 				}
 			}
 		}
-		if ((this.ticksExisted+offset) % 40 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && target != null && !getWorld().isRemote && this.capability.getEmber() > 10){
+		if ((this.ticksExisted+offset) % 20 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && target != null && !getWorld().isRemote && this.capability.getEmber() > 10){
 			if (getWorld().getTileEntity(target) instanceof IEmberPacketReceiver){
 				if (!(((IEmberPacketReceiver)getWorld().getTileEntity(target)).isFull())){
 					EntityEmberPacket packet = new EntityEmberPacket(getWorld());
@@ -191,7 +191,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					}
 					
 					packet.initCustom(getPos(), target, vx, vy, vz, Math.min(40.0,capability.getEmber()));
-					this.capability.removeAmount(40, true);
+					this.capability.removeAmount(Math.min(40.0,capability.getEmber()), true);
 					getWorld().spawnEntityInWorld(packet);
 					markDirty();
 					getWorld().notifyBlockUpdate(getPos(), state, state, 3);

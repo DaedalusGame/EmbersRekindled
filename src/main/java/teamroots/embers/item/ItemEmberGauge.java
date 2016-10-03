@@ -21,6 +21,7 @@ import teamroots.embers.world.EmberWorldData;
 public class ItemEmberGauge extends ItemBase {
 
 	public ItemEmberGauge() {
-		super("emberGauge", true);
+		super("emberDetector", true);
+		this.setMaxStackSize(1);
 	}
 }

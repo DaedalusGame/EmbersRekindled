@@ -44,7 +44,7 @@ public class DefaultEmberCapability implements IEmberCapability {
 	public double removeAmount(double value, boolean doRemove) {
 		if (ember-value < 0){
 			if (doRemove){
-				capacity = 0;
+				ember = 0;
 			}
 			return ember;
 		}

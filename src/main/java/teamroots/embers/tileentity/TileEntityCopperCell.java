@@ -74,6 +74,9 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		capability.setEmber(capability.getEmberCapacity());
+		markDirty();
+		world.notifyBlockUpdate(pos, state, state, 3);
 		return false;
 	}
 

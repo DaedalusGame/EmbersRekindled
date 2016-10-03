@@ -4,6 +4,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import teamroots.embers.Embers;
+import teamroots.embers.network.message.MessageEmberData;
+import teamroots.embers.network.message.MessageEmberDataRequest;
+import teamroots.embers.network.message.MessageEmberGeneration;
 import teamroots.embers.network.message.MessageParticle;
 
 public class PacketHandler {
@@ -12,6 +15,8 @@ public class PacketHandler {
     private static int id = 0;
 
     public static void registerMessages(){
-        INSTANCE.registerMessage(MessageParticle.MessageHolder.class,MessageParticle.class,id++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageEmberGeneration.MessageHolder.class,MessageEmberGeneration.class,0,Side.CLIENT);
+        INSTANCE.registerMessage(MessageEmberData.MessageHolder.class,MessageEmberData.class,1,Side.CLIENT);
+        INSTANCE.registerMessage(MessageEmberDataRequest.MessageHolder.class,MessageEmberDataRequest.class,2,Side.SERVER);
     }
 }

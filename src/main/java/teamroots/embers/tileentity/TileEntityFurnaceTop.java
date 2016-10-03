@@ -1,5 +1,7 @@
 package teamroots.embers.tileentity;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
@@ -15,6 +17,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -43,6 +46,7 @@ import teamroots.embers.util.Misc;
 public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntityBase, ITickable {
 	public static int capacity = Fluid.BUCKET_VOLUME*4;
 	public double angle = 0;
+	int ticksExisted = 0;
 	
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
@@ -177,5 +181,18 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 	@Override
 	public void update() {
 		angle ++;
+		ticksExisted ++;
+		if (ticksExisted % 10 == 0){
+			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY(),getPos().getZ(),getPos().getX()+1,getPos().getY()+1.25,getPos().getZ()+1));
+			for (int i = 0; i < items.size(); i ++){
+				ItemStack stack = inventory.insertItem(0, items.get(i).getEntityItem(), false);
+				if (stack != null){
+					items.get(i).setEntityItemStack(stack);
+				}
+				else {
+					getWorld().removeEntity(items.get(i));
+				}
+			}
+		}
 	}
 }

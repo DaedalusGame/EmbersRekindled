@@ -24,6 +24,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityEmberBore;
 import teamroots.embers.tileentity.TileEntityEmitter;
+import teamroots.embers.tileentity.TileEntityLargeTank;
 import teamroots.embers.tileentity.TileEntityPipe;
 import teamroots.embers.tileentity.TileEntityTank;
 
@@ -35,7 +36,7 @@ public class BlockLargeTank extends BlockTEBase {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityEmberBore();
+		return new TileEntityLargeTank();
 	}
 	
 	@Override
@@ -55,13 +56,13 @@ public class BlockLargeTank extends BlockTEBase {
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		world.setBlockState(pos.north(), RegistryManager.stoneEdge.getStateFromMeta(0));
-		world.setBlockState(pos.north().west(), RegistryManager.stoneEdge.getStateFromMeta(1));
-		world.setBlockState(pos.west(), RegistryManager.stoneEdge.getStateFromMeta(2));
-		world.setBlockState(pos.south().west(), RegistryManager.stoneEdge.getStateFromMeta(3));
-		world.setBlockState(pos.south(), RegistryManager.stoneEdge.getStateFromMeta(4));
-		world.setBlockState(pos.south().east(), RegistryManager.stoneEdge.getStateFromMeta(5));
-		world.setBlockState(pos.east(), RegistryManager.stoneEdge.getStateFromMeta(6));
-		world.setBlockState(pos.north().east(), RegistryManager.stoneEdge.getStateFromMeta(7));
+		world.setBlockState(pos.north(), RegistryManager.mechEdge.getStateFromMeta(0));
+		world.setBlockState(pos.north().west(), RegistryManager.mechEdge.getStateFromMeta(1));
+		world.setBlockState(pos.west(), RegistryManager.mechEdge.getStateFromMeta(2));
+		world.setBlockState(pos.south().west(), RegistryManager.mechEdge.getStateFromMeta(3));
+		world.setBlockState(pos.south(), RegistryManager.mechEdge.getStateFromMeta(4));
+		world.setBlockState(pos.south().east(), RegistryManager.mechEdge.getStateFromMeta(5));
+		world.setBlockState(pos.east(), RegistryManager.mechEdge.getStateFromMeta(6));
+		world.setBlockState(pos.north().east(), RegistryManager.mechEdge.getStateFromMeta(7));
 	}
 }

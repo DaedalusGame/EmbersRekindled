@@ -134,23 +134,27 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	public void update() {
 		this.ticksExisted ++;
 		prevPowered = powered;
-		if (!getWorld().isRemote){
+		if (true){
 			EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
 			if (getWorld().getBlockState(getPos().offset(face,2)).getBlock() == RegistryManager.stampBase){
-				if (this.capability.getEmber() > 1.0){
-					this.capability.removeAmount(1.0, true);
-					if (this.ticksExisted % 80 == 60 && !powered){
-						powered = true;
-						TileEntityStampBase stamp = (TileEntityStampBase)getWorld().getTileEntity(getPos().offset(face,2));
-						FluidStack fluid = null;
-						if (stamp.getFluid() != null){
-							fluid = new FluidStack(stamp.getFluid(),stamp.getAmount());
-						}
-						ItemStampingRecipe recipe = RecipeRegistry.getStampingRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
-						if (recipe != null){
-							ItemStack result = recipe.getResult(stamp.inputs.getStackInSlot(0), new FluidStack(stamp.getFluid(), stamp.getAmount()),EnumStampType.getType(this.stamp.getStackInSlot(0)));
-							stamp.inputs.extractItem(0, 1, false);
-							stamp.getTank().drain(recipe.getFluid(), true);
+				if (this.ticksExisted % 80 == 0 && !powered){
+					TileEntityStampBase stamp = (TileEntityStampBase)getWorld().getTileEntity(getPos().offset(face,2));
+					FluidStack fluid = null;
+					if (stamp.getFluid() != null){
+						fluid = new FluidStack(stamp.getFluid(),stamp.getAmount());
+					}
+					ItemStampingRecipe recipe = RecipeRegistry.getStampingRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
+					if (recipe != null){
+						if (this.capability.getEmber() > 80.0){
+							this.capability.removeAmount(80.0, true);
+							powered = true;
+							ItemStack result = recipe.getResult(stamp.inputs.getStackInSlot(0), new FluidStack(stamp.getFluid(), stamp.getAmount()),EnumStampType.getType(this.stamp.getStackInSlot(0))).copy();
+							if (recipe.getStack() != null){
+								stamp.inputs.extractItem(0, recipe.getStack().stackSize, false);
+							}
+							if (recipe.getFluid() != null){
+								stamp.getTank().drain(recipe.getFluid(), true);
+							}
 							BlockPos off = getPos().offset(face,1);
 							if (getWorld().getTileEntity(getPos().offset(face,3)) instanceof TileEntityBin){
 								TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(getPos().offset(face,3));
@@ -173,25 +177,25 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 						}
 						ItemStampingOreRecipe oreRecipe = RecipeRegistry.getStampingOreRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
 						if (oreRecipe != null){
-							
+						
 						}
-						markDirty();
-						IBlockState state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 					}
-					else if (this.ticksExisted % 80 == 0 && powered){
-						powered = false;
-						markDirty();
-						IBlockState state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
-					}
+					markDirty();
+					IBlockState state = getWorld().getBlockState(getPos());
+					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 				}
-				else if (powered){
+				else if (this.ticksExisted % 80 == 10 && powered){
 					powered = false;
 					markDirty();
 					IBlockState state = getWorld().getBlockState(getPos());
 					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 				}
+			}
+			else if (powered){
+				powered = false;
+				markDirty();
+				IBlockState state = getWorld().getBlockState(getPos());
+				getWorld().notifyBlockUpdate(getPos(), state, state, 3);
 			}
 		}
 	}

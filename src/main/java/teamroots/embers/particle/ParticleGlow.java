@@ -16,7 +16,7 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 	public float colorR = 0;
 	public float colorG = 0;
 	public float colorB = 0;
-	public ResourceLocation texture = new ResourceLocation("embers:entity/particleGlow");
+	public ResourceLocation texture = new ResourceLocation("embers:entity/particleMote");
 	public ParticleGlow(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b) {
 		super(worldIn, x,y,z,0,0,0);
 		this.colorR = r;
@@ -37,6 +37,7 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 		this.motionX = vx;
 		this.motionY = vy;
 		this.motionZ = vz;
+		this.field_190014_F = 2.0f*(float)Math.PI;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
 	    this.setParticleTexture(sprite);
 	}
@@ -66,12 +67,14 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 	@Override
 	public void onUpdate(){
 		super.onUpdate();
-		if (Misc.random.nextInt(4) == 0){
+		if (Misc.random.nextInt(6) == 0){
 			this.particleAge ++;
 		}
 		float lifeCoeff = (float)this.particleAge/(float)this.particleMaxAge;
 		this.particleScale = 2.0f-2.0f*lifeCoeff;
 		this.particleAlpha = 1.0f-lifeCoeff;
+		field_190015_G = field_190014_F;
+		field_190014_F += 1.0f;
 	}
 
 	@Override

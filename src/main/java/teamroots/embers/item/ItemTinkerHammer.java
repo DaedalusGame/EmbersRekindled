@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,6 +32,7 @@ import teamroots.embers.world.EmberWorldData;
 public class ItemTinkerHammer extends ItemBase {
 	public ItemTinkerHammer() {
 		super("tinkerHammer", true);
+		this.setMaxStackSize(1);
 	}
 	
 	@Override
@@ -63,6 +65,26 @@ public class ItemTinkerHammer extends ItemBase {
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.FAIL;
+	}
+	
+	@Override
+	public boolean hasContainerItem(ItemStack stack){
+		return true;
+	}
+	
+	@Override
+	public ItemStack getContainerItem(ItemStack stack){
+		return new ItemStack(this,1);
+	}
+	
+	@Override
+	public boolean hasContainerItem(){
+		return true;
+	}
+	
+	@Override
+	public Item getContainerItem(){
+		return this;
 	}
 	
 	@Override

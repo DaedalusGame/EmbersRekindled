@@ -52,8 +52,13 @@ public class EmberWorldData extends WorldSavedData {
 	}
 	
 	public static EmberWorldData get(World world){
-		EmberWorldData data = (EmberWorldData)world.loadItemData(EmberWorldData.class, Embers.MODID+":ember");
-		if (data == null){
+		EmberWorldData data = null;
+		if (world != null){
+			if ((EmberWorldData)world.loadItemData(EmberWorldData.class, Embers.MODID+":ember") != null){
+				data = (EmberWorldData)world.loadItemData(EmberWorldData.class, Embers.MODID+":ember");
+			}
+		}
+		if (data == null && world != null){
 			data = new EmberWorldData();
 			world.setItemData(Embers.MODID+":ember", data);
 		}

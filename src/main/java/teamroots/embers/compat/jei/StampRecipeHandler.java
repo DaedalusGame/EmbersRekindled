@@ -27,10 +27,7 @@ public class StampRecipeHandler implements IRecipeHandler<StampingRecipeWrapper>
 
 	@Override
 	public boolean isRecipeValid(StampingRecipeWrapper recipe) {
-		if (recipe.getInputs().size() == 2 && recipe.getFluidInputs().size() == 1){
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 }

@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
@@ -31,7 +33,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.util.Misc;
 
-public class TileEntityBin extends TileEntity implements ITileEntityBase {
+public class TileEntityBin extends TileEntity implements ITileEntityBase, ITickable {
+	int ticksExisted = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -118,5 +121,22 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase {
 		this.invalidate();
 		Misc.spawnInventoryInWorld(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
 		world.setTileEntity(pos, null);
+	}
+
+	@Override
+	public void update() {
+		ticksExisted ++;
+		if (ticksExisted % 10 == 0){
+			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY(),getPos().getZ(),getPos().getX()+1,getPos().getY()+1.25,getPos().getZ()+1));
+			for (int i = 0; i < items.size(); i ++){
+				ItemStack stack = inventory.insertItem(0, items.get(i).getEntityItem(), false);
+				if (stack != null){
+					items.get(i).setEntityItemStack(stack);
+				}
+				else {
+					getWorld().removeEntity(items.get(i));
+				}
+			}
+		}
 	}
 }
