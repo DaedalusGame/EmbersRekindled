@@ -32,7 +32,7 @@ public class Embers {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem(){
-			return Items.ARROW;
+			return RegistryManager.crystalEmber;
 		}
 	};
 	

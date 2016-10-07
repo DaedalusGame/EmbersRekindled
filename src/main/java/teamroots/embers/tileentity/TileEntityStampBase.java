@@ -93,13 +93,13 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				boolean didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
 				this.markDirty();
-				world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 3);
+				world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 8);
 				return didFill;
 			}
 			else {
 				player.setHeldItem(hand, this.inputs.insertItem(0,heldItem,false));
 				markDirty();
-				world.notifyBlockUpdate(pos, state, state, 3);
+				world.notifyBlockUpdate(pos, state, state, 8);
 				return true;
 			}
 		}
@@ -108,7 +108,7 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 				world.spawnEntityInWorld(new EntityItem(world,player.posX,player.posY,player.posZ,inputs.getStackInSlot(0)));
 				inputs.setStackInSlot(0, null);
 				markDirty();
-				getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+				getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
 				return true;
 			}
 		}

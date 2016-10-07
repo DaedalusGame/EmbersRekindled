@@ -7,6 +7,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.BiomeManager.BiomeEntry;
+import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -69,6 +74,7 @@ import teamroots.embers.fluid.FluidMoltenLead;
 import teamroots.embers.fluid.FluidMoltenSilver;
 import teamroots.embers.fluid.FluidMoltenUmberSteel;
 import teamroots.embers.item.ItemBase;
+import teamroots.embers.item.ItemDebug;
 import teamroots.embers.item.ItemEmberGauge;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.particle.ParticleRenderer;
@@ -116,6 +122,8 @@ import teamroots.embers.tileentity.TileEntityStamperRenderer;
 import teamroots.embers.tileentity.TileEntityTank;
 import teamroots.embers.tileentity.TileEntityTankRenderer;
 import teamroots.embers.world.WorldGenOres;
+import teamroots.embers.world.dimension.BiomeCave;
+import teamroots.embers.world.dimension.CaveProvider;
 
 public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
@@ -126,7 +134,11 @@ public class RegistryManager {
 	
 	public static Fluid fluidMoltenAstralite, fluidMoltenDawnstone, fluidMoltenUmberSteel, fluidMoltenGold, fluidMoltenCopper, fluidMoltenLead, fluidMoltenSilver, fluidMoltenIron;
 	
-	public static Item plateIron, plateCaminiteRaw, stampBarRaw, stampPlateRaw, stampFlatRaw, nuggetDawnstone, plateCopper, plateLead, plateSilver, plateDawnstone, nuggetIron, ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberDetector, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
+	public static Item debug, plateIron, plateCaminiteRaw, stampBarRaw, stampPlateRaw, stampFlatRaw, nuggetDawnstone, plateCopper, plateLead, plateSilver, plateDawnstone, nuggetIron, ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberDetector, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
+	
+	public static Biome biomeCave;
+	
+	public static DimensionType dimensionCave;
 	
 	public static WorldGenOres worldGenOres;
 	
@@ -231,7 +243,8 @@ public class RegistryManager {
 		items.add(stampPlateRaw = new ItemBase("stampPlateRaw",true));
 		items.add(emberDetector = new ItemEmberGauge());
 		items.add(shardEmber = new ItemBase("shardEmber",true));
-		items.add(crystalEmber = new ItemBase("crystalEmber",true));/*
+		items.add(crystalEmber = new ItemBase("crystalEmber",true));
+		items.add(debug = new ItemDebug());/*
 		items.add(ingotAstralite = new ItemBase("ingotAstralite",true));
 		items.add(ingotUmberSteel = new ItemBase("ingotUmberSteel",true));*/
 		
@@ -264,13 +277,17 @@ public class RegistryManager {
 		
 		int id = 0;
 		
-		EntityRegistry.registerModEntity(EntityEmberPacket.class, "emberPacket", id++, Embers.instance, 64, 3, true);
+		EntityRegistry.registerModEntity(EntityEmberPacket.class, "emberPacket", id++, Embers.instance, 64, 1, true);
 		
 		worldGenOres = new WorldGenOres();
 		GameRegistry.registerWorldGenerator(worldGenOres, 1);
 		
 		OreDictionary.registerOre("nuggetIron", nuggetIron);
 		
+		//GameRegistry.register(biomeCave = new BiomeCave());
+		
+		//dimensionCave = DimensionType.register("cave", "cave", 90, CaveProvider.class, false);
+		//BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(biomeCave, 10000));
 	}
 	
 	@SideOnly(Side.CLIENT)

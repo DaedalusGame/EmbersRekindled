@@ -126,6 +126,7 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 	@Override
 	public void update() {
 		if (tank.getFluid() != null){
+			ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
 			int distAmount = tank.getFluidAmount()/2;
 			ArrayList<EnumFacing> connectedFaces = new ArrayList<EnumFacing>();
 			if (up == EnumPipeConnection.PIPE || up == EnumPipeConnection.BLOCK){
@@ -154,6 +155,12 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 						FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
 						int filled = handler.fill(toAdd, true);
 						tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+						if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+							toUpdate.add(getPos().offset(connectedFaces.get(i)));
+						}
+						if (!toUpdate.contains(getPos())){
+							toUpdate.add(getPos());
+						}
 					}
 				}
 				if (tank.getFluidAmount() <= connectedFaces.size() || tank.getFluidAmount() <= 8){
@@ -162,7 +169,13 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 						if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
 							IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 							int filled = handler.fill(new FluidStack(tank.getFluid().getFluid(),1), true);
-							tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),1), true);
+							tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+							IBlockState state = getWorld().getBlockState(getPos());
+							markDirty();
+							getWorld().notifyBlockUpdate(getPos(), state, state, 8);
+							state = getWorld().getBlockState(getPos().offset(connectedFaces.get(i)));
+							getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).markDirty();
+							getWorld().notifyBlockUpdate(getPos().offset(connectedFaces.get(i)), state, state, 8);
 						}
 					}
 				}
@@ -191,9 +204,20 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 					if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
 						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 						int filled = handler.fill(new FluidStack(tank.getFluid().getFluid(),1), true);
-						tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),1), true);
+						tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+						if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+							toUpdate.add(getPos().offset(connectedFaces.get(i)));
+						}
+						if (!toUpdate.contains(getPos())){
+							toUpdate.add(getPos());
+						}
 					}
 				}
+			}
+			for (int i = 0; i < toUpdate.size(); i ++){
+				getWorld().getTileEntity(toUpdate.get(i)).markDirty();
+				IBlockState state = getWorld().getBlockState(toUpdate.get(i));
+				getWorld().notifyBlockUpdate(toUpdate.get(i), state, state, 3);
 			}
 		}
 	}

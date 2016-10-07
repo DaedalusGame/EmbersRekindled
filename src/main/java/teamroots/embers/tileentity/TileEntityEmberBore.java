@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -64,7 +65,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         	if (slot == stackGunpowder && !stack.getItem().equals(Items.GUNPOWDER)){
         		return insertItem(stackFuel,stack,simulate);
         	}
-        	if (slot == stackFuel && !stack.getItem().equals(Items.COAL)){
+        	if (slot == stackFuel && TileEntityFurnace.getItemBurnTime(stack) == 0){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -151,14 +152,14 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 				if (data.emberData.containsKey(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)){
 					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
 						if (inventory.getStackInSlot(stackGunpowder) != null && inventory.getStackInSlot(stackFuel) != null){
-							ticksFueled = 2000;
+							ticksFueled = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(stackFuel).copy());
 							inventory.getStackInSlot(stackFuel).stackSize --;
 							if (inventory.getStackInSlot(stackFuel).stackSize <= 0){
 								inventory.setStackInSlot(stackFuel, null);
 							}
 							markDirty();
 							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+							getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 							if (random.nextInt(4) == 0){
 								inventory.getStackInSlot(stackGunpowder).stackSize --;
 								if (inventory.getStackInSlot(stackGunpowder).stackSize <= 0){
@@ -166,13 +167,13 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 								}
 								markDirty();
 								state = getWorld().getBlockState(getPos());
-								getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+								getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 							}
 						}
 					}
 				}
 			}
-			else if (ticksExisted % 1000 == 0){
+			else if (ticksExisted % 800 == 0){
 				int chance = random.nextInt(4);
 				EmberWorldData data = EmberWorldData.get(getWorld());
 				if (chance == 0){
@@ -191,7 +192,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 						}
 						markDirty();
 						IBlockState state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+						getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 					}
 				}
 				else {
@@ -210,7 +211,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 						}
 						markDirty();
 						IBlockState state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+						getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 					}
 				}
 			}

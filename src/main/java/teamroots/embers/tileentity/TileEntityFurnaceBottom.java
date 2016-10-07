@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -122,7 +123,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 		if (furnace != null){
 			if (furnace.inventory.getStackInSlot(0) != null){
 				if (progress == -1){
-					progress = 80;
+					progress = 200;
 					markDirty();
 					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);	
 				}

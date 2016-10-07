@@ -116,7 +116,7 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 			getWorld().spawnEntityInWorld(item);
 			markDirty();
 			IBlockState state = getWorld().getBlockState(getPos());
-			getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+			getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 		}
 	}
 }

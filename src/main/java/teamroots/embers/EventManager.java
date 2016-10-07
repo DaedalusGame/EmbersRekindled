@@ -190,13 +190,15 @@ public class EventManager {
 		}
 		World world = player.getEntityWorld();
 		
-		RayTraceResult result = player.rayTrace(4.0, e.getPartialTicks());
-		if (result.typeOfHit == RayTraceResult.Type.BLOCK){
-			IBlockState state = world.getBlockState(result.getBlockPos());
-			if (state.getBlock() instanceof IDial){
-				List<String> text = ((IDial)state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state);
-				for (int i = 0; i < text.size(); i ++){
-					Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text.get(i), x-Minecraft.getMinecraft().fontRendererObj.getStringWidth(text.get(i))/2, y+40+11*i, 0xFFFFFF);
+		RayTraceResult result = player.rayTrace(6.0, e.getPartialTicks());
+		if (result.typeOfHit != null){
+			if (result.typeOfHit == RayTraceResult.Type.BLOCK){
+				IBlockState state = world.getBlockState(result.getBlockPos());
+				if (state.getBlock() instanceof IDial){
+					List<String> text = ((IDial)state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state);
+					for (int i = 0; i < text.size(); i ++){
+						Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text.get(i), x-Minecraft.getMinecraft().fontRendererObj.getStringWidth(text.get(i))/2, y+40+11*i, 0xFFFFFF);
+					}
 				}
 			}
 		}

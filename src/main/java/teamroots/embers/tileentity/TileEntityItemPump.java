@@ -162,12 +162,6 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()){
-			player.addChatMessage(new TextComponentString(lastReceived.toString()));
-		}
-		else if (inventory.getStackInSlot(0) != null){
-			player.addChatMessage(new TextComponentString(""+inventory.getStackInSlot(0).stackSize));
-		}
 		return false;
 	}
 
@@ -181,6 +175,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void update() {
 		if (getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
+			ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
 			ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.LEVER){
 				connections.add(EnumFacing.UP);
@@ -249,12 +244,12 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 									ItemStack extracted = handler.extractItem(slot, 1, false);
 									this.inventory.insertItem(0, extracted, false);
 									lastReceived = getPos().offset(face);
-									IBlockState state = getWorld().getBlockState(getPos().offset(face));
-									(tile).markDirty();
-									getWorld().notifyBlockUpdate(getPos().offset(face), state, state, 3);
-									state = getWorld().getBlockState(getPos());
-									markDirty();
-									getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+									if (!toUpdate.contains(getPos().offset(face))){
+										toUpdate.add(getPos().offset(face));
+									}
+									if (!toUpdate.contains(getPos())){
+										toUpdate.add(getPos());
+									}
 									takenItems = true;
 								}
 							}
@@ -272,7 +267,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 									((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
 									IBlockState state = getWorld().getBlockState(getPos().offset(face));
 									((TileEntityItemPipe)tile).markDirty();
-									getWorld().notifyBlockUpdate(getPos().offset(face), state, state, 3);
+									getWorld().notifyBlockUpdate(getPos().offset(face), state, state, 8);
 								}
 								IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 								if (handler != null){
@@ -300,12 +295,12 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 													((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
 													((TileEntityItemPipe)tile).lastReceived = getPos();
 												}
-												IBlockState state = getWorld().getBlockState(getPos().offset(face));
-												(tile).markDirty();
-												getWorld().notifyBlockUpdate(getPos().offset(face), state, state, 3);
-												state = getWorld().getBlockState(getPos());
-												markDirty();
-												getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+												if (!toUpdate.contains(getPos().offset(face))){
+													toUpdate.add(getPos().offset(face));
+												}
+												if (!toUpdate.contains(getPos())){
+													toUpdate.add(getPos());
+												}
 											}
 										}
 									}
@@ -314,6 +309,11 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
+			}
+			for (int i = 0; i < toUpdate.size(); i ++){
+				getWorld().getTileEntity(toUpdate.get(i)).markDirty();
+				IBlockState state = getWorld().getBlockState(toUpdate.get(i));
+				getWorld().notifyBlockUpdate(toUpdate.get(i), state, state, 3);
 			}
 		}
 	}

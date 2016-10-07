@@ -165,7 +165,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 								}
 								bin.markDirty();
 								IBlockState state = getWorld().getBlockState(getPos().offset(face,3));
-								getWorld().notifyBlockUpdate(getPos().offset(face,3), state, state, 3);
+								getWorld().notifyBlockUpdate(getPos().offset(face,3), state, state, 8);
 							}
 							else if (!getWorld().isRemote){
 								EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
@@ -173,7 +173,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 							}
 							stamp.markDirty();
 							IBlockState state = getWorld().getBlockState(getPos().offset(face,2));
-							getWorld().notifyBlockUpdate(getPos().offset(face,2), state, state, 3);
+							getWorld().notifyBlockUpdate(getPos().offset(face,2), state, state, 8);
 						}
 						ItemStampingOreRecipe oreRecipe = RecipeRegistry.getStampingOreRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
 						if (oreRecipe != null){
@@ -182,20 +182,20 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 					}
 					markDirty();
 					IBlockState state = getWorld().getBlockState(getPos());
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+					getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 				}
 				else if (this.ticksExisted % 80 == 10 && powered){
 					powered = false;
 					markDirty();
 					IBlockState state = getWorld().getBlockState(getPos());
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+					getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 				}
 			}
 			else if (powered){
 				powered = false;
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+				getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 			}
 		}
 	}

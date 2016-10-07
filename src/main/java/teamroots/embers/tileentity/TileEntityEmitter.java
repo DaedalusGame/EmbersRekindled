@@ -153,10 +153,10 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					double removed = cap.removeAmount(10, true);
 					double added = capability.addAmount(removed, true);
 					markDirty();
-					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
 					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
 					getWorld().getTileEntity(offset).markDirty();
-					getWorld().notifyBlockUpdate(offset,getWorld().getBlockState(offset),getWorld().getBlockState(offset),3);
+					getWorld().notifyBlockUpdate(offset,getWorld().getBlockState(offset),getWorld().getBlockState(offset),8);
 				}
 			}
 		}
@@ -168,25 +168,25 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					double vx = 0, vy = 0, vz = 0;
 		
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.UP){
-						vy = 0.2;
+						vy = 0.5;
 					}
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.DOWN){
-						vy = -0.2;
+						vy = -0.5;
 					}
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.NORTH){
-						vz = -0.2;
+						vz = -0.5;
 						vy = -0.01;
 					}
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.SOUTH){
-						vz = 0.2;
+						vz = 0.5;
 						vy = -0.01;
 					}
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.WEST){
-						vx = -0.2;
+						vx = -0.5;
 						vy = -0.01;
 					}
 					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.EAST){
-						vx = 0.2;
+						vx = 0.5;
 						vy = -0.01;
 					}
 					
@@ -194,7 +194,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					this.capability.removeAmount(Math.min(40.0,capability.getEmber()), true);
 					getWorld().spawnEntityInWorld(packet);
 					markDirty();
-					getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+					getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 				}
 			}
 		}

@@ -101,7 +101,7 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 		if (heldItem != null){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
-			world.notifyBlockUpdate(pos, state, state, 3);
+			world.notifyBlockUpdate(pos, state, state, 8);
 			return true;
 		}
 		else {
@@ -109,7 +109,7 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 				world.spawnEntityInWorld(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
 				inventory.setStackInSlot(0, null);
 				markDirty();
-				getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+				getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
 				return true;
 			}
 		}

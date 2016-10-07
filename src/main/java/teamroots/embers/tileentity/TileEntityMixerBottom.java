@@ -177,10 +177,10 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 						top.capability.removeAmount(2.0, true);
 						markDirty();
 						IBlockState state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
 						top.markDirty();
 						IBlockState topState = getWorld().getBlockState(getPos().up());
-						getWorld().notifyBlockUpdate(getPos().up(), getWorld().getBlockState(getPos().up()), getWorld().getBlockState(getPos().up()), 3);
+						getWorld().notifyBlockUpdate(getPos().up(), getWorld().getBlockState(getPos().up()), getWorld().getBlockState(getPos().up()), 8);
 					}
 				}
 			}

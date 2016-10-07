@@ -35,6 +35,7 @@ tile.fluidGauge.name=Fluid Gauge
 tile.emberGauge.name=Ember Gauge
 tile.itemGauge.name=Item Gauge
 tile.blockLantern.name=Ember Lantern
+tile.stoneEdge.name=Caminite Ring
 
 fluid.moltenIron=Molten Iron
 fluid.moltenGold=Molten Gold

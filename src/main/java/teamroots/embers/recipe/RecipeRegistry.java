@@ -160,8 +160,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockTank,1),true,new Object[]{
 				"B B",
 				"P P",
-				"XIX",
-				'X', RegistryManager.blockCaminiteBrick,
+				"BIB",
 				'I', "ingotIron",
 				'P', "plateIron",
 				'B', RegistryManager.brickCaminite}));
@@ -185,15 +184,16 @@ public class RecipeRegistry {
 				'F', Blocks.FURNACE,
 				'I', "ingotIron",
 				'C', "ingotCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberReceiver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberReceiver,4),true,new Object[]{
 				"I I",
-				"ICI",
+				"CPC",
 				'I', "ingotIron",
-				'C', "ingotCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberEmitter,1),true,new Object[]{
+				'C', "ingotCopper",
+				'P', RegistryManager.plateCaminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberEmitter,4),true,new Object[]{
 				" C ",
-				" P ",
-				"ICI",
+				" C ",
+				"IPI",
 				'I', "ingotIron",
 				'C', "ingotCopper",
 				'P', RegistryManager.plateCaminite}));
@@ -222,9 +222,9 @@ public class RecipeRegistry {
 				'P', "plateIron",
 				'I', "ingotIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stamper,1),true,new Object[]{
-				"YRY",
-				"CBC",
+				"XCX",
 				"XBX",
+				"X X",
 				'B', "blockIron",
 				'C', "ingotCopper",
 				'Y', RegistryManager.blockCaminiteBrick,
@@ -232,50 +232,46 @@ public class RecipeRegistry {
 				'R', "dustRedstone"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stampBase,1),true,new Object[]{
 				"I I",
-				"YIY",
-				"XYX",
+				"XBX",
 				'I', "ingotIron",
-				'Y', RegistryManager.blockCaminiteBrick,
-				'X', RegistryManager.brickCaminite}));
+				'B', Items.BUCKET,
+				'X', RegistryManager.blockCaminiteBrick}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberBore,1),true,new Object[]{
 				"YCY",
-				"YMY",
-				"IBI",
+				"YBY",
+				"III",
 				'I', "ingotIron",
-				'B', "blockIron",
-				'Y', RegistryManager.blockCaminiteBrick,
-				'C', "ingotCopper",
-				'M', RegistryManager.mechCore}));
+				'B', RegistryManager.mechCore,
+				'Y', RegistryManager.stairsCaminiteBrick,
+				'C', "ingotCopper"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mechCore,1),true,new Object[]{
 				"IBI",
-				" C ",
+				" P ",
 				"I I",
 				'I', "ingotIron",
-				'C', "ingotCopper",
+				'P', "plateLead",
 				'B', Items.COMPASS}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mechAccessor,1),true,new Object[]{
-				"XII",
-				"P P",
-				"XXX",
-				'I', "plateIron",
-				'X', RegistryManager.brickCaminite,
-				'P', RegistryManager.pipe}));
+				"SPI",
+				'P', "plateIron",
+				'S', RegistryManager.stairsCaminiteBrick,
+				'I', "ingotIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberActivator,1),true,new Object[]{
 				"CCC",
 				"CCC",
 				"IFI",
 				'C', "ingotCopper",
 				'F', Blocks.FURNACE,
-				'I', "ingotIron"}));
+				'I', "plateIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stoneEdge,1),true,new Object[]{
-				"XYX",
+				"XXX",
 				"Y Y",
-				"XYX",
+				"XXX",
 				'Y', RegistryManager.brickCaminite,
-				'X', RegistryManager.blockCaminiteBrick}));
+				'X', RegistryManager.wallCaminiteBrick}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mixer,1),true,new Object[]{
+				"PPP",
 				"PCP",
-				"P P",
 				"IMI",
 				'P', "plateIron",
 				'C', "ingotCopper",
@@ -284,24 +280,23 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.heatCoil,1),true,new Object[]{
 				"PPP",
 				"IBI",
-				"YMY",
+				" M ",
 				'P', "plateCopper",
 				'B', "blockCopper",
 				'M', RegistryManager.mechCore,
-				'I', "ingotIron",
-				'Y', RegistryManager.blockCaminiteBrick}));
+				'I', "ingotIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.itemDropper,1),true,new Object[]{
 				" P ",
 				"I I",
 				'P', RegistryManager.pipe,
 				'I', "ingotIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.largeTank,1),true,new Object[]{
-				"YBY",
-				"IBI",
-				"YYY",
-				'Y', RegistryManager.blockCaminiteBrick,
+				"Y Y",
+				"I I",
+				"YTY",
+				'Y', RegistryManager.stairsCaminiteBrick,
 				'I', "ingotIron",
-				'B', RegistryManager.bin}));
+				'T', RegistryManager.blockTank}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberGauge,1),true,new Object[]{
 				"B",
 				"P",
@@ -326,23 +321,24 @@ public class RecipeRegistry {
 				'I', "ingotIron",
 				'B', Items.COMPASS}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockLantern,4),true,new Object[]{
-				"I",
+				"P",
 				"E",
 				"I",
 				'E', RegistryManager.shardEmber,
-				'I', "ingotIron"}));
+				'I', "ingotIron",
+				'P', "plateIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.tinkerHammer,1),true,new Object[]{
 				"IBI",
+				"ISI",
 				" S ",
-				" S ",
-				'B', Blocks.STONEBRICK,
+				'B', "ingotLead",
 				'I', "ingotIron",
 				'S', "stickWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberDetector,1),true,new Object[]{
 				" I ",
 				"CRC",
 				"CIC",
-				'C', "ingotIron",
+				'C', "ingotCopper",
 				'I', "ingotIron",
 				'R', "dustRedstone"}));
 		

@@ -93,10 +93,10 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 					double removed = capability.removeAmount(added, true);
 					cap.removeAmount(added-removed, true);
 					markDirty();
-					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
 					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
 					getWorld().getTileEntity(offset).markDirty();
-					getWorld().notifyBlockUpdate(offset,getWorld().getBlockState(offset),getWorld().getBlockState(offset),3);
+					getWorld().notifyBlockUpdate(offset,getWorld().getBlockState(offset),getWorld().getBlockState(offset),8);
 				}
 			}
 		}

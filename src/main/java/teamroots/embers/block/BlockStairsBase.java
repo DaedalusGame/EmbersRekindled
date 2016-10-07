@@ -17,6 +17,7 @@ public class BlockStairsBase extends BlockStairs implements IBlockModel {
 	public BlockRenderLayer layer = BlockRenderLayer.SOLID;
 	public BlockStairsBase(IBlockState state, String name, boolean addToTab){
 		super(state);
+		this.useNeighborBrightness = true;
 		setUnlocalizedName(name);
 		setRegistryName(Embers.MODID+":"+name);
 		if (addToTab){

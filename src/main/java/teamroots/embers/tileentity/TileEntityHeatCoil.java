@@ -197,7 +197,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 						}
 						markDirty();
 						IBlockState state = getWorld().getBlockState(getPos());
-						getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+						getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 						if (remainder != null){
 							getWorld().spawnEntityInWorld(new EntityItem(getWorld(),items.get(i).posX,items.get(i).posY,items.get(i).posZ,remainder));
 						}

@@ -144,10 +144,10 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 							inventory.extractItem(i, 1, false);
 							markDirty();
 							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+							getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 							top.markDirty();
 							state = getWorld().getBlockState(getPos().up());
-							getWorld().notifyBlockUpdate(getPos().up(), state, state, 3);
+							getWorld().notifyBlockUpdate(getPos().up(), state, state, 8);
 						}
 					}
 					else if (inventory.getStackInSlot(i).getItem() == RegistryManager.crystalEmber){
@@ -156,10 +156,10 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 							inventory.extractItem(i, 1, false);
 							markDirty();
 							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 3);
+							getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 							top.markDirty();
 							state = getWorld().getBlockState(getPos().up());
-							getWorld().notifyBlockUpdate(getPos().up(), state, state, 3);
+							getWorld().notifyBlockUpdate(getPos().up(), state, state, 8);
 						}
 					}
 				}
