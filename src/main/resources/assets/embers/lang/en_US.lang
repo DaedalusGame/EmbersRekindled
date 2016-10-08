@@ -36,6 +36,8 @@ tile.emberGauge.name=Ember Gauge
 tile.itemGauge.name=Item Gauge
 tile.blockLantern.name=Ember Lantern
 tile.stoneEdge.name=Caminite Ring
+tile.beamSplitter.name=Beam Splitter
+tile.emberRelay.name=Ember Relay
 
 fluid.moltenIron=Molten Iron
 fluid.moltenGold=Molten Gold

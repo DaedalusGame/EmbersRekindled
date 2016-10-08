@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.block.BlockEmberEmitter;
+import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -122,5 +123,10 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 	@Override
 	public boolean isFull(){
 		return capability.getEmber() >= capability.getEmberCapacity();
+	}
+
+	@Override
+	public boolean onReceive(EntityEmberPacket packet) {
+		return true;
 	}
 }

@@ -78,7 +78,7 @@ public class TileEntityLantern extends TileEntity implements ITileEntityBase, IT
 	public void update() {
 		if (getWorld().isRemote){
 			for (int i = 0; i < 3; i ++){
-				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.5f, getPos().getY()+0.375f, getPos().getZ()+0.5f, (random.nextFloat()-0.5f)*0.015f, (random.nextFloat())*0.015f, (random.nextFloat()-0.5f)*0.015f, 255, 64, 16);
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.5f, getPos().getY()+0.375f, getPos().getZ()+0.5f, (random.nextFloat()-0.5f)*0.015f, (random.nextFloat())*0.015f, (random.nextFloat()-0.5f)*0.015f, 255, 64, 16, 2.5f);
 			}
 		}
 	}

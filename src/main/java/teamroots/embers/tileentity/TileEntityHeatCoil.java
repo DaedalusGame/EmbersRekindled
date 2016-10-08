@@ -207,7 +207,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			if (getWorld().isRemote && heat > 0){
 				float particleCount = (1+random.nextInt(2))*(1+(float)Math.sqrt((double)heat));
 				for (int i = 0; i < particleCount; i ++){
-					ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, 0, 0, 255, 64, 16);
+					ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, 0, 0, 255, 64, 16, 2.0f);
 				}
 			}
 		//}

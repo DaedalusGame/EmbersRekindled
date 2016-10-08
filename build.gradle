@@ -20,7 +20,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.001"
+version = "0.005"
 group= "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "embers"
 
@@ -73,6 +73,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     deobfCompile "mezz.jei:jei_1.10.2:+"
+    compile files('libs/')
 }
 
 processResources

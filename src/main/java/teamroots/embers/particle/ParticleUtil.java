@@ -16,9 +16,9 @@ public class ParticleUtil {
 		}*/
 	}
 	
-	public static void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b){
+	public static void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale){
 		if (Embers.proxy instanceof ClientProxy){
-			((ClientProxy)Embers.proxy).particleRenderer.addParticle(new ParticleGlow(world,x,y,z,vx,vy,vz,r,g,b));
+			((ClientProxy)Embers.proxy).particleRenderer.addParticle(new ParticleGlow(world,x,y,z,vx,vy,vz,r,g,b, scale));
 		}
 	}
 }

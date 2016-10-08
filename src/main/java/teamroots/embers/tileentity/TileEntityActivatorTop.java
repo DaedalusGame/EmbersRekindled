@@ -120,7 +120,7 @@ public class TileEntityActivatorTop extends TileEntity implements ITileEntityBas
 	public void update() {
 		if (this.capability.getEmber() > 0 && getWorld().isRemote){
 			for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
-				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, 0, 0, 255, 64, 16);
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, 0, 0, 255, 64, 16, 2.0f);
 			}
 		}
 	}

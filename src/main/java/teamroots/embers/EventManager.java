@@ -83,28 +83,26 @@ public class EventManager {
 	@SubscribeEvent
 	public void onChunkGeneration(ChunkEvent.Load event){
 		EmberWorldData data = EmberWorldData.get(event.getWorld());
-		if (random.nextInt(20) == 0 && !event.getWorld().isRemote){
-			if (!data.emberData.containsKey(""+event.getChunk().xPosition+" "+event.getChunk().zPosition)){
-				Biome biome = event.getWorld().getBiomeProvider().getBiomeGenerator(new BlockPos(event.getChunk().xPosition*16,64,event.getChunk().zPosition*16));
-				int baseAmount = 8000;
-				int bonusAmount = 8000;
-				double mult = 1;
-				if (Misc.isHills(biome)){
-					mult = 2;
-				}
-				if (Misc.isExtremeHills(biome)){
-					mult = 4;
-				}
-				baseAmount *= mult;
-				bonusAmount *= mult;
-				double value = 4.0*(baseAmount+random.nextDouble()*bonusAmount);
+		if (!data.emberData.containsKey(""+event.getChunk().xPosition+" "+event.getChunk().zPosition)){
+			Biome biome = event.getWorld().getBiomeProvider().getBiomeGenerator(new BlockPos(event.getChunk().xPosition*16,64,event.getChunk().zPosition*16));
+			int baseAmount = 8000;
+			int bonusAmount = 8000;
+			double mult = 1;
+			if (Misc.isHills(biome)){
+				mult = 2;
+			}
+			if (Misc.isExtremeHills(biome)){
+				mult = 4;
+			}
+			baseAmount *= mult;
+			bonusAmount *= mult;
+			double value = 4.0*(baseAmount+random.nextDouble()*bonusAmount);
+			if (random.nextInt(20/((int)mult)) == 0 && !event.getWorld().isRemote){
 				data.emberData.put(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value);
 				data.markDirty();
 				PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value));
 			}
-		}
-		else {
-			if (!data.emberData.containsKey(""+event.getChunk().xPosition+" "+event.getChunk().zPosition)){
+			else {
 				data.emberData.put(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0);
 				data.markDirty();
 				PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0));

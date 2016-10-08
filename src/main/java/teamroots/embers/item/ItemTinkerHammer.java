@@ -53,7 +53,7 @@ public class ItemTinkerHammer extends ItemBase {
 			return EnumActionResult.SUCCESS;
 		}
 		else if (tile instanceof IEmberPacketProducer && stack.getTagCompound().hasKey("targetX")){
-			((IEmberPacketProducer)tile).setTargetPosition(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")));
+			((IEmberPacketProducer)tile).setTargetPosition(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")), face);
 			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
 			return EnumActionResult.SUCCESS;
 		}

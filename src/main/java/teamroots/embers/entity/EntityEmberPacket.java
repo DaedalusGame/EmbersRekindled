@@ -14,8 +14,8 @@ import teamroots.embers.power.IEmberPacketReceiver;
 public class EntityEmberPacket extends Entity {
 
 	BlockPos pos = new BlockPos(0,0,0);
-	BlockPos dest = new BlockPos(0,0,0);
-	double value = 0;
+	public BlockPos dest = new BlockPos(0,0,0);
+	public double value = 0;
 	int lifetime = 80;
 	
 	public EntityEmberPacket(World worldIn) {
@@ -54,9 +54,11 @@ public class EntityEmberPacket extends Entity {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
-		compound.setInteger("destX",dest.getX());
-		compound.setInteger("destY",dest.getY());
-		compound.setInteger("destZ",dest.getZ());
+		if (dest != null){
+			compound.setInteger("destX",dest.getX());
+			compound.setInteger("destY",dest.getY());
+			compound.setInteger("destZ",dest.getZ());
+		}
 		compound.setDouble("x", posX);
 		compound.setDouble("y", posY);
 		compound.setDouble("z", posZ);
@@ -102,21 +104,24 @@ public class EntityEmberPacket extends Entity {
 			this.kill();
 		}
 		if (getEntityWorld().isRemote){
+			float scale = (float) Math.sqrt(value/10.0);
 			for (double i = 0; i < 9; i ++){
 				double coeff = i/9.0;
-				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16);
+				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, scale);
 			}
 		}
 	}
 	
 	public void affectTileEntity(IBlockState state, TileEntity tile){
 		if (tile instanceof IEmberPacketReceiver){
-			if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
-				tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(value, true);
-				tile.markDirty();
-				tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
-				getEntityWorld().removeEntity(this);
-				this.kill();
+			if (((IEmberPacketReceiver)tile).onReceive(this)){
+				if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+					tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(value, true);
+					tile.markDirty();
+					tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
+					getEntityWorld().removeEntity(this);
+					this.kill();
+				}
 			}
 		}
 	}

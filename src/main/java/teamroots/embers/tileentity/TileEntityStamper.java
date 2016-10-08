@@ -59,7 +59,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	
 	public TileEntityStamper(){
 		super();
-		capability.setEmberCapacity(200);
+		capability.setEmberCapacity(8000);
 	}
 	
 	@Override

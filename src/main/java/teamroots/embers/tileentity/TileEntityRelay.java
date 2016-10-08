@@ -33,10 +33,10 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.TileEntityEmitter.EnumConnection;
+import teamroots.embers.tileentity.TileEntityRelay.EnumConnection;
 import teamroots.embers.tileentity.TileEntityPipe.EnumPipeConnection;
 
-public class TileEntityEmitter extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer {
+public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer, IEmberPacketReceiver {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public BlockPos target = null;
 	public long ticksExisted = 0;
@@ -58,9 +58,9 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	
 	public EnumConnection up = EnumConnection.NONE, down = EnumConnection.NONE, north = EnumConnection.NONE, south = EnumConnection.NONE, east = EnumConnection.NONE, west = EnumConnection.NONE;
 	
-	public TileEntityEmitter(){
+	public TileEntityRelay(){
 		super();
-		capability.setEmberCapacity(200);
+		capability.setEmberCapacity(0);
 	}
 	
 	public void updateNeighbors(IBlockAccess world){
@@ -220,8 +220,42 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 
 	@Override
 	public void setTargetPosition(BlockPos pos, EnumFacing side) {
-		target = pos;
-		markDirty();
-		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(pos), getWorld().getBlockState(pos), 3);
+		if (pos.compareTo(getPos()) != 0){
+			capability.setEmberCapacity(200);
+			target = pos;
+			markDirty();
+			getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(pos), getWorld().getBlockState(pos), 8);
+		}
+	}
+
+	@Override
+	public boolean isFull() {
+		if (target != null){
+			TileEntity tile = getWorld().getTileEntity(target);
+			if (tile instanceof TileEntityRelay){
+				if (((TileEntityRelay)tile).target != null){
+					if (((TileEntityRelay)tile).target.compareTo(getPos()) != 0){
+						return ((IEmberPacketReceiver)tile).isFull();
+					}
+				}
+			}
+			else {
+				if (tile instanceof IEmberPacketReceiver){
+					return ((IEmberPacketReceiver)tile).isFull();
+				}
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onReceive(EntityEmberPacket packet) {
+		if (target != null){
+			packet.dest = target;
+		}
+		else {
+			packet.dest = getPos();
+		}
+		return false;
 	}
 }
