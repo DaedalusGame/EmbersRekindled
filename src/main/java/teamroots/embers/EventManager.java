@@ -191,7 +191,7 @@ public class EventManager {
 		World world = player.getEntityWorld();
 		
 		RayTraceResult result = player.rayTrace(6.0, e.getPartialTicks());
-		if (result.typeOfHit != null){
+		if (result != null){
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK){
 				IBlockState state = world.getBlockState(result.getBlockPos());
 				if (state.getBlock() instanceof IDial){

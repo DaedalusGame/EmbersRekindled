@@ -89,9 +89,8 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
 				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
 				if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
-					double added = cap.addAmount(10, true);
+					double added = cap.addAmount(Math.min(10,capability.getEmber()), true);
 					double removed = capability.removeAmount(added, true);
-					cap.removeAmount(added-removed, true);
 					markDirty();
 					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
 					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);

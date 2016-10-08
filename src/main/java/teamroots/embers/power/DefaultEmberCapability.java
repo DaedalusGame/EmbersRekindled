@@ -29,10 +29,11 @@ public class DefaultEmberCapability implements IEmberCapability {
 	@Override
 	public double addAmount(double value, boolean doAdd) {
 		if (ember+value > capacity){
+			double added = capacity-ember;
 			if (doAdd){
 				ember = capacity;
 			}
-			return capacity-ember;
+			return added;
 		}
 		if (doAdd){
 			ember += value;
@@ -43,10 +44,11 @@ public class DefaultEmberCapability implements IEmberCapability {
 	@Override
 	public double removeAmount(double value, boolean doRemove) {
 		if (ember-value < 0){
+			double removed = ember;
 			if (doRemove){
 				ember = 0;
 			}
-			return ember;
+			return removed;
 		}
 		if (doRemove){
 			ember -= value;

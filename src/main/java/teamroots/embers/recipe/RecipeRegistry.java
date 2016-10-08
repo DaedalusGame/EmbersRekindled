@@ -2,6 +2,7 @@ package teamroots.embers.recipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.minecraft.init.Blocks;
@@ -416,5 +417,23 @@ public class RecipeRegistry {
 			}
 		}
 		return null;
+	}
+	
+	public static ArrayList<ItemMeltingRecipe> getMeltingRecipeList(){
+		Iterator<ItemMeltingRecipe> i = meltingRecipes.values().iterator();
+		ArrayList<ItemMeltingRecipe> recipes = new ArrayList<ItemMeltingRecipe>();
+		while (i.hasNext()){
+			recipes.add(i.next());
+		}
+		return recipes;
+	}
+	
+	public static ArrayList<ItemMeltingOreRecipe> getMeltingOreRecipeList(){
+		Iterator<ItemMeltingOreRecipe> i = meltingOreRecipes.values().iterator();
+		ArrayList<ItemMeltingOreRecipe> recipes = new ArrayList<ItemMeltingOreRecipe>();
+		while (i.hasNext()){
+			recipes.add(i.next());
+		}
+		return recipes;
 	}
 }
