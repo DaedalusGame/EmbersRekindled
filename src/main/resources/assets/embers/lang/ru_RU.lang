@@ -39,14 +39,14 @@ tile.stoneEdge.name=Каминитовое кольцо
 tile.beamSplitter.name=Разделитель луча
 tile.emberRelay.name=Эмбер-реле
 
-fluid.moltenIron=Расплавленное железо
-fluid.moltenGold=Расплавленное золото
-fluid.moltenCopper=Расплавленная медь
-fluid.moltenLead=Расплавленный свинец
-fluid.moltenSilver=Расплавленное серебро
-fluid.moltenAstralite=Расплавленный астралит
-fluid.moltenDawnstone=Расплавленный давнстоун
-fluid.moltenUmberSteel=Расплавленная жженая сталь
+fluid.iron=Расплавленное железо
+fluid.gold=Расплавленное золото
+fluid.copper=Расплавленная медь
+fluid.lead=Расплавленный свинец
+fluid.silver=Расплавленное серебро
+fluid.astralite=Расплавленный астралит
+fluid.dawnstone=Расплавленный давнстоун
+fluid.umberSteel=Расплавленная жженая сталь
 
 item.ingotCopper.name=Медный слиток
 item.ingotSilver.name=Серебряный слиток
@@ -85,3 +85,4 @@ embers.tooltip.emberdial.ember=Эмбер:
 
 embers.jei.recipe.stamp=Штамповка
 embers.jei.recipe.melter=Плавление
+embers.jei.recipe.mixer=Смешивание
