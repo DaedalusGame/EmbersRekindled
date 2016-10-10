@@ -79,9 +79,9 @@ item.nuggetIron.name=Iron Nugget
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
-embers.tooltip.itemdial.slot=Slot 
+embers.tooltip.itemdial.slot=Slot
 embers.tooltip.itemdial.noitem=NONE
-embers.tooltip.emberdial.ember=Ember: 
+embers.tooltip.emberdial.ember=Ember:
 
 embers.jei.recipe.stamp=Stamping Recipe
 embers.jei.recipe.melter=Melting Recipe

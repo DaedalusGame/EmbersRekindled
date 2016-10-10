@@ -101,7 +101,7 @@ public class BlockEmberGauge extends BlockBase implements IDial {
 			if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).hasCapability(EmberCapabilityProvider.emberCapability, Misc.getOppositeFace(state.getValue(facing)))){
 				IEmberCapability handler = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).getCapability(EmberCapabilityProvider.emberCapability, Misc.getOppositeFace(state.getValue(facing)));
 				if (handler != null){
-					text.add(I18n.format("embers.tooltip.emberdial.ember")+handler.getEmber()+"/"+handler.getEmberCapacity());
+					text.add(I18n.format("embers.tooltip.emberdial.ember")+" "+handler.getEmber()+"/"+handler.getEmberCapacity());
 				}
 			}
 		}

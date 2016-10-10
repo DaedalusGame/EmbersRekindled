@@ -80,8 +80,8 @@ item.nuggetIron.name=Железный самородок
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Цель:
 embers.tooltip.itemdial.slot=Слот
-embers.tooltip.itemdial.noitem=NONE
-embers.tooltip.emberdial.ember=Эмбер: 
+embers.tooltip.itemdial.noitem=ПУСТО
+embers.tooltip.emberdial.ember=Эмбер:
 
 embers.jei.recipe.stamp=Штамповка
 embers.jei.recipe.melter=Плавление
