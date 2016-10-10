@@ -100,12 +100,16 @@ public class EventManager {
 			if (random.nextInt(20/((int)mult)) == 0 && !event.getWorld().isRemote){
 				data.emberData.put(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value);
 				data.markDirty();
-				PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value));
+				if (!event.getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value));
+				}
 			}
 			else {
 				data.emberData.put(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0);
 				data.markDirty();
-				PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0));
+				if (!event.getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0));
+				}
 			}
 		}
 	}

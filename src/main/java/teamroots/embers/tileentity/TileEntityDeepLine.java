@@ -100,9 +100,6 @@ public class TileEntityDeepLine extends TileEntity implements ITileEntityBase, I
 					getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 					getWorld().spawnParticle(random.nextInt(3) == 0 ? EnumParticleTypes.SMOKE_LARGE : EnumParticleTypes.SMOKE_NORMAL, getPos().getX()+random.nextDouble(), getPos().getY()+random.nextDouble(), getPos().getZ()+random.nextDouble(), 0, 0.05*random.nextDouble(), 0, 0);
 				}
-				for (double i = 0; i < 360; i += 120){
-					ParticleUtil.spawnParticleGlow(getWorld(), (float)(getPos().getX()+0.5+0.5*Math.sin(Math.toRadians(i+((double)ticksExisted%360)))), (float)(getPos().getY()+3.5), (float)(getPos().getZ()+0.5+0.5*Math.cos(Math.toRadians(i+((double)ticksExisted%360)))), 0, 0, 0, 255, 64, 16);
-				}
 			}
 		}
 	}

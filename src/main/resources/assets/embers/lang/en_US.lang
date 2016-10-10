@@ -39,14 +39,14 @@ tile.stoneEdge.name=Caminite Ring
 tile.beamSplitter.name=Beam Splitter
 tile.emberRelay.name=Ember Relay
 
-fluid.moltenIron=Molten Iron
-fluid.moltenGold=Molten Gold
-fluid.moltenCopper=Molten Copper
-fluid.moltenLead=Molten Lead
-fluid.moltenSilver=Molten Silver
-fluid.moltenAstralite=Molten Astralite
-fluid.moltenDawnstone=Molten Dawnstone
-fluid.moltenUmberSteel=Molten Umber Steel
+fluid.iron=Molten Iron
+fluid.gold=Molten Gold
+fluid.copper=Molten Copper
+fluid.lead=Molten Lead
+fluid.silver=Molten Silver
+fluid.astralite=Molten Astralite
+fluid.dawnstone=Molten Dawnstone
+fluid.umberSteel=Molten Umber Steel
 
 item.ingotCopper.name=Copper Ingot
 item.ingotSilver.name=Silver Ingot
@@ -85,3 +85,4 @@ embers.tooltip.emberdial.ember=Ember:
 
 embers.jei.recipe.stamp=Stamping Recipe
 embers.jei.recipe.melter=Melting Recipe
+embers.jei.recipe.mixer=Mixing Recipe

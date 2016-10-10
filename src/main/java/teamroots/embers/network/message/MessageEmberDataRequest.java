@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -42,7 +44,18 @@ public class MessageEmberDataRequest implements IMessage {
     {
         @Override
         public IMessage onMessage(final MessageEmberDataRequest message, final MessageContext ctx) {
-    		return new MessageEmberData(EmberWorldData.get(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(message.id).getEntityWorld()));
+        	EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(message.id);
+    		for (int i = -16; i < 16; i ++){
+    			for (int j = -16; j < 16; j ++){
+    				EmberWorldData data = EmberWorldData.get(player.getEntityWorld());
+    				if (data != null){
+    					if (data.emberData.containsKey(""+(player.chunkCoordX+i)+" "+(player.chunkCoordZ+j))){
+    						PacketHandler.INSTANCE.sendTo(new MessageEmberGeneration(""+(player.chunkCoordX+i)+" "+(player.chunkCoordZ+j),data.emberData.get(""+(player.chunkCoordX+i)+" "+(player.chunkCoordZ+j))), (EntityPlayerMP) player);
+    					}
+    				}
+    			}
+    		}
+    		return null;
         }
     }
 

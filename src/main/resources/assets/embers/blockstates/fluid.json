@@ -4,59 +4,59 @@
         "model": "forge:fluid"
     },
     "variants": {
-        "molteniron": [
+        "iron": [
             {
                 "custom": {
-                    "fluid": "molteniron"
+                    "fluid": "iron"
                 }
             }
         ],
-        "moltengold": [
+        "gold": [
             {
                 "custom": {
-                    "fluid": "moltengold"
+                    "fluid": "gold"
                 }
             }
         ],
-        "moltensilver": [
+        "silver": [
             {
                 "custom": {
-                    "fluid": "moltensilver"
+                    "fluid": "silver"
                 }
             }
         ],
-        "moltencopper": [
+        "copper": [
             {
                 "custom": {
-                    "fluid": "moltencopper"
+                    "fluid": "copper"
                 }
             }
         ],
-        "moltenlead": [
+        "lead": [
             {
                 "custom": {
-                    "fluid": "moltenlead"
+                    "fluid": "lead"
                 }
             }
         ],
-        "moltenastralite": [
+        "astralite": [
             {
                 "custom": {
-                    "fluid": "moltenastralite"
+                    "fluid": "astralite"
                 }
             }
         ],
-        "moltendawnstone": [
+        "dawnstone": [
             {
                 "custom": {
-                    "fluid": "moltendawnstone"
+                    "fluid": "dawnstone"
                 }
             }
         ],
-        "moltenumbersteel": [
+        "umbersteel": [
             {
                 "custom": {
-                    "fluid": "moltenumbersteel"
+                    "fluid": "umbersteel"
                 }
             }
         ]

@@ -10,13 +10,13 @@ import teamroots.embers.RegistryManager;
 
 public class FluidMoltenLead extends Fluid {
 	public FluidMoltenLead() {
-		super("moltenLead",new ResourceLocation(Embers.MODID+":blocks/moltenLeadStill"),new ResourceLocation(Embers.MODID+":blocks/moltenLeadFlowing"));
+		super("lead",new ResourceLocation(Embers.MODID+":blocks/moltenLeadStill"),new ResourceLocation(Embers.MODID+":blocks/moltenLeadFlowing"));
 		setViscosity(6000);
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
 		setBlock(RegistryManager.blockMoltenLead);
-		setUnlocalizedName("moltenLead");
+		setUnlocalizedName("lead");
 	}
 	
 	@Override

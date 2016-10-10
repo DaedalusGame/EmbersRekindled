@@ -16,7 +16,7 @@ public class EntityEmberPacket extends Entity {
 	BlockPos pos = new BlockPos(0,0,0);
 	public BlockPos dest = new BlockPos(0,0,0);
 	public double value = 0;
-	int lifetime = 80;
+	public int lifetime = 80;
 	
 	public EntityEmberPacket(World worldIn) {
 		super(worldIn);

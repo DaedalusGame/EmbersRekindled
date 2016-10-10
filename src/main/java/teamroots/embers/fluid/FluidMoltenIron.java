@@ -10,13 +10,13 @@ import teamroots.embers.RegistryManager;
 
 public class FluidMoltenIron extends Fluid {
 	public FluidMoltenIron() {
-		super("moltenIron",new ResourceLocation(Embers.MODID+":blocks/fluidMetalBase"),new ResourceLocation(Embers.MODID+":blocks/fluidMetalFlowing"));
+		super("iron",new ResourceLocation(Embers.MODID+":blocks/fluidMetalBase"),new ResourceLocation(Embers.MODID+":blocks/fluidMetalFlowing"));
 		setViscosity(6000);
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
 		setBlock(RegistryManager.blockMoltenIron);
-		setUnlocalizedName("moltenIron");
+		setUnlocalizedName("iron");
 	}
 	
 	@Override

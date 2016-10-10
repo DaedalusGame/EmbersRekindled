@@ -342,6 +342,20 @@ public class RecipeRegistry {
 				'C', "ingotCopper",
 				'I', "ingotIron",
 				'R', "dustRedstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.beamSplitter,1),true,new Object[]{
+				" D ",
+				"CPC",
+				" I ",
+				'C', "ingotCopper",
+				'I', "ingotIron",
+				'P', "plateIron",
+				'D', "ingotDawnstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberRelay,4),true,new Object[]{
+				" C ",
+				"C C",
+				" P ",
+				'C', "ingotCopper",
+				'P', "plateIron"}));
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreCopper), new ItemStack(RegistryManager.ingotCopper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreSilver), new ItemStack(RegistryManager.ingotSilver), 0.35f);

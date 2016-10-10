@@ -47,7 +47,17 @@ public class EmbersJEIPlugin extends BlankModPlugin {
         }
         reg.addRecipes(meltingRecipes);
 
+        reg.addRecipeCategories(new MixingRecipeCategory(guiHelper));
+        reg.addRecipeHandlers(new MixingRecipeHandler());
+
+        ArrayList<MixingRecipeWrapper> mixingRecipes = new ArrayList<MixingRecipeWrapper>();
+        for (int i = 0; i < RecipeRegistry.mixingRecipes.size(); i ++){
+        	mixingRecipes.add(new MixingRecipeWrapper(RecipeRegistry.mixingRecipes.get(i)));
+        }
+        reg.addRecipes(mixingRecipes);
+
         reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.stamper),"embers.stamp");
         reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.blockFurnace),"embers.melter");
+        reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.mixer),"embers.mixer");
     }
 }

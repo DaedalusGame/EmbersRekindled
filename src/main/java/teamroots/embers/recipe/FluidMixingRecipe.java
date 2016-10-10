@@ -33,7 +33,7 @@ public class FluidMixingRecipe {
 		for (int i = 0; i < test.size(); i ++){
 			boolean doContinue = true;
 			for (int j = 0; j < checkInputs.size() && doContinue; j ++){
-				if (test.get(i).getFluid() == checkInputs.get(j).getFluid() && test.get(i).amount >= checkInputs.get(j).amount){
+				if (test.get(i).getFluid().getName().compareTo(checkInputs.get(j).getFluid().getName()) == 0 && test.get(i).amount >= checkInputs.get(j).amount){
 					checkInputs.remove(j);
 					doContinue = false;
 				}

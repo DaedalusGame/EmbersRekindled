@@ -14,14 +14,14 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.world.EmberWorldData;
 
 public class MessageEmberData implements IMessage {
-	NBTTagCompound tag = new NBTTagCompound();
+	public NBTTagCompound tag = new NBTTagCompound();
 	
 	public MessageEmberData(){
 		//
 	}
 	
-	public MessageEmberData(EmberWorldData data){
-		data.writeToNBT(tag);
+	public MessageEmberData(NBTTagCompound tag){
+		this.tag = tag;
 	}
 	
 	@Override

@@ -189,31 +189,6 @@ public class RegistryManager {
 		blocks.add(beamSplitter = (new BlockBeamSplitter(Material.ROCK,"beamSplitter",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(emberRelay = (new BlockRelay(Material.ROCK,"emberRelay",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		
-		FluidRegistry.registerFluid(fluidMoltenIron = new FluidMoltenIron());
-		blocks.add(blockMoltenIron = (new BlockMoltenIron("moltenIron",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenIron);
-		
-		FluidRegistry.registerFluid(fluidMoltenGold = new FluidMoltenGold());
-		blocks.add(blockMoltenGold = (new BlockMoltenGold("moltenGold",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenGold);
-		
-		FluidRegistry.registerFluid(fluidMoltenLead = new FluidMoltenLead());
-		blocks.add(blockMoltenLead = (new BlockMoltenLead("moltenLead",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenLead);
-		
-		FluidRegistry.registerFluid(fluidMoltenCopper = new FluidMoltenCopper());
-		blocks.add(blockMoltenCopper = (new BlockMoltenCopper("moltenCopper",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenCopper);
-		
-		FluidRegistry.registerFluid(fluidMoltenSilver = new FluidMoltenSilver());
-		blocks.add(blockMoltenSilver = (new BlockMoltenSilver("moltenSilver",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenSilver);
-		
-		
-		FluidRegistry.registerFluid(fluidMoltenDawnstone = new FluidMoltenDawnstone());
-		blocks.add(blockMoltenDawnstone = (new BlockMoltenDawnstone("moltenDawnstone",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenDawnstone);
-		
 		/*FluidRegistry.registerFluid(fluidMoltenUmberSteel = new FluidMoltenUmberSteel());
 		blocks.add(blockMoltenUmberSteel = (new BlockMoltenUmberSteel("moltenUmberSteel",false)));
 		FluidRegistry.addBucketForFluid(fluidMoltenUmberSteel);
@@ -250,9 +225,12 @@ public class RegistryManager {
 		items.add(emberDetector = new ItemEmberGauge());
 		items.add(shardEmber = new ItemBase("shardEmber",true));
 		items.add(crystalEmber = new ItemBase("crystalEmber",true));
-		items.add(debug = new ItemDebug());/*
+		//items.add(debug = new ItemDebug());
+		/*
 		items.add(ingotAstralite = new ItemBase("ingotAstralite",true));
 		items.add(ingotUmberSteel = new ItemBase("ingotUmberSteel",true));*/
+		
+		registerFluids();
 		
 		GameRegistry.registerTileEntity(TileEntityTank.class, Embers.MODID+":tileEntityTank");
 		GameRegistry.registerTileEntity(TileEntityPipe.class, Embers.MODID+":tileEntityPipe");
@@ -296,6 +274,33 @@ public class RegistryManager {
 		
 		//dimensionCave = DimensionType.register("cave", "cave", 90, CaveProvider.class, false);
 		//BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(biomeCave, 10000));
+	}
+	
+	public static void registerFluids(){
+		FluidRegistry.registerFluid(fluidMoltenIron = new FluidMoltenIron());
+		blocks.add(blockMoltenIron = (new BlockMoltenIron("moltenIron",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenIron);
+		
+		FluidRegistry.registerFluid(fluidMoltenGold = new FluidMoltenGold());
+		blocks.add(blockMoltenGold = (new BlockMoltenGold("moltenGold",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenGold);
+		
+		FluidRegistry.registerFluid(fluidMoltenLead = new FluidMoltenLead());
+		blocks.add(blockMoltenLead = (new BlockMoltenLead("moltenLead",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenLead);
+		
+		FluidRegistry.registerFluid(fluidMoltenCopper = new FluidMoltenCopper());
+		blocks.add(blockMoltenCopper = (new BlockMoltenCopper("moltenCopper",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenCopper);
+		
+		FluidRegistry.registerFluid(fluidMoltenSilver = new FluidMoltenSilver());
+		blocks.add(blockMoltenSilver = (new BlockMoltenSilver("moltenSilver",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenSilver);
+		
+		
+		FluidRegistry.registerFluid(fluidMoltenDawnstone = new FluidMoltenDawnstone());
+		blocks.add(blockMoltenDawnstone = (new BlockMoltenDawnstone("moltenDawnstone",false)));
+		FluidRegistry.addBucketForFluid(fluidMoltenDawnstone);
 	}
 	
 	@SideOnly(Side.CLIENT)

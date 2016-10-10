@@ -10,13 +10,13 @@ import teamroots.embers.RegistryManager;
 
 public class FluidMoltenGold extends Fluid {
 	public FluidMoltenGold() {
-		super("moltenGold",new ResourceLocation(Embers.MODID+":blocks/moltenGoldStill"),new ResourceLocation(Embers.MODID+":blocks/moltenGoldFlowing"));
+		super("gold",new ResourceLocation(Embers.MODID+":blocks/moltenGoldStill"),new ResourceLocation(Embers.MODID+":blocks/moltenGoldFlowing"));
 		setViscosity(6000);
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
 		setBlock(RegistryManager.blockMoltenGold);
-		setUnlocalizedName("moltenGold");
+		setUnlocalizedName("gold");
 	}
 	
 	@Override

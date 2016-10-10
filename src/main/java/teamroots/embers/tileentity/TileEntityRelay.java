@@ -252,6 +252,7 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITic
 	public boolean onReceive(EntityEmberPacket packet) {
 		if (target != null){
 			packet.dest = target;
+			packet.lifetime = 80;
 		}
 		else {
 			packet.dest = getPos();
