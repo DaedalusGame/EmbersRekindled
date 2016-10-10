@@ -77,9 +77,9 @@ item.crystalEmber.name=Эмбер-кристалл
 item.ingotDawnstone.name=Давнстоуновый слиток
 item.nuggetIron.name=Железный самородок
 
-embers.tooltip.atmosEmber=Atmospheric Ember:
+embers.tooltip.atmosEmber=Атмосферный эмбер:
 embers.tooltip.targetingBlock=Цель:
-embers.tooltip.itemdial.slot=Слот
+embers.tooltip.itemdial.slot=Слот {0}:
 embers.tooltip.itemdial.noitem=ПУСТО
 embers.tooltip.emberdial.ember=Эмбер:
 
