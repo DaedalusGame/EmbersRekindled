@@ -79,7 +79,7 @@ item.nuggetIron.name=Железный самородок
 
 embers.tooltip.atmosEmber=Атмосферный эмбер:
 embers.tooltip.targetingBlock=Цель:
-embers.tooltip.itemdial.slot=Слот {0}:
+embers.tooltip.itemdial.slot=Слот
 embers.tooltip.itemdial.noitem=ПУСТО
 embers.tooltip.emberdial.ember=Эмбер:
 
