@@ -100,7 +100,7 @@ public class BlockItemGauge extends BlockBase implements IDial {
 				IItemHandler handler = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Misc.getOppositeFace(state.getValue(facing)));
 				if (handler != null){
 					for (int i = 0; i < handler.getSlots(); i ++){
-						String line = I18n.format("embers.tooltip.itemdial.slot")+" : ";
+						String line = I18n.format("embers.tooltip.itemdial.slot")+" "+i+": ";
 						if (handler.getStackInSlot(i) == null){
 							text.add(line+I18n.format("embers.tooltip.itemdial.noitem"));
 						}
