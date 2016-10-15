@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:fluidGauge", "x": 180 },
+        "facing=up":    { "model": "embers:fluidGauge" },
+        "facing=north": { "model": "embers:fluidGauge", "x": 90 },
+        "facing=south": { "model": "embers:fluidGauge", "x": 90, "y": 180 },
+        "facing=west":  { "model": "embers:fluidGauge", "x": 90, "y": 270 },
+        "facing=east":  { "model": "embers:fluidGauge", "x": 90, "y": 90 }
+    }
+}

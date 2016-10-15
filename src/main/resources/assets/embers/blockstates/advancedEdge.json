@@ -1,0 +1,14 @@
+{
+    "variants":{
+        "state=9":  { "model": "embers:advancedEdge", "y": 0 },
+        "state=1":  { "model": "embers:advancedCorner", "y": 270 },
+        "state=2":  { "model": "embers:advancedEdge", "y": 270 },
+        "state=3":  { "model": "embers:advancedCorner", "y": 180 },
+        "state=4":  { "model": "embers:advancedEdge", "y": 180 },
+        "state=5":  { "model": "embers:advancedCorner", "y": 90 },
+        "state=6":  { "model": "embers:advancedEdge", "y": 90 },
+        "state=7":  { "model": "embers:advancedCorner", "y": 0 },
+        "state=8":  { "model": "embers:null", "y": 0 },
+        "state=0":  { "model": "embers:null", "y": 0 }
+    }
+}
