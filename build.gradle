@@ -20,7 +20,11 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
+<<<<<<< HEAD
 version = "0.010"
+=======
+version = "0.007"
+>>>>>>> 70cb7d1a4ebb3a05f19bfe0ae3b7fc9b7c7b984c
 group= "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "embers"
 
