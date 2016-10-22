@@ -39,6 +39,7 @@ tile.stoneEdge.name=Caminite Ring
 tile.beamSplitter.name=Beam Splitter
 tile.emberRelay.name=Ember Relay
 tile.crystalCell.name=Crystal Cell
+tile.charger.name=Copper Charger
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -100,6 +101,13 @@ item.axeSilver.name=Silver Axe
 item.shovelSilver.name=Silver Shovel
 item.hoeSilver.name=Silver Hoe
 item.swordSilver.name=Silver Sword
+item.emberJar.name=Mantle Jar
+item.emberCartridge.name=Mantle Cartridge
+item.ignitionCannon.name=Blazing Ray
+item.staffEmber.name=Cinder Staff
+item.axeClockwork.name=Clockwork Axe
+item.pickaxeClockwork.name=Clockwork Pickaxe
+item.grandhammer.name=Grandhammer
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:

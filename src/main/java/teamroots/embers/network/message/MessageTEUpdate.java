@@ -41,11 +41,12 @@ public class MessageTEUpdate implements IMessage {
     	@SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(final MessageTEUpdate message, final MessageContext ctx) {
-    		if ((Minecraft.getMinecraft().thePlayer.getEntityWorld()).getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))) != null){
-    			Minecraft.getMinecraft().thePlayer.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))).readFromNBT(message.tag);
-    		}
+    		Minecraft.getMinecraft().addScheduledTask(()-> {
+	    		if ((Minecraft.getMinecraft().thePlayer.getEntityWorld()).getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))) != null){
+	    			Minecraft.getMinecraft().thePlayer.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))).readFromNBT(message.tag);
+	    		}
+	    	});
     		return null;
-        }
+	    }
     }
-
 }

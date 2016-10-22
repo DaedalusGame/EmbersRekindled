@@ -77,11 +77,10 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == EnumFacing.UP){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override

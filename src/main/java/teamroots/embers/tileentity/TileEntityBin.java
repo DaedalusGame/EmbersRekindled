@@ -33,6 +33,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.power.DefaultEmberCapability;
+import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.Misc;
 
 public class TileEntityBin extends TileEntity implements ITileEntityBase, ITickable {
@@ -82,11 +84,10 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override

@@ -162,7 +162,6 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}

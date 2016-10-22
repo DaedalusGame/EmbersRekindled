@@ -32,7 +32,7 @@ import teamroots.embers.world.EmberWorldData;
 
 public class ItemDebug extends ItemBase {
 	public ItemDebug() {
-		super("axeClockwork", false);
+		super("debug", false);
 	}
 	
 	@Override

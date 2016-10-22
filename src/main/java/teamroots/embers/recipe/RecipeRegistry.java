@@ -87,11 +87,17 @@ public class RecipeRegistry {
 				"XXX",
 				"XXX",
 				'X', "nuggetSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingotDawnstone,9),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingotDawnstone),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "nuggetDawnstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystalEmber,1),true,new Object[]{
+				"XXX",
+				"XXX",
+				'X', RegistryManager.shardEmber}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.shardEmber,6),new Object[]{
+				RegistryManager.crystalEmber}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingotCopper,9),new Object[]{
 				"blockCopper"}));
@@ -535,6 +541,73 @@ public class RecipeRegistry {
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberJar,1),true,new Object[]{
+				" C ",
+				"ISI",
+				" G ",
+				'I', "ingotIron",
+				'S', RegistryManager.shardEmber,
+				'C', "ingotCopper",
+				'G', "blockGlass"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberCartridge,1),true,new Object[]{
+				"ICI",
+				"GSG",
+				" G ",
+				'I', "nuggetIron",
+				'S', RegistryManager.crystalEmber,
+				'C', "plateCopper",
+				'G', "blockGlass"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.charger,1),true,new Object[]{
+				" X ",
+				"DCD",
+				"IPI",
+				'D', "ingotDawnstone",
+				'P', "plateCopper",
+				'C', "ingotCopper",
+				'I', "ingotIron",
+				'X', "plateIron"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeClockwork,1),true,new Object[]{
+				"PCP",
+				"ISI",
+				" W ",
+				'C', "plateCopper",
+				'P', "plateDawnstone",
+				'I', "ingotDawnstone",
+				'S', RegistryManager.shardEmber,
+				'W', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxeClockwork,1),true,new Object[]{
+				"ISI",
+				" C ",
+				" W ",
+				'C', "ingotCopper",
+				'I', "ingotDawnstone",
+				'S', RegistryManager.shardEmber,
+				'W', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.grandhammer,1),true,new Object[]{
+				"BIB",
+				" C ",
+				" W ",
+				'C', "ingotCopper",
+				'I', "ingotDawnstone",
+				'B', "blockDawnstone",
+				'W', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.staffEmber,1),true,new Object[]{
+				"SES",
+				"IWI",
+				" W ",
+				'S', "plateSilver",
+				'I', "ingotDawnstone",
+				'E', RegistryManager.shardEmber,
+				'W', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ignitionCannon,1),true,new Object[]{
+				" DP",
+				"DPI",
+				"SW ",
+				'I', "ingotIron",
+				'D', "ingotDawnstone",
+				'P', "plateDawnstone",
+				'S', RegistryManager.shardEmber,
+				'W', "stickWood"}));
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreCopper), new ItemStack(RegistryManager.ingotCopper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreSilver), new ItemStack(RegistryManager.ingotSilver), 0.35f);

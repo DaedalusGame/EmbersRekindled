@@ -200,20 +200,18 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITic
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		super.getCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return (T)this.capability;
 		}
-		return (T)this.capability;
+		return super.getCapability(capability, facing);
 	}
 
 	@Override

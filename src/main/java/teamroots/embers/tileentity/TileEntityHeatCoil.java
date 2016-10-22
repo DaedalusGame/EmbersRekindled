@@ -127,14 +127,13 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return true;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override

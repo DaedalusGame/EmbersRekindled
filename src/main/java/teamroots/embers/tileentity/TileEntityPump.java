@@ -185,14 +185,16 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 				for (int i = 0; i < connectedFaces.size(); i ++){
 					if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
 						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-						FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
-						int filled = handler.fill(toAdd, true);
-						tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
-						if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-							toUpdate.add(getPos().offset(connectedFaces.get(i)));
-						}
-						if (!toUpdate.contains(getPos())){
-							toUpdate.add(getPos());
+						if (tank.getFluid() != null){
+							FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
+							int filled = handler.fill(toAdd, true);
+							tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+							if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+								toUpdate.add(getPos().offset(connectedFaces.get(i)));
+							}
+							if (!toUpdate.contains(getPos())){
+								toUpdate.add(getPos());
+							}
 						}
 					}
 				}

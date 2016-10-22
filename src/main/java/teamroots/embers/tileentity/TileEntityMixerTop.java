@@ -98,7 +98,6 @@ public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityB
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return true;
 		}

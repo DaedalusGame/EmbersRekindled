@@ -223,25 +223,23 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return true;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		super.getCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return (T)this.capability;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return (T)stamp;
 		}
-		return (T)this.capability;
+		return super.getCapability(capability, facing);
 	}
 }

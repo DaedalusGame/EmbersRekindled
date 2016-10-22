@@ -228,19 +228,17 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		super.hasCapability(capability, facing);
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		super.getCapability(capability, facing);
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return (T)this.inventory;
 		}
-		return null;
+		return super.getCapability(capability, facing);
 	}
 }

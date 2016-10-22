@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,6 +32,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -45,12 +47,16 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.block.IDial;
+import teamroots.embers.item.IEmberChargedTool;
 import teamroots.embers.item.ItemEmberGauge;
+import teamroots.embers.item.ItemGrandhammer;
 import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberData;
 import teamroots.embers.network.message.MessageEmberDataRequest;
 import teamroots.embers.network.message.MessageEmberGeneration;
 import teamroots.embers.proxy.ClientProxy;
+import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.FluidTextureUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
@@ -212,6 +218,48 @@ public class EventManager {
 	public void onTick(TickEvent.ClientTickEvent event){
 		if (event.side == Side.CLIENT){
 			((ClientProxy)Embers.proxy).particleRenderer.updateParticles();
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void onEntityDamaged(LivingHurtEvent event){
+		if (event.getSource().damageType == RegistryManager.damageEmber.damageType){
+			if (event.getEntityLiving().isPotionActive(Potion.getPotionFromResourceLocation("fire_resistance"))){
+				event.setAmount(event.getAmount()*0.5f);
+			}
+		}
+		if (event.getSource().getEntity() != null){
+			if (event.getSource().getEntity() instanceof EntityPlayer){
+				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand() != null){
+					if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
+						if (IEmberChargedTool.hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand())){
+							event.getEntityLiving().setFire(1);
+							if (!event.getEntityLiving().getEntityWorld().isRemote){
+								PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getEntityLiving().posX,event.getEntityLiving().posY+event.getEntityLiving().getEyeHeight()/1.5,event.getEntityLiving().posZ));
+								((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getTagCompound().setBoolean("didUse", true);
+							}
+						}
+						else {
+							event.setCanceled(true);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onBlockBreak(BlockEvent.BreakEvent event){
+		if (event.getPlayer() != null){
+			if (event.getPlayer().getHeldItemMainhand() != null){
+				/*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
+					PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
+				}*/
+				if (event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemGrandhammer){
+					event.setCanceled(true);
+					event.getWorld().setBlockToAir(event.getPos());
+				}
+			}
 		}
 	}
 	
