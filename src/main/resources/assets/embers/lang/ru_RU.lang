@@ -38,7 +38,8 @@ tile.blockLantern.name=Эмбер-фонарь
 tile.stoneEdge.name=Каминитовое кольцо
 tile.beamSplitter.name=Разделитель луча
 tile.emberRelay.name=Эмбер-реле
-tile.crystalCell.name=Кристалловая ячейка
+tile.crystalCell.name=Кристальное хранилище эмбера
+tile.charger.name=Медный зарядник
 
 fluid.iron=Расплавленное железо
 fluid.gold=Расплавленное золото
@@ -100,6 +101,13 @@ item.axeSilver.name=Серебряный топор
 item.shovelSilver.name=Серебряная лопата
 item.hoeSilver.name=Серебряная мотыга
 item.swordSilver.name=Серебряный меч
+item.emberJar.name=Мэнтл-банка
+item.emberCartridge.name=Мэнтл-картридж
+item.ignitionCannon.name=Пылающий луч
+item.staffEmber.name=Испепеляющий посох
+item.axeClockwork.name=Механический топор
+item.pickaxeClockwork.name=Механическая кирка
+item.grandhammer.name=Кувалда
 
 embers.tooltip.atmosEmber=Атмосферный эмбер:
 embers.tooltip.targetingBlock=Цель:
