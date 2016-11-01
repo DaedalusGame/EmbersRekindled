@@ -56,6 +56,7 @@ import teamroots.embers.network.message.MessageEmberData;
 import teamroots.embers.network.message.MessageEmberDataRequest;
 import teamroots.embers.network.message.MessageEmberGeneration;
 import teamroots.embers.proxy.ClientProxy;
+import teamroots.embers.util.BlockTextureUtil;
 import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.FluidTextureUtil;
 import teamroots.embers.util.Misc;
@@ -74,6 +75,8 @@ public class EventManager {
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre event){
 		FluidTextureUtil.initTextures(event.getMap());
+		
+		BlockTextureUtil.mapBlockTexture(event.getMap(), new ResourceLocation(Embers.MODID + ":textures/blocks/pipeTex.png"));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -93,8 +96,8 @@ public class EventManager {
 		EmberWorldData data = EmberWorldData.get(event.getWorld());
 		if (!data.emberData.containsKey(""+event.getChunk().xPosition+" "+event.getChunk().zPosition)){
 			Biome biome = event.getWorld().getBiomeProvider().getBiomeGenerator(new BlockPos(event.getChunk().xPosition*16,64,event.getChunk().zPosition*16));
-			int baseAmount = 40000;
-			int bonusAmount = 40000;
+			int baseAmount = 640000;
+			int bonusAmount = 640000;
 			double mult = 1;
 			if (Misc.isHills(biome)){
 				mult = 1.5;
@@ -232,7 +235,7 @@ public class EventManager {
 			if (event.getSource().getEntity() instanceof EntityPlayer){
 				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand() != null){
 					if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
-						if (IEmberChargedTool.hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand())){
+						if (IEmberChargedTool.hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getEntity()).capabilities.isCreativeMode){
 							event.getEntityLiving().setFire(1);
 							if (!event.getEntityLiving().getEntityWorld().isRemote){
 								PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getEntityLiving().posX,event.getEntityLiving().posY+event.getEntityLiving().getEyeHeight()/1.5,event.getEntityLiving().posZ));

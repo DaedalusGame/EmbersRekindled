@@ -1,5 +1,6 @@
 package teamroots.embers.block;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
@@ -52,6 +54,22 @@ public class BlockFurnace extends BlockTEBase {
     }
 	
 	@Override
+	public void onBlockExploded(World world, BlockPos pos, Explosion explosion){
+		if (!world.isRemote){
+			world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+		}
+		IBlockState state = world.getBlockState(pos);
+		if (this.getMetaFromState(state) == 0){
+			world.setBlockToAir(pos.up());
+		}
+		else {
+			world.setBlockToAir(pos.down());
+		}
+		((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world,pos,state,null);
+		world.setBlockToAir(pos);
+	}
+	
+	@Override
 	public BlockStateContainer createBlockState(){
 		return new BlockStateContainer(this, isTop);
 	}
@@ -79,7 +97,7 @@ public class BlockFurnace extends BlockTEBase {
 	
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
-		return null;
+		return new ArrayList<ItemStack>();
 	}
 	
 	@Override

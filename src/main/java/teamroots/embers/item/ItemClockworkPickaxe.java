@@ -48,7 +48,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		setHarvestLevel("pickaxe",this.toolMaterial.getHarvestLevel());
 		setHarvestLevel("shovel",this.toolMaterial.getHarvestLevel());
 		this.damageVsEntity = 6.0f;
-		this.attackSpeed = -2.7f;
+		this.attackSpeed = -3.0f;
 		GameRegistry.register(this);
 	}
 	
@@ -74,7 +74,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
-		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0){
+		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
 			double posX = player.posX;
 			double posY = player.posY+player.getEyeHeight();
 			double posZ = player.posZ;
@@ -98,6 +98,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 								BlockPos newPos = pos.add(xx,yy,zz);
 								if (this.canHarvestBlock(world.getBlockState(newPos),stack)){
 									IBlockState tempState = world.getBlockState(newPos);
+									tempState.getBlock().onBlockHarvested(world, newPos, tempState, player);
 									world.destroyBlock(newPos, true);
 									world.notifyBlockUpdate(newPos, state, Blocks.AIR.getDefaultState(), 3);
 								}

@@ -75,8 +75,8 @@ public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer {
                 GlStateManager.translate(x+0.5, y+height/2.0f+1.5, z+0.5);
 	            GlStateManager.scale(scale, scale, scale);
 
-                GlStateManager.rotate(30.0f*(float)Math.sin(Math.toRadians(partialTicks/3.0f+(float)(cell.ticksExisted/3%360))), 1, 0, 0);
                 GlStateManager.rotate(partialTicks+(float)(cell.ticksExisted%360), 0, 1, 0);
+                GlStateManager.rotate(30.0f*(float)Math.sin(Math.toRadians(partialTicks/3.0f+(float)(cell.ticksExisted/3%360))), 1, 0, 0);
                 
 	            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 	            for (int i = 0; i < widths.length-1; i ++){

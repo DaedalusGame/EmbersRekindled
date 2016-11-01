@@ -27,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.particle.ParticleUtil;
@@ -71,6 +73,7 @@ public class ItemCinderStaff extends ItemBase {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count){
 		double charge = (((double)Math.min(60, 72000-count))/60.0)*15.0;
@@ -92,7 +95,7 @@ public class ItemCinderStaff extends ItemBase {
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
-		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0){
+		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
 			EmberInventoryUtil.removeEmber(player, 25.0);
 			player.setActiveHand(hand);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);

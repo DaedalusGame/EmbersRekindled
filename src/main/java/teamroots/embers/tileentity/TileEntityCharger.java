@@ -6,10 +6,14 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -31,6 +35,7 @@ import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.item.IEmberItem;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
@@ -116,7 +121,7 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null){
-			if (heldItem.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+			if (heldItem.getItem() instanceof IEmberItem){
 				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 				markDirty();
 				if (!getWorld().isRemote){
@@ -126,11 +131,14 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			}
 		}
 		else {
-			if (inventory.getStackInSlot(0) != null && !world.isRemote){
-				world.spawnEntityInWorld(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
-				inventory.setStackInSlot(0, null);
-				markDirty();
-				getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
+			if (inventory.getStackInSlot(0) != null){
+				if (!getWorld().isRemote){
+					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).stackSize, false));
+					markDirty();
+					if (!getWorld().isRemote){
+						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+					}
+				}
 				return true;
 			}
 		}
@@ -148,9 +156,9 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	public void update() {
 		turnRate = 1;
 		if (inventory.getStackInSlot(0) != null && capability.getEmber() > 0){
-			if (inventory.getStackInSlot(0).hasCapability(EmberCapabilityProvider.emberCapability, null)){
+			if (inventory.getStackInSlot(0).getItem() instanceof IEmberItem){
 				//turnRate = 6;
-				double emberAdded = (inventory.getStackInSlot(0).getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(Math.min(10.0, capability.getEmber()), true));
+				double emberAdded = ((IEmberItem)inventory.getStackInSlot(0).getItem()).addAmount(inventory.getStackInSlot(0),Math.min(10.0, capability.getEmber()), true);
 				capability.removeAmount(emberAdded, true);
 				markDirty();
 				if (!getWorld().isRemote){

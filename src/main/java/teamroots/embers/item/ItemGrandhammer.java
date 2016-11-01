@@ -52,7 +52,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 		setHarvestLevel("axe",this.toolMaterial.getHarvestLevel());
 		setHarvestLevel("shovel",this.toolMaterial.getHarvestLevel());
 		this.damageVsEntity = 10.0f;
-		this.attackSpeed = -2.7f;
+		this.attackSpeed = -3.0f;
 		GameRegistry.register(this);
 	}
 	
@@ -78,7 +78,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
-		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0){
+		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
 			double posX = player.posX+1.5*player.getLookVec().xCoord;
 			double posY = player.posY+player.getEyeHeight()+1.5*player.getLookVec().yCoord;
 			double posZ = player.posZ+1.5*player.getLookVec().zCoord;

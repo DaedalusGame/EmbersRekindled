@@ -91,8 +91,10 @@ public class EntityEmberProjectile extends Entity {
 		posZ += motionZ;
 		IBlockState state = getEntityWorld().getBlockState(getPosition());
 		if (state.isFullCube() && state.isOpaqueCube()){
-			for (int i = 0; i < 80; i ++){
-				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+			if (getEntityWorld().isRemote){
+				for (int i = 0; i < 80; i ++){
+					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+				}
 			}
 			getEntityWorld().removeEntity(this);
 			this.kill();
@@ -127,11 +129,12 @@ public class EntityEmberProjectile extends Entity {
 			else {
 				target.attackEntityFrom(source, getDataManager().get(value));
 			}
-			for (int i = 0; i < 80; i ++){
-				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+			if (getEntityWorld().isRemote){
+				for (int i = 0; i < 80; i ++){
+					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+				}
 			}
-			this.kill();
-			getEntityWorld().removeEntity(this);
+			this.setDead();
 		}
 	}
 }

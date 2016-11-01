@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +23,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityPipe.EnumPipeConnection;
@@ -73,6 +76,12 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 		tag.setInteger("east", east.ordinal());
 		return tag;
 	}
+	
+	/*@SideOnly(Side.CLIENT)
+	@Override
+	public boolean hasFastRenderer(){
+		return true;
+	}*/
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag){

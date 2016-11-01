@@ -1,0 +1,19 @@
+{
+    "multipart": [
+        {   "when": { "up": "true" },
+            "apply": { "model": "embers:wallAshenTilePost" }
+        },
+        {   "when": { "north": "true" },
+            "apply": { "model": "embers:wallAshenTileSide", "uvlock": true }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "embers:wallAshenTileSide", "y": 90, "uvlock": true }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "embers:wallAshenTileSide", "y": 180, "uvlock": true }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "embers:wallAshenTileSide", "y": 270, "uvlock": true }
+        }
+    ]
+}

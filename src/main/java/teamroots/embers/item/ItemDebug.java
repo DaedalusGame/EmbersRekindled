@@ -9,8 +9,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -37,8 +39,9 @@ public class ItemDebug extends ItemBase {
 	
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
-		player.setPositionAndUpdate(64, 64, 64);
-		player.changeDimension(RegistryManager.dimensionCave.getId());
+		if (Blocks.TORCH.canPlaceBlockOnSide(world, pos, face)){
+			((ItemBlock)Item.getItemFromBlock(Blocks.TORCH)).onItemUse(stack, player, world, pos, hand, face, hitX, hitY, hitZ);
+		}
 		return EnumActionResult.SUCCESS;
 	}
 }

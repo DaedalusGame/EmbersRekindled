@@ -1,0 +1,9 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "bottom": "embers:blocks/ashenTile",
+        "top": "embers:blocks/ashenTile",
+        "side": "embers:blocks/ashenTile",
+        "particle": "embers:blocks/ashenTile"
+    }
+}

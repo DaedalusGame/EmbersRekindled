@@ -1,6 +1,7 @@
 package teamroots.embers.util;
 
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,6 +49,42 @@ public class RenderUtil {
 		b.pos(x2, y1, z2).tex(textures[5].maxU,textures[5].minV).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
 		b.pos(x2, y2, z2).tex(textures[5].maxU,textures[5].maxV).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
 		b.pos(x2, y2, z1).tex(textures[5].minU,textures[5].maxV).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
+	}
+	
+	public static void addBoxWithSprite(VertexBuffer b, double x1, double y1, double z1, double x2, double y2, double z2, TextureAtlasSprite sprite, StructUV[] textures, int[] inversions){
+		float spriteW = sprite.getMaxU()-sprite.getMinU();
+		float spriteH = sprite.getMaxV()-sprite.getMinV();
+		
+		//BOTTOM FACE
+		b.pos(x1, y1, z1).tex(sprite.getMinU()+textures[0].minU*spriteW,sprite.getMinV()+textures[0].minV*spriteH).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
+		b.pos(x1, y1, z2).tex(sprite.getMinU()+textures[0].maxU*spriteW,sprite.getMinV()+textures[0].minV*spriteH).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
+		b.pos(x2, y1, z2).tex(sprite.getMinU()+textures[0].maxU*spriteW,sprite.getMinV()+textures[0].maxV*spriteH).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
+		b.pos(x2, y1, z1).tex(sprite.getMinU()+textures[0].minU*spriteW,sprite.getMinV()+textures[0].maxV*spriteH).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
+		//TOP FACE
+		b.pos(x1, y2, z1).tex(sprite.getMinU()+textures[1].minU*spriteW,sprite.getMinV()+textures[1].minV*spriteH).color(255, 255, 255, 255).normal(0, 1*inversions[1], 0).endVertex();
+		b.pos(x1, y2, z2).tex(sprite.getMinU()+textures[1].maxU*spriteW,sprite.getMinV()+textures[1].minV*spriteH).color(255, 255, 255, 255).normal(0, 1*inversions[1], 0).endVertex();
+		b.pos(x2, y2, z2).tex(sprite.getMinU()+textures[1].maxU*spriteW,sprite.getMinV()+textures[1].maxV*spriteH).color(255, 255, 255, 255).normal(0, 1*inversions[1], 0).endVertex();
+		b.pos(x2, y2, z1).tex(sprite.getMinU()+textures[1].minU*spriteW,sprite.getMinV()+textures[1].maxV*spriteH).color(255, 255, 255, 255).normal(0, 1*inversions[1], 0).endVertex();
+		//NORTH FACE
+		b.pos(x1, y1, z1).tex(sprite.getMinU()+textures[2].minU*spriteW,sprite.getMinV()+textures[2].minV*spriteH).color(255, 255, 255, 255).normal(0, 0, -1*inversions[2]).endVertex();
+		b.pos(x2, y1, z1).tex(sprite.getMinU()+textures[2].maxU*spriteW,sprite.getMinV()+textures[2].minV*spriteH).color(255, 255, 255, 255).normal(0, 0, -1*inversions[2]).endVertex();
+		b.pos(x2, y2, z1).tex(sprite.getMinU()+textures[2].maxU*spriteW,sprite.getMinV()+textures[2].maxV*spriteH).color(255, 255, 255, 255).normal(0, 0, -1*inversions[2]).endVertex();
+		b.pos(x1, y2, z1).tex(sprite.getMinU()+textures[2].minU*spriteW,sprite.getMinV()+textures[2].maxV*spriteH).color(255, 255, 255, 255).normal(0, 0, -1*inversions[2]).endVertex();
+		//SOUTH FACE
+		b.pos(x1, y1, z2).tex(sprite.getMinU()+textures[3].minU*spriteW,sprite.getMinV()+textures[3].minV*spriteH).color(255, 255, 255, 255).normal(0, 0, 1*inversions[3]).endVertex();
+		b.pos(x2, y1, z2).tex(sprite.getMinU()+textures[3].maxU*spriteW,sprite.getMinV()+textures[3].minV*spriteH).color(255, 255, 255, 255).normal(0, 0, 1*inversions[3]).endVertex();
+		b.pos(x2, y2, z2).tex(sprite.getMinU()+textures[3].maxU*spriteW,sprite.getMinV()+textures[3].maxV*spriteH).color(255, 255, 255, 255).normal(0, 0, 1*inversions[3]).endVertex();
+		b.pos(x1, y2, z2).tex(sprite.getMinU()+textures[3].minU*spriteW,sprite.getMinV()+textures[3].maxV*spriteH).color(255, 255, 255, 255).normal(0, 0, 1*inversions[3]).endVertex();
+		//WEST FACE
+		b.pos(x1, y1, z1).tex(sprite.getMinU()+textures[4].minU*spriteW,sprite.getMinV()+textures[4].minV*spriteH).color(255, 255, 255, 255).normal(-1*inversions[4], 0, 0).endVertex();
+		b.pos(x1, y1, z2).tex(sprite.getMinU()+textures[4].maxU*spriteW,sprite.getMinV()+textures[4].minV*spriteH).color(255, 255, 255, 255).normal(-1*inversions[4], 0, 0).endVertex();
+		b.pos(x1, y2, z2).tex(sprite.getMinU()+textures[4].maxU*spriteW,sprite.getMinV()+textures[4].maxV*spriteH).color(255, 255, 255, 255).normal(-1*inversions[4], 0, 0).endVertex();
+		b.pos(x1, y2, z1).tex(sprite.getMinU()+textures[4].minU*spriteW,sprite.getMinV()+textures[4].maxV*spriteH).color(255, 255, 255, 255).normal(-1*inversions[4], 0, 0).endVertex();
+		//EAST FACE
+		b.pos(x2, y1, z1).tex(sprite.getMinU()+textures[5].minU*spriteW,sprite.getMinV()+textures[5].minV*spriteH).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
+		b.pos(x2, y1, z2).tex(sprite.getMinU()+textures[5].maxU*spriteW,sprite.getMinV()+textures[5].minV*spriteH).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
+		b.pos(x2, y2, z2).tex(sprite.getMinU()+textures[5].maxU*spriteW,sprite.getMinV()+textures[5].maxV*spriteH).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
+		b.pos(x2, y2, z1).tex(sprite.getMinU()+textures[5].minU*spriteW,sprite.getMinV()+textures[5].maxV*spriteH).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
 	}
 	
 

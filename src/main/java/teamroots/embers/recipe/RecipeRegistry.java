@@ -553,7 +553,7 @@ public class RecipeRegistry {
 				"ICI",
 				"GSG",
 				" G ",
-				'I', "nuggetIron",
+				'I', "ingotIron",
 				'S', RegistryManager.crystalEmber,
 				'C', "plateCopper",
 				'G', "blockGlass"}));

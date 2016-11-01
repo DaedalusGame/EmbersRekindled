@@ -44,6 +44,7 @@ public class MessageTEUpdate implements IMessage {
     		Minecraft.getMinecraft().addScheduledTask(()-> {
 	    		if ((Minecraft.getMinecraft().thePlayer.getEntityWorld()).getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))) != null){
 	    			Minecraft.getMinecraft().thePlayer.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))).readFromNBT(message.tag);
+	    			Minecraft.getMinecraft().thePlayer.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))).markDirty();
 	    		}
 	    	});
     		return null;

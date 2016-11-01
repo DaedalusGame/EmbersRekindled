@@ -1,0 +1,9 @@
+{
+    "parent": "block/upper_slab",
+    "textures": {
+        "top": "embers:blocks/ashenTile",
+        "side": "embers:blocks/ashenTile",
+        "bottom": "embers:blocks/ashenTile",
+        "particle": "embers:blocks/ashenTile"
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "parent": "block/upper_slab",
+    "textures": {
+        "top": "embers:blocks/blockCaminiteBrick",
+        "side": "embers:blocks/blockCaminiteBrick",
+        "bottom": "embers:blocks/blockCaminiteBrick",
+        "particle": "embers:blocks/blockCaminiteBrick"
+    }
+}

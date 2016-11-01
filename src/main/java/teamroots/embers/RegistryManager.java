@@ -32,8 +32,10 @@ import teamroots.embers.block.BlockBase;
 import teamroots.embers.block.BlockBeamSplitter;
 import teamroots.embers.block.BlockBin;
 import teamroots.embers.block.BlockCharger;
+import teamroots.embers.block.BlockCinderPlinth;
 import teamroots.embers.block.BlockCopperCell;
 import teamroots.embers.block.BlockCrystalCell;
+import teamroots.embers.block.BlockDoubleSlabBase;
 import teamroots.embers.block.BlockDropper;
 import teamroots.embers.block.BlockEmberBore;
 import teamroots.embers.block.BlockEmberReceiver;
@@ -55,6 +57,7 @@ import teamroots.embers.block.BlockOven;
 import teamroots.embers.block.BlockPipe;
 import teamroots.embers.block.BlockPump;
 import teamroots.embers.block.BlockRelay;
+import teamroots.embers.block.BlockSlabBase;
 import teamroots.embers.block.BlockStairsBase;
 import teamroots.embers.block.BlockStampBase;
 import teamroots.embers.block.BlockStamper;
@@ -101,6 +104,7 @@ import teamroots.embers.item.ItemPickaxeBase;
 import teamroots.embers.item.ItemShovelBase;
 import teamroots.embers.item.ItemSwordBase;
 import teamroots.embers.item.ItemTinkerHammer;
+import teamroots.embers.item.block.ItemBlockSlab;
 import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
@@ -112,6 +116,8 @@ import teamroots.embers.tileentity.TileEntityBin;
 import teamroots.embers.tileentity.TileEntityBinRenderer;
 import teamroots.embers.tileentity.TileEntityCharger;
 import teamroots.embers.tileentity.TileEntityChargerRenderer;
+import teamroots.embers.tileentity.TileEntityCinderPlinth;
+import teamroots.embers.tileentity.TileEntityCinderPlinthRenderer;
 import teamroots.embers.tileentity.TileEntityCopperCell;
 import teamroots.embers.tileentity.TileEntityCrystalCell;
 import teamroots.embers.tileentity.TileEntityCrystalCellRenderer;
@@ -160,12 +166,12 @@ public class RegistryManager {
 	
 	public static ToolMaterial toolMatCopper, toolMatSilver, toolMatLead, toolMatDawnstone;
 	
-	public static Block charger, crystalCell, advancedEdge, emberRelay, beamSplitter, blockLantern, emberGauge, itemGauge, fluidGauge, largeTank, itemDropper, heatCoil, wallCaminiteBrick, blockDawnstone, mixer, stoneEdge, emberActivator, mechCore, stairsCaminiteBrick, mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
+	public static Block cinderPlinth, ashenTile, stairsAshenTile, wallAshenTile, ashenTileSlab, ashenTileSlabDouble, ashenStone, ashenBrick, stairsAshenStone, wallAshenStone, ashenStoneSlab, ashenStoneSlabDouble, stairsAshenBrick, wallAshenBrick, ashenBrickSlab, ashenBrickSlabDouble, blockCaminiteBrickSlab, blockCaminiteBrickSlabDouble, charger, crystalCell, advancedEdge, emberRelay, beamSplitter, blockLantern, emberGauge, itemGauge, fluidGauge, largeTank, itemDropper, heatCoil, wallCaminiteBrick, blockDawnstone, mixer, stoneEdge, emberActivator, mechCore, stairsCaminiteBrick, mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
 	public static Block blockMoltenAstralite, blockMoltenDawnstone, blockMoltenUmberSteel, blockMoltenGold, blockMoltenCopper, blockMoltenLead, blockMoltenSilver, blockMoltenIron;
 	
 	public static Fluid fluidMoltenAstralite, fluidMoltenDawnstone, fluidMoltenUmberSteel, fluidMoltenGold, fluidMoltenCopper, fluidMoltenLead, fluidMoltenSilver, fluidMoltenIron;
 	
-	public static Item grandhammer, pickaxeClockwork, axeClockwork, staffEmber, ignitionCannon, emberJar, emberCartridge, pickaxeCopper, axeCopper, shovelCopper, hoeCopper, swordCopper, pickaxeSilver, axeSilver, shovelSilver, hoeSilver, swordSilver, pickaxeLead, axeLead, shovelLead, hoeLead, swordLead, pickaxeDawnstone, axeDawnstone, shovelDawnstone, hoeDawnstone, swordDawnstone, debug, plateGold, plateIron, plateCaminiteRaw, stampBarRaw, stampPlateRaw, stampFlatRaw, nuggetDawnstone, plateCopper, plateLead, plateSilver, plateDawnstone, nuggetIron, ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberDetector, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
+	public static Item dustAsh, grandhammer, pickaxeClockwork, axeClockwork, staffEmber, ignitionCannon, emberJar, emberCartridge, pickaxeCopper, axeCopper, shovelCopper, hoeCopper, swordCopper, pickaxeSilver, axeSilver, shovelSilver, hoeSilver, swordSilver, pickaxeLead, axeLead, shovelLead, hoeLead, swordLead, pickaxeDawnstone, axeDawnstone, shovelDawnstone, hoeDawnstone, swordDawnstone, debug, plateGold, plateIron, plateCaminiteRaw, stampBarRaw, stampPlateRaw, stampFlatRaw, nuggetDawnstone, plateCopper, plateLead, plateSilver, plateDawnstone, nuggetIron, ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberDetector, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
 	
 	public static DamageSource damageEmber;
 	
@@ -196,7 +202,11 @@ public class RegistryManager {
 		blocks.add(oreCopper = (new BlockBase(Material.ROCK,"oreCopper",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 1).setHardness(1.8f).setLightOpacity(16));
 		blocks.add(oreLead = (new BlockBase(Material.ROCK,"oreLead",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 2).setHardness(2.5f).setLightOpacity(16));
 		blocks.add(oreSilver = (new BlockBase(Material.ROCK,"oreSilver",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 2).setHardness(2.5f).setLightOpacity(16));
-		blocks.add(blockCaminiteBrick = (new BlockBase(Material.ROCK,"blockCaminiteBrick",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(blockCaminiteBrick = (new BlockBase(Material.ROCK,"blockCaminiteBrick",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(blockCaminiteBrickSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"blockCaminiteBrickSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(blockCaminiteBrickSlab = new BlockSlabBase(blockCaminiteBrickSlabDouble,"blockCaminiteBrickSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
+		((BlockDoubleSlabBase)blockCaminiteBrickSlabDouble).setSlab(blockCaminiteBrickSlab);
+		items.add(new ItemBlockSlab(blockCaminiteBrickSlab, (BlockDoubleSlabBase)blockCaminiteBrickSlabDouble));
 		blocks.add(stairsCaminiteBrick = (new BlockStairsBase(RegistryManager.blockCaminiteBrick.getDefaultState(),"stairsCaminiteBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(wallCaminiteBrick = (new BlockWallBase(RegistryManager.blockCaminiteBrick,"wallCaminiteBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		//blocks.add(blockCaminiteLargeBrick = (new BlockBase(Material.ROCK,"blockCaminiteLargeBrick",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
@@ -231,6 +241,28 @@ public class RegistryManager {
 		blocks.add(advancedEdge = (new BlockAdvancedEdge(unpushable,"advancedEdge",false)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(crystalCell = (new BlockCrystalCell(Material.ROCK,"crystalCell",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(charger = (new BlockCharger(Material.ROCK,"charger",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(ashenStone = (new BlockBase(Material.ROCK,"ashenStone",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(ashenStoneSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"ashenStoneSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(ashenStoneSlab = new BlockSlabBase(ashenStoneSlabDouble,"ashenStoneSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
+		((BlockDoubleSlabBase)ashenStoneSlabDouble).setSlab(ashenStoneSlab);
+		items.add(new ItemBlockSlab(ashenStoneSlab, (BlockDoubleSlabBase)ashenStoneSlabDouble));
+		blocks.add(stairsAshenStone = (new BlockStairsBase(RegistryManager.ashenStone.getDefaultState(),"stairsAshenStone",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(wallAshenStone = (new BlockWallBase(RegistryManager.ashenStone,"wallAshenStone",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(ashenBrick = (new BlockBase(Material.ROCK,"ashenBrick",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(ashenBrickSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"ashenBrickSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(ashenBrickSlab = new BlockSlabBase(ashenBrickSlabDouble,"ashenBrickSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
+		((BlockDoubleSlabBase)ashenBrickSlabDouble).setSlab(ashenBrickSlab);
+		items.add(new ItemBlockSlab(ashenBrickSlab, (BlockDoubleSlabBase)ashenBrickSlabDouble));
+		blocks.add(stairsAshenBrick = (new BlockStairsBase(RegistryManager.ashenBrick.getDefaultState(),"stairsAshenBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(wallAshenBrick = (new BlockWallBase(RegistryManager.ashenBrick,"wallAshenBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(ashenTile = (new BlockBase(Material.ROCK,"ashenTile",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(ashenTileSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"ashenTileSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(ashenTileSlab = new BlockSlabBase(ashenTileSlabDouble,"ashenTileSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
+		((BlockDoubleSlabBase)ashenTileSlabDouble).setSlab(ashenTileSlab);
+		items.add(new ItemBlockSlab(ashenTileSlab, (BlockDoubleSlabBase)ashenTileSlabDouble));
+		blocks.add(stairsAshenTile = (new BlockStairsBase(RegistryManager.ashenTile.getDefaultState(),"stairsAshenTile",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
+		blocks.add(wallAshenTile = (new BlockWallBase(RegistryManager.ashenTile,"wallAshenTile",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(cinderPlinth = (new BlockCinderPlinth(Material.ROCK, "cinderPlinth",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		
 		/*FluidRegistry.registerFluid(fluidMoltenUmberSteel = new FluidMoltenUmberSteel());
 		blocks.add(blockMoltenUmberSteel = (new BlockMoltenUmberSteel("moltenUmberSteel",false)));
@@ -297,6 +329,7 @@ public class RegistryManager {
 		items.add(axeClockwork = new ItemClockworkAxe("axeClockwork",true));
 		items.add(pickaxeClockwork = new ItemClockworkPickaxe("pickaxeClockwork",true));
 		items.add(grandhammer = new ItemGrandhammer("grandhammer",true));
+		items.add(dustAsh = new ItemBase("dustAsh",true));
 		
 		toolMatCopper.setRepairItem(new ItemStack(ingotCopper));
 		toolMatSilver.setRepairItem(new ItemStack(ingotSilver));
@@ -337,6 +370,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityRelay.class, Embers.MODID+":tileEntityRelay");
 		GameRegistry.registerTileEntity(TileEntityCrystalCell.class, Embers.MODID+":tileEntityCrystalCell");
 		GameRegistry.registerTileEntity(TileEntityCharger.class, Embers.MODID+":tileEntityCharger");
+		GameRegistry.registerTileEntity(TileEntityCinderPlinth.class, Embers.MODID+":tileEntityCinderPlinth");
 		
 		int id = 0;
 		
@@ -399,6 +433,7 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLargeTank.class, new TileEntityLargeTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystalCell.class, new TileEntityCrystalCellRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCharger.class, new TileEntityChargerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCinderPlinth.class, new TileEntityCinderPlinthRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
