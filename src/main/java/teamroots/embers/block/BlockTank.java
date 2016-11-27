@@ -1,22 +1,22 @@
 package teamroots.embers.block;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.tileentity.ITileEntityBase;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityTank;
 
 public class BlockTank extends BlockTEBase {
@@ -29,8 +29,27 @@ public class BlockTank extends BlockTEBase {
 	public BlockTank(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack){
+		super.onBlockPlacedBy(world, pos, state, player, stack);
+		if (stack.hasTagCompound()){
+			TileEntityTank tile = (TileEntityTank)createNewTileEntity(world, getMetaFromState(state));
+			world.setTileEntity(pos, tile);
+			tile.getTank().readFromNBT(stack.getTagCompound());
+			tile.markDirty();
+			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
+		}
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		return items;
+	}
 
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    @Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
     {
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BASE);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_SIDE_WEST);

@@ -7,9 +7,7 @@ import java.util.Map;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -158,6 +156,9 @@ public class RecipeRegistry {
 				"XX",
 				"XX",
 				'X', RegistryManager.brickCaminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockCaminiteBrickSlab,6),true,new Object[]{
+				"XXX",
+				'X', RegistryManager.blockCaminiteBrick}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsCaminiteBrick,4),true,new Object[]{
 				"X  ",
 				"XX ",
@@ -167,6 +168,66 @@ public class RecipeRegistry {
 				"XXX",
 				"XXX",
 				'X', RegistryManager.blockCaminiteBrick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenStone,4),true,new Object[]{
+				" S ",
+				"SAS",
+				" S ",
+				'S', "stone",
+				'A', RegistryManager.dustAsh}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenStoneSlab,6),true,new Object[]{
+				"XXX",
+				'X', RegistryManager.ashenStone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsAshenStone,4),true,new Object[]{
+				"X  ",
+				"XX ",
+				"XXX",
+				'X', RegistryManager.ashenStone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallAshenStone,6),true,new Object[]{
+				"XXX",
+				"XXX",
+				'X', RegistryManager.ashenStone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenBrick,4),true,new Object[]{
+				" S ",
+				"SAS",
+				" S ",
+				'S', Blocks.STONEBRICK,
+				'A', RegistryManager.dustAsh}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenBrick,4),true,new Object[]{
+				"SS",
+				"SS",
+				'S', RegistryManager.ashenStone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenBrickSlab,6),true,new Object[]{
+				"XXX",
+				'X', RegistryManager.ashenBrick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsAshenBrick,4),true,new Object[]{
+				"X  ",
+				"XX ",
+				"XXX",
+				'X', RegistryManager.ashenBrick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallAshenBrick,6),true,new Object[]{
+				"XXX",
+				"XXX",
+				'X', RegistryManager.ashenBrick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenTile,4),true,new Object[]{
+				"SS",
+				"SS",
+				'S', RegistryManager.ashenBrick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenTileSlab,6),true,new Object[]{
+				"XXX",
+				'X', RegistryManager.ashenTile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsAshenTile,4),true,new Object[]{
+				"X  ",
+				"XX ",
+				"XXX",
+				'X', RegistryManager.ashenTile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallAshenTile,6),true,new Object[]{
+				"XXX",
+				"XXX",
+				'X', RegistryManager.ashenTile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenStone,4),true,new Object[]{
+				"SS",
+				"SS",
+				'S', RegistryManager.ashenTile}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockTank,1),true,new Object[]{
 				"B B",
 				"P P",
@@ -608,6 +669,14 @@ public class RecipeRegistry {
 				'P', "plateDawnstone",
 				'S', RegistryManager.shardEmber,
 				'W', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.cinderPlinth,1),true,new Object[]{
+				" P ",
+				"SFS",
+				"PBP",
+				'P', "plateLead",
+				'B', RegistryManager.blockCaminiteBrick,
+				'S', "ingotSilver",
+				'F', Blocks.FURNACE}));
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreCopper), new ItemStack(RegistryManager.ingotCopper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreSilver), new ItemStack(RegistryManager.ingotSilver), 0.35f);

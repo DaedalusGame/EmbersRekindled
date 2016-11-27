@@ -5,23 +5,11 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.model.ModelFluid.FluidLoader;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import teamroots.embers.util.FluidTextureUtil;
 
 public class TileEntityBinRenderer extends TileEntitySpecialRenderer {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -36,12 +24,12 @@ public class TileEntityBinRenderer extends TileEntitySpecialRenderer {
 			TileEntityBin bin = (TileEntityBin)tile;
 			random.setSeed(tile.getWorld().getSeed());
 			if (bin.inventory.getStackInSlot(0) != null){
-				int itemCount = (int)Math.ceil(((double)bin.inventory.getStackInSlot(0).stackSize)/4.0);
+				int itemCount = (int)Math.ceil((bin.inventory.getStackInSlot(0).stackSize)/4.0);
 				for (int i = 0; i < itemCount; i ++){
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().theWorld,x,y,z,new ItemStack(bin.inventory.getStackInSlot(0).getItem(),1,bin.inventory.getStackInSlot(0).getMetadata()));
 					item.hoverStart = 0;
-					GL11.glTranslated(x, y+0.2+((double)i*0.0625), z);
+					GL11.glTranslated(x, y+0.2+(i*0.0625), z);
 					GL11.glTranslated(0.5, 0, 0.5);
 					GL11.glRotated(random.nextFloat()*360.0, 0, 1.0, 0);
 					GL11.glTranslated(-0.5, 0, -0.5);

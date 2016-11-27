@@ -1,7 +1,6 @@
 package teamroots.embers;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -10,7 +9,6 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.proxy.CommonProxy;
@@ -19,7 +17,7 @@ import teamroots.embers.proxy.CommonProxy;
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String VERSION = "0.013";
+	public static final String VERSION = "0.016";
 	public static final String DEPENDENCIES = "";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")

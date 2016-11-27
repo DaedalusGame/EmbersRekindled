@@ -18,7 +18,7 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 	public float colorB = 0;
 	public float initScale = 0;
 	public ResourceLocation texture = new ResourceLocation("embers:entity/particleMote");
-	public ParticleGlow(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float scale) {
+	public ParticleGlow(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float scale, int lifetime) {
 		super(worldIn, x,y,z,0,0,0);
 		this.colorR = r;
 		this.colorG = g;
@@ -33,7 +33,7 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 			this.colorB = this.colorB/255.0f;
 		}
 		this.setRBGColorF(colorR, colorG, colorB);
-		this.particleMaxAge = 24;
+		this.particleMaxAge = lifetime;
 		this.particleScale = scale;
 		this.initScale = scale;
 		this.motionX = vx;

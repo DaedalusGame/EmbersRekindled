@@ -2,7 +2,6 @@ package teamroots.embers.util;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.item.IEmberItem;
 import teamroots.embers.item.IHeldEmberCell;
 import teamroots.embers.item.IInventoryEmberCell;
@@ -46,7 +45,7 @@ public class EmberInventoryUtil {
 			}
 		}
 		if (player.getHeldItem(EnumHand.MAIN_HAND) != null){
-			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEmberItem){
+			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IEmberItem){
 				amount += ((IEmberItem)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getEmber(player.getHeldItem(EnumHand.MAIN_HAND));
 			}
 		}
@@ -62,7 +61,7 @@ public class EmberInventoryUtil {
 			}
 		}
 		if (player.getHeldItem(EnumHand.MAIN_HAND) != null){
-			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEmberItem){
+			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IEmberItem){
 				temp -= ((IEmberItem)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).removeAmount(player.getHeldItem(EnumHand.MAIN_HAND),temp,true);
 			}
 		}

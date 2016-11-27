@@ -5,9 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -27,8 +25,6 @@ import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityActivatorBottom;
 import teamroots.embers.tileentity.TileEntityActivatorTop;
-import teamroots.embers.tileentity.TileEntityFurnaceBottom;
-import teamroots.embers.tileentity.TileEntityFurnaceTop;
 
 public class BlockActivator extends BlockTEBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,0.25,1);
@@ -42,7 +38,8 @@ public class BlockActivator extends BlockTEBase {
 		super(material, name, addToTab);
 	}
 
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    @Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
     {
     	if (state.getValue(isTop)){
 	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_SIDE_WEST);

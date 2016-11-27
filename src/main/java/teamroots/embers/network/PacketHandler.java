@@ -10,7 +10,6 @@ import teamroots.embers.network.message.MessageEmberData;
 import teamroots.embers.network.message.MessageEmberDataRequest;
 import teamroots.embers.network.message.MessageEmberGeneration;
 import teamroots.embers.network.message.MessageItemUpdate;
-import teamroots.embers.network.message.MessageParticle;
 import teamroots.embers.network.message.MessageTEUpdate;
 
 public class PacketHandler {

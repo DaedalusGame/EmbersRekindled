@@ -43,9 +43,9 @@ public class ParticleRenderer {
         float f4 = ActiveRenderInfo.getRotationXZ();
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         if (player != null){
-	        Particle.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
-	        Particle.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
-	        Particle.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+	        Particle.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+	        Particle.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+	        Particle.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 	        Particle.field_190016_K = player.getLook(partialTicks);
 	        GlStateManager.enableAlpha();
 	        GlStateManager.enableBlend();

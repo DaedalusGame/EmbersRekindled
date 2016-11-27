@@ -12,14 +12,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.particle.ParticleUtil;
 
 public class MessageCannonBeamFX implements IMessage {
@@ -78,13 +75,13 @@ public class MessageCannonBeamFX implements IMessage {
     				message.posX += 0.2*i*message.dX/384.0;
     				message.posY += 0.2*i*message.dY/384.0;
     				message.posZ += 0.2*i*message.dZ/384.0;
-    				ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0, 0, 0, 255, 64, 16, 2.0f);
+    				ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0, 0, 0, 255, 64, 16, 2.0f, 24);
     			}
     			IBlockState state = world.getBlockState(new BlockPos(message.posX,message.posY,message.posZ));
     			if (state.isFullCube() && state.isOpaqueCube()){
     				doContinue = false;
     				for (int k = 0; k < 80; k ++){
-    					ParticleUtil.spawnParticleGlow(world, (float)message.posX-(float)(i*message.dX/384.0f), (float)message.posY-(float)(i*message.dY/384.0f), (float)message.posZ-(float)(i*message.dZ/384.0f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f);
+    					ParticleUtil.spawnParticleGlow(world, (float)message.posX-(float)(i*message.dX/384.0f), (float)message.posY-(float)(i*message.dY/384.0f), (float)message.posZ-(float)(i*message.dZ/384.0f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 24);
     				}
     			}
     			List<EntityLivingBase> rawEntities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(message.posX-0.85,message.posY-0.85,message.posZ-0.85,message.posX+0.85,message.posY+0.85,message.posZ+0.85));
@@ -97,7 +94,7 @@ public class MessageCannonBeamFX implements IMessage {
     			if (entities.size() > 0){
     				doContinue = false;
     				for (int k = 0; k < 80; k ++){
-    					ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f);
+    					ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 24);
     				}
     			}
     		}

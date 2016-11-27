@@ -9,12 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.BiomeManager.BiomeEntry;
-import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
@@ -28,6 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.block.BlockActivator;
 import teamroots.embers.block.BlockAdvancedEdge;
+import teamroots.embers.block.BlockAlchemyPedestal;
+import teamroots.embers.block.BlockAlchemyTablet;
 import teamroots.embers.block.BlockBase;
 import teamroots.embers.block.BlockBeamSplitter;
 import teamroots.embers.block.BlockBin;
@@ -47,13 +45,13 @@ import teamroots.embers.block.BlockHeatCoil;
 import teamroots.embers.block.BlockItemGauge;
 import teamroots.embers.block.BlockItemPipe;
 import teamroots.embers.block.BlockItemPump;
+import teamroots.embers.block.BlockKnowledgeTable;
 import teamroots.embers.block.BlockLantern;
 import teamroots.embers.block.BlockLargeTank;
 import teamroots.embers.block.BlockMechAccessor;
 import teamroots.embers.block.BlockMechCore;
 import teamroots.embers.block.BlockMechEdge;
 import teamroots.embers.block.BlockMixer;
-import teamroots.embers.block.BlockOven;
 import teamroots.embers.block.BlockPipe;
 import teamroots.embers.block.BlockPump;
 import teamroots.embers.block.BlockRelay;
@@ -62,31 +60,26 @@ import teamroots.embers.block.BlockStairsBase;
 import teamroots.embers.block.BlockStampBase;
 import teamroots.embers.block.BlockStamper;
 import teamroots.embers.block.BlockStoneEdge;
-import teamroots.embers.block.BlockTEBase;
 import teamroots.embers.block.BlockTank;
 import teamroots.embers.block.BlockWallBase;
 import teamroots.embers.block.IModeledBlock;
 import teamroots.embers.block.MaterialUnpushable;
-import teamroots.embers.block.fluid.BlockMoltenAstralite;
 import teamroots.embers.block.fluid.BlockMoltenCopper;
 import teamroots.embers.block.fluid.BlockMoltenDawnstone;
 import teamroots.embers.block.fluid.BlockMoltenGold;
 import teamroots.embers.block.fluid.BlockMoltenIron;
 import teamroots.embers.block.fluid.BlockMoltenLead;
 import teamroots.embers.block.fluid.BlockMoltenSilver;
-import teamroots.embers.block.fluid.BlockMoltenUmberSteel;
 import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.entity.RenderEmberPacket;
-import teamroots.embers.fluid.FluidMoltenAstralite;
 import teamroots.embers.fluid.FluidMoltenCopper;
 import teamroots.embers.fluid.FluidMoltenDawnstone;
 import teamroots.embers.fluid.FluidMoltenGold;
 import teamroots.embers.fluid.FluidMoltenIron;
 import teamroots.embers.fluid.FluidMoltenLead;
 import teamroots.embers.fluid.FluidMoltenSilver;
-import teamroots.embers.fluid.FluidMoltenUmberSteel;
 import teamroots.embers.item.IModeledItem;
 import teamroots.embers.item.ItemAxeBase;
 import teamroots.embers.item.ItemBase;
@@ -97,6 +90,7 @@ import teamroots.embers.item.ItemDebug;
 import teamroots.embers.item.ItemEmberCartridge;
 import teamroots.embers.item.ItemEmberGauge;
 import teamroots.embers.item.ItemEmberJar;
+import teamroots.embers.item.ItemGolemsEye;
 import teamroots.embers.item.ItemGrandhammer;
 import teamroots.embers.item.ItemHoeBase;
 import teamroots.embers.item.ItemIgnitionCannon;
@@ -105,12 +99,15 @@ import teamroots.embers.item.ItemShovelBase;
 import teamroots.embers.item.ItemSwordBase;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.item.block.ItemBlockSlab;
-import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.tileentity.TileEntityActivatorBottom;
 import teamroots.embers.tileentity.TileEntityActivatorTop;
+import teamroots.embers.tileentity.TileEntityAlchemyPedestal;
+import teamroots.embers.tileentity.TileEntityAlchemyPedestalRenderer;
+import teamroots.embers.tileentity.TileEntityAlchemyTablet;
+import teamroots.embers.tileentity.TileEntityAlchemyTabletRenderer;
 import teamroots.embers.tileentity.TileEntityBeamSplitter;
 import teamroots.embers.tileentity.TileEntityBin;
 import teamroots.embers.tileentity.TileEntityBinRenderer;
@@ -135,7 +132,8 @@ import teamroots.embers.tileentity.TileEntityItemPipe;
 import teamroots.embers.tileentity.TileEntityItemPipeRenderer;
 import teamroots.embers.tileentity.TileEntityItemPump;
 import teamroots.embers.tileentity.TileEntityItemPumpRenderer;
-import teamroots.embers.tileentity.TileEntityLantern;
+import teamroots.embers.tileentity.TileEntityKnowledgeTable;
+import teamroots.embers.tileentity.TileEntityKnowledgeTableRenderer;
 import teamroots.embers.tileentity.TileEntityLargeTank;
 import teamroots.embers.tileentity.TileEntityLargeTankRenderer;
 import teamroots.embers.tileentity.TileEntityMechAccessor;
@@ -157,8 +155,6 @@ import teamroots.embers.tileentity.TileEntityStamperRenderer;
 import teamroots.embers.tileentity.TileEntityTank;
 import teamroots.embers.tileentity.TileEntityTankRenderer;
 import teamroots.embers.world.WorldGenOres;
-import teamroots.embers.world.dimension.BiomeCave;
-import teamroots.embers.world.dimension.CaveProvider;
 
 public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
@@ -166,12 +162,12 @@ public class RegistryManager {
 	
 	public static ToolMaterial toolMatCopper, toolMatSilver, toolMatLead, toolMatDawnstone;
 	
-	public static Block cinderPlinth, ashenTile, stairsAshenTile, wallAshenTile, ashenTileSlab, ashenTileSlabDouble, ashenStone, ashenBrick, stairsAshenStone, wallAshenStone, ashenStoneSlab, ashenStoneSlabDouble, stairsAshenBrick, wallAshenBrick, ashenBrickSlab, ashenBrickSlabDouble, blockCaminiteBrickSlab, blockCaminiteBrickSlabDouble, charger, crystalCell, advancedEdge, emberRelay, beamSplitter, blockLantern, emberGauge, itemGauge, fluidGauge, largeTank, itemDropper, heatCoil, wallCaminiteBrick, blockDawnstone, mixer, stoneEdge, emberActivator, mechCore, stairsCaminiteBrick, mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
+	public static Block alchemyTablet, alchemyPedestal, knowledgeTable, cinderPlinth, ashenTile, stairsAshenTile, wallAshenTile, ashenTileSlab, ashenTileSlabDouble, ashenStone, ashenBrick, stairsAshenStone, wallAshenStone, ashenStoneSlab, ashenStoneSlabDouble, stairsAshenBrick, wallAshenBrick, ashenBrickSlab, ashenBrickSlabDouble, blockCaminiteBrickSlab, blockCaminiteBrickSlabDouble, charger, crystalCell, advancedEdge, emberRelay, beamSplitter, blockLantern, emberGauge, itemGauge, fluidGauge, largeTank, itemDropper, heatCoil, wallCaminiteBrick, blockDawnstone, mixer, stoneEdge, emberActivator, mechCore, stairsCaminiteBrick, mechAccessor, emberBore, mechEdge, itemPump, itemPipe, blockOven, stampBase, stamper, blockCaminiteLargeBrick, bin, copperCell, deepLine, emberEmitter, emberReceiver, blockFurnace, pump, blockCopper, blockLead, blockSilver, oreCopper, oreLead, oreSilver, blockCaminiteBrick, blockTank, pipe;
 	public static Block blockMoltenAstralite, blockMoltenDawnstone, blockMoltenUmberSteel, blockMoltenGold, blockMoltenCopper, blockMoltenLead, blockMoltenSilver, blockMoltenIron;
 	
 	public static Fluid fluidMoltenAstralite, fluidMoltenDawnstone, fluidMoltenUmberSteel, fluidMoltenGold, fluidMoltenCopper, fluidMoltenLead, fluidMoltenSilver, fluidMoltenIron;
 	
-	public static Item dustAsh, grandhammer, pickaxeClockwork, axeClockwork, staffEmber, ignitionCannon, emberJar, emberCartridge, pickaxeCopper, axeCopper, shovelCopper, hoeCopper, swordCopper, pickaxeSilver, axeSilver, shovelSilver, hoeSilver, swordSilver, pickaxeLead, axeLead, shovelLead, hoeLead, swordLead, pickaxeDawnstone, axeDawnstone, shovelDawnstone, hoeDawnstone, swordDawnstone, debug, plateGold, plateIron, plateCaminiteRaw, stampBarRaw, stampPlateRaw, stampFlatRaw, nuggetDawnstone, plateCopper, plateLead, plateSilver, plateDawnstone, nuggetIron, ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberDetector, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
+	public static Item golemsEye, dustAsh, grandhammer, pickaxeClockwork, axeClockwork, staffEmber, ignitionCannon, emberJar, emberCartridge, pickaxeCopper, axeCopper, shovelCopper, hoeCopper, swordCopper, pickaxeSilver, axeSilver, shovelSilver, hoeSilver, swordSilver, pickaxeLead, axeLead, shovelLead, hoeLead, swordLead, pickaxeDawnstone, axeDawnstone, shovelDawnstone, hoeDawnstone, swordDawnstone, debug, plateGold, plateIron, plateCaminiteRaw, stampBarRaw, stampPlateRaw, stampFlatRaw, nuggetDawnstone, plateCopper, plateLead, plateSilver, plateDawnstone, nuggetIron, ingotAstralite, ingotDawnstone, ingotUmberSteel, crystalEmber, shardEmber, stampBar, stampPlate, stampFlat, tinkerHammer, emberDetector, ingotCopper, ingotSilver, ingotLead, nuggetCopper, nuggetSilver, nuggetLead, brickCaminite, blendCaminite, plateCaminite;
 	
 	public static DamageSource damageEmber;
 	
@@ -206,7 +202,7 @@ public class RegistryManager {
 		blocks.add(blockCaminiteBrickSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"blockCaminiteBrickSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(blockCaminiteBrickSlab = new BlockSlabBase(blockCaminiteBrickSlabDouble,"blockCaminiteBrickSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
 		((BlockDoubleSlabBase)blockCaminiteBrickSlabDouble).setSlab(blockCaminiteBrickSlab);
-		items.add(new ItemBlockSlab(blockCaminiteBrickSlab, (BlockDoubleSlabBase)blockCaminiteBrickSlabDouble));
+		items.add(new ItemBlockSlab(blockCaminiteBrickSlab, blockCaminiteBrickSlabDouble));
 		blocks.add(stairsCaminiteBrick = (new BlockStairsBase(RegistryManager.blockCaminiteBrick.getDefaultState(),"stairsCaminiteBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(wallCaminiteBrick = (new BlockWallBase(RegistryManager.blockCaminiteBrick,"wallCaminiteBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		//blocks.add(blockCaminiteLargeBrick = (new BlockBase(Material.ROCK,"blockCaminiteLargeBrick",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
@@ -245,24 +241,27 @@ public class RegistryManager {
 		blocks.add(ashenStoneSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"ashenStoneSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(ashenStoneSlab = new BlockSlabBase(ashenStoneSlabDouble,"ashenStoneSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
 		((BlockDoubleSlabBase)ashenStoneSlabDouble).setSlab(ashenStoneSlab);
-		items.add(new ItemBlockSlab(ashenStoneSlab, (BlockDoubleSlabBase)ashenStoneSlabDouble));
+		items.add(new ItemBlockSlab(ashenStoneSlab, ashenStoneSlabDouble));
 		blocks.add(stairsAshenStone = (new BlockStairsBase(RegistryManager.ashenStone.getDefaultState(),"stairsAshenStone",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(wallAshenStone = (new BlockWallBase(RegistryManager.ashenStone,"wallAshenStone",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ashenBrick = (new BlockBase(Material.ROCK,"ashenBrick",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
 		blocks.add(ashenBrickSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"ashenBrickSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(ashenBrickSlab = new BlockSlabBase(ashenBrickSlabDouble,"ashenBrickSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
 		((BlockDoubleSlabBase)ashenBrickSlabDouble).setSlab(ashenBrickSlab);
-		items.add(new ItemBlockSlab(ashenBrickSlab, (BlockDoubleSlabBase)ashenBrickSlabDouble));
+		items.add(new ItemBlockSlab(ashenBrickSlab, ashenBrickSlabDouble));
 		blocks.add(stairsAshenBrick = (new BlockStairsBase(RegistryManager.ashenBrick.getDefaultState(),"stairsAshenBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(wallAshenBrick = (new BlockWallBase(RegistryManager.ashenBrick,"wallAshenBrick",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ashenTile = (new BlockBase(Material.ROCK,"ashenTile",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
 		blocks.add(ashenTileSlabDouble = new BlockDoubleSlabBase(Material.WOOD,"ashenTileSlabDouble",false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(ashenTileSlab = new BlockSlabBase(ashenTileSlabDouble,"ashenTileSlab",true).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(1));
 		((BlockDoubleSlabBase)ashenTileSlabDouble).setSlab(ashenTileSlab);
-		items.add(new ItemBlockSlab(ashenTileSlab, (BlockDoubleSlabBase)ashenTileSlabDouble));
+		items.add(new ItemBlockSlab(ashenTileSlab, ashenTileSlabDouble));
 		blocks.add(stairsAshenTile = (new BlockStairsBase(RegistryManager.ashenTile.getDefaultState(),"stairsAshenTile",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));
 		blocks.add(wallAshenTile = (new BlockWallBase(RegistryManager.ashenTile,"wallAshenTile",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(cinderPlinth = (new BlockCinderPlinth(Material.ROCK, "cinderPlinth",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(knowledgeTable = (new BlockKnowledgeTable(Material.WOOD, "knowledgeTable",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("axe", 0).setHardness(1.6f));
+		blocks.add(alchemyPedestal = (new BlockAlchemyPedestal(Material.ROCK, "alchemyPedestal",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(alchemyTablet = (new BlockAlchemyTablet(Material.ROCK, "alchemyTablet",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		
 		/*FluidRegistry.registerFluid(fluidMoltenUmberSteel = new FluidMoltenUmberSteel());
 		blocks.add(blockMoltenUmberSteel = (new BlockMoltenUmberSteel("moltenUmberSteel",false)));
@@ -330,6 +329,7 @@ public class RegistryManager {
 		items.add(pickaxeClockwork = new ItemClockworkPickaxe("pickaxeClockwork",true));
 		items.add(grandhammer = new ItemGrandhammer("grandhammer",true));
 		items.add(dustAsh = new ItemBase("dustAsh",true));
+		items.add(golemsEye = new ItemGolemsEye());
 		
 		toolMatCopper.setRepairItem(new ItemStack(ingotCopper));
 		toolMatSilver.setRepairItem(new ItemStack(ingotSilver));
@@ -365,12 +365,14 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityHeatCoil.class, Embers.MODID+":tileEntityHeatCoil");
 		GameRegistry.registerTileEntity(TileEntityDropper.class, Embers.MODID+":tileEntityDropper");
 		GameRegistry.registerTileEntity(TileEntityLargeTank.class, Embers.MODID+":tileEntityLargeTank");
-		GameRegistry.registerTileEntity(TileEntityLantern.class, Embers.MODID+":tileEntityLantern");
 		GameRegistry.registerTileEntity(TileEntityBeamSplitter.class, Embers.MODID+":tileEntityBeamSplitter");
 		GameRegistry.registerTileEntity(TileEntityRelay.class, Embers.MODID+":tileEntityRelay");
 		GameRegistry.registerTileEntity(TileEntityCrystalCell.class, Embers.MODID+":tileEntityCrystalCell");
 		GameRegistry.registerTileEntity(TileEntityCharger.class, Embers.MODID+":tileEntityCharger");
 		GameRegistry.registerTileEntity(TileEntityCinderPlinth.class, Embers.MODID+":tileEntityCinderPlinth");
+		GameRegistry.registerTileEntity(TileEntityKnowledgeTable.class, Embers.MODID+":tileEntityKnowledgeTable");
+		GameRegistry.registerTileEntity(TileEntityAlchemyPedestal.class, Embers.MODID+":tileEntityAlchemyPedestal");
+		GameRegistry.registerTileEntity(TileEntityAlchemyTablet.class, Embers.MODID+":tileEntityAlchemyTablet");
 		
 		int id = 0;
 		
@@ -416,6 +418,12 @@ public class RegistryManager {
 	}
 	
 	@SideOnly(Side.CLIENT)
+	public static void registerColorHandlers(){
+		/*Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberJar.EmberChargeColorHandler(), emberJar);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberCartridge.EmberChargeColorHandler(), emberCartridge);*/
+	}
+	
+	@SideOnly(Side.CLIENT)
     public static void registerRendering(){
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPipe.class, new TileEntityPipeRenderer());
@@ -434,6 +442,9 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystalCell.class, new TileEntityCrystalCellRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCharger.class, new TileEntityChargerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCinderPlinth.class, new TileEntityCinderPlinthRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityKnowledgeTable.class, new TileEntityKnowledgeTableRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlchemyPedestal.class, new TileEntityAlchemyPedestalRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlchemyTablet.class, new TileEntityAlchemyTabletRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));

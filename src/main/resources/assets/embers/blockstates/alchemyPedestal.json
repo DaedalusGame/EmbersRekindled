@@ -1,0 +1,6 @@
+{
+    "variants":{
+        "top=true":{"model": "embers:alchemyPedestalTop"},
+        "top=false":{"model": "embers:alchemyPedestalBase"}
+    }
+}

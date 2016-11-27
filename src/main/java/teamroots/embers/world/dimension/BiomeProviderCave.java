@@ -1,6 +1,5 @@
 package teamroots.embers.world.dimension;
 
-import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 
 public class BiomeProviderCave extends BiomeProviderSingle {

@@ -1,19 +1,12 @@
 package teamroots.embers.compat.jei;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.item.EnumStampType;
 import teamroots.embers.recipe.ItemMeltingOreRecipe;
 import teamroots.embers.recipe.ItemMeltingRecipe;
-import teamroots.embers.recipe.ItemStampingOreRecipe;
-import teamroots.embers.recipe.ItemStampingRecipe;
 
 public class MeltingRecipeWrapper extends BlankRecipeWrapper {
 

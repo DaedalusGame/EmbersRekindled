@@ -83,6 +83,7 @@ public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock {
 		return true;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().toString()));

@@ -11,10 +11,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.model.ModelFluid.FluidLoader;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.util.FluidTextureUtil;
 
 public class TileEntityLargeTankRenderer extends TileEntitySpecialRenderer {

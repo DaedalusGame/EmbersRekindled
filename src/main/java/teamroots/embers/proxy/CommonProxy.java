@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.research.ResearchManager;
 
 public class CommonProxy {
 	
@@ -13,6 +14,7 @@ public class CommonProxy {
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
 		RecipeRegistry.init();
+		ResearchManager.initResearches();
 	}
 	
 	public void init(FMLInitializationEvent event){

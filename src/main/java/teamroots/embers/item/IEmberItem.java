@@ -1,8 +1,6 @@
 package teamroots.embers.item;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import teamroots.embers.power.IEmberCapability;
 
 public interface IEmberItem {
 	public double getEmber(ItemStack stack);

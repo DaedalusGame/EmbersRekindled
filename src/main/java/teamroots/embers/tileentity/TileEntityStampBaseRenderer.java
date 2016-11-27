@@ -11,14 +11,10 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.ModelFluid.FluidLoader;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.block.BlockStampBase;
 import teamroots.embers.util.FluidTextureUtil;
 
@@ -32,7 +28,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
-		if (tile instanceof TileEntityStampBase){
+		if (tile instanceof TileEntityStampBase && !tile.getWorld().isAirBlock(tile.getPos())){
 			TileEntityStampBase tank = (TileEntityStampBase)tile;
 			EnumFacing face = tank.getWorld().getBlockState(tank.getPos()).getValue(BlockStampBase.facing);
 			int amount = tank.getAmount();
@@ -123,18 +119,18 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 				}
 				
 				if (face == EnumFacing.WEST){
-					GL11.glRotated(90, 1, 0, 0);
 					GL11.glRotated(90, 0, 1, 0);
+					GL11.glRotated(90, 1, 0, 0);
 				}
 				
 				if (face == EnumFacing.SOUTH){
-					GL11.glRotated(90, 1, 0, 0);
 					GL11.glRotated(180, 0, 1, 0);
+					GL11.glRotated(90, 1, 0, 0);
 				}
 				
 				if (face == EnumFacing.EAST){
-					GL11.glRotated(90, 1, 0, 0);
 					GL11.glRotated(270, 0, 1, 0);
+					GL11.glRotated(90, 1, 0, 0);
 				}
 				
 				GL11.glScaled(1.0, 1.0, 1.0);
