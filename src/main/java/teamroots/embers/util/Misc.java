@@ -1,10 +1,12 @@
 package teamroots.embers.util;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.items.IItemHandler;
@@ -26,6 +28,26 @@ public class Misc {
 		else {
 			return face.getOpposite();
 		}
+	}
+	
+	public static EntityItem rayTraceItem(World world, double posX, double posY, double posZ, double dirX, double dirY, double dirZ){
+		double x = posX;
+		double y = posY;
+		double z = posZ;
+		for (int i = 0; i < 120; i ++){
+			x += dirX/20.0f;
+			y += dirY/20.0f;
+			z += dirZ/20.0f;
+			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(x-0.2,y-0.2,z-0.2,x+0.2,y+0.2,z+0.2));
+			if (items.size() > 0){
+				return items.get(0);
+			}
+		}
+		return null;
+	}
+	
+	public static int intColor(int r, int g, int b){
+		return (r*65536 + g*256 + b);
 	}
 	
 	public static EnumFacing getOppositeFace(EnumFacing face){

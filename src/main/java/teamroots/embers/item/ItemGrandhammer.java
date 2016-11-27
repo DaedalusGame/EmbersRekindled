@@ -6,24 +6,19 @@ import java.util.List;
 import com.google.common.collect.Sets;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,7 +29,6 @@ import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
-import teamroots.embers.network.message.MessageItemUpdate;
 import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberChargedTool {
@@ -70,7 +64,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	public double getDurabilityForDisplay(ItemStack stack){
 		if (stack.hasTagCompound()){
 			if (stack.getTagCompound().getInteger("cooldown") > 0){
-				return ((float)stack.getTagCompound().getInteger("cooldown"))/160.0f;
+				return (stack.getTagCompound().getInteger("cooldown"))/160.0f;
 			}
 		}
 		return 0.0;
@@ -93,7 +87,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 			if (entities.size() > 0){
 				for (int i = 0; i < entities.size(); i ++){
 					entities.get(i).setFire(1);
-					entities.get(i).attackEntityFrom(RegistryManager.damageEmber.causePlayerDamage(player), 11.0f);
+					entities.get(i).attackEntityFrom(DamageSource.causePlayerDamage(player), 11.0f);
 					entities.get(i).setLastAttacker(player);
 					entities.get(i).setRevengeTarget(player);
 					entities.get(i).knockBack(player, 1.0f, player.posX-entities.get(i).posX, player.posZ-entities.get(i).posZ);
@@ -109,6 +103,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
 	}
 	
+	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state){
         if (stack.hasTagCompound()){
         	if (!stack.getTagCompound().getBoolean("poweredOn")){

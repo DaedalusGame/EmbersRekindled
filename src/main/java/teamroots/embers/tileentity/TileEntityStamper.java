@@ -1,16 +1,12 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -20,22 +16,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.block.BlockStamper;
-import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -57,6 +44,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
         @Override
         protected void onContentsChanged(int slot) {
         	TileEntityStamper.this.markDirty();
+        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityStamper.this));
         }
 	};
 	

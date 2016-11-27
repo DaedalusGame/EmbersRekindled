@@ -5,9 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +38,8 @@ public class BlockFurnace extends BlockTEBase {
 		super(material, name, addToTab);
 	}
 
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    @Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
     {
     	if (state.getValue(isTop)){
 	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_SIDE_WEST);

@@ -7,26 +7,20 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.tileentity.TileEntityPipe.EnumPipeConnection;
 
 public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, ITickable {
 	Random random = new Random();
@@ -50,6 +44,7 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 		tank.setCapacity(1000);
 	}
 	
+	@Override
 	public void updateNeighbors(IBlockAccess world){
 		up = getConnection(world,getPos().up(),EnumFacing.DOWN);
 		down = getConnection(world,getPos().down(),EnumFacing.UP);
@@ -141,18 +136,20 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 			for (int i = 0; i < connectedFaces.size(); i ++){
 				if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
 					IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-					IFluidTankProperties[] properties = handler.getTankProperties();
-					for (int j = 0; j < properties.length && tank.getFluidAmount() < tank.getCapacity(); j ++){
-						FluidStack stack = properties[j].getContents();
-						if (stack != null){
-							int taken = tank.fill(stack, true);
-							handler.drain(new FluidStack(stack.getFluid(),taken), true);
-							IBlockState state = getWorld().getBlockState(getPos());
-							if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-								toUpdate.add(getPos().offset(connectedFaces.get(i)));
-							}
-							if (!toUpdate.contains(getPos())){
-								toUpdate.add(getPos());
+					if (handler != null){
+						IFluidTankProperties[] properties = handler.getTankProperties();
+						for (int j = 0; j < properties.length && tank.getFluidAmount() < tank.getCapacity(); j ++){
+							FluidStack stack = properties[j].getContents();
+							if (stack != null){
+								int taken = tank.fill(stack, true);
+								handler.drain(new FluidStack(stack.getFluid(),taken), true);
+								IBlockState state = getWorld().getBlockState(getPos());
+								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+									toUpdate.add(getPos().offset(connectedFaces.get(i)));
+								}
+								if (!toUpdate.contains(getPos())){
+									toUpdate.add(getPos());
+								}
 							}
 						}
 					}
@@ -185,15 +182,17 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 				for (int i = 0; i < connectedFaces.size(); i ++){
 					if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
 						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-						if (tank.getFluid() != null){
-							FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
-							int filled = handler.fill(toAdd, true);
-							tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
-							if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-								toUpdate.add(getPos().offset(connectedFaces.get(i)));
-							}
-							if (!toUpdate.contains(getPos())){
-								toUpdate.add(getPos());
+						if (handler != null){
+							if (tank.getFluid() != null){
+								FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
+								int filled = handler.fill(toAdd, true);
+								tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+									toUpdate.add(getPos().offset(connectedFaces.get(i)));
+								}
+								if (!toUpdate.contains(getPos())){
+									toUpdate.add(getPos());
+								}
 							}
 						}
 					}
@@ -204,13 +203,15 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 					int i = random.nextInt(connectedFaces.size());
 					if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
 						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-						int filled = handler.fill(new FluidStack(tank.getFluid().getFluid(),1), true);
-						tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),1), true);
-						if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-							toUpdate.add(getPos().offset(connectedFaces.get(i)));
-						}
-						if (!toUpdate.contains(getPos())){
-							toUpdate.add(getPos());
+						if (handler != null){
+							int filled = handler.fill(new FluidStack(tank.getFluid().getFluid(),1), true);
+							tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),1), true);
+							if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+								toUpdate.add(getPos().offset(connectedFaces.get(i)));
+							}
+							if (!toUpdate.contains(getPos())){
+								toUpdate.add(getPos());
+							}
 						}
 					}
 				}

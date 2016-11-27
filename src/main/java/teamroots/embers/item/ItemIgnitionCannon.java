@@ -4,38 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCannonBeamFX;
-import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.power.IEmberPacketProducer;
-import teamroots.embers.power.IEmberPacketReceiver;
 import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.Vec2i;
-import teamroots.embers.world.EmberWorldData;
 
 public class ItemIgnitionCannon extends ItemBase {
 	public ItemIgnitionCannon() {
@@ -44,7 +29,7 @@ public class ItemIgnitionCannon extends ItemBase {
 	
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft){
-		double charge = ((double)Math.min(20, timeLeft))/20.0;
+		double charge = (Math.min(20, timeLeft))/20.0;
 		double posX = entity.posX+entity.getLookVec().xCoord+(entity.width/2.0)*Math.sin(Math.toRadians(-entity.rotationYaw-90));
 		double posY = entity.posY+entity.getEyeHeight()-0.2+entity.getLookVec().yCoord;
 		double posZ = entity.posZ+entity.getLookVec().zCoord+(entity.width/2.0)*Math.cos(Math.toRadians(-entity.rotationYaw-90));
@@ -79,7 +64,7 @@ public class ItemIgnitionCannon extends ItemBase {
 			}
 			if (entities.size() > 0){
 				entities.get(0).setFire(1);
-				entities.get(0).attackEntityFrom(RegistryManager.damageEmber.causeMobDamage(entity), 7.0f);
+				entities.get(0).attackEntityFrom(DamageSource.causeMobDamage(entity), 7.0f);
 				entities.get(0).setLastAttacker(entity);
 				entities.get(0).setRevengeTarget(entity);
 				entities.get(0).knockBack(entity, 0.5f, -dX, -dZ);
@@ -124,6 +109,6 @@ public class ItemIgnitionCannon extends ItemBase {
 			player.setActiveHand(hand);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS,stack);
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
 	}
 }

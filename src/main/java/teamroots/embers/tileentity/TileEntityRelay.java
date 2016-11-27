@@ -1,6 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -18,14 +17,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -33,8 +27,6 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.TileEntityRelay.EnumConnection;
-import teamroots.embers.tileentity.TileEntityPipe.EnumPipeConnection;
 
 public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer, IEmberPacketReceiver {
 	public IEmberCapability capability = new DefaultEmberCapability();

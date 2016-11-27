@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 

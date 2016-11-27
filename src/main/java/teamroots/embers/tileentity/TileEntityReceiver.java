@@ -1,14 +1,11 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -18,14 +15,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.network.PacketHandler;
@@ -91,14 +82,16 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 		if (ticksExisted % 5 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
 			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
 				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
-				if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
-					double added = cap.addAmount(Math.min(10,capability.getEmber()), true);
-					double removed = capability.removeAmount(added, true);
-					markDirty();
-					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
-					getWorld().getTileEntity(offset).markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				if (cap != null){
+					if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
+						double added = cap.addAmount(Math.min(10,capability.getEmber()), true);
+						double removed = capability.removeAmount(added, true);
+						markDirty();
+						BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
+						getWorld().getTileEntity(offset).markDirty();
+						if (!getWorld().isRemote){
+							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+						}
 					}
 				}
 			}

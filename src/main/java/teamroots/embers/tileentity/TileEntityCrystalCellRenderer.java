@@ -9,22 +9,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelFluid.FluidLoader;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.Embers;
-import teamroots.embers.util.FluidTextureUtil;
-import teamroots.embers.world.dimension.NoiseGeneratorUtil;
 
 public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/crystalMaterial.png");
@@ -75,30 +64,30 @@ public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer {
                 GlStateManager.translate(x+0.5, y+height/2.0f+1.5, z+0.5);
 	            GlStateManager.scale(scale, scale, scale);
 
-                GlStateManager.rotate(partialTicks+(float)(cell.ticksExisted%360), 0, 1, 0);
-                GlStateManager.rotate(30.0f*(float)Math.sin(Math.toRadians(partialTicks/3.0f+(float)(cell.ticksExisted/3%360))), 1, 0, 0);
+                GlStateManager.rotate(partialTicks+cell.ticksExisted%360, 0, 1, 0);
+                GlStateManager.rotate(30.0f*(float)Math.sin(Math.toRadians(partialTicks/3.0f+cell.ticksExisted/3%360)), 1, 0, 0);
                 
 	            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 	            for (int i = 0; i < widths.length-1; i ++){
-	            	buffer.pos(-widths[i], layerHeight*(float)i-height/2.0f, -widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i], layerHeight*(float)i-height/2.0f, -widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, -widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, -widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i], layerHeight*i-height/2.0f, -widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i], layerHeight*i-height/2.0f, -widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i+1], layerHeight+layerHeight*i-height/2.0f, -widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*i-height/2.0f, -widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
 
-	            	buffer.pos(-widths[i], layerHeight*(float)i-height/2.0f, widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i], layerHeight*(float)i-height/2.0f, widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i], layerHeight*i-height/2.0f, widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i], layerHeight*i-height/2.0f, widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i+1], layerHeight+layerHeight*i-height/2.0f, widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*i-height/2.0f, widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
 	            	
-	            	buffer.pos(-widths[i], layerHeight*(float)i-height/2.0f, -widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(-widths[i], layerHeight*(float)i-height/2.0f, widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, -widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i], layerHeight*i-height/2.0f, -widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i], layerHeight*i-height/2.0f, widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*i-height/2.0f, widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(-widths[i+1], layerHeight+layerHeight*i-height/2.0f, -widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
 	            	
-	            	buffer.pos(widths[i], layerHeight*(float)i-height/2.0f, -widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i], layerHeight*(float)i-height/2.0f, widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
-	            	buffer.pos(widths[i+1], layerHeight+layerHeight*(float)i-height/2.0f, -widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i], layerHeight*i-height/2.0f, -widths[i]).tex(0, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i], layerHeight*i-height/2.0f, widths[i]).tex(0.5, 0).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i+1], layerHeight+layerHeight*i-height/2.0f, widths[i+1]).tex(0.5, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
+	            	buffer.pos(widths[i+1], layerHeight+layerHeight*i-height/2.0f, -widths[i+1]).tex(0, 0.5).lightmap(lx, ly).color(1, 1, 1, 0.65f).endVertex();
 	            }
 	            tess.draw();
 	            GlStateManager.popMatrix();

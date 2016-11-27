@@ -1,17 +1,12 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,28 +14,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.power.IEmberPacketReceiver;
 import teamroots.embers.util.Misc;
 import teamroots.embers.world.EmberWorldData;
 
@@ -51,9 +33,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	public int ticksFueled = 0;
 	int stackShards = 0;
 	int stackCrystals = 1;
-	int stackGunpowder = 2;
-	int stackFuel = 3;
-	public ItemStackHandler inventory = new ItemStackHandler(4){
+	int stackFuel = 2;
+	public ItemStackHandler inventory = new ItemStackHandler(3){
         @Override
         protected void onContentsChanged(int slot) {
         	TileEntityEmberBore.this.markDirty();
@@ -64,9 +45,6 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         	if (slot == stackCrystals || slot == stackShards){
         		return insertItem(slot+1,stack,simulate);
         	}
-        	if (slot == stackGunpowder && !stack.getItem().equals(Items.GUNPOWDER)){
-        		return insertItem(stackFuel,stack,simulate);
-        	}
         	if (slot == stackFuel && TileEntityFurnace.getItemBurnTime(stack) == 0){
         		return stack;
         	}
@@ -75,7 +53,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate){
-        	if (slot == stackGunpowder || slot == stackFuel){
+        	if (slot == stackFuel){
         		return null;
         	}
         	return super.extractItem(slot, amount, simulate);
@@ -153,7 +131,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 				EmberWorldData data = EmberWorldData.get(getWorld());
 				if (data.emberData.containsKey(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)){
 					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
-						if (inventory.getStackInSlot(stackGunpowder) != null && inventory.getStackInSlot(stackFuel) != null){
+						if (inventory.getStackInSlot(stackFuel) != null){
 							ticksFueled = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(stackFuel).copy());
 							inventory.getStackInSlot(stackFuel).stackSize --;
 							if (inventory.getStackInSlot(stackFuel).stackSize <= 0){
@@ -165,16 +143,6 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 							}
 							IBlockState state = getWorld().getBlockState(getPos());
 							getWorld().notifyBlockUpdate(getPos(), state, state, 8);
-							if (random.nextInt(4) == 0){
-								inventory.getStackInSlot(stackGunpowder).stackSize --;
-								if (inventory.getStackInSlot(stackGunpowder).stackSize <= 0){
-									inventory.setStackInSlot(stackGunpowder, null);
-								}
-								markDirty();
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
-							}
 						}
 					}
 				}

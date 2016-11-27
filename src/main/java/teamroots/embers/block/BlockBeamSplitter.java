@@ -25,7 +25,6 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityBeamSplitter;
 import teamroots.embers.tileentity.TileEntityBin;
-import teamroots.embers.tileentity.TileEntityLantern;
 import teamroots.embers.tileentity.TileEntityTank;
 
 public class BlockBeamSplitter extends BlockTEBase {

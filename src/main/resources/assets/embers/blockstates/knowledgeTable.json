@@ -1,0 +1,8 @@
+{
+    "variants":{
+        "facing=north": { "model": "embers:knowledgeTable" },
+        "facing=south": { "model": "embers:knowledgeTable", "y": 180 },
+        "facing=west":  { "model": "embers:knowledgeTable", "y": 270 },
+        "facing=east":  { "model": "embers:knowledgeTable", "y": 90 }
+    }
+}

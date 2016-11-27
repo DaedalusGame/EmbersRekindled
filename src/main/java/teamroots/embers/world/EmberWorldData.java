@@ -8,13 +8,11 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import teamroots.embers.Embers;
 import teamroots.embers.network.message.MessageEmberData;
-import teamroots.embers.util.Vec2i;
 
 public class EmberWorldData extends WorldSavedData {
 	public Map<String, Double> emberData = new HashMap<String, Double>();

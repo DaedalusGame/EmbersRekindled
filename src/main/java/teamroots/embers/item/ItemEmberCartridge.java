@@ -1,42 +1,16 @@
 package teamroots.embers.item;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import teamroots.embers.Embers;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageCannonBeamFX;
-import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.Vec2i;
-import teamroots.embers.world.EmberWorldData;
 
 public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmberItem {
 
@@ -98,27 +72,33 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 			tooltip.add(""+getEmber(stack)+" / "+getEmberCapacity(stack));
 		}
 	}
+	
+	public void initNBT(ItemStack stack){
+		stack.setTagCompound(new NBTTagCompound());
+		setEmberCapacity(stack, 6000.0);
+		setEmber(stack,0.0);
+	}
 
 	@Override
 	public double getEmber(ItemStack stack) {
-		if (stack.hasTagCompound()){
-			return stack.getTagCompound().getDouble(Embers.MODID+":ember");
+		if (!stack.hasTagCompound()){
+			initNBT(stack);
 		}
-		return 0;
+		return stack.getTagCompound().getDouble(Embers.MODID+":ember");
 	}
 
 	@Override
 	public double getEmberCapacity(ItemStack stack) {
-		if (stack.hasTagCompound()){
-			return stack.getTagCompound().getDouble(Embers.MODID+":emberCapacity");
+		if (!stack.hasTagCompound()){
+			initNBT(stack);
 		}
-		return 0;
+		return stack.getTagCompound().getDouble(Embers.MODID+":emberCapacity");
 	}
 
 	@Override
 	public void setEmber(ItemStack stack, double value) {
 		if (!stack.hasTagCompound()){
-			stack.setTagCompound(new NBTTagCompound());
+			initNBT(stack);
 		}
 		stack.getTagCompound().setDouble(Embers.MODID+":ember",value);
 	}
@@ -126,13 +106,16 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 	@Override
 	public void setEmberCapacity(ItemStack stack, double value) {
 		if (!stack.hasTagCompound()){
-			stack.setTagCompound(new NBTTagCompound());
+			initNBT(stack);
 		}
 		stack.getTagCompound().setDouble(Embers.MODID+":emberCapacity",value);
 	}
 
 	@Override
 	public double addAmount(ItemStack stack, double value, boolean doAdd) {
+		if (!stack.hasTagCompound()){
+			initNBT(stack);
+		}
 		double ember = stack.getTagCompound().getDouble(Embers.MODID+":ember");
 		double capacity = stack.getTagCompound().getDouble(Embers.MODID+":emberCapacity");
 		if (ember+value > capacity){
@@ -151,6 +134,9 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 
 	@Override
 	public double removeAmount(ItemStack stack, double value, boolean doRemove) {
+		if (!stack.hasTagCompound()){
+			initNBT(stack);
+		}
 		double ember = stack.getTagCompound().getDouble(Embers.MODID+":ember");
 		double capacity = stack.getTagCompound().getDouble(Embers.MODID+":emberCapacity");
 		if (ember-value < 0){
@@ -165,4 +151,26 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 		}
 		return value;
 	}
+	
+	public static class EmberChargeColorHandler implements IItemColor {
+		public EmberChargeColorHandler(){
+			//
+		}
+
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int layer) {
+			if (layer == 0 && stack.hasTagCompound()){
+				if (stack.getItem() instanceof IEmberItem){
+					double coeff = ((IEmberItem)stack.getItem()).getEmber(stack)/((IEmberItem)stack.getItem()).getEmberCapacity(stack);
+					int r = 255;
+					int g = (int)(255.0*(1.0-coeff)+64.0*coeff);
+					int b = (int)(255.0*(1.0-coeff)+16.0*coeff);
+					return 0xFF0000;
+				}
+			}
+			return 0xFFFFFF;
+		}
+
+	}
+
 }

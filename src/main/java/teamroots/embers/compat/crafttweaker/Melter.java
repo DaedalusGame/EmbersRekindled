@@ -1,15 +1,6 @@
 package teamroots.embers.compat.crafttweaker;
 
-import java.util.List;
-
-import minetweaker.IUndoableAction;
-import minetweaker.MineTweakerAPI;
-import minetweaker.api.item.IIngredient;
-import minetweaker.api.item.IItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
-import teamroots.embers.recipe.ItemMeltingRecipe;
-import teamroots.embers.recipe.RecipeRegistry;
 
 @ZenClass("mods.embers.melter")
 public class Melter {

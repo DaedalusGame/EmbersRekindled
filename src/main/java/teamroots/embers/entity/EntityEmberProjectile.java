@@ -12,16 +12,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberPacketReceiver;
 
 public class EntityEmberProjectile extends Entity {
     public static final DataParameter<Float> value = EntityDataManager.<Float>createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
@@ -44,8 +40,8 @@ public class EntityEmberProjectile extends Entity {
 		this.motionY = vy;
 		this.motionZ = vz;
 		setSize((float)value/10.0f,(float)value/10.0f);
-		getDataManager().set(this.value, (float)value);
-		getDataManager().setDirty(this.value);
+		getDataManager().set(EntityEmberProjectile.value, (float)value);
+		getDataManager().setDirty(EntityEmberProjectile.value);
 		setSize((float)value/10.0f,(float)value/10.0f);
 		this.id = playerId;
 	}
@@ -56,8 +52,8 @@ public class EntityEmberProjectile extends Entity {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound compound) {
-		getDataManager().set(this.value, compound.getFloat("value"));
-		getDataManager().setDirty(this.value);
+		getDataManager().set(EntityEmberProjectile.value, compound.getFloat("value"));
+		getDataManager().setDirty(EntityEmberProjectile.value);
 		if (compound.hasKey("UUIDmost")){
 			id = new UUID(compound.getLong("UUIDmost"),compound.getLong("UUIDleast"));
 		}
@@ -93,7 +89,7 @@ public class EntityEmberProjectile extends Entity {
 		if (state.isFullCube() && state.isOpaqueCube()){
 			if (getEntityWorld().isRemote){
 				for (int i = 0; i < 80; i ++){
-					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f, 24);
 				}
 			}
 			getEntityWorld().removeEntity(this);
@@ -102,7 +98,7 @@ public class EntityEmberProjectile extends Entity {
 		if (getEntityWorld().isRemote){
 			for (double i = 0; i < 9; i ++){
 				double coeff = i/9.0;
-				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f, 24);
 			}
 		}
 		List<EntityLivingBase> rawEntities = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-getDataManager().get(value)*0.125,posY-getDataManager().get(value)*0.125,posZ-getDataManager().get(value)*0.125,posX+getDataManager().get(value)*0.125,posY+getDataManager().get(value)*0.125,posZ+getDataManager().get(value)*0.125));
@@ -119,7 +115,7 @@ public class EntityEmberProjectile extends Entity {
 			DamageSource source = RegistryManager.damageEmber;
 			if (getEntityWorld().getPlayerEntityByUUID(id) != null){
 				EntityPlayer player = getEntityWorld().getPlayerEntityByUUID(id);
-				source = source.causePlayerDamage(player);
+				source = DamageSource.causePlayerDamage(player);
 				target.setFire(1);
 				target.attackEntityFrom(source, getDataManager().get(value));
 				target.setLastAttacker(player);
@@ -131,7 +127,7 @@ public class EntityEmberProjectile extends Entity {
 			}
 			if (getEntityWorld().isRemote){
 				for (int i = 0; i < 80; i ++){
-					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f);
+					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)posX, (float)posY, (float)posZ, 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 0.25f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f, 24);
 				}
 			}
 			this.setDead();

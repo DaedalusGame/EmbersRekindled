@@ -10,18 +10,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -30,8 +24,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
-import teamroots.embers.network.message.MessageItemUpdate;
-import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmberChargedTool {
@@ -66,7 +58,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	public double getDurabilityForDisplay(ItemStack stack){
 		if (stack.hasTagCompound()){
 			if (stack.getTagCompound().getInteger("cooldown") > 0){
-				return ((float)stack.getTagCompound().getInteger("cooldown"))/80.0f;
+				return (stack.getTagCompound().getInteger("cooldown"))/80.0f;
 			}
 		}
 		return 0.0;
@@ -86,7 +78,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 					posZ += 0.1f*player.getLookVec().zCoord;
 				}
 				IBlockState state = world.getBlockState(new BlockPos(posX,posY,posZ));
-				if (state.isFullCube() && state.isOpaqueCube()){
+				if (state.isFullCube() && state.isOpaqueCube() && state.getBlockHardness(world, new BlockPos(posX,posY,posZ)) > 0){
 					doContinue = false;
 					BlockPos pos = new BlockPos(posX,posY,posZ);
 					if (!world.isRemote){
@@ -96,7 +88,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 						for (int yy = -1; yy < 2; yy ++){
 							for (int zz = -1; zz < 2; zz ++){
 								BlockPos newPos = pos.add(xx,yy,zz);
-								if (this.canHarvestBlock(world.getBlockState(newPos),stack)){
+								if (this.canHarvestBlock(world.getBlockState(newPos),stack) && world.getBlockState(newPos).getBlockHardness(world, new BlockPos(posX,posY,posZ)) > 0){
 									IBlockState tempState = world.getBlockState(newPos);
 									tempState.getBlock().onBlockHarvested(world, newPos, tempState, player);
 									world.destroyBlock(newPos, true);
@@ -114,6 +106,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
 	}
 	
+	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state){
         Material material = state.getMaterial();
         if (stack.hasTagCompound()){

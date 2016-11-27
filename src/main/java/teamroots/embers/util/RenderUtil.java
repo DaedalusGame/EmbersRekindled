@@ -137,9 +137,21 @@ public class RenderUtil {
 	public static void drawQuadGui(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV){
 		float f = 0.00390625F;
         float f1 = 0.00390625F;
-        vertexbuffer.pos((double)(x1 + 0.0F), (double)(y1 + 0.0F), (double)0).tex(minU,maxV).endVertex();
-        vertexbuffer.pos((double)(x2 + 0.0F), (double)(y2 + 0.0F), (double)0).tex(maxU, maxV).endVertex();
-        vertexbuffer.pos((double)(x3 + 0.0F), (double)(y3 + 0.0F), (double)0).tex(maxU, minV).endVertex();
-        vertexbuffer.pos((double)(x4 + 0.0F), (double)(y4 + 0.0F), (double)0).tex(minU, minV).endVertex();
+        vertexbuffer.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(minU,maxV).endVertex();
+        vertexbuffer.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(maxU, maxV).endVertex();
+        vertexbuffer.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(maxU, minV).endVertex();
+        vertexbuffer.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(minU, minV).endVertex();
+    }
+	
+	@SideOnly(Side.CLIENT)
+	public static void drawQuadGuiExt(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV, int texW, int texH){
+		float mU = (float)minU / (float)texW;
+		float mV = (float)minV / (float)texH;
+		float xU = (float)maxU / (float)texW;
+		float xV = (float)maxV / (float)texH;
+        vertexbuffer.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(mU,xV).endVertex();
+        vertexbuffer.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(xU, xV).endVertex();
+        vertexbuffer.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(xU, mV).endVertex();
+        vertexbuffer.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(mU, mV).endVertex();
     }
 }

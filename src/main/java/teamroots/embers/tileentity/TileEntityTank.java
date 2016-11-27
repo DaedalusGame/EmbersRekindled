@@ -3,9 +3,8 @@ package teamroots.embers.tileentity;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,16 +15,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 
@@ -80,6 +75,10 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 		return tank.getFluidAmount();
 	}
 	
+	public FluidTank getTank(){
+		return tank;
+	}
+	
 	public Fluid getFluid(){
 		if (tank.getFluid() != null){
 			return tank.getFluid().getFluid();
@@ -90,6 +89,15 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
+		if (!world.isRemote){
+			ItemStack toDrop = new ItemStack(RegistryManager.blockTank,1);
+			if (getTank().getFluidAmount() > 0){
+				NBTTagCompound tag = new NBTTagCompound();
+				getTank().writeToNBT(tag);
+				toDrop.setTagCompound(tag);
+			}
+			world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,toDrop));
+		}
 		world.setTileEntity(pos, null);
 	}
 }

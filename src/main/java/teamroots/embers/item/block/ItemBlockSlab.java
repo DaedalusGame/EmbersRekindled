@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -34,6 +33,7 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 		GameRegistry.register(this);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().toString()));
@@ -90,8 +90,8 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 							                                                                                        3))
 					{
 						worldIn
-							.playSound((double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F),
-							                 (double) ((float) pos.getZ() + 0.5F),
+							.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F,
+							                 pos.getZ() + 0.5F,
 							                 this.doubleSlab.getSoundType().getPlaceSound(),
 							                 SoundCategory.BLOCKS,(this.doubleSlab.getSoundType().getVolume() + 1.0F) / 2.0F,
 							                 this.doubleSlab.getSoundType().getPitch() * 0.8F,true);
@@ -143,9 +143,9 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 				this.doubleSlab.getBoundingBox(iblockstate1, worldIn, p_180615_3_)) && worldIn.setBlockState(
 				p_180615_3_, iblockstate1, 3))
 			{
-				worldIn.playSound((double) ((float) p_180615_3_.getX() + 0.5F),
-				                        (double) ((float) p_180615_3_.getY() + 0.5F),
-				                        (double) ((float) p_180615_3_.getZ() + 0.5F),
+				worldIn.playSound(p_180615_3_.getX() + 0.5F,
+				                        p_180615_3_.getY() + 0.5F,
+				                        p_180615_3_.getZ() + 0.5F,
 				                        this.doubleSlab.getSoundType().getPlaceSound(),
 				                        SoundCategory.BLOCKS, (this.doubleSlab.getSoundType().getVolume() + 1.0F) / 2.0F,
 				                        this.doubleSlab.getSoundType().getPitch() * 0.8F, true);
