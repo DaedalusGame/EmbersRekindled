@@ -9,8 +9,10 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.command.CommandEmberFill;
 import teamroots.embers.proxy.CommonProxy;
 
 @Mod(modid = Embers.MODID, name = Embers.MODNAME, version = Embers.VERSION, dependencies = Embers.DEPENDENCIES)
@@ -48,5 +50,10 @@ public class Embers {
 		MinecraftForge.EVENT_BUS.register(new ConfigManager());
         ConfigManager.init(event.getSuggestedConfigurationFile());
 		proxy.preInit(event);
+	}
+
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event){
+		event.registerServerCommand(new CommandEmberFill());
 	}
 }

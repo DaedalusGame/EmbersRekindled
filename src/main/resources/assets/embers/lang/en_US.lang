@@ -141,6 +141,7 @@ embers.jei.recipe.stamp=Stamping Recipe
 embers.jei.recipe.melter=Melting Recipe
 embers.jei.recipe.mixer=Mixing Recipe
 
+<<<<<<< HEAD
 
 
 embers.research.oreCopper.title=Copper Ore
@@ -445,3 +446,12 @@ embers.research.dustAsh=A pile of reduced, blackened ash. It may have certain al
 
 
 
+=======
+embers.commands.fill.usage=/ember-fill <x> <z> <set|add|query> ...
+embers.commands.fill.usage.add=/ember-fill <x> <z> add <value>
+embers.commands.fill.usage.set=/ember-fill <x> <z> set <value>
+embers.commands.fill.failed=Missing ember data at chunk [%d, %d] (at x %d, z %d)
+embers.commands.fill.added=Added %d to the ember level (now %d) in the chunk [%d, %d] (at x %d, z %d)
+embers.commands.fill.set=Added the ember level to %d in the chunk [%d, %d] (at x %d, z %d)
+embers.commands.fill.query=Ember level is %d in the chunk [%d, %d] (at x %d, z %d)
+>>>>>>> baa8ef35282be79c3cb507153d43222b2981a0f1
