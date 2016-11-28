@@ -268,46 +268,46 @@ embers.research.swordDawnstone.title=Золотитовый меч
 embers.research.swordDawnstone=Меч, сделанный из золотитового сплава.
 
 embers.research.blendCaminite.title=Каминитовая смесь
-embers.research.blendCaminite=Mixing together clay and bone meal appears to create this strange ceramic blend.
+embers.research.blendCaminite=Смешивая вместе глину и костную муку, по-видимому, удалось создать эту странную керамическую смесь.
 
 embers.research.brickCaminite.title=Каминитовый кирпич
-embers.research.brickCaminite=A brick of strong Caminite ceramic. It is strong enough for use in machine casings, containers, or any number of structural purposes.
+embers.research.brickCaminite=Кирпич из прочной каминитовой керамики. Он довольно крепок для использования в создании машинных корпусов, резервуаров, или в других конструктивных целях.
 
 embers.research.blockCaminiteBrick.title=Каминитовые кирпичи
-embers.research.blockCaminiteBrick=A block of arranged Caminite bricks. It will make a fine building material, and is able to be carved into multiple decorative forms such as stairs or walls.
+embers.research.blockCaminiteBrick=Блок, выложенный из каминитовых кирпичей. Он является прекрасным строительным материалом, а так же может быть высечен в несколько декоративных форм, таких как ступеньки и ограды.
 
 embers.research.swordCaminiteRaw.title=Сырой каминитовый меч
-embers.research.swordCaminiteRaw=Caminite blend molded into a sword shape.
+embers.research.swordCaminiteRaw=Каминитовая смесь, штампованная в виде меча.
 
 embers.research.swordCaminite.title=Каминитовый меч
-embers.research.swordCaminite=A square sword of strong Caminite ceramic.
+embers.research.swordCaminite=Квадратный меч из прочной каминитовой керамики.
 
 embers.research.stampBarRaw.title=Сырой штамп слитка
-embers.research.stampBarRaw=Caminite blend molded into an ingot mold.
+embers.research.stampBarRaw=Каминитовая смесь, сформированная в виде штампа слитка.
 
 embers.research.stampBar.title=Штамп слитка
-embers.research.stampBar=An ingot mold made out of Caminite ceramic.
+embers.research.stampBar=Штамп слитка, сделанный из каминитовой керамики.
 
 embers.research.stampSwordRaw.title=Сырой штамп меча
-embers.research.stampSwordRaw=Caminite blend molded into a sword stamp.
+embers.research.stampSwordRaw=Каминитовая смесь, сформированная в виде штампа меча.
 
 embers.research.stampSword.title=Штамп меча
-embers.research.stampSword=A sword mold made out of Caminite ceramic.
+embers.research.stampSword=Штамп меча, сделанный из каминитовой керамики.
 
 embers.research.stampFlatRaw.title=Сырой плоский штамп
-embers.research.stampFlatRaw=Caminite blend molded into a flat stamp.
+embers.research.stampFlatRaw=Каминитовая смесь, сформированная в виде плоского штампа.
 
 embers.research.stampFlat.title=Плоский штамп
-embers.research.stampFlat=A flat mold made out of Caminite ceramic.
+embers.research.stampFlat=Плоский штамп, сделанный из каминитовой керамики.
 
 embers.research.stairsCaminiteBrick.title=Ступеньки из каминитовых кирпичей
-embers.research.stairsCaminiteBrick=Stairs made out of arranged Caminite bricks.
+embers.research.stairsCaminiteBrick=Ступеньки, выложенные из каминитовых кирпичей.
 
 embers.research.blockCaminiteBrickSlab.title=Плита из каминитовых кирпичей
-embers.research.blockCaminiteBrickSlab=A slab made out of arranged Caminite bricks.
+embers.research.blockCaminiteBrickSlab=Плита, выложенная из каминитовых кирпичей.
 
 embers.research.wallCaminiteBrick.title=Ограда из каминитовых кирпичей
-embers.research.wallCaminiteBrick=A wall made out of arranged Caminite bricks.
+embers.research.wallCaminiteBrick=Ограда, выложенная из каминитовых кирпичей.
 
 embers.research.emberDetector.title=Измеритель атмосферы
 embers.research.emberDetector=A dial of copper and iron. The copper and redstone within it are attracted to a strange atmospheric energy, the quantity of which this dial can detect. This energy is the very source of power that the ancients used to create me, perhaps it will be of use to you?
@@ -406,10 +406,10 @@ embers.research.cinderPlinth.title=Пепельный постамент
 embers.research.cinderPlinth=A form of controlled item destruction. Any item can be placed into the upper slot of the block, or pumped in using automated methods. When the Plinth is given Ember power, it will begin to burn the item. The lead structure of the Plinth absorbs released energies of the burned item, reducing it into a form of pure ash. The ash will either appear in the world as a dropped item, or be placed into a Bin beneath the Cinder Plinth if one is available.
 
 embers.research.shardEmber.title=Эмбер-осколок
-embers.research.shardEmber=A shard of pure crystallized Ember.
+embers.research.shardEmber=Осколок чистого кристаллизованного эмбера.
 
 embers.research.crystalEmber.title=Эмбер-кристалл
-embers.research.crystalEmber=A glowing crystal of pure solid Ember. It is roughly six times the size of an Ember shard.
+embers.research.crystalEmber=Светящийся кристалл чистого эмбера. Он больше эмбер-осколка примерно в шесть раз.
 
 embers.research.emberJar.title=Мэнтл-банка
 embers.research.emberJar=A glass jar with two copper wires. It is capable of storing Ember within itself, when charged using a Charger. To be accessed by Ember-demanding items, it need only be present in your inventory.
@@ -433,7 +433,7 @@ embers.research.ignitionCannon.title=Пылающий луч
 embers.research.ignitionCannon=An Ember-powered dawnstone shotgun. When Ember is available in containers in the inventory, it can be fired to shoot damaging beams of Ember. If it is charged back before firing, it will be more accurate at long ranges.
 
 embers.research.dustAsh.title=Кучка пепла
-embers.research.dustAsh=A pile of reduced, blackened ash. It may have certain alchemical uses.
+embers.research.dustAsh=Кучка почерневшего пепла. Она может применяться в некоторых алхимических сферах деятельности.
 
 embers.commands.fill.usage=/ember-fill <x> <z> <set|add|query> ...
 embers.commands.fill.usage.add=/ember-fill <x> <z> add <значение>
