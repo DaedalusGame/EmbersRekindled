@@ -41,15 +41,14 @@ public class ParticleRenderer {
         float f2 = ActiveRenderInfo.getRotationYZ();
         float f3 = ActiveRenderInfo.getRotationXY();
         float f4 = ActiveRenderInfo.getRotationXZ();
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         if (player != null){
 	        Particle.interpPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
 	        Particle.interpPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
 	        Particle.interpPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-	        Particle.field_190016_K = player.getLook(partialTicks);
+	        Particle.cameraViewDir = player.getLook(partialTicks);
 	        GlStateManager.enableAlpha();
 	        GlStateManager.enableBlend();
-	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 	        GlStateManager.alphaFunc(516, 0.003921569F);
             GlStateManager.disableCull();
 	
@@ -58,9 +57,22 @@ public class ParticleRenderer {
 	        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			Tessellator tess = Tessellator.getInstance();
 			VertexBuffer buffer = tess.getBuffer();
+			
+	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 			for (int i = 0; i < particles.size(); i ++){
-				particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+				if (!((IEmberParticle)particles.get(i)).isAdditive()){
+					particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+				}
+			}
+			tess.draw();
+
+	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+			for (int i = 0; i < particles.size(); i ++){
+				if (((IEmberParticle)particles.get(i)).isAdditive()){
+					particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+				}
 			}
 			tess.draw();
 

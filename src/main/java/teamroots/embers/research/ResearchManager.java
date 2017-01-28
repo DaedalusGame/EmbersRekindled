@@ -10,189 +10,189 @@ public class ResearchManager {
 	public static Map<String, ResearchBase> researches = new HashMap<String, ResearchBase>();
 	
 	public static void initResearches(){
-		researches.put(RegistryManager.oreCopper.getRegistryName().toString(), 
-				new ResearchBase("oreCopper", new ItemStack(RegistryManager.oreCopper))
+		researches.put(RegistryManager.ore_copper.getRegistryName().toString(), 
+				new ResearchBase("ore_copper", new ItemStack(RegistryManager.ore_copper))
 				);
-		researches.put(RegistryManager.oreLead.getRegistryName().toString(), 
-				new ResearchBase("oreLead", new ItemStack(RegistryManager.oreLead))
+		researches.put(RegistryManager.ore_lead.getRegistryName().toString(), 
+				new ResearchBase("ore_lead", new ItemStack(RegistryManager.ore_lead))
 				);
-		researches.put(RegistryManager.oreSilver.getRegistryName().toString(), 
-				new ResearchBase("oreSilver", new ItemStack(RegistryManager.oreSilver))
-				);
-		
-		researches.put(RegistryManager.ingotCopper.getRegistryName().toString(), 
-				new ResearchBase("ingotCopper", new ItemStack(RegistryManager.ingotCopper))
-				);
-		researches.put(RegistryManager.ingotLead.getRegistryName().toString(), 
-				new ResearchBase("ingotLead", new ItemStack(RegistryManager.ingotLead))
-				);
-		researches.put(RegistryManager.ingotSilver.getRegistryName().toString(), 
-				new ResearchBase("ingotSilver", new ItemStack(RegistryManager.ingotSilver))
-				);
-		researches.put(RegistryManager.ingotDawnstone.getRegistryName().toString(), 
-				new ResearchBase("ingotDawnstone", new ItemStack(RegistryManager.ingotDawnstone))
+		researches.put(RegistryManager.ore_silver.getRegistryName().toString(), 
+				new ResearchBase("ore_silver", new ItemStack(RegistryManager.ore_silver))
 				);
 		
-		researches.put(RegistryManager.nuggetCopper.getRegistryName().toString(), 
-				new ResearchBase("nuggetCopper", new ItemStack(RegistryManager.nuggetCopper))
+		researches.put(RegistryManager.ingot_copper.getRegistryName().toString(), 
+				new ResearchBase("ingot_copper", new ItemStack(RegistryManager.ingot_copper))
 				);
-		researches.put(RegistryManager.nuggetLead.getRegistryName().toString(), 
-				new ResearchBase("nuggetLead", new ItemStack(RegistryManager.nuggetLead))
+		researches.put(RegistryManager.ingot_lead.getRegistryName().toString(), 
+				new ResearchBase("ingot_lead", new ItemStack(RegistryManager.ingot_lead))
 				);
-		researches.put(RegistryManager.nuggetSilver.getRegistryName().toString(), 
-				new ResearchBase("nuggetSilver", new ItemStack(RegistryManager.nuggetSilver))
+		researches.put(RegistryManager.ingot_silver.getRegistryName().toString(), 
+				new ResearchBase("ingot_silver", new ItemStack(RegistryManager.ingot_silver))
 				);
-		researches.put(RegistryManager.nuggetDawnstone.getRegistryName().toString(), 
-				new ResearchBase("nuggetDawnstone", new ItemStack(RegistryManager.nuggetDawnstone))
-				);
-		researches.put(RegistryManager.nuggetIron.getRegistryName().toString(), 
-				new ResearchBase("nuggetIron", new ItemStack(RegistryManager.nuggetIron))
+		researches.put(RegistryManager.ingot_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("ingot_dawnstone", new ItemStack(RegistryManager.ingot_dawnstone))
 				);
 		
-		researches.put(RegistryManager.plateCopper.getRegistryName().toString(), 
-				new ResearchBase("plateCopper", new ItemStack(RegistryManager.plateCopper))
+		researches.put(RegistryManager.nugget_copper.getRegistryName().toString(), 
+				new ResearchBase("nugget_copper", new ItemStack(RegistryManager.nugget_copper))
 				);
-		researches.put(RegistryManager.plateLead.getRegistryName().toString(), 
-				new ResearchBase("plateLead", new ItemStack(RegistryManager.plateLead))
+		researches.put(RegistryManager.nugget_lead.getRegistryName().toString(), 
+				new ResearchBase("nugget_lead", new ItemStack(RegistryManager.nugget_lead))
 				);
-		researches.put(RegistryManager.plateSilver.getRegistryName().toString(), 
-				new ResearchBase("plateSilver", new ItemStack(RegistryManager.plateSilver))
+		researches.put(RegistryManager.nugget_silver.getRegistryName().toString(), 
+				new ResearchBase("nugget_silver", new ItemStack(RegistryManager.nugget_silver))
 				);
-		researches.put(RegistryManager.plateDawnstone.getRegistryName().toString(), 
-				new ResearchBase("plateDawnstone", new ItemStack(RegistryManager.plateDawnstone))
+		researches.put(RegistryManager.nugget_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("nugget_dawnstone", new ItemStack(RegistryManager.nugget_dawnstone))
 				);
-		researches.put(RegistryManager.plateIron.getRegistryName().toString(), 
-				new ResearchBase("plateIron", new ItemStack(RegistryManager.plateIron))
-				);
-		researches.put(RegistryManager.plateGold.getRegistryName().toString(), 
-				new ResearchBase("plateGold", new ItemStack(RegistryManager.plateGold))
+		researches.put(RegistryManager.nugget_iron.getRegistryName().toString(), 
+				new ResearchBase("nugget_iron", new ItemStack(RegistryManager.nugget_iron))
 				);
 		
-		researches.put(RegistryManager.blockCopper.getRegistryName().toString(), 
-				new ResearchBase("blockCopper", new ItemStack(RegistryManager.blockCopper))
+		researches.put(RegistryManager.plate_copper.getRegistryName().toString(), 
+				new ResearchBase("plate_copper", new ItemStack(RegistryManager.plate_copper))
 				);
-		researches.put(RegistryManager.blockLead.getRegistryName().toString(), 
-				new ResearchBase("blockLead", new ItemStack(RegistryManager.blockLead))
+		researches.put(RegistryManager.plate_lead.getRegistryName().toString(), 
+				new ResearchBase("plate_lead", new ItemStack(RegistryManager.plate_lead))
 				);
-		researches.put(RegistryManager.blockSilver.getRegistryName().toString(), 
-				new ResearchBase("blockSilver", new ItemStack(RegistryManager.blockSilver))
+		researches.put(RegistryManager.plate_silver.getRegistryName().toString(), 
+				new ResearchBase("plate_silver", new ItemStack(RegistryManager.plate_silver))
 				);
-		researches.put(RegistryManager.blockDawnstone.getRegistryName().toString(), 
-				new ResearchBase("blockDawnstone", new ItemStack(RegistryManager.blockDawnstone))
+		researches.put(RegistryManager.plate_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("plate_dawnstone", new ItemStack(RegistryManager.plate_dawnstone))
 				);
-
-		researches.put(RegistryManager.shovelCopper.getRegistryName().toString(), 
-				new ResearchBase("shovelCopper", new ItemStack(RegistryManager.shovelCopper))
+		researches.put(RegistryManager.plate_iron.getRegistryName().toString(), 
+				new ResearchBase("plate_iron", new ItemStack(RegistryManager.plate_iron))
 				);
-		researches.put(RegistryManager.shovelLead.getRegistryName().toString(), 
-				new ResearchBase("shovelLead", new ItemStack(RegistryManager.shovelLead))
-				);
-		researches.put(RegistryManager.shovelSilver.getRegistryName().toString(), 
-				new ResearchBase("shovelSilver", new ItemStack(RegistryManager.shovelSilver))
-				);
-		researches.put(RegistryManager.shovelDawnstone.getRegistryName().toString(), 
-				new ResearchBase("shovelDawnstone", new ItemStack(RegistryManager.shovelDawnstone))
-				);
-
-		researches.put(RegistryManager.hoeCopper.getRegistryName().toString(), 
-				new ResearchBase("hoeCopper", new ItemStack(RegistryManager.hoeCopper))
-				);
-		researches.put(RegistryManager.hoeLead.getRegistryName().toString(), 
-				new ResearchBase("hoeLead", new ItemStack(RegistryManager.hoeLead))
-				);
-		researches.put(RegistryManager.hoeSilver.getRegistryName().toString(), 
-				new ResearchBase("hoeSilver", new ItemStack(RegistryManager.hoeSilver))
-				);
-		researches.put(RegistryManager.hoeDawnstone.getRegistryName().toString(), 
-				new ResearchBase("hoeDawnstone", new ItemStack(RegistryManager.hoeDawnstone))
-				);
-
-		researches.put(RegistryManager.swordCopper.getRegistryName().toString(), 
-				new ResearchBase("swordCopper", new ItemStack(RegistryManager.swordCopper))
-				);
-		researches.put(RegistryManager.swordLead.getRegistryName().toString(), 
-				new ResearchBase("swordLead", new ItemStack(RegistryManager.swordLead))
-				);
-		researches.put(RegistryManager.swordSilver.getRegistryName().toString(), 
-				new ResearchBase("swordSilver", new ItemStack(RegistryManager.swordSilver))
-				);
-		researches.put(RegistryManager.swordDawnstone.getRegistryName().toString(), 
-				new ResearchBase("swordDawnstone", new ItemStack(RegistryManager.swordDawnstone))
-				);
-
-		researches.put(RegistryManager.axeCopper.getRegistryName().toString(), 
-				new ResearchBase("axeCopper", new ItemStack(RegistryManager.axeCopper))
-				);
-		researches.put(RegistryManager.axeLead.getRegistryName().toString(), 
-				new ResearchBase("axeLead", new ItemStack(RegistryManager.axeLead))
-				);
-		researches.put(RegistryManager.axeSilver.getRegistryName().toString(), 
-				new ResearchBase("axeSilver", new ItemStack(RegistryManager.axeSilver))
-				);
-		researches.put(RegistryManager.axeDawnstone.getRegistryName().toString(), 
-				new ResearchBase("axeDawnstone", new ItemStack(RegistryManager.axeDawnstone))
-				);
-
-		researches.put(RegistryManager.pickaxeCopper.getRegistryName().toString(), 
-				new ResearchBase("pickaxeCopper", new ItemStack(RegistryManager.pickaxeCopper))
-				);
-		researches.put(RegistryManager.pickaxeLead.getRegistryName().toString(), 
-				new ResearchBase("pickaxeLead", new ItemStack(RegistryManager.pickaxeLead))
-				);
-		researches.put(RegistryManager.pickaxeSilver.getRegistryName().toString(), 
-				new ResearchBase("pickaxeSilver", new ItemStack(RegistryManager.pickaxeSilver))
-				);
-		researches.put(RegistryManager.pickaxeDawnstone.getRegistryName().toString(), 
-				new ResearchBase("pickaxeDawnstone", new ItemStack(RegistryManager.pickaxeDawnstone))
+		researches.put(RegistryManager.plate_gold.getRegistryName().toString(), 
+				new ResearchBase("plate_gold", new ItemStack(RegistryManager.plate_gold))
 				);
 		
-		researches.put(RegistryManager.blendCaminite.getRegistryName().toString(), 
-				new ResearchBase("blendCaminite", new ItemStack(RegistryManager.blendCaminite))
+		researches.put(RegistryManager.block_copper.getRegistryName().toString(), 
+				new ResearchBase("block_copper", new ItemStack(RegistryManager.block_copper))
 				);
-		researches.put(RegistryManager.brickCaminite.getRegistryName().toString(), 
-				new ResearchBase("brickCaminite", new ItemStack(RegistryManager.brickCaminite))
+		researches.put(RegistryManager.block_lead.getRegistryName().toString(), 
+				new ResearchBase("block_lead", new ItemStack(RegistryManager.block_lead))
 				);
-		researches.put(RegistryManager.plateCaminiteRaw.getRegistryName().toString(), 
-				new ResearchBase("plateCaminiteRaw", new ItemStack(RegistryManager.plateCaminiteRaw))
+		researches.put(RegistryManager.block_silver.getRegistryName().toString(), 
+				new ResearchBase("block_silver", new ItemStack(RegistryManager.block_silver))
 				);
-		researches.put(RegistryManager.plateCaminite.getRegistryName().toString(), 
-				new ResearchBase("plateCaminite", new ItemStack(RegistryManager.plateCaminite))
+		researches.put(RegistryManager.block_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("block_dawnstone", new ItemStack(RegistryManager.block_dawnstone))
 				);
-		researches.put(RegistryManager.stampBarRaw.getRegistryName().toString(), 
-				new ResearchBase("stampBarRaw", new ItemStack(RegistryManager.stampBarRaw))
+
+		researches.put(RegistryManager.shovel_copper.getRegistryName().toString(), 
+				new ResearchBase("shovel_copper", new ItemStack(RegistryManager.shovel_copper))
 				);
-		researches.put(RegistryManager.stampBar.getRegistryName().toString(), 
-				new ResearchBase("stampBar", new ItemStack(RegistryManager.stampBar))
+		researches.put(RegistryManager.shovel_lead.getRegistryName().toString(), 
+				new ResearchBase("shovel_lead", new ItemStack(RegistryManager.shovel_lead))
 				);
-		researches.put(RegistryManager.stampPlateRaw.getRegistryName().toString(), 
-				new ResearchBase("stampPlateRaw", new ItemStack(RegistryManager.stampPlateRaw))
+		researches.put(RegistryManager.shovel_silver.getRegistryName().toString(), 
+				new ResearchBase("shovel_silver", new ItemStack(RegistryManager.shovel_silver))
 				);
-		researches.put(RegistryManager.stampPlate.getRegistryName().toString(), 
-				new ResearchBase("stampPlate", new ItemStack(RegistryManager.stampPlate))
+		researches.put(RegistryManager.shovel_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("shovel_dawnstone", new ItemStack(RegistryManager.shovel_dawnstone))
 				);
-		researches.put(RegistryManager.stampFlatRaw.getRegistryName().toString(), 
-				new ResearchBase("stampFlatRaw", new ItemStack(RegistryManager.stampFlatRaw))
+
+		researches.put(RegistryManager.hoe_copper.getRegistryName().toString(), 
+				new ResearchBase("hoe_copper", new ItemStack(RegistryManager.hoe_copper))
 				);
-		researches.put(RegistryManager.stampFlat.getRegistryName().toString(), 
-				new ResearchBase("stampFlat", new ItemStack(RegistryManager.stampFlat))
+		researches.put(RegistryManager.hoe_lead.getRegistryName().toString(), 
+				new ResearchBase("hoe_lead", new ItemStack(RegistryManager.hoe_lead))
 				);
-		researches.put(RegistryManager.blockCaminiteBrick.getRegistryName().toString(), 
-				new ResearchBase("blockCaminiteBrick", new ItemStack(RegistryManager.blockCaminiteBrick))
+		researches.put(RegistryManager.hoe_silver.getRegistryName().toString(), 
+				new ResearchBase("hoe_silver", new ItemStack(RegistryManager.hoe_silver))
 				);
-		researches.put(RegistryManager.stairsCaminiteBrick.getRegistryName().toString(), 
-				new ResearchBase("stairsCaminiteBrick", new ItemStack(RegistryManager.stairsCaminiteBrick))
+		researches.put(RegistryManager.hoe_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("hoe_dawnstone", new ItemStack(RegistryManager.hoe_dawnstone))
 				);
-		researches.put(RegistryManager.blockCaminiteBrickSlab.getRegistryName().toString(), 
-				new ResearchBase("blockCaminiteBrickSlab", new ItemStack(RegistryManager.blockCaminiteBrickSlab))
+
+		researches.put(RegistryManager.sword_copper.getRegistryName().toString(), 
+				new ResearchBase("sword_copper", new ItemStack(RegistryManager.sword_copper))
 				);
-		researches.put(RegistryManager.wallCaminiteBrick.getRegistryName().toString(), 
-				new ResearchBase("wallCaminiteBrick", new ItemStack(RegistryManager.wallCaminiteBrick))
+		researches.put(RegistryManager.sword_lead.getRegistryName().toString(), 
+				new ResearchBase("sword_lead", new ItemStack(RegistryManager.sword_lead))
 				);
-		researches.put(RegistryManager.emberDetector.getRegistryName().toString(), 
-				new ResearchBase("emberDetector", new ItemStack(RegistryManager.emberDetector))
+		researches.put(RegistryManager.sword_silver.getRegistryName().toString(), 
+				new ResearchBase("sword_silver", new ItemStack(RegistryManager.sword_silver))
 				);
-		researches.put(RegistryManager.blockTank.getRegistryName().toString(), 
-				new ResearchBase("blockTank", new ItemStack(RegistryManager.blockTank))
+		researches.put(RegistryManager.sword_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("sword_dawnstone", new ItemStack(RegistryManager.sword_dawnstone))
+				);
+
+		researches.put(RegistryManager.axe_copper.getRegistryName().toString(), 
+				new ResearchBase("axe_copper", new ItemStack(RegistryManager.axe_copper))
+				);
+		researches.put(RegistryManager.axe_lead.getRegistryName().toString(), 
+				new ResearchBase("axe_lead", new ItemStack(RegistryManager.axe_lead))
+				);
+		researches.put(RegistryManager.axe_silver.getRegistryName().toString(), 
+				new ResearchBase("axe_silver", new ItemStack(RegistryManager.axe_silver))
+				);
+		researches.put(RegistryManager.axe_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("axe_dawnstone", new ItemStack(RegistryManager.axe_dawnstone))
+				);
+
+		researches.put(RegistryManager.pickaxe_copper.getRegistryName().toString(), 
+				new ResearchBase("pickaxe_copper", new ItemStack(RegistryManager.pickaxe_copper))
+				);
+		researches.put(RegistryManager.pickaxe_lead.getRegistryName().toString(), 
+				new ResearchBase("pickaxe_lead", new ItemStack(RegistryManager.pickaxe_lead))
+				);
+		researches.put(RegistryManager.pickaxe_silver.getRegistryName().toString(), 
+				new ResearchBase("pickaxe_silver", new ItemStack(RegistryManager.pickaxe_silver))
+				);
+		researches.put(RegistryManager.pickaxe_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("pickaxe_dawnstone", new ItemStack(RegistryManager.pickaxe_dawnstone))
+				);
+		
+		researches.put(RegistryManager.blend_caminite.getRegistryName().toString(), 
+				new ResearchBase("blend_caminite", new ItemStack(RegistryManager.blend_caminite))
+				);
+		researches.put(RegistryManager.brick_caminite.getRegistryName().toString(), 
+				new ResearchBase("brick_caminite", new ItemStack(RegistryManager.brick_caminite))
+				);
+		researches.put(RegistryManager.plate_caminite_raw.getRegistryName().toString(), 
+				new ResearchBase("plate_caminite_raw", new ItemStack(RegistryManager.plate_caminite_raw))
+				);
+		researches.put(RegistryManager.plate_caminite.getRegistryName().toString(), 
+				new ResearchBase("plate_caminite", new ItemStack(RegistryManager.plate_caminite))
+				);
+		researches.put(RegistryManager.stamp_bar_raw.getRegistryName().toString(), 
+				new ResearchBase("stamp_bar_raw", new ItemStack(RegistryManager.stamp_bar_raw))
+				);
+		researches.put(RegistryManager.stamp_bar.getRegistryName().toString(), 
+				new ResearchBase("stamp_bar", new ItemStack(RegistryManager.stamp_bar))
+				);
+		researches.put(RegistryManager.stamp_plate_raw.getRegistryName().toString(), 
+				new ResearchBase("stamp_plate_raw", new ItemStack(RegistryManager.stamp_plate_raw))
+				);
+		researches.put(RegistryManager.stamp_plate.getRegistryName().toString(), 
+				new ResearchBase("stamp_plate", new ItemStack(RegistryManager.stamp_plate))
+				);
+		researches.put(RegistryManager.stamp_flat_raw.getRegistryName().toString(), 
+				new ResearchBase("stamp_flat_raw", new ItemStack(RegistryManager.stamp_flat_raw))
+				);
+		researches.put(RegistryManager.stamp_flat.getRegistryName().toString(), 
+				new ResearchBase("stamp_flat", new ItemStack(RegistryManager.stamp_flat))
+				);
+		researches.put(RegistryManager.block_caminite_brick.getRegistryName().toString(), 
+				new ResearchBase("block_caminite_brick", new ItemStack(RegistryManager.block_caminite_brick))
+				);
+		researches.put(RegistryManager.stairs_caminite_brick.getRegistryName().toString(), 
+				new ResearchBase("stairs_caminite_brick", new ItemStack(RegistryManager.stairs_caminite_brick))
+				);
+		researches.put(RegistryManager.block_caminite_brick_slab.getRegistryName().toString(), 
+				new ResearchBase("block_caminite_brick_slab", new ItemStack(RegistryManager.block_caminite_brick_slab))
+				);
+		researches.put(RegistryManager.wall_caminite_brick.getRegistryName().toString(), 
+				new ResearchBase("wall_caminite_brick", new ItemStack(RegistryManager.wall_caminite_brick))
+				);
+		researches.put(RegistryManager.ember_detector.getRegistryName().toString(), 
+				new ResearchBase("ember_detector", new ItemStack(RegistryManager.ember_detector))
+				);
+		researches.put(RegistryManager.block_tank.getRegistryName().toString(), 
+				new ResearchBase("block_tank", new ItemStack(RegistryManager.block_tank))
 				);
 		researches.put(RegistryManager.pipe.getRegistryName().toString(), 
 				new ResearchBase("pipe", new ItemStack(RegistryManager.pipe))
@@ -200,26 +200,26 @@ public class ResearchManager {
 		researches.put(RegistryManager.pump.getRegistryName().toString(), 
 				new ResearchBase("pump", new ItemStack(RegistryManager.pump))
 				);
-		researches.put(RegistryManager.blockFurnace.getRegistryName().toString(), 
-				new ResearchBase("blockFurnace", new ItemStack(RegistryManager.blockFurnace))
+		researches.put(RegistryManager.block_furnace.getRegistryName().toString(), 
+				new ResearchBase("block_furnace", new ItemStack(RegistryManager.block_furnace))
 				);
-		researches.put(RegistryManager.emberReceiver.getRegistryName().toString(), 
-				new ResearchBase("emberReceiver", new ItemStack(RegistryManager.emberReceiver))
+		researches.put(RegistryManager.ember_receiver.getRegistryName().toString(), 
+				new ResearchBase("ember_receiver", new ItemStack(RegistryManager.ember_receiver))
 				);
-		researches.put(RegistryManager.emberEmitter.getRegistryName().toString(), 
-				new ResearchBase("emberEmitter", new ItemStack(RegistryManager.emberEmitter))
+		researches.put(RegistryManager.ember_emitter.getRegistryName().toString(), 
+				new ResearchBase("ember_emitter", new ItemStack(RegistryManager.ember_emitter))
 				);
-		researches.put(RegistryManager.tinkerHammer.getRegistryName().toString(), 
-				new ResearchBase("tinkerHammer", new ItemStack(RegistryManager.tinkerHammer))
+		researches.put(RegistryManager.tinker_hammer.getRegistryName().toString(), 
+				new ResearchBase("tinker_hammer", new ItemStack(RegistryManager.tinker_hammer))
 				);
-		researches.put(RegistryManager.copperCell.getRegistryName().toString(), 
-				new ResearchBase("copperCell", new ItemStack(RegistryManager.copperCell))
+		researches.put(RegistryManager.copper_cell.getRegistryName().toString(), 
+				new ResearchBase("copper_cell", new ItemStack(RegistryManager.copper_cell))
 				);
-		researches.put(RegistryManager.itemPipe.getRegistryName().toString(), 
-				new ResearchBase("itemPipe", new ItemStack(RegistryManager.itemPipe))
+		researches.put(RegistryManager.item_pipe.getRegistryName().toString(), 
+				new ResearchBase("item_pipe", new ItemStack(RegistryManager.item_pipe))
 				);
-		researches.put(RegistryManager.itemPump.getRegistryName().toString(), 
-				new ResearchBase("itemPump", new ItemStack(RegistryManager.itemPump))
+		researches.put(RegistryManager.item_pump.getRegistryName().toString(), 
+				new ResearchBase("item_pump", new ItemStack(RegistryManager.item_pump))
 				);
 		researches.put(RegistryManager.bin.getRegistryName().toString(), 
 				new ResearchBase("bin", new ItemStack(RegistryManager.bin))
@@ -227,92 +227,143 @@ public class ResearchManager {
 		researches.put(RegistryManager.stamper.getRegistryName().toString(), 
 				new ResearchBase("stamper", new ItemStack(RegistryManager.stamper))
 				);
-		researches.put(RegistryManager.stampBase.getRegistryName().toString(), 
-				new ResearchBase("stampBase", new ItemStack(RegistryManager.stampBase))
+		researches.put(RegistryManager.stamp_base.getRegistryName().toString(), 
+				new ResearchBase("stamp_base", new ItemStack(RegistryManager.stamp_base))
 				);
-		researches.put(RegistryManager.emberBore.getRegistryName().toString(), 
-				new ResearchBase("emberBore", new ItemStack(RegistryManager.emberBore))
+		researches.put(RegistryManager.ember_bore.getRegistryName().toString(), 
+				new ResearchBase("ember_bore", new ItemStack(RegistryManager.ember_bore))
 				);
-		researches.put(RegistryManager.mechAccessor.getRegistryName().toString(), 
-				new ResearchBase("mechAccessor", new ItemStack(RegistryManager.mechAccessor))
+		researches.put(RegistryManager.mech_accessor.getRegistryName().toString(), 
+				new ResearchBase("mech_accessor", new ItemStack(RegistryManager.mech_accessor))
 				);
-		researches.put(RegistryManager.mechCore.getRegistryName().toString(), 
-				new ResearchBase("mechCore", new ItemStack(RegistryManager.mechCore))
+		researches.put(RegistryManager.mech_core.getRegistryName().toString(), 
+				new ResearchBase("mech_core", new ItemStack(RegistryManager.mech_core))
 				);
-		researches.put(RegistryManager.emberActivator.getRegistryName().toString(), 
-				new ResearchBase("emberActivator", new ItemStack(RegistryManager.emberActivator))
+		researches.put(RegistryManager.ember_activator.getRegistryName().toString(), 
+				new ResearchBase("ember_activator", new ItemStack(RegistryManager.ember_activator))
 				);
 		researches.put(RegistryManager.mixer.getRegistryName().toString(), 
 				new ResearchBase("mixer", new ItemStack(RegistryManager.mixer))
 				);
-		researches.put(RegistryManager.heatCoil.getRegistryName().toString(), 
-				new ResearchBase("heatCoil", new ItemStack(RegistryManager.heatCoil))
+		researches.put(RegistryManager.heat_coil.getRegistryName().toString(), 
+				new ResearchBase("heat_coil", new ItemStack(RegistryManager.heat_coil))
 				);
-		researches.put(RegistryManager.itemDropper.getRegistryName().toString(), 
-				new ResearchBase("itemDropper", new ItemStack(RegistryManager.itemDropper))
+		researches.put(RegistryManager.item_dropper.getRegistryName().toString(), 
+				new ResearchBase("item_dropper", new ItemStack(RegistryManager.item_dropper))
 				);
-		researches.put(RegistryManager.largeTank.getRegistryName().toString(), 
-				new ResearchBase("largeTank", new ItemStack(RegistryManager.largeTank))
+		researches.put(RegistryManager.large_tank.getRegistryName().toString(), 
+				new ResearchBase("large_tank", new ItemStack(RegistryManager.large_tank))
 				);
-		researches.put(RegistryManager.emberGauge.getRegistryName().toString(), 
-				new ResearchBase("emberGauge", new ItemStack(RegistryManager.emberGauge))
+		researches.put(RegistryManager.ember_gauge.getRegistryName().toString(), 
+				new ResearchBase("ember_gauge", new ItemStack(RegistryManager.ember_gauge))
 				);
-		researches.put(RegistryManager.itemGauge.getRegistryName().toString(), 
-				new ResearchBase("itemGauge", new ItemStack(RegistryManager.itemGauge))
+		/*researches.put(RegistryManager.item_gauge.getRegistryName().toString(), 
+				new ResearchBase("item_gauge", new ItemStack(RegistryManager.item_gauge))
+				);*/
+		researches.put(RegistryManager.fluid_gauge.getRegistryName().toString(), 
+				new ResearchBase("fluid_gauge", new ItemStack(RegistryManager.fluid_gauge))
 				);
-		researches.put(RegistryManager.fluidGauge.getRegistryName().toString(), 
-				new ResearchBase("fluidGauge", new ItemStack(RegistryManager.fluidGauge))
+		researches.put(RegistryManager.block_lantern.getRegistryName().toString(), 
+				new ResearchBase("block_lantern", new ItemStack(RegistryManager.block_lantern))
 				);
-		researches.put(RegistryManager.blockLantern.getRegistryName().toString(), 
-				new ResearchBase("blockLantern", new ItemStack(RegistryManager.blockLantern))
+		researches.put(RegistryManager.beam_splitter.getRegistryName().toString(), 
+				new ResearchBase("beam_splitter", new ItemStack(RegistryManager.beam_splitter))
 				);
-		researches.put(RegistryManager.beamSplitter.getRegistryName().toString(), 
-				new ResearchBase("beamSplitter", new ItemStack(RegistryManager.beamSplitter))
+		researches.put(RegistryManager.ember_relay.getRegistryName().toString(), 
+				new ResearchBase("ember_relay", new ItemStack(RegistryManager.ember_relay))
 				);
-		researches.put(RegistryManager.emberRelay.getRegistryName().toString(), 
-				new ResearchBase("emberRelay", new ItemStack(RegistryManager.emberRelay))
-				);
-		researches.put(RegistryManager.crystalCell.getRegistryName().toString(), 
-				new ResearchBase("crystalCell", new ItemStack(RegistryManager.crystalCell))
+		researches.put(RegistryManager.crystal_cell.getRegistryName().toString(), 
+				new ResearchBase("crystal_cell", new ItemStack(RegistryManager.crystal_cell))
 				);
 		researches.put(RegistryManager.charger.getRegistryName().toString(), 
 				new ResearchBase("charger", new ItemStack(RegistryManager.charger))
 				);
-		researches.put(RegistryManager.cinderPlinth.getRegistryName().toString(), 
-				new ResearchBase("cinderPlinth", new ItemStack(RegistryManager.cinderPlinth))
+		researches.put(RegistryManager.cinder_plinth.getRegistryName().toString(), 
+				new ResearchBase("cinder_plinth", new ItemStack(RegistryManager.cinder_plinth))
 				);
-		researches.put(RegistryManager.stoneEdge.getRegistryName().toString(), 
-				new ResearchBase("stoneEdge", new ItemStack(RegistryManager.stoneEdge))
+		researches.put(RegistryManager.stone_edge.getRegistryName().toString(), 
+				new ResearchBase("stone_edge", new ItemStack(RegistryManager.stone_edge))
 				);
-		researches.put(RegistryManager.shardEmber.getRegistryName().toString(), 
-				new ResearchBase("shardEmber", new ItemStack(RegistryManager.shardEmber))
+		researches.put(RegistryManager.shard_ember.getRegistryName().toString(), 
+				new ResearchBase("shard_ember", new ItemStack(RegistryManager.shard_ember))
 				);
-		researches.put(RegistryManager.crystalEmber.getRegistryName().toString(), 
-				new ResearchBase("crystalEmber", new ItemStack(RegistryManager.crystalEmber))
+		researches.put(RegistryManager.crystal_ember.getRegistryName().toString(), 
+				new ResearchBase("crystal_ember", new ItemStack(RegistryManager.crystal_ember))
 				);
-		researches.put(RegistryManager.emberJar.getRegistryName().toString(), 
-				new ResearchBase("emberJar", new ItemStack(RegistryManager.emberJar))
+		researches.put(RegistryManager.ember_jar.getRegistryName().toString(), 
+				new ResearchBase("ember_jar", new ItemStack(RegistryManager.ember_jar))
 				);
-		researches.put(RegistryManager.emberCartridge.getRegistryName().toString(), 
-				new ResearchBase("emberCartridge", new ItemStack(RegistryManager.emberCartridge))
+		researches.put(RegistryManager.ember_cartridge.getRegistryName().toString(), 
+				new ResearchBase("ember_cartridge", new ItemStack(RegistryManager.ember_cartridge))
 				);
-		researches.put(RegistryManager.pickaxeClockwork.getRegistryName().toString(), 
-				new ResearchBase("pickaxeClockwork", new ItemStack(RegistryManager.pickaxeClockwork))
+		researches.put(RegistryManager.pickaxe_clockwork.getRegistryName().toString(), 
+				new ResearchBase("pickaxe_clockwork", new ItemStack(RegistryManager.pickaxe_clockwork))
 				);
-		researches.put(RegistryManager.axeClockwork.getRegistryName().toString(), 
-				new ResearchBase("axeClockwork", new ItemStack(RegistryManager.axeClockwork))
+		researches.put(RegistryManager.axe_clockwork.getRegistryName().toString(), 
+				new ResearchBase("axe_clockwork", new ItemStack(RegistryManager.axe_clockwork))
 				);
-		researches.put(RegistryManager.ignitionCannon.getRegistryName().toString(), 
-				new ResearchBase("ignitionCannon", new ItemStack(RegistryManager.ignitionCannon))
+		researches.put(RegistryManager.ignition_cannon.getRegistryName().toString(), 
+				new ResearchBase("ignition_cannon", new ItemStack(RegistryManager.ignition_cannon))
 				);
-		researches.put(RegistryManager.staffEmber.getRegistryName().toString(), 
-				new ResearchBase("staffEmber", new ItemStack(RegistryManager.staffEmber))
+		researches.put(RegistryManager.staff_ember.getRegistryName().toString(), 
+				new ResearchBase("staff_ember", new ItemStack(RegistryManager.staff_ember))
 				);
 		researches.put(RegistryManager.grandhammer.getRegistryName().toString(), 
 				new ResearchBase("grandhammer", new ItemStack(RegistryManager.grandhammer))
 				);
-		researches.put(RegistryManager.dustAsh.getRegistryName().toString(), 
-				new ResearchBase("dustAsh", new ItemStack(RegistryManager.dustAsh))
+		researches.put(RegistryManager.dust_ash.getRegistryName().toString(), 
+				new ResearchBase("dust_ash", new ItemStack(RegistryManager.dust_ash))
+				);
+		researches.put(RegistryManager.alchemy_pedestal.getRegistryName().toString(), 
+				new ResearchBase("alchemy_pedestal", new ItemStack(RegistryManager.alchemy_pedestal))
+				);
+		researches.put(RegistryManager.alchemy_tablet.getRegistryName().toString(), 
+				new ResearchBase("alchemy_tablet", new ItemStack(RegistryManager.alchemy_tablet))
+				);
+		researches.put(RegistryManager.item_transfer.getRegistryName().toString(), 
+				new ResearchBase("item_transfer", new ItemStack(RegistryManager.item_transfer))
+				);
+		researches.put(RegistryManager.core_stone.getRegistryName().toString(), 
+				new ResearchBase("core_stone", new ItemStack(RegistryManager.core_stone))
+				);
+		researches.put(RegistryManager.beam_cannon.getRegistryName().toString(), 
+				new ResearchBase("beam_cannon", new ItemStack(RegistryManager.beam_cannon))
+				);
+		researches.put(RegistryManager.aspectus_iron.getRegistryName().toString(), 
+				new ResearchBase("aspectus_iron", new ItemStack(RegistryManager.aspectus_iron))
+				);
+		researches.put(RegistryManager.aspectus_copper.getRegistryName().toString(), 
+				new ResearchBase("aspectus_copper", new ItemStack(RegistryManager.aspectus_copper))
+				);
+		researches.put(RegistryManager.aspectus_lead.getRegistryName().toString(), 
+				new ResearchBase("aspectus_lead", new ItemStack(RegistryManager.aspectus_lead))
+				);
+		researches.put(RegistryManager.aspectus_silver.getRegistryName().toString(), 
+				new ResearchBase("aspectus_silver", new ItemStack(RegistryManager.aspectus_silver))
+				);
+		researches.put(RegistryManager.aspectus_dawnstone.getRegistryName().toString(), 
+				new ResearchBase("aspectus_dawnstone", new ItemStack(RegistryManager.aspectus_dawnstone))
+				);
+		researches.put(RegistryManager.alchemic_waste.getRegistryName().toString(), 
+				new ResearchBase("alchemic_waste", new ItemStack(RegistryManager.alchemic_waste))
+				);
+		researches.put(RegistryManager.ashen_cloth.getRegistryName().toString(), 
+				new ResearchBase("ashen_cloth", new ItemStack(RegistryManager.ashen_cloth))
+				);
+		researches.put(RegistryManager.ashen_cloak_head.getRegistryName().toString(), 
+				new ResearchBase("ashen_cloak_head", new ItemStack(RegistryManager.ashen_cloak_head))
+				);
+		researches.put(RegistryManager.ashen_cloak_chest.getRegistryName().toString(), 
+				new ResearchBase("ashen_cloak_chest", new ItemStack(RegistryManager.ashen_cloak_chest))
+				);
+		researches.put(RegistryManager.ashen_cloak_legs.getRegistryName().toString(), 
+				new ResearchBase("ashen_cloak_legs", new ItemStack(RegistryManager.ashen_cloak_legs))
+				);
+		researches.put(RegistryManager.ashen_cloak_boots.getRegistryName().toString(), 
+				new ResearchBase("ashen_cloak_boots", new ItemStack(RegistryManager.ashen_cloak_boots))
+				);
+		researches.put(RegistryManager.inflictor_gem.getRegistryName().toString(), 
+				new ResearchBase("inflictor_gem", new ItemStack(RegistryManager.inflictor_gem))
 				);
 	}
 }

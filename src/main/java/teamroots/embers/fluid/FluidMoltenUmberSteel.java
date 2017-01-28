@@ -9,12 +9,12 @@ import teamroots.embers.RegistryManager;
 
 public class FluidMoltenUmberSteel extends Fluid {
 	public FluidMoltenUmberSteel() {
-		super("umberSteel",new ResourceLocation(Embers.MODID+":blocks/moltenUmberSteelStill"),new ResourceLocation(Embers.MODID+":blocks/moltenUmberSteelFlowing"));
+		super("umber_steel",new ResourceLocation(Embers.MODID+":blocks/molten_umber_steel_still"),new ResourceLocation(Embers.MODID+":blocks/molten_umber_steel_flowing"));
 		setViscosity(6000);
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
-		setBlock(RegistryManager.blockMoltenUmberSteel);
+		setBlock(RegistryManager.block_molten_umber_steel);
 		setUnlocalizedName("umberSteel");
 	}
 	

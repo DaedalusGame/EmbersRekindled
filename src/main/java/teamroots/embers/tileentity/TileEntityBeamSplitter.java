@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.block.BlockBeamSplitter;
 import teamroots.embers.entity.EntityEmberPacket;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -83,7 +85,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -103,11 +105,10 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		super.getCapability(capability, facing);
 		if (capability == EmberCapabilityProvider.emberCapability){
 			return (T)this.capability;
 		}
-		return (T)this.capability;
+		return super.getCapability(capability, facing);
 	}
 
 	@Override
@@ -119,20 +120,22 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				this.capability.setEmber(0);
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				getWorld().notifyBlockUpdate(getPos(), state, state, 8);
+				if (!getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				}
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetLeft) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
-							getWorld().spawnEntityInWorld(packetLeft);
+							getWorld().spawnEntity(packetLeft);
 						}
 					}
 					if (getWorld().getTileEntity(targetRight) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
-							getWorld().spawnEntityInWorld(packetRight);
+							getWorld().spawnEntity(packetRight);
 						}
 					}
 				}
@@ -141,14 +144,14 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
-							getWorld().spawnEntityInWorld(packetLeft);
+							getWorld().spawnEntity(packetLeft);
 						}
 					}
 					if (getWorld().getTileEntity(targetRight) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
-							getWorld().spawnEntityInWorld(packetRight);
+							getWorld().spawnEntity(packetRight);
 						}
 					}
 				}
@@ -158,13 +161,15 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				this.capability.setEmber(0);
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				getWorld().notifyBlockUpdate(getPos(), state, state, 8);
+				if (!getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				}
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetLeft) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
-							getWorld().spawnEntityInWorld(packetLeft);
+							getWorld().spawnEntity(packetLeft);
 						}
 					}
 				}
@@ -173,7 +178,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
-							getWorld().spawnEntityInWorld(packetLeft);
+							getWorld().spawnEntity(packetLeft);
 						}
 					}
 				}
@@ -183,13 +188,15 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				this.capability.setEmber(0);
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				getWorld().notifyBlockUpdate(getPos(), state, state, 8);
+				if (!getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				}
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetRight) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
-							getWorld().spawnEntityInWorld(packetRight);
+							getWorld().spawnEntity(packetRight);
 						}
 					}
 				}
@@ -198,7 +205,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
-							getWorld().spawnEntityInWorld(packetRight);
+							getWorld().spawnEntity(packetRight);
 						}
 					}
 				}

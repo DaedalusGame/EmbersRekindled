@@ -39,7 +39,7 @@ public class BlockActivator extends BlockTEBase {
 	}
 
     @Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean b)
     {
     	if (state.getValue(isTop)){
 	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_SIDE_WEST);
@@ -48,7 +48,7 @@ public class BlockActivator extends BlockTEBase {
 	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_SIDE_SOUTH);
     	}
     	else {
-    		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
+    		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn,b);
     	}
     }
 	
@@ -86,7 +86,7 @@ public class BlockActivator extends BlockTEBase {
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
 		if (!world.isRemote && !player.capabilities.isCreativeMode){
-			world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
 		}
 		if (this.getMetaFromState(state) == 0){
 			world.setBlockToAir(pos.up());
@@ -100,7 +100,7 @@ public class BlockActivator extends BlockTEBase {
 	@Override
 	public void onBlockExploded(World world, BlockPos pos, Explosion explosion){
 		if (!world.isRemote){
-			world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
 		}
 		IBlockState state = world.getBlockState(pos);
 		if (this.getMetaFromState(state) == 0){
@@ -131,7 +131,7 @@ public class BlockActivator extends BlockTEBase {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ){
-		return ((ITileEntityBase)world.getTileEntity(pos)).activate(world,pos,state,player,hand,heldItem,side,hitX,hitY,hitZ);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ){
+		return ((ITileEntityBase)world.getTileEntity(pos)).activate(world,pos,state,player,hand,side,hitX,hitY,hitZ);
 	}
 }

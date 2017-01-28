@@ -36,13 +36,13 @@ public class BlockHeatCoil extends BlockTEBase {
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		world.setBlockState(pos.north(), RegistryManager.mechEdge.getStateFromMeta(0));
-		world.setBlockState(pos.north().west(), RegistryManager.mechEdge.getStateFromMeta(1));
-		world.setBlockState(pos.west(), RegistryManager.mechEdge.getStateFromMeta(2));
-		world.setBlockState(pos.south().west(), RegistryManager.mechEdge.getStateFromMeta(3));
-		world.setBlockState(pos.south(), RegistryManager.mechEdge.getStateFromMeta(4));
-		world.setBlockState(pos.south().east(), RegistryManager.mechEdge.getStateFromMeta(5));
-		world.setBlockState(pos.east(), RegistryManager.mechEdge.getStateFromMeta(6));
-		world.setBlockState(pos.north().east(), RegistryManager.mechEdge.getStateFromMeta(7));
+		world.setBlockState(pos.north(), RegistryManager.mech_edge.getStateFromMeta(0));
+		world.setBlockState(pos.north().west(), RegistryManager.mech_edge.getStateFromMeta(1));
+		world.setBlockState(pos.west(), RegistryManager.mech_edge.getStateFromMeta(2));
+		world.setBlockState(pos.south().west(), RegistryManager.mech_edge.getStateFromMeta(3));
+		world.setBlockState(pos.south(), RegistryManager.mech_edge.getStateFromMeta(4));
+		world.setBlockState(pos.south().east(), RegistryManager.mech_edge.getStateFromMeta(5));
+		world.setBlockState(pos.east(), RegistryManager.mech_edge.getStateFromMeta(6));
+		world.setBlockState(pos.north().east(), RegistryManager.mech_edge.getStateFromMeta(7));
 	}
 }

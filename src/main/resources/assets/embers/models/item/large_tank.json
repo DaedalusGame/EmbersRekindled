@@ -1,0 +1,7 @@
+{
+    "parent":"block/cube_all",
+    "textures": {
+        "all": "embers:blocks/crate_tank",
+        "particle": "embers:blocks/crate_tank"
+    }
+}

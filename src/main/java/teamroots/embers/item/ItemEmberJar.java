@@ -9,13 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
 
 public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeldEmberCell, IEmberItem {
 
 	public ItemEmberJar() {
-		super("emberJar", true);
+		super("ember_jar", true);
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 	}
@@ -30,7 +31,7 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 	}
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems){
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems){
 		ItemStack emptyStack = new ItemStack(this,1);
 		emptyStack.setTagCompound(new NBTTagCompound());
 		setEmberCapacity(emptyStack, 1000.0);

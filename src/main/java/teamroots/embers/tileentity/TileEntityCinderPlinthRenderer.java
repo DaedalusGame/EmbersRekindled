@@ -23,11 +23,11 @@ public class TileEntityCinderPlinthRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
 		if (tile instanceof TileEntityCinderPlinth){
 			TileEntityCinderPlinth plinth = (TileEntityCinderPlinth)tile;
-			if (plinth.inventory.getStackInSlot(0) != null){
-				if (Minecraft.getMinecraft().theWorld != null){
+			if (plinth.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().theWorld,x,y,z,new ItemStack(plinth.inventory.getStackInSlot(0).getItem(),1,plinth.inventory.getStackInSlot(0).getMetadata()));
+					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(plinth.inventory.getStackInSlot(0).getItem(),1,plinth.inventory.getStackInSlot(0).getMetadata()));
 					item.hoverStart = 0;
 					item.isCollided = false;
 					GL11.glTranslated(x+0.5, y+0.75, z+0.5);

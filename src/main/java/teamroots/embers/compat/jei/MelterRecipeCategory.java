@@ -19,7 +19,7 @@ public class MelterRecipeCategory extends BlankRecipeCategory {
     private final IDrawable background;
     private final String name;
     
-    public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jeiMelter.png");
+    public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jei_melter.png");
 
     public MelterRecipeCategory(IGuiHelper helper){
     	

@@ -1,11 +1,125 @@
 package teamroots.embers.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RenderUtil {
+	public static final float root2over2 = (float)Math.sqrt(2.0f)/2.0f;
+	public static void renderBeam(VertexBuffer buf, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a, float radius, double angle){
+		int lightx = 0xF000F0;
+        int lighty = 0xF000F0;
+        double yaw = Misc.yawDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
+        double pitch = Misc.pitchDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
+        
+        float yawCos = MathHelper.cos((float)Math.toRadians(yaw));
+        float yawSin = MathHelper.sin((float)Math.toRadians(yaw));
+        float pitchCos = MathHelper.cos((float)Math.toRadians(pitch));
+        float pitchSin = MathHelper.sin((float)Math.toRadians(pitch));
+        float angCos = MathHelper.cos((float)Math.toRadians(angle));
+        float angSin = MathHelper.sin((float)Math.toRadians(angle));
+        
+        float dxh = radius*yawCos*pitchCos;
+        float dyh = 0;
+        float dzh = radius*-yawSin*pitchCos;
+        
+        float dxv = radius*0.5f*-yawSin*pitchSin;
+        float dyv = radius*0.5f*pitchCos;
+        float dzv = radius*0.5f*-yawCos*pitchSin;
+        
+        float dx = dxh * angCos + dxv * angSin;
+        float dy = dyh * angCos + dyv * angSin;
+        float dz = dzh * angCos + dzv * angSin;
+        float dx2 = dxh * -angSin + dxv * angCos;
+        float dy2 = dyh * -angSin + dyv * angCos;
+        float dz2 = dzh * -angSin + dzv * angCos;
+        
+        double distX = x2-x1;
+        double distY = y2-y1;
+        double distZ = z2-z1;
+        
+        buf.pos(x1-dx, y1-dy, z1-dz).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        buf.pos(x1+dx, y1+dy, z1+dz).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        buf.pos(x1+distX*0.1f+dx, y1+distY*0.1f+dy, z1+distZ*0.1f+dz).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.1f-dx, y1+distY*0.1f-dy, z1+distZ*0.1f-dz).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        
+        buf.pos(x1-dx2, y1-dy2, z1-dz2).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        buf.pos(x1+dx2, y1+dy2, z1+dz2).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        buf.pos(x1+distX*0.1f+dx2, y1+distY*0.1f+dy2, z1+distZ*0.1f+dz2).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.1f-dx2, y1+distY*0.1f-dy2, z1+distZ*0.1f-dz2).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        
+        buf.pos(x1+distX*0.1f-dx, y1+distY*0.1f-dy, z1+distZ*0.1f-dz).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.1f+dx, y1+distY*0.1f+dy, z1+distZ*0.1f+dz).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.9f+dx, y1+distY*0.9f+dy, z1+distZ*0.9f+dz).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.9f-dx, y1+distY*0.9f-dy, z1+distZ*0.9f-dz).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        
+        buf.pos(x1+distX*0.1f-dx2, y1+distY*0.1f-dy2, z1+distZ*0.1f-dz2).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.1f+dx2, y1+distY*0.1f+dy2, z1+distZ*0.1f+dz2).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.9f+dx2, y1+distY*0.9f+dy2, z1+distZ*0.9f+dz2).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.9f-dx2, y1+distY*0.9f-dy2, z1+distZ*0.9f-dz2).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        
+        buf.pos(x1+distX*0.9f-dx, y1+distY*0.9f-dy, z1+distZ*0.9f-dz).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.9f+dx, y1+distY*0.9f+dy, z1+distZ*0.9f+dz).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX+dx, y1+distY+dy, z1+distZ+dz).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        buf.pos(x1+distX-dx, y1+distY-dy, z1+distZ-dz).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        
+        buf.pos(x1+distX*0.9f-dx2, y1+distY*0.9f-dy2, z1+distZ*0.9f-dz2).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX*0.9f+dx2, y1+distY*0.9f+dy2, z1+distZ*0.9f+dz2).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+        buf.pos(x1+distX+dx2, y1+distY+dy2, z1+distZ+dz2).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+        buf.pos(x1+distX-dx2, y1+distY-dy2, z1+distZ-dz2).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, 0).endVertex();
+	
+	}
+	
+	public static void renderAlchemyCircle(VertexBuffer buf, double x, double y, double z, float r, float g, float b, float a, double radius, double angle){
+		double sign = 1;
+		if (Minecraft.getMinecraft().player.posY+Minecraft.getMinecraft().player.getEyeHeight() < y){
+			sign = -1;
+		}
+		int lightx = 0xF000F0;
+        int lighty = 0xF000F0;
+        for (double i = 0; i < 360; i += 10){
+			double tx = Math.sin(Math.toRadians(i+angle));
+			double tz = Math.cos(Math.toRadians(i+angle));
+			double tx2 = Math.sin(Math.toRadians(i+angle+10));
+			double tz2 = Math.cos(Math.toRadians(i+angle+10));
+			buf.pos(x+radius*tx, y, z+radius*tz).tex(0, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+			buf.pos(x+(radius+0.25)*tx, y, z+(radius+0.25)*tz).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+			buf.pos(x+(radius+0.25)*tx2, y, z+(radius+0.25)*tz2).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+			buf.pos(x+radius*tx2, y, z+radius*tz2).tex(1, 0).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		}
+		double ax = (radius+0.24)*Math.sin(Math.toRadians(0+angle));
+		double az = (radius+0.24)*Math.cos(Math.toRadians(0+angle));
+		double adx = (0.1875)*Math.cos(Math.toRadians(0+angle));
+		double adz = (0.1875)*-Math.sin(Math.toRadians(0+angle));
+		double bx = (radius+0.24)*Math.sin(Math.toRadians(120+angle));
+		double bz = (radius+0.24)*Math.cos(Math.toRadians(120+angle));
+		double bdx = (0.1875)*Math.cos(Math.toRadians(120+angle));
+		double bdz = (0.1875)*-Math.sin(Math.toRadians(120+angle));
+		double cx = (radius+0.24)*Math.sin(Math.toRadians(240+angle));
+		double cz = (radius+0.24)*Math.cos(Math.toRadians(240+angle));
+		double cdx = (0.1875)*Math.cos(Math.toRadians(240+angle));
+		double cdz = (0.1875)*-Math.sin(Math.toRadians(240+angle));
+		buf.pos(x+(ax-adx), y+0.00005*sign, z+(az-adz)).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(ax+adx), y+0.00005*sign, z+(az+adz)).tex(0, 1).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(bx-bdx), y+0.00005*sign, z+(bz-bdz)).tex(1, 1).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(bx+bdx), y+0.00005*sign, z+(bz+bdz)).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+
+		buf.pos(x+(bx-bdx), y+0.0001*sign, z+(bz-bdz)).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(bx+bdx), y+0.0001*sign, z+(bz+bdz)).tex(0, 1).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(cx-cdx), y+0.0001*sign, z+(cz-cdz)).tex(1, 1).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(cx+cdx), y+0.0001*sign, z+(cz+cdz)).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+
+		buf.pos(x+(ax-adx), y+0.00015*sign, z+(az-adz)).tex(0, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(ax+adx), y+0.00015*sign, z+(az+adz)).tex(0, 1).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(cx-cdx), y+0.00015*sign, z+(cz-cdz)).tex(1, 1).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+		buf.pos(x+(cx+cdx), y+0.00015*sign, z+(cz+cdz)).tex(1, 0.5).lightmap(lightx, lighty).color(r, g, b, a).endVertex();
+	}
+	
 	/**
 	 * 
 	 * @param x1

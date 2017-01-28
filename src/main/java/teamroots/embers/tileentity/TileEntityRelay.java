@@ -28,12 +28,13 @@ import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
 
-public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer, IEmberPacketReceiver {
+public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmberPacketProducer, IEmberPacketReceiver, ITickable {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public BlockPos target = null;
 	public long ticksExisted = 0;
 	Random random = new Random();
 	int offset = random.nextInt(40);
+	boolean polled = false;
 	public static enum EnumConnection{
 		NONE, LEVER
 	}
@@ -125,7 +126,7 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITic
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -133,61 +134,6 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITic
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
 		world.setTileEntity(pos, null);
-	}
-
-	@Override
-	public void update() {
-		this.ticksExisted ++;
-		if (ticksExisted % 5 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
-			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
-				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
-				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
-					double removed = cap.removeAmount(10, true);
-					double added = capability.addAmount(removed, true);
-					markDirty();
-					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
-					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
-					getWorld().getTileEntity(offset).markDirty();
-				}
-			}
-		}
-		if ((this.ticksExisted+offset) % 20 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && target != null && !getWorld().isRemote && this.capability.getEmber() > 10){
-			if (getWorld().getTileEntity(target) instanceof IEmberPacketReceiver){
-				if (!(((IEmberPacketReceiver)getWorld().getTileEntity(target)).isFull())){
-					EntityEmberPacket packet = new EntityEmberPacket(getWorld());
-					IBlockState state = getWorld().getBlockState(getPos());
-					double vx = 0, vy = 0, vz = 0;
-		
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.UP){
-						vy = 0.5;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.DOWN){
-						vy = -0.5;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.NORTH){
-						vz = -0.5;
-						vy = -0.01;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.SOUTH){
-						vz = 0.5;
-						vy = -0.01;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.WEST){
-						vx = -0.5;
-						vy = -0.01;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.EAST){
-						vx = 0.5;
-						vy = -0.01;
-					}
-					
-					packet.initCustom(getPos(), target, vx, vy, vz, Math.min(40.0,capability.getEmber()));
-					this.capability.removeAmount(Math.min(40.0,capability.getEmber()), true);
-					getWorld().spawnEntityInWorld(packet);
-					markDirty();
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -217,10 +163,11 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITic
 
 	@Override
 	public boolean isFull() {
+		polled = true;
 		if (target != null){
 			TileEntity tile = getWorld().getTileEntity(target);
 			if (tile instanceof TileEntityRelay){
-				if (((TileEntityRelay)tile).target != null){
+				if (((TileEntityRelay)tile).target != null && !((TileEntityRelay)tile).polled){
 					if (((TileEntityRelay)tile).target.compareTo(getPos()) != 0){
 						return ((IEmberPacketReceiver)tile).isFull();
 					}
@@ -245,5 +192,10 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, ITic
 			packet.dest = getPos();
 		}
 		return false;
+	}
+	
+	@Override
+	public void update(){
+		this.polled = false;
 	}
 }

@@ -8,6 +8,8 @@ import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -71,39 +73,6 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
-		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
-			double posX = player.posX+1.5*player.getLookVec().xCoord;
-			double posY = player.posY+player.getEyeHeight()+1.5*player.getLookVec().yCoord;
-			double posZ = player.posZ+1.5*player.getLookVec().zCoord;
-			boolean doContinue = true;
-			List<EntityLivingBase> rawEntities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-3.0,posY-3.0,posZ-3.0,posX+3.0,posY+3.0,posZ+3.0));
-			ArrayList<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
-			for (int i = 0; i < rawEntities.size(); i ++){
-				if (rawEntities.get(i).getUniqueID().compareTo(player.getUniqueID()) != 0){
-					entities.add(rawEntities.get(i));
-				}
-			}
-			if (entities.size() > 0){
-				for (int i = 0; i < entities.size(); i ++){
-					entities.get(i).setFire(1);
-					entities.get(i).attackEntityFrom(DamageSource.causePlayerDamage(player), 11.0f);
-					entities.get(i).setLastAttacker(player);
-					entities.get(i).setRevengeTarget(player);
-					entities.get(i).knockBack(player, 1.0f, player.posX-entities.get(i).posX, player.posZ-entities.get(i).posZ);
-					if (!world.isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(entities.get(i).posX,entities.get(i).posY+entities.get(i).getEyeHeight()/1.5,entities.get(i).posZ));
-					}
-				}
-				stack.getTagCompound().setInteger("cooldown",160);
-				EmberInventoryUtil.removeEmber(player, 25.0);
-			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
-		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
-	}
-	
-	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state){
         if (stack.hasTagCompound()){
         	if (!stack.getTagCompound().getBoolean("poweredOn")){
@@ -114,8 +83,18 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
     }
 	
 	@Override
+	public boolean isEnchantable(ItemStack stack){
+		return true;
+	}
+	
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant){
+		return enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER;
+	}
+	
+	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
-		return this.getHarvestLevel(stack, state.getBlock().getHarvestTool(state)) >= state.getBlock().getHarvestLevel(state);
+		return state.getBlock().getHarvestLevel(state) < 1;
 	}
 	
 	@Override
@@ -127,9 +106,9 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){
 		if (oldStack.hasTagCompound() && newStack.hasTagCompound()){
-			return slotChanged || oldStack.getTagCompound().getBoolean("poweredOn") != newStack.getTagCompound().getBoolean("poweredOn");
+			return slotChanged || oldStack.getTagCompound().getBoolean("poweredOn") != newStack.getTagCompound().getBoolean("poweredOn") || newStack.getItem() != oldStack.getItem();
 		}
-		return slotChanged;
+		return slotChanged || newStack.getItem() != oldStack.getItem();
 	}
 	
 	@Override
@@ -182,5 +161,13 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	@Override
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().toString()));
+	}
+
+	@Override
+	public boolean hasEmber(ItemStack stack) {
+		if (stack.hasTagCompound()){
+			return stack.getTagCompound().getBoolean("poweredOn");
+		}
+		return false;
 	}
 }

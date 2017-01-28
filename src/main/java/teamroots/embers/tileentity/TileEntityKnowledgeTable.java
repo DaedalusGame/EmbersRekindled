@@ -32,6 +32,7 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityKnowledgeTable.this.markDirty();
+        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityKnowledgeTable.this));
         }
 	};
 	Random random = new Random();
@@ -87,8 +88,9 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null){
+			EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
 			if (!getWorld().isRemote){
@@ -97,9 +99,9 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
 			return true;
 		}
 		else {
-			if (inventory.getStackInSlot(0) != null){
+			if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
 				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).stackSize, false));
+					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
 					if (!getWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));

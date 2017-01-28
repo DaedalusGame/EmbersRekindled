@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageEmberSparkleFX;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberPacketReceiver;
@@ -71,6 +73,11 @@ public class EntityEmberPacket extends Entity {
 	@Override
 	public void onUpdate(){
 		super.onUpdate();
+		if (this.ticksExisted == 2){
+			if (getEntityWorld().isRemote){
+				PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
+			}
+		}
 		
 		lifetime --;
 		if (lifetime <= 0){
@@ -98,10 +105,16 @@ public class EntityEmberPacket extends Entity {
 		posZ += motionZ;
 		IBlockState state = getEntityWorld().getBlockState(getPosition());
 		TileEntity tile = getEntityWorld().getTileEntity(getPosition());
-		affectTileEntity(state,tile);
-		if (state.isFullCube() && state.isOpaqueCube()){
-			getEntityWorld().removeEntity(this);
-			this.kill();
+		BlockPos pos = getPosition();
+		if (posX > pos.getX()+0.25 && posX < pos.getX()+0.75 && posY > pos.getY()+0.25 && posY < pos.getY()+0.75 && posZ > pos.getZ()+0.25 && posZ < pos.getZ()+0.75){
+			affectTileEntity(state,tile);
+			if (state.isFullCube() && state.isOpaqueCube()){
+				if (!getEntityWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
+				}
+				getEntityWorld().removeEntity(this);
+				this.kill();
+			}
 		}
 		if (getEntityWorld().isRemote){
 			for (double i = 0; i < 9; i ++){
@@ -115,6 +128,9 @@ public class EntityEmberPacket extends Entity {
 		if (tile instanceof IEmberPacketReceiver){
 			if (((IEmberPacketReceiver)tile).onReceive(this)){
 				if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+					if (!getEntityWorld().isRemote){
+						PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
+					}
 					tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(value, true);
 					tile.markDirty();
 					tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);

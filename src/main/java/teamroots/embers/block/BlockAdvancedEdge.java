@@ -53,7 +53,7 @@ public class BlockAdvancedEdge extends BlockBase {
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
 		if (!world.isRemote && !player.capabilities.isCreativeMode){
-			world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(RegistryManager.crystalCell,1,0)));
+			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(RegistryManager.crystal_cell,1,0)));
 		}
 		if (state.getValue(BlockAdvancedEdge.state) == 9){
 			breakBlockSafe(world,pos.south(),player);

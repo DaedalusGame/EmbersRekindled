@@ -8,8 +8,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +19,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import teamroots.embers.EventManager;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdateRequest;
 import teamroots.embers.util.Misc;
 
 public class BlockItemGauge extends BlockBase implements IDial {
@@ -42,7 +47,7 @@ public class BlockItemGauge extends BlockBase implements IDial {
 	}
 	
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
 		return getDefaultState().withProperty(facing, face);
 	}
 	
@@ -52,7 +57,7 @@ public class BlockItemGauge extends BlockBase implements IDial {
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block){
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
 		if (world.isAirBlock(pos.offset(state.getValue(facing),-1))){
 			world.setBlockToAir(pos);
 			this.dropBlockAsItem(world, pos, state, 0);
@@ -87,11 +92,11 @@ public class BlockItemGauge extends BlockBase implements IDial {
 				if (handler != null){
 					for (int i = 0; i < handler.getSlots(); i ++){
 						String line = I18n.format("embers.tooltip.itemdial.slot").replace("{0}", Integer.toString(i))+": ";
-						if (handler.getStackInSlot(i) == null){
+						if (handler.getStackInSlot(i) == ItemStack.EMPTY){
 							text.add(line+I18n.format("embers.tooltip.itemdial.noitem"));
 						}
 						else {
-							text.add(line+handler.getStackInSlot(i).stackSize+"x " + handler.getStackInSlot(i).getDisplayName());
+							text.add(line+handler.getStackInSlot(i).getCount()+"x " + handler.getStackInSlot(i).getDisplayName());
 						}
 					}
 				}

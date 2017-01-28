@@ -15,6 +15,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
@@ -22,6 +23,8 @@ import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdate;
 
 public class TileEntityLargeTank extends TileFluidHandler implements ITileEntityBase, ITickable, IMultiblockMachine {
 	int ticksExisted = 0;
@@ -52,13 +55,16 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null){
+			EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != ItemStack.EMPTY){
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
-				boolean didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
+				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
 				this.markDirty();
-				world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 8);
-				return didFill;
+				if (!getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				}
+				return didFill.success;
 			}
 		}
 		return false;
@@ -95,7 +101,7 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 	
 	public void updateCapacity(){
 		int capacity = 0;
-		for (int i = 1; getWorld().getBlockState(getPos().add(0, i, 0)) == RegistryManager.stoneEdge.getStateFromMeta(8); i ++){
+		for (int i = 1; getWorld().getBlockState(getPos().add(0, i, 0)) == RegistryManager.stone_edge.getStateFromMeta(8); i ++){
 			capacity += 40000;
 		}
 		this.tank.setCapacity(capacity);

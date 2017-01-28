@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -28,6 +29,7 @@ public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock {
 	public Item itemBlock = null;
 	private Block slab;
 	public boolean isOpaqueCube = true, isFullCube = true;
+	public static AxisAlignedBB FULL_AABB = new AxisAlignedBB(0,0,0,1,1,1);
 	public BlockRenderLayer layer = BlockRenderLayer.SOLID;
 	
 	public BlockDoubleSlabBase(Material material, String name, boolean addToTab){
@@ -103,6 +105,11 @@ public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock {
 				                                             BlockSlab.EnumBlockHalf.TOP);
 
 		return iblockstate;
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos){
+		return FULL_AABB;
 	}
 
 	@Override

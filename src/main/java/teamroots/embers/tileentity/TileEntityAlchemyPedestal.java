@@ -42,7 +42,7 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (slot == stackAsh && stack.getItem() != RegistryManager.dustAsh){
+        	if (slot == stackAsh && stack.getItem() != RegistryManager.dust_ash){
         		return insertItem(slot+1,stack,simulate);
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -104,9 +104,10 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null){
-			if (heldItem.getItem() == RegistryManager.dustAsh){
+			EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != ItemStack.EMPTY){
+			if (heldItem.getItem() == RegistryManager.dust_ash){
 				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 				markDirty();
 				if (!getWorld().isRemote){
@@ -123,9 +124,9 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 			return true;
 		}
 		else {
-			if (inventory.getStackInSlot(1) != null){
+			if (inventory.getStackInSlot(1) != ItemStack.EMPTY){
 				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(1, inventory.getStackInSlot(1).stackSize, false));
+					player.setHeldItem(hand, inventory.extractItem(1, inventory.getStackInSlot(1).getCount(), false));
 					markDirty();
 					if (!getWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
@@ -133,9 +134,9 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 				}
 				return true;
 			}
-			else if (inventory.getStackInSlot(0) != null){
+			else if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
 				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).stackSize, false));
+					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
 					if (!getWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));

@@ -1,6 +1,6 @@
 {
     "variants":{
-        "top=true":{"model": "embers:mixerTop"},
-        "top=false":{"model": "embers:mixerBase"}
+        "top=true":{"model": "embers:mixer_top"},
+        "top=false":{"model": "embers:mixer_base"}
     }
 }

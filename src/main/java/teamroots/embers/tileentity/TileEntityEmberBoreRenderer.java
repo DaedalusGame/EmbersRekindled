@@ -16,7 +16,7 @@ import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
 public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
-	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/boreBlade.png");
+	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/bore_blade.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox blade = new StructBox(-0.125,-1,-1,0.125,1,1,new StructUV[]{new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64),new StructUV(32,0,36,32,64,64),new StructUV(32,0,36,32,64,64),new StructUV(0,0,32,32,64,64),new StructUV(0,0,32,32,64,64)});
 	public StructBox pole = new StructBox(-0.125,0,-0.125,0.125,1,0.125,new StructUV[]{new StructUV(32,32,36,36,64,64),new StructUV(32,32,36,36,64,64),new StructUV(36,0,40,16,64,64),new StructUV(36,0,40,16,64,64),new StructUV(36,0,40,16,64,64),new StructUV(36,0,40,16,64,64)});

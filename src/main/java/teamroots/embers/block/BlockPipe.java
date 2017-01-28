@@ -5,11 +5,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.tileentity.TileEntityItemPipe;
 import teamroots.embers.tileentity.TileEntityPipe;
+import teamroots.embers.tileentity.TileEntityPump;
 
 public class BlockPipe extends BlockTEBase {
 	public BlockPipe(Material material, String name, boolean addToTab) {
@@ -23,24 +28,34 @@ public class BlockPipe extends BlockTEBase {
 	
 	@Override
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
-		if (world.getTileEntity(pos) != null){
+		if (world.getTileEntity(pos) instanceof TileEntityPipe){
 			((TileEntityPipe)world.getTileEntity(pos)).updateNeighbors(world);
 		}
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block){
-		if (world.getTileEntity(pos) != null){
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
+		if (world.getTileEntity(pos) instanceof TileEntityPipe){
 			((TileEntityPipe)world.getTileEntity(pos)).updateNeighbors(world);
-			world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 3);
 		}
 	}
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		if (world.getTileEntity(pos) != null){
+		if (world.getTileEntity(pos) instanceof TileEntityPipe){
 			((TileEntityPipe)world.getTileEntity(pos)).updateNeighbors(world);
+			if (!world.isRemote){
+				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
+			}
 		}
+	}
+	
+	@Override
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
+		if (world.getTileEntity(pos) instanceof TileEntityPipe){
+			return ((TileEntityPipe)world.getTileEntity(pos)).getConnection(side) == TileEntityPipe.EnumPipeConnection.NONE;
+		}
+		return true;
 	}
 	
 	@Override

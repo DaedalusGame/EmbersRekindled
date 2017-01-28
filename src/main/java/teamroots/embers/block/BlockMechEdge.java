@@ -37,7 +37,7 @@ public class BlockMechEdge extends BlockBase {
 		if (world.getTileEntity(pos) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world, pos, world.getBlockState(pos), player);
 			if (!world.isRemote && !player.capabilities.isCreativeMode){
-				world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(world.getBlockState(pos).getBlock())));
+				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(world.getBlockState(pos).getBlock())));
 			}
 		}
 		world.setBlockToAir(pos);

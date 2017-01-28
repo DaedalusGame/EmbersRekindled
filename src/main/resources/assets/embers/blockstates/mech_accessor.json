@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:mech_accessor", "x": 180 },
+        "facing=up":    { "model": "embers:mech_accessor" },
+        "facing=north": { "model": "embers:mech_accessor" },
+        "facing=south": { "model": "embers:mech_accessor", "y": 180 },
+        "facing=west":  { "model": "embers:mech_accessor", "y": 270 },
+        "facing=east":  { "model": "embers:mech_accessor", "y": 90 }
+    }
+}

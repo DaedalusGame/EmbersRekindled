@@ -18,7 +18,7 @@ import java.util.List;
 public class CommandEmberFill extends CommandBase {
     @Override
     @Nonnull
-    public String getCommandName() {
+    public String getName() {
         return "ember-fill";
     }
 
@@ -29,7 +29,7 @@ public class CommandEmberFill extends CommandBase {
 
     @Override
     @Nonnull
-    public String getCommandUsage(@Nonnull ICommandSender sender) {
+    public String getUsage(@Nonnull ICommandSender sender) {
         return Embers.MODID + ".commands.fill.usage";
     }
 
@@ -64,6 +64,7 @@ public class CommandEmberFill extends CommandBase {
 
                     if (data.emberData.containsKey(key)) {
                         data.emberData.put(key, level);
+                        data.markDirty();
 
                         notifyCommandListener(sender, this, getCommandResult("set"), level, chunkX, chunkZ, x, z);
 
@@ -71,7 +72,7 @@ public class CommandEmberFill extends CommandBase {
                     } else
                         throw new NumberInvalidException(getCommandResult("failed"), chunkX, chunkZ, x, z);
                 } else
-                    throw new WrongUsageException(getCommandUsage(sender) + ".set");
+                    throw new WrongUsageException(getUsage(sender) + ".set");
             } else if ("add".equals(args[2])) {
                 if (args.length > 3) {
                     double level = parseDouble(args[1]);
@@ -81,6 +82,7 @@ public class CommandEmberFill extends CommandBase {
                         double newLevel = Math.max(0, previous + level);
 
                         data.emberData.put(key, newLevel);
+                        data.markDirty();
 
                         notifyCommandListener(sender, this, getCommandResult("add"), level, newLevel, chunkX, chunkZ, x, z);
 
@@ -88,7 +90,7 @@ public class CommandEmberFill extends CommandBase {
                     } else
                         throw new NumberInvalidException(getCommandResult("failed"), chunkX, chunkZ, x, z);
                 } else
-                    throw new WrongUsageException(getCommandUsage(sender) + ".add");
+                    throw new WrongUsageException(getUsage(sender) + ".add");
             } else if ("query".equals(args[2])) {
                 if (data.emberData.containsKey(key)) {
                     double level = data.emberData.get(key);
@@ -102,7 +104,7 @@ public class CommandEmberFill extends CommandBase {
             }
         }
 
-        throw new WrongUsageException(getCommandUsage(sender));
+        throw new WrongUsageException(getUsage(sender));
     }
 
     @Nonnull

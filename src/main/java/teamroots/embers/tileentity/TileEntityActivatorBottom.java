@@ -22,6 +22,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.util.Misc;
 
 public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable {
 	Random random = new Random();
@@ -34,7 +35,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (!stack.getItem().equals(RegistryManager.crystalEmber) && !stack.getItem().equals(RegistryManager.shardEmber)){
+        	if (!stack.getItem().equals(RegistryManager.crystal_ember) && !stack.getItem().equals(RegistryManager.shard_ember)){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -80,13 +81,14 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
+		Misc.spawnInventoryInWorld(getWorld(), pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
 		world.setTileEntity(pos, null);
 	}
 	
@@ -108,40 +110,43 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 
 	@Override
 	public void update() {
-		TileEntityActivatorTop top = (TileEntityActivatorTop)getWorld().getTileEntity(getPos().up());
-		if (top != null){
-			int i = random.nextInt(inventory.getSlots());
-			if (inventory != null){
-				if (inventory.getStackInSlot(i) != null){
-					if (inventory.getStackInSlot(i).getItem() == RegistryManager.shardEmber){
-						if (top.capability.getEmber() <= top.capability.getEmberCapacity()-750){
-							top.capability.addAmount(750, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							top.markDirty();
-							state = getWorld().getBlockState(getPos().up());
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-							}
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(top));
+		TileEntity tile = getWorld().getTileEntity(getPos().up());
+		if (tile instanceof TileEntityActivatorTop){
+			TileEntityActivatorTop top = (TileEntityActivatorTop)tile;
+			if (top != null){
+				int i = random.nextInt(inventory.getSlots());
+				if (inventory != null){
+					if (inventory.getStackInSlot(i) != ItemStack.EMPTY){
+						if (inventory.getStackInSlot(i).getItem() == RegistryManager.shard_ember){
+							if (top.capability.getEmber() <= top.capability.getEmberCapacity()-750){
+								top.capability.addAmount(750, true);
+								inventory.extractItem(i, 1, false);
+								markDirty();
+								IBlockState state = getWorld().getBlockState(getPos());
+								top.markDirty();
+								state = getWorld().getBlockState(getPos().up());
+								if (!getWorld().isRemote){
+									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+								}
+								if (!getWorld().isRemote){
+									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(top));
+								}
 							}
 						}
-					}
-					else if (inventory.getStackInSlot(i).getItem() == RegistryManager.crystalEmber){
-						if (top.capability.getEmber() <= top.capability.getEmberCapacity()-4500){
-							top.capability.addAmount(4500, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							top.markDirty();
-							state = getWorld().getBlockState(getPos().up());
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-							}
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(top));
+						else if (inventory.getStackInSlot(i).getItem() == RegistryManager.crystal_ember){
+							if (top.capability.getEmber() <= top.capability.getEmberCapacity()-4500){
+								top.capability.addAmount(4500, true);
+								inventory.extractItem(i, 1, false);
+								markDirty();
+								IBlockState state = getWorld().getBlockState(getPos());
+								top.markDirty();
+								state = getWorld().getBlockState(getPos().up());
+								if (!getWorld().isRemote){
+									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+								}
+								if (!getWorld().isRemote){
+									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(top));
+								}
 							}
 						}
 					}

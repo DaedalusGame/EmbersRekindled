@@ -1,0 +1,5 @@
+{
+    "variants":{
+        "normal":{"model": "embers:heat_coil", "x":180}
+    }
+}

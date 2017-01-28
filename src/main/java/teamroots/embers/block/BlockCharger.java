@@ -41,7 +41,7 @@ public class BlockCharger extends BlockTEBase {
 	}
 	
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
 		return getDefaultState().withProperty(facing, Misc.getOppositeHorizontalFace(placer.getHorizontalFacing()));
 	}
 

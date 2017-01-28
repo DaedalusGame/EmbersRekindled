@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ResearchBase {
 	public String name = "";
 	public String title = "";
-	public ItemStack icon = null;
+	public ItemStack icon = ItemStack.EMPTY;
 	public ResearchBase(String location, ItemStack icon){
 		this.name = location;
 		this.icon = icon;

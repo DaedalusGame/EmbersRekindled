@@ -16,7 +16,7 @@ import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
 public class TileEntityHeatCoilRenderer extends TileEntitySpecialRenderer {
-	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/furnaceCoil.png");
+	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/furnace_coil.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox coil = new StructBox(-1,0,-1,1,0.25,1,new StructUV[]{new StructUV(0,0,32,32,64,64),new StructUV(0,0,32,32,64,64),new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64)});
 	

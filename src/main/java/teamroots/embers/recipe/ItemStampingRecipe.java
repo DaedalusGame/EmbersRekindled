@@ -5,10 +5,10 @@ import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.item.EnumStampType;
 
 public class ItemStampingRecipe {
-	private ItemStack stack = null;
-	private FluidStack fluid = null;
-	public ItemStack result = null;
-	private EnumStampType type = EnumStampType.TYPE_NULL;
+	protected ItemStack stack = ItemStack.EMPTY;
+	protected FluidStack fluid = null;
+	public ItemStack result = ItemStack.EMPTY;
+	protected EnumStampType type = EnumStampType.TYPE_NULL;
 	boolean matchMetadata = false;
 	boolean matchNBT = false;
 	public ItemStampingRecipe(ItemStack stack, FluidStack fluid, EnumStampType type, ItemStack result, boolean meta, boolean nbt){
@@ -34,10 +34,10 @@ public class ItemStampingRecipe {
 	
 	public boolean matches(ItemStack stack, FluidStack fluid, EnumStampType type){
 		boolean matchesItem = false;
-		if (stack == null && this.stack == null){
+		if (stack == ItemStack.EMPTY && this.stack == ItemStack.EMPTY){
 			matchesItem = true;
 		}
-		else if (this.stack != null && stack != null){
+		else if (this.stack != ItemStack.EMPTY && stack != ItemStack.EMPTY){
 			if (this.matchNBT){
 				matchesItem = this.stack.getItem().equals(stack.getItem()) && this.stack.getMetadata() == stack.getMetadata() && ItemStack.areItemStackTagsEqual(this.stack, stack);
 			}
@@ -49,7 +49,7 @@ public class ItemStampingRecipe {
 			}
 		}
 		boolean matchesFluid = false;
-		if (fluid != null){
+		if (fluid != null && this.fluid != null){
 			if (fluid.getFluid().getName().compareTo(this.fluid.getFluid().getName()) == 0 && fluid.amount >= this.fluid.amount){
 				matchesFluid = true;
 			}

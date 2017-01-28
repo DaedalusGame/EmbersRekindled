@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import teamroots.embers.Embers;
 
 public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer {
-	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/crystalMaterial.png");
+	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/crystal_material.png");
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public TileEntityCrystalCellRenderer(){

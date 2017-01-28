@@ -1,0 +1,16 @@
+{
+    "variants":{
+        "facing=down,filter=false":  { "model": "embers:item_transfer", "x": 180 },
+        "facing=up,filter=false":    { "model": "embers:item_transfer" },
+        "facing=north,filter=false": { "model": "embers:item_transfer", "x": 90 },
+        "facing=south,filter=false": { "model": "embers:item_transfer", "x": 90, "y": 180 },
+        "facing=west,filter=false":  { "model": "embers:item_transfer", "x": 90, "y": 270 },
+        "facing=east,filter=false":  { "model": "embers:item_transfer", "x": 90, "y": 90 },
+        "facing=down,filter=true":  { "model": "embers:item_transfer_filtered", "x": 180 },
+        "facing=up,filter=true":    { "model": "embers:item_transfer_filtered" },
+        "facing=north,filter=true": { "model": "embers:item_transfer_filtered", "x": 90 },
+        "facing=south,filter=true": { "model": "embers:item_transfer_filtered", "x": 90, "y": 180 },
+        "facing=west,filter=true":  { "model": "embers:item_transfer_filtered", "x": 90, "y": 270 },
+        "facing=east,filter=true":  { "model": "embers:item_transfer_filtered", "x": 90, "y": 90 }
+    }
+}

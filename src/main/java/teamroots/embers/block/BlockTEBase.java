@@ -23,8 +23,8 @@ public class BlockTEBase extends BlockBase implements ITileEntityProvider {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ){
-		return ((ITileEntityBase)world.getTileEntity(pos)).activate(world,pos,state,player,hand,heldItem,side,hitX,hitY,hitZ);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ){
+		return ((ITileEntityBase)world.getTileEntity(pos)).activate(world,pos,state,player,hand,side,hitX,hitY,hitZ);
 	}
 	
 	@Override

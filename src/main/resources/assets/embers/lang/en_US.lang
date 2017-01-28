@@ -1,65 +1,69 @@
 itemGroup.embers=Embers
 
-tile.blockCopper.name=Copper Block
-tile.blockLead.name=Lead Block
-tile.blockDawnstone.name=Dawnstone Block
-tile.blockSilver.name=Silver Block
-tile.oreCopper.name=Copper Ore
-tile.oreLead.name=Lead Ore
-tile.oreSilver.name=Silver Ore
-tile.blockTank.name=Fluid Vessel
-tile.blockCaminiteBrick.name=Caminite Bricks
+tile.block_copper.name=Copper Block
+tile.block_lead.name=Lead Block
+tile.block_dawnstone.name=Dawnstone Block
+tile.block_silver.name=Silver Block
+tile.ore_copper.name=Copper Ore
+tile.ore_lead.name=Lead Ore
+tile.ore_silver.name=Silver Ore
+tile.block_tank.name=Fluid Vessel
+tile.block_caminite_brick.name=Caminite Bricks
 tile.pipe.name=Iron Pipe
 tile.pump.name=Mechanical Pump
-tile.blockFurnace.name=Melter
-tile.emberReceiver.name=Ember Receptor
-tile.emberEmitter.name=Ember Emitter
-tile.deepLine.name=Depth Well
-tile.copperCell.name=Copper Cell
-tile.itemPipe.name=Item Pipe
-tile.itemPump.name=Item Pump
+tile.block_furnace.name=Melter
+tile.ember_receiver.name=Ember Receptor
+tile.ember_emitter.name=Ember Emitter
+tile.deep_line.name=Depth Well
+tile.copper_cell.name=Copper Cell
+tile.item_pipe.name=Item Pipe
+tile.item_pump.name=Item Pump
 tile.bin.name=Bin
 tile.stamper.name=Stamper
-tile.stamperBase.name=Stamp Base
-tile.emberBore.name=Ember Bore
-tile.mechAccessor.name=Machine Accessor
-tile.mechCore.name=Mechanical Core
-tile.stairsCaminiteBrick.name=Caminite Brick Stairs
-tile.wallCaminiteBrick.name=Caminite Brick Wall
-tile.emberActivator.name=Ember Activator
+tile.stamper_base.name=Stamp Base
+tile.ember_bore.name=Ember Bore
+tile.mech_accessor.name=Machine Accessor
+tile.mech_core.name=Mechanical Core
+tile.stairs_caminite_brick.name=Caminite Brick Stairs
+tile.wall_caminite_brick.name=Caminite Brick Wall
+tile.ember_activator.name=Ember Activator
 tile.mixer.name=Mixer Centrifuge
-tile.heatCoil.name=Hearth Coil
-tile.itemDropper.name=Item Dropper
-tile.largeTank.name=Reservoir
-tile.fluidGauge.name=Fluid Gauge
-tile.emberGauge.name=Ember Gauge
-tile.itemGauge.name=Item Gauge
-tile.blockLantern.name=Ember Lantern
-tile.stoneEdge.name=Caminite Ring
-tile.beamSplitter.name=Beam Splitter
-tile.emberRelay.name=Ember Relay
-tile.crystalCell.name=Crystal Cell
+tile.heat_coil.name=Hearth Coil
+tile.item_dropper.name=Item Dropper
+tile.large_tank.name=Reservoir
+tile.fluid_gauge.name=Fluid Gauge
+tile.ember_gauge.name=Ember Gauge
+tile.item_gauge.name=Item Gauge
+tile.block_lantern.name=Ember Lantern
+tile.stone_edge.name=Caminite Ring
+tile.beam_splitter.name=Beam Splitter
+tile.ember_relay.name=Ember Relay
+tile.crystal_cell.name=Crystal Cell
 tile.charger.name=Copper Charger
-tile.blockCaminiteBrickSlab.name=Caminite Brick Slab
-tile.blockCaminiteBrickSlabDouble.name=Caminite Brick Double Slab
-tile.ashenStone.name=Ashen Stone
-tile.ashenStoneSlab.name=Ashen Stone Slab
-tile.ashenStoneSlabDouble.name=Ashen Stone Double Slab
-tile.stairsAshenStone.name=Ashen Stone Stairs
-tile.wallAshenStone.name=Ashen Stone Wall
-tile.ashenBrick.name=Ashen Brick
-tile.ashenBrickSlab.name=Ashen Brick Slab
-tile.ashenBrickSlabDouble.name=Ashen Brick Double Slab
-tile.stairsAshenBrick.name=Ashen Brick Stairs
-tile.wallAshenBrick.name=Ashen Brick Wall
-tile.ashenTile.name=Ashen Tile
-tile.ashenTileSlab.name=Ashen Tile Slab
-tile.ashenTileSlabDouble.name=Ashen Tile Double Slab
-tile.stairsAshenTile.name=Ashen Tile Stairs
-tile.wallAshenTile.name=Ashen Tile Wall
-tile.cinderPlinth.name=Cinder Plinth
-tile.knowledgeTable.name=Research Table
-tile.alchemyPedestal.name=Alchemy Pedestal
+tile.block_caminite_brick_slab.name=Caminite Brick Slab
+tile.block_caminite_brick_slab_double.name=Caminite Brick Double Slab
+tile.ashen_stone.name=Ashen Stone
+tile.ashen_stone_slab.name=Ashen Stone Slab
+tile.ashen_stone_slab_double.name=Ashen Stone Double Slab
+tile.stairs_ashen_stone.name=Ashen Stone Stairs
+tile.wall_ashen_stone.name=Ashen Stone Wall
+tile.ashen_brick.name=Ashen Brick
+tile.ashen_brick_slab.name=Ashen Brick Slab
+tile.ashen_brick_slab_double.name=Ashen Brick Double Slab
+tile.stairs_ashen_brick.name=Ashen Brick Stairs
+tile.wall_ashen_brick.name=Ashen Brick Wall
+tile.ashen_tile.name=Ashen Tile
+tile.ashen_tile_slab.name=Ashen Tile Slab
+tile.ashen_tile_slab_double.name=Ashen Tile Double Slab
+tile.stairs_ashen_tile.name=Ashen Tile Stairs
+tile.wall_ashen_tile.name=Ashen Tile Wall
+tile.cinder_plinth.name=Cinder Plinth
+tile.knowledge_table.name=Research Table
+tile.alchemy_pedestal.name=Alchemy Pedestal
+tile.alchemy_tablet.name=Exchange Tablet
+tile.item_transfer.name=Item Transfer
+tile.core_stone.name=Core Stone
+tile.beam_cannon.name=Beam Cannon
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -70,253 +74,274 @@ fluid.astralite=Molten Astralite
 fluid.dawnstone=Molten Dawnstone
 fluid.umberSteel=Molten Umber Steel
 
-item.ingotCopper.name=Copper Ingot
-item.ingotSilver.name=Silver Ingot
-item.ingotLead.name=Lead Ingot
-item.nuggetCopper.name=Copper Nugget
-item.nuggetSilver.name=Silver Nugget
-item.nuggetLead.name=Lead Nugget
-item.nuggetDawnstone.name=Dawnstone Nugget
-item.brickCaminite.name=Caminite Brick
-item.blendCaminite.name=Caminite Blend
-item.plateCaminite.name=Caminite Plate
-item.plateCaminiteRaw.name=Raw Caminite Plate
-item.plateGold.name=Gold Plate
-item.plateIron.name=Iron Plate
-item.plateDawnstone.name=Dawnstone Plate
-item.plateCopper.name=Copper Plate
-item.plateLead.name=Lead Plate
-item.plateSilver.name=Silver Plate
-item.emberDetector.name=Atmospheric Gauge
-item.tinkerHammer.name=Tinker's Hammer
-item.stampBar.name=Bar Stamp
-item.stampFlat.name=Flat Stamp
-item.stampPlate.name=Plate Stamp
-item.stampBarRaw.name=Raw Bar Stamp
-item.stampFlatRaw.name=Raw Flat Stamp
-item.stampPlateRaw.name=Raw Plate Stamp
-item.shardEmber.name=Ember Shard
-item.crystalEmber.name=Ember Crystal
-item.ingotDawnstone.name=Dawnstone Ingot
-item.nuggetIron.name=Iron Nugget
-item.pickaxeClockwork.name=Clockwork Pickaxe
-item.axeClockwork.name=Clockwork Battleaxe
-item.pickaxeCopper.name=Copper Pickaxe
-item.axeCopper.name=Copper Axe
-item.shovelCopper.name=Copper Shovel
-item.hoeCopper.name=Copper Hoe
-item.swordCopper.name=Copper Sword
-item.pickaxeDawnstone.name=Dawnstone Pickaxe
-item.axeDawnstone.name=Dawnstone Axe
-item.shovelDawnstone.name=Dawnstone Shovel
-item.hoeDawnstone.name=Dawnstone Hoe
-item.swordDawnstone.name=Dawnstone Sword
-item.pickaxeLead.name=Lead Pickaxe
-item.axeLead.name=Lead Axe
-item.shovelLead.name=Lead Shovel
-item.hoeLead.name=Lead Hoe
-item.swordLead.name=Lead Sword
-item.pickaxeSilver.name=Silver Pickaxe
-item.axeSilver.name=Silver Axe
-item.shovelSilver.name=Silver Shovel
-item.hoeSilver.name=Silver Hoe
-item.swordSilver.name=Silver Sword
-item.emberJar.name=Mantle Jar
-item.emberCartridge.name=Mantle Cartridge
-item.ignitionCannon.name=Blazing Ray
-item.staffEmber.name=Cinder Staff
-item.axeClockwork.name=Clockwork Axe
-item.pickaxeClockwork.name=Clockwork Pickaxe
+item.ingot_copper.name=Copper Ingot
+item.ingot_silver.name=Silver Ingot
+item.ingot_lead.name=Lead Ingot
+item.nugget_copper.name=Copper Nugget
+item.nugget_silver.name=Silver Nugget
+item.nugget_lead.name=Lead Nugget
+item.nugget_dawnstone.name=Dawnstone Nugget
+item.brick_caminite.name=Caminite Brick
+item.blend_caminite.name=Caminite Blend
+item.plate_caminite.name=Caminite Plate
+item.plate_caminite_raw.name=Raw Caminite Plate
+item.plate_gold.name=Gold Plate
+item.plate_iron.name=Iron Plate
+item.plate_dawnstone.name=Dawnstone Plate
+item.plate_copper.name=Copper Plate
+item.plate_lead.name=Lead Plate
+item.plate_silver.name=Silver Plate
+item.ember_detector.name=Atmospheric Gauge
+item.tinker_hammer.name=Tinker's Hammer
+item.stamp_bar.name=Bar Stamp
+item.stamp_flat.name=Flat Stamp
+item.stamp_plate.name=Plate Stamp
+item.stamp_bar_raw.name=Raw Bar Stamp
+item.stamp_flat_raw.name=Raw Flat Stamp
+item.stamp_plate_raw.name=Raw Plate Stamp
+item.shard_ember.name=Ember Shard
+item.crystal_ember.name=Ember Crystal
+item.ingot_dawnstone.name=Dawnstone Ingot
+item.nugget_iron.name=Iron Nugget
+item.pickaxe_clockwork.name=Clockwork Pickaxe
+item.axe_clockwork.name=Clockwork Battleaxe
+item.pickaxe_copper.name=Copper Pickaxe
+item.axe_copper.name=Copper Axe
+item.shovel_copper.name=Copper Shovel
+item.hoe_copper.name=Copper Hoe
+item.sword_copper.name=Copper Sword
+item.pickaxe_dawnstone.name=Dawnstone Pickaxe
+item.axe_dawnstone.name=Dawnstone Axe
+item.shovel_dawnstone.name=Dawnstone Shovel
+item.hoe_dawnstone.name=Dawnstone Hoe
+item.sword_dawnstone.name=Dawnstone Sword
+item.pickaxe_lead.name=Lead Pickaxe
+item.axe_lead.name=Lead Axe
+item.shovel_lead.name=Lead Shovel
+item.hoe_lead.name=Lead Hoe
+item.sword_lead.name=Lead Sword
+item.pickaxe_silver.name=Silver Pickaxe
+item.axe_silver.name=Silver Axe
+item.shovel_silver.name=Silver Shovel
+item.hoe_silver.name=Silver Hoe
+item.sword_silver.name=Silver Sword
+item.ember_jar.name=Mantle Jar
+item.ember_cartridge.name=Mantle Cartridge
+item.ignition_cannon.name=Blazing Ray
+item.staff_ember.name=Cinder Staff
 item.grandhammer.name=Grandhammer
-item.dustAsh.name=Ash Pile
-item.golemsEye.name=Eye of the Ancients
+item.dust_ash.name=Ash Pile
+item.golems_eye.name=Eye of the Ancients
+item.aspectus_iron.name=Iron Aspectus
+item.aspectus_dawnstone.name=Dawnstone Aspectus
+item.aspectus_copper.name=Copper Aspectus
+item.aspectus_silver.name=Silver Aspectus
+item.aspectus_lead.name=Lead Aspectus
+item.alchemic_waste.name=Alchemical Waste
+item.inflictor_gem.name=Inflictor Gem
+item.ashen_cloak_head.name=Ashen Goggles
+item.ashen_cloak_chest.name=Ashen Cloak
+item.ashen_cloak_legs.name=Ashen Leggings
+item.ashen_cloak_boots.name=Ashen Boots
+item.glimmer_shard.name=Glimmer Crystal
+item.glimmer_lamp.name=Glimmer Lamp
+item.ashen_cloth.name=Ashen Fabric
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
 embers.tooltip.itemdial.slot=Slot {0}
 embers.tooltip.itemdial.noitem=NONE
 embers.tooltip.emberdial.ember=Ember: 
+embers.tooltip.iron_accuracy=Iron Inaccuracy: 
+embers.tooltip.copper_accuracy=Copper Inaccuracy: 
+embers.tooltip.lead_accuracy=Lead Inaccuracy: 
+embers.tooltip.silver_accuracy=Silver Inaccuracy: 
+embers.tooltip.dawnstone_accuracy=Dawnstone Inaccuracy: 
+embers.tooltip.inflictor=Attuned Damage: 
 
 embers.jei.recipe.stamp=Stamping Recipe
 embers.jei.recipe.melter=Melting Recipe
 embers.jei.recipe.mixer=Mixing Recipe
+embers.jei.recipe.alchemy=Alchemy Recipe
 
-<<<<<<< HEAD
+entity.ancient_golem.name=Ancient Golem
 
+death.attack.ember=%1$s was incinerated.
+death.attack.ember.player=%1$s was incinerated by %2$s.
 
-embers.research.oreCopper.title=Copper Ore
-embers.research.oreCopper=This piece of rock is filled with a lustrous, orange metal.
+embers.research.ore_copper.title=Copper Ore
+embers.research.ore_copper=This piece of rock is filled with a lustrous, orange metal.
 
-embers.research.oreLead.title=Lead Ore
-embers.research.oreLead=This piece of rock is filled with dull, purple-gray metal.
+embers.research.ore_lead.title=Lead Ore
+embers.research.ore_lead=This piece of rock is filled with dull, purple-gray metal.
 
-embers.research.oreSilver.title=Silver Ore
-embers.research.oreSilver=This piece of rock is filled with a shiny, blue-white metal.
+embers.research.ore_silver.title=Silver Ore
+embers.research.ore_silver=This piece of rock is filled with a shiny, blue-white metal.
 
-embers.research.ingotCopper.title=Copper Ingot
-embers.research.ingotCopper=Copper is a highly conductive material. What it lacks in hardness, it makes up for in ductility, and it appears useful in all kinds of energy-manipulation purposes.
+embers.research.ingot_copper.title=Copper Ingot
+embers.research.ingot_copper=Copper is a highly conductive material. What it lacks in hardness, it makes up for in ductility, and it appears useful in all kinds of energy-manipulation purposes.
 
-embers.research.ingotLead.title=Lead Ingot
-embers.research.ingotLead=Lead is a soft and toxic material. It lacks the hardness of iron, and seems innately impossible to use as an energetic conductor. Its malleability makes it useful for various purposes though.
+embers.research.ingot_lead.title=Lead Ingot
+embers.research.ingot_lead=Lead is a soft and toxic material. It lacks the hardness of iron, and seems innately impossible to use as an energetic conductor. Its malleability makes it useful for various purposes though.
 
-embers.research.ingotSilver.title=Silver Ingot
-embers.research.ingotSilver=Silver is a shiny and precious material. At first glance, it doesn't seem particularly special beyond this fact, but perhaps more advanced uses for the material will reveal themselves in time.
+embers.research.ingot_silver.title=Silver Ingot
+embers.research.ingot_silver=Silver is a shiny and precious material. At first glance, it doesn't seem particularly special beyond this fact, but perhaps more advanced uses for the material will reveal themselves in time.
 
-embers.research.ingotDawnstone.title=Dawnstone Ingot
-embers.research.ingotDawnstone=Dawnstone is a bright gold alloy of copper and gold. It is as strong as iron but lighter, has a very high yield from its component metals, and is strangely attuned to the mysterious energies of ember power. There are many uses for this new alloy.
+embers.research.ingot_dawnstone.title=Dawnstone Ingot
+embers.research.ingot_dawnstone=Dawnstone is a bright gold alloy of copper and gold. It is as strong as iron but lighter, has a very high yield from its component metals, and is strangely attuned to the mysterious energies of ember power. There are many uses for this new alloy.
 
-embers.research.blockCopper.title=Block of Copper
-embers.research.blockCopper=A block made out of copper metal.
+embers.research.block_copper.title=Block of Copper
+embers.research.block_copper=A block made out of copper metal.
 
-embers.research.blockLead.title=Block of Lead
-embers.research.blockLeadA block made out of lead metal.
+embers.research.block_lead.title=Block of Lead
+embers.research.block_lead=A block made out of lead metal.
 
-embers.research.blockSilver.title=Block of Silver
-embers.research.blockSilver=A block made out of silver metal.
+embers.research.block_silver.title=Block of Silver
+embers.research.block_silver=A block made out of silver metal.
 
-embers.research.blockDawnstone.title=Block of Dawnstone
-embers.research.blockDawnstone=A block made out of dawnstone alloy.
+embers.research.block_dawnstone.title=Block of Dawnstone
+embers.research.block_dawnstone=A block made out of dawnstone alloy.
 
-embers.research.nuggetIron.title=Iron Nugget
-embers.research.nuggetIron=A nugget of iron metal.
+embers.research.nugget_iron.title=Iron Nugget
+embers.research.nugget_iron=A nugget of iron metal.
 
-embers.research.nuggetCopper.title=Copper Nugget
-embers.research.nuggetCopper=A nugget of copper metal.
+embers.research.nugget_copper.title=Copper Nugget
+embers.research.nugget_copper=A nugget of copper metal.
 
-embers.research.nuggetLead.title=Lead Nugget
-embers.research.nuggetLeadA nugget of lead metal.
+embers.research.nugget_lead.title=Lead Nugget
+embers.research.nugget_lead=A nugget of lead metal.
 
-embers.research.nuggetSilver.title=Silver Nugget
-embers.research.nuggetSilver=A nugget of silver metal.
+embers.research.nugget_silver.title=Silver Nugget
+embers.research.nugget_silver=A nugget of silver metal.
 
-embers.research.nuggetDawnstone.title=Dawnstone Nugget
-embers.research.nuggetDawnstone=A nugget of dawnstone alloy.
+embers.research.nugget_dawnstone.title=Dawnstone Nugget
+embers.research.nugget_dawnstone=A nugget of dawnstone alloy.
 
-embers.research.plateIron.title=Iron Plate
-embers.research.plateIron=A plate made out of iron metal.
+embers.research.plate_iron.title=Iron Plate
+embers.research.plate_iron=A plate made out of iron metal.
 
-embers.research.plateCopper.title=Copper Plate
-embers.research.plateCopper=A plate made out of copper metal.
+embers.research.plate_copper.title=Copper Plate
+embers.research.plate_copper=A plate made out of copper metal.
 
-embers.research.plateLead.title=Lead Plate
-embers.research.plateLead=A plate made out of lead metal.
+embers.research.plate_lead.title=Lead Plate
+embers.research.plate_lead=A plate made out of lead metal.
 
-embers.research.plateSilver.title=Silver Plate
-embers.research.plateSilver=A plate made out of silver metal.
+embers.research.plate_silver.title=Silver Plate
+embers.research.plate_silver=A plate made out of silver metal.
 
-embers.research.plateDawnstone.title=Dawnstone Plate
-embers.research.plateDawnstone=A plate made out of dawnstone alloy.
+embers.research.plate_dawnstone.title=Dawnstone Plate
+embers.research.plate_dawnstone=A plate made out of dawnstone alloy.
 
-embers.research.plateGold.title=Gold Plate
-embers.research.plateGold=A plate made out of gold metal.
+embers.research.plate_gold.title=Gold Plate
+embers.research.plate_gold=A plate made out of gold metal.
 
-embers.research.pickaxeCopper.title=Copper Pickaxe
-embers.research.pickaxeCopper=A pickaxe made out of copper metal.
+embers.research.pickaxe_copper.title=Copper Pickaxe
+embers.research.pickaxe_copper=A pickaxe made out of copper metal.
 
-embers.research.pickaxeLead.title=Lead Pickaxe
-embers.research.pickaxeLead=A pickaxe made out of lead metal.
+embers.research.pickaxe_lead.title=Lead Pickaxe
+embers.research.pickaxe_lead=A pickaxe made out of lead metal.
 
-embers.research.pickaxeSilver.title=Silver Pickaxe
-embers.research.pickaxeSilver=A pickaxe made out of silver metal.
+embers.research.pickaxe_silver.title=Silver Pickaxe
+embers.research.pickaxe_silver=A pickaxe made out of silver metal.
 
-embers.research.pickaxeDawnstone.title=Dawnstone Pickaxe
-embers.research.pickaxeDawnstone=A pickaxe made out of dawnstone alloy.
+embers.research.pickaxe_dawnstone.title=Dawnstone Pickaxe
+embers.research.pickaxe_dawnstone=A pickaxe made out of dawnstone alloy.
 
-embers.research.axeCopper.title=Copper Axe
-embers.research.axeCopper=An axe made out of copper metal.
+embers.research.axe_copper.title=Copper Axe
+embers.research.axe_copper=An axe made out of copper metal.
 
-embers.research.axeLead.title=Lead Axe
-embers.research.axeLead=An axe made out of lead metal.
+embers.research.axe_lead.title=Lead Axe
+embers.research.axe_lead=An axe made out of lead metal.
 
-embers.research.axeSilver.title=Silver Axe
-embers.research.axeSilver=An axe made out of silver metal.
+embers.research.axe_silver.title=Silver Axe
+embers.research.axe_silver=An axe made out of silver metal.
 
-embers.research.axeDawnstone.title=Dawnstone Axe
-embers.research.axeDawnstone=An axe made out of dawnstone alloy.
+embers.research.axe_dawnstone.title=Dawnstone Axe
+embers.research.axe_dawnstone=An axe made out of dawnstone alloy.
 
-embers.research.hoeCopper.title=Copper Hoe
-embers.research.hoeCopper=A hoe made out of copper metal.
+embers.research.hoe_copper.title=Copper Hoe
+embers.research.hoe_copper=A hoe made out of copper metal.
 
-embers.research.hoeLead.title=Lead Hoe
-embers.research.hoeLead=A hoe made out of lead metal.
+embers.research.hoe_lead.title=Lead Hoe
+embers.research.hoe_lead=A hoe made out of lead metal.
 
-embers.research.hoeSilver.title=Silver Hoe
-embers.research.hoeSilver=A hoe made out of silver metal.
+embers.research.hoe_silver.title=Silver Hoe
+embers.research.hoe_silver=A hoe made out of silver metal.
 
-embers.research.hoeDawnstone.title=Dawnstone Hoe
-embers.research.hoeDawnstone=A hoe made out of dawnstone alloy.
+embers.research.hoe_dawnstone.title=Dawnstone Hoe
+embers.research.hoe_dawnstone=A hoe made out of dawnstone alloy.
 
-embers.research.shovelCopper.title=Copper Shovel
-embers.research.shovelCopper=A shovel made out of copper metal.
+embers.research.shovel_copper.title=Copper Shovel
+embers.research.shovel_copper=A shovel made out of copper metal.
 
-embers.research.shovelLead.title=Lead Shovel
-embers.research.shovelLead=A shovel made out of lead metal.
+embers.research.shovel_lead.title=Lead Shovel
+embers.research.shovel_lead=A shovel made out of lead metal.
 
-embers.research.shovelSilver.title=Silver Shovel
-embers.research.shovelSilver=A shovel made out of silver metal.
+embers.research.shovel_silver.title=Silver Shovel
+embers.research.shovel_silver=A shovel made out of silver metal.
 
-embers.research.shovelDawnstone.title=Dawnstone Shovel
-embers.research.shovelDawnstone=A shovel made out of dawnstone alloy.
+embers.research.shovel_dawnstone.title=Dawnstone Shovel
+embers.research.shovel_dawnstone=A shovel made out of dawnstone alloy.
 
-embers.research.swordCopper.title=Copper Sword
-embers.research.swordCopper=A sword made out of copper metal.
+embers.research.sword_copper.title=Copper Sword
+embers.research.sword_copper=A sword made out of copper metal.
 
-embers.research.swordLead.title=Lead Sword
-embers.research.swordLead=A sword made out of lead metal.
+embers.research.sword_lead.title=Lead Sword
+embers.research.sword_lead=A sword made out of lead metal.
 
-embers.research.swordSilver.title=Silver Sword
-embers.research.swordSilver=A sword made out of silver metal.
+embers.research.sword_silver.title=Silver Sword
+embers.research.sword_silver=A sword made out of silver metal.
 
-embers.research.swordDawnstone.title=Dawnstone Sword
-embers.research.swordDawnstone=A sword made out of dawnstone alloy.
+embers.research.sword_dawnstone.title=Dawnstone Sword
+embers.research.sword_dawnstone=A sword made out of dawnstone alloy.
 
-embers.research.blendCaminite.title=Caminite Blend
-embers.research.blendCaminite=Mixing together clay and bone meal appears to create this strange ceramic blend.
+embers.research.blend_caminite.title=Caminite Blend
+embers.research.blend_caminite=Mixing together clay and bone meal appears to create this strange ceramic blend.
 
-embers.research.brickCaminite.title=Caminite Brick
-embers.research.brickCaminite=A brick of strong Caminite ceramic. It is strong enough for use in machine casings, containers, or any number of structural purposes.
+embers.research.brick_caminite.title=Caminite Brick
+embers.research.brick_caminite=A brick of strong Caminite ceramic. It is strong enough for use in machine casings, containers, or any number of structural purposes.
 
-embers.research.blockCaminiteBrick.title=Caminite Brick Block
-embers.research.blockCaminiteBrick=A block of arranged Caminite bricks. It will make a fine building material, and is able to be carved into multiple decorative forms such as stairs or walls.
+embers.research.block_caminite_brick.title=Caminite Brick Block
+embers.research.block_caminite_brick=A block of arranged Caminite bricks. It will make a fine building material, and is able to be carved into multiple decorative forms such as stairs or walls.
 
-embers.research.swordCaminiteRaw.title=Raw Caminite Sword
-embers.research.swordCaminiteRaw=Caminite blend molded into a sword shape.
+embers.research.sword_caminite_raw.title=Raw Caminite Sword
+embers.research.sword_caminite_raw=Caminite blend molded into a sword shape.
 
-embers.research.swordCaminite.title=Caminite Sword
-embers.research.swordCaminite=A square sword of strong Caminite ceramic.
+embers.research.sword_caminite.title=Caminite Sword
+embers.research.sword_caminite=A square sword of strong Caminite ceramic.
 
-embers.research.stampBarRaw.title=Raw Bar Stamp
-embers.research.stampBarRaw=Caminite blend molded into an ingot mold.
+embers.research.stamp_bar_raw.title=Raw Bar Stamp
+embers.research.stamp_bar_raw=Caminite blend molded into an ingot mold.
 
-embers.research.stampBar.title=Bar Stamp
-embers.research.stampBar=An ingot mold made out of Caminite ceramic.
+embers.research.stamp_bar.title=Bar Stamp
+embers.research.stamp_bar=An ingot mold made out of Caminite ceramic.
 
-embers.research.stampSwordRaw.title=Raw Sword Stamp
-embers.research.stampSwordRaw=Caminite blend molded into a sword stamp.
+embers.research.stamp_sword_raw.title=Raw Sword Stamp
+embers.research.stamp_sword_raw=Caminite blend molded into a sword stamp.
 
-embers.research.stampSword.title=Sword Stamp
-embers.research.stampSword=A sword mold made out of Caminite ceramic.
+embers.research.stamp_sword.title=Sword Stamp
+embers.research.stamp_sword=A sword mold made out of Caminite ceramic.
 
-embers.research.stampFlatRaw.title=Raw Flat Stamp
-embers.research.stampFlatRaw=Caminite blend molded into a flat stamp.
+embers.research.stamp_flat_raw.title=Raw Flat Stamp
+embers.research.stamp_flat_raw=Caminite blend molded into a flat stamp.
 
-embers.research.stampFlat.title=Flat Stamp
-embers.research.stampFlat=A flat mold made out of Caminite ceramic.
+embers.research.stamp_flat.title=Flat Stamp
+embers.research.stamp_flat=A flat mold made out of Caminite ceramic.
 
-embers.research.stairsCaminiteBrick.title=Caminite Brick Stairs
-embers.research.stairsCaminiteBrick=Stairs made out of arranged Caminite bricks.
+embers.research.stairs_caminite_brick.title=Caminite Brick Stairs
+embers.research.stairs_caminite_brick=Stairs made out of arranged Caminite bricks.
 
-embers.research.blockCaminiteBrickSlab.title=Caminite Brick Slab
-embers.research.blockCaminiteBrickSlab=A slab made out of arranged Caminite bricks.
+embers.research.block_caminite_brick_slab.title=Caminite Brick Slab
+embers.research.block_caminite_brick_slab=A slab made out of arranged Caminite bricks.
 
-embers.research.wallCaminiteBrick.title=Caminite Brick Wall
-embers.research.wallCaminiteBrick=A wall made out of arranged Caminite bricks.
+embers.research.wall_caminite_brick.title=Caminite Brick Wall
+embers.research.wall_caminite_brick=A wall made out of arranged Caminite bricks.
 
-embers.research.emberDetector.title=Atmospheric Gauge
-embers.research.emberDetector=A dial of copper and iron. The copper and redstone within it are attracted to a strange atmospheric energy, the quantity of which this dial can detect. This energy is the very source of power that the ancients used to create me, perhaps it will be of use to you?
+embers.research.ember_detector.title=Atmospheric Gauge
+embers.research.ember_detector=A dial of copper and iron. The copper and redstone within it are attracted to a strange atmospheric energy, the quantity of which this dial can detect. This energy is the very source of power that the ancients used to create me, perhaps it will be of use to you?
 
-embers.research.blockTank.title=Fluid Vessel
-embers.research.blockTank=A Caminite-reinforced iron tank. This vessel should be able to hold up to 16 buckets' worth of any single kind of fluid, and can be broken and placed down without losing its contents.
+embers.research.block_tank.title=Fluid Vessel
+embers.research.block_tank=A Caminite-reinforced iron tank. This vessel should be able to hold up to 16 buckets' worth of any single kind of fluid, and can be broken and placed down without losing its contents.
 
 embers.research.pipe.title=Iron Pipe
 embers.research.pipe=A simple Iron Pipe for transporting fluids. They cannot extract from fluid-containing blocks on their own, instead requiring a Pump. They will evenly divide their contents between themselves and their neighbors, so if one pipe initially carries one bucket of fluid, and it's connected to one other, the two pipes will each carry half a bucket of fluid. As a result of this, these Pipes have a form of "pressure" and will significantly drop in transfer rate the longer the fluid has to travel from a Pump.
@@ -324,26 +349,26 @@ embers.research.pipe=A simple Iron Pipe for transporting fluids. They cannot ext
 embers.research.pump.title=Mechanical Pump
 embers.research.pump=A redstone pump for extracting fluids. When given a redstone signal, the Pump will extract fluids from a connected fluid container into nearby Iron Pipes. It cannot directly pump fluids into a fluid container on its own. The Mechanical Pump will dump its contents as fast as possible into nearby Pipes, and is the source of the pressure that pushes fluids through the Pipes themselves.
 
-embers.research.blockFurnace.title=Melter
-embers.research.blockFurnace=A device that uses the energy of ember to melt down metals. The melter will accept ember power in its lower half, and raw metal items or ores in its upper half. When powered, if the items in its upper half are able to be melted, the melter will gradually melt each one down into a liquid form, which can be pumped out. You can drop items in the top, pump them in using a hopper or an Item Pipe, or place them in by hand.
+embers.research.block_furnace.title=Melter
+embers.research.block_furnace=A device that uses the energy of ember to melt down metals. The melter will accept ember power in its lower half, and raw metal items or ores in its upper half. When powered, if the items in its upper half are able to be melted, the melter will gradually melt each one down into a liquid form, which can be pumped out. You can drop items in the top, pump them in using a hopper or an Item Pipe, or place them in by hand.
 
-embers.research.emberReceiver.title=Ember Receptor
-embers.research.emberReceiver=A small copper and iron device capable of absorbing Embers. When placed on an Ember container, the copper core of the receptor can accept Embers from the air and conduct them into the container it is connected to. It can be placed on any face of a block.
+embers.research.ember_receiver.title=Ember Receptor
+embers.research.ember_receiver=A small copper and iron device capable of absorbing Embers. When placed on an Ember container, the copper core of the receptor can accept Embers from the air and conduct them into the container it is connected to. It can be placed on any face of a block.
 
-embers.research.emberEmitter.title=Ember Emitter
-embers.research.emberEmitter=A small copper and iron device capable of extracting Embers from an Ember container. It must be bound to a valid Ember receiving block, such as an Ember Receptor or an Ember Relay, using a Tinker Hammer. Shift-right-click on the block you want to bind the Emitter to, then right click any Emitter to bind it to that target block. When given a redstone signal, the Emitter will extract Rmber from an Ember container into an airborne packet of Ember energy, which will fly to its connected receiver block as long as the receiver isn't full.
+embers.research.ember_emitter.title=Ember Emitter
+embers.research.ember_emitter=A small copper and iron device capable of extracting Embers from an Ember container. It must be bound to a valid Ember receiving block, such as an Ember Receptor or an Ember Relay, using a Tinker Hammer. Shift-right-click on the block you want to bind the Emitter to, then right click any Emitter to bind it to that target block. When given a redstone signal, the Emitter will extract Ember from an Ember container into an airborne packet of Ember energy, which will fly to its connected receiver block as long as the receiver isn't full.
 
-embers.research.tinkerHammer.title=Tinker Hammer
-embers.research.tinkerHammer=A simple metal hammer of iron and lead. It works well as a heavy-duty tool. It can be used to pound four ingots of any metal type into their corresponding plate, and for several other purposes that will present themselves in due time.
+embers.research.tinker_hammer.title=Tinker Hammer
+embers.research.tinker_hammer=A simple metal hammer of iron and lead. It works well as a heavy-duty tool. It can be used to pound four ingots of any metal type into their corresponding plate, and for several other purposes that will present themselves in due time.
 
-embers.research.copperCell.title=Copper Cell
-embers.research.copperCell=A large coil of copper inside a reinforced frame, the Copper Cell works as a simple Ember battery. It can store a relatively small amount of Ember, which can be extracted using Ember Emitters. It will not retain the Ember charged within it when broken, as the charge will dissipate in the process of breaking and replacing the Cell.
+embers.research.copper_cell.title=Copper Cell
+embers.research.copper_cell=A large coil of copper inside a reinforced frame, the Copper Cell works as a simple Ember battery. It can store a relatively small amount of Ember, which can be extracted using Ember Emitters. It will not retain the Ember charged within it when broken, as the charge will dissipate in the process of breaking and replacing the Cell.
 
-embers.research.itemPipe.title=Item Pipe
-embers.research.itemPipe=A pipe made of wrought lead metal. Similar to the Iron Pipe with fluids, the Item Pipe can transfer items by inserting them into connected inventories. If one possesses multiple connections, it will randomly select one for each item it transfers. Item Pipes cannot insert items into inventories on their own, relying on an Item Pump to do so. The same Item Pump is responsible for giving Item Pipes a pressure value, determining the rate at which each Pipe will transfer items. One Pump can only push items about 16 blocks before its pressure runs out.
+embers.research.item_pipe.title=Item Pipe
+embers.research.item_pipe=A pipe made of wrought lead metal. Similar to the Iron Pipe with fluids, the Item Pipe can transfer items by inserting them into connected inventories. If one possesses multiple connections, it will randomly select one for each item it transfers. Item Pipes cannot insert items into inventories on their own, relying on an Item Pump to do so. The same Item Pump is responsible for giving Item Pipes a pressure value, determining the rate at which each Pipe will transfer items. One Pump can only push items about 16 blocks before its pressure runs out.
 
-embers.research.itemPump.title=Item Pump
-embers.research.itemPump=A redstone pump for extracting items from inventories. When given a redstone signal, the Item Pump will extract items from an adjacent inventory and transfer them into nearby Item Pipes. It will transfer items very quickly, and is responsible for powering the transmission of connected Item Pipes. One Pump on its own can only provide the "push" necessary to transport items about 16 blocks, after which the items will stop in the Pipe and be unable to be inserted into inventories without another Pump's pressure.
+embers.research.item_pump.title=Item Pump
+embers.research.item_pump=A redstone pump for extracting items from inventories. When given a redstone signal, the Item Pump will extract items from an adjacent inventory and transfer them into nearby Item Pipes. It will transfer items very quickly, and is responsible for powering the transmission of connected Item Pipes. One Pump on its own can only provide the "push" necessary to transport items about 16 blocks, after which the items will stop in the Pipe and be unable to be inserted into inventories without another Pump's pressure.
 
 embers.research.bin.title=Bin
 embers.research.bin=A simple iron bin, capable of holding one stack of one item. It is necessary for providing inputs or accepting outputs of several machines.
@@ -351,102 +376,150 @@ embers.research.bin=A simple iron bin, capable of holding one stack of one item.
 embers.research.stamper.title=Stamper
 embers.research.stamper=A powerful iron piston powered by Ember. The Stamper is able to stamp shapes into items or fluids contained in a Stamp Base. It must be placed facing a Stamp Base, with its iron piston facing the open part of the Stamp Base, and with one block of empty space in between the two. It must also be given a stamp of some kind, which are created from Caminite and can be placed in the Stamper with a right-click. When given Ember power, the Stamper will repeatedly plunge its stamp into the Stamp Base, if the Stamp on the Stamper and the materials in the Stamp Base correspond to a valid stamping recipe.
 
-embers.research.stampBase.title=Stamp Base
-embers.research.stampBase=A simple iron receptacle for fluids and items alike, the Stamp Base must be paired with a stamper to work properly. If the Stamper facing it has Ember power, and the stamp on the Stamper and the contents of the Stamp Base match a valid stamping recipe, the stamper will form an item from the materials within the stamp base. The results of the stamping recipe will either form in the world as dropped items, or be inserted into a Bin on the side of the Stamper opposite its open face, if one is available.
+embers.research.stamp_base.title=Stamp Base
+embers.research.stamp_base=A simple iron receptacle for fluids and items alike, the Stamp Base must be paired with a stamper to work properly. If the Stamper facing it has Ember power, and the stamp on the Stamper and the contents of the Stamp Base match a valid stamping recipe, the stamper will form an item from the materials within the stamp base. The results of the stamping recipe will either form in the world as dropped items, or be inserted into a Bin on the side of the Stamper opposite its open face, if one is available.
 
-embers.research.emberBore.title=Ember Bore
-embers.research.emberBore=This Bore is the earliest means of extracting the mysterious energies known as "Ember" from the world's core. It will only function at a layer where bedrock can appear, or the layer directly above the bedrock layers. When furnace fuel is pumped into its center block, it will come to life, with its blades spinning. While active, it will occasionally mine up shards of pure crystallized Ember energy of various sizes, which can be extracted from the bore using Item Pumps.
+embers.research.ember_bore.title=Ember Bore
+embers.research.ember_bore=This Bore is the earliest means of extracting the mysterious energies known as "Ember" from the world's core. It will only function at a layer where bedrock can appear, or the layer directly above the bedrock layers. When furnace fuel is pumped into its center block, it will come to life, with its blades spinning. While active, it will occasionally mine up shards of pure crystallized Ember energy of various sizes, which can be extracted from the bore using Item Pumps.
 
-embers.research.mechAccessor.title=Mechanical Accessor
-embers.research.mechAccessor=Like the Mechanical Core, the Mechanical Accessor will act as a proxy to access a multiblock machine's inventory, fluid contents, Ember contents, or other capabilities. The Accessor just allows a second layer of proxying, acting as a proxy to the Mechanical Core, which in turn acts as a proxy to the machine you access.
+embers.research.mech_accessor.title=Mechanical Accessor
+embers.research.mech_accessor=Like the Mechanical Core, the Mechanical Accessor will act as a proxy to access a multiblock machine's inventory, fluid contents, Ember contents, or other capabilities. The Accessor just allows a second layer of proxying, acting as a proxy to the Mechanical Core, which in turn acts as a proxy to the machine you access.
 
-embers.research.mechCore.title=Mechanical Core
-embers.research.mechCore=A mechanical cube of gadgetry. In addition to being used as a base for many machines, the Mechanical Core has the ability to act as a proxy to the inventory, fluid content, Ember content, or other capabilities of a multiblock machine, like the Ember Bore or the Hearth Coil. Use it to gain more faces for input and output for complex machines like the Ember Bore, where Ember Crystals must be extracted while fuel must be inserted.
+embers.research.mech_core.title=Mechanical Core
+embers.research.mech_core=A mechanical cube of gadgetry. In addition to being used as a base for many machines, the Mechanical Core has the ability to act as a proxy to the inventory, fluid content, Ember content, or other capabilities of a multiblock machine, like the Ember Bore or the Hearth Coil. Use it to gain more faces for input and output for complex machines like the Ember Bore, where Ember Crystals must be extracted while fuel must be inserted.
 
-embers.research.emberActivator.title=Ember Activator
-embers.research.emberActivator=The key to tapping into the energy contained within Ember crystal shards. When Ember crystals or Ember shards are pumped into the bottom block, they will be activated into a volatile form of Ember, contained in the copper mesh cage in the top block. From there, the volatile Ember can be extracted using Ember Emitters. I believe this form of Ember is able to be used for various devices.
+embers.research.ember_activator.title=Ember Activator
+embers.research.ember_activator=The key to tapping into the energy contained within Ember crystal shards. When Ember crystals or Ember shards are pumped into the bottom block, they will be activated into a volatile form of Ember, contained in the copper mesh cage in the top block. From there, the volatile Ember can be extracted using Ember Emitters. I believe this form of Ember is able to be used for various devices.
 
 embers.research.mixer.title=Mixer Centrifuge
 embers.research.mixer=A machine capable of mixing together molten metals into an alloy. Each face of the bottom block contains a tank which can contain its own fluid. When the top block is powered by Ember, and required molten metals for a recipe are present in the bottom block, molten alloy will appear in the top block and can be pumped out using Iron Pipes and Mechanical Pumps.
 
-embers.research.heatCoil.title=Hearth Coil
-embers.research.heatCoil=A large mass of copper coil that can smelt items. When the center block is given Ember power, the Coil will begin to heat up. The hotter it gets, the brighter the flames on its top will become, and the faster it will smelt items. It starts out smelting one item about every fifteen seconds, but can get as fast as one item per second. It will take the smelted products into its internal inventory, where they can be extracted.
+embers.research.heat_coil.title=Hearth Coil
+embers.research.heat_coil=A large mass of copper coil that can smelt items. When the center block is given Ember power, the Coil will begin to heat up. The hotter it gets, the brighter the flames on its top will become, and the faster it will smelt items. It starts out smelting one item about every fifteen seconds, but can get as fast as one item per second. It will take the smelted products into its internal inventory, where they can be extracted.
 
-embers.research.itemDropper.title=Item Dropper
-embers.research.itemDropper=A simple iron chute. When items are pumped into the Dropper using a hopper or an Item Pipe, they will be immediately dropped out the bottom in a straight line.
+embers.research.item_dropper.title=Item Dropper
+embers.research.item_dropper=A simple iron chute. When items are pumped into the Dropper using a hopper or an Item Pipe, they will be immediately dropped out the bottom in a straight line.
 
-embers.research.largeTank.title=Reservoir
-embers.research.largeTank=A base for a tall tank. The Reservoir is functionless on its own, but when combined with Caminite Rings it works as an expandable fluid tank. For each Caminite Ring placed above its center block, it will gain 40 buckets' worth of capacity.
+embers.research.large_tank.title=Reservoir
+embers.research.large_tank=A base for a tall tank. The Reservoir is functionless on its own, but when combined with Caminite Rings it works as an expandable fluid tank. For each Caminite Ring placed above its center block, it will gain 40 buckets' worth of capacity.
 
-embers.research.stoneEdge.title=Caminite Ring
-embers.research.stoneEdge=A simple ring of Caminite bricks. It can be used to expand the fluid capacity of a Reservoir tank.
+embers.research.stone_edge.title=Caminite Ring
+embers.research.stone_edge=A simple ring of Caminite bricks. It can be used to expand the fluid capacity of a Reservoir tank.
 
-embers.research.emberGauge.title=Ember Gauge
-embers.research.emberGauge=A copper dial. It can be attached to the side of a block to display the Ember contained within.
+embers.research.ember_gauge.title=Ember Gauge
+embers.research.ember_gauge=A copper dial. It can be attached to the side of a block to display the Ember contained within.
 
-embers.research.itemGauge.title=Item Gauge
-embers.research.itemGauge=A lead dial. It can be attached to the side of a block to display the items contained within.
+embers.research.item_gauge.title=Item Gauge
+embers.research.item_gauge=A lead dial. It can be attached to the side of a block to display the items contained within.
 
-embers.research.fluidGauge.title=Fluid Gauge
-embers.research.fluidGauge=An iron dial. It can be attached to the side of a block to display fluids contained within.
+embers.research.fluid_gauge.title=Fluid Gauge
+embers.research.fluid_gauge=An iron dial. It can be attached to the side of a block to display fluids contained within.
 
-embers.research.blockLantern.title=Ember Lantern
-embers.research.blockLantern=A lantern with a glowing Ember shard core. The Lantern acts as a simple light source, illuminating the area around it as a torch would.
+embers.research.block_lantern.title=Ember Lantern
+embers.research.block_lantern=A lantern with a glowing Ember shard core. The Lantern acts as a simple light source, illuminating the area around it as a torch would.
 
-embers.research.beamSplitter.title=Beam Splitter
-embers.research.beamSplitter=A bidirectional channel for Ember energy. When it receives Ember inserted into it from an Ember Receptor, the Beam Splitter will build up its internal capacity. Each of its two sides with copper ends can be bound to a valid Ember receiver as an Ember Emitter would, and if at least one of these is bound, the Splitter will emit Ember towards that side's target. If both sides are bound, the Splitter will split its internal capacity evenly between the two targets.
+embers.research.beam_splitter.title=Beam Splitter
+embers.research.beam_splitter=A bidirectional channel for Ember energy. When it receives Ember inserted into it from an Ember Receptor, the Beam Splitter will build up its internal capacity. Each of its two sides with copper ends can be bound to a valid Ember receiver as an Ember Emitter would, and if at least one of these is bound, the Splitter will emit Ember towards that side's target. If both sides are bound, the Splitter will split its internal capacity evenly between the two targets.
 
-embers.research.emberRelay.title=Ember Relay
-embers.research.emberRelay=A copper cage atop an iron base. The Relay can act both as a valid Ember receiver and emitter. It can be bound to a valid Ember-receiving block like another Relay or a Receptor, and also receive bursts from Ember-emitting blocks like an Emitter or Beam Splitter.
+embers.research.ember_relay.title=Ember Relay
+embers.research.ember_relay=A copper cage atop an iron base. The Relay can act both as a valid Ember receiver and emitter. It can be bound to a valid Ember-receiving block like another Relay or a Receptor, and also receive bursts from Ember-emitting blocks like an Emitter or Beam Splitter.
 
-embers.research.crystalCell.title=Crystal Cell
-embers.research.crystalCell=A large Ember storage cell with an expandable capacity. Not only can the Crystal Cell hold large amounts of Ember power within the floating crystal atop it, but it can also be expanded using crystallized Ember items. Pumping in Ember crystals or shards will increase the capacity of the cell, and visually increase the size of the floating crystal. Eight Ember crystals or 48 Ember shards, or some mixture, will bring the cell to full capacity.
+embers.research.crystal_cell.title=Crystal Cell
+embers.research.crystal_cell=A large Ember storage cell with an expandable capacity. Not only can the Crystal Cell hold large amounts of Ember power within the floating crystal atop it, but it can also be expanded using crystallized Ember items. Pumping in Ember crystals or shards will increase the capacity of the cell, and visually increase the size of the floating crystal. Sixteen Ember crystals or 96 Ember shards, or some mixture, will bring the cell to full capacity.
 
-embers.research.charger.title=Charger
-embers.research.charger=A means of charging Ember-containing items. When the Charger is given Ember power, and an item with Ember capacity such as an Ember Jar or an Ember Cartridge is placed within it, the Charger will begin to fill up the internal Ember storage of the item.
+embers.research.charger.title=Copper Charger
+embers.research.charger=A means of charging Ember-containing items. When the Charger is given Ember power, and an item with Ember capacity such as a Mantle Jar or Mantle Cartridge is placed within it, the Charger will begin to fill up the internal Ember storage of the item.
 
-embers.research.cinderPlinth.title=Cinder Plinth
-embers.research.cinderPlinth=A form of controlled item destruction. Any item can be placed into the upper slot of the block, or pumped in using automated methods. When the Plinth is given Ember power, it will begin to burn the item. The lead structure of the Plinth absorbs released energies of the burned item, reducing it into a form of pure ash. The ash will either appear in the world as a dropped item, or be placed into a Bin beneath the Cinder Plinth if one is available.
+embers.research.cinder_plinth.title=Cinder Plinth
+embers.research.cinder_plinth=A form of controlled item destruction. Any item can be placed into the upper slot of the block, or pumped in using automated methods. When the Plinth is given Ember power, it will begin to burn the item. The lead structure of the Plinth absorbs released energies of the burned item, reducing it into a form of pure ash. The ash will either appear in the world as a dropped item, or be placed into a Bin beneath the Cinder Plinth if one is available.
 
-embers.research.shardEmber.title=Ember Shard
-embers.research.shardEmber=A shard of pure crystallized Ember.
+embers.research.shard_ember.title=Ember Shard
+embers.research.shard_ember=A shard of pure crystallized Ember.
 
-embers.research.crystalEmber.title=Ember Crystal
-embers.research.crystalEmber=A glowing crystal of pure solid Ember. It is roughly six times the size of an Ember shard.
+embers.research.crystal_ember.title=Ember Crystal
+embers.research.crystal_ember=A glowing crystal of pure solid Ember. It is roughly six times the size of an Ember shard.
 
-embers.research.emberJar.title=Mantle Jar
-embers.research.emberJar=A glass jar with two copper wires. It is capable of storing Ember within itself, when charged using a Charger. To be accessed by Ember-demanding items, it need only be present in your inventory.
+embers.research.ember_jar.title=Mantle Jar
+embers.research.ember_jar=A glass jar with two copper wires. It is capable of storing Ember within itself, when charged using a Charger. To be accessed by Ember-demanding items, it need only be present in your inventory.
 
-embers.research.emberCartridge.title=Mantle Cartridge
-embers.research.emberCartridge=A large glass jar with two copper wires. It is capable of storing Ember within itself, when charged using a Charger. It must be held in one of your hands to be accessible quickly enough for it to be used to fuel Ember-demanding items.
+embers.research.ember_cartridge.title=Mantle Cartridge
+embers.research.ember_cartridge=A large glass jar with two copper wires. It is capable of storing Ember within itself, when charged using a Charger. It must be held in one of your hands to be accessible quickly enough for it to be used to fuel Ember-demanding items.
 
-embers.research.pickaxeClockwork.title=Clockwork Pickaxe
-embers.research.pickaxeClockwork=A mechanical pickaxe powered by Ember. It must be able to access Ember from the inventory, from Mantle Jars or Cartridges, in order to work. It can break both dirt-type and stone-type blocks effectively, and when right-clicked, it will break a small area at once.
+embers.research.pickaxe_clockwork.title=Clockwork Pickaxe
+embers.research.pickaxe_clockwork=A mechanical pickaxe powered by Ember. It must be able to access Ember from the inventory, from Mantle Jars or Cartridges, in order to work. It can break both dirt-type and stone-type blocks effectively, and when right-clicked, it will break a small area at once.
 
-embers.research.axeClockwork.title=Clockwork Axe
-embers.research.axeClockwork=A mechanical axe powered by Ember. It requires Ember from the inventory to function, from Mantle Jars or Cartridges. It is effective both as a weapon and as a means of breaking wooden blocks, and when right-clicked, it can break a large area of wood blocks all at once.
+embers.research.axe_clockwork.title=Clockwork Axe
+embers.research.axe_clockwork=A mechanical axe powered by Ember. It requires Ember from the inventory to function, from Mantle Jars or Cartridges. It is effective both as a weapon and as a means of breaking wooden blocks, and when right-clicked, it can break a large area of wood blocks all at once.
 
 embers.research.grandhammer.title=Grandhammer
 embers.research.grandhammer=A massive dawnstone hammer with an Ember-powered core. It requires Ember from the inventory to do damage, from Mantle Jars or Cartridges. It is a powerful weapon, and is capable of performing a wide sweeping attack when right-clicked to knock back nearby creatures and deal damage to them.
 
-embers.research.staffEmber.title=Cinder Staff
-embers.research.staffEmber=A silver-topped wooden staff. When Ember is available in containers in the inventory, it can be charged up to create a large fireball. The more it is charged, the larger and more damaging the fireball will become.
+embers.research.staff_ember.title=Cinder Staff
+embers.research.staff_ember=A silver-topped wooden staff. When Ember is available in containers in the inventory, it can be charged up to create a large fireball. The more it is charged, the larger and more damaging the fireball will become.
 
-embers.research.ignitionCannon.title=Blazing Ray
-embers.research.ignitionCannon=An Ember-powered dawnstone shotgun. When Ember is available in containers in the inventory, it can be fired to shoot damaging beams of Ember. If it is charged back before firing, it will be more accurate at long ranges.
+embers.research.ignition_cannon.title=Blazing Ray
+embers.research.ignition_cannon=An Ember-powered dawnstone shotgun. When Ember is available in containers in the inventory, it can be fired to shoot damaging beams of Ember.
 
-embers.research.dustAsh.title=Ash Pile
-embers.research.dustAsh=A pile of reduced, blackened ash. It may have certain alchemical uses.
+embers.research.dust_ash.title=Ash Pile
+embers.research.dust_ash=A pile of reduced, blackened ash. It may have certain alchemical uses.
 
+embers.research.alchemy_pedestal.title=Alchemy Pedestal
+embers.research.alchemy_pedestal=A Dawnstone pedestal for energetic alchemical purposes. To function, it must contain Ash, which can be placed inside with a right click or an Item Pipe, as well as a metal Aspectus to determine its elemental attunement. When placed around an Exchange Table, they can provide Ash to an alchemical process for the element determined by their Aspectus. 
 
+embers.research.alchemy_tablet.title=Exchange Table
+embers.research.alchemy_tablet=A Dawnstone tablet, the core of energetic alchemy. Items can be placed on top of the Table by inserting items into the block's faces using a right-click or a Pipe. When the Table is struck by a beam from a Beam Cannon, if sufficient ash of the necessary elements for a recipe is present in nearby Pedestals, an alchemic process will begin. If the ash matches the recipe exactly, a product will appear; otherwise, Alchemical Waste will be produced, with a visible accuracy so you know how far off you were.
 
+embers.research.item_transfer.title=Item Transfer
+embers.research.item_transfer=A lead machine, capable of transfering items in Item Pipes to different paths. By default, the Item Transfer will effectively provide a higher-priority direction for items within connected Item Pipes to go. However, an item can be right-clicked on the Transfer, giving it a filter, making it only allow that item to pass through it.
 
+embers.research.core_stone.title=Core Stone
+embers.research.core_stone=Ancient brown stone. It has a composition that cannot be identified.
 
+embers.research.beam_cannon.title=Beam Cannon
+embers.research.beam_cannon=A dawnstone and copper cannon. It can be aimed at a particular block using a Tinker Hammer, simply by shift-right-clicking on the block you wish to target, then right-clicking on the cannon. When the cannon is given enough Ember power, it will unleash a powerful, highly-damaging ray of energy. The ray has a range of about sixty blocks, and is notably used to kickstart energetic alchemy recipes at an Exchange Table.
 
+embers.research.aspectus_iron.title=Iron Aspectus
+embers.research.aspectus_iron=An iron sigil with an Ember Shard at its core, used in alchemic processes.
 
+embers.research.aspectus_copper.title=Copper Aspectus
+embers.research.aspectus_copper=A copper sigil with an Ember Shard at its core, used in alchemic processes.
 
+embers.research.aspectus_lead.title=Lead Aspectus
+embers.research.aspectus_lead=A lead sigil with an Ember Shard at its core, used in alchemic processes.
 
-=======
+embers.research.aspectus_silver.title=Silver Aspectus
+embers.research.aspectus_silver=A silver sigil with an Ember Shard at its core, used in alchemic processes.
+
+embers.research.aspectus_dawnstone.title=Dawnstone Aspectus
+embers.research.aspectus_dawnstone=A dawnstone sigil with an Ember Shard at its core, used in alchemic processes.
+
+embers.research.alchemic_waste.title=Alchemical Waste
+embers.research.alchemic_waste=The remainder of a failed alchemical reaction. From it, you may determine the accuracy of your previous attempt. Furthermore, the waste can be broken apart in a Stamper to reclaim some of the Ash used in its synthesis.
+
+embers.research.ashen_cloth.title=Ashen Fabric
+embers.research.ashen_cloth=Ash-imbued cloth. The imbuement process has left it toughened.
+
+embers.research.ashen_cloak_head.title=Ashen Goggles
+embers.research.ashen_cloak_head=Dawnstone goggles with an Ashen Cloth base. When worn with all the other pieces of its armor set, it will bestow damage reductions depending on the Inflictor Gems embedded in the Ashen Cloak.
+
+embers.research.ashen_cloak_chest.title=Ashen Cloak
+embers.research.ashen_cloak_chest=A cloak made of Ash-imbued cloth. Inflictor Gems can be embedded in it with a crafting recipe: simply craft the cloak, one string, and one to seven Gems together to sew the Gems into the Cloak. You can also put the Cloak in a crafting table on its own to reclaim the Gems. When Gems are embedded, and the other Ashen Cloth armor pieces are also worn, the Ashen Cloak will reduce damage from incoming sources by about a seventh for each embedded Inflictor Gem with a matching attuned damage type.
+
+embers.research.ashen_cloak_legs.title=Ashen Leggings
+embers.research.ashen_cloak_legs=Dawnstone greaves on an Ashen Cloth base. When worn with all the other pieces of its armor set, it will bestow damage reductions depending on the Inflictor Gems embedded in the Ashen Cloak.
+
+embers.research.ashen_cloak_boots.title=Ashen Boots
+embers.research.ashen_cloak_boots=Sturdy Ashen Cloth boots. When worn with all the other pieces of its armor set, it will bestow damage reductions depending on the Inflictor Gems embedded in the Ashen Cloak.
+
+embers.research.inflictor_gem.title=Inflictor Gem
+embers.research.inflictor_gem=A gem as black as night. When the Inflictor Gem is held, any damage taken will attune the Gem to that damage's type, indicated by a white glow within the Gem. You may also right-click with the Gem to unattune it, but doing so will cause you some injury.
+
+embers.research.glimmer_shard.title=Glimmer Crystal
+embers.research.glimmer_shard=A glowing orange crystal. When right-clicked on a block, the Glimmer Crystal can shoot out a small mote of its internal light, creating a glowing light. However, it cannot create these lights infinitely; it must recharge in sunlight if used to regenerate itself when used up.
+
+embers.research.glimmer_lamp.title=Glimmer Lamp
+embers.research.glimmer_lamp=A lantern containing a bound Glimmer Crystal. While the Glimmer Crystal was limited to being able to place lights on blocks directly, the Glimmer Lamp can cast forth a ball of light that will create a glowing orb where it lands. Like the Glimmer Crystal, it must regenerate itself in sunlight, but has about 50% more use than the Glimmer Crystal per recharge.
+
 embers.commands.fill.usage=/ember-fill <x> <z> <set|add|query> ...
 embers.commands.fill.usage.add=/ember-fill <x> <z> add <value>
 embers.commands.fill.usage.set=/ember-fill <x> <z> set <value>
@@ -454,4 +527,3 @@ embers.commands.fill.failed=Missing ember data at chunk [%d, %d] (at x %d, z %d)
 embers.commands.fill.added=Added %d to the ember level (now %d) in the chunk [%d, %d] (at x %d, z %d)
 embers.commands.fill.set=Added the ember level to %d in the chunk [%d, %d] (at x %d, z %d)
 embers.commands.fill.query=Ember level is %d in the chunk [%d, %d] (at x %d, z %d)
->>>>>>> baa8ef35282be79c3cb507153d43222b2981a0f1

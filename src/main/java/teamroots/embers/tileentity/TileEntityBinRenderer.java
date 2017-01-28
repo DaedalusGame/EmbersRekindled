@@ -23,11 +23,11 @@ public class TileEntityBinRenderer extends TileEntitySpecialRenderer {
 		if (tile instanceof TileEntityBin){
 			TileEntityBin bin = (TileEntityBin)tile;
 			random.setSeed(tile.getWorld().getSeed());
-			if (bin.inventory.getStackInSlot(0) != null){
-				int itemCount = (int)Math.ceil((bin.inventory.getStackInSlot(0).stackSize)/4.0);
+			if (bin.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+				int itemCount = (int)Math.ceil((bin.inventory.getStackInSlot(0).getCount())/4.0);
 				for (int i = 0; i < itemCount; i ++){
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().theWorld,x,y,z,new ItemStack(bin.inventory.getStackInSlot(0).getItem(),1,bin.inventory.getStackInSlot(0).getMetadata()));
+					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(bin.inventory.getStackInSlot(0).getItem(),1,bin.inventory.getStackInSlot(0).getMetadata()));
 					item.hoverStart = 0;
 					GL11.glTranslated(x, y+0.2+(i*0.0625), z);
 					GL11.glTranslated(0.5, 0, 0.5);

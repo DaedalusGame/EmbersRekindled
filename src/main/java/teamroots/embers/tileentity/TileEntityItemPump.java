@@ -5,7 +5,9 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -24,11 +26,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.tileentity.TileEntityItemPipe.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
-public class TileEntityItemPump extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityItemPump extends TileEntity implements ITileEntityBase, ITickable, IPressurizable {
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -39,7 +43,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 	public int pressure = 16;
 	Random random = new Random();
 	public static enum EnumPipeConnection{
-		NONE, PIPE, BLOCK, LEVER
+		NONE, PIPE, BLOCK, LEVER, FORCENONE, NEIGHBORNONE
 	}
 	
 	public static EnumPipeConnection connectionFromInt(int value){
@@ -52,6 +56,8 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 			return EnumPipeConnection.BLOCK;
 		case 3:
 			return EnumPipeConnection.LEVER;
+		case 4:
+			return EnumPipeConnection.FORCENONE;
 		}
 		return EnumPipeConnection.NONE;
 	}
@@ -63,12 +69,12 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 	}
 	
 	public void updateNeighbors(IBlockAccess world){
-		up = getConnection(world,getPos().up(),EnumFacing.DOWN);
-		down = getConnection(world,getPos().down(),EnumFacing.UP);
-		north = getConnection(world,getPos().north(),EnumFacing.NORTH);
-		south = getConnection(world,getPos().south(),EnumFacing.SOUTH);
-		west = getConnection(world,getPos().west(),EnumFacing.WEST);
-		east = getConnection(world,getPos().east(),EnumFacing.EAST);
+		up = getConnection(world,getPos().offset(EnumFacing.UP),EnumFacing.UP);
+		down = getConnection(world,getPos().offset(EnumFacing.DOWN),EnumFacing.DOWN);
+		north = getConnection(world,getPos().offset(EnumFacing.NORTH),EnumFacing.NORTH);
+		south = getConnection(world,getPos().offset(EnumFacing.SOUTH),EnumFacing.SOUTH);
+		west = getConnection(world,getPos().offset(EnumFacing.WEST),EnumFacing.WEST);
+		east = getConnection(world,getPos().offset(EnumFacing.EAST),EnumFacing.EAST);
 	}
 	
 	@Override
@@ -134,7 +140,53 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 		return super.getCapability(capability, facing);
 	}
 	
+	public EnumPipeConnection getConnection(EnumFacing side){
+		if (side == EnumFacing.UP){
+			return up;
+		}
+		else if (side == EnumFacing.DOWN){
+			return down;
+		}
+		else if (side == EnumFacing.EAST){
+			return east;
+		}
+		else if (side == EnumFacing.WEST){
+			return west;
+		}
+		else if (side == EnumFacing.NORTH){
+			return north;
+		}
+		else if (side == EnumFacing.SOUTH){
+			return south;
+		}
+		return EnumPipeConnection.NONE;
+	}
+	
+	public void setConnection(EnumFacing side, EnumPipeConnection connect){
+		if (side == EnumFacing.UP){
+			up = connect;
+		}
+		else if (side == EnumFacing.DOWN){
+			down = connect;
+		}
+		else if (side == EnumFacing.EAST){
+			east = connect;
+		}
+		else if (side == EnumFacing.WEST){
+			west = connect;
+		}
+		else if (side == EnumFacing.NORTH){
+			north = connect;
+		}
+		else if (side == EnumFacing.SOUTH){
+			south = connect;
+		}
+	}
+	
 	public EnumPipeConnection getConnection(IBlockAccess world, BlockPos pos, EnumFacing side){
+		if (getConnection(side) == EnumPipeConnection.FORCENONE){
+			return EnumPipeConnection.FORCENONE;
+		}
 		if (world.getTileEntity(pos) instanceof TileEntityItemPipe && !(world.getTileEntity(pos) instanceof TileEntityItemPump)){
 			return EnumPipeConnection.PIPE;
 		}
@@ -149,12 +201,111 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 				return EnumPipeConnection.LEVER;
 			}
 		}
+		else if (world.getBlockState(pos).getBlock() == Blocks.STONE_BUTTON){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockButton.FACING);
+			if (face == side){
+				return EnumPipeConnection.LEVER;
+			}
+		}
+		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
+			if (face == side){
+				return EnumPipeConnection.LEVER;
+			}
+		}
 		return EnumPipeConnection.NONE;
+	}
+	
+	public static EnumPipeConnection reverseForce(EnumPipeConnection connect){
+		if (connect == EnumPipeConnection.FORCENONE){
+			return EnumPipeConnection.NONE;
+		}
+		if (connect != EnumPipeConnection.NONE && connect != EnumPipeConnection.LEVER){
+			return EnumPipeConnection.FORCENONE;
+		}
+		return EnumPipeConnection.NONE;
+	}
+	
+	public void reverseConnection(EnumFacing face){
 	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != ItemStack.EMPTY){
+			if (heldItem.getItem() instanceof ItemTinkerHammer){
+				if (side == EnumFacing.UP || side == EnumFacing.DOWN){
+					if (Math.abs(hitX-0.5) > Math.abs(hitZ-0.5)){
+						if (hitX < 0.5){
+							this.west = reverseForce(west);
+							this.reverseConnection(EnumFacing.WEST);
+						}
+						else {
+							this.east = reverseForce(east);
+							this.reverseConnection(EnumFacing.EAST);
+						}
+					}
+					else {
+						if (hitZ < 0.5){
+							this.north = reverseForce(north);
+							this.reverseConnection(EnumFacing.NORTH);
+						}
+						else {
+							this.south = reverseForce(south);
+							this.reverseConnection(EnumFacing.SOUTH);
+						}
+					}
+				}
+				if (side == EnumFacing.EAST || side == EnumFacing.WEST){
+					if (Math.abs(hitY-0.5) > Math.abs(hitZ-0.5)){
+						if (hitY < 0.5){
+							this.down = reverseForce(down);
+							this.reverseConnection(EnumFacing.DOWN);
+						}
+						else {
+							this.up = reverseForce(up);
+							this.reverseConnection(EnumFacing.UP);
+						}
+					}
+					else {
+						if (hitZ < 0.5){
+							this.north = reverseForce(north);
+							this.reverseConnection(EnumFacing.NORTH);
+						}
+						else {
+							this.south = reverseForce(south);
+							this.reverseConnection(EnumFacing.SOUTH);
+						}
+					}
+				}
+				if (side == EnumFacing.NORTH || side == EnumFacing.SOUTH){
+					if (Math.abs(hitX-0.5) > Math.abs(hitY-0.5)){
+						if (hitX < 0.5){
+							this.west = reverseForce(west);
+							this.reverseConnection(EnumFacing.WEST);
+						}
+						else {
+							this.east = reverseForce(east);
+							this.reverseConnection(EnumFacing.EAST);
+						}
+					}
+					else {
+						if (hitY < 0.5){
+							this.down = reverseForce(down);
+							this.reverseConnection(EnumFacing.DOWN);
+						}
+						else {
+							this.up = reverseForce(up);
+							this.reverseConnection(EnumFacing.UP);
+						}
+					}
+				}
+				updateNeighbors(world);
+				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -164,28 +315,48 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 		Misc.spawnInventoryInWorld(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
 		world.setTileEntity(pos, null);
 	}
+	
+	public boolean isConnected(EnumFacing face){
+		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
+		if (tile instanceof TileEntityItemPipe){
+			if (((TileEntityItemPipe)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemPipe.EnumPipeConnection.FORCENONE
+					&& ((TileEntityItemPipe)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemPipe.EnumPipeConnection.NONE){
+				return true;
+			}
+		}
+		if (tile instanceof TileEntityItemPump){
+			if (((TileEntityItemPump)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.FORCENONE
+					&& ((TileEntityItemPump)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.NONE){
+				return true;
+			}
+		}
+		if (getConnection(face) == EnumPipeConnection.BLOCK){
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void update() {
 		if (getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
 			ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
 			ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
-			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.LEVER){
+			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.FORCENONE && up != EnumPipeConnection.LEVER && isConnected(EnumFacing.UP)){
 				connections.add(EnumFacing.UP);
 			}
-			if (down != EnumPipeConnection.NONE && down != EnumPipeConnection.LEVER){
+			if (down != EnumPipeConnection.NONE && down != EnumPipeConnection.FORCENONE && down != EnumPipeConnection.LEVER && isConnected(EnumFacing.DOWN)){
 				connections.add(EnumFacing.DOWN);
 			}
-			if (north != EnumPipeConnection.NONE && north != EnumPipeConnection.LEVER){
+			if (north != EnumPipeConnection.NONE && north != EnumPipeConnection.FORCENONE && north != EnumPipeConnection.LEVER && isConnected(EnumFacing.NORTH)){
 				connections.add(EnumFacing.NORTH);
 			}
-			if (south != EnumPipeConnection.NONE && south != EnumPipeConnection.LEVER){
+			if (south != EnumPipeConnection.NONE && south != EnumPipeConnection.FORCENONE && south != EnumPipeConnection.LEVER && isConnected(EnumFacing.SOUTH)){
 				connections.add(EnumFacing.SOUTH);
 			}
-			if (east != EnumPipeConnection.NONE && east != EnumPipeConnection.LEVER){
+			if (east != EnumPipeConnection.NONE && east != EnumPipeConnection.FORCENONE && east != EnumPipeConnection.LEVER && isConnected(EnumFacing.EAST)){
 				connections.add(EnumFacing.EAST);
 			}
-			if (west != EnumPipeConnection.NONE && west != EnumPipeConnection.LEVER){
+			if (west != EnumPipeConnection.NONE && west != EnumPipeConnection.FORCENONE && west != EnumPipeConnection.LEVER && isConnected(EnumFacing.WEST)){
 				connections.add(EnumFacing.WEST);
 			}
 			for (int i = 0; i < connections.size(); i ++){
@@ -226,14 +397,14 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 						if (handler != null){
 							int slot = -1;
 							for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-								if (handler.getStackInSlot(j) != null){
-									if (handler.getStackInSlot(j).stackSize > 0){
+								if (handler.getStackInSlot(j) != ItemStack.EMPTY){
+									if (handler.getStackInSlot(j).getCount() > 0){
 										slot = j;
 									}
 								}
 							}
 							if (slot != -1){
-								if (this.inventory.getStackInSlot(0) == null){
+								if (this.inventory.getStackInSlot(0) == ItemStack.EMPTY){
 									ItemStack extracted = handler.extractItem(slot, 1, false);
 									this.inventory.insertItem(0, extracted, false);
 									lastReceived = getPos().offset(face);
@@ -252,7 +423,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 				
 				if (connections.size() > 0){
 					for (int i = 0; i < pressure; i ++){
-						if (inventory.getStackInSlot(0) != null){
+						if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
 							EnumFacing face = connections.get(random.nextInt(connections.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile instanceof TileEntityItemPipe){
@@ -269,22 +440,24 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 									}
 									int slot = -1;
 									for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-										if (handler.getStackInSlot(j) == null){
+										if (handler.getStackInSlot(j) == ItemStack.EMPTY){
 											slot = j;
 										}
 										else {
-											if (handler.getStackInSlot(j).stackSize < handler.getStackInSlot(j).getMaxStackSize() && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
+											if (handler.getStackInSlot(j).getCount() < handler.getStackInSlot(j).getMaxStackSize() && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
 												slot = j;
 											}
 										}
 									}
 									if (slot != -1){
 										ItemStack added = handler.insertItem(slot, passStack, false);
-										if (added == null){
+										if (added == ItemStack.EMPTY){
 											ItemStack extracted = this.inventory.extractItem(0, 1, false);
-											if (extracted != null){
+											if (extracted != ItemStack.EMPTY){
+												if (tile instanceof IPressurizable){
+													((IPressurizable)tile).setPressure(Math.max(0, pressure-1));
+												}
 												if (tile instanceof TileEntityItemPipe){
-													((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
 													((TileEntityItemPipe)tile).lastReceived = getPos();
 												}
 												if (!toUpdate.contains(getPos().offset(face))){
@@ -309,5 +482,15 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 				}
 			}
 		}
+	}
+
+	@Override
+	public int getPressure() {
+		return pressure;
+	}
+
+	@Override
+	public void setPressure(int pressure) {
+		this.pressure = pressure;
 	}
 }

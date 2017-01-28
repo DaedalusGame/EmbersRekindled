@@ -5,12 +5,16 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +25,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.tileentity.TileEntityItemPump.EnumPipeConnection;
+import teamroots.embers.util.Misc;
 
 public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, ITickable {
 	Random random = new Random();
@@ -35,6 +41,8 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 			return EnumPipeConnection.BLOCK;
 		case 3:
 			return EnumPipeConnection.LEVER;
+		case 4:
+			return EnumPipeConnection.FORCENONE;
 		}
 		return EnumPipeConnection.NONE;
 	}
@@ -46,8 +54,8 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 	
 	@Override
 	public void updateNeighbors(IBlockAccess world){
-		up = getConnection(world,getPos().up(),EnumFacing.DOWN);
-		down = getConnection(world,getPos().down(),EnumFacing.UP);
+		up = getConnection(world,getPos().up(),EnumFacing.UP);
+		down = getConnection(world,getPos().down(),EnumFacing.DOWN);
 		north = getConnection(world,getPos().north(),EnumFacing.NORTH);
 		south = getConnection(world,getPos().south(),EnumFacing.SOUTH);
 		west = getConnection(world,getPos().west(),EnumFacing.WEST);
@@ -93,8 +101,67 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 		readFromNBT(pkt.getNbtCompound());
 	}
 	
+	public EnumPipeConnection getConnection(EnumFacing side){
+		if (side == EnumFacing.UP){
+			return up;
+		}
+		else if (side == EnumFacing.DOWN){
+			return down;
+		}
+		else if (side == EnumFacing.EAST){
+			return east;
+		}
+		else if (side == EnumFacing.WEST){
+			return west;
+		}
+		else if (side == EnumFacing.NORTH){
+			return north;
+		}
+		else if (side == EnumFacing.SOUTH){
+			return south;
+		}
+		return EnumPipeConnection.NONE;
+	}
+	
+	public void setConnection(EnumFacing side, EnumPipeConnection connect){
+		if (side == EnumFacing.UP){
+			up = connect;
+		}
+		else if (side == EnumFacing.DOWN){
+			down = connect;
+		}
+		else if (side == EnumFacing.EAST){
+			east = connect;
+		}
+		else if (side == EnumFacing.WEST){
+			west = connect;
+		}
+		else if (side == EnumFacing.NORTH){
+			north = connect;
+		}
+		else if (side == EnumFacing.SOUTH){
+			south = connect;
+		}
+	}
+	
+	public void reverseConnection(EnumFacing face){
+	}
+	
+	public static EnumPipeConnection reverseForce(EnumPipeConnection connect){
+		if (connect == EnumPipeConnection.FORCENONE){
+			return EnumPipeConnection.NONE;
+		}
+		if (connect != EnumPipeConnection.NONE && connect != EnumPipeConnection.LEVER){
+			return EnumPipeConnection.FORCENONE;
+		}
+		return EnumPipeConnection.NONE;
+	}
+	
 	@Override
 	public EnumPipeConnection getConnection(IBlockAccess world, BlockPos pos, EnumFacing side){
+		if (getConnection(side) == EnumPipeConnection.FORCENONE){
+			return EnumPipeConnection.FORCENONE;
+		}
 		if (world.getTileEntity(pos) != null){
 			if (world.getTileEntity(pos).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side) && !(world.getTileEntity(pos) instanceof TileEntityPump)){
 				return EnumPipeConnection.BLOCK;
@@ -106,7 +173,39 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 				return EnumPipeConnection.LEVER;
 			}
 		}
+		else if (world.getBlockState(pos).getBlock() == Blocks.STONE_BUTTON){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockButton.FACING);
+			if (face == side){
+				return EnumPipeConnection.LEVER;
+			}
+		}
+		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
+			if (face == side){
+				return EnumPipeConnection.LEVER;
+			}
+		}
 		return EnumPipeConnection.NONE;
+	}
+	
+	public boolean isConnected(EnumFacing face){
+		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
+		if (tile instanceof TileEntityPipe){
+			if (((TileEntityPipe)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.FORCENONE
+					&& ((TileEntityPipe)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.NONE){
+				return true;
+			}
+		}
+		if (tile instanceof TileEntityPump){
+			if (((TileEntityPump)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.FORCENONE
+					&& ((TileEntityPump)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.NONE){
+				return true;
+			}
+		}
+		if (getConnection(face) == EnumPipeConnection.BLOCK){
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -116,22 +215,34 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 		if (tank.getFluidAmount() < tank.getCapacity() && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
 			ArrayList<EnumFacing> connectedFaces = new ArrayList<EnumFacing>();
 			if (up == EnumPipeConnection.BLOCK){
-				connectedFaces.add(EnumFacing.UP);
+				if (isConnected(EnumFacing.UP)){
+					connectedFaces.add(EnumFacing.UP);
+				}
 			}
 			if (down == EnumPipeConnection.BLOCK){
-				connectedFaces.add(EnumFacing.DOWN);
+				if (isConnected(EnumFacing.DOWN)){
+					connectedFaces.add(EnumFacing.DOWN);
+				}
 			}
 			if (north == EnumPipeConnection.BLOCK){
-				connectedFaces.add(EnumFacing.NORTH);
+				if (isConnected(EnumFacing.NORTH)){
+					connectedFaces.add(EnumFacing.NORTH);
+				}
 			}
 			if (south == EnumPipeConnection.BLOCK){
-				connectedFaces.add(EnumFacing.SOUTH);
+				if (isConnected(EnumFacing.SOUTH)){
+					connectedFaces.add(EnumFacing.SOUTH);
+				}
 			}
 			if (west == EnumPipeConnection.BLOCK){
-				connectedFaces.add(EnumFacing.WEST);
+				if (isConnected(EnumFacing.WEST)){
+					connectedFaces.add(EnumFacing.WEST);
+				}
 			}
 			if (east == EnumPipeConnection.BLOCK){
-				connectedFaces.add(EnumFacing.EAST);
+				if (isConnected(EnumFacing.EAST)){
+					connectedFaces.add(EnumFacing.EAST);
+				}
 			}
 			for (int i = 0; i < connectedFaces.size(); i ++){
 				if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
@@ -184,14 +295,16 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 						if (handler != null){
 							if (tank.getFluid() != null){
-								FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
-								int filled = handler.fill(toAdd, true);
-								tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
-								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-									toUpdate.add(getPos().offset(connectedFaces.get(i)));
-								}
-								if (!toUpdate.contains(getPos())){
-									toUpdate.add(getPos());
+								if (tank.getFluid().getFluid() != null){
+									FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
+									int filled = handler.fill(toAdd, true);
+									tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+									if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+										toUpdate.add(getPos().offset(connectedFaces.get(i)));
+									}
+									if (!toUpdate.contains(getPos())){
+										toUpdate.add(getPos());
+									}
 								}
 							}
 						}

@@ -10,7 +10,6 @@ public class StampRecipeHandler implements IRecipeHandler<StampingRecipeWrapper>
 		return StampingRecipeWrapper.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "embers.stamp";
 	}

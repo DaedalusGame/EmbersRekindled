@@ -2,6 +2,7 @@ package teamroots.embers;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -19,7 +20,7 @@ import teamroots.embers.proxy.CommonProxy;
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String VERSION = "0.016";
+	public static final String VERSION = "0.107";
 	public static final String DEPENDENCIES = "";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")
@@ -32,8 +33,8 @@ public class Embers {
     	}
 		@Override
 		@SideOnly(Side.CLIENT)
-		public Item getTabIconItem(){
-			return RegistryManager.crystalEmber;
+		public ItemStack getTabIconItem(){
+			return new ItemStack(RegistryManager.crystal_ember,1);
 		}
 	};
 	
