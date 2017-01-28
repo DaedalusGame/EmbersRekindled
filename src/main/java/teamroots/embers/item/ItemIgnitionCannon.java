@@ -24,7 +24,8 @@ import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemIgnitionCannon extends ItemBase {
 	public ItemIgnitionCannon() {
-		super("ignitionCannon", true);
+		super("ignition_cannon", true);
+		this.setMaxStackSize(1);
 	}
 	
 	@Override
@@ -76,7 +77,7 @@ public class ItemIgnitionCannon extends ItemBase {
 	
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){
-		return slotChanged;
+		return slotChanged || newStack.getItem() != oldStack.getItem();
 	}
 	
 	@Override
@@ -101,9 +102,10 @@ public class ItemIgnitionCannon extends ItemBase {
 	public EnumAction getItemUseAction(ItemStack stack){
 		return EnumAction.BOW;
 	}
-	
+
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
+		ItemStack stack = player.getHeldItem(hand);
 		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
 			EmberInventoryUtil.removeEmber(player, 25.0);
 			player.setActiveHand(hand);

@@ -22,6 +22,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageEmberData;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.Misc;
 import teamroots.embers.world.EmberWorldData;
@@ -38,6 +39,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         @Override
         protected void onContentsChanged(int slot) {
         	TileEntityEmberBore.this.markDirty();
+        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityEmberBore.this));
         }
         
         @Override
@@ -54,7 +56,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate){
         	if (slot == stackFuel){
-        		return null;
+        		return ItemStack.EMPTY;
         	}
         	return super.extractItem(slot, amount, simulate);
         }
@@ -98,7 +100,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -119,7 +121,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public void update() {
-		if (getPos().getY() <= 7){
+		if (getPos().getY() <= 7 && !getWorld().isRemote){
 			if (ticksFueled > 0){
 				angle += 12.0f;
 			}
@@ -129,39 +131,39 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 			}
 			if (ticksFueled == 0){
 				EmberWorldData data = EmberWorldData.get(getWorld());
-				if (data.emberData.containsKey(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)){
-					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
-						if (inventory.getStackInSlot(stackFuel) != null){
-							ticksFueled = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(stackFuel).copy());
-							inventory.getStackInSlot(stackFuel).stackSize --;
-							if (inventory.getStackInSlot(stackFuel).stackSize <= 0){
-								inventory.setStackInSlot(stackFuel, null);
-							}
-							markDirty();
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-							}
-							IBlockState state = getWorld().getBlockState(getPos());
-							getWorld().notifyBlockUpdate(getPos(), state, state, 8);
+				double ember = data.getEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f));
+				if (ember > 750){
+					if (inventory.getStackInSlot(stackFuel) != ItemStack.EMPTY){
+						ticksFueled = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(stackFuel).copy());
+						inventory.getStackInSlot(stackFuel).shrink(1);
+						if (inventory.getStackInSlot(stackFuel).getCount() <= 0){
+							inventory.setStackInSlot(stackFuel, ItemStack.EMPTY);
+						}
+						markDirty();
+						if (!getWorld().isRemote){
+							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 						}
 					}
 				}
 			}
 			else if (ticksExisted % 800 == 0){
-				int chance = random.nextInt(4);
 				EmberWorldData data = EmberWorldData.get(getWorld());
+				double ember = data.getEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f));
+				int chance = random.nextInt(4);
 				if (chance == 0){
-					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 4500){
-						if (inventory.getStackInSlot(stackCrystals) != null){ 
-							if (inventory.getStackInSlot(stackCrystals).stackSize < inventory.getStackInSlot(stackCrystals).getMaxStackSize()){
-								inventory.getStackInSlot(stackCrystals).stackSize = Math.min(64, inventory.getStackInSlot(stackCrystals).stackSize);
-								data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
+					if (ember > 4500){
+						if (inventory.getStackInSlot(stackCrystals) != ItemStack.EMPTY){ 
+							if (inventory.getStackInSlot(stackCrystals).getCount() < inventory.getStackInSlot(stackCrystals).getMaxStackSize()){
+								inventory.getStackInSlot(stackCrystals).setCount(Math.min(64, inventory.getStackInSlot(stackCrystals).getCount()));
+								data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500);
+								PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500));
 								data.markDirty();
 							}
 						}
 						else {
-							inventory.setStackInSlot(stackCrystals, new ItemStack(RegistryManager.crystalEmber,1));
-							data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-4500);
+							inventory.setStackInSlot(stackCrystals, new ItemStack(RegistryManager.crystal_ember,1));
+							data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500);
+							PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500));
 							data.markDirty();
 						}
 						markDirty();
@@ -171,17 +173,19 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 					}
 				}
 				else {
-					if (data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16) > 750){
-						if (inventory.getStackInSlot(stackShards) != null){
-							if (inventory.getStackInSlot(stackShards).stackSize < inventory.getStackInSlot(stackShards).getMaxStackSize()){
-								inventory.getStackInSlot(stackShards).stackSize = Math.min(inventory.getStackInSlot(stackShards).getMaxStackSize(), inventory.getStackInSlot(stackShards).stackSize);
-								data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
+					if (ember > 750){
+						if (inventory.getStackInSlot(stackShards) != ItemStack.EMPTY){
+							if (inventory.getStackInSlot(stackShards).getCount() < inventory.getStackInSlot(stackShards).getMaxStackSize()){
+								inventory.getStackInSlot(stackShards).setCount(Math.min(inventory.getStackInSlot(stackShards).getMaxStackSize(), inventory.getStackInSlot(stackShards).getCount()));
+								data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750);
+								PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750));
 								data.markDirty();
 							}
 						}
 						else {
-							inventory.setStackInSlot(stackShards, new ItemStack(RegistryManager.shardEmber,1));
-							data.emberData.replace(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16, data.emberData.get(""+this.getPos().getX()/16+" "+this.getPos().getZ()/16)-750);
+							inventory.setStackInSlot(stackShards, new ItemStack(RegistryManager.shard_ember,1));
+							data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750);
+							PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750));
 							data.markDirty();
 						}
 						markDirty();

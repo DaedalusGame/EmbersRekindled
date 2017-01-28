@@ -87,7 +87,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -156,15 +156,15 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 				}
 				if (items.size() > 0){
 					int i = random.nextInt(items.size());
-					if (FurnaceRecipes.instance().getSmeltingResult(items.get(i).getEntityItem()) != null){
+					if (FurnaceRecipes.instance().getSmeltingResult(items.get(i).getEntityItem()) != ItemStack.EMPTY){
 						ItemStack recipeStack = new ItemStack(items.get(i).getEntityItem().getItem(),1,items.get(i).getEntityItem().getMetadata());
 						if (items.get(i).getEntityItem().hasTagCompound()){
 							recipeStack.setTagCompound(items.get(i).getEntityItem().getTagCompound());
 						}
 						ItemStack stack = FurnaceRecipes.instance().getSmeltingResult(recipeStack).copy();
 						ItemStack remainder = inventory.insertItem(0, stack, false);
-						items.get(i).getEntityItem().stackSize --;
-						if (items.get(i).getEntityItem().stackSize == 0){
+						items.get(i).getEntityItem().shrink(1);
+						if (items.get(i).getEntityItem().getCount() == 0){
 							items.get(i).setDead();
 							for (int j = 0; j < 3; j ++){
 								if (random.nextBoolean()){
@@ -181,8 +181,8 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 						}
 						IBlockState state = getWorld().getBlockState(getPos());
-						if (remainder != null){
-							getWorld().spawnEntityInWorld(new EntityItem(getWorld(),items.get(i).posX,items.get(i).posY,items.get(i).posZ,remainder));
+						if (remainder != ItemStack.EMPTY){
+							getWorld().spawnEntity(new EntityItem(getWorld(),items.get(i).posX,items.get(i).posY,items.get(i).posZ,remainder));
 						}
 					}
 				}

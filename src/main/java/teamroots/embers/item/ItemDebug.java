@@ -17,9 +17,10 @@ public class ItemDebug extends ItemBase {
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
+	public EnumActionResult onItemUse(
+	EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
 		if (Blocks.TORCH.canPlaceBlockOnSide(world, pos, face)){
-			((ItemBlock)Item.getItemFromBlock(Blocks.TORCH)).onItemUse(stack, player, world, pos, hand, face, hitX, hitY, hitZ);
+			((ItemBlock)Item.getItemFromBlock(Blocks.TORCH)).onItemUse(player, world, pos, hand, face, hitX, hitY, hitZ);
 		}
 		return EnumActionResult.SUCCESS;
 	}

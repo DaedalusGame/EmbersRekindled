@@ -13,7 +13,8 @@ public class ConfigManager {
 	//ORES
 	public static int copperVeinSize, copperMinY, copperMaxY, copperVeinsPerChunk,
 					leadVeinSize, leadMinY, leadMaxY, leadVeinsPerChunk,
-					silverVeinSize, silverMinY, silverMaxY, silverVeinsPerChunk;
+					silverVeinSize, silverMinY, silverMaxY, silverVeinsPerChunk,
+					ancientGolemSpawnWeight;
 
 	public static void init(File configFile)
 	{
@@ -42,6 +43,10 @@ public class ConfigManager {
 		silverMinY = config.getInt("silverMinY", "ores", 0, 0, 255, "Minimum height over which silver ore will spawn.");
 		silverMaxY = config.getInt("silverMaxY", "ores", 28, 0, 255, "Maximum height under which silver ore will spawn.");
 		silverVeinsPerChunk = config.getInt("silverVeinsPerChunk", "ores", 4, 0, 255, "Number of attempts to spawn silver ore the world generator will make for each chunk.");
+		
+		config.addCustomCategoryComment("mobs", "Settings related to ore generation.");
+		
+		ancientGolemSpawnWeight = config.getInt("ancientGolemSpawnWeight", "mobs", 15, 0, 32767, "Spawning weight of the Ancient Golem mob. Higher values make golems spawn more frequently.");
 		
 		if (config.hasChanged())
 		{

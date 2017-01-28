@@ -18,26 +18,26 @@ public class WorldGenOres implements IWorldGenerator {
 			IChunkProvider chunkProvider) {
 		switch (world.provider.getDimension()) {
 		case 0:{
-			WorldGenMinable oreCopper = new WorldGenMinable(RegistryManager.oreCopper.getDefaultState(), ConfigManager.copperVeinSize);
+			WorldGenMinable ore_copper = new WorldGenMinable(RegistryManager.ore_copper.getDefaultState(), ConfigManager.copperVeinSize);
 			for (int i = 0; i < ConfigManager.copperVeinsPerChunk; i ++){
 				int x = chunkX*16+random.nextInt(16);
 				int y = random.nextInt(ConfigManager.copperMaxY-ConfigManager.copperMinY)+ConfigManager.copperMinY;
 				int z = chunkZ*16+random.nextInt(16);
-				oreCopper.generate(world, random, new BlockPos(x,y,z));
+				ore_copper.generate(world, random, new BlockPos(x,y,z));
 			}
-			WorldGenMinable oreLead = new WorldGenMinable(RegistryManager.oreLead.getDefaultState(), ConfigManager.leadVeinSize);
+			WorldGenMinable ore_lead = new WorldGenMinable(RegistryManager.ore_lead.getDefaultState(), ConfigManager.leadVeinSize);
 			for (int i = 0; i < ConfigManager.leadVeinsPerChunk; i ++){
 				int x = chunkX*16+random.nextInt(16);
 				int y = random.nextInt(ConfigManager.leadMaxY-ConfigManager.leadMinY)+ConfigManager.leadMinY;
 				int z = chunkZ*16+random.nextInt(16);
-				oreLead.generate(world, random, new BlockPos(x,y,z));
+				ore_lead.generate(world, random, new BlockPos(x,y,z));
 			}
-			WorldGenMinable oreSilver = new WorldGenMinable(RegistryManager.oreSilver.getDefaultState(), ConfigManager.silverVeinSize);
+			WorldGenMinable ore_silver = new WorldGenMinable(RegistryManager.ore_silver.getDefaultState(), ConfigManager.silverVeinSize);
 			for (int i = 0; i < ConfigManager.silverVeinsPerChunk; i ++){
 				int x = chunkX*16+random.nextInt(16);
 				int y = random.nextInt(ConfigManager.silverMaxY-ConfigManager.silverMinY)+ConfigManager.silverMinY;
 				int z = chunkZ*16+random.nextInt(16);
-				oreSilver.generate(world, random, new BlockPos(x,y,z));
+				ore_silver.generate(world, random, new BlockPos(x,y,z));
 			}
             break;
 		}

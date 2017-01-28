@@ -17,7 +17,7 @@ public class MixingRecipeCategory extends BlankRecipeCategory {
     private final IDrawable background;
     private final String name;
     
-    public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jeiMixer.png");
+    public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jei_mixer.png");
 
     public MixingRecipeCategory(IGuiHelper helper){
     	

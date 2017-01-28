@@ -10,7 +10,6 @@ public class MixingRecipeHandler implements IRecipeHandler<MixingRecipeWrapper>{
 		return MixingRecipeWrapper.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "embers.mixer";
 	}

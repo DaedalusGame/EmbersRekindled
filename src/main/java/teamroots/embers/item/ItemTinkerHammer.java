@@ -18,10 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.tileentity.ITargetable;
 
 public class ItemTinkerHammer extends ItemBase {
 	public ItemTinkerHammer() {
-		super("tinkerHammer", true);
+		super("tinker_hammer", true);
 		this.setMaxStackSize(1);
 	}
 	
@@ -33,9 +34,10 @@ public class ItemTinkerHammer extends ItemBase {
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
+		ItemStack stack = player.getHeldItem(hand);
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof IEmberPacketReceiver && player.isSneaking()){
+		if (player.isSneaking()){
 			stack.getTagCompound().setInteger("targetX", pos.getX());
 			stack.getTagCompound().setInteger("targetY", pos.getY());
 			stack.getTagCompound().setInteger("targetZ", pos.getZ());
@@ -43,15 +45,15 @@ public class ItemTinkerHammer extends ItemBase {
 			return EnumActionResult.SUCCESS;
 		}
 		else if (tile instanceof IEmberPacketProducer && stack.getTagCompound().hasKey("targetX")){
-			((IEmberPacketProducer)tile).setTargetPosition(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")), face);
-			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
-			return EnumActionResult.SUCCESS;
+			if (world.getTileEntity(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ"))) instanceof IEmberPacketReceiver){
+				((IEmberPacketProducer)tile).setTargetPosition(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")), face);
+				world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+				return EnumActionResult.SUCCESS;
+			}
 		}
-		else if (stack.getTagCompound().hasKey("targetX")){
-			stack.getTagCompound().removeTag("targetX");
-			stack.getTagCompound().removeTag("targetY");
-			stack.getTagCompound().removeTag("targetZ");
-			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 2.0f, false);
+		else if (tile instanceof ITargetable && stack.getTagCompound().hasKey("targetX")){
+			((ITargetable)tile).setTarget(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")));
+			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.FAIL;

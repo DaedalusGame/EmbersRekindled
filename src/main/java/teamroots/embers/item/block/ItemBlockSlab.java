@@ -46,9 +46,9 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 	
 	public void decrementHeldStack(EntityPlayer player, ItemStack stack, EnumHand hand){
 		if (!player.capabilities.isCreativeMode){
-			stack.stackSize --;
-			if (stack.stackSize == 0){
-				player.setItemStackToSlot(hand == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, null);
+			stack.shrink(1);
+			if (stack.getCount() == 0){
+				player.setItemStackToSlot(hand == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -60,9 +60,10 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if (stack.stackSize == 0)
+		ItemStack stack = playerIn.getHeldItem(hand);
+		if (stack.getCount() == 0)
 		{
 			return EnumActionResult.FAIL;
 		}
@@ -95,14 +96,14 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 							                 this.doubleSlab.getSoundType().getPlaceSound(),
 							                 SoundCategory.BLOCKS,(this.doubleSlab.getSoundType().getVolume() + 1.0F) / 2.0F,
 							                 this.doubleSlab.getSoundType().getPitch() * 0.8F,true);
-						--stack.stackSize;
+						stack.shrink(1);
 					}
 
 					return EnumActionResult.SUCCESS;
 				}
 			}
 
-			return (this.func_180615_a(stack, worldIn, pos.offset(side)) || (super.onItemUse(stack, playerIn,
+			return (this.func_180615_a(stack, worldIn, pos.offset(side)) || (super.onItemUse(playerIn,
 			                                                                                       worldIn, pos, hand, side,
 			                                                                                       hitX, hitY, hitZ) == EnumActionResult.SUCCESS ? true : false)) ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
 		}
@@ -149,7 +150,7 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 				                        this.doubleSlab.getSoundType().getPlaceSound(),
 				                        SoundCategory.BLOCKS, (this.doubleSlab.getSoundType().getVolume() + 1.0F) / 2.0F,
 				                        this.doubleSlab.getSoundType().getPitch() * 0.8F, true);
-				--p_180615_1_.stackSize;
+				p_180615_1_.shrink(1);
 			}
 
 			return true;

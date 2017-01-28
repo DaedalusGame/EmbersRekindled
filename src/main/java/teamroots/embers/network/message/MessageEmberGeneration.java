@@ -40,14 +40,18 @@ public class MessageEmberGeneration implements IMessage {
     	@SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(final MessageEmberGeneration message, final MessageContext ctx) {
-        	EmberWorldData data = EmberWorldData.get(Minecraft.getMinecraft().theWorld);
-        	if (data.emberData.containsKey(message.key)){
-            	data.emberData.replace(message.key, message.ember);
-        	}
-        	else {
-            	data.emberData.put(message.key, message.ember);
-        	}
-        	data.markDirty();
+    		Minecraft.getMinecraft().addScheduledTask(()-> {
+	    		if (message.key != null){
+		        	EmberWorldData data = EmberWorldData.get(Minecraft.getMinecraft().world);
+		        	if (data.emberData.containsKey(message.key)){
+		            	data.emberData.replace(message.key, message.ember);
+		        	}
+		        	else {
+		            	data.emberData.put(message.key, message.ember);
+		        	}
+		        	data.markDirty();
+	    		}
+    		});
     		return null;
         }
     }

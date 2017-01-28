@@ -36,14 +36,12 @@ public class EmbersJEIPlugin extends BlankModPlugin {
         reg.addRecipeHandlers(new MelterRecipeHandler());
 
         ArrayList<MeltingRecipeWrapper> meltingRecipes = new ArrayList<MeltingRecipeWrapper>();
-        for (int i = 0; i < RecipeRegistry.meltingRecipes.keySet().size(); i ++){
-        	ItemStack key = (ItemStack)RecipeRegistry.meltingRecipes.keySet().toArray()[i];
-        	meltingRecipes.add(new MeltingRecipeWrapper(RecipeRegistry.meltingRecipes.get(key)));
+        for (int i = 0; i < RecipeRegistry.meltingRecipes.size(); i ++){
+        	ItemStack key = (ItemStack)RecipeRegistry.meltingRecipes.get(i).getStack();
+        	meltingRecipes.add(new MeltingRecipeWrapper(RecipeRegistry.meltingRecipes.get(i)));
         }
-    	Object[] keys = RecipeRegistry.meltingOreRecipes.keySet().toArray();
-        for (int i = 0; i < keys.length; i ++){
-        	String key = keys[i].toString();
-        	meltingRecipes.add(new MeltingRecipeWrapper(RecipeRegistry.meltingOreRecipes.get(key)));
+        for (int i = 0; i < RecipeRegistry.meltingOreRecipes.size(); i ++){
+        	meltingRecipes.add(new MeltingRecipeWrapper(RecipeRegistry.meltingOreRecipes.get(i)));
         }
         reg.addRecipes(meltingRecipes);
 
@@ -56,8 +54,18 @@ public class EmbersJEIPlugin extends BlankModPlugin {
         }
         reg.addRecipes(mixingRecipes);
 
+        reg.addRecipeCategories(new AlchemyRecipeCategory(guiHelper));
+        reg.addRecipeHandlers(new AlchemyRecipeHandler());
+
+        ArrayList<AlchemyRecipeWrapper> alchemyRecipes = new ArrayList<AlchemyRecipeWrapper>();
+        for (int i = 0; i < RecipeRegistry.alchemyRecipes.size(); i ++){
+        	alchemyRecipes.add(new AlchemyRecipeWrapper(RecipeRegistry.alchemyRecipes.get(i)));
+        }
+        reg.addRecipes(alchemyRecipes);
+
         reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.stamper),"embers.stamp");
-        reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.blockFurnace),"embers.melter");
+        reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.block_furnace),"embers.melter");
         reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.mixer),"embers.mixer");
+        reg.addRecipeCategoryCraftingItem(new ItemStack(RegistryManager.alchemy_tablet),"embers.alchemy");
     }
 }

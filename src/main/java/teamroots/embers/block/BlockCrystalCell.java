@@ -36,13 +36,13 @@ public class BlockCrystalCell extends BlockTEBase {
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		world.setBlockState(pos.north(), RegistryManager.advancedEdge.getStateFromMeta(9));
-		world.setBlockState(pos.north().west(), RegistryManager.advancedEdge.getStateFromMeta(1));
-		world.setBlockState(pos.west(), RegistryManager.advancedEdge.getStateFromMeta(2));
-		world.setBlockState(pos.south().west(), RegistryManager.advancedEdge.getStateFromMeta(3));
-		world.setBlockState(pos.south(), RegistryManager.advancedEdge.getStateFromMeta(4));
-		world.setBlockState(pos.south().east(), RegistryManager.advancedEdge.getStateFromMeta(5));
-		world.setBlockState(pos.east(), RegistryManager.advancedEdge.getStateFromMeta(6));
-		world.setBlockState(pos.north().east(), RegistryManager.advancedEdge.getStateFromMeta(7));
+		world.setBlockState(pos.north(), RegistryManager.advanced_edge.getStateFromMeta(9));
+		world.setBlockState(pos.north().west(), RegistryManager.advanced_edge.getStateFromMeta(1));
+		world.setBlockState(pos.west(), RegistryManager.advanced_edge.getStateFromMeta(2));
+		world.setBlockState(pos.south().west(), RegistryManager.advanced_edge.getStateFromMeta(3));
+		world.setBlockState(pos.south(), RegistryManager.advanced_edge.getStateFromMeta(4));
+		world.setBlockState(pos.south().east(), RegistryManager.advanced_edge.getStateFromMeta(5));
+		world.setBlockState(pos.east(), RegistryManager.advanced_edge.getStateFromMeta(6));
+		world.setBlockState(pos.north().east(), RegistryManager.advanced_edge.getStateFromMeta(7));
 	}
 }

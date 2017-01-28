@@ -12,7 +12,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityEmitter;
+import teamroots.embers.tileentity.TileEntityItemPipe;
 
 public class BlockEmberEmitter extends BlockTEBase {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");
@@ -42,7 +45,7 @@ public class BlockEmberEmitter extends BlockTEBase {
 	}
 	
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
 		return getDefaultState().withProperty(facing, face);
 	}
 	
@@ -58,16 +61,18 @@ public class BlockEmberEmitter extends BlockTEBase {
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		if (world.getTileEntity(pos) != null){
+		if (world.getTileEntity(pos) instanceof TileEntityEmitter){
 			((TileEntityEmitter)world.getTileEntity(pos)).updateNeighbors(world);
 		}
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block){
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
 		if (world.getTileEntity(pos) instanceof TileEntityEmitter){
 			((TileEntityEmitter)world.getTileEntity(pos)).updateNeighbors(world);
-			world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 3);
+			if (!world.isRemote){
+				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
+			}
 		}
 		if (world.isAirBlock(pos.offset(state.getValue(facing),-1))){
 			world.setBlockToAir(pos);

@@ -32,7 +32,7 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 	long ticksExisted = 0;
 	public TileEntityReceiver(){
 		super();
-		capability.setEmberCapacity(200);
+		capability.setEmberCapacity(2000);
 	}
 	
 	@Override
@@ -66,7 +66,7 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -79,7 +79,7 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void update() {
 		this.ticksExisted ++;
-		if (ticksExisted % 5 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
+		if (ticksExisted % 2 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
 			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
 				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
 				if (cap != null){

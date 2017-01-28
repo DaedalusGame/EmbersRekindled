@@ -5,11 +5,13 @@ import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class Misc {
 	public static Random random = new Random();
@@ -50,6 +52,28 @@ public class Misc {
 		return (r*65536 + g*256 + b);
 	}
 	
+	public static boolean matchOreDict(ItemStack stack1, ItemStack stack2){
+		int[] keys1 = OreDictionary.getOreIDs(stack1);
+		int[] keys2 = OreDictionary.getOreIDs(stack2);
+		for (int i = 0; i < keys1.length; i ++){
+			for (int j = 0; j < keys2.length; j ++){
+				if (keys1[i] == keys2[j]){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static float yawDegreesBetweenPoints(double posX, double posY, double posZ, double posX2, double posY2, double posZ2){
+		float f = (float) ((180.0f*Math.atan2(posX2-posX,posZ2-posZ))/(float)Math.PI);
+		return f;
+	}
+	
+	public static float pitchDegreesBetweenPoints(double posX, double posY, double posZ, double posX2, double posY2, double posZ2){
+		return (float)Math.toDegrees(Math.atan2(posY2-posY,Math.sqrt((posX2-posX)*(posX2-posX)+(posZ2-posZ)*(posZ2-posZ))));
+	}
+	
 	public static EnumFacing getOppositeFace(EnumFacing face){
 		if (face == EnumFacing.DOWN){
 			return EnumFacing.UP;
@@ -62,6 +86,18 @@ public class Misc {
 		}
 	}
 	
+	public static EnumFacing getOppositeVerticalFace(EnumFacing face){
+		if (face == EnumFacing.DOWN){
+			return EnumFacing.UP;
+		}
+		else if (face == EnumFacing.UP){
+			return EnumFacing.DOWN;
+		}
+		else {
+			return face;
+		}
+	}
+	
 	public static boolean isHills(Biome biome){
 		return biome.getBiomeName().compareTo(Biomes.BIRCH_FOREST_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.COLD_TAIGA_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.DESERT_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.FOREST_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.JUNGLE_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_BIRCH_FOREST_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_REDWOOD_TAIGA_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.REDWOOD_TAIGA_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.TAIGA_HILLS.getBiomeName()) == 0;
 	}
@@ -69,8 +105,8 @@ public class Misc {
 	public static void spawnInventoryInWorld(World world, double x, double y, double z, IItemHandler inventory){
 		if (inventory != null && !world.isRemote){
 			for (int i = 0; i < inventory.getSlots(); i ++){
-				if (inventory.getStackInSlot(i) != null){
-					world.spawnEntityInWorld(new EntityItem(world,x,y,z,inventory.getStackInSlot(i)));
+				if (inventory.getStackInSlot(i) != ItemStack.EMPTY){
+					world.spawnEntity(new EntityItem(world,x,y,z,inventory.getStackInSlot(i)));
 				}
 			}
 		}

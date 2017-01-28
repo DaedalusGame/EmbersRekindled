@@ -34,6 +34,7 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityBin.this.markDirty();
+        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityBin.this));
         }
 	};
 	Random random = new Random();
@@ -89,8 +90,9 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null){
+			EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
 			if (!getWorld().isRemote){
@@ -99,11 +101,13 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 			return true;
 		}
 		else {
-			if (inventory.getStackInSlot(0) != null && !world.isRemote){
-				world.spawnEntityInWorld(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
-				inventory.setStackInSlot(0, null);
+			if (inventory.getStackInSlot(0) != ItemStack.EMPTY && !world.isRemote){
+				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
+				inventory.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
-				getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 8);
+				if (!getWorld().isRemote){
+					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+				}
 				return true;
 			}
 		}
@@ -124,7 +128,7 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY(),getPos().getZ(),getPos().getX()+1,getPos().getY()+1.25,getPos().getZ()+1));
 			for (int i = 0; i < items.size(); i ++){
 				ItemStack stack = inventory.insertItem(0, items.get(i).getEntityItem(), false);
-				if (stack != null){
+				if (stack != ItemStack.EMPTY){
 					items.get(i).setEntityItemStack(stack);
 				}
 				else {

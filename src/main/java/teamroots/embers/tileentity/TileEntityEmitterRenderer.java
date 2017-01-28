@@ -16,7 +16,7 @@ import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
 public class TileEntityEmitterRenderer extends TileEntitySpecialRenderer {
-	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/pipeTex.png");
+	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/pipe_tex.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox up = new StructBox(0.375,0.625,0.375,0.625,1.0,0.625,new StructUV[]{new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16)});
 	public StructBox down = new StructBox(0.375,0.375,0.375,0.625,0,0.625,new StructUV[]{new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16)});

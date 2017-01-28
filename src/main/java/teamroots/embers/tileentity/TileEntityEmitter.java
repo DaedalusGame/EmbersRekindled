@@ -4,7 +4,9 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -27,6 +29,8 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.tileentity.TileEntityItemPump.EnumPipeConnection;
+import teamroots.embers.util.Misc;
 
 public class TileEntityEmitter extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -120,12 +124,24 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 				return EnumConnection.LEVER;
 			}
 		}
+		else if (world.getBlockState(pos).getBlock() == Blocks.STONE_BUTTON){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockButton.FACING);
+			if (face == Misc.getOppositeVerticalFace(side)){
+				return EnumConnection.LEVER;
+			}
+		}
+		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
+			if (face == Misc.getOppositeVerticalFace(side)){
+				return EnumConnection.LEVER;
+			}
+		}
 		return EnumConnection.NONE;
 	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -182,7 +198,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					
 					packet.initCustom(getPos(), target, vx, vy, vz, Math.min(40.0,capability.getEmber()));
 					this.capability.removeAmount(Math.min(40.0,capability.getEmber()), true);
-					getWorld().spawnEntityInWorld(packet);
+					getWorld().spawnEntity(packet);
 					markDirty();
 				}
 			}

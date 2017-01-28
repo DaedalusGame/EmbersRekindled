@@ -10,8 +10,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPipe;
 import teamroots.embers.tileentity.TileEntityItemPump;
+import teamroots.embers.tileentity.TileEntityPipe;
 
 public class BlockItemPump extends BlockTEBase {
 	public BlockItemPump(Material material, String name, boolean addToTab) {
@@ -24,18 +27,25 @@ public class BlockItemPump extends BlockTEBase {
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block){
-		if (world.getTileEntity(pos) != null){
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
+		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
 			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
-			world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 3);
+			if (!world.isRemote){
+				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
+			}
 		}
 	}
 	
 	@Override
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
-		if (world.getTileEntity(pos) != null){
+		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
 			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
 		}
+	}
+	
+	@Override
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side){
+		return true;
 	}
 	
 	@Override
@@ -45,8 +55,11 @@ public class BlockItemPump extends BlockTEBase {
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		if (world.getTileEntity(pos) != null){
+		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
 			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
+			if (!world.isRemote){
+				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
+			}
 		}
 	}
 	

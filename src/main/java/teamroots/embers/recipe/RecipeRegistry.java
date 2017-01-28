@@ -3,6 +3,7 @@ package teamroots.embers.recipe;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.init.Blocks;
@@ -17,224 +18,226 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.item.EnumStampType;
 
 public class RecipeRegistry {
-	public static Map<ItemStack,ItemMeltingRecipe> meltingRecipes = new HashMap<ItemStack,ItemMeltingRecipe>();
-	public static Map<String,ItemMeltingOreRecipe> meltingOreRecipes = new HashMap<String,ItemMeltingOreRecipe>();
+	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<ItemMeltingRecipe>();
+	public static ArrayList<ItemMeltingOreRecipe> meltingOreRecipes = new ArrayList<ItemMeltingOreRecipe>();
 	
 	public static ArrayList<ItemStampingRecipe> stampingRecipes = new ArrayList<ItemStampingRecipe>();
 	public static ArrayList<ItemStampingOreRecipe> stampingOreRecipes = new ArrayList<ItemStampingOreRecipe>();
 	
 	public static ArrayList<FluidMixingRecipe> mixingRecipes = new ArrayList<FluidMixingRecipe>();
 	
+	public static ArrayList<AlchemyRecipe> alchemyRecipes = new ArrayList<AlchemyRecipe>();
+	
 	public static void init(){
-		OreDictionary.registerOre("nuggetIron", RegistryManager.nuggetIron);
-		OreDictionary.registerOre("ingotCopper", RegistryManager.ingotCopper);
-		OreDictionary.registerOre("ingotLead", RegistryManager.ingotLead);
-		OreDictionary.registerOre("ingotSilver", RegistryManager.ingotSilver);
-		OreDictionary.registerOre("ingotDawnstone", RegistryManager.ingotDawnstone);
-		OreDictionary.registerOre("nuggetCopper", RegistryManager.nuggetCopper);
-		OreDictionary.registerOre("nuggetLead", RegistryManager.nuggetLead);
-		OreDictionary.registerOre("nuggetSilver", RegistryManager.nuggetSilver);
-		OreDictionary.registerOre("nuggetDawnstone", RegistryManager.nuggetDawnstone);
-		OreDictionary.registerOre("plateGold", RegistryManager.plateGold);
-		OreDictionary.registerOre("plateIron", RegistryManager.plateIron);
-		OreDictionary.registerOre("plateCopper", RegistryManager.plateCopper);
-		OreDictionary.registerOre("plateLead", RegistryManager.plateLead);
-		OreDictionary.registerOre("plateSilver", RegistryManager.plateSilver);
-		OreDictionary.registerOre("plateDawnstone", RegistryManager.plateDawnstone);
-		OreDictionary.registerOre("blockCopper", RegistryManager.blockCopper);
-		OreDictionary.registerOre("blockLead", RegistryManager.blockLead);
-		OreDictionary.registerOre("blockSilver", RegistryManager.blockSilver);
-		OreDictionary.registerOre("blockDawnstone", RegistryManager.blockDawnstone);
-		OreDictionary.registerOre("oreCopper", RegistryManager.oreCopper);
-		OreDictionary.registerOre("oreLead", RegistryManager.oreLead);
-		OreDictionary.registerOre("oreSilver", RegistryManager.oreSilver);
+		OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
+		OreDictionary.registerOre("ingotCopper", RegistryManager.ingot_copper);
+		OreDictionary.registerOre("ingotLead", RegistryManager.ingot_lead);
+		OreDictionary.registerOre("ingotSilver", RegistryManager.ingot_silver);
+		OreDictionary.registerOre("ingotDawnstone", RegistryManager.ingot_dawnstone);
+		OreDictionary.registerOre("nuggetCopper", RegistryManager.nugget_copper);
+		OreDictionary.registerOre("nuggetLead", RegistryManager.nugget_lead);
+		OreDictionary.registerOre("nuggetSilver", RegistryManager.nugget_silver);
+		OreDictionary.registerOre("nuggetDawnstone", RegistryManager.nugget_dawnstone);
+		OreDictionary.registerOre("plateGold", RegistryManager.plate_gold);
+		OreDictionary.registerOre("plateIron", RegistryManager.plate_iron);
+		OreDictionary.registerOre("plateCopper", RegistryManager.plate_copper);
+		OreDictionary.registerOre("plateLead", RegistryManager.plate_lead);
+		OreDictionary.registerOre("plateSilver", RegistryManager.plate_silver);
+		OreDictionary.registerOre("plateDawnstone", RegistryManager.plate_dawnstone);
+		OreDictionary.registerOre("blockCopper", RegistryManager.block_copper);
+		OreDictionary.registerOre("blockLead", RegistryManager.block_lead);
+		OreDictionary.registerOre("blockSilver", RegistryManager.block_silver);
+		OreDictionary.registerOre("blockDawnstone", RegistryManager.block_dawnstone);
+		OreDictionary.registerOre("oreCopper", RegistryManager.ore_copper);
+		OreDictionary.registerOre("oreLead", RegistryManager.ore_lead);
+		OreDictionary.registerOre("oreSilver", RegistryManager.ore_silver);
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockCopper),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_copper),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "ingotCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockLead),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_lead),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "ingotLead"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockSilver),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_silver),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "ingotSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockDawnstone),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_dawnstone),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "ingotDawnstone"}));
 		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingotCopper),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingot_copper),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "nuggetCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingotLead),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingot_lead),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "nuggetLead"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingotSilver),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingot_silver),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "nuggetSilver"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingotDawnstone),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingot_dawnstone),true,new Object[]{
 				"XXX",
 				"XXX",
 				"XXX",
 				'X', "nuggetDawnstone"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystalEmber,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystal_ember,1),true,new Object[]{
 				"XXX",
 				"XXX",
-				'X', RegistryManager.shardEmber}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.shardEmber,6),new Object[]{
-				RegistryManager.crystalEmber}));
+				'X', RegistryManager.shard_ember}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.shard_ember,6),new Object[]{
+				RegistryManager.crystal_ember}));
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingotCopper,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingot_copper,9),new Object[]{
 				"blockCopper"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingotLead,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingot_lead,9),new Object[]{
 				"blockLead"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingotSilver,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingot_silver,9),new Object[]{
 				"blockSilver"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingotDawnstone,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingot_dawnstone,9),new Object[]{
 				"blockDawnstone"}));
 
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nuggetIron,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_iron,9),new Object[]{
 				"ingotIron"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nuggetCopper,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_copper,9),new Object[]{
 				"ingotCopper"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nuggetLead,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_lead,9),new Object[]{
 				"ingotLead"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nuggetSilver,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_silver,9),new Object[]{
 				"ingotSilver"}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nuggetDawnstone,9),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_dawnstone,9),new Object[]{
 				"ingotDawnstone"}));
 		
 
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plateGold,1),new Object[]{
-		"ingotGold","ingotGold","ingotGold","ingotGold",RegistryManager.tinkerHammer}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plateIron,1),new Object[]{
-		"ingotIron","ingotIron","ingotIron","ingotIron",RegistryManager.tinkerHammer}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plateCopper,1),new Object[]{
-		"ingotCopper","ingotCopper","ingotCopper","ingotCopper",RegistryManager.tinkerHammer}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plateSilver,1),new Object[]{
-		"ingotSilver","ingotSilver","ingotSilver","ingotSilver",RegistryManager.tinkerHammer}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plateLead,1),new Object[]{
-		"ingotLead","ingotLead","ingotLead","ingotLead",RegistryManager.tinkerHammer}));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plateDawnstone,1),new Object[]{
-		"ingotDawnstone","ingotDawnstone","ingotDawnstone","ingotDawnstone",RegistryManager.tinkerHammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_gold,1),new Object[]{
+		"ingotGold","ingotGold","ingotGold","ingotGold",RegistryManager.tinker_hammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_iron,1),new Object[]{
+		"ingotIron","ingotIron","ingotIron","ingotIron",RegistryManager.tinker_hammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_copper,1),new Object[]{
+		"ingotCopper","ingotCopper","ingotCopper","ingotCopper",RegistryManager.tinker_hammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_silver,1),new Object[]{
+		"ingotSilver","ingotSilver","ingotSilver","ingotSilver",RegistryManager.tinker_hammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_lead,1),new Object[]{
+		"ingotLead","ingotLead","ingotLead","ingotLead",RegistryManager.tinker_hammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_dawnstone,1),new Object[]{
+		"ingotDawnstone","ingotDawnstone","ingotDawnstone","ingotDawnstone",RegistryManager.tinker_hammer}));
 		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.blendCaminite,4),new Object[]{
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.blend_caminite,4),new Object[]{
 		Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL,new ItemStack(Items.DYE,1,15)}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.plateCaminiteRaw,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.plate_caminite_raw,1),true,new Object[]{
 				"XX",
 				"XX",
-				'X', RegistryManager.blendCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stampBarRaw,1),true,new Object[]{
+				'X', RegistryManager.blend_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stamp_bar_raw,1),true,new Object[]{
 				" X ",
 				"X X",
 				" X ",
-				'X', RegistryManager.blendCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stampFlatRaw,1),true,new Object[]{
+				'X', RegistryManager.blend_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stamp_flat_raw,1),true,new Object[]{
 				"XXX",
 				"X X",
 				"XXX",
-				'X', RegistryManager.blendCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stampPlateRaw,1),true,new Object[]{
+				'X', RegistryManager.blend_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stamp_plate_raw,1),true,new Object[]{
 				"X X",
 				"   ",
 				"X X",
-				'X', RegistryManager.blendCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockCaminiteBrick,1),true,new Object[]{
+				'X', RegistryManager.blend_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_caminite_brick,1),true,new Object[]{
 				"XX",
 				"XX",
-				'X', RegistryManager.brickCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockCaminiteBrickSlab,6),true,new Object[]{
+				'X', RegistryManager.brick_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_caminite_brick_slab,6),true,new Object[]{
 				"XXX",
-				'X', RegistryManager.blockCaminiteBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsCaminiteBrick,4),true,new Object[]{
+				'X', RegistryManager.block_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairs_caminite_brick,4),true,new Object[]{
 				"X  ",
 				"XX ",
 				"XXX",
-				'X', RegistryManager.blockCaminiteBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallCaminiteBrick,6),true,new Object[]{
+				'X', RegistryManager.block_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wall_caminite_brick,6),true,new Object[]{
 				"XXX",
 				"XXX",
-				'X', RegistryManager.blockCaminiteBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenStone,4),true,new Object[]{
+				'X', RegistryManager.block_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_stone,4),true,new Object[]{
 				" S ",
 				"SAS",
 				" S ",
 				'S', "stone",
-				'A', RegistryManager.dustAsh}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenStoneSlab,6),true,new Object[]{
+				'A', RegistryManager.dust_ash}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_stone_slab,6),true,new Object[]{
 				"XXX",
-				'X', RegistryManager.ashenStone}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsAshenStone,4),true,new Object[]{
+				'X', RegistryManager.ashen_stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairs_ashen_stone,4),true,new Object[]{
 				"X  ",
 				"XX ",
 				"XXX",
-				'X', RegistryManager.ashenStone}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallAshenStone,6),true,new Object[]{
+				'X', RegistryManager.ashen_stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wall_ashen_stone,6),true,new Object[]{
 				"XXX",
 				"XXX",
-				'X', RegistryManager.ashenStone}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenBrick,4),true,new Object[]{
+				'X', RegistryManager.ashen_stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_brick,4),true,new Object[]{
 				" S ",
 				"SAS",
 				" S ",
 				'S', Blocks.STONEBRICK,
-				'A', RegistryManager.dustAsh}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenBrick,4),true,new Object[]{
+				'A', RegistryManager.dust_ash}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_brick,4),true,new Object[]{
 				"SS",
 				"SS",
-				'S', RegistryManager.ashenStone}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenBrickSlab,6),true,new Object[]{
+				'S', RegistryManager.ashen_stone}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_brick_slab,6),true,new Object[]{
 				"XXX",
-				'X', RegistryManager.ashenBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsAshenBrick,4),true,new Object[]{
+				'X', RegistryManager.ashen_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairs_ashen_brick,4),true,new Object[]{
 				"X  ",
 				"XX ",
 				"XXX",
-				'X', RegistryManager.ashenBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallAshenBrick,6),true,new Object[]{
+				'X', RegistryManager.ashen_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wall_ashen_brick,6),true,new Object[]{
 				"XXX",
 				"XXX",
-				'X', RegistryManager.ashenBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenTile,4),true,new Object[]{
+				'X', RegistryManager.ashen_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_tile,4),true,new Object[]{
 				"SS",
 				"SS",
-				'S', RegistryManager.ashenBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenTileSlab,6),true,new Object[]{
+				'S', RegistryManager.ashen_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_tile_slab,6),true,new Object[]{
 				"XXX",
-				'X', RegistryManager.ashenTile}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairsAshenTile,4),true,new Object[]{
+				'X', RegistryManager.ashen_tile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stairs_ashen_tile,4),true,new Object[]{
 				"X  ",
 				"XX ",
 				"XXX",
-				'X', RegistryManager.ashenTile}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wallAshenTile,6),true,new Object[]{
+				'X', RegistryManager.ashen_tile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.wall_ashen_tile,6),true,new Object[]{
 				"XXX",
 				"XXX",
-				'X', RegistryManager.ashenTile}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashenStone,4),true,new Object[]{
+				'X', RegistryManager.ashen_tile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_stone,4),true,new Object[]{
 				"SS",
 				"SS",
-				'S', RegistryManager.ashenTile}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockTank,1),true,new Object[]{
+				'S', RegistryManager.ashen_tile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_tank,1),true,new Object[]{
 				"B B",
 				"P P",
 				"BIB",
 				'I', "ingotIron",
 				'P', "plateIron",
-				'B', RegistryManager.brickCaminite}));
+				'B', RegistryManager.brick_caminite}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pipe,8),true,new Object[]{
 				"IPI",
 				'P', "plateIron",
@@ -244,47 +247,47 @@ public class RecipeRegistry {
 				"PBP",
 				" R ",
 				'P', RegistryManager.pipe,
-				'B', RegistryManager.plateCaminite,
+				'B', RegistryManager.plate_caminite,
 				'R', "dustRedstone"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockFurnace,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_furnace,1),true,new Object[]{
 				"BPB",
 				"BCB",
 				"IFI",
-				'P', RegistryManager.plateCaminite,
-				'B', RegistryManager.brickCaminite,
+				'P', RegistryManager.plate_caminite,
+				'B', RegistryManager.brick_caminite,
 				'F', Blocks.FURNACE,
 				'I', "ingotIron",
 				'C', "ingotCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberReceiver,4),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_receiver,4),true,new Object[]{
 				"I I",
 				"CPC",
 				'I', "ingotIron",
 				'C', "ingotCopper",
-				'P', RegistryManager.plateCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberEmitter,4),true,new Object[]{
+				'P', RegistryManager.plate_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_emitter,4),true,new Object[]{
 				" C ",
 				" C ",
 				"IPI",
 				'I', "ingotIron",
 				'C', "ingotCopper",
-				'P', RegistryManager.plateCaminite}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.copperCell,1),true,new Object[]{
+				'P', RegistryManager.plate_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.copper_cell,1),true,new Object[]{
 				"BIB",
 				"ICI",
 				"BIB",
 				'I', "ingotIron",
 				'C', "blockCopper",
-				'B', RegistryManager.blockCaminiteBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.itemPipe,8),true,new Object[]{
+				'B', RegistryManager.block_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.item_pipe,8),true,new Object[]{
 				"IPI",
 				'P', "plateLead",
 				'I', "ingotLead"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.itemPump,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.item_pump,1),true,new Object[]{
 				" R ",
 				"PBP",
 				" R ",
-				'P', RegistryManager.itemPipe,
-				'B', RegistryManager.plateCaminite,
+				'P', RegistryManager.item_pipe,
+				'B', RegistryManager.plate_caminite,
 				'R', "dustRedstone"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.bin,1),true,new Object[]{
 				"I I",
@@ -298,77 +301,77 @@ public class RecipeRegistry {
 				"X X",
 				'B', "blockIron",
 				'C', "ingotCopper",
-				'Y', RegistryManager.blockCaminiteBrick,
-				'X', RegistryManager.brickCaminite,
+				'Y', RegistryManager.block_caminite_brick,
+				'X', RegistryManager.brick_caminite,
 				'R', "dustRedstone"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stampBase,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stamp_base,1),true,new Object[]{
 				"I I",
 				"XBX",
 				'I', "ingotIron",
 				'B', Items.BUCKET,
-				'X', RegistryManager.blockCaminiteBrick}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberBore,1),true,new Object[]{
+				'X', RegistryManager.block_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_bore,1),true,new Object[]{
 				"YCY",
 				"YBY",
 				"III",
 				'I', "ingotIron",
-				'B', RegistryManager.mechCore,
-				'Y', RegistryManager.stairsCaminiteBrick,
+				'B', RegistryManager.mech_core,
+				'Y', RegistryManager.stairs_caminite_brick,
 				'C', "ingotCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mechCore,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mech_core,1),true,new Object[]{
 				"IBI",
 				" P ",
 				"I I",
 				'I', "ingotIron",
 				'P', "plateLead",
 				'B', Items.COMPASS}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mechAccessor,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mech_accessor,1),true,new Object[]{
 				"SPI",
 				'P', "plateIron",
-				'S', RegistryManager.stairsCaminiteBrick,
+				'S', RegistryManager.stairs_caminite_brick,
 				'I', "ingotIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberActivator,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_activator,1),true,new Object[]{
 				"CCC",
 				"CCC",
 				"IFI",
 				'C', "ingotCopper",
 				'F', Blocks.FURNACE,
 				'I', "plateIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stoneEdge,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.stone_edge,1),true,new Object[]{
 				"XXX",
 				"Y Y",
 				"XXX",
-				'Y', RegistryManager.brickCaminite,
-				'X', RegistryManager.wallCaminiteBrick}));
+				'Y', RegistryManager.brick_caminite,
+				'X', RegistryManager.wall_caminite_brick}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.mixer,1),true,new Object[]{
 				"PPP",
 				"PCP",
 				"IMI",
 				'P', "plateIron",
 				'C', "ingotCopper",
-				'M', RegistryManager.mechCore,
+				'M', RegistryManager.mech_core,
 				'I', "ingotIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.heatCoil,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.heat_coil,1),true,new Object[]{
 				"PPP",
 				"IBI",
 				" M ",
 				'P', "plateCopper",
 				'B', "blockCopper",
-				'M', RegistryManager.mechCore,
+				'M', RegistryManager.mech_core,
 				'I', "ingotIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.itemDropper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.item_dropper,1),true,new Object[]{
 				" P ",
 				"I I",
 				'P', RegistryManager.pipe,
 				'I', "ingotIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.largeTank,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.large_tank,1),true,new Object[]{
 				"Y Y",
 				"I I",
 				"YTY",
-				'Y', RegistryManager.stairsCaminiteBrick,
+				'Y', RegistryManager.stairs_caminite_brick,
 				'I', "ingotIron",
-				'T', RegistryManager.blockTank}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberGauge,1),true,new Object[]{
+				'T', RegistryManager.block_tank}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_gauge,1),true,new Object[]{
 				"B",
 				"P",
 				"C",
@@ -376,7 +379,7 @@ public class RecipeRegistry {
 				'I', "ingotIron",
 				'B', Items.COMPASS,
 				'C', "ingotCopper"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.itemGauge,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.item_gauge,1),true,new Object[]{
 				"B",
 				"P",
 				"L",
@@ -384,35 +387,35 @@ public class RecipeRegistry {
 				'I', "ingotIron",
 				'B', Items.COMPASS,
 				'L', "ingotLead"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.fluidGauge,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.fluid_gauge,1),true,new Object[]{
 				"B",
 				"P",
 				"I",
 				'P', Items.PAPER,
 				'I', "ingotIron",
 				'B', Items.COMPASS}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.blockLantern,4),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_lantern,4),true,new Object[]{
 				"P",
 				"E",
 				"I",
-				'E', RegistryManager.shardEmber,
+				'E', RegistryManager.shard_ember,
 				'I', "ingotIron",
 				'P', "plateIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.tinkerHammer,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.tinker_hammer,1),true,new Object[]{
 				"IBI",
 				"ISI",
 				" S ",
 				'B', "ingotLead",
 				'I', "ingotIron",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberDetector,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_detector,1),true,new Object[]{
 				" I ",
 				"CRC",
 				"CIC",
 				'C', "ingotCopper",
 				'I', "ingotIron",
 				'R', "dustRedstone"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.beamSplitter,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.beam_splitter,1),true,new Object[]{
 				" D ",
 				"CPC",
 				" I ",
@@ -420,202 +423,202 @@ public class RecipeRegistry {
 				'I', "ingotIron",
 				'P', "plateIron",
 				'D', "ingotDawnstone"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberRelay,4),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_relay,4),true,new Object[]{
 				" C ",
 				"C C",
 				" P ",
 				'C', "ingotCopper",
 				'P', "plateIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystalCell,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystal_cell,1),true,new Object[]{
 				" E ",
 				"DED",
 				"CBC",
 				'C', "blockCopper",
 				'B', "blockDawnstone",
 				'D', "plateDawnstone",
-				'E', RegistryManager.crystalEmber}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.swordCopper,1),true,new Object[]{
+				'E', RegistryManager.crystal_ember}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sword_copper,1),true,new Object[]{
 				" C ",
 				" C ",
 				" S ",
 				'C', "ingotCopper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxeCopper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxe_copper,1),true,new Object[]{
 				"CCC",
 				" S ",
 				" S ",
 				'C', "ingotCopper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovelCopper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovel_copper,1),true,new Object[]{
 				" C ",
 				" S ",
 				" S ",
 				'C', "ingotCopper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeCopper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_copper,1),true,new Object[]{
 				" CC",
 				" SC",
 				" S ",
-				'C', "ingotCopper",
+				'C', "ingot_copper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeCopper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_copper,1),true,new Object[]{
 				"CC ",
 				"CS ",
 				" S ",
 				'C', "ingotCopper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeCopper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_copper,1),true,new Object[]{
 				" CC",
 				" S ",
 				" S ",
 				'C', "ingotCopper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeCopper,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_copper,1),true,new Object[]{
 				"CC ",
 				" S ",
 				" S ",
 				'C', "ingotCopper",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.swordDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sword_dawnstone,1),true,new Object[]{
 				" C ",
 				" C ",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxeDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxe_dawnstone,1),true,new Object[]{
 				"CCC",
 				" S ",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovelDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovel_dawnstone,1),true,new Object[]{
 				" C ",
 				" S ",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_dawnstone,1),true,new Object[]{
 				" CC",
 				" SC",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_dawnstone,1),true,new Object[]{
 				"CC ",
 				"CS ",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_dawnstone,1),true,new Object[]{
 				" CC",
 				" S ",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeDawnstone,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_dawnstone,1),true,new Object[]{
 				"CC ",
 				" S ",
 				" S ",
 				'C', "ingotDawnstone",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.swordSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sword_silver,1),true,new Object[]{
 				" C ",
 				" C ",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxeSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxe_silver,1),true,new Object[]{
 				"CCC",
 				" S ",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovelSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovel_silver,1),true,new Object[]{
 				" C ",
 				" S ",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_silver,1),true,new Object[]{
 				" CC",
 				" SC",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_silver,1),true,new Object[]{
 				"CC ",
 				"CS ",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_silver,1),true,new Object[]{
 				" CC",
 				" S ",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeSilver,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_silver,1),true,new Object[]{
 				"CC ",
 				" S ",
 				" S ",
 				'C', "ingotSilver",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.swordLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sword_lead,1),true,new Object[]{
 				" C ",
 				" C ",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxeLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxe_lead,1),true,new Object[]{
 				"CCC",
 				" S ",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovelLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovel_lead,1),true,new Object[]{
 				" C ",
 				" S ",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_lead,1),true,new Object[]{
 				" CC",
 				" SC",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_lead,1),true,new Object[]{
 				"CC ",
 				"CS ",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_lead,1),true,new Object[]{
 				" CC",
 				" S ",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoeLead,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_lead,1),true,new Object[]{
 				"CC ",
 				" S ",
 				" S ",
 				'C', "ingotLead",
 				'S', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberJar,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_jar,1),true,new Object[]{
 				" C ",
 				"ISI",
 				" G ",
 				'I', "ingotIron",
-				'S', RegistryManager.shardEmber,
+				'S', RegistryManager.shard_ember,
 				'C', "ingotCopper",
 				'G', "blockGlass"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.emberCartridge,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_cartridge,1),true,new Object[]{
 				"ICI",
 				"GSG",
 				" G ",
 				'I', "ingotIron",
-				'S', RegistryManager.crystalEmber,
+				'S', RegistryManager.crystal_ember,
 				'C', "plateCopper",
 				'G', "blockGlass"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.charger,1),true,new Object[]{
@@ -627,22 +630,22 @@ public class RecipeRegistry {
 				'C', "ingotCopper",
 				'I', "ingotIron",
 				'X', "plateIron"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axeClockwork,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_clockwork,1),true,new Object[]{
 				"PCP",
 				"ISI",
 				" W ",
 				'C', "plateCopper",
 				'P', "plateDawnstone",
 				'I', "ingotDawnstone",
-				'S', RegistryManager.shardEmber,
+				'S', RegistryManager.shard_ember,
 				'W', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxeClockwork,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxe_clockwork,1),true,new Object[]{
 				"ISI",
 				" C ",
 				" W ",
 				'C', "ingotCopper",
 				'I', "ingotDawnstone",
-				'S', RegistryManager.shardEmber,
+				'S', RegistryManager.shard_ember,
 				'W', "stickWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.grandhammer,1),true,new Object[]{
 				"BIB",
@@ -652,80 +655,177 @@ public class RecipeRegistry {
 				'I', "ingotDawnstone",
 				'B', "blockDawnstone",
 				'W', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.staffEmber,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.staff_ember,1),true,new Object[]{
 				"SES",
 				"IWI",
 				" W ",
 				'S', "plateSilver",
 				'I', "ingotDawnstone",
-				'E', RegistryManager.shardEmber,
+				'E', RegistryManager.shard_ember,
 				'W', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ignitionCannon,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ignition_cannon,1),true,new Object[]{
 				" DP",
 				"DPI",
 				"SW ",
 				'I', "ingotIron",
 				'D', "ingotDawnstone",
 				'P', "plateDawnstone",
-				'S', RegistryManager.shardEmber,
+				'S', RegistryManager.shard_ember,
 				'W', "stickWood"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.cinderPlinth,1),true,new Object[]{
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.cinder_plinth,1),true,new Object[]{
 				" P ",
 				"SFS",
 				"PBP",
 				'P', "plateLead",
-				'B', RegistryManager.blockCaminiteBrick,
+				'B', RegistryManager.block_caminite_brick,
 				'S', "ingotSilver",
 				'F', Blocks.FURNACE}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.knowledge_table,1),true,new Object[]{
+				" E ",
+				"PPP",
+				"L L",
+				'P', "plankWood",
+				'L', "logWood",
+				'E', RegistryManager.golems_eye}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.alchemy_pedestal,1),true,new Object[]{
+				"D D",
+				"ICI",
+				"SBS",
+				'D', "plateDawnstone",
+				'I', "ingotDawnstone",
+				'B', "blockCopper",
+				'S', RegistryManager.stairs_caminite_brick,
+				'C', RegistryManager.crystal_ember}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.alchemy_tablet,1),true,new Object[]{
+				" D ",
+				"SXS",
+				"BIB",
+				'D', "plateDawnstone",
+				'I', "ingotDawnstone",
+				'B', RegistryManager.block_caminite_brick,
+				'S', RegistryManager.stairs_caminite_brick,
+				'X', "plateCopper"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.item_transfer,2),true,new Object[]{
+				"PLP",
+				"ILI",
+				"I I",
+				'P', "plateLead",
+				'I', "ingotLead",
+				'L', RegistryManager.item_pipe}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.beam_cannon,1),true,new Object[]{
+				"PSP",
+				"PSP",
+				"IBI",
+				'S', RegistryManager.crystal_ember,
+				'P', "plateCopper",
+				'I', "ingotDawnstone",
+				'B', RegistryManager.block_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_cloak_head,1),true,new Object[]{
+				" S ",
+				"C C",
+				"DCD",
+				'S', "string",
+				'D', "ingotDawnstone",
+				'C', RegistryManager.ashen_cloth}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_cloak_chest,1),true,new Object[]{
+				"P P",
+				"CDC",
+				"CDC",
+				'D', "ingotDawnstone",
+				'P', "plateDawnstone",
+				'C', RegistryManager.ashen_cloth}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_cloak_legs,1),true,new Object[]{
+				"CCC",
+				"D D",
+				"D D",
+				'D', "ingotDawnstone",
+				'P', "plateDawnstone",
+				'C', RegistryManager.ashen_cloth}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_cloak_boots,1),true,new Object[]{
+				"C C",
+				"C C",
+				"C C",
+				'C', RegistryManager.ashen_cloth}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.glimmer_lamp,1),true,new Object[]{
+				" P ",
+				"IGI",
+				" P ",
+				'G', RegistryManager.glimmer_shard,
+				'I', "ingotIron",
+				'P', "plateIron"}));
+		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
+		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreCopper), new ItemStack(RegistryManager.ingotCopper), 0.65f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreSilver), new ItemStack(RegistryManager.ingotSilver), 0.35f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.oreLead), new ItemStack(RegistryManager.ingotLead), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_copper), new ItemStack(RegistryManager.ingot_copper), 0.65f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_silver), new ItemStack(RegistryManager.ingot_silver), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_lead), new ItemStack(RegistryManager.ingot_lead), 0.35f);
 
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.blendCaminite), new ItemStack(RegistryManager.brickCaminite), 0.35f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.plateCaminiteRaw), new ItemStack(RegistryManager.plateCaminite), 0.35f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.stampBarRaw), new ItemStack(RegistryManager.stampBar), 0.35f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.stampPlateRaw), new ItemStack(RegistryManager.stampPlate), 0.35f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.stampFlatRaw), new ItemStack(RegistryManager.stampFlat), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.blend_caminite), new ItemStack(RegistryManager.brick_caminite), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.plate_caminite_raw), new ItemStack(RegistryManager.plate_caminite), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.stamp_bar_raw), new ItemStack(RegistryManager.stamp_bar), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.stamp_plate_raw), new ItemStack(RegistryManager.stamp_plate), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.stamp_flat_raw), new ItemStack(RegistryManager.stamp_flat), 0.35f);
 		
-		meltingOreRecipes.put("oreIron", new ItemMeltingOreRecipe("oreIron",new FluidStack(RegistryManager.fluidMoltenIron,288)));
-		meltingOreRecipes.put("ingotIron", new ItemMeltingOreRecipe("ingotIron",new FluidStack(RegistryManager.fluidMoltenIron,144)));
-		meltingOreRecipes.put("nuggetIron", new ItemMeltingOreRecipe("nuggetIron",new FluidStack(RegistryManager.fluidMoltenIron,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("oreIron",new FluidStack(RegistryManager.fluid_molten_iron,288)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("ingotIron",new FluidStack(RegistryManager.fluid_molten_iron,144)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("nuggetIron",new FluidStack(RegistryManager.fluid_molten_iron,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("plateIron",new FluidStack(RegistryManager.fluid_molten_iron,144)));
 
-		meltingOreRecipes.put("oreGold", new ItemMeltingOreRecipe("oreGold",new FluidStack(RegistryManager.fluidMoltenGold,288)));
-		meltingOreRecipes.put("ingotGold", new ItemMeltingOreRecipe("ingotGold",new FluidStack(RegistryManager.fluidMoltenGold,144)));
-		meltingOreRecipes.put("nuggetGold", new ItemMeltingOreRecipe("nuggetGold",new FluidStack(RegistryManager.fluidMoltenGold,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("oreGold",new FluidStack(RegistryManager.fluid_molten_gold,288)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("ingotGold",new FluidStack(RegistryManager.fluid_molten_gold,144)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("nuggetGold",new FluidStack(RegistryManager.fluid_molten_gold,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("plateGold",new FluidStack(RegistryManager.fluid_molten_gold,144)));
 
-		meltingOreRecipes.put("oreSilver", new ItemMeltingOreRecipe("oreSilver",new FluidStack(RegistryManager.fluidMoltenSilver,288)));
-		meltingOreRecipes.put("ingotSilver", new ItemMeltingOreRecipe("ingotSilver",new FluidStack(RegistryManager.fluidMoltenSilver,144)));
-		meltingOreRecipes.put("nuggetSilver", new ItemMeltingOreRecipe("nuggetSilver",new FluidStack(RegistryManager.fluidMoltenSilver,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("oreSilver",new FluidStack(RegistryManager.fluid_molten_silver,288)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("ingotSilver",new FluidStack(RegistryManager.fluid_molten_silver,144)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("nuggetSilver",new FluidStack(RegistryManager.fluid_molten_silver,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("plateSilver",new FluidStack(RegistryManager.fluid_molten_silver,144)));
 
-		meltingOreRecipes.put("oreCopper", new ItemMeltingOreRecipe("oreCopper",new FluidStack(RegistryManager.fluidMoltenCopper,288)));
-		meltingOreRecipes.put("ingotCopper", new ItemMeltingOreRecipe("ingotCopper",new FluidStack(RegistryManager.fluidMoltenCopper,144)));
-		meltingOreRecipes.put("nuggetCopper", new ItemMeltingOreRecipe("nuggetCopper",new FluidStack(RegistryManager.fluidMoltenCopper,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("oreCopper",new FluidStack(RegistryManager.fluid_molten_copper,288)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("ingotCopper",new FluidStack(RegistryManager.fluid_molten_copper,144)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("nuggetCopper",new FluidStack(RegistryManager.fluid_molten_copper,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("plateCopper",new FluidStack(RegistryManager.fluid_molten_copper,144)));
 
-		meltingOreRecipes.put("oreLead", new ItemMeltingOreRecipe("oreLead",new FluidStack(RegistryManager.fluidMoltenLead,288)));
-		meltingOreRecipes.put("ingotLead", new ItemMeltingOreRecipe("ingotLead",new FluidStack(RegistryManager.fluidMoltenLead,144)));
-		meltingOreRecipes.put("nuggetLead", new ItemMeltingOreRecipe("nuggetLead",new FluidStack(RegistryManager.fluidMoltenLead,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("oreLead",new FluidStack(RegistryManager.fluid_molten_lead,288)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("ingotLead",new FluidStack(RegistryManager.fluid_molten_lead,144)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("nuggetLead",new FluidStack(RegistryManager.fluid_molten_lead,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("plateLead",new FluidStack(RegistryManager.fluid_molten_lead,144)));
 		
-		meltingOreRecipes.put("ingotDawnstone", new ItemMeltingOreRecipe("ingotDawnstone",new FluidStack(RegistryManager.fluidMoltenDawnstone,144)));
-		meltingOreRecipes.put("nuggetDawnstone", new ItemMeltingOreRecipe("nuggetDawnstone",new FluidStack(RegistryManager.fluidMoltenDawnstone,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("ingotDawnstone",new FluidStack(RegistryManager.fluid_molten_dawnstone,144)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("nuggetDawnstone",new FluidStack(RegistryManager.fluid_molten_dawnstone,16)));
+		meltingOreRecipes.add(new ItemMeltingOreRecipe("plateDawnstone",new FluidStack(RegistryManager.fluid_molten_dawnstone,144)));
 		
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenIron,144),EnumStampType.TYPE_BAR,new ItemStack(Items.IRON_INGOT,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenGold,144),EnumStampType.TYPE_BAR,new ItemStack(Items.GOLD_INGOT,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenLead,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotLead,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenSilver,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotSilver,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenCopper,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotCopper,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenDawnstone,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingotDawnstone,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_iron,144),EnumStampType.TYPE_BAR,new ItemStack(Items.IRON_INGOT,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_gold,144),EnumStampType.TYPE_BAR,new ItemStack(Items.GOLD_INGOT,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_lead,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingot_lead,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_silver,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingot_silver,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_copper,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingot_copper,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_dawnstone,144),EnumStampType.TYPE_BAR,new ItemStack(RegistryManager.ingot_dawnstone,1),false,false));
 		
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenIron,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plateIron,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenGold,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plateGold,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenLead,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plateLead,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenSilver,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plateSilver,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenCopper,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plateCopper,1),false,false));
-		stampingRecipes.add(new ItemStampingRecipe(null,new FluidStack(RegistryManager.fluidMoltenDawnstone,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plateDawnstone,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_iron,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plate_iron,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_gold,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plate_gold,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_lead,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plate_lead,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_silver,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plate_silver,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_copper,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plate_copper,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(ItemStack.EMPTY,new FluidStack(RegistryManager.fluid_molten_dawnstone,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.plate_dawnstone,1),false,false));
+		stampingRecipes.add(new ItemWasteStampingRecipe());
 		
-		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluidMoltenCopper,4),new FluidStack(RegistryManager.fluidMoltenGold,4)}, new FluidStack(RegistryManager.fluidMoltenDawnstone,16)));
+		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_iron,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_iron,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_lead,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_lead,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_silver,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_silver,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_copper,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_copper,1),false,false));
+		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_dawnstone,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_dawnstone,1),false,false));
+		
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,4),new FluidStack(RegistryManager.fluid_molten_gold,4)}, new FluidStack(RegistryManager.fluid_molten_dawnstone,16)));
+	
+		alchemyRecipes.add(new AlchemyRecipe(8, 16, 0, 0, 8, 16, 0, 0, 0, 0, new ItemStack(RegistryManager.ingot_copper), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.ore_copper,1)));
+		alchemyRecipes.add(new AlchemyRecipe(8, 16, 0, 0, 0, 0, 8, 16, 0, 0, new ItemStack(RegistryManager.ingot_silver), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.ore_silver,1)));
+		alchemyRecipes.add(new AlchemyRecipe(8, 16, 0, 0, 0, 0, 0, 0, 8, 16, new ItemStack(RegistryManager.ingot_lead), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.ore_lead,1)));
+		alchemyRecipes.add(new AlchemyRecipe(8, 16, 8, 16, 0, 0, 0, 0, 0, 0, new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(Blocks.GOLD_ORE,1)));
+		alchemyRecipes.add(new AlchemyRecipe(16, 32, 0, 0, 0, 0, 0, 0, 0, 0, new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(Blocks.IRON_ORE,1)));
+		alchemyRecipes.add(new AlchemyRecipe(12, 24, 0, 0, 0, 0, 0, 0, 12, 24, new ItemStack(Blocks.WOOL), new ItemStack(RegistryManager.dust_ash), new ItemStack(RegistryManager.dust_ash), new ItemStack(Items.STRING), new ItemStack(Items.STRING), new ItemStack(RegistryManager.ashen_cloth,2)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 32, 48, 0, 0, 0, 0, 24, 40, new ItemStack(Items.DIAMOND), new ItemStack(RegistryManager.ingot_dawnstone), new ItemStack(Items.COAL), new ItemStack(Items.COAL), new ItemStack(Items.COAL), new ItemStack(RegistryManager.inflictor_gem,1)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 64, 80, 0, 0, 0, 0, 0, 0, new ItemStack(Items.DIAMOND), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.REDSTONE), new ItemStack(Items.REDSTONE), new ItemStack(RegistryManager.glimmer_shard,1)));
 	}
 	
 	public static ItemStampingRecipe getStampingRecipe(ItemStack stack, FluidStack fluid, EnumStampType type){
@@ -746,6 +846,24 @@ public class RecipeRegistry {
 		return null;
 	}
 	
+	public static ItemMeltingRecipe getMeltingRecipe(ItemStack stack){
+		for (int i = 0; i < meltingRecipes.size(); i ++){
+			if (meltingRecipes.get(i).matches(stack)){
+				return meltingRecipes.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public static ItemMeltingOreRecipe getMeltingOreRecipe(ItemStack stack){
+		for (int i = 0; i < meltingOreRecipes.size(); i ++){
+			if (meltingOreRecipes.get(i).matches(stack)){
+				return meltingOreRecipes.get(i);
+			}
+		}
+		return null;
+	}
+	
 	public static FluidMixingRecipe getMixingRecipe(ArrayList<FluidStack> fluids){
 		for (int i = 0; i < mixingRecipes.size(); i ++){
 			if (mixingRecipes.get(i).matches(fluids)){
@@ -755,21 +873,25 @@ public class RecipeRegistry {
 		return null;
 	}
 	
-	public static ArrayList<ItemMeltingRecipe> getMeltingRecipeList(){
-		Iterator<ItemMeltingRecipe> i = meltingRecipes.values().iterator();
-		ArrayList<ItemMeltingRecipe> recipes = new ArrayList<ItemMeltingRecipe>();
-		while (i.hasNext()){
-			recipes.add(i.next());
+	public static AlchemyRecipe getAlchemyRecipe(ItemStack center, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4){
+		List<ItemStack> list = new ArrayList<ItemStack>();
+		if (stack1 != ItemStack.EMPTY){
+			list.add(stack1);
 		}
-		return recipes;
-	}
-	
-	public static ArrayList<ItemMeltingOreRecipe> getMeltingOreRecipeList(){
-		Iterator<ItemMeltingOreRecipe> i = meltingOreRecipes.values().iterator();
-		ArrayList<ItemMeltingOreRecipe> recipes = new ArrayList<ItemMeltingOreRecipe>();
-		while (i.hasNext()){
-			recipes.add(i.next());
+		if (stack2 != ItemStack.EMPTY){
+			list.add(stack2);
 		}
-		return recipes;
+		if (stack3 != ItemStack.EMPTY){
+			list.add(stack3);
+		}
+		if (stack4 != ItemStack.EMPTY){
+			list.add(stack4);
+		}
+		for (int i = 0; i < alchemyRecipes.size(); i ++){
+			if (alchemyRecipes.get(i).matches(center, list)){
+				return alchemyRecipes.get(i);
+			}
+		}
+		return null;
 	}
 }

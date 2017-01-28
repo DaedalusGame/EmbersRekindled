@@ -34,12 +34,12 @@ public class StampingRecipeWrapper extends BlankRecipeWrapper {
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		if (!isOreRecipe){
-			ItemStack stampStack = new ItemStack(RegistryManager.stampFlat, 1);
+			ItemStack stampStack = new ItemStack(RegistryManager.stamp_flat, 1);
 			if (recipe.getStamp() == EnumStampType.TYPE_BAR){
-				stampStack = new ItemStack(RegistryManager.stampBar,1);
+				stampStack = new ItemStack(RegistryManager.stamp_bar,1);
 			}
 			if (recipe.getStamp() == EnumStampType.TYPE_PLATE){
-				stampStack = new ItemStack(RegistryManager.stampPlate,1);
+				stampStack = new ItemStack(RegistryManager.stamp_plate,1);
 			}
 			ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
 			stacks.add(recipe.getStack());
@@ -51,12 +51,12 @@ public class StampingRecipeWrapper extends BlankRecipeWrapper {
 		else {
 			ArrayList<ItemStack> validStacks = new ArrayList<ItemStack>(OreDictionary.getOres(oreRecipe.getOre()));
 			ArrayList<ItemStack> stampStacks = new ArrayList<ItemStack>();
-			ItemStack stampStack = new ItemStack(RegistryManager.stampFlat, 1);
+			ItemStack stampStack = new ItemStack(RegistryManager.stamp_flat, 1);
 			if (recipe.getStamp() == EnumStampType.TYPE_BAR){
-				stampStack = new ItemStack(RegistryManager.stampBar,1);
+				stampStack = new ItemStack(RegistryManager.stamp_bar,1);
 			}
 			if (recipe.getStamp() == EnumStampType.TYPE_PLATE){
-				stampStack = new ItemStack(RegistryManager.stampPlate,1);
+				stampStack = new ItemStack(RegistryManager.stamp_plate,1);
 			}
 			stampStacks.add(stampStack);
 			ArrayList< List<ItemStack> > recipeItems = new ArrayList< List<ItemStack> >();

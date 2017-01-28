@@ -9,12 +9,12 @@ import teamroots.embers.RegistryManager;
 
 public class FluidMoltenDawnstone extends Fluid {
 	public FluidMoltenDawnstone() {
-		super("dawnstone",new ResourceLocation(Embers.MODID+":blocks/moltenDawnstoneStill"),new ResourceLocation(Embers.MODID+":blocks/moltenDawnstoneFlowing"));
+		super("dawnstone",new ResourceLocation(Embers.MODID+":blocks/molten_dawnstone_still"),new ResourceLocation(Embers.MODID+":blocks/molten_dawnstone_flowing"));
 		setViscosity(6000);
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
-		setBlock(RegistryManager.blockMoltenDawnstone);
+		setBlock(RegistryManager.block_molten_dawnstone);
 		setUnlocalizedName("dawnstone");
 	}
 	

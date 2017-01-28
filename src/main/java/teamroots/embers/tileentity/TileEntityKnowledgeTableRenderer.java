@@ -23,11 +23,11 @@ public class TileEntityKnowledgeTableRenderer extends TileEntitySpecialRenderer 
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
 		if (tile instanceof TileEntityKnowledgeTable){
 			TileEntityKnowledgeTable table = (TileEntityKnowledgeTable)tile;
-			if (table.inventory.getStackInSlot(0) != null){
-				if (Minecraft.getMinecraft().theWorld != null){
+			if (table.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().theWorld,x,y,z,new ItemStack(table.inventory.getStackInSlot(0).getItem(),1,table.inventory.getStackInSlot(0).getMetadata()));
+					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(table.inventory.getStackInSlot(0).getItem(),1,table.inventory.getStackInSlot(0).getMetadata()));
 					item.hoverStart = 0;
 					item.isCollided = false;
 					GL11.glTranslated(x+0.5, y+0.75, z+0.5);

@@ -6,6 +6,6 @@ public class DamageEmber extends DamageSource {
 
 	public DamageEmber() {
 		super("ember");
+		this.setMagicDamage();
 	}
-
 }

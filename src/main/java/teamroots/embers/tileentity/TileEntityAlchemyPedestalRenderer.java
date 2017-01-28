@@ -31,11 +31,11 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
 		if (tile instanceof TileEntityAlchemyPedestal){
 			TileEntityAlchemyPedestal pedestal = (TileEntityAlchemyPedestal)tile;
-			if (pedestal.inventory.getStackInSlot(1) != null){
-				if (Minecraft.getMinecraft().theWorld != null){
+			if (pedestal.inventory.getStackInSlot(1) != ItemStack.EMPTY){
+				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().theWorld,x,y,z,new ItemStack(pedestal.inventory.getStackInSlot(1).getItem(),1,pedestal.inventory.getStackInSlot(1).getMetadata()));
+					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(pedestal.inventory.getStackInSlot(1).getItem(),1,pedestal.inventory.getStackInSlot(1).getMetadata()));
 					item.hoverStart = 0;
 					item.isCollided = false;
 					GL11.glTranslated(x+0.5, y+0.5, z+0.5);
@@ -45,8 +45,8 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 					GlStateManager.popAttrib();
 				}
 			}
-			if (pedestal.inventory.getStackInSlot(0) != null){
-				float coeff = pedestal.inventory.getStackInSlot(0).stackSize/64.0f;
+			if (pedestal.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+				float coeff = pedestal.inventory.getStackInSlot(0).getCount()/64.0f;
 	            
 	            Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	            Tessellator tess = Tessellator.getInstance();

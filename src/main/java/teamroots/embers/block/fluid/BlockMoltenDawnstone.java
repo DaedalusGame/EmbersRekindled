@@ -23,16 +23,16 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.block.IModeledBlock;
 
 public class BlockMoltenDawnstone extends BlockFluidClassic implements IModeledBlock {
-	public static FluidStack stack = new FluidStack(RegistryManager.fluidMoltenDawnstone,1000);
+	public static FluidStack stack = new FluidStack(RegistryManager.fluid_molten_dawnstone,1000);
 	
 	public BlockMoltenDawnstone(String name, boolean addToTab) {
-		super(RegistryManager.fluidMoltenDawnstone,Material.LAVA);
+		super(RegistryManager.fluid_molten_dawnstone,Material.LAVA);
 		setRegistryName(Embers.MODID+":"+name);
 		if (addToTab){
 			this.setCreativeTab(Embers.tab);
 		}
 		this.setQuantaPerBlock(6);
-		RegistryManager.fluidMoltenDawnstone.setBlock(this);
+		RegistryManager.fluid_molten_dawnstone.setBlock(this);
 		GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
@@ -60,7 +60,7 @@ public class BlockMoltenDawnstone extends BlockFluidClassic implements IModeledB
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void initModel(){
-        Block block = RegistryManager.blockMoltenDawnstone;
+        Block block = RegistryManager.block_molten_dawnstone;
         Item item = Item.getItemFromBlock(block);   
 
         ModelBakery.registerItemVariants(item);

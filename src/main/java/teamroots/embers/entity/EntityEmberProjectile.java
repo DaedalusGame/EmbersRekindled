@@ -112,7 +112,7 @@ public class EntityEmberProjectile extends Entity {
 		}
 		if (entities.size() > 0){
 			EntityLivingBase target = entities.get(0);
-			DamageSource source = RegistryManager.damageEmber;
+			DamageSource source = RegistryManager.damage_ember;
 			if (getEntityWorld().getPlayerEntityByUUID(id) != null){
 				EntityPlayer player = getEntityWorld().getPlayerEntityByUUID(id);
 				source = DamageSource.causePlayerDamage(player);

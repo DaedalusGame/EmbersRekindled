@@ -10,7 +10,6 @@ public class MelterRecipeHandler implements IRecipeHandler<MeltingRecipeWrapper>
 		return MeltingRecipeWrapper.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "embers.melter";
 	}

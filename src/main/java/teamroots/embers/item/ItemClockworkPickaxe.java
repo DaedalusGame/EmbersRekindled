@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,48 +67,6 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
-		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
-			double posX = player.posX;
-			double posY = player.posY+player.getEyeHeight();
-			double posZ = player.posZ;
-			boolean doContinue = true;
-			for (double i = 0; i < 40.0 && doContinue; i ++){
-				for (int j = 0; j < 5; j ++){
-					posX += 0.1f*player.getLookVec().xCoord;
-					posY += 0.1f*player.getLookVec().yCoord;
-					posZ += 0.1f*player.getLookVec().zCoord;
-				}
-				IBlockState state = world.getBlockState(new BlockPos(posX,posY,posZ));
-				if (state.isFullCube() && state.isOpaqueCube() && state.getBlockHardness(world, new BlockPos(posX,posY,posZ)) > 0){
-					doContinue = false;
-					BlockPos pos = new BlockPos(posX,posY,posZ);
-					if (!world.isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5));
-					}
-					for (int xx = -1; xx < 2; xx ++){
-						for (int yy = -1; yy < 2; yy ++){
-							for (int zz = -1; zz < 2; zz ++){
-								BlockPos newPos = pos.add(xx,yy,zz);
-								if (this.canHarvestBlock(world.getBlockState(newPos),stack) && world.getBlockState(newPos).getBlockHardness(world, new BlockPos(posX,posY,posZ)) > 0){
-									IBlockState tempState = world.getBlockState(newPos);
-									tempState.getBlock().onBlockHarvested(world, newPos, tempState, player);
-									world.destroyBlock(newPos, true);
-									world.notifyBlockUpdate(newPos, state, Blocks.AIR.getDefaultState(), 3);
-								}
-							}
-						}
-					}
-					stack.getTagCompound().setInteger("cooldown",80);
-					EmberInventoryUtil.removeEmber(player, 25.0);
-				}
-			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
-		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
-	}
-	
-	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state){
         Material material = state.getMaterial();
         if (stack.hasTagCompound()){
@@ -138,15 +98,25 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
-		return this.getHarvestLevel(stack, state.getBlock().getHarvestTool(state)) >= state.getBlock().getHarvestLevel(state);
+		return this.getHarvestLevel(stack, state.getBlock().getHarvestTool(state), null, state) >= state.getBlock().getHarvestLevel(state);
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack){
+		return true;
+	}
+	
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant){
+		return enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER;
 	}
 	
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){
 		if (oldStack.hasTagCompound() && newStack.hasTagCompound()){
-			return slotChanged || oldStack.getTagCompound().getBoolean("poweredOn") != newStack.getTagCompound().getBoolean("poweredOn");
+			return slotChanged || oldStack.getTagCompound().getBoolean("poweredOn") != newStack.getTagCompound().getBoolean("poweredOn") || newStack.getItem() != oldStack.getItem();
 		}
-		return slotChanged;
+		return slotChanged || newStack.getItem() != oldStack.getItem();
 	}
 	
 	@Override
@@ -199,5 +169,13 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	@Override
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().toString()));
+	}
+
+	@Override
+	public boolean hasEmber(ItemStack stack) {
+		if (stack.hasTagCompound()){
+			return stack.getTagCompound().getBoolean("poweredOn");
+		}
+		return false;
 	}
 }

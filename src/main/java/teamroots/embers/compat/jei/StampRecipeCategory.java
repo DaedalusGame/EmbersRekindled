@@ -19,7 +19,7 @@ public class StampRecipeCategory extends BlankRecipeCategory {
     private final IDrawable background;
     private final String name;
     
-    public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jeiStamp.png");
+    public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jei_stamp.png");
 
     public StampRecipeCategory(IGuiHelper helper){
     	
@@ -57,7 +57,7 @@ public class StampRecipeCategory extends BlankRecipeCategory {
         		stacks.set(1, ingredients.getInputs(ItemStack.class).get(1));
         	}
         }
-        stacks.set(2,ingredients.getOutputs(ItemStack.class));
+        stacks.set(2,ingredients.getOutputs(ItemStack.class).get(0));
         
         IGuiFluidStackGroup fluid = layout.getFluidStacks();
         fluid.init(3, true, 47, 48, 16, 32, 1500, true, null);

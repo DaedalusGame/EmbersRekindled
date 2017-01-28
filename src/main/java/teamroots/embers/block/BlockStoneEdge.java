@@ -61,7 +61,7 @@ public class BlockStoneEdge extends BlockBase {
 	}
 
     @Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean b)
     {
 		if (state.getValue(BlockStoneEdge.state) == 9 || state.getValue(BlockStoneEdge.state) == 4){
 	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_ZFACE);
@@ -119,7 +119,7 @@ public class BlockStoneEdge extends BlockBase {
 		if (world.getTileEntity(pos) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world, pos, world.getBlockState(pos), player);
 		}
-		if (world.getBlockState(pos).getBlock() == RegistryManager.stoneEdge){
+		if (world.getBlockState(pos).getBlock() == RegistryManager.stone_edge){
 			if (world.getBlockState(pos).getValue(BlockStoneEdge.state) == 8){
 				boolean foundBlock = false;
 				for (int i = 1; i < 64 && !foundBlock; i ++){
@@ -129,7 +129,7 @@ public class BlockStoneEdge extends BlockBase {
 					}
 				}
 				if (!world.isRemote && !player.capabilities.isCreativeMode){
-					world.spawnEntityInWorld(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+					world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
 				}
 			}
 		}
@@ -248,15 +248,15 @@ public class BlockStoneEdge extends BlockBase {
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
 		if (state.getValue(BlockStoneEdge.state) == 0){
-			world.setBlockState(pos, RegistryManager.stoneEdge.getStateFromMeta(8));
-			world.setBlockState(pos.north(), RegistryManager.stoneEdge.getStateFromMeta(9));
-			world.setBlockState(pos.north().west(), RegistryManager.stoneEdge.getStateFromMeta(1));
-			world.setBlockState(pos.west(), RegistryManager.stoneEdge.getStateFromMeta(2));
-			world.setBlockState(pos.south().west(), RegistryManager.stoneEdge.getStateFromMeta(3));
-			world.setBlockState(pos.south(), RegistryManager.stoneEdge.getStateFromMeta(4));
-			world.setBlockState(pos.south().east(), RegistryManager.stoneEdge.getStateFromMeta(5));
-			world.setBlockState(pos.east(), RegistryManager.stoneEdge.getStateFromMeta(6));
-			world.setBlockState(pos.north().east(), RegistryManager.stoneEdge.getStateFromMeta(7));
+			world.setBlockState(pos, RegistryManager.stone_edge.getStateFromMeta(8));
+			world.setBlockState(pos.north(), RegistryManager.stone_edge.getStateFromMeta(9));
+			world.setBlockState(pos.north().west(), RegistryManager.stone_edge.getStateFromMeta(1));
+			world.setBlockState(pos.west(), RegistryManager.stone_edge.getStateFromMeta(2));
+			world.setBlockState(pos.south().west(), RegistryManager.stone_edge.getStateFromMeta(3));
+			world.setBlockState(pos.south(), RegistryManager.stone_edge.getStateFromMeta(4));
+			world.setBlockState(pos.south().east(), RegistryManager.stone_edge.getStateFromMeta(5));
+			world.setBlockState(pos.east(), RegistryManager.stone_edge.getStateFromMeta(6));
+			world.setBlockState(pos.north().east(), RegistryManager.stone_edge.getStateFromMeta(7));
 		}
 		boolean foundBlock = false;
 		for (int i = 0; i < 64 && !foundBlock; i ++){

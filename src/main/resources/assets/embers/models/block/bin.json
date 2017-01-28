@@ -2,9 +2,9 @@
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "block/block",
     "textures": {
-        "0": "embers:blocks/chuteTexture",
-        "1": "embers:blocks/chuteBottom",
-        "particle": "embers:blocks/chuteTexture"
+        "0": "embers:blocks/chute_texture",
+        "1": "embers:blocks/chute_bottom",
+        "particle": "embers:blocks/chute_texture"
     },
     "elements": [
         {

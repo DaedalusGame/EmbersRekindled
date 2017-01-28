@@ -9,12 +9,12 @@ import teamroots.embers.RegistryManager;
 
 public class FluidMoltenSilver extends Fluid {
 	public FluidMoltenSilver() {
-		super("silver",new ResourceLocation(Embers.MODID+":blocks/moltenSilverStill"),new ResourceLocation(Embers.MODID+":blocks/moltenSilverFlowing"));
+		super("silver",new ResourceLocation(Embers.MODID+":blocks/molten_silver_still"),new ResourceLocation(Embers.MODID+":blocks/molten_silver_flowing"));
 		setViscosity(6000);
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
-		setBlock(RegistryManager.blockMoltenSilver);
+		setBlock(RegistryManager.block_molten_silver);
 		setUnlocalizedName("silver");
 	}
 	

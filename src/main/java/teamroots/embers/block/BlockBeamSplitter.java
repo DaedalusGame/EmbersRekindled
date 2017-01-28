@@ -1,31 +1,17 @@
 package teamroots.embers.block;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityBeamSplitter;
-import teamroots.embers.tileentity.TileEntityBin;
-import teamroots.embers.tileentity.TileEntityTank;
 
 public class BlockBeamSplitter extends BlockTEBase {
 	public static AxisAlignedBB AABB_UP = new AxisAlignedBB(0.1875,0.1875,0.1875,0.8125,1.0,0.8125);
@@ -38,7 +24,8 @@ public class BlockBeamSplitter extends BlockTEBase {
 		super(material, name, addToTab);
 	}
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+    @Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
         if (state.getValue(isConnectedUp)){
         	return AABB_UP;
@@ -71,7 +58,7 @@ public class BlockBeamSplitter extends BlockTEBase {
 	}
 	
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
 		IBlockState state = getDefaultState();
 		if (placer.getHorizontalFacing() == EnumFacing.EAST || placer.getHorizontalFacing() == EnumFacing.WEST){
 			state = state.withProperty(isXAligned, true);

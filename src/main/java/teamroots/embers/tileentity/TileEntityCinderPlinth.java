@@ -24,6 +24,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -40,6 +41,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityCinderPlinth.this.markDirty();
+        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityCinderPlinth.this));
         }
 	};
 	Random random = new Random();
@@ -107,8 +109,9 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null){
+			EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
 			if (!getWorld().isRemote){
@@ -117,9 +120,9 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 			return true;
 		}
 		else {
-			if (inventory.getStackInSlot(0) != null){
+			if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
 				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).stackSize, false));
+					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
 					if (!getWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
@@ -141,10 +144,10 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 	@Override
 	public void update() {
 		turnRate = 1;
-		if (inventory.getStackInSlot(0) != null && capability.getEmber() > 0){
+		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && capability.getEmber() > 0){
 			progress ++;
 			if (getWorld().isRemote){
-				getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, getPos().getX()+0.5, getPos().getY()+0.875, getPos().getZ()+0.5, 0, 0.05f*(random.nextFloat()+1.0f), 0, 0);
+				ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()+0.5f, (float)getPos().getY()+0.875f, (float)getPos().getZ()+0.5f, 0.0125f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 72, 72, 72, 3.0f+random.nextFloat(), 48);
 			}
 			capability.removeAmount(0.5, true);
 			if (progress > 40){
@@ -153,16 +156,16 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 				TileEntity tile = getWorld().getTileEntity(getPos().down());
 				boolean doSpawn = true;
 				if (tile instanceof TileEntityBin){
-					if (((TileEntityBin) tile).inventory.getStackInSlot(0) == null){
-						((TileEntityBin) tile).inventory.insertItem(0, new ItemStack(RegistryManager.dustAsh,1), false);
+					if (((TileEntityBin) tile).inventory.getStackInSlot(0) == ItemStack.EMPTY){
+						((TileEntityBin) tile).inventory.insertItem(0, new ItemStack(RegistryManager.dust_ash,1), false);
 						tile.markDirty();
 						if (!getWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
 						}
 						doSpawn = false;
 					}
-					else if (((TileEntityBin) tile).inventory.getStackInSlot(0).getItem() == RegistryManager.dustAsh && ((TileEntityBin) tile).inventory.getStackInSlot(0).stackSize < 64){
-						((TileEntityBin) tile).inventory.insertItem(0, new ItemStack(RegistryManager.dustAsh,1), false);
+					else if (((TileEntityBin) tile).inventory.getStackInSlot(0).getItem() == RegistryManager.dust_ash && ((TileEntityBin) tile).inventory.getStackInSlot(0).getCount() < 64){
+						((TileEntityBin) tile).inventory.insertItem(0, new ItemStack(RegistryManager.dust_ash,1), false);
 						tile.markDirty();
 						if (!getWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
@@ -171,7 +174,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 					}
 				}
 				if (doSpawn && !getWorld().isRemote){
-					getWorld().spawnEntityInWorld(new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0,getPos().getZ()+0.5,new ItemStack(RegistryManager.dustAsh,1)));
+					getWorld().spawnEntity(new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0,getPos().getZ()+0.5,new ItemStack(RegistryManager.dust_ash,1)));
 				}
 			}
 			markDirty();

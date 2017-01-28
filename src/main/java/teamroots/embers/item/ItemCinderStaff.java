@@ -18,7 +18,8 @@ import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemCinderStaff extends ItemBase {
 	public ItemCinderStaff() {
-		super("staffEmber", true);
+		super("staff_ember", true);
+		this.setMaxStackSize(1);
 	}
 	
 	@Override
@@ -28,14 +29,14 @@ public class ItemCinderStaff extends ItemBase {
 			float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
 			EntityEmberProjectile proj = new EntityEmberProjectile(world);
 			proj.initCustom(entity.posX+entity.getLookVec().xCoord*spawnDistance,entity.posY+entity.getEyeHeight()+entity.getLookVec().yCoord*spawnDistance,entity.posZ+entity.getLookVec().zCoord*spawnDistance,entity.getLookVec().xCoord*0.85, entity.getLookVec().yCoord*0.85, entity.getLookVec().zCoord*0.85, charge, entity.getUniqueID());
-			world.spawnEntityInWorld(proj);
+			world.spawnEntity(proj);
 		}
 		stack.getTagCompound().setInteger("cooldown", 10);
 	}
 	
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){
-		return slotChanged;
+		return slotChanged || newStack.getItem() != oldStack.getItem();
 	}
 	
 	@Override
@@ -70,9 +71,10 @@ public class ItemCinderStaff extends ItemBase {
 	public EnumAction getItemUseAction(ItemStack stack){
 		return EnumAction.BOW;
 	}
-	
+
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
+		ItemStack stack = player.getHeldItem(hand);
 		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
 			EmberInventoryUtil.removeEmber(player, 25.0);
 			player.setActiveHand(hand);

@@ -41,13 +41,15 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
         	TileEntityCrystalCell.this.markDirty();
         	if (!TileEntityCrystalCell.this.getWorld().isRemote){
         		IBlockState state = TileEntityCrystalCell.this.getWorld().getBlockState(TileEntityCrystalCell.this.getPos());
-        		TileEntityCrystalCell.this.getWorld().notifyBlockUpdate(TileEntityCrystalCell.this.getPos(), state, state, 8);
+    			if (!getWorld().isRemote){
+    				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityCrystalCell.this));
+    			}
         	}
         }
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (stack.getItem() != RegistryManager.shardEmber && stack.getItem() != RegistryManager.crystalEmber){
+        	if (stack.getItem() != RegistryManager.shard_ember && stack.getItem() != RegistryManager.crystal_ember){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -96,7 +98,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -118,26 +120,26 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	@Override
 	public void update() {
 		ticksExisted ++;
-		if (inventory.getStackInSlot(0) != null && ticksExisted % 4 == 0){
+		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && ticksExisted % 4 == 0){
 			ItemStack stack = inventory.extractItem(0, 1, true);
-			if (!getWorld().isRemote && stack != null){
+			if (!getWorld().isRemote && stack != ItemStack.EMPTY){
 				inventory.extractItem(0, 1, false);
-				if (stack.getItem() == RegistryManager.shardEmber){
-					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+30000.0));
+				if (stack.getItem() == RegistryManager.shard_ember){
+					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+15000.0));
 					markDirty();
 					if (!getWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 					}
 				}
-				else if (stack.getItem() == RegistryManager.crystalEmber){
-					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+180000.0));
+				else if (stack.getItem() == RegistryManager.crystal_ember){
+					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+90000.0));
 					markDirty();
 					if (!getWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 					}
 				}
 			}
-			if (getWorld().isRemote && stack != null){
+			if (getWorld().isRemote && stack != ItemStack.EMPTY){
 				double angle = random.nextDouble()*2.0*Math.PI;
 				double x = getPos().getX()+0.5+0.5*Math.sin(angle);
 				double z = getPos().getZ()+0.5+0.5*Math.cos(angle);

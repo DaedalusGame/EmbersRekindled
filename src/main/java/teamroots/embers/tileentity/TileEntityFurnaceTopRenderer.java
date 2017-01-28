@@ -35,7 +35,7 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 			Fluid fluid = furnace.getFluid();
 			for (int i = 0; i < furnace.inventory.getSlots(); i ++){
 				ItemStack stack = furnace.inventory.getStackInSlot(i);
-				if (stack != null){
+				if (stack != ItemStack.EMPTY){
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(x+0.5,y,z+0.5);
 					GlStateManager.rotate(1.0f*((float)furnace.angle+partialTicks),0,1,0);

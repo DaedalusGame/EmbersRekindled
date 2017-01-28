@@ -2,8 +2,8 @@
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "block/block",
     "textures": {
-        "0": "embers:blocks/pipeTex",
-        "particle": "embers:blocks/pipeTex"
+        "0": "embers:blocks/pipe_tex",
+        "particle": "embers:blocks/pipe_tex"
     },
     "elements": [
         {

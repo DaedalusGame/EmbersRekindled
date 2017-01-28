@@ -1,6 +1,0 @@
-{
-    "variants":{
-        "top=true":{"model": "embers:tileFurnaceTop"},
-        "top=false":{"model": "embers:tileFurnaceBottom"}
-    }
-}

@@ -1,11 +1,11 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
-    "parent":"embers:item/handheldModelBase",
+    "parent":"embers:item/handheld_model_base",
     "textures": {
-        "0": "embers:items/toolPartsOne",
-        "1": "embers:items/toolPartsThree",
-        "2": "embers:items/toolPartsTwo",
-        "3": "embers:items/toolPartsFour"
+        "0": "embers:items/tool_parts_one",
+        "1": "embers:items/tool_parts_three",
+        "2": "embers:items/tool_parts_two",
+        "3": "embers:items/tool_parts_four"
     },
     "elements": [
         {
@@ -229,5 +229,28 @@
                 "down": { "texture": "#3", "uv": [ 0.0, 11.0, 7.0, 16.0 ] }
             }
         }
-    ]
+    ],
+    "display": {
+        "gui": {
+            "rotation": [ 90, 45, -90 ],
+            "translation": [ -3, -3, 0],
+            "scale":[ 0.55, 0.55, 0.55 ]
+        },
+        "ground": {
+            "rotation": [ 0, 90, 0 ],
+            "translation": [ 0, 3, 0],
+            "scale":[ 0.25, 0.25, 0.25 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 90, 0 ],
+            "translation": [ 0, 0, 0],
+            "scale":[ 0.5, 0.5, 0.5 ]
+        },
+        "firstperson_righthand": {
+            "scale": [ 0.75, 0.75, 0.75 ]
+        },
+        "firstperson_lefthand": {
+            "scale": [ 0.75, 0.75, 0.75 ]
+        }
+    }
 }

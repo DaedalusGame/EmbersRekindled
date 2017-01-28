@@ -48,7 +48,7 @@ public class MessageItemUpdate implements IMessage {
         @Override
         public IMessage onMessage(final MessageItemUpdate message, final MessageContext ctx) {
     		Minecraft.getMinecraft().addScheduledTask(()-> {
-	    		EntityPlayer player = Minecraft.getMinecraft().theWorld.getPlayerEntityByUUID(message.id);
+	    		EntityPlayer player = Minecraft.getMinecraft().world.getPlayerEntityByUUID(message.id);
 	    		if (player != null){
 	    			player.inventory.getStackInSlot(message.slot).setTagCompound(message.tag);
 	    		}

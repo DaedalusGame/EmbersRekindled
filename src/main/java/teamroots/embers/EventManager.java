@@ -12,16 +12,21 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -29,17 +34,22 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.block.IDial;
 import teamroots.embers.item.IEmberChargedTool;
+import teamroots.embers.item.ItemAshenCloak;
 import teamroots.embers.item.ItemEmberGauge;
 import teamroots.embers.item.ItemGolemsEye;
 import teamroots.embers.item.ItemGrandhammer;
@@ -50,6 +60,7 @@ import teamroots.embers.network.message.MessageEmberGeneration;
 import teamroots.embers.proxy.ClientProxy;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
+import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
 import teamroots.embers.tileentity.TileEntityKnowledgeTable;
 import teamroots.embers.util.BlockTextureUtil;
 import teamroots.embers.util.FluidTextureUtil;
@@ -67,6 +78,11 @@ public class EventManager {
 	public static float frameCounter = 0;
 	public static long prevTime = 0;
 	public static EnumHand lastHand = EnumHand.MAIN_HAND;
+	public static float starlightRed = 255;
+	public static float starlightGreen = 32;
+	public static float starlightBlue = 255;
+	public static float tickCounter = 0;
+	public static double currentEmber = 0;
 	
 	static EntityPlayer clientPlayer = null;
 	
@@ -74,15 +90,17 @@ public class EventManager {
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre event){
 		FluidTextureUtil.initTextures(event.getMap());
-		
-		BlockTextureUtil.mapBlockTexture(event.getMap(), new ResourceLocation(Embers.MODID + ":textures/blocks/pipeTex.png"));
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTextureStitch(TextureStitchEvent event){
-		ResourceLocation particleGlow = new ResourceLocation("embers:entity/particleMote");
+		ResourceLocation particleGlow = new ResourceLocation("embers:entity/particle_mote");
 		event.getMap().registerSprite(particleGlow);
+		ResourceLocation particleSparkle = new ResourceLocation("embers:entity/particle_star");
+		event.getMap().registerSprite(particleSparkle);
+		ResourceLocation particleSmoke = new ResourceLocation("embers:entity/particle_smoke");
+		event.getMap().registerSprite(particleSmoke);
 	}
 	
 	@SubscribeEvent
@@ -91,44 +109,39 @@ public class EventManager {
 	}
 	
 	@SubscribeEvent
-	public void onChunkGeneration(ChunkEvent.Load event){
-		EmberWorldData data = EmberWorldData.get(event.getWorld());
-		if (!data.emberData.containsKey(""+event.getChunk().xPosition+" "+event.getChunk().zPosition)){
-			Biome biome = event.getWorld().getBiomeProvider().getBiomeGenerator(new BlockPos(event.getChunk().xPosition*16,64,event.getChunk().zPosition*16));
-			int baseAmount = 800000;
-			int bonusAmount = 800000;
-			double mult = 1;
-			if (Misc.isHills(biome)){
-				mult = 1.5;
-			}
-			if (Misc.isExtremeHills(biome)){
-				mult = 2;
-			}
-			baseAmount *= mult;
-			bonusAmount *= mult;
-			double value = 4.0*(baseAmount+random.nextDouble()*bonusAmount);
-			if (random.nextInt(20/((int)mult)) == 0 && !event.getWorld().isRemote){
-				data.emberData.put(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value);
-				data.markDirty();
-				if (!event.getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, value));
+	public void onLivingDamage(LivingHurtEvent event){
+		if (event.getEntity() instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer)event.getEntity();
+			String source = event.getSource().getDamageType();
+			if (source.compareTo("mob") != 0 && source.compareTo("generic") != 0 && source.compareTo("player") != 0 && source.compareTo("arrow") != 0){
+				if (player.getHeldItemMainhand() != ItemStack.EMPTY){
+					if (player.getHeldItemMainhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemMainhand().hasTagCompound()){
+						player.getHeldItemMainhand().setItemDamage(1);
+						player.getHeldItemMainhand().getTagCompound().setString("type", event.getSource().getDamageType());
+					}
 				}
-			}
-			else {
-				data.emberData.put(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0);
-				data.markDirty();
-				if (!event.getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageEmberGeneration(""+event.getChunk().xPosition+" "+event.getChunk().zPosition, 0.0));
+				if (player.getHeldItemOffhand() != ItemStack.EMPTY){
+					if (player.getHeldItemOffhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemOffhand().hasTagCompound()){
+						player.getHeldItemOffhand().setItemDamage(1);
+						player.getHeldItemOffhand().getTagCompound().setString("type", event.getSource().getDamageType());
+					}
 				}
 			}
 		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onPlayerLogin(EntityJoinWorldEvent event){
-		if (event.getEntity() instanceof EntityPlayer && event.getWorld().isRemote){
-			PacketHandler.INSTANCE.sendToServer(new MessageEmberDataRequest(((EntityPlayer)event.getEntity()).getUniqueID()));
+		if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD) != ItemStack.EMPTY &&
+				event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST) != ItemStack.EMPTY &&
+				event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS) != ItemStack.EMPTY &&
+				event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET) != ItemStack.EMPTY){
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemAshenCloak &&
+					event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemAshenCloak &&
+					event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemAshenCloak &&
+					event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemAshenCloak){
+				float mult = Math.max(0,1.0f-ItemAshenCloak.getDamageMultiplier(event.getSource(), event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST)));
+				if (mult == 0){
+					event.setCanceled(true);
+				}
+				event.setAmount(event.getAmount()*mult);
+			}
 		}
 	}
 	
@@ -140,7 +153,7 @@ public class EventManager {
 			EventManager.frameTime = (System.nanoTime()-prevTime)/1000000000.0f;
 			EventManager.prevTime = System.nanoTime();
 		}
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		boolean showBar = false;
 
 		int w = e.getResolution().getScaledWidth();
@@ -148,12 +161,12 @@ public class EventManager {
 		
 		int x = w/2;
 		int y = h/2;
-		if (player.getHeldItemMainhand() != null){
+		if (player.getHeldItemMainhand() != ItemStack.EMPTY){
 			if (player.getHeldItemMainhand().getItem() instanceof ItemEmberGauge){
 				showBar = true;
 			}
 		}
-		if (player.getHeldItemOffhand() != null){
+		if (player.getHeldItemOffhand() != ItemStack.EMPTY){
 			if (player.getHeldItemOffhand().getItem() instanceof ItemEmberGauge){
 				showBar = true;
 			}
@@ -167,7 +180,7 @@ public class EventManager {
 				GlStateManager.disableDepth();
 				GlStateManager.disableCull();
 				GlStateManager.pushMatrix();
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/emberMeterOverlay.png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/ember_meter_overlay.png"));
 				GlStateManager.color(1f, 1f, 1f, 1f);
 				
 				int offsetX = 0;
@@ -178,22 +191,21 @@ public class EventManager {
 				
 				double angle = 195.0;
 				EmberWorldData data = EmberWorldData.get(world);
-				if (data != null && player != null){
-					if (data.emberData != null){
-						if (data.emberData.containsKey(""+((int)player.posX) / 16 + " " + ((int)player.posZ) / 16)){
-							double value = data.emberData.get(""+((int)player.posX) / 16 + " " + ((int)player.posZ) / 16);
-							double ratio = value/12800000.0;
+				if (player != null){
+					//if (data.emberData != null){
+						//if (data.emberData.containsKey(""+((int)player.posX) / 16 + " " + ((int)player.posZ) / 16)){
+							double ratio = data.getEmberForChunk((int)Math.floor((player).getPosition().getX()/16.0f), (int)Math.floor((player).getPosition().getZ()/16.0f))/822000.0;
 							if (gaugeAngle == 0){
 								gaugeAngle = 165.0+210.0*ratio;
 							}
 							else {
 								gaugeAngle = gaugeAngle*0.99+0.01*(165.0+210.0*ratio);
 							}
-						}
-					}
+						//}
+					//}
 				}
 				
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/emberMeterPointer.png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/ember_meter_pointer.png"));
 				GlStateManager.translate(x, y-20, 0);
 				GlStateManager.rotate((float)gaugeAngle, 0, 0, 1);
 				b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -210,13 +222,13 @@ public class EventManager {
 		
 		boolean showEye = false;
 		boolean showingResearch = false;
-		if (player.getHeldItemOffhand() != null){
+		if (player.getHeldItemOffhand() != ItemStack.EMPTY){
 			if (player.getHeldItemOffhand().getItem() instanceof ItemGolemsEye){
 				showEye = true;
 				lastHand = EnumHand.OFF_HAND;
 			}
 		}
-		if (player.getHeldItemMainhand() != null){
+		if (player.getHeldItemMainhand() != ItemStack.EMPTY){
 			if (player.getHeldItemMainhand().getItem() instanceof ItemGolemsEye){
 				showEye = true;
 				lastHand = EnumHand.MAIN_HAND;
@@ -224,19 +236,19 @@ public class EventManager {
 		}
 		if (showEye){
 			if (result != null){
-				ItemStack test = null;
+				ItemStack test = ItemStack.EMPTY;
 				if (result.typeOfHit == RayTraceResult.Type.BLOCK){
 					if (world.getTileEntity(result.getBlockPos()) instanceof TileEntityKnowledgeTable){
 						TileEntityKnowledgeTable table = ((TileEntityKnowledgeTable)world.getTileEntity(result.getBlockPos()));
-						if (table.inventory.getStackInSlot(0) != null){
+						if (table.inventory.getStackInSlot(0) != ItemStack.EMPTY){
 							test = table.inventory.getStackInSlot(0);
 						}
 					}
-					if (test == null){
+					if (test == ItemStack.EMPTY){
 						test = new ItemStack(world.getBlockState(result.getBlockPos()).getBlock(),1,world.getBlockState(result.getBlockPos()).getBlock().getMetaFromState(world.getBlockState(result.getBlockPos())));
 					}
 				}
-				if (test != null){
+				if (test != ItemStack.EMPTY){
 					if (test.getItem() != null){
 						ResearchBase research = ResearchManager.researches.get(test.getItem().getRegistryName().toString());
 						if (research != null){
@@ -308,7 +320,7 @@ public class EventManager {
 			tess.draw();
 			GlStateManager.color(1f*EventManager.emberEyeView, 1f*EventManager.emberEyeView, 1f*EventManager.emberEyeView, 1f*EventManager.emberEyeView);
 
-			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/eyeGuiOverlay.png"));
+			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/eye_gui_overlay.png"));
 			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			RenderUtil.drawQuadGuiExt(b, x-16, y-48, x+16, y-48, x+16, y-80, x-16, y-80, 0, 0, 32, 32, 128, 128);
 			tess.draw();
@@ -357,11 +369,17 @@ public class EventManager {
 		GlStateManager.enableDepth();
 	}
 	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onTick(WorldTickEvent event){
+		if (Minecraft.getMinecraft().player != null){
+			EmberWorldData.get(event.world).ticks ++;
+			PacketHandler.INSTANCE.sendToServer(new MessageEmberDataRequest((Minecraft.getMinecraft().player).getUniqueID(), (int)Math.floor((Minecraft.getMinecraft().player).getPosition().getX()/16.0f), (int)Math.floor((Minecraft.getMinecraft().player).getPosition().getZ()/16.0f)));
+		}
+	}
+	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onTick(TickEvent.ClientTickEvent event){
-		if (Minecraft.getMinecraft().pointedEntity instanceof EntityItem){
-			System.out.println(((EntityItem)Minecraft.getMinecraft().pointedEntity).getEntityItem());
-		}
 		if (event.side == Side.CLIENT){
 			ClientProxy.particleRenderer.updateParticles();
 		}
@@ -369,16 +387,16 @@ public class EventManager {
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityDamaged(LivingHurtEvent event){
-		if (event.getSource().damageType == RegistryManager.damageEmber.damageType){
+		if (event.getSource().damageType == RegistryManager.damage_ember.damageType){
 			if (event.getEntityLiving().isPotionActive(Potion.getPotionFromResourceLocation("fire_resistance"))){
 				event.setAmount(event.getAmount()*0.5f);
 			}
 		}
 		if (event.getSource().getEntity() != null){
 			if (event.getSource().getEntity() instanceof EntityPlayer){
-				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand() != null){
+				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand() != ItemStack.EMPTY){
 					if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
-						if (IEmberChargedTool.hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getEntity()).capabilities.isCreativeMode){
+						if (((IEmberChargedTool)((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem()).hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getEntity()).capabilities.isCreativeMode){
 							event.getEntityLiving().setFire(1);
 							if (!event.getEntityLiving().getEntityWorld().isRemote){
 								PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getEntityLiving().posX,event.getEntityLiving().posY+event.getEntityLiving().getEyeHeight()/1.5,event.getEntityLiving().posZ));
@@ -397,7 +415,7 @@ public class EventManager {
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event){
 		if (event.getPlayer() != null){
-			if (event.getPlayer().getHeldItemMainhand() != null){
+			if (event.getPlayer().getHeldItemMainhand() != ItemStack.EMPTY){
 				/*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
 					PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 				}*/
@@ -412,8 +430,21 @@ public class EventManager {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onRenderAfterWorld(RenderWorldLastEvent event){
+		tickCounter ++;
+		this.starlightBlue = 96.0f + 80.0f*(float)(Math.sin(Math.toRadians(tickCounter % 360))+1.0f);
+		this.starlightRed = 255.0f - 80.0f*(float)(Math.sin(Math.toRadians(tickCounter % 360))+1.0f);
 		if (Embers.proxy instanceof ClientProxy){
 			ClientProxy.particleRenderer.renderParticles(clientPlayer, event.getPartialTicks());
+		}
+		List<TileEntity> list = Minecraft.getMinecraft().world.loadedTileEntityList;
+		for (int i = 0; i < list.size(); i ++){
+			TileEntitySpecialRenderer render = TileEntityRendererDispatcher.instance.getSpecialRenderer(list.get(i));
+			if (render instanceof ITileEntitySpecialRendererLater){
+				double x = Minecraft.getMinecraft().player.lastTickPosX + Minecraft.getMinecraft().getRenderPartialTicks()*(Minecraft.getMinecraft().player.posX-Minecraft.getMinecraft().player.lastTickPosX);
+				double y = Minecraft.getMinecraft().player.lastTickPosY + Minecraft.getMinecraft().getRenderPartialTicks()*(Minecraft.getMinecraft().player.posY-Minecraft.getMinecraft().player.lastTickPosY);
+				double z = Minecraft.getMinecraft().player.lastTickPosZ + Minecraft.getMinecraft().getRenderPartialTicks()*(Minecraft.getMinecraft().player.posZ-Minecraft.getMinecraft().player.lastTickPosZ);
+				((ITileEntitySpecialRendererLater)render).renderLater(list.get(i), list.get(i).getPos().getX()-x, list.get(i).getPos().getY()-y, list.get(i).getPos().getZ()-z, Minecraft.getMinecraft().getRenderPartialTicks());
+			}
 		}
 	}
 }

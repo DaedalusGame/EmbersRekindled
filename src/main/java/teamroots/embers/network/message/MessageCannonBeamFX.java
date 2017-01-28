@@ -68,7 +68,7 @@ public class MessageCannonBeamFX implements IMessage {
     	@SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(final MessageCannonBeamFX message, final MessageContext ctx) {
-    		World world = Minecraft.getMinecraft().theWorld;
+    		World world = Minecraft.getMinecraft().world;
     		boolean doContinue = true;
     		for (double i = 0; i < 384.0 && doContinue; i ++){
     			for (int j = 0; j < 5; j ++){

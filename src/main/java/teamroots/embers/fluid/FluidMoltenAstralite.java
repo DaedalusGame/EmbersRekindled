@@ -14,7 +14,7 @@ public class FluidMoltenAstralite extends Fluid {
 		setDensity(2000);
 		setLuminosity(15);
 		setTemperature(900);
-		setBlock(RegistryManager.blockMoltenAstralite);
+		setBlock(RegistryManager.block_molten_astralite);
 		setUnlocalizedName("astralite");
 	}
 	
