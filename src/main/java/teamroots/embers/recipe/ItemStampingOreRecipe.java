@@ -34,7 +34,6 @@ public class ItemStampingOreRecipe {
 	}
 	
 	public boolean matches(ItemStack stack, FluidStack fluid, EnumStampType type){
-		System.out.println("Stamper check!");
 		boolean matchesItem = OreDictionary.containsMatch(false, OreDictionary.getOres(ore), stack);
 		boolean matchesFluid = false;
 		if (fluid.getFluid().getName().compareTo(this.fluid.getFluid().getName()) == 0 && fluid.amount >= this.fluid.amount){

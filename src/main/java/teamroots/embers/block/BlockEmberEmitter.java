@@ -70,9 +70,6 @@ public class BlockEmberEmitter extends BlockTEBase {
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
 		if (world.getTileEntity(pos) instanceof TileEntityEmitter){
 			((TileEntityEmitter)world.getTileEntity(pos)).updateNeighbors(world);
-			if (!world.isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
-			}
 		}
 		if (world.isAirBlock(pos.offset(state.getValue(facing),-1))){
 			world.setBlockToAir(pos);

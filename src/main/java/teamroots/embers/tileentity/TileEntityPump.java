@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPump.EnumPipeConnection;
@@ -331,10 +332,34 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 			}
 		}
 		for (int i = 0; i < toUpdate.size(); i ++){
-			getWorld().getTileEntity(toUpdate.get(i)).markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
+			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+			tile.markDirty();
+			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+				EventManager.toUpdate.add(tile);
 			}
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

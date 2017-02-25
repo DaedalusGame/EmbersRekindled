@@ -36,7 +36,6 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
         @Override
         protected void onContentsChanged(int slot) {
         	TileEntityStampBase.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityStampBase.this));
         }
 	};
 	
@@ -92,17 +91,11 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
 				this.markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return didFill.success;
 			}
 			else {
 				player.setHeldItem(hand, this.inputs.insertItem(0,heldItem,false));
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}
@@ -111,9 +104,6 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inputs.getStackInSlot(0)));
 				inputs.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}
@@ -157,5 +147,28 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 		this.invalidate();
 		Misc.spawnInventoryInWorld(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inputs);
 		world.setTileEntity(pos, null);
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

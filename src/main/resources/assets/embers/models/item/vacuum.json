@@ -1,0 +1,51 @@
+{
+	"__comment": "Designed by Elucent with Cubik Studio - https://cubik.studio",
+	"parent":"block/block",
+	"textures": {
+		"particle": "embers:blocks/vacuum_opening",
+		"opening": "embers:blocks/vacuum_opening",
+		"side": "embers:blocks/vacuum_side",
+		"out": "embers:blocks/item_transfer_top"
+	},
+	"elements": [
+		{
+			"__comment": "Cube1",
+			"from": [ 0, 12, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#out" },
+				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#opening" },
+				"north": { "uv": [ 12, 0, 16, 16 ], "texture": "#side", "rotation": 90 },
+				"south": { "uv": [ 12, 0, 16, 16 ], "texture": "#side", "rotation": 90 },
+				"west": { "uv": [ 12, 0, 16, 16 ], "texture": "#side", "rotation": 90 },
+				"east": { "uv": [ 12, 0, 16, 16 ], "texture": "#side", "rotation": 90 }
+			}
+		},
+		{
+			"__comment": "Cube1",
+			"from": [ 2, 4, 2 ],
+			"to": [ 14, 12, 14 ],
+			"faces": {
+				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#out" },
+				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#opening" },
+				"north": { "uv": [ 4, 2, 12, 14 ], "texture": "#side", "rotation": 90 },
+				"south": { "uv": [ 4, 2, 12, 14 ], "texture": "#side", "rotation": 90 },
+				"west": { "uv": [ 4, 2, 12, 14 ], "texture": "#side", "rotation": 90 },
+				"east": { "uv": [ 4, 2, 12, 14 ], "texture": "#side", "rotation": 90 }
+			}
+		},
+		{
+			"__comment": "Cube1",
+			"from": [ 4, 0, 4 ],
+			"to": [ 12, 4, 12 ],
+			"faces": {
+				"down": { "uv": [ 4, 4, 12, 12 ], "texture": "#out" },
+				"up": { "uv": [ 4, 4, 12, 12 ], "texture": "#out" },
+				"north": { "uv": [ 0, 12, 4, 4 ], "texture": "#side", "rotation": 270 },
+				"south": { "uv": [ 0, 12, 4, 4 ], "texture": "#side", "rotation": 270 },
+				"west": { "uv": [ 0, 12, 4, 4 ], "texture": "#side", "rotation": 270 },
+				"east": { "uv": [ 0, 12, 4, 4 ], "texture": "#side", "rotation": 270 }
+			}
+		}
+	]
+}

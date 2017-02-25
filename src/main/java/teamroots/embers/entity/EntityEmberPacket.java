@@ -90,7 +90,7 @@ public class EntityEmberPacket extends Entity {
 			double targetZ = dest.getZ()+0.5;
 			Vec3d targetVector = new Vec3d(targetX-posX,targetY-posY,targetZ-posZ);
 			double length = targetVector.lengthVector();
-			targetVector = targetVector.normalize().scale(0.3);
+			targetVector = targetVector.scale(0.3/length);
 			double weight  = 0;
 			if (length <= 3){
 				weight = 0.9*((3.0-length)/3.0);

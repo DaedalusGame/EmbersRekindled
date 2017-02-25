@@ -120,9 +120,6 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				this.capability.setEmber(0);
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetLeft) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
@@ -161,9 +158,6 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				this.capability.setEmber(0);
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetLeft) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
@@ -188,9 +182,6 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				this.capability.setEmber(0);
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetRight) != null){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
@@ -211,6 +202,29 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				}
 			}
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 
 	@Override

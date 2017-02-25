@@ -198,4 +198,21 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmb
 	public void update(){
 		this.polled = false;
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
 }

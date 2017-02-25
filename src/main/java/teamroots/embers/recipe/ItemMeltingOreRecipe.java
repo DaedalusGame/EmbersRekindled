@@ -21,7 +21,6 @@ public class ItemMeltingOreRecipe {
 	}
 	
 	public boolean matches(ItemStack stack){
-		System.out.println("Melter Check!");
 		return OreDictionary.containsMatch(false, OreDictionary.getOres(ore), stack);
 	}
 }

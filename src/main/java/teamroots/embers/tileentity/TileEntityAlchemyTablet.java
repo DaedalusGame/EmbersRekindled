@@ -48,7 +48,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityAlchemyTablet.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
         }
 	};
 	public ItemStackHandler south = new ItemStackHandler(1){
@@ -57,7 +56,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityAlchemyTablet.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
         }
 	};
 	public ItemStackHandler east = new ItemStackHandler(1){
@@ -66,7 +64,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityAlchemyTablet.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
         }
 	};
 	public ItemStackHandler west = new ItemStackHandler(1){
@@ -75,7 +72,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityAlchemyTablet.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
         }
 	};
 	public ItemStackHandler center = new ItemStackHandler(1){
@@ -84,7 +80,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityAlchemyTablet.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
         }
 	};
 	Random random = new Random();
@@ -201,15 +196,33 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 		AlchemyRecipe recipe = RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), east.getStackInSlot(0), west.getStackInSlot(0), north.getStackInSlot(0), south.getStackInSlot(0));
 		if (recipe != null){
 			if (getNearbyAsh(getNearbyPedestals()) >= recipe.dawnstoneAspectMin+recipe.copperAspectMin+recipe.ironAspectMin+recipe.silverAspectMin+recipe.leadAspectMin){
-				System.out.println(recipe.getIron(getWorld())+" "
-						+recipe.getDawnstone(getWorld())+" "
-						+recipe.getCopper(getWorld())+" "
-						+recipe.getSilver(getWorld())+" "
-						+recipe.getLead(getWorld()));
 				this.progress = 1;
-	        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
+				markDirty();
 			}
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 
 	@Override
@@ -219,9 +232,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, getInventoryForFace(side).insertItem(0,heldItem,false));
 			markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-			}
 			return true;
 		}
 		else {
@@ -229,9 +239,6 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, getInventoryForFace(side).extractItem(0, getInventoryForFace(side).getStackInSlot(0).getCount(), false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				return true;
 			}
@@ -325,8 +332,8 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 						if (pedestal.inventory.getStackInSlot(1).getItem() == RegistryManager.aspectus_lead){
 							this.lead ++;
 						}
-			        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
-			        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(pedestal));
+						markDirty();
+						pedestal.markDirty();
 					}
 				}
 				else {
@@ -348,7 +355,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 			        	this.south.setStackInSlot(0, decrStack(this.south.getStackInSlot(0)));
 			        	this.east.setStackInSlot(0, decrStack(this.east.getStackInSlot(0)));
 			        	this.west.setStackInSlot(0, decrStack(this.west.getStackInSlot(0)));
-			        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyTablet.this));
+			        	markDirty();
 					}
 				}
 			}

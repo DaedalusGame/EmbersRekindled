@@ -24,6 +24,8 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberData;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.world.EmberWorldData;
 
@@ -39,7 +41,6 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         @Override
         protected void onContentsChanged(int slot) {
         	TileEntityEmberBore.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityEmberBore.this));
         }
         
         @Override
@@ -121,81 +122,75 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public void update() {
+		if (ticksFueled > 0){
+			angle += 12.0f;
+		}
 		if (getPos().getY() <= 7 && !getWorld().isRemote){
-			if (ticksFueled > 0){
-				angle += 12.0f;
-			}
 			ticksExisted ++;
 			if (ticksFueled > 0){
 				ticksFueled --;
 			}
 			if (ticksFueled == 0){
-				EmberWorldData data = EmberWorldData.get(getWorld());
-				double ember = data.getEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f));
-				if (ember > 750){
-					if (inventory.getStackInSlot(stackFuel) != ItemStack.EMPTY){
-						ticksFueled = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(stackFuel).copy());
-						inventory.getStackInSlot(stackFuel).shrink(1);
-						if (inventory.getStackInSlot(stackFuel).getCount() <= 0){
-							inventory.setStackInSlot(stackFuel, ItemStack.EMPTY);
-						}
-						markDirty();
-						if (!getWorld().isRemote){
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-						}
+				if (inventory.getStackInSlot(stackFuel) != ItemStack.EMPTY){
+					ticksFueled = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(stackFuel).copy());
+					inventory.getStackInSlot(stackFuel).shrink(1);
+					if (inventory.getStackInSlot(stackFuel).getCount() <= 0){
+						inventory.setStackInSlot(stackFuel, ItemStack.EMPTY);
 					}
+					markDirty();
 				}
 			}
-			else if (ticksExisted % 800 == 0){
-				EmberWorldData data = EmberWorldData.get(getWorld());
-				double ember = data.getEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f));
-				int chance = random.nextInt(4);
-				if (chance == 0){
-					if (ember > 4500){
+			else if (ticksExisted % 100 == 0){
+				if (random.nextFloat()*0.5f > EmberGenUtil.getEmberDensity(world.getSeed(), getPos().getX(), getPos().getZ())){
+					int chance = random.nextInt(4);
+					if (chance == 0){
 						if (inventory.getStackInSlot(stackCrystals) != ItemStack.EMPTY){ 
 							if (inventory.getStackInSlot(stackCrystals).getCount() < inventory.getStackInSlot(stackCrystals).getMaxStackSize()){
 								inventory.getStackInSlot(stackCrystals).setCount(Math.min(64, inventory.getStackInSlot(stackCrystals).getCount()));
-								data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500);
-								PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500));
-								data.markDirty();
 							}
 						}
 						else {
 							inventory.setStackInSlot(stackCrystals, new ItemStack(RegistryManager.crystal_ember,1));
-							data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500);
-							PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-4500));
-							data.markDirty();
 						}
 						markDirty();
-						if (!getWorld().isRemote){
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-						}
 					}
-				}
-				else {
-					if (ember > 750){
+					else {
 						if (inventory.getStackInSlot(stackShards) != ItemStack.EMPTY){
 							if (inventory.getStackInSlot(stackShards).getCount() < inventory.getStackInSlot(stackShards).getMaxStackSize()){
 								inventory.getStackInSlot(stackShards).setCount(Math.min(inventory.getStackInSlot(stackShards).getMaxStackSize(), inventory.getStackInSlot(stackShards).getCount()));
-								data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750);
-								PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750));
-								data.markDirty();
 							}
 						}
 						else {
 							inventory.setStackInSlot(stackShards, new ItemStack(RegistryManager.shard_ember,1));
-							data.setEmberForChunk((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750);
-							PacketHandler.INSTANCE.sendToAll(new MessageEmberData((int)Math.floor(this.getPos().getX()/16.0f), (int)Math.floor(this.getPos().getZ()/16.0f), ember-750));
-							data.markDirty();
 						}
 						markDirty();
-						if (!getWorld().isRemote){
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-						}
 					}
 				}
 			}
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 	
 	@Override

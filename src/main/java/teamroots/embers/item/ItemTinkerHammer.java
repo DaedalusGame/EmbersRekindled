@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
 import teamroots.embers.tileentity.ITargetable;
+import teamroots.embers.util.Misc;
 
 public class ItemTinkerHammer extends ItemBase {
 	public ItemTinkerHammer() {
@@ -41,19 +42,18 @@ public class ItemTinkerHammer extends ItemBase {
 			stack.getTagCompound().setInteger("targetX", pos.getX());
 			stack.getTagCompound().setInteger("targetY", pos.getY());
 			stack.getTagCompound().setInteger("targetZ", pos.getZ());
-			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 2.0f, false);
+			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.9f+Misc.random.nextFloat()*0.2f, false);
 			return EnumActionResult.SUCCESS;
 		}
 		else if (tile instanceof IEmberPacketProducer && stack.getTagCompound().hasKey("targetX")){
 			if (world.getTileEntity(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ"))) instanceof IEmberPacketReceiver){
 				((IEmberPacketProducer)tile).setTargetPosition(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")), face);
-				world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+				world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.95f+Misc.random.nextFloat()*0.1f, false);
 				return EnumActionResult.SUCCESS;
 			}
 		}
 		else if (tile instanceof ITargetable && stack.getTagCompound().hasKey("targetX")){
 			((ITargetable)tile).setTarget(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")));
-			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.FAIL;

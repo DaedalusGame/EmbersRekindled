@@ -323,9 +323,6 @@ public class ResearchManager {
 		researches.put(RegistryManager.item_transfer.getRegistryName().toString(), 
 				new ResearchBase("item_transfer", new ItemStack(RegistryManager.item_transfer))
 				);
-		researches.put(RegistryManager.core_stone.getRegistryName().toString(), 
-				new ResearchBase("core_stone", new ItemStack(RegistryManager.core_stone))
-				);
 		researches.put(RegistryManager.beam_cannon.getRegistryName().toString(), 
 				new ResearchBase("beam_cannon", new ItemStack(RegistryManager.beam_cannon))
 				);

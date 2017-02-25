@@ -39,6 +39,13 @@ public class WorldGenOres implements IWorldGenerator {
 				int z = chunkZ*16+random.nextInt(16);
 				ore_silver.generate(world, random, new BlockPos(x,y,z));
 			}
+			WorldGenMinable ore_quartz = new WorldGenMinable(RegistryManager.ore_quartz.getDefaultState(), ConfigManager.quartzVeinSize);
+			for (int i = 0; i < ConfigManager.quartzVeinsPerChunk; i ++){
+				int x = chunkX*16+random.nextInt(16);
+				int y = random.nextInt(ConfigManager.quartzMaxY-ConfigManager.quartzMinY)+ConfigManager.quartzMinY;
+				int z = chunkZ*16+random.nextInt(16);
+				ore_quartz.generate(world, random, new BlockPos(x,y,z));
+			}
             break;
 		}
 			

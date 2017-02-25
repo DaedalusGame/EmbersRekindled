@@ -8,18 +8,27 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.Profile;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
@@ -31,11 +40,16 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -43,7 +57,9 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,12 +73,18 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberDataRequest;
 import teamroots.embers.network.message.MessageEmberGeneration;
+import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.network.message.MessageTyrfingBurstFX;
 import teamroots.embers.proxy.ClientProxy;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
+import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
+import teamroots.embers.tileentity.TileEntityDawnstoneAnvil;
 import teamroots.embers.tileentity.TileEntityKnowledgeTable;
 import teamroots.embers.util.BlockTextureUtil;
+import teamroots.embers.util.EmberGenUtil;
+import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.FluidTextureUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
@@ -83,6 +105,10 @@ public class EventManager {
 	public static float starlightBlue = 255;
 	public static float tickCounter = 0;
 	public static double currentEmber = 0;
+	public static boolean allowPlayerRenderEvent = true;
+	public static int ticks = 0;
+	
+	public static List<TileEntity> toUpdate = new ArrayList<TileEntity>();
 	
 	static EntityPlayer clientPlayer = null;
 	
@@ -104,8 +130,13 @@ public class EventManager {
 	}
 	
 	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load event){
-		EmberWorldData.get(event.getWorld());
+	public void onServerTick(ServerTickEvent event){
+		if (Misc.random.nextInt(200) == 0){
+			EmberGenUtil.offX ++;
+		}
+		if (Misc.random.nextInt(200) == 0){
+			EmberGenUtil.offZ ++;
+		}
 	}
 	
 	@SubscribeEvent
@@ -194,7 +225,7 @@ public class EventManager {
 				if (player != null){
 					//if (data.emberData != null){
 						//if (data.emberData.containsKey(""+((int)player.posX) / 16 + " " + ((int)player.posZ) / 16)){
-							double ratio = data.getEmberForChunk((int)Math.floor((player).getPosition().getX()/16.0f), (int)Math.floor((player).getPosition().getZ()/16.0f))/822000.0;
+							double ratio = EmberGenUtil.getEmberDensity(world.getSeed(), player.getPosition().getX(), player.getPosition().getZ());
 							if (gaugeAngle == 0){
 								gaugeAngle = 165.0+210.0*ratio;
 							}
@@ -370,18 +401,35 @@ public class EventManager {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onTick(WorldTickEvent event){
-		if (Minecraft.getMinecraft().player != null){
-			EmberWorldData.get(event.world).ticks ++;
-			PacketHandler.INSTANCE.sendToServer(new MessageEmberDataRequest((Minecraft.getMinecraft().player).getUniqueID(), (int)Math.floor((Minecraft.getMinecraft().player).getPosition().getX()/16.0f), (int)Math.floor((Minecraft.getMinecraft().player).getPosition().getZ()/16.0f)));
-		}
-	}
-	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onTick(TickEvent.ClientTickEvent event){
 		if (event.side == Side.CLIENT){
+			ticks ++;
 			ClientProxy.particleRenderer.updateParticles();
+
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			if (player != null){
+				World world = player.getEntityWorld();
+				RayTraceResult result = player.rayTrace(6.0, Minecraft.getMinecraft().getRenderPartialTicks());
+				if (result != null){
+					if (result.typeOfHit == RayTraceResult.Type.BLOCK){
+						IBlockState state = world.getBlockState(result.getBlockPos());
+						if (state.getBlock() instanceof IDial){
+							((IDial)state.getBlock()).updateTEData(world, state, result.getBlockPos());
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onPlayerRender(RenderPlayerEvent.Pre event){
+		if (event.getEntityPlayer() != null){
+			if (Minecraft.getMinecraft().inGameHasFocus || event.getEntityPlayer().getUniqueID().compareTo(Minecraft.getMinecraft().player.getUniqueID()) != 0){
+				event.setCanceled(!allowPlayerRenderEvent);
+			}
 		}
 	}
 	
@@ -394,6 +442,13 @@ public class EventManager {
 		}
 		if (event.getSource().getEntity() != null){
 			if (event.getSource().getEntity() instanceof EntityPlayer){
+				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() == RegistryManager.tyrfing){
+					if (!event.getEntity().world.isRemote){
+						PacketHandler.INSTANCE.sendToAll(new MessageTyrfingBurstFX(event.getEntity().posX,event.getEntity().posY+event.getEntity().height/2.0f,event.getEntity().posZ));
+					}
+					EntityPlayer p = ((EntityPlayer)event.getSource().getEntity());
+					event.setAmount((event.getAmount()/4.0f)*(4.0f+(float)event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue()*1.0f));
+				}
 				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand() != ItemStack.EMPTY){
 					if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
 						if (((IEmberChargedTool)((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem()).hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getEntity()).capabilities.isCreativeMode){
@@ -431,12 +486,13 @@ public class EventManager {
 	@SideOnly(Side.CLIENT)
 	public void onRenderAfterWorld(RenderWorldLastEvent event){
 		tickCounter ++;
-		this.starlightBlue = 96.0f + 80.0f*(float)(Math.sin(Math.toRadians(tickCounter % 360))+1.0f);
-		this.starlightRed = 255.0f - 80.0f*(float)(Math.sin(Math.toRadians(tickCounter % 360))+1.0f);
 		if (Embers.proxy instanceof ClientProxy){
+			GlStateManager.pushMatrix();
 			ClientProxy.particleRenderer.renderParticles(clientPlayer, event.getPartialTicks());
+			GlStateManager.popMatrix();
 		}
 		List<TileEntity> list = Minecraft.getMinecraft().world.loadedTileEntityList;
+		GlStateManager.pushMatrix();
 		for (int i = 0; i < list.size(); i ++){
 			TileEntitySpecialRenderer render = TileEntityRendererDispatcher.instance.getSpecialRenderer(list.get(i));
 			if (render instanceof ITileEntitySpecialRendererLater){
@@ -445,6 +501,73 @@ public class EventManager {
 				double z = Minecraft.getMinecraft().player.lastTickPosZ + Minecraft.getMinecraft().getRenderPartialTicks()*(Minecraft.getMinecraft().player.posZ-Minecraft.getMinecraft().player.lastTickPosZ);
 				((ITileEntitySpecialRendererLater)render).renderLater(list.get(i), list.get(i).getPos().getX()-x, list.get(i).getPos().getY()-y, list.get(i).getPos().getZ()-z, Minecraft.getMinecraft().getRenderPartialTicks());
 			}
+		}
+		GlStateManager.popMatrix();
+		if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().gameSettings.thirdPersonView != 0){
+			EntityPlayer p = Minecraft.getMinecraft().player;
+			if (p.getGameProfile().getName().equalsIgnoreCase("Elucent")){
+				if (EmberInventoryUtil.getEmberTotal(p) > 0){
+					GlStateManager.pushMatrix();
+					GlStateManager.disableLighting();
+					GlStateManager.disableCull();
+					GlStateManager.enableAlpha();
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+					int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
+					GlStateManager.depthFunc(GL11.GL_LEQUAL);
+					int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+					float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+					GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
+					GlStateManager.depthMask(false);
+					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Embers.MODID + ":textures/entity/beam.png"));
+					Tessellator tess = Tessellator.getInstance();
+					VertexBuffer buff = tess.getBuffer();
+					buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+					GlStateManager.translate(0, 1, 0);
+					GlStateManager.rotate(90.0f, 1, 0, 0);
+					GlStateManager.rotate(p.rotationYaw, 0, 0, 1);
+					GlStateManager.rotate(p.rotationPitch, 1, 0, 0);
+					RenderUtil.renderAlchemyCircle(buff, 0, 0, 0, 1.0f, 0.25f, 0.0625f, (float)(EmberInventoryUtil.getEmberTotal(p)/EmberInventoryUtil.getEmberCapacityTotal(p)), 0.75f, 4.0f*((float)p.ticksExisted+event.getPartialTicks()));
+					RenderUtil.renderAlchemyCircle(buff, 0, 0, 0, 1.0f, 0.25f, 0.0625f, (float)(EmberInventoryUtil.getEmberTotal(p)/EmberInventoryUtil.getEmberCapacityTotal(p)), 0.8f, 4.0f*((float)p.ticksExisted+event.getPartialTicks()));
+					RenderUtil.renderAlchemyCircle(buff, 0, 0, 0, 1.0f, 0.25f, 0.0625f, (float)(EmberInventoryUtil.getEmberTotal(p)/EmberInventoryUtil.getEmberCapacityTotal(p)), 0.85f, 4.0f*((float)p.ticksExisted+event.getPartialTicks()));
+					tess.draw();
+					GlStateManager.depthMask(true);
+					GlStateManager.alphaFunc(func, ref);
+					GlStateManager.depthFunc(dfunc);
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.disableBlend();
+					GlStateManager.disableAlpha();
+					GlStateManager.enableCull();
+					GlStateManager.enableLighting();
+					GlStateManager.popMatrix();
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event){
+		List<TileEntity> tiles = event.world.loadedTileEntityList;
+		NBTTagList list = new NBTTagList();
+		for (TileEntity t : tiles){
+			if (t instanceof ITileEntityBase){
+				if (((ITileEntityBase)t).needsUpdate()){
+					((ITileEntityBase)t).clean();
+					if (!event.world.isRemote){
+						list.appendTag(t.getUpdateTag());
+					}
+				}
+			}
+		}
+		for (TileEntity t : toUpdate){
+			if (!event.world.isRemote){
+				list.appendTag(t.getUpdateTag());
+			}
+		}
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setTag("data", list);
+		if (!event.world.isRemote){
+			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tag));
 		}
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -99,5 +100,13 @@ public class BlockFluidGauge extends BlockBase implements IDial {
 			}
 		}
 		return text;
+	}
+
+	@Override
+	public void updateTEData(World world, IBlockState state, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(this.facing)));
+		if (tile != null){
+			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdateRequest(Minecraft.getMinecraft().player.getUniqueID(),pos));
+		}
 	}
 }

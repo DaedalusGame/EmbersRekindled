@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "embers:blocks/wrapped_sealed_planks",
+        "particle": "embers:blocks/wrapped_sealed_planks"
+    }
+}

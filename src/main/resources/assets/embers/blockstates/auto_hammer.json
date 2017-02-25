@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:auto_hammer", "x": 180 },
+        "facing=up":    { "model": "embers:auto_hammer" },
+        "facing=north": { "model": "embers:auto_hammer" },
+        "facing=south": { "model": "embers:auto_hammer", "y": 180 },
+        "facing=west":  { "model": "embers:auto_hammer", "y": 270 },
+        "facing=east":  { "model": "embers:auto_hammer", "y": 90 }
+    }
+}

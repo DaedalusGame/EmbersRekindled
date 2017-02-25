@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -256,7 +257,6 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 						}
 					}
 					updateNeighbors(world);
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 					return true;
 				}
 			}
@@ -355,9 +355,6 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 								IBlockState state = getWorld().getBlockState(getPos());
 								markDirty();
 								getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).markDirty();
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
 							}
 						}
 					}
@@ -402,11 +399,35 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 				}
 			}
 			for (int i = 0; i < toUpdate.size(); i ++){
-				getWorld().getTileEntity(toUpdate.get(i)).markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(getWorld().getTileEntity(toUpdate.get(i))));
+				TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+				tile.markDirty();
+				if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+					EventManager.toUpdate.add(tile);
 				}
 			}
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

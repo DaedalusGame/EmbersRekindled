@@ -3,8 +3,10 @@ package teamroots.embers.network.message;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -19,8 +21,8 @@ public class MessageTEUpdate implements IMessage {
 		//
 	}
 	
-	public MessageTEUpdate(TileEntity tile){
-		this.tag = tile.getUpdateTag();
+	public MessageTEUpdate(NBTTagCompound tag){
+		this.tag = tag;
 	}
 	
 	@Override
@@ -39,10 +41,15 @@ public class MessageTEUpdate implements IMessage {
         @Override
         public IMessage onMessage(final MessageTEUpdate message, final MessageContext ctx) {
     		Minecraft.getMinecraft().addScheduledTask(()-> {
-	    		if ((Minecraft.getMinecraft().player.getEntityWorld()).getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))) != null){
-	    			Minecraft.getMinecraft().player.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))).readFromNBT(message.tag);
-	    			Minecraft.getMinecraft().player.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))).markDirty();
-	    		}
+    			NBTTagList list = message.tag.getTagList("data", Constants.NBT.TAG_COMPOUND);
+    			for (int i = 0; i < list.tagCount(); i ++){
+    				NBTTagCompound tag = list.getCompoundTagAt(i);
+    				TileEntity t = Minecraft.getMinecraft().player.getEntityWorld().getTileEntity(new BlockPos(tag.getInteger("x"),tag.getInteger("y"),tag.getInteger("z")));
+		    		if (t != null){
+		    			t.readFromNBT(tag);
+		    			t.markDirty();
+		    		}
+    			}
 	    	});
     		return null;
 	    }

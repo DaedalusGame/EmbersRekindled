@@ -1,0 +1,9 @@
+{
+    "variants":{
+        "type=0":  { "model": "embers:glow"},
+        "type=1":  { "model": "embers:glow"},
+        "type=2":  { "model": "embers:glow"},
+        "type=3":  { "model": "embers:glow"},
+        "type=4":  { "model": "embers:glow"}
+    }
+}

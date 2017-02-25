@@ -12,6 +12,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
+import teamroots.embers.EventManager;
+import teamroots.embers.RegistryManager;
+import teamroots.embers.util.Misc;
 
 public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmberItem {
 
@@ -172,6 +175,23 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 			return 0xFFFFFF;
 		}
 
+	}
+	
+	public static class ColorHandler implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 
+			if (tintIndex == 1){
+				if (stack.hasTagCompound() && stack.getItem() == RegistryManager.ember_cartridge){
+					float coeff = (float)(((IEmberItem)stack.getItem()).getEmber(stack) / ((IEmberItem)stack.getItem()).getEmberCapacity(stack));
+					float timerSine = ((float)Math.sin(8.0*Math.toRadians(EventManager.ticks % 360))+1.0f)/2.0f;
+					int r = (int)255.0f;
+					int g = (int)(255.0f*(1.0f-coeff) + (64.0f*timerSine+64.0f)*coeff);
+					int b = (int)(255.0f*(1.0f-coeff) + 16.0f*coeff);
+					return (r << 16) + (g << 8) + b;
+				}
+			}
+			return Misc.intColor(255, 255, 255);
+		}		
 	}
 
 }

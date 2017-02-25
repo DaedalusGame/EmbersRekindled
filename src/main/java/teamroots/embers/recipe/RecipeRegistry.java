@@ -51,6 +51,7 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("oreCopper", RegistryManager.ore_copper);
 		OreDictionary.registerOre("oreLead", RegistryManager.ore_lead);
 		OreDictionary.registerOre("oreSilver", RegistryManager.ore_silver);
+		OreDictionary.registerOre("slimeball", RegistryManager.adhesive);
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_copper),true,new Object[]{
 				"XXX",
@@ -753,12 +754,71 @@ public class RecipeRegistry {
 				'G', RegistryManager.glimmer_shard,
 				'I', "ingotIron",
 				'P', "plateIron"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sealed_planks,8),true,new Object[]{
+				"PPP",
+				"PSP",
+				"PPP",
+				'S', "slimeball",
+				'P', "plankWood"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.wrapped_sealed_planks,1),new Object[]{
+				Blocks.IRON_BARS, RegistryManager.sealed_planks}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.golems_eye,1),true,new Object[]{
+				"BCB",
+				'B', RegistryManager.archaic_brick,
+				'C', RegistryManager.ancient_motive_core}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.archaic_bricks,1),true,new Object[]{
+				"BB",
+				"BB",
+				'B', RegistryManager.archaic_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.archaic_light,1),true,new Object[]{
+				" B ",
+				"BSB",
+				" B ",
+				'B', RegistryManager.archaic_brick,
+				'S', RegistryManager.shard_ember}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.dawnstone_anvil,1),true,new Object[]{
+				"BBB",
+				"cIc",
+				"CCC",
+				'B', "blockDawnstone",
+				'I', "ingotDawnstone",
+				'C', RegistryManager.block_caminite_brick,
+				'c', RegistryManager.brick_caminite}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.auto_hammer,1),true,new Object[]{
+				"cc ",
+				"CIB",
+				"cc ",
+				'B', "blockIron",
+				'I', "ingotIron",
+				'C', "blockCopper",
+				'c', RegistryManager.stairs_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.auto_hammer,1),true,new Object[]{
+				" cc",
+				"BIC",
+				" cc",
+				'B', "blockIron",
+				'I', "ingotIron",
+				'C', "blockCopper",
+				'c', RegistryManager.stairs_caminite_brick}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.vacuum,1),true,new Object[]{
+				" LL",
+				"P  ",
+				" LL",
+				'P', RegistryManager.item_pipe,
+				'L', RegistryManager.ingot_lead}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.vacuum,1),true,new Object[]{
+				"LL ",
+				"  P",
+				"LL ",
+				'P', RegistryManager.item_pipe,
+				'L', RegistryManager.ingot_lead}));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_copper), new ItemStack(RegistryManager.ingot_copper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_silver), new ItemStack(RegistryManager.ingot_silver), 0.35f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_lead), new ItemStack(RegistryManager.ingot_lead), 0.35f);
+		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_quartz), new ItemStack(Items.QUARTZ), 0.35f);
 
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.blend_caminite), new ItemStack(RegistryManager.brick_caminite), 0.35f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.plate_caminite_raw), new ItemStack(RegistryManager.plate_caminite), 0.35f);
@@ -818,14 +878,23 @@ public class RecipeRegistry {
 		
 		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,4),new FluidStack(RegistryManager.fluid_molten_gold,4)}, new FluidStack(RegistryManager.fluid_molten_dawnstone,16)));
 	
-		alchemyRecipes.add(new AlchemyRecipe(8, 16, 0, 0, 8, 16, 0, 0, 0, 0, new ItemStack(RegistryManager.ingot_copper), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.ore_copper,1)));
-		alchemyRecipes.add(new AlchemyRecipe(8, 16, 0, 0, 0, 0, 8, 16, 0, 0, new ItemStack(RegistryManager.ingot_silver), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.ore_silver,1)));
-		alchemyRecipes.add(new AlchemyRecipe(8, 16, 0, 0, 0, 0, 0, 0, 8, 16, new ItemStack(RegistryManager.ingot_lead), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.ore_lead,1)));
-		alchemyRecipes.add(new AlchemyRecipe(8, 16, 8, 16, 0, 0, 0, 0, 0, 0, new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(Blocks.GOLD_ORE,1)));
-		alchemyRecipes.add(new AlchemyRecipe(16, 32, 0, 0, 0, 0, 0, 0, 0, 0, new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.STONE), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(Blocks.IRON_ORE,1)));
+		alchemyRecipes.add(new AlchemyRecipe(48, 64, 0, 0, 48, 64, 0, 0, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(RegistryManager.ingot_copper), new ItemStack(RegistryManager.ingot_copper), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,2)));
+		alchemyRecipes.add(new AlchemyRecipe(48, 64, 0, 0, 0, 0, 48, 64, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(RegistryManager.ingot_silver), new ItemStack(RegistryManager.ingot_silver), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,4)));
+		alchemyRecipes.add(new AlchemyRecipe(48, 64, 0, 0, 0, 0, 0, 0, 48, 64, new ItemStack(Items.QUARTZ), new ItemStack(RegistryManager.ingot_lead), new ItemStack(RegistryManager.ingot_lead), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,3)));
+		alchemyRecipes.add(new AlchemyRecipe(48, 64, 48, 64, 0, 0, 0, 0, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(Items.GOLD_INGOT), new ItemStack(Items.GOLD_INGOT), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,1)));
+		alchemyRecipes.add(new AlchemyRecipe(96, 128, 0, 0, 0, 0, 0, 0, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.IRON_INGOT), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,0)));
 		alchemyRecipes.add(new AlchemyRecipe(12, 24, 0, 0, 0, 0, 0, 0, 12, 24, new ItemStack(Blocks.WOOL), new ItemStack(RegistryManager.dust_ash), new ItemStack(RegistryManager.dust_ash), new ItemStack(Items.STRING), new ItemStack(Items.STRING), new ItemStack(RegistryManager.ashen_cloth,2)));
 		alchemyRecipes.add(new AlchemyRecipe(0, 0, 32, 48, 0, 0, 0, 0, 24, 40, new ItemStack(Items.DIAMOND), new ItemStack(RegistryManager.ingot_dawnstone), new ItemStack(Items.COAL), new ItemStack(Items.COAL), new ItemStack(Items.COAL), new ItemStack(RegistryManager.inflictor_gem,1)));
-		alchemyRecipes.add(new AlchemyRecipe(0, 0, 64, 80, 0, 0, 0, 0, 0, 0, new ItemStack(Items.DIAMOND), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.REDSTONE), new ItemStack(Items.REDSTONE), new ItemStack(RegistryManager.glimmer_shard,1)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 64, 80, 0, 0, 0, 0, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(Items.GUNPOWDER), new ItemStack(Items.GUNPOWDER), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.glimmer_shard,1)));
+		alchemyRecipes.add(new AlchemyRecipe(24, 36, 0, 0, 0, 0, 0, 0, 0, 0, new ItemStack(Items.IRON_INGOT), new ItemStack(Items.QUARTZ), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE,1,4), ItemStack.EMPTY, new ItemStack(RegistryManager.isolated_materia,4)));
+		alchemyRecipes.add(new AlchemyRecipe(12, 18, 0, 0, 0, 0, 0, 0, 0, 0, new ItemStack(Items.CLAY_BALL), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), ItemStack.EMPTY, ItemStack.EMPTY, new ItemStack(RegistryManager.adhesive,6)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 0, 0, 8, 16, 0, 0, 0, 0, new ItemStack(Items.REDSTONE), new ItemStack(RegistryManager.dust_ash), new ItemStack(RegistryManager.dust_ash), new ItemStack(Blocks.COBBLESTONE,1), new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.NETHERRACK,2)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 0, 0, 8, 16, 0, 0, 0, 0, new ItemStack(RegistryManager.dust_ash), new ItemStack(Blocks.SAND), new ItemStack(Blocks.SAND), new ItemStack(Blocks.SAND), new ItemStack(Blocks.SAND), new ItemStack(Blocks.SOUL_SAND,4)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 0, 0, 0, 0, 64, 96, 64, 96, new ItemStack(RegistryManager.sword_lead,1), new ItemStack(Blocks.COAL_BLOCK), new ItemStack(Blocks.OBSIDIAN), new ItemStack(RegistryManager.ingot_lead), new ItemStack(RegistryManager.ingot_lead), new ItemStack(RegistryManager.tyrfing,1)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 24, 48, 24, 48, 0, 0, 0, 0, new ItemStack(RegistryManager.crystal_ember,1), new ItemStack(Items.GUNPOWDER), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.ember_cluster,1)));
+		alchemyRecipes.add(new AlchemyRecipe(32, 48, 0, 0, 0, 0, 24, 32, 0, 0, new ItemStack(RegistryManager.ancient_motive_core,1), new ItemStack(RegistryManager.ingot_dawnstone), new ItemStack(RegistryManager.ember_cluster), new ItemStack(RegistryManager.ingot_dawnstone), new ItemStack(RegistryManager.plate_copper), new ItemStack(RegistryManager.wildfire_core,1)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 4, 8, 0, 0, 0, 0, 0, 0, new ItemStack(RegistryManager.archaic_brick,1), new ItemStack(Blocks.SOUL_SAND), new ItemStack(Blocks.SOUL_SAND), new ItemStack(Items.CLAY_BALL), new ItemStack(Items.CLAY_BALL), new ItemStack(RegistryManager.archaic_brick,5)));
+		alchemyRecipes.add(new AlchemyRecipe(0, 0, 24, 32, 0, 0, 0, 0, 0, 0, new ItemStack(RegistryManager.shard_ember,1), new ItemStack(RegistryManager.archaic_brick), new ItemStack(RegistryManager.archaic_brick), new ItemStack(RegistryManager.archaic_brick), new ItemStack(RegistryManager.archaic_brick), new ItemStack(RegistryManager.ancient_motive_core,1)));
 	}
 	
 	public static ItemStampingRecipe getStampingRecipe(ItemStack stack, FluidStack fluid, EnumStampType type){

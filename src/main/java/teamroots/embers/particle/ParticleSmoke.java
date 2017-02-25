@@ -17,8 +17,9 @@ public class ParticleSmoke extends Particle implements IEmberParticle{
 	public float colorG = 0;
 	public float colorB = 0;
 	public float initScale = 0;
+	public float initAlpha = 0;
 	public ResourceLocation texture = new ResourceLocation("embers:entity/particle_smoke");
-	public ParticleSmoke(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float scale, int lifetime) {
+	public ParticleSmoke(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float a, float scale, int lifetime) {
 		super(worldIn, x,y,z,0,0,0);
 		this.colorR = r;
 		this.colorG = g;
@@ -40,6 +41,7 @@ public class ParticleSmoke extends Particle implements IEmberParticle{
 		this.motionY = vy;
 		this.motionZ = vz;
 		this.particleAngle = 2.0f*(float)Math.PI;
+		this.particleAlpha = initAlpha = a;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
 	    this.setParticleTexture(sprite);
 	}
@@ -69,7 +71,7 @@ public class ParticleSmoke extends Particle implements IEmberParticle{
 		}
 		float lifeCoeff = (float)this.particleAge/(float)this.particleMaxAge;
 		this.particleScale = initScale-initScale*lifeCoeff;
-		this.particleAlpha = 1.0f-lifeCoeff;
+		this.particleAlpha = (1.0f-lifeCoeff) * initAlpha;
 	}
 
 	@Override

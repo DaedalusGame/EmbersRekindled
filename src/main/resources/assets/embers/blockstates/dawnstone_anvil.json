@@ -1,0 +1,6 @@
+{
+    "variants":{
+        "xaligned=false":  { "model": "embers:dawnstone_anvil", "y": 90 },
+        "xaligned=true":  { "model": "embers:dawnstone_anvil", "y": 0 }
+    }
+}

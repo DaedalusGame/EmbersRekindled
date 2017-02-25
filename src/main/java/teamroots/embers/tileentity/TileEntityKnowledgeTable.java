@@ -32,7 +32,6 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityKnowledgeTable.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityKnowledgeTable.this));
         }
 	};
 	Random random = new Random();
@@ -93,9 +92,6 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
 		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-			}
 			return true;
 		}
 		else {
@@ -103,9 +99,6 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				return true;
 			}
@@ -124,5 +117,28 @@ public class TileEntityKnowledgeTable extends TileEntity implements ITileEntityB
 	public void update() {
 		turnRate = 1;
 		angle += turnRate;
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

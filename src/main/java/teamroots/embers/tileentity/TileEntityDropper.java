@@ -31,7 +31,6 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityDropper.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityDropper.this));
         }
 	};
 	Random random = new Random();
@@ -75,6 +74,29 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 			return true;
 		}
 		return super.hasCapability(capability, facing);
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 	
 	@Override

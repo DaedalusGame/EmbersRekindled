@@ -7,12 +7,14 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.research.ResearchManager;
+import teamroots.embers.util.EmberGenUtil;
 
 public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event){
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
+		EmberGenUtil.init();
 		RecipeRegistry.init();
 		ResearchManager.initResearches();
 	}

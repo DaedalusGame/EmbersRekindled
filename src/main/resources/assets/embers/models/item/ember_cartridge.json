@@ -1,6 +1,8 @@
 {
     "parent" : "item/generated",
     "textures" : {
-        "layer0" : "embers:items/ember_cartridge"
+        "layer0" : "embers:items/ember_cartridge",
+        "layer1" : "embers:items/ember_cartridge_glass",
+        "layer2" : "embers:items/ember_cartridge_glass_shine"
     }
 }

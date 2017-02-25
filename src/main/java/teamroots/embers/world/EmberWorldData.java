@@ -86,9 +86,6 @@ public class EmberWorldData extends WorldSavedData {
 			emberData.replace(chunkString, value);
 			markDirty();
 		}
-		if (value != emberData.get(chunkString)){
-			System.out.println("Desired: "+value+", Curr: "+emberData.get(chunkString));
-		}
 	}
 
 	@Override

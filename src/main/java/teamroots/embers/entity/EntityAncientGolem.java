@@ -14,8 +14,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
+import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 
 public class EntityAncientGolem extends EntityMob {
@@ -61,6 +63,7 @@ public class EntityAncientGolem extends EntityMob {
     @Override
     public void onUpdate(){
     	super.onUpdate();
+    	this.rotationYaw = this.rotationYawHead;
     	if (this.ticksExisted % 100 == 0 && this.getAttackTarget() != null){
     		if (!getEntityWorld().isRemote){
     			EntityEmberProjectile proj = new EntityEmberProjectile(getEntityWorld());
@@ -69,24 +72,9 @@ public class EntityAncientGolem extends EntityMob {
     		}
     	}
     }
-    
-    @Override
-    public void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source){
-    	super.dropLoot(wasRecentlyHit,lootingModifier,source);
-    	if (!getEntityWorld().isRemote){
-    		if (source.getEntity() instanceof EntityPlayer && !(source.getEntity() instanceof FakePlayer)){
-    			if (((EntityPlayer)source.getEntity()).getHeldItemMainhand() != ItemStack.EMPTY){
-    				if (((EntityPlayer)source.getEntity()).getHeldItemMainhand().getItem() instanceof ItemPickaxe){
-    	    			getEntityWorld().spawnEntity(new EntityItem(getEntityWorld(),posX,posY+0.5,posZ,new ItemStack(RegistryManager.golems_eye,1)));
-    				}
-    			}
-    		}
-	    	for (int i = 0; i < 3+lootingModifier; i ++){
-	    		if (rand.nextInt(2) == 0){
-	    			getEntityWorld().spawnEntity(new EntityItem(getEntityWorld(),posX,posY+0.5,posZ,new ItemStack(RegistryManager.core_stone,1)));
-	    		}
-	    	}
-    	}
-    }
-
+	
+	@Override
+	public ResourceLocation getLootTable(){
+		return new ResourceLocation(Embers.MODID+":entity/ancient_golem");
+	}
 }

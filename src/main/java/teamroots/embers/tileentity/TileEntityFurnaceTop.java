@@ -97,17 +97,11 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
 				this.markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return didFill.success;
 			}
 			else {
 				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}
@@ -116,9 +110,6 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
 				inventory.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}
@@ -131,6 +122,29 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 	
 	public int getAmount(){
 		return tank.getFluidAmount();
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 	
 	public Fluid getFluid(){

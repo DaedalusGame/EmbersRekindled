@@ -177,9 +177,6 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 							getWorld().removeEntity(items.get(i));
 						}
 						markDirty();
-						if (!getWorld().isRemote){
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-						}
 						IBlockState state = getWorld().getBlockState(getPos());
 						if (remainder != ItemStack.EMPTY){
 							getWorld().spawnEntity(new EntityItem(getWorld(),items.get(i).posX,items.get(i).posY,items.get(i).posZ,remainder));
@@ -194,5 +191,28 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 				}
 			}
 		//}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

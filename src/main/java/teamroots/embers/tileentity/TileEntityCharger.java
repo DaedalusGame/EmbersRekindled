@@ -38,7 +38,6 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityCharger.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityCharger.this));
         }
 	};
 	Random random = new Random();
@@ -110,9 +109,6 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			if (heldItem.getItem() instanceof IEmberItem){
 				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}
@@ -121,9 +117,6 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				return true;
 			}
@@ -147,10 +140,7 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 				double emberAdded = ((IEmberItem)inventory.getStackInSlot(0).getItem()).addAmount(inventory.getStackInSlot(0),Math.min(10.0, capability.getEmber()), true);
 				capability.removeAmount(emberAdded, true);
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
-				else {
+				if (getWorld().isRemote) {
 					if (this.capability.getEmber() > 0 && getWorld().isRemote){
 						for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
 							ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
@@ -160,5 +150,28 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			}
 		}
 		angle += turnRate;
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }
