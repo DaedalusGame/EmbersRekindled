@@ -34,7 +34,6 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityBin.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityBin.this));
         }
 	};
 	Random random = new Random();
@@ -87,6 +86,29 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 		}
 		return super.getCapability(capability, facing);
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
@@ -95,9 +117,6 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-			}
 			return true;
 		}
 		else {
@@ -105,9 +124,6 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
 				inventory.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}

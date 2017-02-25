@@ -21,7 +21,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable {
@@ -35,7 +37,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (!stack.getItem().equals(RegistryManager.crystal_ember) && !stack.getItem().equals(RegistryManager.shard_ember)){
+        	if (EmberGenUtil.getEmberForItem(stack.getItem()) == 0){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -110,48 +112,58 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 
 	@Override
 	public void update() {
-		TileEntity tile = getWorld().getTileEntity(getPos().up());
-		if (tile instanceof TileEntityActivatorTop){
-			TileEntityActivatorTop top = (TileEntityActivatorTop)tile;
-			if (top != null){
-				int i = random.nextInt(inventory.getSlots());
-				if (inventory != null){
-					if (inventory.getStackInSlot(i) != ItemStack.EMPTY){
-						if (inventory.getStackInSlot(i).getItem() == RegistryManager.shard_ember){
-							if (top.capability.getEmber() <= top.capability.getEmberCapacity()-750){
-								top.capability.addAmount(750, true);
-								inventory.extractItem(i, 1, false);
-								markDirty();
-								IBlockState state = getWorld().getBlockState(getPos());
-								top.markDirty();
-								state = getWorld().getBlockState(getPos().up());
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(top));
-								}
-							}
-						}
-						else if (inventory.getStackInSlot(i).getItem() == RegistryManager.crystal_ember){
-							if (top.capability.getEmber() <= top.capability.getEmberCapacity()-4500){
-								top.capability.addAmount(4500, true);
-								inventory.extractItem(i, 1, false);
-								markDirty();
-								IBlockState state = getWorld().getBlockState(getPos());
-								top.markDirty();
-								state = getWorld().getBlockState(getPos().up());
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(top));
+		if (!inventory.getStackInSlot(0).isEmpty()){
+			TileEntity tile = getWorld().getTileEntity(getPos().up());
+			if (tile instanceof TileEntityActivatorTop){
+				TileEntityActivatorTop top = (TileEntityActivatorTop)tile;
+				if (top != null){
+					progress ++;
+					if (progress > 40){
+						progress = 0;
+						int i = 0;
+						if (inventory != null){
+							if (EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem()) > 0){
+								double ember = EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem());
+								if (top.capability.getEmber() <= top.capability.getEmberCapacity()-ember){
+									if (!world.isRemote){
+										PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+1.5f,getPos().getZ()+0.5f));
+									}
+									top.capability.addAmount(ember, true);
+									inventory.extractItem(i, 1, false);
+									markDirty();
+									IBlockState state = getWorld().getBlockState(getPos());
+									top.markDirty();
+									state = getWorld().getBlockState(getPos().up());
 								}
 							}
 						}
 					}
+					markDirty();
 				}
 			}
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

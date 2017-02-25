@@ -37,7 +37,6 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityAlchemyPedestal.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityAlchemyPedestal.this));
         }
         
         @Override
@@ -101,6 +100,29 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 		}
 		return super.getCapability(capability, facing);
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
@@ -110,16 +132,10 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 			if (heldItem.getItem() == RegistryManager.dust_ash){
 				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 			}
 			else {
 				player.setHeldItem(hand, this.inventory.insertItem(1,heldItem,false));
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 			}
 			return true;
 		}
@@ -128,9 +144,6 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, inventory.extractItem(1, inventory.getStackInSlot(1).getCount(), false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				return true;
 			}
@@ -138,9 +151,6 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				return true;
 			}

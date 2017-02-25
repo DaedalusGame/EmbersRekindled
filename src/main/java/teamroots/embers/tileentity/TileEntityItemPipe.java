@@ -22,6 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -288,7 +289,6 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					}
 				}
 				updateNeighbors(world);
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 				return true;
 			}
 		}
@@ -325,7 +325,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void update() {
 		ticksExisted ++;
-		if (ticksExisted % (16-pressure) == 0){
+		if (ticksExisted % 1 == 0 && !world.isRemote){
 			ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
 			ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.FORCENONE && up != EnumPipeConnection.LEVER && isConnected(EnumFacing.UP)){
@@ -363,7 +363,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 			if (priorities.size() > 0){
 				if (lastReceived.getX() != 0 || lastReceived.getY() != 0 || lastReceived.getZ() != 0){
 					for (int i = 0; i < 1; i ++){
-						if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
+						if (!inventory.getStackInSlot(0).isEmpty()){
 							EnumFacing face = priorities.get(random.nextInt(priorities.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile != null){
@@ -375,7 +375,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 									}
 									int slot = -1;
 									for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-										if (handler.getStackInSlot(j) == ItemStack.EMPTY){
+										if (handler.getStackInSlot(j).isEmpty()){
 											slot = j;
 										}
 										else {
@@ -386,12 +386,9 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 									}
 									if (slot != -1){
 										ItemStack added = handler.insertItem(slot, passStack, false);
-										if (added == ItemStack.EMPTY){
+										if (added.isEmpty()){
 											ItemStack extracted = this.inventory.extractItem(0, 1, false);
-											if (extracted != ItemStack.EMPTY){
-												if (tile instanceof IPressurizable){
-													((IPressurizable)tile).setPressure(Math.max(0, pressure-1));
-												}
+											if (!extracted.isEmpty()){
 												if (tile instanceof TileEntityItemPipe){
 													((TileEntityItemPipe)tile).lastReceived = getPos();
 												}
@@ -410,9 +407,10 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					}
 				}
 				for (int i = 0; i < toUpdate.size(); i ++){
-					getWorld().getTileEntity(toUpdate.get(i)).markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(getWorld().getTileEntity(toUpdate.get(i))));
+					TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+					tile.markDirty();
+					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+						EventManager.toUpdate.add(tile);
 					}
 				}
 				if (toUpdate.size() > 0){
@@ -422,7 +420,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 			if (connections.size() > 0){
 				if (lastReceived.getX() != 0 || lastReceived.getY() != 0 || lastReceived.getZ() != 0){
 					for (int i = 0; i < 1; i ++){
-						if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
+						if (!inventory.getStackInSlot(0).isEmpty()){
 							EnumFacing face = connections.get(random.nextInt(connections.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile != null){
@@ -434,7 +432,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 									}
 									int slot = -1;
 									for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-										if (handler.getStackInSlot(j) == ItemStack.EMPTY){
+										if (handler.getStackInSlot(j).isEmpty()){
 											slot = j;
 										}
 										else {
@@ -445,12 +443,9 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 									}
 									if (slot != -1){
 										ItemStack added = handler.insertItem(slot, passStack, false);
-										if (added == ItemStack.EMPTY){
+										if (added.isEmpty()){
 											ItemStack extracted = this.inventory.extractItem(0, 1, false);
-											if (extracted != ItemStack.EMPTY){
-												if (tile instanceof IPressurizable){
-													((IPressurizable)tile).setPressure(Math.max(0, pressure-1));
-												}
+											if (!extracted.isEmpty()){
 												if (tile instanceof TileEntityItemPipe){
 													((TileEntityItemPipe)tile).lastReceived = getPos();
 												}
@@ -469,9 +464,10 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					}
 				}
 				for (int i = 0; i < toUpdate.size(); i ++){
-					getWorld().getTileEntity(toUpdate.get(i)).markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(getWorld().getTileEntity(toUpdate.get(i))));
+					TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+					tile.markDirty();
+					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+						EventManager.toUpdate.add(tile);
 					}
 				}
 			}
@@ -486,5 +482,28 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void setPressure(int pressure) {
 		this.pressure = pressure;
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

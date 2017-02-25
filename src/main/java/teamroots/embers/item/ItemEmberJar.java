@@ -12,6 +12,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
+import teamroots.embers.EventManager;
+import teamroots.embers.RegistryManager;
+import teamroots.embers.util.Misc;
 
 public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeldEmberCell, IEmberItem {
 
@@ -153,24 +156,20 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 		return value;
 	}
 	
-	public static class EmberChargeColorHandler implements IItemColor {
-		public EmberChargeColorHandler(){
-			//
-		}
-
+	public static class ColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int layer) {
-			if (layer == 0 && stack.hasTagCompound()){
-				if (stack.getItem() instanceof IEmberItem){
-					double coeff = ((IEmberItem)stack.getItem()).getEmber(stack)/((IEmberItem)stack.getItem()).getEmberCapacity(stack);
-					int r = 255;
-					int g = (int)(255.0*(1.0-coeff)+64.0*coeff);
-					int b = (int)(255.0*(1.0-coeff)+16.0*coeff);
-					return 0xFF0000;
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 
+			if (tintIndex == 1){
+				if (stack.hasTagCompound() && stack.getItem() == RegistryManager.ember_jar){
+					float coeff = (float)(((IEmberItem)stack.getItem()).getEmber(stack) / ((IEmberItem)stack.getItem()).getEmberCapacity(stack));
+					float timerSine = ((float)Math.sin(8.0*Math.toRadians(EventManager.ticks % 360))+1.0f)/2.0f;
+					int r = (int)255.0f;
+					int g = (int)(255.0f*(1.0f-coeff) + (64.0f*timerSine+64.0f)*coeff);
+					int b = (int)(255.0f*(1.0f-coeff) + 16.0f*coeff);
+					return (r << 16) + (g << 8) + b;
 				}
 			}
-			return 0xFFFFFF;
-		}
-
+			return Misc.intColor(255, 255, 255);
+		}		
 	}
 }

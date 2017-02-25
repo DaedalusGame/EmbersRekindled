@@ -61,7 +61,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 		            GlStateManager.enableAlpha();
 		            
 		            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-	
+		            
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
 					GL11.glTranslated(0.5, 0.5, 0.5);

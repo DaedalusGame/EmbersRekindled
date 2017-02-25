@@ -38,7 +38,6 @@ public class BlockTank extends BlockTEBase {
 			world.setTileEntity(pos, tile);
 			tile.getTank().readFromNBT(stack.getTagCompound());
 			tile.markDirty();
-			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
 		}
 	}
 	

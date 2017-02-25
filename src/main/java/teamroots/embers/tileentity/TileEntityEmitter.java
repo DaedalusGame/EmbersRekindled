@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -138,6 +139,29 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 		}
 		return EnumConnection.NONE;
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
@@ -163,6 +187,9 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					markDirty();
 					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
 					getWorld().getTileEntity(offset).markDirty();
+					if (!getWorld().isRemote && !(getWorld().getTileEntity(offset) instanceof ITileEntityBase)){
+						EventManager.toUpdate.add(getWorld().getTileEntity(offset));
+					}
 				}
 			}
 		}

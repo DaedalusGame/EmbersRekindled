@@ -80,4 +80,27 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
 		this.invalidate();
 		world.setTileEntity(pos, null);
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 }

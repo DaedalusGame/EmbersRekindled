@@ -41,8 +41,6 @@ public class MatchUtil {
 	public static boolean stackListsMatch(List<ItemStack> list1, List<ItemStack> list2){
 		list1.sort(stackComparator);
 		list2.sort(stackComparator);
-		System.out.println(list1);
-		System.out.println(list2);
 		boolean doMatch = list1.size() == list2.size();
 		if (doMatch){
 			for (int i = 0; i < list1.size(); i ++){

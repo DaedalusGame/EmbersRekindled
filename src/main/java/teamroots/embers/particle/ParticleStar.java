@@ -75,7 +75,7 @@ public class ParticleStar extends Particle implements IEmberParticle{
 		}
 		float lifeCoeff = (float)this.particleAge/(float)this.particleMaxAge;
 		this.particleScale = initScale-initScale*lifeCoeff;
-		this.particleAlpha = 1.0f-lifeCoeff;
+		this.particleAlpha = (1.0f-lifeCoeff)*(1.0f-lifeCoeff);
 		this.prevParticleAngle = particleAngle;
 		particleAngle += rotScale;
 	}

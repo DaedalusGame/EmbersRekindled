@@ -61,9 +61,6 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
 				this.markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return didFill.success;
 			}
 		}
@@ -117,5 +114,28 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 		if (ticksExisted % 20 == 0){
 			updateCapacity();
 		}
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

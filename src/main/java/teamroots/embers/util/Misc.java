@@ -5,7 +5,17 @@ import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -30,6 +40,19 @@ public class Misc {
 		else {
 			return face.getOpposite();
 		}
+	}
+	
+	public static ItemStack getRepairItem(ItemStack stack){
+		if (stack.getItem() instanceof ItemTool){
+			return ((ItemTool)stack.getItem()).getToolMaterial().getRepairItemStack();
+		}
+		if (stack.getItem() instanceof ItemSword){
+			return ToolMaterial.valueOf(((ItemSword)stack.getItem()).getToolMaterialName()).getRepairItemStack();
+		}
+		if (stack.getItem() instanceof ItemArmor){
+			return ((ItemArmor)stack.getItem()).getArmorMaterial().getRepairItemStack();
+		}
+		return ItemStack.EMPTY;
 	}
 	
 	public static EntityItem rayTraceItem(World world, double posX, double posY, double posZ, double dirX, double dirY, double dirZ){
@@ -84,6 +107,49 @@ public class Misc {
 		else {
 			return face.getOpposite();
 		}
+	}
+	
+	public static int getResourceCount(ItemStack stack){
+		int baseCount = 0;
+		if (stack.getItem() instanceof ItemArmor){
+			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.HEAD){
+				baseCount = 5;
+			}
+			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.CHEST){
+				baseCount = 8;
+			}
+			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.LEGS){
+				baseCount = 7;
+			}
+			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.FEET){
+				baseCount = 4;
+			}
+		}
+		if (stack.getItem() instanceof ItemSword){
+			baseCount = 2;
+		}
+		if (stack.getItem() instanceof ItemBow){
+			baseCount = 3;
+		}
+		if (stack.getItem() instanceof ItemTool){
+			if (stack.getItem() instanceof ItemPickaxe || stack.getItem().getHarvestLevel(stack, "pickaxe", null, null) > -1){
+				baseCount = 3;
+			}
+			if (stack.getItem() instanceof ItemAxe || stack.getItem().getHarvestLevel(stack, "axe", null, null) > -1){
+				baseCount = 3;
+			}
+			if (stack.getItem() instanceof ItemHoe){
+				baseCount = 2;
+			}
+			if (stack.getItem() instanceof ItemSpade){
+				baseCount = 1;
+			}
+			baseCount = 1;
+		}
+		if (baseCount > 0){
+			return (int)((float)baseCount * (1.0f-(float)stack.getItemDamage() / (float)stack.getMaxDamage()));
+		}
+		return -1;
 	}
 	
 	public static EnumFacing getOppositeVerticalFace(EnumFacing face){

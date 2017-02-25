@@ -22,6 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -36,13 +37,12 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityItemTransfer.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityItemTransfer.this));
         }
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (filterItem != ItemStack.EMPTY){
-        		if (stack != ItemStack.EMPTY){
+        	if (!filterItem.isEmpty()){
+        		if (!stack.isEmpty()){
         			if (filterItem.getItem() == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage()){
             			return super.insertItem(slot, stack, simulate);	
         			}
@@ -65,7 +65,7 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
 		tag.setTag("inventory", inventory.serializeNBT());
-		if (filterItem != ItemStack.EMPTY){
+		if (!filterItem.isEmpty()){
 			tag.setTag("filter", filterItem.writeToNBT(new NBTTagCompound()));
 		}
 		tag.setInteger("lastX", this.lastReceived.getX());
@@ -132,16 +132,16 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (heldItem != ItemStack.EMPTY){
 			this.filterItem = heldItem.copy();
+			markDirty();
 			world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, true), 8);
 			world.notifyBlockUpdate(pos, state, state.withProperty(BlockItemTransfer.filter, true), 8);
-			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 			return true;
 		}
 		else {
 			this.filterItem = ItemStack.EMPTY;
+			markDirty();
 			world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, false), 8);
 			world.notifyBlockUpdate(pos, state, state.withProperty(BlockItemTransfer.filter, false), 8);
-			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 			return true;
 		}
 	}
@@ -162,7 +162,7 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 		connections.add(state.getValue(BlockItemTransfer.facing));
 		if (connections.size() > 0){
 			for (int i = 0; i < 1; i ++){
-				if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
+				if (!inventory.getStackInSlot(0).isEmpty()){
 					EnumFacing face = connections.get(random.nextInt(connections.size()));
 					TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 					if (tile != null){
@@ -174,7 +174,7 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 							}
 							int slot = -1;
 							for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-								if (handler.getStackInSlot(j) == ItemStack.EMPTY){
+								if (handler.getStackInSlot(j).isEmpty()){
 									slot = j;
 								}
 								else {
@@ -185,12 +185,9 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 							}
 							if (slot != -1){
 								ItemStack added = handler.insertItem(slot, passStack, false);
-								if (added == ItemStack.EMPTY){
+								if (added.isEmpty()){
 									ItemStack extracted = this.inventory.extractItem(0, 1, false);
-									if (extracted != ItemStack.EMPTY){
-										if (tile instanceof IPressurizable){
-											((IPressurizable)tile).setPressure(Math.max(0, pressure-1));
-										}
+									if (!extracted.isEmpty()){
 										if (tile instanceof TileEntityItemPipe){
 											((TileEntityItemPipe)tile).lastReceived = getPos();
 										}
@@ -209,9 +206,10 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 			}
 		}
 		for (int i = 0; i < toUpdate.size(); i ++){
-			getWorld().getTileEntity(toUpdate.get(i)).markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(getWorld().getTileEntity(toUpdate.get(i))));
+			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+			tile.markDirty();
+			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+				EventManager.toUpdate.add(tile);
 			}
 		}
 	}
@@ -229,5 +227,28 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 	@Override
 	public int getPriority() {
 		return 1;
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

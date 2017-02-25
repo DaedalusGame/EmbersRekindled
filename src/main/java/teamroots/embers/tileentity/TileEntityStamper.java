@@ -25,6 +25,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockStamper;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageStamperFX;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
@@ -44,7 +45,6 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
         @Override
         protected void onContentsChanged(int slot) {
         	TileEntityStamper.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityStamper.this));
         }
         
         @Override
@@ -104,9 +104,6 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 					}
 					player.setHeldItem(hand, this.stamp.insertItem(0,newStack,false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 					return true;
 				}
 			}
@@ -116,9 +113,6 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,stamp.getStackInSlot(0)));
 				stamp.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 				return true;
 			}
 		}
@@ -149,6 +143,9 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 					if (recipe != null){
 						if (this.capability.getEmber() > 80.0){
 							this.capability.removeAmount(80.0, true);
+							if (!world.isRemote){
+								PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().offset(face,2).getX()+0.5f,getPos().offset(face,2).getY()+1.0f,getPos().offset(face,2).getZ()+0.5f));
+							}
 							powered = true;
 							ItemStack result = recipe.getResult(stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,EnumStampType.getType(this.stamp.getStackInSlot(0))).copy();
 							if (recipe.getStack() != ItemStack.EMPTY){
@@ -166,13 +163,8 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 									getWorld().spawnEntity(item);
 								}
 								bin.markDirty();
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(bin));
-								}
 								IBlockState state = getWorld().getBlockState(getPos().offset(face,3));
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
+								markDirty();
 							}
 							else if (!getWorld().isRemote){
 								EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
@@ -180,9 +172,6 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 							}
 							stamp.markDirty();
 							IBlockState state = getWorld().getBlockState(getPos().offset(face,2));
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(stamp));
-							}
 						}
 					}
 					ItemStampingOreRecipe oreRecipe = RecipeRegistry.getStampingOreRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
@@ -206,13 +195,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 									getWorld().spawnEntity(item);
 								}
 								bin.markDirty();
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(bin));
-								}
-								IBlockState state = getWorld().getBlockState(getPos().offset(face,3));
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
+								markDirty();
 							}
 							else if (!getWorld().isRemote){
 								EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
@@ -220,33 +203,21 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 							}
 							stamp.markDirty();
 							IBlockState state = getWorld().getBlockState(getPos().offset(face,2));
-							if (!getWorld().isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(stamp));
-							}
 						}
 					}
 					markDirty();
 					IBlockState state = getWorld().getBlockState(getPos());
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				else if (this.ticksExisted % 80 == 10 && powered && !getWorld().isRemote){
 					powered = false;
 					markDirty();
 					IBlockState state = getWorld().getBlockState(getPos());
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 			}
 			else if (powered){
 				powered = false;
 				markDirty();
 				IBlockState state = getWorld().getBlockState(getPos());
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 			}
 		}
 	}
@@ -271,5 +242,28 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 			return (T)stamp;
 		}
 		return super.getCapability(capability, facing);
+	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
 	}
 }

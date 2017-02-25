@@ -4,17 +4,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import teamroots.embers.Embers;
-import teamroots.embers.network.message.MessageBeamCannonFX;
-import teamroots.embers.network.message.MessageCannonBeamFX;
-import teamroots.embers.network.message.MessageEmberBurstFX;
-import teamroots.embers.network.message.MessageEmberData;
-import teamroots.embers.network.message.MessageEmberDataRequest;
-import teamroots.embers.network.message.MessageEmberGeneration;
-import teamroots.embers.network.message.MessageEmberSparkleFX;
-import teamroots.embers.network.message.MessageEmberSphereFX;
-import teamroots.embers.network.message.MessageItemUpdate;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.network.message.MessageTEUpdateRequest;
+import teamroots.embers.network.message.*;
 
 public class PacketHandler {
 	public static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Embers.MODID);
@@ -32,5 +22,9 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageEmberSphereFX.MessageHolder.class,MessageEmberSphereFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageBeamCannonFX.MessageHolder.class,MessageBeamCannonFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageTEUpdateRequest.MessageHolder.class,MessageTEUpdateRequest.class,id ++,Side.SERVER);
-    }
+        INSTANCE.registerMessage(MessageStamperFX.MessageHolder.class,MessageStamperFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageAnvilSparksFX.MessageHolder.class,MessageAnvilSparksFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageTyrfingBurstFX.MessageHolder.class,MessageTyrfingBurstFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageEmberActivationFX.MessageHolder.class,MessageEmberActivationFX.class,id ++,Side.CLIENT);
+       }
 }

@@ -28,19 +28,13 @@ public class BlockItemPump extends BlockTEBase {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
-		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
-			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
-			if (!world.isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
-			}
-		}
+		((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
+		world.getTileEntity(pos).markDirty();
 	}
 	
 	@Override
 	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
-		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
-			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
-		}
+		((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
 	}
 	
 	@Override
@@ -57,9 +51,7 @@ public class BlockItemPump extends BlockTEBase {
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
 		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
 			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
-			if (!world.isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(world.getTileEntity(pos)));
-			}
+			world.getTileEntity(pos).markDirty();
 		}
 	}
 	

@@ -49,10 +49,12 @@ public class ItemAshenCloak extends ItemArmorBase {
 		for (int i = 1; i < 8; i ++){
 			if (stack.hasTagCompound()){
 				ItemStack gem = new ItemStack(stack.getTagCompound().getCompoundTag("gem"+i));
-				if (gem.hasTagCompound()){
-					if (gem.getTagCompound().hasKey("type")){
-						if (gem.getTagCompound().getString("type").compareTo(source.getDamageType()) == 0){
-							mult += 0.15f;
+				if (gem != ItemStack.EMPTY){
+					if (gem.hasTagCompound()){
+						if (gem.getTagCompound().hasKey("type")){
+							if (gem.getTagCompound().getString("type").compareTo(source.getDamageType()) == 0){
+								mult += 0.15f;
+							}
 						}
 					}
 				}

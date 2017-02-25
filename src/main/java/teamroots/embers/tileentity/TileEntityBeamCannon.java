@@ -99,6 +99,29 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		this.invalidate();
 		world.setTileEntity(pos, null);
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public void update() {
@@ -128,7 +151,6 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 						if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
 							tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(capability.getEmber(), true);
 							tile.markDirty();
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
 						}
 						doContinue = false;
 					}
@@ -142,7 +164,6 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 				}
 				this.capability.setEmber(0);
 				markDirty();	
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 				PacketHandler.INSTANCE.sendToAll(new MessageBeamCannonFX(this));
 			}
 		}
@@ -167,7 +188,6 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	@Override
 	public void setTarget(BlockPos pos) {
 		this.target = pos;
-		PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
 		markDirty();
 	}
 }

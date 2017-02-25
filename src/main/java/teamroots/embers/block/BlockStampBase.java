@@ -36,7 +36,7 @@ public class BlockStampBase extends BlockTEBase {
 	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-		return getDefaultState().withProperty(facing, face.getOpposite());
+		return getDefaultState().withProperty(facing, EnumFacing.DOWN);
 	}
 	
 	@Override

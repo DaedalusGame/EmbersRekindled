@@ -42,18 +42,18 @@ public class MessageTEUpdateRequest implements IMessage {
 		buf.writeLong(pos);
 	}
 
-    public static class MessageHolder implements IMessageHandler<MessageTEUpdateRequest,IMessage>
+    public static class MessageHolder implements IMessageHandler<MessageTEUpdateRequest,MessageTEUpdate>
     {
     	@SideOnly(Side.CLIENT)
         @Override
-        public IMessage onMessage(final MessageTEUpdateRequest message, final MessageContext ctx) {
+        public MessageTEUpdate onMessage(final MessageTEUpdateRequest message, final MessageContext ctx) {
     		Minecraft.getMinecraft().addScheduledTask(()-> {
 	    		BlockPos pos = BlockPos.fromLong(message.pos);
     			EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(message.id);
     			if (player != null){
     				if (player.world != null){
     					if (player.world.getTileEntity(pos) != null){
-    						return new MessageTEUpdate(player.world.getTileEntity(pos));
+    						player.world.getTileEntity(pos).markDirty();
     					}
     				}
     			}

@@ -27,172 +27,39 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.block.BlockActivator;
-import teamroots.embers.block.BlockAdvancedEdge;
-import teamroots.embers.block.BlockAlchemyPedestal;
-import teamroots.embers.block.BlockAlchemyTablet;
-import teamroots.embers.block.BlockBase;
-import teamroots.embers.block.BlockBeamCannon;
-import teamroots.embers.block.BlockBeamSplitter;
-import teamroots.embers.block.BlockBin;
-import teamroots.embers.block.BlockCharger;
-import teamroots.embers.block.BlockCinderPlinth;
-import teamroots.embers.block.BlockCopperCell;
-import teamroots.embers.block.BlockCrystalCell;
-import teamroots.embers.block.BlockDoubleSlabBase;
-import teamroots.embers.block.BlockDropper;
-import teamroots.embers.block.BlockEmberBore;
-import teamroots.embers.block.BlockEmberReceiver;
-import teamroots.embers.block.BlockFluidGauge;
-import teamroots.embers.block.BlockEmberEmitter;
-import teamroots.embers.block.BlockEmberGauge;
-import teamroots.embers.block.BlockFurnace;
-import teamroots.embers.block.BlockGlow;
-import teamroots.embers.block.BlockHeatCoil;
-import teamroots.embers.block.BlockItemGauge;
-import teamroots.embers.block.BlockItemPipe;
-import teamroots.embers.block.BlockItemPump;
-import teamroots.embers.block.BlockItemTransfer;
-import teamroots.embers.block.BlockKnowledgeTable;
-import teamroots.embers.block.BlockLantern;
-import teamroots.embers.block.BlockLargeTank;
-import teamroots.embers.block.BlockMechAccessor;
-import teamroots.embers.block.BlockMechCore;
-import teamroots.embers.block.BlockMechEdge;
-import teamroots.embers.block.BlockMixer;
-import teamroots.embers.block.BlockPipe;
-import teamroots.embers.block.BlockPump;
-import teamroots.embers.block.BlockRelay;
-import teamroots.embers.block.BlockSlabBase;
-import teamroots.embers.block.BlockStairsBase;
-import teamroots.embers.block.BlockStampBase;
-import teamroots.embers.block.BlockStamper;
-import teamroots.embers.block.BlockStoneEdge;
-import teamroots.embers.block.BlockTank;
-import teamroots.embers.block.BlockWallBase;
-import teamroots.embers.block.IModeledBlock;
-import teamroots.embers.block.MaterialUnpushable;
-import teamroots.embers.block.fluid.BlockMoltenCopper;
-import teamroots.embers.block.fluid.BlockMoltenDawnstone;
-import teamroots.embers.block.fluid.BlockMoltenGold;
-import teamroots.embers.block.fluid.BlockMoltenIron;
-import teamroots.embers.block.fluid.BlockMoltenLead;
-import teamroots.embers.block.fluid.BlockMoltenSilver;
-import teamroots.embers.damage.DamageEmber;
-import teamroots.embers.entity.EntityAncientGolem;
-import teamroots.embers.entity.EntityEmberLight;
-import teamroots.embers.entity.EntityEmberPacket;
-import teamroots.embers.entity.EntityEmberProjectile;
-import teamroots.embers.entity.RenderAncientGolem;
-import teamroots.embers.entity.RenderEmberPacket;
-import teamroots.embers.fluid.FluidMoltenCopper;
-import teamroots.embers.fluid.FluidMoltenDawnstone;
-import teamroots.embers.fluid.FluidMoltenGold;
-import teamroots.embers.fluid.FluidMoltenIron;
-import teamroots.embers.fluid.FluidMoltenLead;
-import teamroots.embers.fluid.FluidMoltenSilver;
-import teamroots.embers.item.IModeledItem;
-import teamroots.embers.item.ItemAlchemicWaste;
-import teamroots.embers.item.ItemAshenCloak;
-import teamroots.embers.item.ItemAxeBase;
-import teamroots.embers.item.ItemBase;
-import teamroots.embers.item.ItemCinderStaff;
-import teamroots.embers.item.ItemClockworkAxe;
-import teamroots.embers.item.ItemClockworkPickaxe;
-import teamroots.embers.item.ItemDebug;
-import teamroots.embers.item.ItemEmberCartridge;
-import teamroots.embers.item.ItemEmberGauge;
-import teamroots.embers.item.ItemEmberJar;
-import teamroots.embers.item.ItemGlimmerLamp;
-import teamroots.embers.item.ItemGlimmerShard;
-import teamroots.embers.item.ItemGolemsEye;
-import teamroots.embers.item.ItemGrandhammer;
-import teamroots.embers.item.ItemHoeBase;
-import teamroots.embers.item.ItemIgnitionCannon;
-import teamroots.embers.item.ItemInflictorGem;
-import teamroots.embers.item.ItemPickaxeBase;
-import teamroots.embers.item.ItemShovelBase;
-import teamroots.embers.item.ItemSwordBase;
-import teamroots.embers.item.ItemTinkerHammer;
-import teamroots.embers.item.block.ItemBlockSlab;
+import teamroots.embers.block.*;
+import teamroots.embers.block.fluid.*;
+import teamroots.embers.damage.*;
+import teamroots.embers.entity.*;
+import teamroots.embers.fluid.*;
+import teamroots.embers.item.*;
+import teamroots.embers.item.block.*;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
 import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.tileentity.TileEntityActivatorBottom;
-import teamroots.embers.tileentity.TileEntityActivatorTop;
-import teamroots.embers.tileentity.TileEntityAlchemyPedestal;
-import teamroots.embers.tileentity.TileEntityAlchemyPedestalRenderer;
-import teamroots.embers.tileentity.TileEntityAlchemyTablet;
-import teamroots.embers.tileentity.TileEntityAlchemyTabletRenderer;
-import teamroots.embers.tileentity.TileEntityBeamCannon;
-import teamroots.embers.tileentity.TileEntityBeamCannonRenderer;
-import teamroots.embers.tileentity.TileEntityBeamSplitter;
-import teamroots.embers.tileentity.TileEntityBin;
-import teamroots.embers.tileentity.TileEntityBinRenderer;
-import teamroots.embers.tileentity.TileEntityCharger;
-import teamroots.embers.tileentity.TileEntityChargerRenderer;
-import teamroots.embers.tileentity.TileEntityCinderPlinth;
-import teamroots.embers.tileentity.TileEntityCinderPlinthRenderer;
-import teamroots.embers.tileentity.TileEntityCopperCell;
-import teamroots.embers.tileentity.TileEntityCrystalCell;
-import teamroots.embers.tileentity.TileEntityCrystalCellRenderer;
-import teamroots.embers.tileentity.TileEntityDropper;
-import teamroots.embers.tileentity.TileEntityEmberBore;
-import teamroots.embers.tileentity.TileEntityEmberBoreRenderer;
-import teamroots.embers.tileentity.TileEntityEmitter;
-import teamroots.embers.tileentity.TileEntityEmitterRenderer;
-import teamroots.embers.tileentity.TileEntityFurnaceBottom;
-import teamroots.embers.tileentity.TileEntityFurnaceTop;
-import teamroots.embers.tileentity.TileEntityFurnaceTopRenderer;
-import teamroots.embers.tileentity.TileEntityHeatCoil;
-import teamroots.embers.tileentity.TileEntityHeatCoilRenderer;
-import teamroots.embers.tileentity.TileEntityItemPipe;
-import teamroots.embers.tileentity.TileEntityItemPipeRenderer;
-import teamroots.embers.tileentity.TileEntityItemPump;
-import teamroots.embers.tileentity.TileEntityItemPumpRenderer;
-import teamroots.embers.tileentity.TileEntityItemTransfer;
-import teamroots.embers.tileentity.TileEntityItemTransferRenderer;
-import teamroots.embers.tileentity.TileEntityKnowledgeTable;
-import teamroots.embers.tileentity.TileEntityKnowledgeTableRenderer;
-import teamroots.embers.tileentity.TileEntityLargeTank;
-import teamroots.embers.tileentity.TileEntityLargeTankRenderer;
-import teamroots.embers.tileentity.TileEntityMechAccessor;
-import teamroots.embers.tileentity.TileEntityMechCore;
-import teamroots.embers.tileentity.TileEntityMixerBottom;
-import teamroots.embers.tileentity.TileEntityMixerTop;
-import teamroots.embers.tileentity.TileEntityPipe;
-import teamroots.embers.tileentity.TileEntityPipeRenderer;
-import teamroots.embers.tileentity.TileEntityPump;
-import teamroots.embers.tileentity.TileEntityPumpRenderer;
-import teamroots.embers.tileentity.TileEntityReceiver;
-import teamroots.embers.tileentity.TileEntityRelay;
-import teamroots.embers.tileentity.TileEntityStampBase;
-import teamroots.embers.tileentity.TileEntityStampBaseRenderer;
-import teamroots.embers.tileentity.TileEntityStamper;
-import teamroots.embers.tileentity.TileEntityStamperRenderer;
-import teamroots.embers.tileentity.TileEntityTank;
-import teamroots.embers.tileentity.TileEntityTankRenderer;
+import teamroots.embers.tileentity.*;
 import teamroots.embers.util.Misc;
-import teamroots.embers.world.WorldGenOres;
+import teamroots.embers.world.*;
 
 public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
 	public static ArrayList<Item> items = new ArrayList<Item>();
 	
-	public static ToolMaterial tool_mat_copper, tool_mat_silver, tool_mat_lead, tool_mat_dawnstone;
+	public static ToolMaterial tool_mat_tyrfing, tool_mat_copper, tool_mat_silver, tool_mat_lead, tool_mat_dawnstone;
 	public static ArmorMaterial armor_mat_ashen_cloak;
 	
-	public static Block glow, beam_cannon, core_stone, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
+	public static Block archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, seed, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
 	public static Block block_molten_astralite, block_molten_dawnstone, block_molten_umber_steel, block_molten_gold, block_molten_copper, block_molten_lead, block_molten_silver, block_molten_iron;
 	
 	public static Fluid fluid_molten_astralite, fluid_molten_dawnstone, fluid_molten_umber_steel, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron;
 	
-	public static Item ashen_cloth, glimmer_shard, glimmer_lamp, inflictor_gem, ashen_cloak_head, ashen_cloak_chest, ashen_cloak_legs, ashen_cloak_boots, aster, shard_aster, alchemic_waste, aspectus_iron, aspectus_copper, aspectus_dawnstone, aspectus_lead, aspectus_silver, golems_eye, dust_ash, grandhammer, pickaxe_clockwork, axe_clockwork, staff_ember, ignition_cannon, ember_jar, ember_cartridge, pickaxe_copper, axe_copper, shovel_copper, hoe_copper, sword_copper, pickaxe_silver, axe_silver, shovel_silver, hoe_silver, sword_silver, pickaxe_lead, axe_lead, shovel_lead, hoe_lead, sword_lead, pickaxe_dawnstone, axe_dawnstone, shovel_dawnstone, hoe_dawnstone, sword_dawnstone, debug, plate_gold, plate_iron, plate_caminite_raw, stamp_bar_raw, stamp_plate_raw, stamp_flat_raw, nugget_dawnstone, plate_copper, plate_lead, plate_silver, plate_dawnstone, nugget_iron, ingot_astralite, ingot_dawnstone, ingot_umber_steel, crystal_ember, shard_ember, stamp_bar, stamp_plate, stamp_flat, tinker_hammer, ember_detector, ingot_copper, ingot_silver, ingot_lead, nugget_copper, nugget_silver, nugget_lead, brick_caminite, blend_caminite, plate_caminite;
+	public static Item wildfire_core, ember_cluster, adhesive, tyrfing, isolated_materia, archaic_brick, ancient_motive_core, ashen_cloth, glimmer_shard, glimmer_lamp, inflictor_gem, ashen_cloak_head, ashen_cloak_chest, ashen_cloak_legs, ashen_cloak_boots, aster, shard_aster, alchemic_waste, aspectus_iron, aspectus_copper, aspectus_dawnstone, aspectus_lead, aspectus_silver, golems_eye, dust_ash, grandhammer, pickaxe_clockwork, axe_clockwork, staff_ember, ignition_cannon, ember_jar, ember_cartridge, pickaxe_copper, axe_copper, shovel_copper, hoe_copper, sword_copper, pickaxe_silver, axe_silver, shovel_silver, hoe_silver, sword_silver, pickaxe_lead, axe_lead, shovel_lead, hoe_lead, sword_lead, pickaxe_dawnstone, axe_dawnstone, shovel_dawnstone, hoe_dawnstone, sword_dawnstone, debug, plate_gold, plate_iron, plate_caminite_raw, stamp_bar_raw, stamp_plate_raw, stamp_flat_raw, nugget_dawnstone, plate_copper, plate_lead, plate_silver, plate_dawnstone, nugget_iron, ingot_astralite, ingot_dawnstone, ingot_umber_steel, crystal_ember, shard_ember, stamp_bar, stamp_plate, stamp_flat, tinker_hammer, ember_detector, ingot_copper, ingot_silver, ingot_lead, nugget_copper, nugget_silver, nugget_lead, brick_caminite, blend_caminite, plate_caminite;
 	
 	public static DamageSource damage_ember;
 	
@@ -204,7 +71,10 @@ public class RegistryManager {
 	
 	public static WorldGenOres world_gen_ores;
 	
+	public static IWorldGenerator world_gen_small_ruin;
+	
 	public static void registerAll(){
+		
 		CapabilityManager.INSTANCE.register(IEmberCapability.class, new EmberCapabilityStorage(), DefaultEmberCapability.class);
 		
 		damage_ember = new DamageEmber();
@@ -213,6 +83,7 @@ public class RegistryManager {
 		tool_mat_silver = EnumHelper.addToolMaterial(Embers.MODID+":silver", 2, 202, 7.6f, 2.0f, 20);
 		tool_mat_lead = EnumHelper.addToolMaterial(Embers.MODID+":lead", 2, 168, 6.0f, 2.0f, 4);
 		tool_mat_dawnstone = EnumHelper.addToolMaterial(Embers.MODID+":dawnstone", 2, 644, 7.5f, 2.5f, 18);
+		tool_mat_tyrfing = EnumHelper.addToolMaterial(Embers.MODID+":tyrfing", 2, 512, 7.5f, 0.0f, 24);
 		
 		armor_mat_ashen_cloak = EnumHelper.addArmorMaterial(Embers.MODID+":ashen_cloak", Embers.MODID+":ashen_cloak", 19, new int[]{3,5,7,3}, 18, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0);
 		
@@ -290,17 +161,23 @@ public class RegistryManager {
 		blocks.add(alchemy_pedestal = (new BlockAlchemyPedestal(Material.ROCK, "alchemy_pedestal",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(alchemy_tablet = (new BlockAlchemyTablet(Material.ROCK, "alchemy_tablet",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(item_transfer = (new BlockItemTransfer(Material.ROCK, "item_transfer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
-		blocks.add(core_stone = (new BlockBase(Material.ROCK,"core_stone",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
 		blocks.add(beam_cannon = (new BlockBeamCannon(Material.ROCK,"beam_cannon",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(glow = (new BlockGlow(Material.CIRCUITS,"glow",false)).setIsFullCube(false).setIsOpaqueCube(false).setHardness(0.0f).setLightLevel(1.0f));
-		
-		/*FluidRegistry.registerFluid(fluidMoltenUmberSteel = new FluidMoltenUmberSteel());
-		blocks.add(blockMoltenUmberSteel = (new BlockMoltenUmberSteel("moltenUmberSteel",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenUmberSteel);
-		
-		FluidRegistry.registerFluid(fluidMoltenAstralite = new FluidMoltenAstralite());
-		blocks.add(blockMoltenAstralite = (new BlockMoltenAstralite("moltenAstralite",false)));
-		FluidRegistry.addBucketForFluid(fluidMoltenAstralite);*/
+		blocks.add(archaic_bricks = (new BlockBase(Material.ROCK,"archaic_bricks",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(archaic_edge = (new BlockBase(Material.ROCK,"archaic_edge",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(archaic_tile = (new BlockBase(Material.ROCK,"archaic_tile",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(16));	
+		blocks.add(archaic_light = (new BlockArchaicLight(Material.ROCK,"archaic_light",true)).setHarvestProperties("pickaxe", 0).setHardness(1.6f).setLightOpacity(0).setLightLevel(1.0f));	
+		blocks.add(dawnstone_anvil = (new BlockDawnstoneAnvil(Material.ANVIL,"dawnstone_anvil",true)).setHarvestProperties("pickaxe", 1).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(0));	
+		blocks.add(auto_hammer = (new BlockAutoHammer(Material.ROCK,"auto_hammer",true)).setHarvestProperties("pickaxe", 0).setIsFullCube(false).setIsOpaqueCube(false).setHardness(1.6f).setLightOpacity(0));	
+		blocks.add(ore_quartz = (new BlockQuartzOre(Material.ROCK,"ore_quartz",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 2).setHardness(1.9f).setLightOpacity(16));
+		blocks.add(sealed_planks = (new BlockBase(Material.WOOD,"sealed_planks",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("axe", -1).setHardness(2.5f).setLightOpacity(16));
+		blocks.add(wrapped_sealed_planks = (new BlockBase(Material.WOOD,"wrapped_sealed_planks",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("axe", -1).setHardness(3.1f).setLightOpacity(16));
+		blocks.add(vacuum = (new BlockVacuum(Material.ROCK,"vacuum",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(breaker = (new BlockBreaker(Material.ROCK,"breaker",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(seed = (new BlockSeed(Material.ROCK,"seed",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(ember_injector = (new BlockEmberInjector(Material.ROCK,"ember_injector",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(boiler = (new BlockBoiler(Material.ROCK,"boiler",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(structure_marker = (new BlockStructureMarker()).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		
 		items.add(ingot_copper = new ItemBase("ingot_copper",true));
 		items.add(ingot_lead = new ItemBase("ingot_lead",true));
@@ -375,11 +252,19 @@ public class RegistryManager {
 		items.add(glimmer_shard = new ItemGlimmerShard());
 		items.add(glimmer_lamp = new ItemGlimmerLamp());
 		items.add(ashen_cloth = new ItemBase("ashen_cloth",true));
+		items.add(archaic_brick = new ItemBase("archaic_brick",true));
+		items.add(ancient_motive_core = new ItemBase("ancient_motive_core",true));
+		items.add(isolated_materia = new ItemBase("isolated_materia",true));
+		items.add(tyrfing = new ItemTyrfing(tool_mat_tyrfing,"tyrfing",true));
+		items.add(adhesive = new ItemBase("adhesive",true));
+		items.add(ember_cluster = new ItemBase("ember_cluster",true));
+		items.add(wildfire_core = new ItemBase("wildfire_core",true));
 		
 		tool_mat_copper.setRepairItem(new ItemStack(ingot_copper));
 		tool_mat_silver.setRepairItem(new ItemStack(ingot_silver));
 		tool_mat_lead.setRepairItem(new ItemStack(ingot_lead));
 		tool_mat_dawnstone.setRepairItem(new ItemStack(ingot_dawnstone));
+		tool_mat_tyrfing.setRepairItem(new ItemStack(dust_ash));
 		
 		armor_mat_ashen_cloak.repairMaterial = new ItemStack(ashen_cloth,1);
 		
@@ -422,6 +307,14 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityAlchemyTablet.class, Embers.MODID+":tile_entity_alchemy_tablet");
 		GameRegistry.registerTileEntity(TileEntityItemTransfer.class, Embers.MODID+":tile_entity_item_transfer");
 		GameRegistry.registerTileEntity(TileEntityBeamCannon.class, Embers.MODID+":tile_entity_beam_cannon");
+		GameRegistry.registerTileEntity(TileEntityDawnstoneAnvil.class, Embers.MODID+":tile_entity_dawnstone_anvil");
+		GameRegistry.registerTileEntity(TileEntityAutoHammer.class, Embers.MODID+":tile_entity_auto_hammer");
+		GameRegistry.registerTileEntity(TileEntityItemVacuum.class, Embers.MODID+":tile_entity_vacuum");
+		GameRegistry.registerTileEntity(TileEntityBreaker.class, Embers.MODID+":tile_entity_breaker");
+		GameRegistry.registerTileEntity(TileEntitySeed.class, Embers.MODID+":tile_entity_seed");
+		GameRegistry.registerTileEntity(TileEntityEmberInjector.class, Embers.MODID+":tile_entity_ember_injector");
+		GameRegistry.registerTileEntity(TileEntityBoilerBottom.class, Embers.MODID+":tile_entity_boiler_bottom");
+		GameRegistry.registerTileEntity(TileEntityBoilerTop.class, Embers.MODID+":tile_entity_boiler_top");
 		
 		int id = 0;
 		
@@ -446,6 +339,8 @@ public class RegistryManager {
 		
 		world_gen_ores = new WorldGenOres();
 		GameRegistry.registerWorldGenerator(world_gen_ores, 1);
+		int weight = 400;
+		GameRegistry.registerWorldGenerator(world_gen_small_ruin = new WorldGenSmallRuin(), weight ++);
 		
 		OreDictionary.registerOre("nuggetIron", nugget_iron);
 		
@@ -483,8 +378,9 @@ public class RegistryManager {
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerColorHandlers(){
-		/*Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberJar.EmberChargeColorHandler(), emberJar);
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberCartridge.EmberChargeColorHandler(), emberCartridge);*/
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberJar.ColorHandler(), ember_jar);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberCartridge.ColorHandler(), ember_cartridge);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemTyrfing.ColorHandler(), tyrfing);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -510,6 +406,10 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlchemyTablet.class, new TileEntityAlchemyTabletRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemTransfer.class, new TileEntityItemTransferRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBeamCannon.class, new TileEntityBeamCannonRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDawnstoneAnvil.class, new TileEntityDawnstoneAnvilRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHammer.class, new TileEntityAutoHammerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBreaker.class, new TileEntityBreakerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeed.class, new TileEntitySeedRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));

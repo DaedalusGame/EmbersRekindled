@@ -61,6 +61,29 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {

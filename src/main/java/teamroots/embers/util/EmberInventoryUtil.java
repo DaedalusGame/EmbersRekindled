@@ -13,19 +13,19 @@ public class EmberInventoryUtil {
 		double amount = 0;
 		for (int i = 0; i < 36; i ++){
 			if (player.inventory.getStackInSlot(i) != ItemStack.EMPTY){
-				if (player.inventory.getStackInSlot(i).getItem() instanceof IInventoryEmberCell){
-					amount += player.inventory.getStackInSlot(i).getCapability(EmberCapabilityProvider.emberCapability, null).getEmberCapacity();
+				if (player.inventory.getStackInSlot(i).getItem() instanceof IInventoryEmberCell && player.inventory.getStackInSlot(i).getItem() instanceof IEmberItem){
+					amount += ((IEmberItem)player.inventory.getStackInSlot(i).getItem()).getEmber(player.inventory.getStackInSlot(i));
 				}
 			}
 		}
 		if (player.getHeldItem(EnumHand.OFF_HAND) != ItemStack.EMPTY){
-			if (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHeldEmberCell){
-				amount += player.getHeldItem(EnumHand.OFF_HAND).getCapability(EmberCapabilityProvider.emberCapability, null).getEmberCapacity();
+			if (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEmberItem){
+				amount += ((IEmberItem)player.getHeldItem(EnumHand.OFF_HAND).getItem()).getEmberCapacity(player.getHeldItem(EnumHand.OFF_HAND));
 			}
 		}
 		if (player.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
-			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHeldEmberCell){
-				amount += player.getHeldItem(EnumHand.MAIN_HAND).getCapability(EmberCapabilityProvider.emberCapability, null).getEmberCapacity();
+			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IEmberItem){
+				amount += ((IEmberItem)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getEmberCapacity(player.getHeldItem(EnumHand.MAIN_HAND));
 			}
 		}
 		return amount;

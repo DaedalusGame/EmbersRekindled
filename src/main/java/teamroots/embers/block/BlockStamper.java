@@ -36,7 +36,7 @@ public class BlockStamper extends BlockTEBase {
 	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
-		return getDefaultState().withProperty(facing, face);
+		return getDefaultState().withProperty(facing, EnumFacing.DOWN);
 	}
 	
 	@Override

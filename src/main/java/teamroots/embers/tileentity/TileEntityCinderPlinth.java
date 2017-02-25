@@ -41,7 +41,6 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted
         	TileEntityCinderPlinth.this.markDirty();
-        	PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(TileEntityCinderPlinth.this));
         }
 	};
 	Random random = new Random();
@@ -106,6 +105,29 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		}
 		return super.getCapability(capability, facing);
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
@@ -114,9 +136,6 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		if (heldItem != ItemStack.EMPTY){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-			}
 			return true;
 		}
 		else {
@@ -124,9 +143,6 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
 					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}
 				}
 				return true;
 			}
@@ -147,7 +163,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && capability.getEmber() > 0){
 			progress ++;
 			if (getWorld().isRemote){
-				ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()+0.5f, (float)getPos().getY()+0.875f, (float)getPos().getZ()+0.5f, 0.0125f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 72, 72, 72, 3.0f+random.nextFloat(), 48);
+				ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()+0.5f, (float)getPos().getY()+0.875f, (float)getPos().getZ()+0.5f, 0.0125f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 72, 72, 72, 1.0f, 3.0f+random.nextFloat(), 48);
 			}
 			capability.removeAmount(0.5, true);
 			if (progress > 40){
@@ -159,17 +175,11 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 					if (((TileEntityBin) tile).inventory.getStackInSlot(0) == ItemStack.EMPTY){
 						((TileEntityBin) tile).inventory.insertItem(0, new ItemStack(RegistryManager.dust_ash,1), false);
 						tile.markDirty();
-						if (!getWorld().isRemote){
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
-						}
 						doSpawn = false;
 					}
 					else if (((TileEntityBin) tile).inventory.getStackInSlot(0).getItem() == RegistryManager.dust_ash && ((TileEntityBin) tile).inventory.getStackInSlot(0).getCount() < 64){
 						((TileEntityBin) tile).inventory.insertItem(0, new ItemStack(RegistryManager.dust_ash,1), false);
 						tile.markDirty();
-						if (!getWorld().isRemote){
-							PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tile));
-						}
 						doSpawn = false;
 					}
 				}
@@ -178,17 +188,11 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 				}
 			}
 			markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-			}
 		}
 		else {
 			if (progress != 0){
 				progress = 0;
 				markDirty();
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-				}
 			}
 		}
 		angle += turnRate;

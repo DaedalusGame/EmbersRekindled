@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -98,6 +99,29 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 		}
 		return super.getCapability(capability, facing);
 	}
+	
+	public boolean dirty = false;
+	
+	@Override
+	public void markForUpdate(){
+		dirty = true;
+	}
+	
+	@Override
+	public boolean needsUpdate(){
+		return dirty;
+	}
+	
+	@Override
+	public void clean(){
+		dirty = false;
+	}
+	
+	@Override
+	public void markDirty(){
+		markForUpdate();
+		super.markDirty();
+	}
 
 	@Override
 	public void update() {
@@ -110,6 +134,16 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 				}
 				else if (capability.getEmber() >= 1){
 					capability.removeAmount(1.0, true);
+					if (world.isRemote){
+						if (random.nextInt(20) == 0){
+							ParticleUtil.spawnParticleSpark(world, getPos().getX()+0.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.25f, getPos().getZ()+0.5f+0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);
+						}
+						if (random.nextInt(10) == 0){
+							for (int i = 0; i < 12; i ++){
+								ParticleUtil.spawnParticleSmoke(world, getPos().getX()+0.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.25f, getPos().getZ()+0.5f+0.125f*(random.nextFloat()-0.5f), 0, 0.03125f+0.03125f*random.nextFloat(), 0, 64, 64, 64, 0.125f, 5.0f+3.0f*random.nextFloat(), 80);
+							}
+						}
+					}
 					progress --;
 					markDirty();
 					if (progress == 0){
@@ -126,17 +160,12 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 									t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(recipe.getFluid(), true);
 									t.markDirty();
 									if (!getWorld().isRemote){
-										PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-									}
-									if (!getWorld().isRemote){
-										PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(t));
-									}
-									if (!getWorld().isRemote){
 										furnace.inventory.getStackInSlot(0).shrink(1);
 										if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
 											furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
 										}
 									}
+									markDirty();
 									return;
 								}
 							}
@@ -144,14 +173,12 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 								t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(recipe.getFluid(), true);
 								t.markDirty();
 								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(t));
-								}
-								if (!getWorld().isRemote){
 									furnace.inventory.getStackInSlot(0).shrink(1);
 									if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
 										furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
 									}
 								}
+								markDirty();
 								return;
 							}
 						}
@@ -163,33 +190,23 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 									t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(oreRecipe.getFluid(), true);
 									t.markDirty();
 									if (!getWorld().isRemote){
-										PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(t));
-									}
-									if (!getWorld().isRemote){
-										PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-									}
-									if (!getWorld().isRemote){
 										furnace.inventory.getStackInSlot(0).shrink(1);
 										if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
 											furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
 										}
 									}
+									markDirty();
 									return;
 								}
 							}
 							else {
 								t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(oreRecipe.getFluid(), true);
 								t.markDirty();
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(t));
-								}
-								if (!getWorld().isRemote){
-									PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-								}
 								furnace.inventory.getStackInSlot(0).shrink(1);
 								if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
 									furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
 								}
+								markDirty();
 								return;
 							}
 						}
@@ -199,10 +216,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 			else {
 				if (progress != -1){
 					progress = -1;
-					markDirty();
-					if (!getWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(this));
-					}	
+					markDirty();	
 				}
 			}
 		}
