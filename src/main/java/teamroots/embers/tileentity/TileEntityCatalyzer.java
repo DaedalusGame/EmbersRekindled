@@ -26,26 +26,26 @@ import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 
-public class TileEntityCombustor extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityCatalyzer extends TileEntity implements ITileEntityBase, ITickable {
 	Random random = new Random();
 	int progress = 0;
 	float multiplier = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
-        	TileEntityCombustor.this.markDirty();
+        	TileEntityCatalyzer.this.markDirty();
         }
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (EmberGenUtil.getFuelCoefficient(stack.getItem()) == 0){
+        	if (EmberGenUtil.getCatalysisCoefficient(stack.getItem()) == 0){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
         }
 	};
 	
-	public TileEntityCombustor(){
+	public TileEntityCatalyzer(){
 		super();
 	}
 	
@@ -123,8 +123,8 @@ public class TileEntityCombustor extends TileEntity implements ITileEntityBase, 
 			markDirty();
 		}
 		if (progress == 0 && !inventory.getStackInSlot(0).isEmpty()){
-			if (EmberGenUtil.getFuelCoefficient(inventory.getStackInSlot(0).getItem()) > 0){
-				multiplier = EmberGenUtil.getFuelCoefficient(inventory.getStackInSlot(0).getItem());
+			if (EmberGenUtil.getCatalysisCoefficient(inventory.getStackInSlot(0).getItem()) > 0){
+				multiplier = EmberGenUtil.getCatalysisCoefficient(inventory.getStackInSlot(0).getItem());
 				progress = 400;
 				inventory.extractItem(0, 1, false);
 				markDirty();

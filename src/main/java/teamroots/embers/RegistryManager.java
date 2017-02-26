@@ -54,7 +54,7 @@ public class RegistryManager {
 	public static ToolMaterial tool_mat_tyrfing, tool_mat_copper, tool_mat_silver, tool_mat_lead, tool_mat_dawnstone;
 	public static ArmorMaterial armor_mat_ashen_cloak;
 	
-	public static Block archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, seed, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
+	public static Block catalyzer, combustor, reactor, archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, seed, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
 	public static Block block_molten_astralite, block_molten_dawnstone, block_molten_umber_steel, block_molten_gold, block_molten_copper, block_molten_lead, block_molten_silver, block_molten_iron;
 	
 	public static Fluid fluid_molten_astralite, fluid_molten_dawnstone, fluid_molten_umber_steel, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron;
@@ -178,6 +178,9 @@ public class RegistryManager {
 		blocks.add(ember_injector = (new BlockEmberInjector(Material.ROCK,"ember_injector",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(boiler = (new BlockBoiler(Material.ROCK,"boiler",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(structure_marker = (new BlockStructureMarker()).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(reactor = (new BlockReactor(Material.ROCK,"reactor",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(combustor = (new BlockCombustor(Material.ROCK,"combustor",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(catalyzer = (new BlockCatalyzer(Material.ROCK,"catalyzer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		
 		items.add(ingot_copper = new ItemBase("ingot_copper",true));
 		items.add(ingot_lead = new ItemBase("ingot_lead",true));
@@ -315,6 +318,9 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityEmberInjector.class, Embers.MODID+":tile_entity_ember_injector");
 		GameRegistry.registerTileEntity(TileEntityBoilerBottom.class, Embers.MODID+":tile_entity_boiler_bottom");
 		GameRegistry.registerTileEntity(TileEntityBoilerTop.class, Embers.MODID+":tile_entity_boiler_top");
+		GameRegistry.registerTileEntity(TileEntityReactor.class, Embers.MODID+":tile_entity_reactor");
+		GameRegistry.registerTileEntity(TileEntityCombustor.class, Embers.MODID+":tile_entity_combustor");
+		GameRegistry.registerTileEntity(TileEntityCatalyzer.class, Embers.MODID+":tile_entity_catalyzer");
 		
 		int id = 0;
 		

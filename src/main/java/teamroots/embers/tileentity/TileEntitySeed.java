@@ -47,7 +47,7 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable {
-	int size = 1000;
+	int size = 0;
 	int ticksExisted = 0;
 	int material = -1;
 	boolean[] willSpawn = new boolean[12];

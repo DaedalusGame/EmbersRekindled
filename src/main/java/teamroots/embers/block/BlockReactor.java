@@ -11,7 +11,7 @@ import teamroots.embers.tileentity.TileEntityDropper;
 import teamroots.embers.tileentity.TileEntityReactor;
 
 public class BlockReactor extends BlockTEBase {
-	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0.25,0.625,0.25,0.75,1.0,0.75);
+	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0.125,0.0,0.125,0.875,1.0,0.875);
 	
 	public BlockReactor(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);

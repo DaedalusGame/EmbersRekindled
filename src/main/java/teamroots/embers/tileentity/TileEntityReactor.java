@@ -128,21 +128,52 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 		if (!inventory.getStackInSlot(0).isEmpty()){
 			progress ++;
 			if (progress > 20){
-				progress = 0;
-				int i = 0;
-				if (inventory != null){
-					if (EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem()) > 0){
-						double ember = EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem());
-						if (capability.getEmber() <= capability.getEmberCapacity()-ember){
-							if (!world.isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+0.5f,getPos().getZ()+0.5f));
+				float catalyzerMult = 0.0f;
+				float combustorMult = 0.0f;
+				float multiplier = 1.0f;
+				if (world.getTileEntity(getPos().north().down()) instanceof TileEntityCatalyzer){
+					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().north().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().south().down()) instanceof TileEntityCatalyzer){
+					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().south().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().east().down()) instanceof TileEntityCatalyzer){
+					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().east().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().west().down()) instanceof TileEntityCatalyzer){
+					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().west().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().north().down()) instanceof TileEntityCombustor){
+					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().north().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().south().down()) instanceof TileEntityCombustor){
+					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().south().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().east().down()) instanceof TileEntityCombustor){
+					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().east().down())).multiplier;
+				}
+				if (world.getTileEntity(getPos().west().down()) instanceof TileEntityCombustor){
+					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().west().down())).multiplier;
+				}
+				if (combustorMult == catalyzerMult){
+					multiplier += combustorMult;
+					multiplier += catalyzerMult;
+					progress = 0;
+					int i = 0;
+					if (inventory != null){
+						if (EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem()) > 0){
+							double ember = multiplier*EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem());
+							if (capability.getEmber() <= capability.getEmberCapacity()-ember){
+								if (!world.isRemote){
+									PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+0.5f,getPos().getZ()+0.5f));
+								}
+								capability.addAmount(ember, true);
+								inventory.extractItem(i, 1, false);
+								markDirty();
+								IBlockState state = getWorld().getBlockState(getPos());
+								markDirty();
+								state = getWorld().getBlockState(getPos().up());
 							}
-							capability.addAmount(ember, true);
-							inventory.extractItem(i, 1, false);
-							markDirty();
-							IBlockState state = getWorld().getBlockState(getPos());
-							markDirty();
-							state = getWorld().getBlockState(getPos().up());
 						}
 					}
 				}

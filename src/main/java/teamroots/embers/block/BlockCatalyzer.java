@@ -29,15 +29,16 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityActivatorBottom;
 import teamroots.embers.tileentity.TileEntityActivatorTop;
+import teamroots.embers.tileentity.TileEntityCatalyzer;
 import teamroots.embers.tileentity.TileEntityCombustor;
 import teamroots.embers.tileentity.TileEntityPipe;
 
-public class BlockCombustor extends BlockTEBase {
+public class BlockCatalyzer extends BlockTEBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,1,1);
 	public static AxisAlignedBB AABB_TOP = new AxisAlignedBB(0.125,0,0.125,0.875,0.75,0.875);
 	public static final PropertyInteger type = PropertyInteger.create("type",0,5);
 	
-	public BlockCombustor(Material material, String name, boolean addToTab) {
+	public BlockCatalyzer(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
 	
@@ -212,7 +213,7 @@ public class BlockCombustor extends BlockTEBase {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		if (meta == 0){
-			return new TileEntityCombustor();
+			return new TileEntityCatalyzer();
 		}
 		return null;
 	}

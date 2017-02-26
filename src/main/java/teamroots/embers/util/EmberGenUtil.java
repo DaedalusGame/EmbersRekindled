@@ -99,7 +99,7 @@ public class EmberGenUtil {
 		
 		registerFuelCoefficient(Items.COAL,2.0f);
 		registerFuelCoefficient(Items.NETHERBRICK,3.0f);
-		registerFuelCoefficient(Items.BLAZE_POWDER,5.0f);
+		registerFuelCoefficient(Items.BLAZE_POWDER,4.0f);
 		
 		registerCatalysisCoefficient(Items.REDSTONE,2.0f);
 		registerCatalysisCoefficient(Items.GUNPOWDER,3.0f);

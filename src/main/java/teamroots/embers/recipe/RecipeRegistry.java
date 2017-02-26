@@ -812,6 +812,69 @@ public class RecipeRegistry {
 				"LL ",
 				'P', RegistryManager.item_pipe,
 				'L', RegistryManager.ingot_lead}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.archaic_edge,2),true,new Object[]{
+				"BBB",
+				"BCB",
+				"BBB",
+				'B', RegistryManager.archaic_brick,
+				'C', RegistryManager.shard_ember}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.archaic_tile,4),true,new Object[]{
+				"BB",
+				"BB",
+				'B', RegistryManager.archaic_bricks}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.archaic_bricks,4),true,new Object[]{
+				"BB",
+				"BB",
+				'B', RegistryManager.archaic_tile}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.breaker,1),true,new Object[]{
+				"PIP",
+				"LRL",
+				"L L", 
+				'P', RegistryManager.plate_iron,
+				'I', Items.IRON_INGOT,
+				'L', RegistryManager.ingot_lead,
+				'R', Items.REDSTONE}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_injector,1),true,new Object[]{
+				"S S",
+				"DCD",
+				"BPB", 
+				'P', RegistryManager.plate_silver,
+				'S', RegistryManager.ingot_silver,
+				'D', RegistryManager.plate_dawnstone,
+				'B', RegistryManager.block_caminite_brick,
+				'C', RegistryManager.wildfire_core}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.boiler,1),true,new Object[]{
+				"CCC",
+				"IFI",
+				"IBI", 
+				'B', RegistryManager.block_copper,
+				'I', Items.IRON_INGOT,
+				'C', RegistryManager.ingot_copper,
+				'F', Blocks.FURNACE}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.reactor,1),true,new Object[]{
+				"CCC",
+				"CWC",
+				"SBS", 
+				'B', RegistryManager.block_caminite_brick,
+				'W', RegistryManager.wildfire_core,
+				'C', RegistryManager.ingot_copper,
+				'S', RegistryManager.plate_silver}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.combustor,1),true,new Object[]{
+				" C ",
+				"PEP",
+				"CMC", 
+				'M', RegistryManager.mech_core,
+				'P', RegistryManager.plate_copper,
+				'C', RegistryManager.ingot_copper,
+				'E', RegistryManager.ember_cluster}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.catalyzer,1),true,new Object[]{
+				" C ",
+				"PEP",
+				"CMC", 
+				'M', RegistryManager.mech_core,
+				'P', RegistryManager.plate_silver,
+				'C', RegistryManager.ingot_silver,
+				'E', RegistryManager.ember_cluster}));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		

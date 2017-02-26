@@ -82,6 +82,9 @@ tile.seed.4.name=Silver Crystal Seed
 tile.boiler.name=Pressure Refinery
 tile.archaic_edge.name=Archaic Edge
 tile.archaic_tile.name=Archaic Tile
+tile.combustor.name=Combustion Chamber
+tile.catalyzer.name=Catalysis Chamber
+tile.reactor.name=Ignem Reactor
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold

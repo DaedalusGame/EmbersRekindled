@@ -99,6 +99,7 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 			if (target.getBlockHardness(getWorld(), getPos().offset(state.getValue(BlockBreaker.facing))) != -1){
 				List<ItemStack> drops = target.getBlock().getDrops(world, getPos().offset(state.getValue(BlockBreaker.facing)), target, 0);
 				if (!world.isRemote){
+					//world.getBlockState(getPos().offset(state.getValue(BlockBreaker.facing))).getBlock().onBlockHarvested(world, getPos().offset(state.getValue(BlockBreaker.facing)), world.getBlockState(getPos().offset(state.getValue(BlockBreaker.facing))), null);
 					world.destroyBlock(getPos().offset(state.getValue(BlockBreaker.facing)), false);
 					world.notifyBlockUpdate(getPos().offset(state.getValue(BlockBreaker.facing)), state, Blocks.AIR.getDefaultState(), 8);
 				}
