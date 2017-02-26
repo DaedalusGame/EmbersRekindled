@@ -86,6 +86,7 @@ tile.archaic_tile.name=Archaic Tile
 tile.combustor.name=Combustion Chamber
 tile.catalyzer.name=Catalysis Chamber
 tile.reactor.name=Ignem Reactor
+tile.field_chart.name=Field Chart
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
