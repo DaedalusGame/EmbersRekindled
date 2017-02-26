@@ -10,11 +10,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RenderUtil {
-	public static final float root2over2 = (float)Math.sqrt(2.0f)/2.0f;
+	public static int lightx = 0xF000F0;
+	public static int lighty = 0xF000F0;
+    public static final float root2over2 = (float)Math.sqrt(2.0f)/2.0f;
 	public static void renderBeam(VertexBuffer buf, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a, float radius, double angle){
-		int lightx = 0xF000F0;
-        int lighty = 0xF000F0;
-        double yaw = Misc.yawDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
+		double yaw = Misc.yawDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
         double pitch = Misc.pitchDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
         
         float yawCos = MathHelper.cos((float)Math.toRadians(yaw));

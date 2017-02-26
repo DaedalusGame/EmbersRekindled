@@ -1,0 +1,14 @@
+{
+    "variants":{
+        "state=9":  { "model": "embers:field_chart_edge", "y": 0 },
+        "state=1":  { "model": "embers:field_chart_corner", "y": 270 },
+        "state=2":  { "model": "embers:field_chart_edge", "y": 270 },
+        "state=3":  { "model": "embers:field_chart_corner", "y": 180 },
+        "state=4":  { "model": "embers:field_chart_edge", "y": 180 },
+        "state=5":  { "model": "embers:field_chart_corner", "y": 90 },
+        "state=6":  { "model": "embers:field_chart_edge", "y": 90 },
+        "state=7":  { "model": "embers:field_chart_corner", "y": 0 },
+        "state=8":  { "model": "embers:field_chart_center", "y": 0 },
+        "state=0":  { "model": "embers:null", "y": 0 }
+    }
+}

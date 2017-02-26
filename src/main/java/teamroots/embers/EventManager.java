@@ -72,6 +72,7 @@ import teamroots.embers.item.ItemGrandhammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberDataRequest;
+import teamroots.embers.network.message.MessageEmberGenOffset;
 import teamroots.embers.network.message.MessageEmberGeneration;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.network.message.MessageTyrfingBurstFX;
@@ -131,12 +132,13 @@ public class EventManager {
 	
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event){
-		if (Misc.random.nextInt(200) == 0){
+		if (Misc.random.nextInt(400) == 0){
 			EmberGenUtil.offX ++;
 		}
-		if (Misc.random.nextInt(200) == 0){
+		if (Misc.random.nextInt(400) == 0){
 			EmberGenUtil.offZ ++;
 		}
+		PacketHandler.INSTANCE.sendToAll(new MessageEmberGenOffset(EmberGenUtil.offX,EmberGenUtil.offZ));
 	}
 	
 	@SubscribeEvent
