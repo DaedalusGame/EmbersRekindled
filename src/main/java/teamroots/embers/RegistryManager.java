@@ -84,7 +84,7 @@ public class RegistryManager {
 		tool_mat_lead = EnumHelper.addToolMaterial(Embers.MODID+":lead", 2, 168, 6.0f, 2.0f, 4);
 		tool_mat_dawnstone = EnumHelper.addToolMaterial(Embers.MODID+":dawnstone", 2, 644, 7.5f, 2.5f, 18);
 		tool_mat_tyrfing = EnumHelper.addToolMaterial(Embers.MODID+":tyrfing", 2, 512, 7.5f, 0.0f, 24);
-		tool_mat_mithril = EnumHelper.addToolMaterial(Embers.MODID+":mithril", 3, 6500, 12.0f, 3.0f, 30);
+		tool_mat_mithril = EnumHelper.addToolMaterial(Embers.MODID+":mithril", 3, 6500, 12.0f, 4.0f, 30);
 				
 		armor_mat_ashen_cloak = EnumHelper.addArmorMaterial(Embers.MODID+":ashen_cloak", Embers.MODID+":ashen_cloak", 19, new int[]{3,5,7,3}, 18, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0);
 		
