@@ -104,6 +104,8 @@ item.ingot_mithril.name=Mithril Ingot
 item.nugget_copper.name=Copper Nugget
 item.nugget_silver.name=Silver Nugget
 item.nugget_lead.name=Lead Nugget
+item.nugget_iron.name=Iron Nugget
+item.nugget_mithril.name=Mithril Nugget
 item.nugget_dawnstone.name=Dawnstone Nugget
 item.brick_caminite.name=Caminite Brick
 item.blend_caminite.name=Caminite Blend
@@ -127,8 +129,6 @@ item.stamp_plate_raw.name=Raw Plate Stamp
 item.shard_ember.name=Ember Shard
 item.crystal_ember.name=Ember Crystal
 item.ingot_dawnstone.name=Dawnstone Ingot
-item.nugget_iron.name=Iron Nugget
-item.nugget_mithril.name=Mithril Nugget
 item.pickaxe_clockwork.name=Clockwork Pickaxe
 item.axe_clockwork.name=Clockwork Battleaxe
 item.pickaxe_copper.name=Copper Pickaxe
@@ -151,6 +151,11 @@ item.axe_silver.name=Silver Axe
 item.shovel_silver.name=Silver Shovel
 item.hoe_silver.name=Silver Hoe
 item.sword_silver.name=Silver Sword
+item.pickaxe_mithril.name=Mithril Pickaxe
+item.axe_mithril.name=Mithril Axe
+item.shovel_mithril.name=Mithril Shovel
+item.hoe_mithril.name=Mithril Hoe
+item.sword_mithril.name=Mithril Sword
 item.ember_jar.name=Mantle Jar
 item.ember_cartridge.name=Mantle Cartridge
 item.ignition_cannon.name=Blazing Ray
@@ -224,6 +229,9 @@ embers.research.ingot_silver=Silver is a shiny and precious material. At first g
 embers.research.ingot_dawnstone.title=Dawnstone Ingot
 embers.research.ingot_dawnstone=Dawnstone is a bright gold alloy of copper and gold. It is as strong as iron but lighter, has a very high yield from its component metals, and is strangely attuned to the mysterious energies of ember power. There are many uses for this new alloy.
 
+embers.research.ingot_mithril.title=Mithril Ingot
+embers.research.ingot_mithril=Mithril is a shimmering silver metal that is as hard as diamond, as light as smoke, and nigh unbreakable . This legendary metal has numerous uses.
+
 embers.research.block_copper.title=Block of Copper
 embers.research.block_copper=A block made out of copper metal.
 
@@ -235,6 +243,9 @@ embers.research.block_silver=A block made out of silver metal.
 
 embers.research.block_dawnstone.title=Block of Dawnstone
 embers.research.block_dawnstone=A block made out of dawnstone alloy.
+
+embers.research.block_mithril.title=Block of Mithril
+embers.research.block_mithril=A block made out of mithril metal.
 
 embers.research.nugget_iron.title=Iron Nugget
 embers.research.nugget_iron=A nugget of iron metal.
@@ -250,6 +261,9 @@ embers.research.nugget_silver=A nugget of silver metal.
 
 embers.research.nugget_dawnstone.title=Dawnstone Nugget
 embers.research.nugget_dawnstone=A nugget of dawnstone alloy.
+
+embers.research.nugget_mithril.title=Mithril Nugget
+embers.research.nugget_mithril=A nugget of mithril metal.
 
 embers.research.plate_iron.title=Iron Plate
 embers.research.plate_iron=A plate made out of iron metal.
@@ -269,6 +283,9 @@ embers.research.plate_dawnstone=A plate made out of dawnstone alloy.
 embers.research.plate_gold.title=Gold Plate
 embers.research.plate_gold=A plate made out of gold metal.
 
+embers.research.plate_mithril.title=Mithril Plate
+embers.research.plate_mithril=A plate made out of mithril metal.
+
 embers.research.pickaxe_copper.title=Copper Pickaxe
 embers.research.pickaxe_copper=A pickaxe made out of copper metal.
 
@@ -280,6 +297,9 @@ embers.research.pickaxe_silver=A pickaxe made out of silver metal.
 
 embers.research.pickaxe_dawnstone.title=Dawnstone Pickaxe
 embers.research.pickaxe_dawnstone=A pickaxe made out of dawnstone alloy.
+
+embers.research.pickaxe_mithril.title=Mithril Pickaxe
+embers.research.pickaxe_mithril=A pickaxe made out of mithril metal.
 
 embers.research.axe_copper.title=Copper Axe
 embers.research.axe_copper=An axe made out of copper metal.
@@ -293,6 +313,9 @@ embers.research.axe_silver=An axe made out of silver metal.
 embers.research.axe_dawnstone.title=Dawnstone Axe
 embers.research.axe_dawnstone=An axe made out of dawnstone alloy.
 
+embers.research.axe_mithril.title=Mithril Axe
+embers.research.axe_mithril=An axe made out of mithril metal.
+
 embers.research.hoe_copper.title=Copper Hoe
 embers.research.hoe_copper=A hoe made out of copper metal.
 
@@ -304,6 +327,9 @@ embers.research.hoe_silver=A hoe made out of silver metal.
 
 embers.research.hoe_dawnstone.title=Dawnstone Hoe
 embers.research.hoe_dawnstone=A hoe made out of dawnstone alloy.
+
+embers.research.hoe_mithril.title=Mithril Hoe
+embers.research.hoe_mithril=A hoe made out of mithril metal.
 
 embers.research.shovel_copper.title=Copper Shovel
 embers.research.shovel_copper=A shovel made out of copper metal.
@@ -317,6 +343,9 @@ embers.research.shovel_silver=A shovel made out of silver metal.
 embers.research.shovel_dawnstone.title=Dawnstone Shovel
 embers.research.shovel_dawnstone=A shovel made out of dawnstone alloy.
 
+embers.research.shovel_mithril.title=Mitrhil Shovel
+embers.research.shovel_mithril=A shovel made out of mithril metal.
+
 embers.research.sword_copper.title=Copper Sword
 embers.research.sword_copper=A sword made out of copper metal.
 
@@ -328,6 +357,9 @@ embers.research.sword_silver=A sword made out of silver metal.
 
 embers.research.sword_dawnstone.title=Dawnstone Sword
 embers.research.sword_dawnstone=A sword made out of dawnstone alloy.
+
+embers.research.sword_mithril.title=Mithril Sword
+embers.research.sword_mithril=A sword made out of mithril metal.
 
 embers.research.blend_caminite.title=Caminite Blend
 embers.research.blend_caminite=Mixing together clay and bone meal appears to create this strange ceramic blend.

@@ -32,6 +32,9 @@ public class ResearchManager {
 		researches.put(RegistryManager.ingot_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("ingot_dawnstone", new ItemStack(RegistryManager.ingot_dawnstone))
 				);
+		researches.put(RegistryManager.ingot_mithril.getRegistryName().toString(), 
+				new ResearchBase("ingot_mithril", new ItemStack(RegistryManager.ingot_mithril))
+				);
 		
 		researches.put(RegistryManager.nugget_copper.getRegistryName().toString(), 
 				new ResearchBase("nugget_copper", new ItemStack(RegistryManager.nugget_copper))
@@ -47,6 +50,9 @@ public class ResearchManager {
 				);
 		researches.put(RegistryManager.nugget_iron.getRegistryName().toString(), 
 				new ResearchBase("nugget_iron", new ItemStack(RegistryManager.nugget_iron))
+				);
+		researches.put(RegistryManager.nugget_mithril.getRegistryName().toString(), 
+				new ResearchBase("nugget_mithril", new ItemStack(RegistryManager.nugget_mithril))
 				);
 		
 		researches.put(RegistryManager.plate_copper.getRegistryName().toString(), 
@@ -67,6 +73,9 @@ public class ResearchManager {
 		researches.put(RegistryManager.plate_gold.getRegistryName().toString(), 
 				new ResearchBase("plate_gold", new ItemStack(RegistryManager.plate_gold))
 				);
+		researches.put(RegistryManager.plate_mithril.getRegistryName().toString(), 
+				new ResearchBase("plate_mithril", new ItemStack(RegistryManager.plate_mithril))
+				);
 		
 		researches.put(RegistryManager.block_copper.getRegistryName().toString(), 
 				new ResearchBase("block_copper", new ItemStack(RegistryManager.block_copper))
@@ -79,6 +88,9 @@ public class ResearchManager {
 				);
 		researches.put(RegistryManager.block_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("block_dawnstone", new ItemStack(RegistryManager.block_dawnstone))
+				);
+		researches.put(RegistryManager.block_mithril.getRegistryName().toString(), 
+				new ResearchBase("block_mithril", new ItemStack(RegistryManager.block_mithril))
 				);
 
 		researches.put(RegistryManager.shovel_copper.getRegistryName().toString(), 
@@ -93,6 +105,9 @@ public class ResearchManager {
 		researches.put(RegistryManager.shovel_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("shovel_dawnstone", new ItemStack(RegistryManager.shovel_dawnstone))
 				);
+		researches.put(RegistryManager.shovel_mithril.getRegistryName().toString(), 
+				new ResearchBase("shovel_mithril", new ItemStack(RegistryManager.shovel_mithril))
+				);
 
 		researches.put(RegistryManager.hoe_copper.getRegistryName().toString(), 
 				new ResearchBase("hoe_copper", new ItemStack(RegistryManager.hoe_copper))
@@ -105,6 +120,9 @@ public class ResearchManager {
 				);
 		researches.put(RegistryManager.hoe_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("hoe_dawnstone", new ItemStack(RegistryManager.hoe_dawnstone))
+				);
+		researches.put(RegistryManager.hoe_mithril.getRegistryName().toString(), 
+				new ResearchBase("hoe_mithril", new ItemStack(RegistryManager.hoe_mithril))
 				);
 
 		researches.put(RegistryManager.sword_copper.getRegistryName().toString(), 
@@ -119,6 +137,9 @@ public class ResearchManager {
 		researches.put(RegistryManager.sword_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("sword_dawnstone", new ItemStack(RegistryManager.sword_dawnstone))
 				);
+		researches.put(RegistryManager.sword_mithril.getRegistryName().toString(), 
+				new ResearchBase("sword_mithril", new ItemStack(RegistryManager.sword_mithril))
+				);
 
 		researches.put(RegistryManager.axe_copper.getRegistryName().toString(), 
 				new ResearchBase("axe_copper", new ItemStack(RegistryManager.axe_copper))
@@ -132,6 +153,9 @@ public class ResearchManager {
 		researches.put(RegistryManager.axe_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("axe_dawnstone", new ItemStack(RegistryManager.axe_dawnstone))
 				);
+		researches.put(RegistryManager.axe_mithril.getRegistryName().toString(), 
+				new ResearchBase("axe_mithril", new ItemStack(RegistryManager.axe_mithril))
+				);
 
 		researches.put(RegistryManager.pickaxe_copper.getRegistryName().toString(), 
 				new ResearchBase("pickaxe_copper", new ItemStack(RegistryManager.pickaxe_copper))
@@ -144,6 +168,9 @@ public class ResearchManager {
 				);
 		researches.put(RegistryManager.pickaxe_dawnstone.getRegistryName().toString(), 
 				new ResearchBase("pickaxe_dawnstone", new ItemStack(RegistryManager.pickaxe_dawnstone))
+				);
+		researches.put(RegistryManager.pickaxe_mithril.getRegistryName().toString(), 
+				new ResearchBase("pickaxe_mithril", new ItemStack(RegistryManager.pickaxe_mithril))
 				);
 		
 		researches.put(RegistryManager.blend_caminite.getRegistryName().toString(), 
