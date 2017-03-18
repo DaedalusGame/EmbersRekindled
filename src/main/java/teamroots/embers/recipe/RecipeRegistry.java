@@ -29,25 +29,29 @@ public class RecipeRegistry {
 	public static ArrayList<AlchemyRecipe> alchemyRecipes = new ArrayList<AlchemyRecipe>();
 	
 	public static void init(){
-		OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
 		OreDictionary.registerOre("ingotCopper", RegistryManager.ingot_copper);
 		OreDictionary.registerOre("ingotLead", RegistryManager.ingot_lead);
 		OreDictionary.registerOre("ingotSilver", RegistryManager.ingot_silver);
 		OreDictionary.registerOre("ingotDawnstone", RegistryManager.ingot_dawnstone);
+		OreDictionary.registerOre("ingotMithril", RegistryManager.ingot_mithril);
+		OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
 		OreDictionary.registerOre("nuggetCopper", RegistryManager.nugget_copper);
 		OreDictionary.registerOre("nuggetLead", RegistryManager.nugget_lead);
 		OreDictionary.registerOre("nuggetSilver", RegistryManager.nugget_silver);
 		OreDictionary.registerOre("nuggetDawnstone", RegistryManager.nugget_dawnstone);
+		OreDictionary.registerOre("nuggetMithril", RegistryManager.nugget_mithril);
 		OreDictionary.registerOre("plateGold", RegistryManager.plate_gold);
 		OreDictionary.registerOre("plateIron", RegistryManager.plate_iron);
 		OreDictionary.registerOre("plateCopper", RegistryManager.plate_copper);
 		OreDictionary.registerOre("plateLead", RegistryManager.plate_lead);
 		OreDictionary.registerOre("plateSilver", RegistryManager.plate_silver);
 		OreDictionary.registerOre("plateDawnstone", RegistryManager.plate_dawnstone);
+		OreDictionary.registerOre("plateMithril", RegistryManager.plate_mithril);
 		OreDictionary.registerOre("blockCopper", RegistryManager.block_copper);
 		OreDictionary.registerOre("blockLead", RegistryManager.block_lead);
 		OreDictionary.registerOre("blockSilver", RegistryManager.block_silver);
 		OreDictionary.registerOre("blockDawnstone", RegistryManager.block_dawnstone);
+		OreDictionary.registerOre("blockMithril", RegistryManager.block_mithril);
 		OreDictionary.registerOre("oreCopper", RegistryManager.ore_copper);
 		OreDictionary.registerOre("oreLead", RegistryManager.ore_lead);
 		OreDictionary.registerOre("oreSilver", RegistryManager.ore_silver);
@@ -73,6 +77,11 @@ public class RecipeRegistry {
 				"XXX",
 				"XXX",
 				'X', "ingotDawnstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.block_mithril),true,new Object[]{
+				"XXX",
+				"XXX",
+				"XXX",
+				'X', "ingotMithril"}));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingot_copper),true,new Object[]{
 				"XXX",
@@ -94,6 +103,11 @@ public class RecipeRegistry {
 				"XXX",
 				"XXX",
 				'X', "nuggetDawnstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ingot_mithril),true,new Object[]{
+				"XXX",
+				"XXX",
+				"XXX",
+				'X', "nuggetMithril"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystal_ember,1),true,new Object[]{
 				"XXX",
 				"XXX",
@@ -109,6 +123,8 @@ public class RecipeRegistry {
 				"blockSilver"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingot_dawnstone,9),new Object[]{
 				"blockDawnstone"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.ingot_mithril,9),new Object[]{
+		"blockMithril"}));
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_iron,9),new Object[]{
 				"ingotIron"}));
@@ -120,6 +136,8 @@ public class RecipeRegistry {
 				"ingotSilver"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_dawnstone,9),new Object[]{
 				"ingotDawnstone"}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.nugget_mithril,9),new Object[]{
+		"ingotMithril"}));
 		
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_gold,1),new Object[]{
@@ -134,6 +152,8 @@ public class RecipeRegistry {
 		"ingotLead","ingotLead","ingotLead","ingotLead",RegistryManager.tinker_hammer}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_dawnstone,1),new Object[]{
 		"ingotDawnstone","ingotDawnstone","ingotDawnstone","ingotDawnstone",RegistryManager.tinker_hammer}));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.plate_mithril,1),new Object[]{
+				"ingotMithril","ingotMithril","ingotMithril","ingotMithril",RegistryManager.tinker_hammer}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.blend_caminite,4),new Object[]{
 		Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL,"sand"}));
@@ -563,6 +583,48 @@ public class RecipeRegistry {
 				" S ",
 				" S ",
 				'C', "ingotSilver",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sword_mithril,1),true,new Object[]{
+				" C ",
+				" C ",
+				" S ",
+				'C', "ingotMithril",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.pickaxe_mithril,1),true,new Object[]{
+				"CCC",
+				" S ",
+				" S ",
+				'C', "ingotMithril",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.shovel_mithril,1),true,new Object[]{
+				" C ",
+				" S ",
+				" S ",
+				'C', "ingotMithril",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_mithril,1),true,new Object[]{
+				" CC",
+				" SC",
+				" S ",
+				'C', "ingotMithril",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.axe_mithril,1),true,new Object[]{
+				"CC ",
+				"CS ",
+				" S ",
+				'C', "ingotMithril",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_mithril,1),true,new Object[]{
+				" CC",
+				" S ",
+				" S ",
+				'C', "ingotMithril",
+				'S', "stickWood"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.hoe_mithril,1),true,new Object[]{
+				"CC ",
+				" S ",
+				" S ",
+				'C', "ingotMithril",
 				'S', "stickWood"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sword_lead,1),true,new Object[]{
 				" C ",
