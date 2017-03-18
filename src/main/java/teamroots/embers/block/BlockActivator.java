@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -25,6 +26,7 @@ import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityActivatorBottom;
 import teamroots.embers.tileentity.TileEntityActivatorTop;
+import teamroots.embers.tileentity.TileEntityEmitter;
 
 public class BlockActivator extends BlockTEBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,0.25,1);
@@ -85,8 +87,10 @@ public class BlockActivator extends BlockTEBase {
 	
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
-		if (!world.isRemote && !player.capabilities.isCreativeMode){
-			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+		if (state.getValue(isTop) && world.getBlockState(pos.down()).getBlock() == this || !state.getValue(isTop) && world.getBlockState(pos.up()).getBlock() == this){
+			if (!world.isRemote && !player.capabilities.isCreativeMode){
+				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+			}
 		}
 		if (this.getMetaFromState(state) == 0){
 			world.setBlockToAir(pos.up());

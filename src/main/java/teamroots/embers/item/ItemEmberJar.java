@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
@@ -155,7 +157,8 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 		}
 		return value;
 	}
-	
+
+	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
 		@Override
 		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 

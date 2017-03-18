@@ -8,10 +8,10 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+//_only edit below this line, the above code adds and enables the necessary things for _forge to be setup.
 
 
-version = "0.201"
+version = "0.205"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "embers"
 
@@ -52,8 +52,8 @@ dependencies {
     //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
 
     // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    // http://www.gradle.org/docs/current/userguide/artifactDependenciesTutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependencyManagement.html
     deobfCompile "mezz.jei:jei_1.11.2:4.2.2.220"
     compile files('libs/')
 

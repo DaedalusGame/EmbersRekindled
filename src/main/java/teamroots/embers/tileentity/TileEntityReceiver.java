@@ -91,7 +91,7 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 						BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
 						getWorld().getTileEntity(offset).markDirty();
 						if (!(getWorld().getTileEntity(offset) instanceof ITileEntityBase) && !getWorld().isRemote){
-							EventManager.toUpdate.add(getWorld().getTileEntity(offset));
+							EventManager.markTEForUpdate(offset,world.getTileEntity(offset));
 						}
 					}
 				}

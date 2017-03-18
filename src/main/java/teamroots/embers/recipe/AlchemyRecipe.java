@@ -86,7 +86,7 @@ public class AlchemyRecipe {
 	}
 	
 	public boolean matches(ItemStack center, List<ItemStack> test){
-		if (ItemStack.areItemsEqual(center, this.centerInput)){
+		if (MatchUtil.areStacksEqualOreDict(center, this.centerInput)){
 			return MatchUtil.stackListsMatch(this.inputs, test);
 		}
 		return false;

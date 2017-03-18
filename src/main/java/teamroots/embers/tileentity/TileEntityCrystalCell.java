@@ -26,6 +26,7 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
@@ -145,12 +146,8 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 			ItemStack stack = inventory.extractItem(0, 1, true);
 			if (!getWorld().isRemote && stack != ItemStack.EMPTY){
 				inventory.extractItem(0, 1, false);
-				if (stack.getItem() == RegistryManager.shard_ember){
-					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+15000.0));
-					markDirty();
-				}
-				else if (stack.getItem() == RegistryManager.crystal_ember){
-					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+90000.0));
+				if (EmberGenUtil.getEmberForItem(stack.getItem()) > 0){
+					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+EmberGenUtil.getEmberForItem(stack.getItem())*10));
 					markDirty();
 				}
 			}

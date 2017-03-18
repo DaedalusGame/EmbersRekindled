@@ -93,8 +93,10 @@ public class BlockAlchemyPedestal extends BlockTEBase {
 	
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
-		if (!world.isRemote && !player.capabilities.isCreativeMode){
-			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+		if (state.getValue(isTop) && world.getBlockState(pos.down()).getBlock() == this || !state.getValue(isTop) && world.getBlockState(pos.up()).getBlock() == this){
+			if (!world.isRemote && !player.capabilities.isCreativeMode){
+				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+			}
 		}
 		if (this.getMetaFromState(state) == 1){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world,pos,state,player);

@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
@@ -30,6 +32,7 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
 		if (tile instanceof TileEntityAlchemyPedestal){
+            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			TileEntityAlchemyPedestal pedestal = (TileEntityAlchemyPedestal)tile;
 			if (pedestal.inventory.getStackInSlot(1) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){

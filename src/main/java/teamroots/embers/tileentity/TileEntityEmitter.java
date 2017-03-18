@@ -188,7 +188,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
 					getWorld().getTileEntity(offset).markDirty();
 					if (!getWorld().isRemote && !(getWorld().getTileEntity(offset) instanceof ITileEntityBase)){
-						EventManager.toUpdate.add(getWorld().getTileEntity(offset));
+						EventManager.markTEForUpdate(offset,world.getTileEntity(offset));
 					}
 				}
 			}

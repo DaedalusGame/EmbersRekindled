@@ -55,7 +55,7 @@ public class ConfigManager {
 		
 		config.addCustomCategoryComment("mobs", "Settings related to ore generation.");
 		
-		ancientGolemSpawnWeight = config.getInt("ancientGolemSpawnWeight", "mobs", 15, 0, 32767, "Spawning weight of the Ancient Golem mob. Higher values make golems spawn more frequently.");
+		ancientGolemSpawnWeight = config.getInt("ancientGolemSpawnWeight", "mobs", 25, 0, 32767, "Spawning weight of the Ancient Golem mob. Higher values make golems spawn more frequently.");
 		
 		config.addCustomCategoryComment("structures", "Settings related to structure generation.");
 		

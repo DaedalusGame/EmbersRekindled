@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
@@ -53,6 +55,7 @@ public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer {
 			GlStateManager.rotate(yaw, 0, 1, 0);
 			GlStateManager.rotate(90-pitch, 1, 0, 0);
 			GlStateManager.disableCull();
+            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			Tessellator tess = Tessellator.getInstance();
 			VertexBuffer b = tess.getBuffer();
 			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);

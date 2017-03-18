@@ -12,8 +12,6 @@ public class PacketHandler {
     private static int id = 0;
 
     public static void registerMessages(){
-        INSTANCE.registerMessage(MessageEmberData.MessageHolder.class,MessageEmberData.class,id ++,Side.CLIENT);
-        INSTANCE.registerMessage(MessageEmberDataRequest.MessageHolder.class,MessageEmberDataRequest.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageTEUpdate.MessageHolder.class,MessageTEUpdate.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageCannonBeamFX.MessageHolder.class,MessageCannonBeamFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberBurstFX.MessageHolder.class,MessageEmberBurstFX.class,id ++,Side.CLIENT);

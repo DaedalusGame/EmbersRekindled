@@ -1,18 +1,85 @@
 package teamroots.embers.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.EventManager;
 
 public class RenderUtil {
 	public static int lightx = 0xF000F0;
 	public static int lighty = 0xF000F0;
     public static final float root2over2 = (float)Math.sqrt(2.0f)/2.0f;
+    
+    public static void renderWavyEmberLine(VertexBuffer b, double x1, double y1, double x2, double y2, double thickness){
+    	double angleRads = Math.atan2(y2-y1, x2-x1);
+    	double orthoX = Math.cos(angleRads+(Math.PI/2.0));
+    	double orthoY = Math.sin(angleRads+(Math.PI/2.0));
+    	double rayX = Math.cos(angleRads);
+    	double rayY = Math.sin(angleRads);
+		for (int i = 0; i <= 10; i ++){
+    		float coeff = (float)i / 10f;
+    		double thickCoeff = Math.min(1.0, 1.4f*MathHelper.sqrt(2.0f*(0.5f-Math.abs((coeff-0.5f)))));
+    		double tx = x1*(1.0f-coeff) + x2*coeff;
+    		double ty = NoiseGenUtil.interpolate((float)y1, (float)y2, coeff);
+			float tick = Minecraft.getMinecraft().getRenderPartialTicks()+EventManager.ticks;
+    		int offX = (int)(6f*tick);
+			int offZ = (int)(6f*tick);
+			float sine = (float)Math.sin(coeff*Math.PI*2.0f + 0.25f*(tick)) + 0.25f*(float)Math.sin(coeff*Math.PI*3.47f + 0.25f*(tick));
+    		float sineOff = (4.0f + (float)thickness)/3.0f;
+    		float minusDensity = EmberGenUtil.getEmberDensity(1, offX+(int)(tx-thickness*orthoX*thickCoeff), offZ+(int)(ty-thickness*orthoY*thickCoeff));
+    		float plusDensity = EmberGenUtil.getEmberDensity(1, offX+(int)(tx-thickness*orthoX*thickCoeff), offZ+(int)(ty-thickness*orthoY*thickCoeff));
+    		b.pos(tx-thickness*(0.5f+minusDensity)*orthoX*thickCoeff-thickCoeff*orthoX*sine*sineOff, ty-thickness*(0.5f+minusDensity)*orthoY*thickCoeff-thickCoeff*orthoY*sine*sineOff, 0).color(1.0f, 0.25f, 0.0625f, (float)Math.pow(0.5f*(float)Math.max(0,thickCoeff-0.4f)*minusDensity,1)).endVertex();
+    		b.pos(tx+thickness*(0.5f+plusDensity)*orthoX*thickCoeff-thickCoeff*orthoX*sine*sineOff, ty+thickness*(0.5f+plusDensity)*orthoY*thickCoeff-thickCoeff*orthoY*sine*sineOff, 0).color(1.0f, 0.25f, 0.0625f, (float)Math.pow(0.5f*(float)Math.max(0,thickCoeff-0.4f)*plusDensity,1)).endVertex();
+    	}
+    }
+
+    public static void renderHighlightCircle(VertexBuffer b, double x1, double y1, double thickness){
+    	for (int i = 0; i < 40; i ++){
+    		float coeff = (float)i / 40f;
+    		float coeff2 = (float)(i) / 40f + 1.0f/20f;
+    		double angle = Math.PI * 2.0 * coeff;
+    		double angle2 = Math.PI * 2.0 * coeff2;
+			float tick = Minecraft.getMinecraft().getRenderPartialTicks()+EventManager.ticks;
+			double calcAngle2 = angle2;
+			if (i == 39){
+				calcAngle2 = 0;
+			}
+			float density1 = EmberGenUtil.getEmberDensity(4, (int)(480.0*angle), 4*(int)tick + (int)(4.0f*thickness));
+			float density2 = EmberGenUtil.getEmberDensity(4, (int)(480.0*calcAngle2), 4*(int)tick + (int)(4.0f*thickness));
+			double tx = x1 + Math.sin(angle+0.03125f*tick)*(thickness - (thickness * 0.5f * density1));
+    		double ty = y1 + Math.cos(angle+0.03125f*tick)*(thickness - (thickness * 0.5f * density1));
+    		double tx2 = x1 + Math.sin(angle2+0.03125f*tick)*(thickness - (thickness * 0.5f * density2));
+    		double ty2 = y1 + Math.cos(angle2+0.03125f*tick)*(thickness - (thickness * 0.5f * density2));
+    		b.pos(x1, y1, 0).color(1.0f, 0.25f, 0.0625f, 1.0f).endVertex();
+    		b.pos(tx, ty, 0).color(1.0f, 0.25f, 0.0625f, 0.0f).endVertex();
+    		b.pos(tx2, ty2, 0).color(1.0f, 0.25f, 0.0625f, 0.0f).endVertex();
+        }
+    }
+    
+    public static void renderRadiantCircle(VertexBuffer b, double x, double y, double radius){
+		for (int i = 0; i < 20; i ++){
+    		double angle = Math.PI * 2.0 * ((double)i)/20.0;
+    		double angle2 = Math.PI * 2.0 * ((double)(i+1))/20.0;
+			float tick = Minecraft.getMinecraft().getRenderPartialTicks()+EventManager.ticks;
+			double radiusBonus = (double)EmberGenUtil.getEmberDensity(4, (int)(20.0*angle), (int)tick);
+    		double tx = x + Math.cos(angle)*40.0;//(radius+radius*0.1*radiusBonus);
+			double ty = y + Math.sin(angle)*40.0;//(radius+radius*0.1*radiusBonus);
+    		double tx2 = x + Math.cos(angle2)*40.0;//(radius+radius*0.1*radiusBonus);
+			double ty2 = y + Math.sin(angle2)*40.0;//(radius+radius*0.1*radiusBonus);
+	    	b.pos(x, y, 0.0).color(1.0f, 0.25f, 0.0625f, 1.0f).endVertex();
+	    	b.pos(tx, ty, 0.0).color(1.0f, 0.25f, 0.0625f, 1.0f).endVertex();
+			b.pos(tx2, ty2, 0.0).color(1.0f, 0.25f, 0.0625f, 1.0f).endVertex();
+    	}
+    }
+    
 	public static void renderBeam(VertexBuffer buf, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a, float radius, double angle){
 		double yaw = Misc.yawDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
         double pitch = Misc.pitchDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
@@ -248,24 +315,41 @@ public class RenderUtil {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void drawQuadGui(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV){
+	public static void drawQuadGui(VertexBuffer vertexbuffer, double zLevel, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double minU, double minV, double maxU, double maxV){
 		float f = 0.00390625F;
         float f1 = 0.00390625F;
-        vertexbuffer.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(minU,maxV).endVertex();
-        vertexbuffer.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(maxU, maxV).endVertex();
-        vertexbuffer.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(maxU, minV).endVertex();
-        vertexbuffer.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(minU, minV).endVertex();
+        vertexbuffer.pos((double)x1 + 0.0F, (double)y1 + 0.0F, zLevel).tex(minU,maxV).endVertex();
+        vertexbuffer.pos((double)x2 + 0.0F, (double)y2 + 0.0F, zLevel).tex(maxU, maxV).endVertex();
+        vertexbuffer.pos((double)x3 + 0.0F, (double)y3 + 0.0F, zLevel).tex(maxU, minV).endVertex();
+        vertexbuffer.pos((double)x4 + 0.0F, (double)y4 + 0.0F, zLevel).tex(minU, minV).endVertex();
+    }
+
+	@SideOnly(Side.CLIENT)
+	public static void drawTexturedModalRect(int xCoord, int yCoord, double zLevel, double minU, double minV, double maxU, double maxV, int widthIn, int heightIn)
+    {
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)zLevel).tex(minU, maxV).endVertex();
+        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)zLevel).tex(maxU, maxV).endVertex();
+        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)zLevel).tex(maxU, minV).endVertex();
+        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).tex(minU, minV).endVertex();
+        tessellator.draw();
     }
 	
 	@SideOnly(Side.CLIENT)
-	public static void drawQuadGuiExt(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV, int texW, int texH){
+	public static void drawQuadGuiExt(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV, int texW, int texH, float r, float g, float b, float a){
 		float mU = (float)minU / (float)texW;
 		float mV = (float)minV / (float)texH;
 		float xU = (float)maxU / (float)texW;
 		float xV = (float)maxV / (float)texH;
-        vertexbuffer.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(mU,xV).endVertex();
-        vertexbuffer.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(xU, xV).endVertex();
-        vertexbuffer.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(xU, mV).endVertex();
-        vertexbuffer.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(mU, mV).endVertex();
+        vertexbuffer.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(mU,xV).color(r, g, b, a).endVertex();
+        vertexbuffer.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(xU, xV).color(r, g, b, a).endVertex();
+        vertexbuffer.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(xU, mV).color(r, g, b, a).endVertex();
+        vertexbuffer.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(mU, mV).color(r, g, b, a).endVertex();
     }
+	
+	public static void drawTextRGBA(FontRenderer font, String s, int x, int y, int r, int g, int b, int a){
+		font.drawString(s, x, y, (a << 24) + (r << 16) + (g << 8) + (b));
+	}
 }

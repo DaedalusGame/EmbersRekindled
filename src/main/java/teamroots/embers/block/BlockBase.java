@@ -46,6 +46,11 @@ public class BlockBase extends Block implements IModeledBlock {
 		return isFullCube;
 	}
 	
+	@Override
+	public boolean isFullBlock(IBlockState state){
+		return isFullCube;
+	}
+	
 	public BlockBase setHarvestProperties(String toolType, int level){
 		super.setHarvestLevel(toolType, level);
 		return this;

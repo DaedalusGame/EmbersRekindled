@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -34,6 +36,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 				EnumFacing face = tank.getWorld().getBlockState(tank.getPos()).getValue(BlockStampBase.facing);
 				int amount = tank.getAmount();
 				int capacity = tank.getCapacity();
+	            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 				Fluid fluid = tank.getFluid();
 				if (fluid != null){
 					int c = fluid.getColor();

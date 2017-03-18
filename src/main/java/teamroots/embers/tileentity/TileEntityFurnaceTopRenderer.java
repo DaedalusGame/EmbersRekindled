@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -33,6 +35,7 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 			int amount = furnace.getAmount();
 			int capacity = furnace.getCapacity();
 			Fluid fluid = furnace.getFluid();
+            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			for (int i = 0; i < furnace.inventory.getSlots(); i ++){
 				ItemStack stack = furnace.inventory.getStackInSlot(i);
 				if (stack != ItemStack.EMPTY){

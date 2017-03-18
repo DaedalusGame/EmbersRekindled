@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -26,6 +28,7 @@ public class TileEntityItemTransferRenderer extends TileEntitySpecialRenderer {
 			if (transfer.filterItem != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
+		            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(transfer.filterItem.getItem(),1,transfer.filterItem.getMetadata()));
 					item.hoverStart = 0;

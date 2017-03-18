@@ -2,7 +2,6 @@ package teamroots.embers.compat.jei;
 
 import java.util.List;
 
-import mezz.jei.JeiHelpers;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiFluidStackGroup;

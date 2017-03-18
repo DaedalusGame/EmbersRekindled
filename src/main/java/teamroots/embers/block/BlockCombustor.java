@@ -172,8 +172,10 @@ public class BlockCombustor extends BlockTEBase {
 	
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
-		if (!world.isRemote && !player.capabilities.isCreativeMode){
-			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+		if (state.getValue(type) != 0 && world.getBlockState(pos.down()).getBlock() == this || state.getValue(type) == 0 && world.getBlockState(pos.up()).getBlock() == this){
+			if (!world.isRemote && !player.capabilities.isCreativeMode){
+				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+			}
 		}
 		if (this.getMetaFromState(state) == 0){
 			world.setBlockToAir(pos.up());

@@ -253,8 +253,9 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 						for (int j = 0; j < properties.length && tank.getFluidAmount() < tank.getCapacity(); j ++){
 							FluidStack stack = properties[j].getContents();
 							if (stack != null){
-								int taken = tank.fill(stack, true);
-								handler.drain(new FluidStack(stack.getFluid(),taken), true);
+								int toFill = tank.fill(stack, false);
+								FluidStack taken = handler.drain(new FluidStack(stack.getFluid(),toFill), true);
+								tank.fill(taken, true);
 								IBlockState state = getWorld().getBlockState(getPos());
 								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
 									toUpdate.add(getPos().offset(connectedFaces.get(i)));
@@ -335,7 +336,7 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
 			tile.markDirty();
 			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
-				EventManager.toUpdate.add(tile);
+				EventManager.markTEForUpdate(toUpdate.get(i),tile);
 			}
 		}
 	}

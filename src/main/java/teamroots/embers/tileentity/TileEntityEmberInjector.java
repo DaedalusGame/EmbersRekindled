@@ -140,8 +140,10 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 			((TileEntitySeed)tile).markDirty();
 			this.capability.removeAmount(1.0, true);
 			markDirty();
-			for (int i = 0; i < 2; i ++){
-				ParticleUtil.spawnParticleLineGlow(world, pos.getX()+0.5f+0.25f*(random.nextFloat()-0.5f), pos.getY()+0.625f, pos.getZ()+0.5f+0.25f*(random.nextFloat()-0.5f), tile.getPos().getX()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getX()+0.5f*(random.nextFloat()-0.5f), tile.getPos().getY()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getY()+0.5f*(random.nextFloat()-0.5f), tile.getPos().getZ()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getZ()+0.5f*(random.nextFloat()-0.5f), 255, 64, 16, 4.0f+random.nextFloat()*2.0f, 40);
+			if (world.isRemote){
+				for (int i = 0; i < 2; i ++){
+					ParticleUtil.spawnParticleLineGlow(world, pos.getX()+0.5f+0.25f*(random.nextFloat()-0.5f), pos.getY()+0.625f, pos.getZ()+0.5f+0.25f*(random.nextFloat()-0.5f), tile.getPos().getX()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getX()+0.5f*(random.nextFloat()-0.5f), tile.getPos().getY()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getY()+0.5f*(random.nextFloat()-0.5f), tile.getPos().getZ()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getZ()+0.5f*(random.nextFloat()-0.5f), 255, 64, 16, 4.0f+random.nextFloat()*2.0f, 40);
+				}
 			}
 		}
 	}

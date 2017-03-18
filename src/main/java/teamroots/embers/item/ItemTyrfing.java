@@ -11,6 +11,8 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
@@ -33,6 +35,7 @@ public class ItemTyrfing extends ItemSword implements IModeledItem {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().toString()));
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
 		@Override
 		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 

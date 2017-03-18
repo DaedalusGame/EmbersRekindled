@@ -28,14 +28,10 @@ public class BlockItemPipe extends BlockTEBase {
 	}
 	
 	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
-		((TileEntityItemPipe)world.getTileEntity(pos)).updateNeighbors(world);
-	}
-	
-	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
-		((TileEntityItemPipe)world.getTileEntity(pos)).updateNeighbors(world);
-		world.getTileEntity(pos).markDirty();
+		TileEntityItemPipe p = (TileEntityItemPipe)world.getTileEntity(pos);
+		p.updateNeighbors(world);
+		p.markDirty();
 	}
 	
 	@Override

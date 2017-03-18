@@ -22,7 +22,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageEmberData;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberGenUtil;

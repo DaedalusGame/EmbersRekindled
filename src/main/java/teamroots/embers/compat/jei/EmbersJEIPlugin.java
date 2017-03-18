@@ -9,6 +9,8 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import net.minecraft.item.ItemStack;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.compat.jei.AlchemyRecipeCategory;
+import teamroots.embers.compat.jei.AlchemyRecipeHandler;
 import teamroots.embers.recipe.RecipeRegistry;
 
 

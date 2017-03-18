@@ -15,14 +15,13 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import teamroots.embers.command.CommandEmberFill;
 import teamroots.embers.proxy.CommonProxy;
 
 @Mod(modid = Embers.MODID, name = Embers.MODNAME, version = Embers.VERSION, dependencies = Embers.DEPENDENCIES)
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String VERSION = "0.201";
+	public static final String VERSION = "0.205";
 	public static final String DEPENDENCIES = "";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")
@@ -67,6 +66,6 @@ public class Embers {
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event){
-		event.registerServerCommand(new CommandEmberFill());
+		//event.registerServerCommand(new CommandEmberFill());
 	}
 }

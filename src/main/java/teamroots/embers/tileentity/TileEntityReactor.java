@@ -155,7 +155,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 				if (world.getTileEntity(getPos().west().down()) instanceof TileEntityCombustor){
 					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().west().down())).multiplier;
 				}
-				if (combustorMult == catalyzerMult){
+				if (Math.max(combustorMult, catalyzerMult) < 2.0f*Math.min(combustorMult, catalyzerMult)){
 					multiplier += combustorMult;
 					multiplier += catalyzerMult;
 					progress = 0;

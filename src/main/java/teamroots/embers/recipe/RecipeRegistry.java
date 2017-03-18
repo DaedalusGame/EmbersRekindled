@@ -136,7 +136,7 @@ public class RecipeRegistry {
 		"ingotDawnstone","ingotDawnstone","ingotDawnstone","ingotDawnstone",RegistryManager.tinker_hammer}));
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.blend_caminite,4),new Object[]{
-		Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL,new ItemStack(Items.DYE,1,15)}));
+		Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL,"sand"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.plate_caminite_raw,1),true,new Object[]{
 				"XX",
 				"XX",
@@ -681,13 +681,6 @@ public class RecipeRegistry {
 				'B', RegistryManager.block_caminite_brick,
 				'S', "ingotSilver",
 				'F', Blocks.FURNACE}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.knowledge_table,1),true,new Object[]{
-				" E ",
-				"PPP",
-				"L L",
-				'P', "plankWood",
-				'L', "logWood",
-				'E', RegistryManager.golems_eye}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.alchemy_pedestal,1),true,new Object[]{
 				"D D",
 				"ICI",
@@ -762,10 +755,6 @@ public class RecipeRegistry {
 				'P', "plankWood"}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(RegistryManager.wrapped_sealed_planks,1),new Object[]{
 				Blocks.IRON_BARS, RegistryManager.sealed_planks}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.golems_eye,1),true,new Object[]{
-				"BCB",
-				'B', RegistryManager.archaic_brick,
-				'C', RegistryManager.ancient_motive_core}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.archaic_bricks,1),true,new Object[]{
 				"BB",
 				"BB",
@@ -830,26 +819,26 @@ public class RecipeRegistry {
 				"PIP",
 				"LRL",
 				"L L", 
-				'P', RegistryManager.plate_iron,
+				'P', "plateIron",
 				'I', Items.IRON_INGOT,
-				'L', RegistryManager.ingot_lead,
+				'L', "ingotLead",
 				'R', Items.REDSTONE}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_injector,1),true,new Object[]{
 				"S S",
 				"DCD",
 				"BPB", 
-				'P', RegistryManager.plate_silver,
-				'S', RegistryManager.ingot_silver,
-				'D', RegistryManager.plate_dawnstone,
+				'P', "plateSilver",
+				'S', "ingotSilver",
+				'D', "plateDawnstone",
 				'B', RegistryManager.block_caminite_brick,
 				'C', RegistryManager.wildfire_core}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.boiler,1),true,new Object[]{
 				"CCC",
 				"IFI",
 				"IBI", 
-				'B', RegistryManager.block_copper,
+				'B', "blockCopper",
 				'I', Items.IRON_INGOT,
-				'C', RegistryManager.ingot_copper,
+				'C', "ingotCopper",
 				'F', Blocks.FURNACE}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.reactor,1),true,new Object[]{
 				"CCC",
@@ -857,24 +846,36 @@ public class RecipeRegistry {
 				"SBS", 
 				'B', RegistryManager.block_caminite_brick,
 				'W', RegistryManager.wildfire_core,
-				'C', RegistryManager.ingot_copper,
-				'S', RegistryManager.plate_silver}));
+				'C', "ingotCopper",
+				'S', "plateSilver"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.combustor,1),true,new Object[]{
 				" C ",
 				"PEP",
 				"CMC", 
 				'M', RegistryManager.mech_core,
-				'P', RegistryManager.plate_copper,
-				'C', RegistryManager.ingot_copper,
+				'P', "plateCopper",
+				'C', "ingotCopper",
 				'E', RegistryManager.ember_cluster}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.catalyzer,1),true,new Object[]{
 				" C ",
 				"PEP",
 				"CMC", 
 				'M', RegistryManager.mech_core,
-				'P', RegistryManager.plate_silver,
-				'C', RegistryManager.ingot_silver,
+				'P', "plateSilver",
+				'C', "ingotSilver",
 				'E', RegistryManager.ember_cluster}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.codex,1),true,new Object[]{
+				" B ",
+				" E ",
+				" B ", 
+				'B', RegistryManager.archaic_brick,
+				'E', RegistryManager.ancient_motive_core}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.field_chart,1),true,new Object[]{
+				"BBB",
+				"BCB",
+				"BBB", 
+				'B', RegistryManager.archaic_brick,
+				'C', RegistryManager.ember_cluster}));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		
@@ -939,7 +940,7 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_copper,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_copper,1),false,false));
 		stampingRecipes.add(new ItemStampingRecipe(new ItemStack(RegistryManager.shard_ember,1),new FluidStack(RegistryManager.fluid_molten_dawnstone,144),EnumStampType.TYPE_PLATE,new ItemStack(RegistryManager.aspectus_dawnstone,1),false,false));
 		
-		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,4),new FluidStack(RegistryManager.fluid_molten_gold,4)}, new FluidStack(RegistryManager.fluid_molten_dawnstone,16)));
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,4),new FluidStack(RegistryManager.fluid_molten_gold,4)}, new FluidStack(RegistryManager.fluid_molten_dawnstone,8)));
 	
 		alchemyRecipes.add(new AlchemyRecipe(48, 64, 0, 0, 48, 64, 0, 0, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(RegistryManager.ingot_copper), new ItemStack(RegistryManager.ingot_copper), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,2)));
 		alchemyRecipes.add(new AlchemyRecipe(48, 64, 0, 0, 0, 0, 48, 64, 0, 0, new ItemStack(Items.QUARTZ), new ItemStack(RegistryManager.ingot_silver), new ItemStack(RegistryManager.ingot_silver), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.shard_ember), new ItemStack(RegistryManager.seed,1,4)));

@@ -88,6 +88,14 @@ public class Misc {
 		return false;
 	}
 	
+	public static boolean betweenAngles(float angleTest, float angleLow, float angleHigh){
+		boolean between = angleTest >= angleLow && angleTest <= angleHigh;
+		if (angleHigh < angleLow){
+			between = angleTest >= angleLow && angleTest < 360 || angleTest > 0 && angleTest <= angleHigh;
+		}
+		return between;
+	}
+	
 	public static float yawDegreesBetweenPoints(double posX, double posY, double posZ, double posX2, double posY2, double posZ2){
 		float f = (float) ((180.0f*Math.atan2(posX2-posX,posZ2-posZ))/(float)Math.PI);
 		return f;

@@ -15,6 +15,7 @@ import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPipe;
 import teamroots.embers.tileentity.TileEntityItemPump;
 import teamroots.embers.tileentity.TileEntityPipe;
+import teamroots.embers.tileentity.TileEntityPump;
 
 public class BlockItemPump extends BlockTEBase {
 	public BlockItemPump(Material material, String name, boolean addToTab) {
@@ -28,13 +29,9 @@ public class BlockItemPump extends BlockTEBase {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
-		((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
-		world.getTileEntity(pos).markDirty();
-	}
-	
-	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
-		((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
+		TileEntityItemPump p = (TileEntityItemPump)world.getTileEntity(pos);
+		p.updateNeighbors(world);
+		p.markDirty();
 	}
 	
 	@Override
