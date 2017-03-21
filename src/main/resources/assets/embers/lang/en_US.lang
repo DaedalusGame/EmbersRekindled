@@ -87,6 +87,7 @@ tile.combustor.name=Combustion Chamber
 tile.catalyzer.name=Catalysis Chamber
 tile.reactor.name=Ignem Reactor
 tile.field_chart.name=Field Chart
+tile.ember_pulser.name=Ember Ejector
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
