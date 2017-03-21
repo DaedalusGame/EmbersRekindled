@@ -1,0 +1,40 @@
+{
+	"__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+	"parent": "block/block",
+	"textures": {
+		"front": "embers:blocks/inferno_forge_solid",
+		"particle": "embers:blocks/block_caminite_brick",
+		"top": "embers:blocks/inferno_forge_edge_top",
+		"coil": "embers:blocks/copper_coil_side",
+		"coil_top": "embers:blocks/copper_coil_top"
+	},
+	"elements": [
+		{
+			"__comment": "Cube10",
+			"from": [ 0, 0, 6 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 10 ], "texture": "#top" },
+				"up": { "uv": [ 0, 0, 16, 10 ], "texture": "#top" },
+				"north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front" },
+				"south": { "uv": [ 0, 0, 16, 16 ], "texture": "#front" },
+				"west": { "uv": [ 3, 0, 13, 16 ], "texture": "#front" },
+				"east": { "uv": [ 3, 0, 13, 16 ], "texture": "#front" }
+			}
+		},
+		{
+			"__comment": "Cube10",
+			"from": [ 2, 3.5, -1 ],
+			"to": [ 14, 16.5, 11 ],
+			"rotation": { "origin": [ 8, 3.5, -1 ], "axis": "x", "angle": 22.5 },
+			"faces": {
+				"down": { "uv": [ 0, 0, 12, 12 ], "texture": "#coil_top" },
+				"up": { "uv": [ 0, 0, 12, 12 ], "texture": "#coil_top" },
+				"north": { "uv": [ 0, 0, 12, 13 ], "texture": "#coil" },
+				"south": { "uv": [ 0, 0, 12, 13 ], "texture": "#coil" },
+				"west": { "uv": [ 0, 0, 12, 13 ], "texture": "#coil" },
+				"east": { "uv": [ 0, 0, 12, 13 ], "texture": "#coil" }
+			}
+		}
+	]
+}

@@ -127,7 +127,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 	public void update() {
 		TileEntityFurnaceTop furnace = (TileEntityFurnaceTop)getWorld().getTileEntity(getPos().up());
 		if (furnace != null){
-			if (furnace.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!furnace.inventory.getStackInSlot(0).isEmpty()){
 				if (progress == -1){
 					progress = 200;
 					markDirty();

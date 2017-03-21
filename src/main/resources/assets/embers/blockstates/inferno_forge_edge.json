@@ -1,0 +1,20 @@
+{
+    "variants":{
+        "state=0":  { "model": "embers:inferno_forge_solid", "y": 0 },
+        "state=1":  { "model": "embers:inferno_forge_corner_bottom", "y": 270 },
+        "state=2":  { "model": "embers:inferno_forge_solid", "y": 270 },
+        "state=3":  { "model": "embers:inferno_forge_corner_bottom", "y": 180 },
+        "state=4":  { "model": "embers:inferno_forge_solid", "y": 180 },
+        "state=5":  { "model": "embers:inferno_forge_corner_bottom", "y": 90 },
+        "state=6":  { "model": "embers:inferno_forge_solid", "y": 90 },
+        "state=7":  { "model": "embers:inferno_forge_corner_bottom", "y": 0 },
+        "state=8":  { "model": "embers:inferno_forge_edge", "y": 0 },
+        "state=9":  { "model": "embers:inferno_forge_corner_top", "y": 270 },
+        "state=10":  { "model": "embers:inferno_forge_edge", "y": 270 },
+        "state=11":  { "model": "embers:inferno_forge_corner_top", "y": 180 },
+        "state=12":  { "model": "embers:inferno_forge_edge", "y": 180 },
+        "state=13":  { "model": "embers:inferno_forge_corner_top", "y": 90 },
+        "state=14":  { "model": "embers:inferno_forge_edge", "y": 90 },
+        "state=15":  { "model": "embers:inferno_forge_corner_top", "y": 0 }
+    }
+}

@@ -117,8 +117,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 		if (ticksExisted % 20 == 0 && !getWorld().isRemote && this.capability.getEmber() > 0){
 			if (targetLeft != null && targetRight != null){
 				double amount = this.capability.getEmber()/2.0;
-				this.capability.setEmber(0);
-				markDirty();
+				boolean didSend = false;
 				IBlockState state = getWorld().getBlockState(getPos());
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetLeft) != null){
@@ -126,6 +125,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
 							getWorld().spawnEntity(packetLeft);
+							didSend = true;
 						}
 					}
 					if (getWorld().getTileEntity(targetRight) != null){
@@ -133,6 +133,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
 							getWorld().spawnEntity(packetRight);
+							didSend = true;
 						}
 					}
 				}
@@ -142,6 +143,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
 							getWorld().spawnEntity(packetLeft);
+							didSend = true;
 						}
 					}
 					if (getWorld().getTileEntity(targetRight) != null){
@@ -149,14 +151,18 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
 							getWorld().spawnEntity(packetRight);
+							didSend = true;
 						}
 					}
+				}
+				if (didSend){
+					this.capability.setEmber(0);
+					markDirty();
 				}
 			}
 			else if (targetLeft != null){
 				double amount = capability.getEmber();
-				this.capability.setEmber(0);
-				markDirty();
+				boolean didSend = false;
 				IBlockState state = getWorld().getBlockState(getPos());
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetLeft) != null){
@@ -164,6 +170,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
 							getWorld().spawnEntity(packetLeft);
+							didSend = true;
 						}
 					}
 				}
@@ -173,14 +180,18 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
 							getWorld().spawnEntity(packetLeft);
+							didSend = true;
 						}
 					}
+				}
+				if (didSend){
+					this.capability.setEmber(0);
+					markDirty();
 				}
 			}
 			else if (targetRight != null){
 				double amount = this.capability.getEmber();
-				this.capability.setEmber(0);
-				markDirty();
+				boolean didSend = false;
 				IBlockState state = getWorld().getBlockState(getPos());
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
 					if (getWorld().getTileEntity(targetRight) != null){
@@ -188,6 +199,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
 							getWorld().spawnEntity(packetRight);
+							didSend = true;
 						}
 					}
 				}
@@ -197,8 +209,13 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
 							getWorld().spawnEntity(packetRight);
+							didSend = true;
 						}
 					}
+				}
+				if (didSend){
+					this.capability.setEmber(0);
+					markDirty();
 				}
 			}
 		}

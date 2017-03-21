@@ -77,7 +77,7 @@ public class ParticleRenderer {
 			tess.draw();
 
             GlStateManager.enableCull();
-	        GlStateManager.depthMask(true);
+            GlStateManager.depthMask(true);
 	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 	        GlStateManager.disableBlend();
 	        GlStateManager.alphaFunc(516, 0.1F);

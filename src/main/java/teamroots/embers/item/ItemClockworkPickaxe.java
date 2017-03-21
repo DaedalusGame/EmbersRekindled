@@ -98,7 +98,10 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
-		return this.getHarvestLevel(stack, state.getBlock().getHarvestTool(state), null, state) >= state.getBlock().getHarvestLevel(state);
+		if (state.getBlock().getHarvestLevel(state) <= 3 && state.getBlock().getHarvestTool(state) != null){
+			return state.getBlock().getHarvestTool(state).compareTo("pickaxe") == 0;
+		}
+		return false;
 	}
 	
 	@Override

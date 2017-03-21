@@ -139,8 +139,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 					markDirty();
 				}
 			}
-			else if (ticksExisted % 100 == 0){
-				if (random.nextFloat()*0.5f > EmberGenUtil.getEmberDensity(world.getSeed(), getPos().getX(), getPos().getZ())){
+			else if (ticksExisted % 200 == 0){
+				if (random.nextFloat() < EmberGenUtil.getEmberDensity(world.getSeed(), getPos().getX(), getPos().getZ())){
 					int chance = random.nextInt(4);
 					if (chance == 0){
 						if (inventory.getStackInSlot(stackCrystals) != ItemStack.EMPTY){ 

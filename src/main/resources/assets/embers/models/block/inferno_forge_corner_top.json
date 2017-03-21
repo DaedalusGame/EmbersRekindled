@@ -1,0 +1,37 @@
+{
+	"__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+	"parent": "block/block",
+	"textures": {
+		"dawnstone_main": "embers:blocks/inferno_forge_edge_front",
+		"particle": "embers:blocks/inferno_forge_edge_front",
+		"dplate": "embers:blocks/dawnstone_plate",
+		"coil_top": "embers:blocks/copper_coil_top",
+		"coil_side": "embers:blocks/copper_coil_side"
+	},
+	"elements": [
+		{
+			"from": [ 0, 0, 6 ],
+			"to": [ 10, 12, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 10, 10 ], "texture": "#dplate" },
+				"up": { "uv": [ 0, 0, 10, 10 ], "texture": "#dplate" },
+				"north": { "uv": [ 3, 0, 13, 12 ], "texture": "#dawnstone_main" },
+				"south": { "uv": [ 3, 0, 13, 12 ], "texture": "#dawnstone_main" },
+				"west": { "uv": [ 3, 0, 13, 12 ], "texture": "#dawnstone_main" },
+				"east": { "uv": [ 3, 0, 13, 12 ], "texture": "#dawnstone_main" }
+			}
+		},
+		{
+			"from": [ 0, 0, 4 ],
+			"to": [ 12, 7, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 12, 12 ], "texture": "#coil_top" },
+				"up": { "uv": [ 0, 0, 12, 12 ], "texture": "#coil_top" },
+				"north": { "uv": [ 0, 9, 12, 16 ], "texture": "#coil_side" },
+				"south": { "uv": [ 0, 9, 12, 16 ], "texture": "#coil_side" },
+				"west": { "uv": [ 0, 9, 12, 16 ], "texture": "#coil_side" },
+				"east": { "uv": [ 0, 9, 12, 16 ], "texture": "#coil_side" }
+			}
+		}
+	]
+}

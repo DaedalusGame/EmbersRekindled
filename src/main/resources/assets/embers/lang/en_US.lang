@@ -88,6 +88,7 @@ tile.catalyzer.name=Catalysis Chamber
 tile.reactor.name=Ignem Reactor
 tile.field_chart.name=Field Chart
 tile.ember_pulser.name=Ember Ejector
+tile.inferno_forge.name=Inferno Forge
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold

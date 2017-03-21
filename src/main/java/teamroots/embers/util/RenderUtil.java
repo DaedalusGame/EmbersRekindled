@@ -336,6 +336,28 @@ public class RenderUtil {
         vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).tex(minU, minV).endVertex();
         tessellator.draw();
     }
+
+	@SideOnly(Side.CLIENT)
+	public static void drawTexturedModalRectBatched(VertexBuffer vertexbuffer, int xCoord, int yCoord, double zLevel, double minU, double minV, double maxU, double maxV, int widthIn, int heightIn)
+    {
+        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)zLevel).tex(minU, maxV).endVertex();
+        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)zLevel).tex(maxU, maxV).endVertex();
+        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)zLevel).tex(maxU, minV).endVertex();
+        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).tex(minU, minV).endVertex();
+    }
+
+	@SideOnly(Side.CLIENT)
+	public static void drawColorRectBatched(VertexBuffer vertexbuffer, double xCoord, double yCoord, double zLevel, double widthIn, double heightIn,
+			float r1, float g1, float b1, float a1,
+			float r2, float g2, float b2, float a2,
+			float r3, float g3, float b3, float a3,
+			float r4, float g4, float b4, float a4)
+    {
+        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)zLevel).color(r1, g1, b1, a1).endVertex();
+        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)zLevel).color(r2, g2, b2, a2).endVertex();
+        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)zLevel).color(r3, g3, b3, a3).endVertex();
+        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).color(r4, g4, b4, a4).endVertex();
+    }
 	
 	@SideOnly(Side.CLIENT)
 	public static void drawQuadGuiExt(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV, int texW, int texH, float r, float g, float b, float a){

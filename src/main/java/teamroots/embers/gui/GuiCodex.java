@@ -364,7 +364,7 @@ public class GuiCodex extends GuiScreen {
 				ResearchBase r = c.researches.get(this.researchPage);
 				this.drawCenteredTextGlowing(this.fontRendererObj, I18n.format("embers.research."+c.name+"."+r.name+".title"), basePosX+96, basePosY+19);
 				GlStateManager.color(1f, 1f, 1f, 1f);
-				List<String> strings = r.getLines(I18n.format("embers.research."+c.name+"."+r.name+".desc"));
+				List<String> strings = r.getLines(I18n.format("embers.research."+c.name+"."+r.name+".desc"), 152);
 				for (int i = 0; i < strings.size(); i ++){
 					this.drawTextGlowing(this.fontRendererObj, strings.get(i), basePosX+20, basePosY+43+i*12);
 				}

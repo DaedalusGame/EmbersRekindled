@@ -11,6 +11,7 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.util.EmberGenUtil;
+import teamroots.embers.util.ItemModUtil;
 
 public class CommonProxy {
 	
@@ -18,6 +19,7 @@ public class CommonProxy {
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
 		EmberGenUtil.init();
+		ItemModUtil.init();
 		RecipeRegistry.init();
 		ResearchManager.initResearches();
 	}

@@ -59,6 +59,7 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 		if (heldItem != ItemStack.EMPTY){
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
+				player.setHeldItem(hand, didFill.getResult());
 				this.markDirty();
 				return didFill.success;
 			}

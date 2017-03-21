@@ -1,0 +1,6 @@
+{
+    "variants":{
+        "top=true":{"model": "embers:null"},
+        "top=false":{"model": "embers:inferno_forge"}
+    }
+}

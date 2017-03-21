@@ -120,16 +120,16 @@ public class Misc {
 	public static int getResourceCount(ItemStack stack){
 		int baseCount = 0;
 		if (stack.getItem() instanceof ItemArmor){
-			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.HEAD){
+			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.HEAD){
 				baseCount = 5;
 			}
-			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.CHEST){
+			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.CHEST){
 				baseCount = 8;
 			}
-			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.LEGS){
+			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.LEGS){
 				baseCount = 7;
 			}
-			if (((ItemArmor)stack.getItem()).getEquipmentSlot() == EntityEquipmentSlot.FEET){
+			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.FEET){
 				baseCount = 4;
 			}
 		}

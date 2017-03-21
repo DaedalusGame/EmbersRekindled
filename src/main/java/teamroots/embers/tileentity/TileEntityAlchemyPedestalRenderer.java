@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -36,18 +37,14 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 			TileEntityAlchemyPedestal pedestal = (TileEntityAlchemyPedestal)tile;
 			if (pedestal.inventory.getStackInSlot(1) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
-					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(pedestal.inventory.getStackInSlot(1).getItem(),1,pedestal.inventory.getStackInSlot(1).getMetadata()));
-					item.hoverStart = 0;
-					item.isCollided = false;
-					GL11.glTranslated(x+0.5, y+0.5, z+0.5);
+					GL11.glTranslated(x+0.5, y+0.75, z+0.5);
 					GL11.glRotated(pedestal.angle+((pedestal.turnRate))*partialTicks, 0, 1.0, 0);
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(pedestal.inventory.getStackInSlot(1).getItem(),1,pedestal.inventory.getStackInSlot(1).getMetadata()), TransformType.GROUND);
 					GL11.glPopMatrix();
-					GlStateManager.popAttrib();
 				}
 			}
+			
 			if (pedestal.inventory.getStackInSlot(0) != ItemStack.EMPTY){
 				float coeff = pedestal.inventory.getStackInSlot(0).getCount()/64.0f;
 	            
