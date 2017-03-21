@@ -18,29 +18,31 @@ public class AshenCloakUnsocketRecipe implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
 		boolean has_cloak = false;
-		boolean moreThanOne_cloak = false;
-		for (int i = 0; i < inv.getSizeInventory(); i ++){
-			if (inv.getStackInSlot(i) != ItemStack.EMPTY){
-				if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest && inv.getStackInSlot(i).getTagCompound() != null){
-					if (inv.getStackInSlot(i).getTagCompound().hasKey("gem1") ||
-							inv.getStackInSlot(i).getTagCompound().hasKey("gem2") ||
-							inv.getStackInSlot(i).getTagCompound().hasKey("gem3") ||
-							inv.getStackInSlot(i).getTagCompound().hasKey("gem4") ||
-							inv.getStackInSlot(i).getTagCompound().hasKey("gem5") ||
-							inv.getStackInSlot(i).getTagCompound().hasKey("gem6") ||
-							inv.getStackInSlot(i).getTagCompound().hasKey("gem7")){
-						if (!has_cloak && !moreThanOne_cloak){
-							has_cloak = true;
-						}
-						else if (has_cloak){
-							has_cloak = false;
-							moreThanOne_cloak = true;
+		boolean more_than_one_cloak = false;
+		if (inv.getSizeInventory() > 4){
+			for (int i = 0; i < inv.getSizeInventory(); i ++){
+				if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+					if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest && inv.getStackInSlot(i).getTagCompound() != null){
+						if (inv.getStackInSlot(i).getTagCompound().hasKey("gem1") ||
+								inv.getStackInSlot(i).getTagCompound().hasKey("gem2") ||
+								inv.getStackInSlot(i).getTagCompound().hasKey("gem3") ||
+								inv.getStackInSlot(i).getTagCompound().hasKey("gem4") ||
+								inv.getStackInSlot(i).getTagCompound().hasKey("gem5") ||
+								inv.getStackInSlot(i).getTagCompound().hasKey("gem6") ||
+								inv.getStackInSlot(i).getTagCompound().hasKey("gem7")){
+							if (!has_cloak && !more_than_one_cloak){
+								has_cloak = true;
+							}
+							else if (has_cloak){
+								has_cloak = false;
+								more_than_one_cloak = true;
+							}
 						}
 					}
-				}
-				else {
-					if (inv.getStackInSlot(i) != ItemStack.EMPTY){
-						return false;
+					else {
+						if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+							return false;
+						}
 					}
 				}
 			}
@@ -52,13 +54,13 @@ public class AshenCloakUnsocketRecipe implements IRecipe {
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack capeStack = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i ++){
-			if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+			if (!inv.getStackInSlot(i).isEmpty()){
 				if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest){
 					capeStack = inv.getStackInSlot(i).copy();
 				}
 			}
 		}
-		if (capeStack != ItemStack.EMPTY){
+		if (!capeStack.isEmpty()){
 			for (int i = 1; i < 8; i ++){
 				if (capeStack.getTagCompound().hasKey("gem"+i)){
 					capeStack.getTagCompound().removeTag("gem"+i);
@@ -70,7 +72,7 @@ public class AshenCloakUnsocketRecipe implements IRecipe {
 
 	@Override
 	public int getRecipeSize() {
-		return 3;
+		return 9;
 	}
 
 	@Override

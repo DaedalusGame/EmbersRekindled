@@ -22,7 +22,7 @@ public class AshenCloakSocketRecipe implements IRecipe {
 		boolean hasGem = false;
 		if (inv.getSizeInventory() > 4){
 			for (int i = 0; i < inv.getSizeInventory(); i ++){
-				if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+				if (!inv.getStackInSlot(i).isEmpty()){
 					if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest){
 						if (!inv.getStackInSlot(i).hasTagCompound() || !inv.getStackInSlot(i).getTagCompound().hasKey("gem1")
 								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem2")
@@ -67,7 +67,7 @@ public class AshenCloakSocketRecipe implements IRecipe {
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack capeStack = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i ++){
-			if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+			if (!inv.getStackInSlot(i).isEmpty()){
 				if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest){
 					capeStack = inv.getStackInSlot(i).copy();
 				}
@@ -79,7 +79,7 @@ public class AshenCloakSocketRecipe implements IRecipe {
 			}
 			int counter = 1;
 			for (int i = 0; i < inv.getSizeInventory(); i ++){
-				if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+				if (!inv.getStackInSlot(i).isEmpty()){
 					if (inv.getStackInSlot(i).getItem() instanceof ItemInflictorGem){
 						capeStack.getTagCompound().setTag("gem"+counter, inv.getStackInSlot(i).writeToNBT(new NBTTagCompound()));
 						counter ++;
@@ -88,7 +88,7 @@ public class AshenCloakSocketRecipe implements IRecipe {
 			}
 			return capeStack;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

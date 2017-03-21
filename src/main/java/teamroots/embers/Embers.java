@@ -21,7 +21,7 @@ import teamroots.embers.proxy.CommonProxy;
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String VERSION = "0.205";
+	public static final String VERSION = "0.206";
 	public static final String DEPENDENCIES = "";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")

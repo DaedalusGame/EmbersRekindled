@@ -188,9 +188,9 @@ public class RegistryManager {
 		blocks.add(combustor = (new BlockCombustor(Material.ROCK,"combustor",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(catalyzer = (new BlockCatalyzer(Material.ROCK,"catalyzer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(field_chart = (new BlockFieldChart(Material.ROCK,"field_chart",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
-		blocks.add(ember_pulser = (new BlockEmberPulser(Material.ROCK,"ember_pulser",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
-		blocks.add(inferno_forge_edge = (new BlockInfernoForgeEdge(unpushable,"inferno_forge_edge",false)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
-		blocks.add(inferno_forge = (new BlockInfernoForge(Material.ROCK,"inferno_forge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		//blocks.add(ember_pulser = (new BlockEmberPulser(Material.ROCK,"ember_pulser",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		//blocks.add(inferno_forge_edge = (new BlockInfernoForgeEdge(unpushable,"inferno_forge_edge",false)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		//blocks.add(inferno_forge = (new BlockInfernoForge(Material.ROCK,"inferno_forge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		
 		items.add(ingot_copper = new ItemBase("ingot_copper",true));
 		items.add(ingot_lead = new ItemBase("ingot_lead",true));

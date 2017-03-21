@@ -386,85 +386,87 @@ public class EventManager {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTooltipRender(RenderTooltipEvent.PostText event){
-		if (ItemModUtil.hasHeat(event.getStack())){
-			for (int i = 0; i < event.getLines().size(); i ++){
-				if (event.getLines().get(i).compareTo(TextFormatting.GRAY+"                        ") == 0){
-					GlStateManager.disableDepth();
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-					event.getFontRenderer().drawStringWithShadow("Heat:", event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i, 0xFFFFFFFF);
-					double x = event.getFontRenderer().getStringWidth("Heat:")+1.0;
-					double w = event.getFontRenderer().getStringWidth("                        ");
-					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("embers:textures/gui/heat_bar.png"));
-					Tessellator tess = Tessellator.getInstance();
-					VertexBuffer b = tess.getBuffer();
-					GlStateManager.disableTexture2D();
-					GlStateManager.enableAlpha();
-					int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
-					float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
-					GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
-					GlStateManager.enableBlend();
-					double baseX = event.getX();
-					double baseY = event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i;
-					GlStateManager.shadeModel(GL11.GL_SMOOTH);
-					b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-					double x1 = baseX + x + 4;
-					double x2 = baseX + w - 3;
-					x2 = x1 + (x2 - x1)*(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack()));
-					for (double j = 0; j < 10; j ++){
-						double coeff = j/10.0;
-						double coeff2 = (j+1.0)/10.0;
+		if (event.getStack() != null){
+			if (ItemModUtil.hasHeat(event.getStack())){
+				for (int i = 0; i < event.getLines().size(); i ++){
+					if (event.getLines().get(i).compareTo(TextFormatting.GRAY+"                        ") == 0){
+						GlStateManager.disableDepth();
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+						event.getFontRenderer().drawStringWithShadow("Heat:", event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i, 0xFFFFFFFF);
+						double x = event.getFontRenderer().getStringWidth("Heat:")+1.0;
+						double w = event.getFontRenderer().getStringWidth("                        ");
+						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("embers:textures/gui/heat_bar.png"));
+						Tessellator tess = Tessellator.getInstance();
+						VertexBuffer b = tess.getBuffer();
+						GlStateManager.disableTexture2D();
+						GlStateManager.enableAlpha();
+						int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+						float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+						GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
+						GlStateManager.enableBlend();
+						double baseX = event.getX();
+						double baseY = event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i;
+						GlStateManager.shadeModel(GL11.GL_SMOOTH);
+						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+						double x1 = baseX + x + 4;
+						double x2 = baseX + w - 3;
+						x2 = x1 + (x2 - x1)*(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack()));
+						for (double j = 0; j < 10; j ++){
+							double coeff = j/10.0;
+							double coeff2 = (j+1.0)/10.0;
+							for (double k = 0; k < 4; k += 0.5){
+								float thick = (float)(k/4.0);
+								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
+										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
+										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
+										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+(8.0-k)))),
+										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+(8.0-k)))));
+							}
+						}
+						x1 = baseX + x + 4;
+						x2 = baseX + w - 3;
+						double point = x1 + (x2 - x1)*(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack()));
+						
 						for (double k = 0; k < 4; k += 0.5){
 							float thick = (float)(k/4.0);
-							RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
-									1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
-									1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
-									1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+(8.0-k)))),
-									1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+(8.0-k)))));
+							RenderUtil.drawColorRectBatched(b, point, baseY+k, 0, Math.min((x2-point),((x2-x1)/10.0)), 8.0-2.0*k, 
+									1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+k))), 
+									0.25f, 0.0625f, 0.015625f, 0.0f, 
+									0.25f, 0.0625f, 0.015625f, 0.0f,
+									1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+(8.0-k)))));
 						}
-					}
-					x1 = baseX + x + 4;
-					x2 = baseX + w - 3;
-					double point = x1 + (x2 - x1)*(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack()));
-					
-					for (double k = 0; k < 4; k += 0.5){
-						float thick = (float)(k/4.0);
-						RenderUtil.drawColorRectBatched(b, point, baseY+k, 0, Math.min((x2-point),((x2-x1)/10.0)), 8.0-2.0*k, 
-								1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+k))), 
-								0.25f, 0.0625f, 0.015625f, 0.0f, 
-								0.25f, 0.0625f, 0.015625f, 0.0f,
-								1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+(8.0-k)))));
-					}
-					tess.draw();
-					b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-					x1 = baseX + x + 4;
-					x2 = baseX + w - 3;
-					x1 = x2 - (x2 - x1)*(1.0f-(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack())));
-					for (double j = 0; j < 10; j ++){
-						double coeff = j/10.0;
-						double coeff2 = (j+1.0)/10.0;
-						for (double k = 0; k < 4; k += 0.5){
-							float thick = (float)(k/4.0);
-							RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
-									0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
-									0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
-									0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+(8.0-k)))),
-									0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+(8.0-k)))));
+						tess.draw();
+						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+						x1 = baseX + x + 4;
+						x2 = baseX + w - 3;
+						x1 = x2 - (x2 - x1)*(1.0f-(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack())));
+						for (double j = 0; j < 10; j ++){
+							double coeff = j/10.0;
+							double coeff2 = (j+1.0)/10.0;
+							for (double k = 0; k < 4; k += 0.5){
+								float thick = (float)(k/4.0);
+								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
+										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
+										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
+										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+(8.0-k)))),
+										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+(8.0-k)))));
+							}
 						}
+						tess.draw();
+						GlStateManager.shadeModel(GL11.GL_FLAT);
+						GlStateManager.enableTexture2D();
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+						GlStateManager.alphaFunc(func, ref);
+						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+						RenderUtil.drawTexturedModalRectBatched(b,(int)(baseX+x+1), (int)baseY-1, 0, 0, 0, 0.5, 0.625, 8, 10);
+						RenderUtil.drawTexturedModalRectBatched(b,(int)(baseX+w-8), (int)baseY-1, 0, 0.5, 0, 1.0, 0.625, 8, 10);
+						//Gui.drawRect(event.getX()+x+1, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+2, event.getX()+w, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+event.getFontRenderer().FONT_HEIGHT, (0xFF << 24)+Misc.intColor(255/2, 32+(int)(32*sine), 8));
+						//Gui.drawRect(event.getX()+x, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+1, event.getX()+w-1, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+event.getFontRenderer().FONT_HEIGHT-1, (0xFF << 24)+Misc.intColor(255, 64+(int)(64*sine), 16));
+						tess.draw();
+						GlStateManager.disableBlend();
+						GlStateManager.disableAlpha();
+						GlStateManager.enableDepth();
 					}
-					tess.draw();
-					GlStateManager.shadeModel(GL11.GL_FLAT);
-					GlStateManager.enableTexture2D();
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-					GlStateManager.alphaFunc(func, ref);
-					b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-					RenderUtil.drawTexturedModalRectBatched(b,(int)(baseX+x+1), (int)baseY-1, 0, 0, 0, 0.5, 0.625, 8, 10);
-					RenderUtil.drawTexturedModalRectBatched(b,(int)(baseX+w-8), (int)baseY-1, 0, 0.5, 0, 1.0, 0.625, 8, 10);
-					//Gui.drawRect(event.getX()+x+1, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+2, event.getX()+w, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+event.getFontRenderer().FONT_HEIGHT, (0xFF << 24)+Misc.intColor(255/2, 32+(int)(32*sine), 8));
-					//Gui.drawRect(event.getX()+x, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+1, event.getX()+w-1, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+event.getFontRenderer().FONT_HEIGHT-1, (0xFF << 24)+Misc.intColor(255, 64+(int)(64*sine), 16));
-					tess.draw();
-					GlStateManager.disableBlend();
-					GlStateManager.disableAlpha();
-					GlStateManager.enableDepth();
 				}
 			}
 		}

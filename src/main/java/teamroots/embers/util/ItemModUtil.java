@@ -110,9 +110,11 @@ public class ItemModUtil {
 	}
 	
 	public static boolean hasHeat(ItemStack stack){
-		if (stack.hasTagCompound()){
-			if (stack.getTagCompound().hasKey(HEAT_TAG)){
-				return true;
+		if (!stack.isEmpty()){
+			if (stack.hasTagCompound()){
+				if (stack.getTagCompound().hasKey(HEAT_TAG)){
+					return true;
+				}
 			}
 		}
 		return false;

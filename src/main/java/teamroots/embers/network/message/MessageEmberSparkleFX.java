@@ -45,12 +45,14 @@ public class MessageEmberSparkleFX implements IMessage {
     	@SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(final MessageEmberSparkleFX message, final MessageContext ctx) {
+    		//Minecraft.getMinecraft().addScheduledTask(()-> {
     		World world = Minecraft.getMinecraft().world;
 			if (world.isRemote){
 				for (double i = 0; i < 18; i ++){
 					ParticleUtil.spawnParticleStar(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 3.5f+0.5f*random.nextFloat(), 40);
 				}
 			}
+    		//});
     		return null;
         }
     }
