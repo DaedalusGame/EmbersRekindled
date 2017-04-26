@@ -83,4 +83,9 @@ public class ParticleSmoke extends Particle implements IEmberParticle{
 	public boolean isAdditive() {
 		return false;
 	}
+
+	@Override
+	public boolean renderThroughBlocks() {
+		return false;
+	}
 }

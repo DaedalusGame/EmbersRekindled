@@ -46,6 +46,33 @@ public class WorldGenOres implements IWorldGenerator {
 				int z = chunkZ*16+random.nextInt(16);
 				ore_quartz.generate(world, random, new BlockPos(x,y,z));
 			}
+			if (ConfigManager.enableAluminum){
+				WorldGenMinable ore_aluminum = new WorldGenMinable(RegistryManager.ore_aluminum.getDefaultState(), ConfigManager.aluminumVeinSize);
+				for (int i = 0; i < ConfigManager.aluminumVeinsPerChunk; i ++){
+					int x = chunkX*16+random.nextInt(16);
+					int y = random.nextInt(ConfigManager.aluminumMaxY-ConfigManager.aluminumMinY)+ConfigManager.aluminumMinY;
+					int z = chunkZ*16+random.nextInt(16);
+					ore_aluminum.generate(world, random, new BlockPos(x,y,z));
+				}
+			}
+			if (ConfigManager.enableNickel){
+				WorldGenMinable ore_nickel = new WorldGenMinable(RegistryManager.ore_nickel.getDefaultState(), ConfigManager.nickelVeinSize);
+				for (int i = 0; i < ConfigManager.nickelVeinsPerChunk; i ++){
+					int x = chunkX*16+random.nextInt(16);
+					int y = random.nextInt(ConfigManager.nickelMaxY-ConfigManager.nickelMinY)+ConfigManager.nickelMinY;
+					int z = chunkZ*16+random.nextInt(16);
+					ore_nickel.generate(world, random, new BlockPos(x,y,z));
+				}
+			}
+			if (ConfigManager.enableTin){
+				WorldGenMinable ore_tin = new WorldGenMinable(RegistryManager.ore_tin.getDefaultState(), ConfigManager.tinVeinSize);
+				for (int i = 0; i < ConfigManager.tinVeinsPerChunk; i ++){
+					int x = chunkX*16+random.nextInt(16);
+					int y = random.nextInt(ConfigManager.tinMaxY-ConfigManager.tinMinY)+ConfigManager.tinMinY;
+					int z = chunkZ*16+random.nextInt(16);
+					ore_tin.generate(world, random, new BlockPos(x,y,z));
+				}
+			}
             break;
 		}
 			

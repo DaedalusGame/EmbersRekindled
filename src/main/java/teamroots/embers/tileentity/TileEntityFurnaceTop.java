@@ -97,6 +97,9 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
 				this.markDirty();
+				if (didFill.success){
+					player.setHeldItem(hand, didFill.getResult());
+				}
 				return didFill.success;
 			}
 			else {

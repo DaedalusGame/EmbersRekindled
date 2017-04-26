@@ -87,8 +87,8 @@ public class BlockEmberGauge extends BlockBase implements IDial {
 	public List<String> getDisplayInfo(World world, BlockPos pos, IBlockState state) {
 		ArrayList<String> text = new ArrayList<String>();
 		if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))) != null){
-			if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).hasCapability(EmberCapabilityProvider.emberCapability, Misc.getOppositeFace(state.getValue(facing)))){
-				IEmberCapability handler = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).getCapability(EmberCapabilityProvider.emberCapability, Misc.getOppositeFace(state.getValue(facing)));
+			if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).hasCapability(EmberCapabilityProvider.emberCapability, state.getValue(facing))){
+				IEmberCapability handler = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).getCapability(EmberCapabilityProvider.emberCapability, state.getValue(facing));
 				if (handler != null){
 					text.add(I18n.format("embers.tooltip.emberdial.ember")+handler.getEmber()+"/"+handler.getEmberCapacity());
 				}
@@ -99,7 +99,7 @@ public class BlockEmberGauge extends BlockBase implements IDial {
 
 	@Override
 	public void updateTEData(World world, IBlockState state, BlockPos pos) {
-		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(this.facing)));
+		TileEntity tile = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(this.facing))));
 		if (tile != null){
 			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdateRequest(Minecraft.getMinecraft().player.getUniqueID(),pos));
 		}

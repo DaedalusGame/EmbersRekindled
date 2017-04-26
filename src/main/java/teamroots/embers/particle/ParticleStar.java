@@ -89,4 +89,9 @@ public class ParticleStar extends Particle implements IEmberParticle{
 	public boolean isAdditive() {
 		return true;
 	}
+
+	@Override
+	public boolean renderThroughBlocks() {
+		return false;
+	}
 }

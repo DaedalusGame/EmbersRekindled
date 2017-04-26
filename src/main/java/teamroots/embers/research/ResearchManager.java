@@ -16,8 +16,9 @@ public class ResearchManager {
 	
 	public static ResearchBase dials, boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, pipes, tank, bin,//WORLD
 							   copper_cell, emitters, dawnstone, dropper, melter, stamper, mixer, breaker, hearth_coil, access, reservoir, vacuum, transfer, //MECHANISMS
-							   beam_cannon, splitter, dawnstone_anvil, autohammer, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, //METALLURGY
-							   tyrfing, waste, wildfire, cluster, combustor, catalyzer, reactor, injector, ashen_cloak, inflictor, materia, misc_alchemy, adhesive //ALCHEMY
+							   ember_ejector, beam_cannon, splitter, dawnstone_anvil, autohammer, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, //METALLURGY
+							   tyrfing, waste, wildfire, cluster, combustor, catalyzer, reactor, injector, ashen_cloak, inflictor, materia, misc_alchemy, adhesive, //ALCHEMY
+							   modifiers, inferno_forge, heat, superheater, cinder_jet, caster_orb, resonating_bell, eldritch_insignia, blasting_core, intelligent_apparatus, flame_barrier //SMITHING
 	;
 	
 	public static void initResearches(){
@@ -53,6 +54,7 @@ public class ResearchManager {
 		
 		//METALLURGY
 		splitter = new ResearchBase("splitter", new ItemStack(RegistryManager.beam_splitter), 0, 6);
+		ember_ejector = new ResearchBase("ember_ejector", new ItemStack(RegistryManager.ember_pulser), 0, 3.5);
 		dawnstone_anvil = new ResearchBase("dawnstone_anvil", new ItemStack(RegistryManager.dawnstone_anvil), 3, 7);
 		autohammer = new ResearchBase("autohammer", new ItemStack(RegistryManager.auto_hammer), 7, 7).addAncestor(dawnstone_anvil);
 		crystal_cell = new ResearchBase("crystal_cell", new ItemStack(RegistryManager.crystal_cell), 0, 1);
@@ -84,6 +86,19 @@ public class ResearchManager {
 		catalyzer = new ResearchBase("catalyzer", new ItemStack(RegistryManager.catalyzer), 5, 7).addAncestor(wildfire);
 		reactor = new ResearchBase("reactor", new ItemStack(RegistryManager.reactor), 9, 7).addAncestor(combustor).addAncestor(catalyzer);
 		tyrfing = new ResearchBase("tyrfing", new ItemStack(RegistryManager.tyrfing), 8, 4).addAncestor(waste);
+		
+		//SMITHING
+		modifiers = new ResearchBase("modifiers", new ItemStack(RegistryManager.ancient_motive_core), 5, 7);
+		heat = new ResearchBase("heat", new ItemStack(RegistryManager.crystal_ember), 7, 7);
+		inferno_forge = new ResearchBase("inferno_forge", new ItemStack(RegistryManager.inferno_forge), 6, 4).addAncestor(heat);
+		superheater = new ResearchBase("superheater", new ItemStack(RegistryManager.superheater), 1, 7).addAncestor(inferno_forge);
+		cinder_jet = new ResearchBase("cinder_jet", new ItemStack(RegistryManager.jet_augment), 0, 5).addAncestor(inferno_forge);
+		blasting_core = new ResearchBase("blasting_core", new ItemStack(RegistryManager.blasting_core), 0, 3).addAncestor(inferno_forge);
+		caster_orb = new ResearchBase("caster_orb", new ItemStack(RegistryManager.caster_orb), 1, 1).addAncestor(inferno_forge);
+		flame_barrier = new ResearchBase("flame_barrier", new ItemStack(RegistryManager.flame_barrier), 11, 1).addAncestor(inferno_forge);
+		eldritch_insignia = new ResearchBase("eldritch_insignia", new ItemStack(RegistryManager.eldritch_insignia), 12, 3).addAncestor(inferno_forge);
+		intelligent_apparatus = new ResearchBase("intelligent_apparatus", new ItemStack(RegistryManager.intelligent_apparatus), 12, 5).addAncestor(inferno_forge);
+		resonating_bell = new ResearchBase("resonating_bell", new ItemStack(RegistryManager.resonating_bell), 11, 7).addAncestor(inferno_forge);
 		
 		researches.add(new ResearchCategory("world", 16)
 				.addResearch(ores)
@@ -141,6 +156,18 @@ public class ResearchManager {
 				.addResearch(catalyzer)
 				.addResearch(materia)
 				.addResearch(tyrfing));
+		researches.add(new ResearchCategory("smithing", 80)
+				.addResearch(modifiers)
+				.addResearch(heat)
+				.addResearch(inferno_forge)
+				.addResearch(superheater)
+				.addResearch(cinder_jet)
+				.addResearch(blasting_core)
+				.addResearch(caster_orb)
+				.addResearch(eldritch_insignia)
+				.addResearch(intelligent_apparatus)
+				.addResearch(resonating_bell)
+				.addResearch(flame_barrier));
 		//researches.add(new ResearchCategory("materia", 80));
 		//researches.add(new ResearchCategory("core", 96));
 	}

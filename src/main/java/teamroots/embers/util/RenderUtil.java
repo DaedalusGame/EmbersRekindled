@@ -1,9 +1,12 @@
 package teamroots.embers.util;
 
+import org.lwjgl.opengl.GL20;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
@@ -44,14 +47,15 @@ public class RenderUtil {
     public static void renderHighlightCircle(VertexBuffer b, double x1, double y1, double thickness){
     	for (int i = 0; i < 40; i ++){
     		float coeff = (float)i / 40f;
-    		float coeff2 = (float)(i) / 40f + 1.0f/20f;
+    		int i2 = i+1;
+    		if (i2 == 40){
+    			i2 = 0;
+    		}
+    		float coeff2 = (float)(i2) / 40f;
     		double angle = Math.PI * 2.0 * coeff;
     		double angle2 = Math.PI * 2.0 * coeff2;
 			float tick = Minecraft.getMinecraft().getRenderPartialTicks()+EventManager.ticks;
 			double calcAngle2 = angle2;
-			if (i == 39){
-				calcAngle2 = 0;
-			}
 			float density1 = EmberGenUtil.getEmberDensity(4, (int)(480.0*angle), 4*(int)tick + (int)(4.0f*thickness));
 			float density2 = EmberGenUtil.getEmberDensity(4, (int)(480.0*calcAngle2), 4*(int)tick + (int)(4.0f*thickness));
 			double tx = x1 + Math.sin(angle+0.03125f*tick)*(thickness - (thickness * 0.5f * density1));
@@ -373,5 +377,17 @@ public class RenderUtil {
 	
 	public static void drawTextRGBA(FontRenderer font, String s, int x, int y, int r, int g, int b, int a){
 		font.drawString(s, x, y, (a << 24) + (r << 16) + (g << 8) + (b));
+	}
+	
+	public static void renderChunkUniforms(RenderChunk c){
+		if (ShaderUtil.currentProgram == ShaderUtil.lightProgram){
+			BlockPos pos = c.getPosition();
+			int chunkX = GL20.glGetUniformLocation(ShaderUtil.lightProgram, "chunkX");
+			int chunkY = GL20.glGetUniformLocation(ShaderUtil.lightProgram, "chunkY");
+			int chunkZ = GL20.glGetUniformLocation(ShaderUtil.lightProgram, "chunkZ");
+			GL20.glUniform1i(chunkX, pos.getX());
+			GL20.glUniform1i(chunkY, pos.getY());
+			GL20.glUniform1i(chunkZ, pos.getZ());
+		}
 	}
 }

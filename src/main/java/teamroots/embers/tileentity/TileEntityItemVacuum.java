@@ -181,7 +181,7 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 									slot = j;
 								}
 								else {
-									if (handler.getStackInSlot(j).getCount() < handler.getStackInSlot(j).getMaxStackSize() && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
+									if (handler.getStackInSlot(j).getCount() < handler.getSlotLimit(j) && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
 										slot = j;
 									}
 								}

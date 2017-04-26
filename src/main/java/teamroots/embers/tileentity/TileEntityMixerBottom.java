@@ -106,7 +106,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && facing != null){
 			switch (facing) {
 			case DOWN:
 				//
@@ -122,7 +122,6 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 				return (T)west;
 			default:
 				//
-				
 			}
 		}
 		return super.getCapability(capability, facing);

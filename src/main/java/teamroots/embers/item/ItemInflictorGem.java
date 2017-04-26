@@ -19,6 +19,7 @@ public class ItemInflictorGem extends ItemBase {
 
 	public ItemInflictorGem() {
 		super("inflictor_gem",true);
+		this.setMaxStackSize(1);
 	}
 
 	@Override

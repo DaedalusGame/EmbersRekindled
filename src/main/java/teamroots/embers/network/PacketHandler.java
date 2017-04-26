@@ -25,5 +25,11 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageTyrfingBurstFX.MessageHolder.class,MessageTyrfingBurstFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberActivationFX.MessageHolder.class,MessageEmberActivationFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberGenOffset.MessageHolder.class,MessageEmberGenOffset.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageSuperheatFX.MessageHolder.class,MessageSuperheatFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageSpawnEmberProj.MessageHolder.class,MessageSpawnEmberProj.class,id ++,Side.SERVER);
+        INSTANCE.registerMessage(MessageRemovePlayerEmber.MessageHolder.class,MessageRemovePlayerEmber.class,id ++,Side.SERVER);
+        INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);
+        INSTANCE.registerMessage(MessagePlayerJetFX.MessageHolder.class,MessagePlayerJetFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
     }
 }

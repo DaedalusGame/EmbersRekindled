@@ -97,7 +97,10 @@ public class ItemClockworkAxe extends ItemTool implements IModeledItem, IEmberCh
 	
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
-		return this.getHarvestLevel(stack, state.getBlock().getHarvestTool(state), null, state) >= state.getBlock().getHarvestLevel(state);
+		if (state.getBlock().getHarvestLevel(state) <= 3 && state.getBlock().getHarvestTool(state) != null || state.getBlock().getHarvestLevel(state) < 1){
+			return state.getBlock().getHarvestTool(state).compareTo("axe") == 0;
+		}
+		return false;
 	}
 	
 	@Override

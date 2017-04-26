@@ -1,19 +1,25 @@
 package teamroots.embers;
 
+import java.awt.Color;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -26,11 +32,15 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +51,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -61,10 +72,14 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -74,19 +89,27 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.block.IDial;
+import teamroots.embers.gui.GuiCodex;
 import teamroots.embers.item.IEmberChargedTool;
 import teamroots.embers.item.ItemAshenCloak;
 import teamroots.embers.item.ItemEmberGauge;
 import teamroots.embers.item.ItemGrandhammer;
+import teamroots.embers.lighting.LightManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberGenOffset;
+import teamroots.embers.network.message.MessageRemovePlayerEmber;
+import teamroots.embers.network.message.MessageSetPlayerMotion;
+import teamroots.embers.network.message.MessageSpawnEmberProj;
+import teamroots.embers.network.message.MessageSuperheatFX;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.network.message.MessageTyrfingBurstFX;
 import teamroots.embers.proxy.ClientProxy;
+import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.ITileEntityBase;
@@ -100,6 +123,7 @@ import teamroots.embers.util.FluidTextureUtil;
 import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
+import teamroots.embers.util.ShaderUtil;
 import teamroots.embers.world.EmberWorldData;
 
 public class EventManager {
@@ -119,6 +143,7 @@ public class EventManager {
 	public static double currentEmber = 0;
 	public static boolean allowPlayerRenderEvent = true;
 	public static int ticks = 0;
+	public static float prevCooledStrength = 0;
 	
 	public static Map<BlockPos, TileEntity> toUpdate = new HashMap<BlockPos, TileEntity>();
 	
@@ -198,6 +223,15 @@ public class EventManager {
 					event.setCanceled(true);
 				}
 				event.setAmount(event.getAmount()*mult);
+			}
+		}
+		if (event.getSource().getEntity() instanceof EntityPlayer){
+			EntityPlayer damager = (EntityPlayer)event.getSource().getEntity();
+			ItemStack s = damager.getHeldItemMainhand();
+			if (!s.isEmpty()){
+				if (ItemModUtil.hasHeat(s)){
+					ItemModUtil.addHeat(s, 1.0f);
+				}
 			}
 		}
 	}
@@ -295,10 +329,10 @@ public class EventManager {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onTick(TickEvent.ClientTickEvent event){
-		if (event.side == Side.CLIENT){
+		if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.START){
 			ticks ++;
 			ClientProxy.particleRenderer.updateParticles();
-
+			
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			if (player != null){
 				World world = player.getEntityWorld();
@@ -363,6 +397,13 @@ public class EventManager {
 	public void onBlockBreak(BlockEvent.BreakEvent event){
 		if (event.getPlayer() != null){
 			if (event.getPlayer().getHeldItemMainhand() != ItemStack.EMPTY){
+				ItemStack s = event.getPlayer().getHeldItemMainhand();
+				if (!s.isEmpty() && event.getState().getBlockHardness(event.getWorld(), event.getPos()) > 0){
+					if (ItemModUtil.hasHeat(s)){
+						ItemModUtil.setLevel(s, ItemModUtil.getLevel(s)+1);
+						ItemModUtil.addHeat(s, 1.0f);
+					}
+				}
 				/*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
 					PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 				}*/
@@ -379,7 +420,21 @@ public class EventManager {
 	public void onTooltip(ItemTooltipEvent event){
 		if (ItemModUtil.hasHeat(event.getItemStack())){
 			event.getToolTip().add("");
+			if (ItemModUtil.hasHeat(event.getItemStack())){
+				if (ItemModUtil.getLevel(event.getItemStack()) > 0){
+					event.getToolTip().add("");
+				}
+			}
 			event.getToolTip().add("                        ");
+			if (ItemModUtil.hasHeat(event.getItemStack())){
+				if (event.getItemStack().getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 1){
+					event.getToolTip().add(TextFormatting.GRAY+I18n.format("embers.tooltip.modifiers"));
+					int c = event.getItemStack().getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount();
+					for (int i = 0; i < c-1; i ++){
+						event.getToolTip().add("");
+					}
+				}
+			}
 		}
 	}
 	
@@ -389,11 +444,48 @@ public class EventManager {
 		if (event.getStack() != null){
 			if (ItemModUtil.hasHeat(event.getStack())){
 				for (int i = 0; i < event.getLines().size(); i ++){
+					if (event.getLines().get(i).compareTo(TextFormatting.GRAY+""+TextFormatting.GRAY+I18n.format("embers.tooltip.modifiers")) == 0){
+						List<String> modifiers = new ArrayList<String>();
+						NBTTagList l = event.getStack().getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
+						for (int j = 0; j < l.tagCount(); j ++){
+							if (l.getCompoundTagAt(j).getString("name").compareTo(ItemModUtil.modifierRegistry.get(RegistryManager.ancient_motive_core).name) != 0){
+								modifiers.add(l.getCompoundTagAt(j).getString("name"));
+							}
+						}
+						GlStateManager.disableDepth();
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+						if (ItemModUtil.getLevel(event.getStack()) > 0){
+							GlStateManager.enableBlend();
+							GlStateManager.enableAlpha();
+							int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+							float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+							GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
+							for (int j = 0; j < modifiers.size(); j ++){
+								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier."+modifiers.get(j))+" "+I18n.format("embers.tooltip.num"+ItemModUtil.getModifierLevel(event.getStack(), modifiers.get(j))), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i+j+1)+2);
+							}
+							GlStateManager.alphaFunc(func, ref);
+							GlStateManager.disableAlpha();
+							GlStateManager.disableBlend();
+						}
+					}
 					if (event.getLines().get(i).compareTo(TextFormatting.GRAY+"                        ") == 0){
 						GlStateManager.disableDepth();
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-						event.getFontRenderer().drawStringWithShadow("Heat:", event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i, 0xFFFFFFFF);
-						double x = event.getFontRenderer().getStringWidth("Heat:")+1.0;
+						if (ItemModUtil.getLevel(event.getStack()) > 0){
+							event.getFontRenderer().drawStringWithShadow(TextFormatting.GRAY+I18n.format("embers.tooltip.heat_level"), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i-1)+2, 0xFFFFFFFF);
+							int level_x = (int)event.getFontRenderer().getStringWidth(I18n.format("embers.tooltip.heat_level"))+2;
+							GlStateManager.enableBlend();
+							GlStateManager.enableAlpha();
+							int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+							float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+							GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
+							GuiCodex.drawTextGlowingAura(event.getFontRenderer(), ""+ItemModUtil.getLevel(event.getStack()), event.getX()+level_x, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i-1)+2);
+							GlStateManager.alphaFunc(func, ref);
+							GlStateManager.disableAlpha();
+							GlStateManager.disableBlend();
+						}
+						event.getFontRenderer().drawStringWithShadow(TextFormatting.GRAY+I18n.format("embers.tooltip.heat_amount"), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+2, 0xFFFFFFFF);
+						double x = event.getFontRenderer().getStringWidth(I18n.format("embers.tooltip.heat_amount"))+1.0;
 						double w = event.getFontRenderer().getStringWidth("                        ");
 						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("embers:textures/gui/heat_bar.png"));
 						Tessellator tess = Tessellator.getInstance();
@@ -405,7 +497,7 @@ public class EventManager {
 						GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
 						GlStateManager.enableBlend();
 						double baseX = event.getX();
-						double baseY = event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i;
+						double baseY = event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*i+2;
 						GlStateManager.shadeModel(GL11.GL_SMOOTH);
 						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 						double x1 = baseX + x + 4;
@@ -493,60 +585,184 @@ public class EventManager {
 			}
 		}
 		GlStateManager.popMatrix();
-		if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().gameSettings.thirdPersonView != 0){
-			EntityPlayer p = Minecraft.getMinecraft().player;
-			if (p.getGameProfile().getName().equalsIgnoreCase("Elucent")){
-				if (EmberInventoryUtil.getEmberTotal(p) > 0){
-					GlStateManager.pushMatrix();
-					GlStateManager.disableLighting();
-					GlStateManager.disableCull();
-					GlStateManager.enableAlpha();
-					GlStateManager.enableBlend();
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-					int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
-					GlStateManager.depthFunc(GL11.GL_LEQUAL);
-					int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
-					float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
-					GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
-					GlStateManager.depthMask(false);
-					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Embers.MODID + ":textures/entity/beam.png"));
-					Tessellator tess = Tessellator.getInstance();
-					VertexBuffer buff = tess.getBuffer();
-					buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
-					GlStateManager.translate(0, 1, 0);
-					GlStateManager.rotate(90.0f, 1, 0, 0);
-					GlStateManager.rotate(p.rotationYaw, 0, 0, 1);
-					GlStateManager.rotate(p.rotationPitch, 1, 0, 0);
-					RenderUtil.renderAlchemyCircle(buff, 0, 0, 0, 1.0f, 0.25f, 0.0625f, (float)(EmberInventoryUtil.getEmberTotal(p)/EmberInventoryUtil.getEmberCapacityTotal(p)), 0.75f, 4.0f*((float)p.ticksExisted+event.getPartialTicks()));
-					RenderUtil.renderAlchemyCircle(buff, 0, 0, 0, 1.0f, 0.25f, 0.0625f, (float)(EmberInventoryUtil.getEmberTotal(p)/EmberInventoryUtil.getEmberCapacityTotal(p)), 0.8f, 4.0f*((float)p.ticksExisted+event.getPartialTicks()));
-					RenderUtil.renderAlchemyCircle(buff, 0, 0, 0, 1.0f, 0.25f, 0.0625f, (float)(EmberInventoryUtil.getEmberTotal(p)/EmberInventoryUtil.getEmberCapacityTotal(p)), 0.85f, 4.0f*((float)p.ticksExisted+event.getPartialTicks()));
-					tess.draw();
-					GlStateManager.depthMask(true);
-					GlStateManager.alphaFunc(func, ref);
-					GlStateManager.depthFunc(dfunc);
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-					GlStateManager.disableBlend();
-					GlStateManager.disableAlpha();
-					GlStateManager.enableCull();
-					GlStateManager.enableLighting();
-					GlStateManager.popMatrix();
+	}
+	
+	@SubscribeEvent
+	public void onBlockBreak(BreakSpeed event){
+		event.getOriginalSpeed();
+	}
+	
+	@SubscribeEvent
+	public void onNameFormat(PlayerEvent.NameFormat event){
+		if (event.getUsername().compareTo("Elucent") == 0){
+			event.setDisplayname(TextFormatting.GOLD+""+TextFormatting.BOLD+"      "+TextFormatting.RESET+"  ");
+		}
+		/*if (event.getUsername().compareTo("Elucent") == 0){
+			event.setDisplayname(event.getUsername()+TextFormatting.RESET+"   ");
+		}*/
+	}
+	
+	public static int chatX = 0;
+	public static int chatY = 0;
+	
+	@SubscribeEvent
+	public void getChatPos(RenderGameOverlayEvent.Chat event){
+		chatX = event.getPosX();
+		chatY = event.getPosY();
+	}
+	
+	@SubscribeEvent
+	public void renderGlowNames(RenderGameOverlayEvent.Post event){
+		GuiNewChat c = Minecraft.getMinecraft().ingameGUI.getChatGUI();
+		Field f_lines;
+		Field f_counter;
+		if (event.getType() == ElementType.CHAT){
+			try {
+				f_lines = c.getClass().getDeclaredField("drawnChatLines");
+				f_lines.setAccessible(true);
+				f_counter = Minecraft.getMinecraft().ingameGUI.getClass().getSuperclass().getDeclaredField("updateCounter");
+				f_counter.setAccessible(true);
+				List<ChatLine> chatLines;
+				int updateCounter = 0;
+				try {
+					updateCounter = f_counter.getInt(Minecraft.getMinecraft().ingameGUI);
+					chatLines = (List<ChatLine>) f_lines.get(c);
+					for (int i = 0; c.getChatOpen() && i < chatLines.size() || !c.getChatOpen() && i < chatLines.size() && i < 10; i ++){
+						ChatLine l = chatLines.get(i);
+						String s = l.getChatComponent().getUnformattedText();
+						for (int j = 0; j < s.length(); j ++){
+							/*if (j < s.length()-4 && s.substring(j, j+5).compareTo(TextFormatting.RESET.toString()+"   ") == 0){
+								float f = Minecraft.getMinecraft().gameSettings.chatOpacity * 0.9F + 0.1F;
+								int j1 = updateCounter - l.getUpdatedCounter();
+								if (j1 < 200 || c.getChatOpen()){
+									double d0 = (double)j1 / 200.0D;
+		                            d0 = 1.0D - d0;
+		                            d0 = d0 * 10.0D;
+		                            d0 = MathHelper.clamp(d0, 0.0D, 1.0D);
+		                            d0 = d0 * d0;
+		                            int l1 = (int)(255.0D * d0);
+	
+		                            if (c.getChatOpen())
+		                            {
+		                                l1 = 255;
+		                            }
+	
+		                            l1 = (int)((float)l1 * f);
+									String before = s.substring(0,j);
+									double x = (double)chatX + (double)Minecraft.getMinecraft().fontRendererObj.getStringWidth(before)+5.0;
+									double y = (double)chatY-((double)Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT)*((double)i)+1.0;
+									GlStateManager.enableAlpha();
+									GlStateManager.enableBlend();
+									GlStateManager.color(1f, 1f, 1f, (float)l1/255f);
+									int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
+									GlStateManager.depthFunc(GL11.GL_LEQUAL);
+									int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+									float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+									GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
+									GlStateManager.depthMask(false);
+									GlStateManager.disableTexture2D();
+									GlStateManager.color(1, 1, 1, 1);
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+									GlStateManager.shadeModel(GL11.GL_SMOOTH);
+									Tessellator tess = Tessellator.getInstance();
+									GlStateManager.translate(0.5f, 0.5f, 0);
+									VertexBuffer b = tess.getBuffer();
+									for (float k = 0; k < 8; k ++){
+										float coeff = (float)(k+1.0f)/8.0f;
+										b.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+										RenderUtil.renderHighlightCircle(b,x+2.5f,y+2.5f,(1.0f+7.0f*coeff*coeff)*((float)l1/255f));
+										tess.draw();
+									}
+									GlStateManager.shadeModel(GL11.GL_FLAT);
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+									GlStateManager.enableTexture2D();
+									GlStateManager.color(1f, 1f, 1f, l1/255f);
+									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("embers:textures/gui/tidbit.png"));
+									drawScaledCustomSizeModalRect((double)x, (double)y, 0, 0, 8.0f, 8.0f, 8.0, 8.0, 32.0f, 32.0f);
+									GlStateManager.translate(-0.5f, -0.5f, 0);
+									GlStateManager.depthMask(true);
+									GlStateManager.alphaFunc(func, ref);
+									GlStateManager.depthFunc(dfunc);
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+									GlStateManager.disableBlend();
+									GlStateManager.disableAlpha();
+								}
+							}*/
+							if (j < s.length()-14 && s.substring(j, j+14).compareTo(TextFormatting.GOLD+""+TextFormatting.BOLD+"      "+TextFormatting.RESET+"  ") == 0){
+								String before = s.substring(0,j);
+								float f = Minecraft.getMinecraft().gameSettings.chatOpacity * 0.9F + 0.1F;
+								int j1 = updateCounter - l.getUpdatedCounter();
+								if (j1 < 200 || c.getChatOpen()){
+									double d0 = (double)j1 / 200.0D;
+		                            d0 = 1.0D - d0;
+		                            d0 = d0 * 10.0D;
+		                            d0 = MathHelper.clamp(d0, 0.0D, 1.0D);
+		                            d0 = d0 * d0;
+		                            int l1 = (int)(255.0D * d0);
+	
+		                            if (c.getChatOpen())
+		                            {
+		                                l1 = 255;
+		                            }
+	
+		                            l1 = (int)((float)l1 * f);
+		                            if ((20*l1)/255 > 3){
+										GlStateManager.enableAlpha();
+										GlStateManager.enableBlend();
+										GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+										int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
+										GlStateManager.depthFunc(GL11.GL_LEQUAL);
+										int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+										float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+										GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
+										GlStateManager.depthMask(false);
+										GuiCodex.drawTextGlowingAuraTransparent(Minecraft.getMinecraft().fontRendererObj, "Elucent", chatX+3+Minecraft.getMinecraft().fontRendererObj.getStringWidth(before), chatY-(Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT)*i,l1);
+										GlStateManager.depthMask(true);
+										GlStateManager.alphaFunc(func, ref);
+										GlStateManager.depthFunc(dfunc);
+										GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+										GlStateManager.disableBlend();
+										GlStateManager.disableAlpha();
+		                            }
+								}
+							}
+						}
+						//System.out.println(s);
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
 				}
+			} catch (NoSuchFieldException | SecurityException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
+    public static void drawScaledCustomSizeModalRect(double x, double y, float u, float v, float uWidth, float vHeight, double width, double height, float tileWidth, float tileHeight)
+    {
+        float f = 1.0F / tileWidth;
+        float f1 = 1.0F / tileHeight;
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)vHeight) * f1)).endVertex();
+        vertexbuffer.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)uWidth) * f), (double)((v + (float)vHeight) * f1)).endVertex();
+        vertexbuffer.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)uWidth) * f), (double)(v * f1)).endVertex();
+        vertexbuffer.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
+        tessellator.draw();
+    }
+	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event){
-		if (!event.world.isRemote){
+		if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
 			List<TileEntity> tiles = event.world.loadedTileEntityList;
 			NBTTagList list = new NBTTagList();
 			for (TileEntity t : tiles){
 				if (t instanceof ITileEntityBase){
 					if (((ITileEntityBase)t).needsUpdate()){
 						((ITileEntityBase)t).clean();
-						if (!event.world.isRemote){
-							list.appendTag(t.getUpdateTag());
-						}
+						list.appendTag(t.getUpdateTag());
 					}
 				}
 			}
@@ -555,9 +771,11 @@ public class EventManager {
 					list.appendTag(t.getUpdateTag());
 				}
 			}
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setTag("data", list);
-			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tag));
+			if (!list.hasNoTags()){
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setTag("data", list);
+				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tag));
+			}
 			toUpdate.clear();
 		}
 	}

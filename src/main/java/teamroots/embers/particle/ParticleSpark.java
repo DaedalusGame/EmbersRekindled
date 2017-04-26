@@ -90,4 +90,9 @@ public class ParticleSpark extends Particle implements IEmberParticle{
 	public boolean isAdditive() {
 		return true;
 	}
+
+	@Override
+	public boolean renderThroughBlocks() {
+		return false;
+	}
 }

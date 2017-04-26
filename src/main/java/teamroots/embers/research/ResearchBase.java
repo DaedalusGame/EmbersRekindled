@@ -20,11 +20,11 @@ public class ResearchBase {
 	public float selectedAmount = 0;
 	public float selectionTarget = 0;
 	
-	public ResearchBase(String location, ItemStack icon, int x, int y){
+	public ResearchBase(String location, ItemStack icon, double x, double y){
 		this.name = location;
 		this.icon = icon;
-		this.x = 48+x*24;
-		this.y = 48+y*24;
+		this.x = 48+(int)(x*24);
+		this.y = 48+(int)(y*24);
 	}
 	
 	public ResearchBase addAncestor(ResearchBase base){

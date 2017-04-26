@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import teamroots.embers.Embers;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockAutoHammer;
 import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
@@ -31,7 +32,7 @@ public class TileEntityAutoHammerRenderer extends TileEntitySpecialRenderer {
 	
 	@Override
 	public void renderTileEntityAt(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage){
-		if (t instanceof TileEntityAutoHammer){
+		if (t instanceof TileEntityAutoHammer && t.getWorld().getBlockState(t.getPos()).getBlock() == RegistryManager.auto_hammer){
 			float progress = ((TileEntityAutoHammer)t).progress;
 	            
 			GlStateManager.pushMatrix();

@@ -1,5 +1,6 @@
 package teamroots.embers.block;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -10,9 +11,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.TileEntityEmberBore;
@@ -20,8 +23,9 @@ import teamroots.embers.tileentity.TileEntityInfernoForge;
 import teamroots.embers.tileentity.TileEntityInfernoForgeOpening;
 
 public class BlockInfernoForge extends BlockTEBase {
-	public static final AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,0.25,1);
-	public static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(0,0,0,1,0.75,1);
+	public static final AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,0.75,1);
+	public static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(0,0.5,0,1,0.75,1);
+	public static final AxisAlignedBB AABB_TOP2 = new AxisAlignedBB(0,0,0,1,0.25,1);
 	public static final AxisAlignedBB AABB_NULL = new AxisAlignedBB(0,0,0,0,0,0);
 	public static final PropertyBool isTop = PropertyBool.create("top");
 	
@@ -35,11 +39,12 @@ public class BlockInfernoForge extends BlockTEBase {
     	if (state.getValue(isTop)){
     		TileEntity t = worldIn.getTileEntity(pos);
     		if (t instanceof TileEntityInfernoForgeOpening){
-    			if (((TileEntityInfernoForgeOpening)t).openAmount > 0.9f){
+    			if (((TileEntityInfernoForgeOpening)t).openAmount > 0.0f){
     				addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_NULL);
     			}
     			else {
     				addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_TOP);
+    				addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_TOP2);
     			}
     		}
     	}

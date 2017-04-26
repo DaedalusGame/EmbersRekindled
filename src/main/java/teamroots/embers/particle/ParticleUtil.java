@@ -20,11 +20,29 @@ public class ParticleUtil {
 		}*/
 	}
 	
+	public static void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime){
+		if (Embers.proxy instanceof ClientProxy){
+			counter += random.nextInt(3);
+			if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2*Minecraft.getMinecraft().gameSettings.particleSetting) == 0){
+				ClientProxy.particleRenderer.addParticle(new ParticleGlow(world,x,y,z,vx,vy,vz,r,g,b,a, scale, lifetime));
+			}
+		}
+	}
+	
+	public static void spawnParticleGlowThroughBlocks(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime){
+		if (Embers.proxy instanceof ClientProxy){
+			counter += random.nextInt(3);
+			if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2*Minecraft.getMinecraft().gameSettings.particleSetting) == 0){
+				ClientProxy.particleRenderer.addParticle(new ParticleGlowThroughBlocks(world,x,y,z,vx,vy,vz,r,g,b,a, scale, lifetime));
+			}
+		}
+	}
+	
 	public static void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime){
 		if (Embers.proxy instanceof ClientProxy){
 			counter += random.nextInt(3);
 			if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2*Minecraft.getMinecraft().gameSettings.particleSetting) == 0){
-				ClientProxy.particleRenderer.addParticle(new ParticleGlow(world,x,y,z,vx,vy,vz,r,g,b, scale, lifetime));
+				ClientProxy.particleRenderer.addParticle(new ParticleGlow(world,x,y,z,vx,vy,vz,r,g,b,1.0f, scale, lifetime));
 			}
 		}
 	}

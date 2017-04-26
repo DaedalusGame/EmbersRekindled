@@ -1,5 +1,7 @@
 package teamroots.embers.block;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -8,6 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
@@ -38,10 +41,17 @@ public class BlockInfernoForgeEdge extends BlockBase {
 		if (world.getTileEntity(pos) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world, pos, world.getBlockState(pos), player);
 			if (!world.isRemote && !player.capabilities.isCreativeMode){
-				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(world.getBlockState(pos).getBlock())));
+				if (!world.getBlockState(pos).getValue(BlockInfernoForge.isTop)){
+					world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(world.getBlockState(pos).getBlock())));
+				}		
 			}
 		}
 		world.setBlockToAir(pos);
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
+		return new ArrayList<ItemStack>();
 	}
 	
 	@Override

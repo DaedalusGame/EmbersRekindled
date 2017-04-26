@@ -90,7 +90,9 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 		if (heldItem != ItemStack.EMPTY){
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
-				player.setHeldItem(hand, didFill.getResult());
+				if (didFill.success){
+					player.setHeldItem(hand, didFill.getResult());
+				}
 				this.markDirty();
 				return didFill.success;
 			}

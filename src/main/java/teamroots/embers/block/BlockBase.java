@@ -7,13 +7,15 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 
 public class BlockBase extends Block implements IModeledBlock {
 	public Item itemBlock = null;
-	public boolean isOpaqueCube = true, isFullCube = true;
+	public boolean isOpaqueCube = true, isFullCube = true, isBeaconBase = false;
 	public BlockRenderLayer layer = BlockRenderLayer.SOLID;
 	public BlockBase(Material material, String name, boolean addToTab){
 		super(material);
@@ -29,6 +31,16 @@ public class BlockBase extends Block implements IModeledBlock {
 	public BlockBase setIsOpaqueCube(boolean b){
 		isOpaqueCube = b;
 		return this;
+	}
+	
+	public BlockBase setBeaconBase(boolean b){
+		isBeaconBase = b;
+		return this;
+	}
+	
+	@Override
+	public boolean isBeaconBase(IBlockAccess world, BlockPos pos, BlockPos beacon){
+		return isBeaconBase;
 	}
 	
 	@Override

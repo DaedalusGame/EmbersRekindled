@@ -1,5 +1,6 @@
 package teamroots.embers.entity;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,10 +17,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.lighting.ILightProvider;
+import teamroots.embers.lighting.Light;
 import teamroots.embers.particle.ParticleUtil;
 
-public class EntityEmberProjectile extends Entity {
+public class EntityEmberProjectile extends Entity implements ILightProvider {
     public static final DataParameter<Float> value = EntityDataManager.<Float>createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
 	BlockPos pos = new BlockPos(0,0,0);
 	int lifetime = 160;
@@ -132,5 +136,10 @@ public class EntityEmberProjectile extends Entity {
 			}
 			this.setDead();
 		}
+	}
+
+	@Override
+	public Light provideLight() {
+		return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.25f,0.0625f,1.0f,4.0f);
 	}
 }

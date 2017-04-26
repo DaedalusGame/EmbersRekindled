@@ -17,8 +17,9 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 	public float colorG = 0;
 	public float colorB = 0;
 	public float initScale = 0;
+	public float initAlpha = 0;
 	public ResourceLocation texture = new ResourceLocation("embers:entity/particle_mote");
-	public ParticleGlow(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float scale, int lifetime) {
+	public ParticleGlow(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float a, float scale, int lifetime) {
 		super(worldIn, x,y,z,0,0,0);
 		this.colorR = r;
 		this.colorG = g;
@@ -33,12 +34,13 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 			this.colorB = this.colorB/255.0f;
 		}
 		this.setRBGColorF(colorR, colorG, colorB);
-		this.particleMaxAge = lifetime;
+		this.particleMaxAge = (int)((float)lifetime*0.5f);
 		this.particleScale = scale;
 		this.initScale = scale;
-		this.motionX = vx;
-		this.motionY = vy;
-		this.motionZ = vz;
+		this.motionX = vx*2.0f;
+		this.motionY = vy*2.0f;
+		this.motionZ = vz*2.0f;
+		this.initAlpha = a;
 		this.particleAngle = 2.0f*(float)Math.PI;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
 	    this.setParticleTexture(sprite);
@@ -74,7 +76,7 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 		}
 		float lifeCoeff = (float)this.particleAge/(float)this.particleMaxAge;
 		this.particleScale = initScale-initScale*lifeCoeff;
-		this.particleAlpha = 1.0f-lifeCoeff;
+		this.particleAlpha = initAlpha*(1.0f-lifeCoeff);
 		this.prevParticleAngle = particleAngle;
 		particleAngle += 1.0f;
 	}
@@ -87,5 +89,10 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 	@Override
 	public boolean isAdditive() {
 		return true;
+	}
+
+	@Override
+	public boolean renderThroughBlocks() {
+		return false;
 	}
 }

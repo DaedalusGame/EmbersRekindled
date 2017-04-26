@@ -110,8 +110,8 @@ public class WorldGenSmallRuin extends StructureBase implements IWorldGenerator 
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
 		if (world.provider.getDimension() == DimensionType.OVERWORLD.getId() && !world.isRemote){
-			int xx = chunkX*16 + Misc.random.nextInt(16);
-			int zz = chunkZ*16 + Misc.random.nextInt(16);
+			int xx = chunkX*16 + 12 + Misc.random.nextInt(4);
+			int zz = chunkZ*16 + 12 + Misc.random.nextInt(4);
 			if (world.getHeight(xx, zz) > 16){
 				int yy = 4+Misc.random.nextInt(world.getHeight(xx, zz));if (random.nextInt(ConfigManager.smallRuinChance) == 0){
 					if (world.getBlockState(new BlockPos(xx,yy,zz)).getBlock() instanceof BlockStone){

@@ -127,7 +127,7 @@ public class GuiCodex extends GuiScreen {
 		}
 	}
 	
-	public void drawText(FontRenderer font, String s, int x, int y, int color){
+	public static void drawText(FontRenderer font, String s, int x, int y, int color){
 		RenderUtil.drawTextRGBA(font, s, x-1, y, 0, 0, 0, 64);
 		RenderUtil.drawTextRGBA(font, s, x+1, y, 0, 0, 0, 64);
 		RenderUtil.drawTextRGBA(font, s, x, y-1, 0, 0, 0, 64);
@@ -135,7 +135,7 @@ public class GuiCodex extends GuiScreen {
 		font.drawString(s, x, y, color);
 	}
 	
-	public void drawTextLessShadow(FontRenderer font, String s, int x, int y, int color){
+	public static void drawTextLessShadow(FontRenderer font, String s, int x, int y, int color){
 		RenderUtil.drawTextRGBA(font, s, x-1, y, 0, 0, 0, 64);
 		RenderUtil.drawTextRGBA(font, s, x+1, y, 0, 0, 0, 64);
 		RenderUtil.drawTextRGBA(font, s, x, y-1, 0, 0, 0, 64);
@@ -143,7 +143,7 @@ public class GuiCodex extends GuiScreen {
 		font.drawString(s, x, y, color);
 	}
 	
-	public void drawTextGlowing(FontRenderer font, String s, int x, int y){
+	public static void drawTextGlowing(FontRenderer font, String s, int x, int y){
 		float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
 		RenderUtil.drawTextRGBA(font, s, x-1, y, 0, 0, 0, 64);
 		RenderUtil.drawTextRGBA(font, s, x+1, y, 0, 0, 0, 64);
@@ -160,11 +160,86 @@ public class GuiCodex extends GuiScreen {
 		font.drawString(s, x, y, Misc.intColor(255, 64+(int)(64*sine), 16));
 	}
 	
-	public void drawCenteredText(FontRenderer font, String s, int x, int y, int color){
+	public static void drawTextGlowingAura(FontRenderer font, String s, int x, int y){
+		float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
+		RenderUtil.drawTextRGBA(font, s, x-1, y, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, s, x+1, y, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, s, x, y-1, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, s, x, y+1, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, s, x-2, y, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x+2, y, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x, y-2, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x, y+2, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x-1, y+1, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x+1, y-1, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x-1, y-1, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, s, x+1, y+1, 255, 64+(int)(64*sine), 16, 20);
+		font.drawString(s, x, y, Misc.intColor(255, 64+(int)(64*sine), 16));
+	}
+	
+	public static void drawTextGlowingAuraTransparent(FontRenderer font, String s, int x, int y, int r, int g, int b, int a){
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		font.drawString(s, x, y, Misc.intColor(r,g,b) + (a << 24));
+		RenderUtil.drawTextRGBA(font, s, x-1, y, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+1, y, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y-1, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y+1, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x-2, y, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+2, y, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y-2, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y+2, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x-1, y+1, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+1, y-1, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x-1, y-1, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+1, y+1, r,g,b, (20*a)/255);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public static void drawTextGlowingAuraTransparentIntColor(FontRenderer font, String s, int x, int y, int color, int a){
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		font.drawString(s, x, y, color + (a << 24));
+		font.drawString(s, x-1, y, color + (((40*a)/255) << 24));
+		font.drawString(s, x+1, y, color + (((40*a)/255) << 24));
+		font.drawString(s, x, y-1, color + (((40*a)/255) << 24));
+		font.drawString(s, x, y+1, color + (((40*a)/255) << 24));
+		font.drawString(s, x-2, y, color + (((20*a)/255) << 24));
+		font.drawString(s, x+2, y, color + (((20*a)/255) << 24));
+		font.drawString(s, x, y-2, color + (((20*a)/255) << 24));
+		font.drawString(s, x, y+2, color + (((20*a)/255) << 24));
+		font.drawString(s, x-1, y+1, color + (((20*a)/255) << 24));
+		font.drawString(s, x+1, y-1, color + (((20*a)/255) << 24));
+		font.drawString(s, x-1, y-1, color + (((20*a)/255) << 24));
+		font.drawString(s, x+1, y+1, color + (((20*a)/255) << 24));
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public static void drawTextGlowingAuraTransparent(FontRenderer font, String s, int x, int y, int a){
+		float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		int r = 255;
+		int g = 64+(int)(64*sine);
+		int b = 16;
+		font.drawString(s, x, y, Misc.intColor(r,g,b) + (a << 24));
+		RenderUtil.drawTextRGBA(font, s, x-1, y, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+1, y, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y-1, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y+1, r,g,b, (40*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x-2, y, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+2, y, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y-2, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x, y+2, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x-1, y+1, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+1, y-1, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x-1, y-1, r,g,b, (20*a)/255);
+		RenderUtil.drawTextRGBA(font, s, x+1, y+1, r,g,b, (20*a)/255);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public static void drawCenteredText(FontRenderer font, String s, int x, int y, int color){
 		drawText(font, s,x-font.getStringWidth(s)/2,y, color);
 	}
 	
-	public void drawCenteredTextGlowing(FontRenderer font, String s, int x, int y){
+	public static void drawCenteredTextGlowing(FontRenderer font, String s, int x, int y){
 		drawTextGlowing(font, s,x-font.getStringWidth(s)/2,y);
 	}
 	

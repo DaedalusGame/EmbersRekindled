@@ -9,6 +9,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.ItemModUtil;
@@ -16,6 +17,7 @@ import teamroots.embers.util.ItemModUtil;
 public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event){
+		Fields.init();
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
 		EmberGenUtil.init();

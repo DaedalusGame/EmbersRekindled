@@ -4,7 +4,7 @@
 	"textures": {
 		"dawnstone_main": "embers:blocks/inferno_forge_edge_front",
 		"particle": "embers:blocks/inferno_forge_edge_front",
-		"dplate": "embers:blocks/dawnstone_plate",
+		"dplate": "embers:blocks/dawnstone_vent",
 		"coil_top": "embers:blocks/copper_coil_top",
 		"coil_side": "embers:blocks/copper_coil_side"
 	},

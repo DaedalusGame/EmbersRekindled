@@ -19,6 +19,12 @@ public class ConfigManager {
 	
 	//STRUCTURES
 	public static int smallRuinChance;
+	
+	//COMPAT
+	public static boolean enableNickel, enableTin, enableAluminum, enableBronze, enableElectrum;
+	public static int nickelVeinSize, nickelMinY, nickelMaxY, nickelVeinsPerChunk,
+					tinVeinSize, tinMinY, tinMaxY, tinVeinsPerChunk,
+					aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
 
 	public static void init(File configFile)
 	{
@@ -60,6 +66,29 @@ public class ConfigManager {
 		config.addCustomCategoryComment("structures", "Settings related to structure generation.");
 		
 		smallRuinChance = config.getInt("smallRuinChance", "structures", 5, 0, 32767, "Spawning frequency of the small ruin structure. A value of 0 will prevent spawning altogether.");
+
+		config.addCustomCategoryComment("compat", "Settings related to compatibility with other mods.");
+		
+		enableNickel = config.getBoolean("enableNickel", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' nickel.");
+		enableTin = config.getBoolean("enableTin", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' tin.");
+		enableAluminum = config.getBoolean("enableAluminum", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' aluminum.");
+		enableBronze = config.getBoolean("enableBronze", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' bronze.");
+		enableElectrum = config.getBoolean("enableElectrum", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' electrum.");
+		
+		aluminumVeinSize = config.getInt("aluminumVeinSize", "compat", 6, 0, 255, "Maximum size of a aluminum ore vein (in blocks)");
+		aluminumMinY = config.getInt("aluminumMinY", "compat", 0, 0, 255, "Minimum height over which aluminum ore will spawn.");
+		aluminumMaxY = config.getInt("aluminumMaxY", "compat", 58, 0, 255, "Maximum height under which aluminum ore will spawn.");
+		aluminumVeinsPerChunk = config.getInt("aluminumVeinsPerChunk", "compat", 4, 0, 255, "Number of attempts to spawn aluminum ore the world generator will make for each chunk.");
+		
+		nickelVeinSize = config.getInt("nickelVeinSize", "compat", 6, 0, 255, "Maximum size of a nickel ore vein (in blocks)");
+		nickelMinY = config.getInt("nickelMinY", "compat", 0, 0, 255, "Minimum height over which nickel ore will spawn.");
+		nickelMaxY = config.getInt("nickelMaxY", "compat", 24, 0, 255, "Maximum height under which nickel ore will spawn.");
+		nickelVeinsPerChunk = config.getInt("nickelVeinsPerChunk", "compat", 4, 0, 255, "Number of attempts to spawn nickel ore the world generator will make for each chunk.");
+		
+		tinVeinSize = config.getInt("tinVeinSize", "compat", 6, 0, 255, "Maximum size of a tin ore vein (in blocks)");
+		tinMinY = config.getInt("tinMinY", "compat", 0, 0, 255, "Minimum height over which tin ore will spawn.");
+		tinMaxY = config.getInt("tinMaxY", "compat", 48, 0, 255, "Maximum height under which tin ore will spawn.");
+		tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 64, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
 		
 		if (config.hasChanged())
 		{

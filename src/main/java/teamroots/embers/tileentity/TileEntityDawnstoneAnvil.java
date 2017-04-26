@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -102,10 +104,10 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem == ItemStack.EMPTY && hand == EnumHand.MAIN_HAND) {
+		if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
 			boolean doContinue = true;
 			for (int i = 1; i >= 0 && doContinue; i --){
-				if (inventory.getStackInSlot(i) != ItemStack.EMPTY && !world.isRemote){
+				if (!inventory.getStackInSlot(i).isEmpty() && !world.isRemote){
 					world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(i)));
 					inventory.setStackInSlot(i, ItemStack.EMPTY);
 					doContinue = false;
@@ -119,13 +121,13 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			onHit();
 			return true;
 		}
-		else if (heldItem != ItemStack.EMPTY && hand == EnumHand.MAIN_HAND){
+		else if (!heldItem.isEmpty() && hand == EnumHand.MAIN_HAND){
 			ItemStack stack = heldItem.copy();
 			ItemStack stack2 = heldItem.copy();
 			stack2.setCount(1);
 			boolean doContinue = true;
 			for (int i = 0; i < 2 && doContinue; i ++){
-				if (inventory.getStackInSlot(i) == ItemStack.EMPTY){
+				if (inventory.getStackInSlot(i).isEmpty()){
 					this.inventory.insertItem(i,stack2,false);
 					doContinue = false;
 					player.getHeldItem(hand).shrink(1);
@@ -153,11 +155,11 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			if (!ItemModUtil.hasHeat(stack1) && stack2.getItem() == RegistryManager.ancient_motive_core){
 				return true;
 			}
-			else if (ItemModUtil.hasHeat(stack1) && ItemModUtil.modifierRegistry.containsKey(stack2.getItem())){
+			else if (ItemModUtil.hasHeat(stack1) && ItemModUtil.modifierRegistry.containsKey(stack2.getItem()) && ItemModUtil.getLevel(stack1) > ItemModUtil.getTotalModLevel(stack1) && ItemModUtil.isModValid(stack1,stack2)){
 				return true;
 			}
 			else if (ItemModUtil.hasHeat(stack1)){
-				if (stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0){
+				if (stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0 && stack2.isEmpty()){
 					return true;
 				}
 			}
@@ -172,15 +174,41 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 		return false;
 	}
 	
-	public ItemStack getResult(ItemStack stack1, ItemStack stack2){
+	public ItemStack[] getResult(ItemStack stack1, ItemStack stack2){
 		if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
-			if (!ItemModUtil.hasHeat(stack1) && stack2.getItem() == RegistryManager.ancient_motive_core){
+			if ((!ItemModUtil.hasHeat(stack1) || !ItemModUtil.hasModifier(stack1, ItemModUtil.modifierRegistry.get(RegistryManager.ancient_motive_core).name)) && stack2.getItem() == RegistryManager.ancient_motive_core){
 				ItemModUtil.checkForTag(stack1);
 				ItemModUtil.addModifier(stack1, stack2.copy());
+				ItemStack result = stack1.copy();
 				inventory.setStackInSlot(1, ItemStack.EMPTY);
 				inventory.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
-				return stack1;
+				return new ItemStack[]{result};
+			}
+			else if (ItemModUtil.hasHeat(stack1) && ItemModUtil.modifierRegistry.containsKey(stack2.getItem())){
+				ItemModUtil.checkForTag(stack1);
+				ItemModUtil.addModifier(stack1, stack2);
+				ItemStack result = stack1.copy();
+				inventory.setStackInSlot(1, ItemStack.EMPTY);
+				inventory.setStackInSlot(0, ItemStack.EMPTY);
+				markDirty();
+				return new ItemStack[]{result};
+			}
+			else if (ItemModUtil.hasHeat(stack1) && stack2.isEmpty()){
+				if (stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0){
+					List<ItemStack> stacks = new ArrayList<ItemStack>();
+					for (int i = 0; i < stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount(); i ++){
+						for (int j = 0; j < stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getInteger("level"); j ++){
+							stacks.add(new ItemStack(stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getCompoundTag("item")));
+						}
+					}
+					stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).setTag("modifiers", new NBTTagList());
+					stacks.add(stack1.copy());
+					inventory.setStackInSlot(0, ItemStack.EMPTY);
+					inventory.setStackInSlot(1, ItemStack.EMPTY);
+					markDirty();
+					return stacks.toArray(new ItemStack[stacks.size()]);
+				}
 			}
 		}
 		if (stack1.getItem().getIsRepairable(stack1, stack2)
@@ -190,15 +218,15 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			ItemStack result = inventory.getStackInSlot(0).copy();
 			inventory.setStackInSlot(0, ItemStack.EMPTY);
 			markDirty();
-			return result;
+			return new ItemStack[]{result};
 		}
 		if (stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2 == ItemStack.EMPTY){
 			int resourceAmount = Misc.getResourceCount(stack1);
 			inventory.setStackInSlot(0, ItemStack.EMPTY);
 			markDirty();
-			return new ItemStack(Misc.getRepairItem(stack1).getItem(),resourceAmount,Misc.getRepairItem(stack1).getItemDamage());		
+			return new ItemStack[]{new ItemStack(Misc.getRepairItem(stack1).getItem(),resourceAmount,Misc.getRepairItem(stack1).getItemDamage())};		
 		}
-		return ItemStack.EMPTY;
+		return new ItemStack[]{};
 	}
 	
 	public boolean dirty = false;
@@ -230,20 +258,23 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.25f, 2.0f+random.nextFloat(), false);
 			if (progress > 40){
 				progress = 0;
-				ItemStack result = getResult(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
-				if (getWorld().getTileEntity(getPos().down()) instanceof TileEntityBin){
-					TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(getPos().down());
-					ItemStack remainder = bin.inventory.insertItem(0, result, false);
-					if (remainder != ItemStack.EMPTY && !getWorld().isRemote){
-						EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,remainder);
+				ItemStack[] results = getResult(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
+				for (int i = 0; i < results.length; i ++){
+					ItemStack result = results[i];
+					if (getWorld().getTileEntity(getPos().down()) instanceof TileEntityBin){
+						TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(getPos().down());
+						ItemStack remainder = bin.inventory.insertItem(0, result, false);
+						if (remainder != ItemStack.EMPTY && !getWorld().isRemote){
+							EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,remainder);
+							getWorld().spawnEntity(item);
+						}
+						bin.markDirty();
+						markDirty();
+					}
+					else if (!world.isRemote){
+						EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,result);
 						getWorld().spawnEntity(item);
 					}
-					bin.markDirty();
-					markDirty();
-				}
-				else if (!world.isRemote){
-					EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,result);
-					getWorld().spawnEntity(item);
 				}
 				if (!getWorld().isRemote){
 					PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().getX()+0.5,getPos().getY()+1.0625,getPos().getZ()+0.5));

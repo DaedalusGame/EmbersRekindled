@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
+import teamroots.embers.util.ShaderUtil;
 
 public class ClientProxy extends CommonProxy{
 
@@ -14,6 +15,7 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void preInit(FMLPreInitializationEvent event){
 		super.preInit(event);
+		ShaderUtil.init();
 		ModelManager.init();
 		RegistryManager.registerRendering();
 	}

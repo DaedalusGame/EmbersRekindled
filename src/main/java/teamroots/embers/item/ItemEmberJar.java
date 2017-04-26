@@ -30,7 +30,7 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean selected){
 		if (!stack.hasTagCompound()){
 			stack.setTagCompound(new NBTTagCompound());
-			setEmberCapacity(stack, 1000.0);
+			setEmberCapacity(stack, 2000.0);
 			setEmber(stack,0.0);
 		}
 	}
@@ -39,13 +39,13 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems){
 		ItemStack emptyStack = new ItemStack(this,1);
 		emptyStack.setTagCompound(new NBTTagCompound());
-		setEmberCapacity(emptyStack, 1000.0);
+		setEmberCapacity(emptyStack, 2000.0);
 		setEmber(emptyStack,0.0);
 		subItems.add(emptyStack);
 		ItemStack fullStack = new ItemStack(this,1);
 		fullStack.setTagCompound(new NBTTagCompound());
-		setEmberCapacity(fullStack, 1000.0);
-		setEmber(fullStack,1000.0);
+		setEmberCapacity(fullStack, 2000.0);
+		setEmber(fullStack,2000.0);
 		subItems.add(fullStack);
 	}
 	
@@ -81,7 +81,7 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 	
 	public void initNBT(ItemStack stack){
 		stack.setTagCompound(new NBTTagCompound());
-		setEmberCapacity(stack, 1000.0);
+		setEmberCapacity(stack, 2000.0);
 		setEmber(stack,0.0);
 	}
 

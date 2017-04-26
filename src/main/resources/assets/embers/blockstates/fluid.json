@@ -39,13 +39,6 @@
                 }
             }
         ],
-        "astralite": [
-            {
-                "custom": {
-                    "fluid": "astralite"
-                }
-            }
-        ],
         "dawnstone": [
             {
                 "custom": {
@@ -53,10 +46,38 @@
                 }
             }
         ],
-        "umbersteel": [
+        "electrum": [
             {
                 "custom": {
-                    "fluid": "umbersteel"
+                    "fluid": "electrum"
+                }
+            }
+        ],
+        "bronze": [
+            {
+                "custom": {
+                    "fluid": "bronze"
+                }
+            }
+        ],
+        "aluminum": [
+            {
+                "custom": {
+                    "fluid": "aluminum"
+                }
+            }
+        ],
+        "nickel": [
+            {
+                "custom": {
+                    "fluid": "nickel"
+                }
+            }
+        ],
+        "tin": [
+            {
+                "custom": {
+                    "fluid": "tin"
                 }
             }
         ]

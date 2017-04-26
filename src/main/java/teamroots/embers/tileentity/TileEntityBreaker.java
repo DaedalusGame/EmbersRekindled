@@ -3,11 +3,14 @@ package teamroots.embers.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import com.jcraft.jorbis.Block;
+import com.mojang.authlib.GameProfile;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -96,10 +100,12 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 		if (ticksExisted % 20 == 0){
 			IBlockState state = world.getBlockState(getPos());
 			IBlockState target = world.getBlockState(pos.offset(state.getValue(BlockBreaker.facing)));
-			if (target.getBlockHardness(getWorld(), getPos().offset(state.getValue(BlockBreaker.facing))) != -1){
+			if (!(target.getBlock() instanceof BlockLiquid) && target.getBlockHardness(getWorld(), getPos().offset(state.getValue(BlockBreaker.facing))) != -1){
 				List<ItemStack> drops = target.getBlock().getDrops(world, getPos().offset(state.getValue(BlockBreaker.facing)), target, 0);
 				if (!world.isRemote){
 					//world.getBlockState(getPos().offset(state.getValue(BlockBreaker.facing))).getBlock().onBlockHarvested(world, getPos().offset(state.getValue(BlockBreaker.facing)), world.getBlockState(getPos().offset(state.getValue(BlockBreaker.facing))), null);
+					FakePlayer p = new FakePlayer((WorldServer) world, new GameProfile(new UUID(13,13), "embers_breaker"));
+					target.getBlock().onBlockHarvested(world, pos.offset(state.getValue(BlockBreaker.facing)), target, p);
 					world.destroyBlock(getPos().offset(state.getValue(BlockBreaker.facing)), false);
 					world.notifyBlockUpdate(getPos().offset(state.getValue(BlockBreaker.facing)), state, Blocks.AIR.getDefaultState(), 8);
 				}

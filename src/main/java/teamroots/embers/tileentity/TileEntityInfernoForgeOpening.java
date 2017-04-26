@@ -42,6 +42,7 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 		super.writeToNBT(tag);
 		tag.setBoolean("isOpen", isOpen);
 		tag.setBoolean("prevState", prevState);
+		tag.setFloat("openAmount", openAmount);
 		return tag;
 	}
 	
@@ -50,6 +51,7 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 		super.readFromNBT(tag);
 		isOpen = tag.getBoolean("isOpen");
 		prevState = tag.getBoolean("prevState");
+		openAmount = tag.getFloat("openAmount");
 	}
 
 	@Override
@@ -95,10 +97,14 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!player.isSneaking()){
-			prevState = isOpen;
-			isOpen = !isOpen;
-			markDirty();
-			return true;
+			if (world.getTileEntity(pos.down()) instanceof TileEntityInfernoForge){
+				if (((TileEntityInfernoForge)world.getTileEntity(pos.down())).progress == 0){
+					prevState = isOpen;
+					isOpen = !isOpen;
+					markDirty();
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -117,13 +123,18 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 			if (openAmount > 0.99f){
 				openAmount = 1.0f;
 				prevState = isOpen;
+				markDirty();
 			}
 		}
 		if (!isOpen && prevState && this.openAmount > 0.0f){
 			openAmount = 0.5f*openAmount;
 			if (openAmount < 0.01f){
 				openAmount = 0.0f;
+				if (world.getTileEntity(pos.down()) instanceof TileEntityInfernoForge){
+					((TileEntityInfernoForge)world.getTileEntity(pos.down())).updateProgress();
+				}
 				prevState = isOpen;
+				markDirty();
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 package teamroots.embers.block;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -8,6 +10,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
 
@@ -125,5 +128,10 @@ public class BlockMechEdge extends BlockBase {
 			breakBlockSafe(world,pos.west().south(2),player);
 			breakBlockSafe(world,pos.west(2).south(2),player);
 		}
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
+		return new ArrayList<ItemStack>();
 	}
 }

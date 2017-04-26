@@ -21,7 +21,7 @@ import teamroots.embers.proxy.CommonProxy;
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String VERSION = "0.206";
+	public static final String VERSION = "0.207";
 	public static final String DEPENDENCIES = "";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")
@@ -36,6 +36,18 @@ public class Embers {
 		@SideOnly(Side.CLIENT)
 		public ItemStack getTabIconItem(){
 			return new ItemStack(RegistryManager.crystal_ember,1);
+		}
+	};
+	
+	public static CreativeTabs resource_tab = new CreativeTabs("embers_resources") {
+    	@Override
+    	public String getTabLabel(){
+    		return "embers_resources";
+    	}
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ItemStack getTabIconItem(){
+			return new ItemStack(RegistryManager.ingot_dawnstone,1);
 		}
 	};
 	

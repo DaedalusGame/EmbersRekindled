@@ -36,7 +36,7 @@ public class ParticleRenderer {
 	}
 	
 	public void renderParticles(EntityPlayer dumbplayer, float partialTicks) {
-        float f = ActiveRenderInfo.getRotationX();
+		float f = ActiveRenderInfo.getRotationX();
         float f1 = ActiveRenderInfo.getRotationZ();
         float f2 = ActiveRenderInfo.getRotationYZ();
         float f3 = ActiveRenderInfo.getRotationXY();
@@ -61,8 +61,10 @@ public class ParticleRenderer {
 	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 			for (int i = 0; i < particles.size(); i ++){
-				if (!((IEmberParticle)particles.get(i)).isAdditive()){
-					particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+				if (particles.get(i) instanceof IEmberParticle){
+					if (!((IEmberParticle)particles.get(i)).isAdditive()){
+						particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+					}
 				}
 			}
 			tess.draw();
@@ -70,11 +72,37 @@ public class ParticleRenderer {
 	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 			for (int i = 0; i < particles.size(); i ++){
-				if (((IEmberParticle)particles.get(i)).isAdditive()){
-					particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+				if (particles.get(i) != null){
+					if (((IEmberParticle)particles.get(i)).isAdditive()){
+						particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+					}
 				}
 			}
 			tess.draw();
+			
+	        GlStateManager.disableDepth();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+			for (int i = 0; i < particles.size(); i ++){
+				if (particles.get(i) instanceof IEmberParticle){
+					if (!((IEmberParticle)particles.get(i)).isAdditive() && ((IEmberParticle)particles.get(i)).renderThroughBlocks()){
+						particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+					}
+				}
+			}
+			tess.draw();
+
+	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+			for (int i = 0; i < particles.size(); i ++){
+				if (particles.get(i) != null){
+					if (((IEmberParticle)particles.get(i)).isAdditive() && ((IEmberParticle)particles.get(i)).renderThroughBlocks()){
+						particles.get(i).renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
+					}
+				}
+			}
+			tess.draw();
+			GlStateManager.enableDepth();
 
             GlStateManager.enableCull();
             GlStateManager.depthMask(true);
