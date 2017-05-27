@@ -36,6 +36,7 @@ public class ModifierCasterOrb extends ModifierBase {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	public static float prevCooledStrength = 0;
+	public static float cooldownTicks = 0;
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -43,6 +44,9 @@ public class ModifierCasterOrb extends ModifierBase {
 		if (event.phase == TickEvent.Phase.START){
 			if (Minecraft.getMinecraft().player != null){
 				prevCooledStrength = Minecraft.getMinecraft().player.getCooledAttackStrength(0);
+			}
+			if (cooldownTicks > 0){
+				cooldownTicks --;
 			}
 		}
 	}
@@ -53,13 +57,14 @@ public class ModifierCasterOrb extends ModifierBase {
 		if (prevCooledStrength == 1.0f){
 			if (ItemModUtil.hasHeat(s)){
 				int level = ItemModUtil.getModifierLevel(s, ItemModUtil.modifierRegistry.get(RegistryManager.caster_orb).name);
-				if (event.getWorld().isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(event.getEntityPlayer()) > cost){
+				if (event.getWorld().isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(event.getEntityPlayer()) > cost && cooldownTicks == 0){
 					float offX = 0.5f*(float)Math.sin(Math.toRadians(-event.getEntityPlayer().rotationYaw-90));
 					float offZ = 0.5f*(float)Math.cos(Math.toRadians(-event.getEntityPlayer().rotationYaw-90));
 					PacketHandler.INSTANCE.sendToServer(new MessageRemovePlayerEmber(event.getEntityPlayer().getUniqueID(),cost));
 					PacketHandler.INSTANCE.sendToServer(new MessageSpawnEmberProj(event.getEntityPlayer().posX+offX,event.getEntityPlayer().posY+event.getEntityPlayer().getEyeHeight(),event.getEntityPlayer().posZ+offZ,
 							0.5*event.getEntityPlayer().getLookVec().xCoord,0.5*event.getEntityPlayer().getLookVec().yCoord,0.5*event.getEntityPlayer().getLookVec().zCoord,
 							8.0*(Math.atan(0.6*(level))/(1.25))));
+					cooldownTicks = 20;
 				}
 			}
 		}
@@ -71,13 +76,14 @@ public class ModifierCasterOrb extends ModifierBase {
 		if (prevCooledStrength == 1.0f){
 			if (ItemModUtil.hasHeat(s)){
 				int level = ItemModUtil.getModifierLevel(s, ItemModUtil.modifierRegistry.get(RegistryManager.caster_orb).name);
-				if (event.getWorld().isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(event.getEntityPlayer()) > cost){
+				if (event.getWorld().isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(event.getEntityPlayer()) > cost && cooldownTicks == 0){
 					float offX = 0.5f*(float)Math.sin(Math.toRadians(-event.getEntityPlayer().rotationYaw-90));
 					float offZ = 0.5f*(float)Math.cos(Math.toRadians(-event.getEntityPlayer().rotationYaw-90));
 					PacketHandler.INSTANCE.sendToServer(new MessageRemovePlayerEmber(event.getEntityPlayer().getUniqueID(),cost));
 					PacketHandler.INSTANCE.sendToServer(new MessageSpawnEmberProj(event.getEntityPlayer().posX+offX,event.getEntityPlayer().posY+event.getEntityPlayer().getEyeHeight(),event.getEntityPlayer().posZ+offZ,
 							0.5*event.getEntityPlayer().getLookVec().xCoord,0.5*event.getEntityPlayer().getLookVec().yCoord,0.5*event.getEntityPlayer().getLookVec().zCoord,
 							8.0*(Math.atan(0.6*(level))/(1.25))));
+					cooldownTicks = 20;
 				}
 			}
 		}

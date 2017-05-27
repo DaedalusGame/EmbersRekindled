@@ -125,7 +125,6 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             tess.draw();
             GlStateManager.popMatrix();
             
-            GlStateManager.enableCull();
-		}
+        }
 	}
 }

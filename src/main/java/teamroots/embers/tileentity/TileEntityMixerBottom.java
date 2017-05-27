@@ -150,7 +150,16 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 					IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 					int amount = tank.fill(recipe.output, false);
 					if (amount != 0){
-						tank.fill(recipe.getResult(fluids), true);
+						tank.fill(recipe.output, true);		
+						for (int i = 0; i < fluids.size(); i ++){
+							boolean doContinue = true;
+							for (int j = 0; j < recipe.inputs.size() && doContinue; j ++){
+								if (recipe.inputs.get(j) != null && fluids.get(i) != null && recipe.inputs.get(j).getFluid() == fluids.get(i).getFluid()){
+									doContinue = false;
+									fluids.get(i).amount -= recipe.inputs.get(j).amount;
+								}
+							}
+						}
 						top.capability.removeAmount(2.0, true);
 						markDirty();
 						IBlockState state = getWorld().getBlockState(getPos());

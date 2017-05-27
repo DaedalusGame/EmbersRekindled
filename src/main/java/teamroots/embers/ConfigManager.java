@@ -88,7 +88,7 @@ public class ConfigManager {
 		tinVeinSize = config.getInt("tinVeinSize", "compat", 6, 0, 255, "Maximum size of a tin ore vein (in blocks)");
 		tinMinY = config.getInt("tinMinY", "compat", 0, 0, 255, "Minimum height over which tin ore will spawn.");
 		tinMaxY = config.getInt("tinMaxY", "compat", 48, 0, 255, "Maximum height under which tin ore will spawn.");
-		tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 64, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
+		tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 6, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
 		
 		if (config.hasChanged())
 		{

@@ -2,6 +2,8 @@ package teamroots.embers.entity;
 
 import java.awt.Color;
 
+import elucent.albedo.lighting.ILightProvider;
+import elucent.albedo.lighting.Light;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -10,10 +12,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional.Interface;
+import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import teamroots.embers.lighting.ILightProvider;
-import teamroots.embers.lighting.Light;
+import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSparkleFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -21,6 +24,7 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberPacketReceiver;
 import teamroots.embers.util.Misc;
 
+@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
 public class EntityEmberPacket extends Entity implements ILightProvider {
 
 	BlockPos pos = new BlockPos(0,0,0);
@@ -85,9 +89,8 @@ public class EntityEmberPacket extends Entity implements ILightProvider {
 	@Override
 	public void onUpdate(){
 		super.onUpdate();
-		this.hue += 2.0f;
 		if (this.lifetime == 79){
-			if (getEntityWorld().isRemote){
+			if (!getEntityWorld().isRemote){
 				PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
 			}
 		}
@@ -155,19 +158,16 @@ public class EntityEmberPacket extends Entity implements ILightProvider {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@Method(modid = "albedo")
 	@Override
 	public Light provideLight() {
-		float shiftedLifetime = Math.max(0.0f, (float)lifetime-Minecraft.getMinecraft().getRenderPartialTicks());
-		if (!dead){
-			return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.25f,0.0625f,1.0f,4.0f);
+		float hue = this.hue + (EventManager.ticks%90)*4;
+		hue = hue/360f;
+		Color c = Color.getHSBColor(hue, 0.9f, 1.0f);
+		if (dead){
+			return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.5f,0.0625f,1.0f,4.0f * ((float)lifetime/20f));
 		}
-		else if (shiftedLifetime > 75){
-			return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.25f,0.0625f,(80.0f-shiftedLifetime)/5.0f,4.0f);
-		}
-		else {
-			return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.25f,0.0625f,(shiftedLifetime/20.0f),4.0f*(shiftedLifetime/20.0f));
-		}
+		return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.5f,0.0625f,1.0f,4.0f);
 	}
 
 }

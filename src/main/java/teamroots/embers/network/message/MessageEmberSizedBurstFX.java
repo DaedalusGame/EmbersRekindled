@@ -11,19 +11,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.particle.ParticleUtil;
 
-public class MessageEmberSparkleFX implements IMessage {
+public class MessageEmberSizedBurstFX implements IMessage {
 	public static Random random = new Random();
-	double posX = 0, posY = 0, posZ = 0;
+	public double posX = 0, posY = 0, posZ = 0;
+	public double value = 0;
 	
-	public MessageEmberSparkleFX(){
+	public MessageEmberSizedBurstFX(){
 		super();
 	}
 	
-	public MessageEmberSparkleFX(double x, double y, double z){
+	public MessageEmberSizedBurstFX(double x, double y, double z, double value){
 		super();
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;
+		this.value = value;
 	}
 	
 	@Override
@@ -31,6 +33,7 @@ public class MessageEmberSparkleFX implements IMessage {
 		posX = buf.readDouble();
 		posY = buf.readDouble();
 		posZ = buf.readDouble();
+		value = buf.readDouble();
 	}
 
 	@Override
@@ -38,21 +41,20 @@ public class MessageEmberSparkleFX implements IMessage {
 		buf.writeDouble(posX);
 		buf.writeDouble(posY);
 		buf.writeDouble(posZ);
+		buf.writeDouble(value);
 	}
 
-    public static class MessageHolder implements IMessageHandler<MessageEmberSparkleFX,IMessage>
+    public static class MessageHolder implements IMessageHandler<MessageEmberSizedBurstFX,IMessage>
     {
     	@SideOnly(Side.CLIENT)
         @Override
-        public IMessage onMessage(final MessageEmberSparkleFX message, final MessageContext ctx) {
+        public IMessage onMessage(MessageEmberSizedBurstFX message, MessageContext ctx) {
+    		Minecraft.getMinecraft().addScheduledTask(()-> {
 	    		World world = Minecraft.getMinecraft().world;
-				if (world.isRemote){
-		    		Minecraft.getMinecraft().addScheduledTask(()-> {
-						for (double i = 0; i < 18; i ++){
-							ParticleUtil.spawnParticleStar(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 3.5f+0.5f*random.nextFloat(), 40);
-						}
-		    		});
+				for (int k = 0; k < 80; k ++){
+					ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 1.0f, (float)message.value, 24);
 				}
+    		});
     		return null;
         }
     }

@@ -897,15 +897,28 @@ public class RecipeRegistry {
 				'C', RegistryManager.crystal_ember,
 				'P', "plateDawnstone",
 				'D', "ingotDawnstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_pulser,1),true,new Object[]{
+				"D",
+				"E",
+				"I", 
+				'E', RegistryManager.ember_emitter,
+				'I', "ingotIron",
+				'D', "plateDawnstone"}));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_copper), new ItemStack(RegistryManager.ingot_copper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_silver), new ItemStack(RegistryManager.ingot_silver), 0.35f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_lead), new ItemStack(RegistryManager.ingot_lead), 0.35f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_aluminum), new ItemStack(RegistryManager.ingot_aluminum), 0.55f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_tin), new ItemStack(RegistryManager.ingot_tin), 0.55f);
-		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_nickel), new ItemStack(RegistryManager.ingot_nickel), 0.55f);
+		if (ConfigManager.enableAluminum){
+			GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_aluminum), new ItemStack(RegistryManager.ingot_aluminum), 0.55f);
+		}
+		if (ConfigManager.enableTin){
+			GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_tin), new ItemStack(RegistryManager.ingot_tin), 0.55f);
+		}
+		if (ConfigManager.enableNickel){
+			GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_nickel), new ItemStack(RegistryManager.ingot_nickel), 0.55f);
+		}
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_quartz), new ItemStack(Items.QUARTZ), 0.35f);
 
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.blend_caminite), new ItemStack(RegistryManager.brick_caminite), 0.35f);

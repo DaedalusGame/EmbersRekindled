@@ -9,6 +9,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
 
 public class EmberGenUtil {
@@ -47,15 +49,24 @@ public class EmberGenUtil {
 		return 0;
 	}
 	
-	public static Map<IBlockState, Float> metalCoefficients = new HashMap<IBlockState, Float>();
+	public static Map<String, Float> metalCoefficients = new HashMap<String, Float>();
 	
-	public static void registerMetalCoefficient(IBlockState state, float coeff){
-		metalCoefficients.put(state, coeff);
+	public static void registerMetalCoefficient(String key, float coeff){
+		metalCoefficients.put(key, coeff);
 	}
 	
 	public static float getMetalCoefficient(IBlockState state){
-		if (metalCoefficients.containsKey(state)){
-			return metalCoefficients.get(state);
+		Block b = state.getBlock();
+		ItemStack s = new ItemStack(b);
+		if (s.isEmpty()){
+			return 0;
+		}
+		int[] ids = OreDictionary.getOreIDs(s);
+		for (int i : ids){
+			String key = OreDictionary.getOreName(i);
+			if (metalCoefficients.containsKey(key)){
+				return metalCoefficients.get(key);
+			}
 		}
 		return 0;
 	}
@@ -91,11 +102,26 @@ public class EmberGenUtil {
 		registerEmberFuelItem(RegistryManager.crystal_ember,2400);
 		registerEmberFuelItem(RegistryManager.ember_cluster,3600);
 		
-		registerMetalCoefficient(Blocks.GOLD_BLOCK.getDefaultState(),1.0f);
-		registerMetalCoefficient(RegistryManager.block_silver.getDefaultState(),1.0f);
-		registerMetalCoefficient(RegistryManager.block_copper.getDefaultState(),1.0f);
-		registerMetalCoefficient(Blocks.IRON_BLOCK.getDefaultState(),0.75f);
-		registerMetalCoefficient(RegistryManager.block_lead.getDefaultState(),0.75f);
+		registerMetalCoefficient("blockGold",1.0f);
+		registerMetalCoefficient("blockSilver",1.0f);
+		registerMetalCoefficient("blockCopper",1.0f);
+		if (ConfigManager.enableElectrum){
+			registerMetalCoefficient("blockElectrum",1.0f);
+		}
+		if (ConfigManager.enableAluminum){
+			registerMetalCoefficient("blockAluminum",0.9f);
+		}
+		if (ConfigManager.enableNickel){
+			registerMetalCoefficient("blockNickel",0.9f);
+		}
+		if (ConfigManager.enableTin){
+			registerMetalCoefficient("blockTin",0.9f);
+		}
+		registerMetalCoefficient("blockIron",0.75f);
+		registerMetalCoefficient("blockLead",0.75f);
+		if (ConfigManager.enableBronze){
+			registerMetalCoefficient("blockBronze",0.75f);
+		}
 		
 		registerFuelCoefficient(Items.COAL,2.0f);
 		registerFuelCoefficient(Items.NETHERBRICK,3.0f);

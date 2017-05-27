@@ -138,8 +138,7 @@ public class TileEntityStamperRenderer extends TileEntitySpecialRenderer {
 					RenderUtil.addBox(buffer, stampBox.x1+0.5+x-0.0001+offX+addX, stampBox.y1+0.5+y+offY+addY, stampBox.z1+0.5+z+offZ+addZ, stampBox.x2+0.5+x+0.0001+offX+addX, stampBox.y2+0.5+y+offY+addY, stampBox.z2+0.5+z+offZ+addZ, stampBox.textures, new int[]{1,1,1,1,1,1});
 					
 		            tess.draw();
-		            GlStateManager.enableCull();
-				}
+		        }
 			}
 		}
 	}

@@ -31,5 +31,6 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessagePlayerJetFX.MessageHolder.class,MessagePlayerJetFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageEmberSizedBurstFX.MessageHolder.class,MessageEmberSizedBurstFX.class,id ++,Side.CLIENT);
     }
 }

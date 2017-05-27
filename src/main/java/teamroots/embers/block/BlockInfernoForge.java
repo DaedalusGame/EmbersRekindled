@@ -131,6 +131,11 @@ public class BlockInfernoForge extends BlockTEBase {
 			world.setBlockToAir(pos);
 			world.notifyBlockUpdate(pos, RegistryManager.inferno_forge_edge.getDefaultState(), Blocks.AIR.getDefaultState(), 8);
 		}
+		if (world.getBlockState(pos).getBlock() == this){
+			world.setBlockToAir(pos);
+			world.setTileEntity(pos, null);
+			world.notifyBlockUpdate(pos, this.getDefaultState().withProperty(isTop, true), Blocks.AIR.getDefaultState(), 8);
+		}
 	}
 	
 	public void cleanEdges(World world, BlockPos pos){
@@ -150,5 +155,17 @@ public class BlockInfernoForge extends BlockTEBase {
 		removeEdge(world,pos.south().east().up());
 		removeEdge(world,pos.east().up());
 		removeEdge(world,pos.north().east().up());
+		removeEdge(world,pos.up());
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		if (state.getBlock() == this){
+			if (!state.getValue(isTop)){
+				drops.add(new ItemStack(this,1));
+			}
+		}
+		return drops;
 	}
 }

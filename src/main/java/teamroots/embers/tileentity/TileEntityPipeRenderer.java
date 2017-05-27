@@ -137,7 +137,6 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer {
             	RenderUtil.addBox(buffer, eastEnd.x1+x, eastEnd.y1+y, eastEnd.z1+z, eastEnd.x2+x, eastEnd.y2+y, eastEnd.z2+z, eastEnd.textures, new int[]{1,1,1,1,-1,-1});
             }
             tess.draw();
-            GlStateManager.enableCull();
-		}
+        }
 	}
 }

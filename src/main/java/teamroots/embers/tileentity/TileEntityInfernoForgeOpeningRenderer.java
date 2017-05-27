@@ -41,7 +41,6 @@ public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRend
             RenderUtil.addBox(buffer, left.x1+x-dx, left.y1+y, left.z1+z, left.x2+x-dx, left.y2+y, left.z2+z, left.textures, new int[]{1,1,1,1,1,1});
             RenderUtil.addBox(buffer, right.x1+x+dx, right.y1+y, right.z1+z, right.x2+x+dx, right.y2+y, right.z2+z, right.textures, new int[]{-1,-1,1,1,1,1});
             tess.draw();
-            GlStateManager.enableCull();
-		}
+        }
 	}
 }

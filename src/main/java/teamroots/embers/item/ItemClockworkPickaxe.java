@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -96,13 +97,16 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		return true;
 	}
 	
-	@Override
+	/*@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
 		if (state.getBlock().getHarvestLevel(state) <= 3 && state.getBlock().getHarvestTool(state) != null || state.getBlock().getHarvestLevel(state) < 1){
-			return state.getBlock().getHarvestTool(state).compareTo("pickaxe") == 0 || state.getBlock().getHarvestTool(state).compareTo("axe") == 0;
+			String tool = state.getBlock().getHarvestTool(state);
+			if (tool != null){
+				return tool.compareTo("pickaxe") == 0 || tool.compareTo("shovel") == 0;
+			}
 		}
 		return false;
-	}
+	}*/
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack){

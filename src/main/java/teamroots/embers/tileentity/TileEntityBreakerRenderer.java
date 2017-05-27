@@ -72,7 +72,6 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer {
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
             
-            GlStateManager.enableCull();
             GlStateManager.popMatrix();
 		}
 	}

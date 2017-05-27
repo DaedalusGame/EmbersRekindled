@@ -86,7 +86,6 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 				GlStateManager.disableAlpha();
 				GlStateManager.disableBlend();
 				GlStateManager.enableLighting();
-				GlStateManager.enableCull();
 			}
 		}
 	}

@@ -95,13 +95,16 @@ public class ItemClockworkAxe extends ItemTool implements IModeledItem, IEmberCh
 		return true;
 	}
 	
-	@Override
+	/*@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
 		if (state.getBlock().getHarvestLevel(state) <= 3 && state.getBlock().getHarvestTool(state) != null || state.getBlock().getHarvestLevel(state) < 1){
-			return state.getBlock().getHarvestTool(state).compareTo("axe") == 0;
+			String tool = state.getBlock().getHarvestTool(state);
+			if (tool != null){
+				return tool.compareTo("axe") == 0;
+			}
 		}
 		return false;
-	}
+	}*/
 	
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){

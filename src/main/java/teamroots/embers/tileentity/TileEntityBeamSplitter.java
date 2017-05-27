@@ -128,7 +128,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							didSend = true;
 						}
 					}
-					if (getWorld().getTileEntity(targetRight) != null){
+					if (getWorld().getTileEntity(targetRight) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
@@ -138,7 +138,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 					}
 				}
 				else {
-					if (getWorld().getTileEntity(targetLeft) != null){
+					if (getWorld().getTileEntity(targetLeft) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
@@ -146,7 +146,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 							didSend = true;
 						}
 					}
-					if (getWorld().getTileEntity(targetRight) != null){
+					if (getWorld().getTileEntity(targetRight) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
@@ -165,7 +165,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				boolean didSend = false;
 				IBlockState state = getWorld().getBlockState(getPos());
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
-					if (getWorld().getTileEntity(targetLeft) != null){
+					if (getWorld().getTileEntity(targetLeft) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
@@ -175,7 +175,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 					}
 				}
 				else {
-					if (getWorld().getTileEntity(targetLeft) != null){
+					if (getWorld().getTileEntity(targetLeft) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetLeft)).isFull()){
 							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
 							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
@@ -194,7 +194,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 				boolean didSend = false;
 				IBlockState state = getWorld().getBlockState(getPos());
 				if (state.getValue(BlockBeamSplitter.isXAligned)){
-					if (getWorld().getTileEntity(targetRight) != null){
+					if (getWorld().getTileEntity(targetRight) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
@@ -204,7 +204,7 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 					}
 				}
 				else {
-					if (getWorld().getTileEntity(targetRight) != null){
+					if (getWorld().getTileEntity(targetRight) instanceof IEmberPacketReceiver){
 						if (!((IEmberPacketReceiver)getWorld().getTileEntity(targetRight)).isFull()){
 							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
 							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);

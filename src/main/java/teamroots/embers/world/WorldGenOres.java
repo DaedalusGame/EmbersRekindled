@@ -16,8 +16,8 @@ public class WorldGenOres implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
-		switch (world.provider.getDimension()) {
-		case 0:{
+		switch (world.provider.getDimensionType()) {
+		case OVERWORLD:{
 			WorldGenMinable ore_copper = new WorldGenMinable(RegistryManager.ore_copper.getDefaultState(), ConfigManager.copperVeinSize);
 			for (int i = 0; i < ConfigManager.copperVeinsPerChunk; i ++){
 				int x = chunkX*16+random.nextInt(16);

@@ -40,7 +40,6 @@ public class TileEntityHeatCoilRenderer extends TileEntitySpecialRenderer {
             RenderUtil.addBox(buffer, x+0.5+coil.x1, y+1.0+coil.y1, z+0.5+coil.z1, x+0.5+coil.x2, y+1.0+coil.y2, z+0.5+coil.z2, coil.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
             
-            GlStateManager.enableCull();
-		}
+        }
 	}
 }

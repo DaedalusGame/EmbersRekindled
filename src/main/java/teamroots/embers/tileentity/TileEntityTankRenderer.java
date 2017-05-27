@@ -66,10 +66,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				buffer.pos(x+0.25, y+0.125+0.8125*((float)amount/(float)capacity), z+0.75).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
 				tess.draw();
 				
-				GlStateManager.disableAlpha();
 				GlStateManager.disableBlend();
 				GlStateManager.enableLighting();
-				GlStateManager.enableCull();
 			}
 		}
 	}

@@ -70,7 +70,6 @@ public class TileEntityAutoHammerRenderer extends TileEntitySpecialRenderer {
             RenderUtil.addBox(buffer, hammerHead.x1, hammerHead.y1, hammerHead.z1, hammerHead.x2, hammerHead.y2, hammerHead.z2, hammerHead.textures, new int[]{1,1,1,1,1,1});
             tess.draw();
             
-            GlStateManager.enableCull();
             GlStateManager.popMatrix();
 		}
 	}

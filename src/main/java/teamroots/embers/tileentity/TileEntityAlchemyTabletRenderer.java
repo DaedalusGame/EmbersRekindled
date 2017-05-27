@@ -62,11 +62,9 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					RenderUtil.renderAlchemyCircle(b, x+0.5, y+1.0+sign*(i/1000.0), z+0.5, 1.0f, 0.25f, 0.0625f, (tablet.process + (partialTicks*processSign))/40.0f, 0.4f*(tablet.process + (partialTicks*processSign))/10.0f, ((TileEntityAlchemyTablet) tile).angle+partialTicks);
 				}
 				tess.draw();
-				GlStateManager.enableCull();
 				GlStateManager.alphaFunc(func, ref);
 				GlStateManager.depthFunc(dfunc);
 				GlStateManager.disableBlend();
-				GlStateManager.disableAlpha();
 				GlStateManager.enableLighting();
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			}

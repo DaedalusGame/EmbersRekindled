@@ -65,8 +65,7 @@ public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer {
 			RenderUtil.addBox(b, disc3.x1, disc3.y1, disc3.z1, disc3.x2, disc3.y2, disc3.z2, disc3.textures, new int[]{1,1,1,1,1,1});
 			RenderUtil.addBox(b, barrel.x1, barrel.y1, barrel.z1, barrel.x2, barrel.y2, barrel.z2, barrel.textures, new int[]{1,1,1,1,1,1});
 			tess.draw();
-			GlStateManager.enableCull();
-            GlStateManager.popMatrix();
+			GlStateManager.popMatrix();
 		}
 	}
 }

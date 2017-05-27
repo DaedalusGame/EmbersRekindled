@@ -168,7 +168,7 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 				|| stack1.getItem().isRepairable() && stack2.getItem() == RegistryManager.isolated_materia){
 			return true;
 		}
-		if (Misc.getRepairItem(stack1) != ItemStack.EMPTY && stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2 == ItemStack.EMPTY){
+		if (Misc.getRepairItem(stack1).isEmpty() && stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2.isEmpty()){
 			return true;
 		}
 		return false;
@@ -198,8 +198,11 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 				if (stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0){
 					List<ItemStack> stacks = new ArrayList<ItemStack>();
 					for (int i = 0; i < stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount(); i ++){
-						for (int j = 0; j < stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getInteger("level"); j ++){
-							stacks.add(new ItemStack(stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getCompoundTag("item")));
+						ItemStack s = new ItemStack(stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getCompoundTag("item"));
+						if (ItemModUtil.modifierRegistry.get(s.getItem()) != null && ItemModUtil.modifierRegistry.get(s.getItem()).countTowardsTotalLevel){
+							for (int j = 0; j < stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getInteger("level"); j ++){
+								stacks.add(new ItemStack(stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getCompoundTag("item")));
+							}
 						}
 					}
 					stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).setTag("modifiers", new NBTTagList());

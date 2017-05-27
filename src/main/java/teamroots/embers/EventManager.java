@@ -19,6 +19,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -37,6 +38,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
@@ -90,6 +92,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.block.IDial;
@@ -98,7 +101,6 @@ import teamroots.embers.item.IEmberChargedTool;
 import teamroots.embers.item.ItemAshenCloak;
 import teamroots.embers.item.ItemEmberGauge;
 import teamroots.embers.item.ItemGrandhammer;
-import teamroots.embers.lighting.LightManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberGenOffset;
@@ -223,6 +225,13 @@ public class EventManager {
 					event.setCanceled(true);
 				}
 				event.setAmount(event.getAmount()*mult);
+			}
+		}
+		for (ItemStack s : event.getEntityLiving().getEquipmentAndArmor()){
+			if (s.getItem() instanceof ItemArmor){
+				if (ItemModUtil.hasHeat(s)){
+					ItemModUtil.addHeat(s, 5.0f);
+				}
 			}
 		}
 		if (event.getSource().getEntity() instanceof EntityPlayer){
@@ -400,7 +409,6 @@ public class EventManager {
 				ItemStack s = event.getPlayer().getHeldItemMainhand();
 				if (!s.isEmpty() && event.getState().getBlockHardness(event.getWorld(), event.getPos()) > 0){
 					if (ItemModUtil.hasHeat(s)){
-						ItemModUtil.setLevel(s, ItemModUtil.getLevel(s)+1);
 						ItemModUtil.addHeat(s, 1.0f);
 					}
 				}
@@ -590,152 +598,6 @@ public class EventManager {
 	@SubscribeEvent
 	public void onBlockBreak(BreakSpeed event){
 		event.getOriginalSpeed();
-	}
-	
-	@SubscribeEvent
-	public void onNameFormat(PlayerEvent.NameFormat event){
-		if (event.getUsername().compareTo("Elucent") == 0){
-			event.setDisplayname(TextFormatting.GOLD+""+TextFormatting.BOLD+"      "+TextFormatting.RESET+"  ");
-		}
-		/*if (event.getUsername().compareTo("Elucent") == 0){
-			event.setDisplayname(event.getUsername()+TextFormatting.RESET+"   ");
-		}*/
-	}
-	
-	public static int chatX = 0;
-	public static int chatY = 0;
-	
-	@SubscribeEvent
-	public void getChatPos(RenderGameOverlayEvent.Chat event){
-		chatX = event.getPosX();
-		chatY = event.getPosY();
-	}
-	
-	@SubscribeEvent
-	public void renderGlowNames(RenderGameOverlayEvent.Post event){
-		GuiNewChat c = Minecraft.getMinecraft().ingameGUI.getChatGUI();
-		Field f_lines;
-		Field f_counter;
-		if (event.getType() == ElementType.CHAT){
-			try {
-				f_lines = c.getClass().getDeclaredField("drawnChatLines");
-				f_lines.setAccessible(true);
-				f_counter = Minecraft.getMinecraft().ingameGUI.getClass().getSuperclass().getDeclaredField("updateCounter");
-				f_counter.setAccessible(true);
-				List<ChatLine> chatLines;
-				int updateCounter = 0;
-				try {
-					updateCounter = f_counter.getInt(Minecraft.getMinecraft().ingameGUI);
-					chatLines = (List<ChatLine>) f_lines.get(c);
-					for (int i = 0; c.getChatOpen() && i < chatLines.size() || !c.getChatOpen() && i < chatLines.size() && i < 10; i ++){
-						ChatLine l = chatLines.get(i);
-						String s = l.getChatComponent().getUnformattedText();
-						for (int j = 0; j < s.length(); j ++){
-							/*if (j < s.length()-4 && s.substring(j, j+5).compareTo(TextFormatting.RESET.toString()+"   ") == 0){
-								float f = Minecraft.getMinecraft().gameSettings.chatOpacity * 0.9F + 0.1F;
-								int j1 = updateCounter - l.getUpdatedCounter();
-								if (j1 < 200 || c.getChatOpen()){
-									double d0 = (double)j1 / 200.0D;
-		                            d0 = 1.0D - d0;
-		                            d0 = d0 * 10.0D;
-		                            d0 = MathHelper.clamp(d0, 0.0D, 1.0D);
-		                            d0 = d0 * d0;
-		                            int l1 = (int)(255.0D * d0);
-	
-		                            if (c.getChatOpen())
-		                            {
-		                                l1 = 255;
-		                            }
-	
-		                            l1 = (int)((float)l1 * f);
-									String before = s.substring(0,j);
-									double x = (double)chatX + (double)Minecraft.getMinecraft().fontRendererObj.getStringWidth(before)+5.0;
-									double y = (double)chatY-((double)Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT)*((double)i)+1.0;
-									GlStateManager.enableAlpha();
-									GlStateManager.enableBlend();
-									GlStateManager.color(1f, 1f, 1f, (float)l1/255f);
-									int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
-									GlStateManager.depthFunc(GL11.GL_LEQUAL);
-									int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
-									float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
-									GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
-									GlStateManager.depthMask(false);
-									GlStateManager.disableTexture2D();
-									GlStateManager.color(1, 1, 1, 1);
-									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-									GlStateManager.shadeModel(GL11.GL_SMOOTH);
-									Tessellator tess = Tessellator.getInstance();
-									GlStateManager.translate(0.5f, 0.5f, 0);
-									VertexBuffer b = tess.getBuffer();
-									for (float k = 0; k < 8; k ++){
-										float coeff = (float)(k+1.0f)/8.0f;
-										b.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-										RenderUtil.renderHighlightCircle(b,x+2.5f,y+2.5f,(1.0f+7.0f*coeff*coeff)*((float)l1/255f));
-										tess.draw();
-									}
-									GlStateManager.shadeModel(GL11.GL_FLAT);
-									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-									GlStateManager.enableTexture2D();
-									GlStateManager.color(1f, 1f, 1f, l1/255f);
-									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("embers:textures/gui/tidbit.png"));
-									drawScaledCustomSizeModalRect((double)x, (double)y, 0, 0, 8.0f, 8.0f, 8.0, 8.0, 32.0f, 32.0f);
-									GlStateManager.translate(-0.5f, -0.5f, 0);
-									GlStateManager.depthMask(true);
-									GlStateManager.alphaFunc(func, ref);
-									GlStateManager.depthFunc(dfunc);
-									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-									GlStateManager.disableBlend();
-									GlStateManager.disableAlpha();
-								}
-							}*/
-							if (j < s.length()-14 && s.substring(j, j+14).compareTo(TextFormatting.GOLD+""+TextFormatting.BOLD+"      "+TextFormatting.RESET+"  ") == 0){
-								String before = s.substring(0,j);
-								float f = Minecraft.getMinecraft().gameSettings.chatOpacity * 0.9F + 0.1F;
-								int j1 = updateCounter - l.getUpdatedCounter();
-								if (j1 < 200 || c.getChatOpen()){
-									double d0 = (double)j1 / 200.0D;
-		                            d0 = 1.0D - d0;
-		                            d0 = d0 * 10.0D;
-		                            d0 = MathHelper.clamp(d0, 0.0D, 1.0D);
-		                            d0 = d0 * d0;
-		                            int l1 = (int)(255.0D * d0);
-	
-		                            if (c.getChatOpen())
-		                            {
-		                                l1 = 255;
-		                            }
-	
-		                            l1 = (int)((float)l1 * f);
-		                            if ((20*l1)/255 > 3){
-										GlStateManager.enableAlpha();
-										GlStateManager.enableBlend();
-										GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-										int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
-										GlStateManager.depthFunc(GL11.GL_LEQUAL);
-										int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
-										float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
-										GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
-										GlStateManager.depthMask(false);
-										GuiCodex.drawTextGlowingAuraTransparent(Minecraft.getMinecraft().fontRendererObj, "Elucent", chatX+3+Minecraft.getMinecraft().fontRendererObj.getStringWidth(before), chatY-(Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT)*i,l1);
-										GlStateManager.depthMask(true);
-										GlStateManager.alphaFunc(func, ref);
-										GlStateManager.depthFunc(dfunc);
-										GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-										GlStateManager.disableBlend();
-										GlStateManager.disableAlpha();
-		                            }
-								}
-							}
-						}
-						//System.out.println(s);
-					}
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			} catch (NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	@SideOnly(Side.CLIENT)

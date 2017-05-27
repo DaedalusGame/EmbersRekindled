@@ -20,8 +20,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.lighting.ILightProvider;
-import teamroots.embers.lighting.Light;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.network.message.MessageTEUpdate;
