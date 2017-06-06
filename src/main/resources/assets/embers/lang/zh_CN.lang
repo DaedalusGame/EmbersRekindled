@@ -1,5 +1,5 @@
 itemGroup.embers=Embers
-itemGroup.embers_resources=Embers（金属）
+itemGroup.embers_resources=Embers|金属
 
 tile.block_copper.name=铜块
 tile.block_lead.name=铅块
@@ -96,7 +96,7 @@ fluid.gold=熔融金
 fluid.copper=熔融铜
 fluid.lead=熔融铅
 fluid.silver=熔融银
-fluid.astralite=熔融Astralite
+fluid.astralite=熔融奥司脱拉特
 fluid.dawnstone=熔融黎明石
 fluid.umberSteel=熔融棕钢
 
@@ -259,7 +259,7 @@ item.sword_tin.name=锡剑
 fluid.tin=熔融锡
 
 embers.tooltip.atmosEmber=大气灰烬：
-embers.tooltip.targeting块=指向定位：
+embers.tooltip.targetingBlock=指向定位：
 embers.tooltip.itemdial.slot=存储槽{0}
 embers.tooltip.itemdial.noitem=无
 embers.tooltip.emberdial.ember=灰烬能量：
