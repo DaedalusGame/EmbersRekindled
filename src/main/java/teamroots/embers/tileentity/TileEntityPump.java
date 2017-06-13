@@ -246,22 +246,25 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 				}
 			}
 			for (int i = 0; i < connectedFaces.size(); i ++){
-				if (getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))) != null){
-					IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-					if (handler != null){
-						IFluidTankProperties[] properties = handler.getTankProperties();
-						for (int j = 0; j < properties.length && tank.getFluidAmount() < tank.getCapacity(); j ++){
-							FluidStack stack = properties[j].getContents();
-							if (stack != null){
-								int toFill = tank.fill(stack, false);
-								FluidStack taken = handler.drain(new FluidStack(stack.getFluid(),toFill), true);
-								tank.fill(taken, true);
-								IBlockState state = getWorld().getBlockState(getPos());
-								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-									toUpdate.add(getPos().offset(connectedFaces.get(i)));
-								}
-								if (!toUpdate.contains(getPos())){
-									toUpdate.add(getPos());
+				TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
+				if (t != null){
+					if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
+						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
+						if (handler != null){
+							IFluidTankProperties[] properties = handler.getTankProperties();
+							for (int j = 0; j < properties.length && tank.getFluidAmount() < tank.getCapacity(); j ++){
+								FluidStack stack = properties[j].getContents();
+								if (stack != null){
+									int toFill = tank.fill(stack, false);
+									FluidStack taken = handler.drain(new FluidStack(stack.getFluid(),toFill), true);
+									tank.fill(taken, true);
+									IBlockState state = getWorld().getBlockState(getPos());
+									if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
+										toUpdate.add(getPos().offset(connectedFaces.get(i)));
+									}
+									if (!toUpdate.contains(getPos())){
+										toUpdate.add(getPos());
+									}
 								}
 							}
 						}

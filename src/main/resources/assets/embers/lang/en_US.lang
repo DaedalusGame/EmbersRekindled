@@ -296,8 +296,8 @@ embers.jei.recipe.alchemy=Alchemy Recipe
 
 entity.ancient_golem.name=Ancient Golem
 
-death.attack.ember=%1$s was incinerated.
-death.attack.ember.player=%1$s was incinerated by %2$s.
+death.attack.ember=%1$s was incinerated
+death.attack.ember.player=%1$s was incinerated by %2$s
 
 embers.research.null=
 embers.research.world=Natural Energy
@@ -495,7 +495,7 @@ embers.research.alchemy.ashen_cloak.desc=By imbuing mundane cloth with alchemica
 
 embers.research.alchemy.inflictor=Inflictor Gems
 embers.research.alchemy.inflictor.title=Absorbing Pain
-embers.research.alchemy.inflictor.desc=The Inflictor Gem is a strange crystal indeed. While holding it in your hand, when taking damage, it will absorb the type of damage taken. By stitching one to your Ashen Cloak in a crafting table with a piece of string, it will reduce the damage you take from that damage source by approximately a seventh. They can be removed by placing an Ashen Cloak in a crafting table on its own, and up to seven may be placed on a Cloak at a time.
+embers.research.alchemy.inflictor.desc=The Inflictor Gem is a strange crystal indeed. While holding it in your hand, when taking damage, it will absorb the type of damage taken. By stitching one to your Ashen Cloak in a crafting table with a piece of string, it will reduce the damage you take from that damage source by approximately a third. They can be removed by placing an Ashen Cloak in a crafting table on its own, and up to seven may be placed on a Cloak at a time.
 
 embers.research.alchemy.cluster=Ember Clusters
 embers.research.alchemy.cluster.title=Purified Crystals

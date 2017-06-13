@@ -326,9 +326,9 @@ public class RegistryManager {
 		items.add(eldritch_insignia = new ItemBase("eldritch_insignia",true));
 		items.add(intelligent_apparatus = new ItemBase("intelligent_apparatus",true));
 		items.add(archaic_circuit = new ItemBase("archaic_circuit",true));
-		items.add(ember_ring = new ItemEmberRing("ember_ring",true));
-		items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
-		items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
+		//items.add(ember_ring = new ItemEmberRing("ember_ring",true));
+		//items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
+		//items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
 		//items.add(mantle_bulb = new ItemEmberBulb());
 		
 		if (ConfigManager.enableAluminum){

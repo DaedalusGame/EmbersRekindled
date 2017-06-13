@@ -331,7 +331,7 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 				for (int i = 0; i < connectedFaces.size(); i ++){
 					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
 					if (t != null){
-						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
+						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFaces.get(i)))){
 							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 							if (handler != null){
 								FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
@@ -352,7 +352,7 @@ public class TileEntityPipe extends TileFluidHandler implements ITileEntityBase,
 						int i = random.nextInt(connectedFaces.size());
 						TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
 						if (t != null){
-							if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
+							if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFaces.get(i)))){
 								IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 								if (handler != null){
 									int filled = handler.fill(new FluidStack(tank.getFluid().getFluid(),1), true);

@@ -621,7 +621,7 @@ public class EventManager {
 			List<TileEntity> tiles = event.world.loadedTileEntityList;
 			NBTTagList list = new NBTTagList();
 			for (int i = 0; i < tiles.size(); i ++){
-				TileEntity t = tiles.get(Math.max(tiles.size()-1, i));
+				TileEntity t = tiles.get(Math.min(tiles.size()-1, i));
 				if (t instanceof ITileEntityBase){
 					if (((ITileEntityBase)t).needsUpdate()){
 						((ITileEntityBase)t).clean();
