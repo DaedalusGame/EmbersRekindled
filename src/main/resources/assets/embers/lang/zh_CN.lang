@@ -1,4 +1,5 @@
 itemGroup.embers=Embers
+itemGroup.embers_resources=Embers|金属
 
 tile.block_copper.name=铜块
 tile.block_lead.name=铅块
@@ -86,14 +87,16 @@ tile.archaic_tile.name=古代瓦块
 tile.combustor.name=燃烧室
 tile.catalyzer.name=催化室
 tile.reactor.name=高温催化反应器
-tile.field_chart.name=地形显示器
+tile.field_chart.name=能量波峰地形显示器
+tile.ember_pulser.name=灰烬能量喷发器
+tile.inferno_forge.name=炼狱锻造炉
 
 fluid.iron=熔融铁
 fluid.gold=熔融金
 fluid.copper=熔融铜
 fluid.lead=熔融铅
 fluid.silver=熔融银
-fluid.astralite=Molten Astralite
+fluid.astralite=熔融奥司脱拉特
 fluid.dawnstone=熔融黎明石
 fluid.umberSteel=熔融棕钢
 
@@ -180,19 +183,111 @@ item.adhesive.name=胶粘剂
 item.ember_cluster.name=灰烬水晶簇
 item.wildfire_core.name=野火核心
 item.codex.name=古代法典
+item.superheater.name=热炙器
+item.inferno_forge.name=炼狱锻造炉
+item.jet_augment.name=煤渣喷气机
+item.blasting_core.name=爆破核心
+item.caster_orb.name=法师法球
+item.resonating_bell.name=共鸣之铃
+item.flame_barrier.name=烈焰屏障
+item.eldritch_insignia.name=恐怖徽章
+item.intelligent_apparatus.name=智械机关
+item.archaic_circuit.name=太古电路
+item.ember_ring.name=灰烬之戒
+item.ember_belt.name=灰烬腰带
+item.ember_amulet.name=灰烬护身符
+item.ember_bulb.name=地幔灯泡
+
+tile.block_aluminum.name=铝块
+tile.ore_aluminum.name=铝矿石
+item.ingot_aluminum.name=铝锭
+item.nugget_aluminum.name=铝粒
+item.plate_aluminum.name=铝板
+item.pickaxe_aluminum.name=铝镐
+item.axe_aluminum.name=铝斧
+item.hoe_aluminum.name=铝锄
+item.shovel_aluminum.name=铝铲
+item.sword_aluminum.name=铝剑
+fluid.aluminum=熔融铝
+
+tile.block_bronze.name=青铜块
+tile.ore_bronze.name=青铜矿石
+item.ingot_bronze.name=青铜锭
+item.nugget_bronze.name=青铜粒
+item.plate_bronze.name=青铜板
+item.pickaxe_bronze.name=青铜镐
+item.axe_bronze.name=青铜斧
+item.hoe_bronze.name=青铜锄
+item.shovel_bronze.name=青铜铲
+item.sword_bronze.name=青铜剑
+fluid.bronze=熔融青铜
+
+tile.block_electrum.name=琥珀金块
+tile.ore_electrum.name=琥珀金矿石
+item.ingot_electrum.name=琥珀金锭
+item.nugget_electrum.name=琥珀金粒
+item.plate_electrum.name=琥珀金板
+item.pickaxe_electrum.name=琥珀金镐
+item.axe_electrum.name=琥珀金斧
+item.hoe_electrum.name=琥珀金锄
+item.shovel_electrum.name=琥珀金铲
+item.sword_electrum.name=琥珀金剑
+fluid.electrum=熔融琥珀金
+
+tile.block_nickel.name=镍块
+tile.ore_nickel.name=镍矿石
+item.ingot_nickel.name=镍锭
+item.nugget_nickel.name=镍粒
+item.plate_nickel.name=镍板
+item.pickaxe_nickel.name=镍镐
+item.axe_nickel.name=镍斧
+item.hoe_nickel.name=镍锄
+item.shovel_nickel.name=镍铲
+item.sword_nickel.name=镍剑
+fluid.nickel=熔融镍
+
+tile.block_tin.name=锡块
+tile.ore_tin.name=锡矿石
+item.ingot_tin.name=锡锭
+item.nugget_tin.name=锡粒
+item.plate_tin.name=锡板
+item.pickaxe_tin.name=锡镐
+item.axe_tin.name=锡斧
+item.hoe_tin.name=锡锄
+item.shovel_tin.name=锡铲
+item.sword_tin.name=锡剑
+fluid.tin=熔融锡
 
 embers.tooltip.atmosEmber=大气灰烬：
 embers.tooltip.targetingBlock=指向定位：
 embers.tooltip.itemdial.slot=存储槽{0}
 embers.tooltip.itemdial.noitem=无
 embers.tooltip.emberdial.ember=灰烬能量：
-embers.tooltip.iron_accuracy=铁之误差:
-embers.tooltip.copper_accuracy=铜之误差： 
+embers.tooltip.iron_accuracy=铁之误差：
+embers.tooltip.copper_accuracy=铜之误差：
 embers.tooltip.lead_accuracy=铅之误差：
 embers.tooltip.silver_accuracy=银之误差：
 embers.tooltip.dawnstone_accuracy=黎明石之误差：
 embers.tooltip.inflictor=协调伤害
 embers.tooltip.tyrfing=基于目标的护甲造成伤害，护甲越高，伤害越大。
+embers.tooltip.heat_amount=热量：
+embers.tooltip.heat_level=等级：
+embers.tooltip.modifiers=附加强化：
+
+embers.tooltip.modifier.superheater=过热
+embers.tooltip.modifier.jet_augment=煤渣喷气机
+embers.tooltip.modifier.blasting_core=爆破
+embers.tooltip.modifier.resonating_bell=共振
+embers.tooltip.modifier.caster_orb=能量发射
+embers.tooltip.modifier.flame_barrier=烈焰屏障
+embers.tooltip.modifier.eldritch_insignia=怪诞
+embers.tooltip.modifier.intelligent_apparatus=智能
+
+embers.tooltip.num1=I
+embers.tooltip.num2=II
+embers.tooltip.num3=III
+embers.tooltip.num4=IV
+embers.tooltip.num5=V
 
 embers.jei.recipe.stamp=冲压配方
 embers.jei.recipe.melter=熔炼配方
@@ -214,7 +309,7 @@ embers.research.core=核心的辉光
 
 embers.research.world.ores=矿石
 embers.research.world.ores.title=原矿
-embers.research.world.ores.desc=在坚实的地底深处，新手挖矿者可能 会发现许多有用的矿物，即铜、铅、 银和石英。铜作物导体具有多种用途 ，银可以作为施展奥术的媒介，以及 石英，它是结晶物质的良好来源。
+embers.research.world.ores.desc=在坚实的地底深处，新手挖矿者可能 会发现许多有用的矿物，即铜、铅、 银和石英。铜作为导体具有多种用途 ，银可以作为施展奥术的媒介，以及 石英，它是结晶物质的良好来源。
 
 embers.research.world.hammer=铁匠锤
 embers.research.world.hammer.title=粉碎
@@ -264,6 +359,8 @@ embers.research.world.dials=表盘
 embers.research.world.dials.title=仔细测量
 embers.research.world.dials.desc=计量表是从机器中获取信息的一种简 单的方法。表盘主要有两种：灰烬能 量计量表和流体计量表。将它们附加 到各自的容器上后，当你指着表盘时 ，会显示该容器内的缓存和存储上限 。
 
+
+
 embers.research.mechanisms.melter=熔炼炉
 embers.research.mechanisms.melter.title=熔炼那些事
 embers.research.mechanisms.melter.desc=使用激活的灰烬能量，你设计了一种 可以熔炼金属的设备。熔炉会视其下 半部分的灰烬能量功率来熔炉熔炉中 的矿石或者物品。当供能后，如果物 品是可以被熔炼的，那么熔炉将会将 其熔炼为相应的液体形式，液体能被 泵出。在熔炉中放入物品的方法是： 在熔炉上方投掷物品、使用漏斗或其 他物品传输管道、或者将物品直接拿 在手中右键熔炉上方。
@@ -298,7 +395,7 @@ embers.research.mechanisms.breaker.desc=自动方块破坏器是一个非常简�
 
 embers.research.mechanisms.vacuum=虚空吸取器
 embers.research.mechanisms.vacuum.title=自动收集
-embers.research.mechanisms.vacuum.desc=虚空吸取器是手机掉落在地上的物品 的设备。只需要通入红石信号，它将 会把其开口前方大范围区域内的所有 物品吸入到其后方的存储容器或管道 里。
+embers.research.mechanisms.vacuum.desc=虚空吸取器是收集掉落在地上的物品 的设备。只需要通入红石信号，它将 会把其开口前方大范围区域内的所有 物品吸入到其后方的存储容器或管道 里。
 
 embers.research.mechanisms.dropper=物品投掷口
 embers.research.mechanisms.dropper.title=掉了下来
@@ -315,6 +412,8 @@ embers.research.mechanisms.emitters.desc=有两个名为灰烬能量发射器和
 embers.research.mechanisms.copper_cell=铜质灰烬能量单元
 embers.research.mechanisms.copper_cell.title=电容器
 embers.research.mechanisms.copper_cell.desc=铁框架内放置着缠绕着的铜线圈。铜 质灰烬能量单元作为最基础的灰烬电 容，可以存储少量的灰烬能量。能量 可以使用发射器提取。在被破坏会后 它不会保存内部存储的灰烬能量，能 量会在在打破或者更换时消散。
+
+
 
 embers.research.metallurgy.splitter=灰烬能量分束器
 embers.research.metallurgy.splitter.title=灰烬能量分裂法
@@ -368,6 +467,9 @@ embers.research.metallurgy.alchemy=积极有用的炼金术
 embers.research.metallurgy.alchemy.title=转化
 embers.research.metallurgy.alchemy.desc=灰烬炼金术是一个奇妙的发现。第一 个关键设备是炼金台：通过右键除了 底面以外的五个面来放入物品（或者 使用管道）。接下来是炼金基座，基 座上必须包含金属元素象征和一定量 的灰烬。你必须在炼金台中摆上正确 的配方，并在相应的元素象征中放入 确定范围数量的灰烬，最后，用光束 炮轰击炼金台以启动炼金仪式。
 
+embers.research.metallurgy.ejector=灰烬能量喷发器
+embers.research.metallurgy.ejector.title=输出增强
+embers.research.metallurgy.ejector.desc=普通的灰烬能量发射器是十分便利的 ，但是，有时你迫切需要更多的能量 吞吐。这时候，你就需要灰烬能量喷 发器。它的使用方法与灰烬能量发射 器完全相同，但是在同样的时间里， 吞吐的能量是普通的发射器的十倍。
 
 
 embers.research.alchemy.waste=实验法
@@ -410,10 +512,9 @@ embers.research.alchemy.combustor=燃烧室
 embers.research.alchemy.combustor.title=供奉牲礼
 embers.research.alchemy.combustor.desc=燃烧室是一个简单的设备，它功能很 少且相当简便，它可以燃烧燃料。 每种燃料都有特定的功率： 煤的功率为2， 地狱砖的功率为3， 烈焰粉的功率为4
 
-
 embers.research.alchemy.catalyzer=催化室
 embers.research.alchemy.catalyzer.title=化学能量
-embers.research.alchemy.catalyzer.desc=燃烧室是一个简单的设备，它功能很 少且相当简便，它可以使用催化剂物 品来催化。 每种催化剂都有特定的功率： 红石的功率为2， 火药的功率为3， 萤石粉的功率为4
+embers.research.alchemy.catalyzer.desc=催化室是一个简单的设备，它功能很 少且相当简便，它可以使用催化剂物 品来催化。 每种催化剂都有特定的功率： 红石的功率为2， 火药的功率为3， 萤石粉的功率为4
 
 embers.research.alchemy.reactor=高温催化反应器
 embers.research.alchemy.reactor.title=灰烬化学
@@ -422,6 +523,53 @@ embers.research.alchemy.reactor.desc=高温催化反应器是一种非常强大�
 embers.research.alchemy.materia=万用修复要素
 embers.research.alchemy.materia.title=通用修理材料
 embers.research.alchemy.materia.desc=万用修复要素是一种特殊的材料，它 具有在某种情况下转变为其他物质的 能力。它能在黎明石砧中，作为任意 修理材料的替换材料来修理工具。你 可以预见，它在未来将更有用……
+
+embers.research.smithing=强化锻造
+
+embers.research.smithing.modifiers=强化嵌入
+embers.research.smithing.modifiers.title=升级
+embers.research.smithing.modifiers.desc=您相信，通过足够先进的技术，您可 以制作为您的装备授予额外功能的设 备。这些物品在黎明石砧锤击后可以 应用于盔甲、工具或武器。将需要强 化的物品放入石砧，然后放入强化物 品，然后敲击。强化物品具有等级， 这将提高装备的力量。
+
+embers.research.smithing.heat=热量
+embers.research.smithing.heat.title=用旧了
+embers.research.smithing.heat.desc=就像您使用“黎明石砧”拆分物品或 修理物品一样，您也可以使用石砧将 附件物品附加到装备上。在砧上放一 把工具，剑或装甲，然后在砧上放置 一个太古动力核心。当锤子敲击完成时 ，该工具将获得吸收热量的能力。这 种热量是通过正常使用的工具产生的 ，热量条满后，需要炼狱锻造炉来处 理才能获得升级槽
+
+embers.research.smithing.inferno_forge=炼狱锻造炉
+embers.research.smithing.inferno_forge.title=等级再提升！
+embers.research.smithing.inferno_forge.desc=当物品的热量条达到满值后，如果你 想要增加强化槽。就必须控温。该设 备必须在下方中央部位提供灰烬能量 才能工作。打开上方的舱口，将你热 量条满了的物品和一些灰烬晶体一起 扔入仓内，灰烬晶体越多，成功率越 大（通常低级只需要一个）。它工作 时，周围的四个孔会冒出黑烟。一旦 成功，它的舱口会出现粒子效果并自 动打开。然后，工具会弹出并获得一 个升级强化槽。有了等级的工具，升 级物品可以在黎明石砧中嵌入，直到 这个物品的等级的上限。
+
+
+embers.research.smithing.superheater=热炙器
+embers.research.smithing.superheater.title=热力上升！
+embers.research.smithing.superheater.desc=热炙器是一个简单的升级，可以应用 于积累了热量的物品。嵌入这个升级 后，所有被拥有这个升级的工具挖掘 /杀死的方块/生物的掉落都会自动 烧炼并产生相应的物品损耗。升级的 等级越高，燃烧的伤害越高。需要携 带式灰烬能量才能运作。
+
+embers.research.smithing.cinder_jet=煤渣喷气机
+embers.research.smithing.cinder_jet.title=向前冲！
+embers.research.smithing.cinder_jet.desc=煤渣喷气机是一种装甲强化装置，可 以让你进行冲刺行动。当装备了有这 种升级的盔甲并且有足够的便携式灰 烬能量支持时，每当你按下快跑（两 下前进键），就可以向前冲刺一段距 离。等级越高，速度和距离越远（似 乎对船有效）。
+
+embers.research.smithing.blasting_core=爆破核心
+embers.research.smithing.blasting_core.title=挥发物
+embers.research.smithing.blasting_core.desc=爆破核心是造成爆炸的升级。当嵌入 到工具，使用工具挖掘方块后，它将 破坏附近的方块。当嵌入到武器时， 会发生爆炸并伤害附近的生物。当嵌 入到护甲时，当护甲受到损耗时，会 发生爆炸并吹开附近的生物。所有三 种效果都随着强化升级的等级的提高 而增加。
+
+embers.research.smithing.caster_orb=法师法球
+embers.research.smithing.caster_orb.title=灰烬能量启动！
+embers.research.smithing.caster_orb.desc=法师法球是一种工具和武器升级，它可 以使得具有这种升级的工具拥有发射 灰烬能量弹丸的能力。需要便携式灰 烬能量来启动。当使用（左键）这个 工具时，该工具就可以发射一个灰烬 能量弹丸。弹丸的发射间隔等同于工 具的复原时间。弹丸的尺寸和伤害随 升级的等级增加而增加
+
+embers.research.smithing.flame_barrier=烈焰屏障
+embers.research.smithing.flame_barrier.title=火焰风衣
+embers.research.smithing.flame_barrier.desc=烈焰屏障是一种装甲强化装置，在装 备了拥有这种升级的护甲并且拥有便 携式灰烬能量储备时，如果受到攻击 ，那么就会在玩家身上残绕烈焰保护 玩家。攻击到玩家的生物会着火并造 成一定伤害。伤害随升级的等级增加 而增加。
+
+embers.research.smithing.eldritch_insignia=恐怖徽章
+embers.research.smithing.eldritch_insignia.title=怪异标记
+embers.research.smithing.eldritch_insignia.desc=当怪异标记嵌入到你的盔甲时，某些 怪物会害怕你。你将获得恐吓怪物的 能力，怪物无法攻击你，除非你攻击 它们。恐惧这些符号持有人的怪物的 比例会随升级的等级增加而增加。
+
+embers.research.smithing.intelligent_apparatus=智械机关
+embers.research.smithing.intelligent_apparatus.title=堕落的智慧
+embers.research.smithing.intelligent_apparatus.desc=智械机关是一种简单的工具和武器的嵌 入升级。它可以提升使用工具和武器 而获得的经验的数量。增加的经验数 量随升级的等级增加而增加。
+
+embers.research.smithing.resonating_bell=共鸣之铃
+embers.research.smithing.resonating_bell.title=共振
+embers.research.smithing.resonating_bell.desc=共鸣之铃是嵌入到工具的升级。它能 通过拥有此升级的工具右键敲击某类 方块，使得附近的同类方块发光。共 鸣的范围随升级的等级增加而增加。
 
 embers.commands.fill.usage=/ember-fill <x>  <z> <set|add|que ry> ...
 embers.commands.fill.usage.add=/ember-fill <x>  <z> add <value>
