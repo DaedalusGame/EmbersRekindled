@@ -31,7 +31,7 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 	
 	public TileEntityLargeTank(){
 		super();
-		tank = new FluidTank(0){
+		tank = new FluidTank(Integer.MAX_VALUE){
 			@Override
 			public void onContentsChanged(){
 				TileEntityLargeTank.this.markDirty();
