@@ -394,28 +394,30 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 					EnumFacing face = blockConnections.get(i);
 					TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 					if (tile != null){
-						IItemHandler handler = getWorld().getTileEntity(getPos().offset(face)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
-						if (handler != null){
-							int slot = -1;
-							for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-								if (!handler.getStackInSlot(j).isEmpty()){
-									if (handler.getStackInSlot(j).getCount() > 0){
-										slot = j;
+						if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){
+							IItemHandler handler = getWorld().getTileEntity(getPos().offset(face)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
+							if (handler != null){
+								int slot = -1;
+								for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
+									if (!handler.getStackInSlot(j).isEmpty()){
+										if (handler.getStackInSlot(j).getCount() > 0){
+											slot = j;
+										}
 									}
 								}
-							}
-							if (slot != -1){
-								if (this.inventory.getStackInSlot(0).isEmpty()){
-									ItemStack extracted = handler.extractItem(slot, 1, false);
-									this.inventory.insertItem(0, extracted, false);
-									lastReceived = getPos().offset(face);
-									if (!toUpdate.contains(getPos().offset(face))){
-										toUpdate.add(getPos().offset(face));
+								if (slot != -1){
+									if (this.inventory.getStackInSlot(0).isEmpty()){
+										ItemStack extracted = handler.extractItem(slot, 1, false);
+										this.inventory.insertItem(0, extracted, false);
+										lastReceived = getPos().offset(face);
+										if (!toUpdate.contains(getPos().offset(face))){
+											toUpdate.add(getPos().offset(face));
+										}
+										if (!toUpdate.contains(getPos())){
+											toUpdate.add(getPos());
+										}
+										takenItems = true;
 									}
-									if (!toUpdate.contains(getPos())){
-										toUpdate.add(getPos());
-									}
-									takenItems = true;
 								}
 							}
 						}
@@ -428,12 +430,12 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 							EnumFacing face = connections.get(random.nextInt(connections.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile instanceof TileEntityItemPipe){
+								IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 								if (((TileEntityItemPipe)tile).pressure != Math.max(0, pressure-1)){
 									((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
 									IBlockState state = getWorld().getBlockState(getPos().offset(face));
 									toUpdate.add(pos.offset(face));
 								}
-								IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 								if (handler != null){
 									ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
 									if (inventory.getStackInSlot(0).hasTagCompound()){

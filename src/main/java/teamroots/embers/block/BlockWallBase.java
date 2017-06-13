@@ -12,6 +12,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
@@ -29,6 +32,11 @@ public class BlockWallBase extends BlockWall implements IModeledBlock {
 		GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
     }
+	
+	@Override
+	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos){
+		return true;
+	}
 	
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){

@@ -168,7 +168,7 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 				|| stack1.getItem().isRepairable() && stack2.getItem() == RegistryManager.isolated_materia){
 			return true;
 		}
-		if (Misc.getRepairItem(stack1).isEmpty() && stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2.isEmpty()){
+		if (!Misc.getRepairItem(stack1).isEmpty() && stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2.isEmpty()){
 			return true;
 		}
 		return false;

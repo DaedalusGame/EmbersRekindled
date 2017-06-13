@@ -52,7 +52,7 @@ public class ModifierEldritchInsignia extends ModifierBase {
 					|| event.getEntityLiving().getLastDamageSource() != null && event.getEntityLiving().getLastDamageSource().getEntity() != null && event.getEntityLiving().getLastDamageSource().getEntity().getUniqueID().compareTo(event.getTarget().getUniqueID()) != 0
 					) 
 					&& event.getEntity().getEntityId() % (3+level) >= 2){
-				if (level > 0){
+				if (level > 0 && !(event.getEntityLiving() instanceof EntityPlayer)/* || event.getEntityLiving() instanceof EntityPlayer && ((EntityPlayer)event.getEntityLiving()).getGameProfile().getName().compareToIgnoreCase("yrsegal") == 0*/){
 					((EntityLiving)event.getEntityLiving()).setAttackTarget(null);
 					//EmberInventoryUtil.removeEmber((EntityPlayer)event.getTarget(), cost);
 				}

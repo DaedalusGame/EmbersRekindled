@@ -4,9 +4,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -26,6 +29,11 @@ public class BlockAdvancedEdge extends BlockBase {
 	
 	public BlockAdvancedEdge(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
+	}
+
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
+		
 	}
 	
 	@Override

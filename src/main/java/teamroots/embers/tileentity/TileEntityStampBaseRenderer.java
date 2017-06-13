@@ -49,63 +49,65 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 		            diffU = maxU-minU;
 		            diffV = maxV-minV;
 		            
-		            minU = sprite.getMinU()+diffU*0.25;
-		            maxU = sprite.getMaxU()-diffU*0.25;
-		            minV = sprite.getMinV()+diffV*0.25;
-		            maxV = sprite.getMaxV()-diffV*0.25;
-		            
-		            int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
-		            lightx = i >> 0x10 & 0xFFFF;
-		            lighty = i & 0xFFFF;
-		            
-		            GlStateManager.disableCull();
-		            GlStateManager.disableLighting();
-		            GlStateManager.enableBlend();
-		            GlStateManager.enableAlpha();
-		            
-		            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		            
-					GL11.glPushMatrix();
-					GL11.glTranslated(x, y, z);
-					GL11.glTranslated(0.5, 0.5, 0.5);
-					if (face == EnumFacing.UP){
-						GL11.glRotated(180, 1, 0, 0);
-					}
-					
-					if (face == EnumFacing.NORTH){
-						GL11.glRotated(90, 1, 0, 0);
-					}
-					
-					if (face == EnumFacing.WEST){
-						GL11.glRotated(90, 0, 1, 0);
-						GL11.glRotated(90, 1, 0, 0);
-					}
-					
-					if (face == EnumFacing.SOUTH){
-						GL11.glRotated(180, 0, 1, 0);
-						GL11.glRotated(90, 1, 0, 0);
-					}
-					
-					if (face == EnumFacing.EAST){
-						GL11.glRotated(270, 0, 1, 0);
-						GL11.glRotated(90, 1, 0, 0);
-					}
-					GL11.glTranslated(-0.5, -0.5, -0.5);
-					
-		            Tessellator tess = Tessellator.getInstance();
-		            VertexBuffer buffer = tess.getBuffer();
-		            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
-		            buffer.pos(0.25, 0.75+0.1875*((float)amount/(float)capacity), 0.25).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					buffer.pos(0.75, 0.75+0.1875*((float)amount/(float)capacity), 0.25).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					buffer.pos(0.75, 0.75+0.1875*((float)amount/(float)capacity), 0.75).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					buffer.pos(0.25, 0.75+0.1875*((float)amount/(float)capacity), 0.75).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					tess.draw();
-					GL11.glPopMatrix();
-					
-					GlStateManager.disableAlpha();
-					GlStateManager.disableBlend();
-					GlStateManager.enableLighting();
-					GlStateManager.enableCull();
+		            if (sprite != null){
+			            minU = sprite.getMinU()+diffU*0.25;
+			            maxU = sprite.getMaxU()-diffU*0.25;
+			            minV = sprite.getMinV()+diffV*0.25;
+			            maxV = sprite.getMaxV()-diffV*0.25;
+			            
+			            int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
+			            lightx = i >> 0x10 & 0xFFFF;
+			            lighty = i & 0xFFFF;
+			            
+			            GlStateManager.disableCull();
+			            GlStateManager.disableLighting();
+			            GlStateManager.enableBlend();
+			            GlStateManager.enableAlpha();
+			            
+			            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			            
+						GL11.glPushMatrix();
+						GL11.glTranslated(x, y, z);
+						GL11.glTranslated(0.5, 0.5, 0.5);
+						if (face == EnumFacing.UP){
+							GL11.glRotated(180, 1, 0, 0);
+						}
+						
+						if (face == EnumFacing.NORTH){
+							GL11.glRotated(90, 1, 0, 0);
+						}
+						
+						if (face == EnumFacing.WEST){
+							GL11.glRotated(90, 0, 1, 0);
+							GL11.glRotated(90, 1, 0, 0);
+						}
+						
+						if (face == EnumFacing.SOUTH){
+							GL11.glRotated(180, 0, 1, 0);
+							GL11.glRotated(90, 1, 0, 0);
+						}
+						
+						if (face == EnumFacing.EAST){
+							GL11.glRotated(270, 0, 1, 0);
+							GL11.glRotated(90, 1, 0, 0);
+						}
+						GL11.glTranslated(-0.5, -0.5, -0.5);
+						
+			            Tessellator tess = Tessellator.getInstance();
+			            VertexBuffer buffer = tess.getBuffer();
+			            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+			            buffer.pos(0.25, 0.75+0.1875*((float)amount/(float)capacity), 0.25).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+						buffer.pos(0.75, 0.75+0.1875*((float)amount/(float)capacity), 0.25).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+						buffer.pos(0.75, 0.75+0.1875*((float)amount/(float)capacity), 0.75).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+						buffer.pos(0.25, 0.75+0.1875*((float)amount/(float)capacity), 0.75).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+						tess.draw();
+						GL11.glPopMatrix();
+						
+						GlStateManager.disableAlpha();
+						GlStateManager.disableBlend();
+						GlStateManager.enableLighting();
+						GlStateManager.enableCull();
+		            }
 				}
 				if (tank.inputs.getStackInSlot(0) != ItemStack.EMPTY){
 					GL11.glPushMatrix();

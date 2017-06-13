@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //_only edit below this line, the above code adds and enables the necessary things for _forge to be setup.
 
 
-version = "0.214"
+version = "0.215"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "embers"
 

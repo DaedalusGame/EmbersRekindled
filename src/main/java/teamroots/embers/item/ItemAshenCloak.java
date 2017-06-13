@@ -53,7 +53,7 @@ public class ItemAshenCloak extends ItemArmorBase {
 					if (gem.hasTagCompound()){
 						if (gem.getTagCompound().hasKey("type")){
 							if (gem.getTagCompound().getString("type").compareTo(source.getDamageType()) == 0){
-								mult += 0.15f;
+								mult += 0.35f;
 							}
 						}
 					}

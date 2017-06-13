@@ -41,7 +41,7 @@ public class ModifierFlameBarrier extends ModifierBase {
 			float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
 			if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(((EntityPlayer)event.getEntity())) >= cost){
 				EmberInventoryUtil.removeEmber(((EntityPlayer)event.getEntity()), cost);
-				((EntityLivingBase)event.getSource().getEntity()).attackEntityFrom(RegistryManager.damage_ember.causePlayerDamage((EntityPlayer)event.getEntity()), strength*event.getAmount()*0.5f);
+				((EntityLivingBase)event.getSource().getEntity()).attackEntityFrom(RegistryManager.damage_ember, strength*event.getAmount()*0.5f);
 				((EntityLivingBase)event.getSource().getEntity()).setFire(blastingLevel+1);
 				if (!event.getEntity().world.isRemote){
 					PacketHandler.INSTANCE.sendToAll(new MessageFlameShieldFX(event.getEntity().posX,event.getEntity().posY+event.getEntity().height/2.0,event.getEntity().posZ));

@@ -97,7 +97,7 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public void update() {
 		ticksExisted ++;
-		if (ticksExisted % 20 == 0){
+		if (ticksExisted % 20 == 0 && world.isBlockIndirectlyGettingPowered(getPos()) == 0){
 			IBlockState state = world.getBlockState(getPos());
 			IBlockState target = world.getBlockState(pos.offset(state.getValue(BlockBreaker.facing)));
 			if (!(target.getBlock() instanceof BlockLiquid) && target.getBlockHardness(getWorld(), getPos().offset(state.getValue(BlockBreaker.facing))) != -1){

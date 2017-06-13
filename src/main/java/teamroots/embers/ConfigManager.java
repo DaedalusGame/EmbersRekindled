@@ -5,6 +5,8 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigManager {
 
@@ -16,6 +18,7 @@ public class ConfigManager {
 					silverVeinSize, silverMinY, silverMaxY, silverVeinsPerChunk,
 					quartzVeinSize, quartzMinY, quartzMaxY, quartzVeinsPerChunk,
 					ancientGolemSpawnWeight;
+	public static List<Integer> orespawnBlacklist = new ArrayList<Integer>();
 	
 	//STRUCTURES
 	public static int smallRuinChance;
@@ -38,6 +41,11 @@ public class ConfigManager {
 	public static void load()
 	{
 		config.addCustomCategoryComment("ores", "Settings related to ore generation.");
+		
+		String[] strings = config.getStringList("oreBlacklist", "ores", new String[]{"-1","1"}, "A list of all dimension IDs in which Embers orespawn is prohibited. Embers ores will spawn in any dimension not on this list, but only in vanilla stone.");
+		for (String s : strings){
+			orespawnBlacklist.add(Integer.valueOf(s));
+		}
 		
 		copperVeinSize = config.getInt("copperVeinSize", "ores", 12, 0, 255, "Maximum size of a copper ore vein (in blocks)");
 		copperMinY = config.getInt("copperMinY", "ores", 0, 0, 255, "Minimum height over which copper ore will spawn.");

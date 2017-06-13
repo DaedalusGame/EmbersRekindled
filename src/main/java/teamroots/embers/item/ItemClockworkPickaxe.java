@@ -31,7 +31,7 @@ import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmberChargedTool {
 
-	public static ToolMaterial materialClockworkPickaxe = EnumHelper.addToolMaterial(Embers.MODID+":clockworkPickaxe", 3, -1, 12.0f, 4.0f, 15);
+	public static ToolMaterial materialClockworkPickaxe = EnumHelper.addToolMaterial(Embers.MODID+":clockworkPickaxe", 3, -1, 16.0f, 4.0f, 15);
 	
 	public ItemClockworkPickaxe(String name, boolean addToTab) {
 		super(materialClockworkPickaxe,Sets.newHashSet(new Block[]{Blocks.STONE}));
@@ -97,16 +97,13 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		return true;
 	}
 	
-	/*@Override
+	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack){
-		if (state.getBlock().getHarvestLevel(state) <= 3 && state.getBlock().getHarvestTool(state) != null || state.getBlock().getHarvestLevel(state) < 1){
-			String tool = state.getBlock().getHarvestTool(state);
-			if (tool != null){
-				return tool.compareTo("pickaxe") == 0 || tool.compareTo("shovel") == 0;
-			}
+		if (state.getBlock().getHarvestLevel(state) > 3 || state.getBlock().getHarvestTool(state) != null && !state.getBlock().getHarvestTool(state).equals("pickaxe") && !state.getBlock().getHarvestTool(state).equals("shovel") && state.getBlock().getHarvestLevel(state) > -1 && !state.getMaterial().isToolNotRequired()){
+			return false;
 		}
-		return false;
-	}*/
+		return true;
+	}
 	
 	@Override
 	public boolean isEnchantable(ItemStack stack){

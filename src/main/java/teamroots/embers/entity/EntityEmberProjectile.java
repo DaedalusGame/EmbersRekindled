@@ -127,26 +127,27 @@ public class EntityEmberProjectile extends Entity implements ILightProvider {
 				}
 			}
 			if (entities.size() > 0){
-				EntityLivingBase target = entities.get(0);
-				DamageSource source = RegistryManager.damage_ember;
-				if (getEntityWorld().getPlayerEntityByUUID(id) != null){
-					EntityPlayer player = getEntityWorld().getPlayerEntityByUUID(id);
-					source = DamageSource.causePlayerDamage(player);
-					target.setFire(1);
-					target.attackEntityFrom(source, getDataManager().get(value));
-					target.setLastAttacker(player);
-					target.setRevengeTarget(player);
-					target.knockBack(this, 0.5f, -motionX, -motionZ);
-				}
-				else {
-					target.attackEntityFrom(source, getDataManager().get(value));
-				}
-				if (!getEntityWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
-					getDataManager().set(lifetime, 20);
-					getDataManager().setDirty(lifetime);
-					this.getDataManager().set(dead, true);
-					getDataManager().setDirty(dead);
+				for (EntityLivingBase target : entities){
+					DamageSource source = RegistryManager.damage_ember;
+					if (getEntityWorld().getPlayerEntityByUUID(id) != null){
+						EntityPlayer player = getEntityWorld().getPlayerEntityByUUID(id);
+						source = DamageSource.causePlayerDamage(player);
+						target.setFire(1);
+						target.attackEntityFrom(source, getDataManager().get(value));
+						target.setLastAttacker(player);
+						target.setRevengeTarget(player);
+						target.knockBack(this, 0.5f, -motionX, -motionZ);
+					}
+					else {
+						target.attackEntityFrom(source, getDataManager().get(value));
+					}
+					if (!getEntityWorld().isRemote){
+						PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
+						getDataManager().set(lifetime, 20);
+						getDataManager().setDirty(lifetime);
+						this.getDataManager().set(dead, true);
+						getDataManager().setDirty(dead);
+					}
 				}
 			}
 		}

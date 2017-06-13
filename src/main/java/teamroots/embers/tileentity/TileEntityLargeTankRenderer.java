@@ -43,44 +43,46 @@ public class TileEntityLargeTankRenderer extends TileEntitySpecialRenderer {
 	            diffU = maxU-minU;
 	            diffV = maxV-minV;
 	            
-	            minU = sprite.getMinU();
-	            maxU = sprite.getMaxU();
-	            minV = sprite.getMinV();
-	            maxV = sprite.getMaxV();
-	            
-	            int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
-	            lightx = i >> 0x10 & 0xFFFF;
-	            lighty = i & 0xFFFF;
-	            
-	            GlStateManager.disableCull();
-	            GlStateManager.disableLighting();
-	            GlStateManager.enableBlend();
-	            GlStateManager.enableAlpha();
-	            
-	            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-	            Tessellator tess = Tessellator.getInstance();
-	            VertexBuffer buffer = tess.getBuffer();
-	            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
-	            buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-				tess.draw();
-				
-				GlStateManager.disableBlend();
-				GlStateManager.enableLighting();
+	            if (sprite != null){
+		            minU = sprite.getMinU();
+		            maxU = sprite.getMaxU();
+		            minV = sprite.getMinV();
+		            maxV = sprite.getMaxV();
+		            
+		            int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
+		            lightx = i >> 0x10 & 0xFFFF;
+		            lighty = i & 0xFFFF;
+		            
+		            GlStateManager.disableCull();
+		            GlStateManager.disableLighting();
+		            GlStateManager.enableBlend();
+		            GlStateManager.enableAlpha();
+		            
+		            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		            Tessellator tess = Tessellator.getInstance();
+		            VertexBuffer buffer = tess.getBuffer();
+		            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+		            buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z-0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+1.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+0.5).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x+0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+					tess.draw();
+					
+					GlStateManager.disableBlend();
+					GlStateManager.enableLighting();
+	            }
 			}
 		}
 	}

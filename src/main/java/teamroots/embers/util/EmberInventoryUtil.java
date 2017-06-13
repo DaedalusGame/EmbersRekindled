@@ -3,6 +3,8 @@ package teamroots.embers.util;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.MinecraftForge;
+import teamroots.embers.event.EmberRemoveEvent;
 import teamroots.embers.item.IEmberItem;
 import teamroots.embers.item.IHeldEmberCell;
 import teamroots.embers.item.IInventoryEmberCell;
@@ -54,7 +56,9 @@ public class EmberInventoryUtil {
 	}
 	
 	public static void removeEmber(EntityPlayer player, double amount){
-		double temp = amount;
+		EmberRemoveEvent event = new EmberRemoveEvent(player,amount);
+		MinecraftForge.EVENT_BUS.post(event);
+		double temp = event.getFinal();
 		
 		if (player.getHeldItem(EnumHand.OFF_HAND) != ItemStack.EMPTY){
 			if (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHeldEmberCell && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEmberItem){

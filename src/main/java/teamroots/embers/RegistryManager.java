@@ -307,7 +307,7 @@ public class RegistryManager {
 		items.add(ashen_cloak_boots = new ItemAshenCloak(armor_mat_ashen_cloak, 3, EntityEquipmentSlot.FEET));
 		items.add(inflictor_gem = new ItemInflictorGem());
 		items.add(glimmer_shard = new ItemGlimmerShard());
-		items.add(glimmer_lamp = new ItemGlimmerLamp());
+		//items.add(glimmer_lamp = new ItemGlimmerLamp());
 		items.add(ashen_cloth = new ItemBase("ashen_cloth",true));
 		items.add(archaic_brick = new ItemBase("archaic_brick",true));
 		items.add(ancient_motive_core = new ItemBase("ancient_motive_core",true));
@@ -326,10 +326,10 @@ public class RegistryManager {
 		items.add(eldritch_insignia = new ItemBase("eldritch_insignia",true));
 		items.add(intelligent_apparatus = new ItemBase("intelligent_apparatus",true));
 		items.add(archaic_circuit = new ItemBase("archaic_circuit",true));
-		/*items.add(ember_ring = new ItemEmberRing("ember_ring",true));
+		items.add(ember_ring = new ItemEmberRing("ember_ring",true));
 		items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
 		items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
-		items.add(mantle_bulb = new ItemEmberBulb());*/
+		//items.add(mantle_bulb = new ItemEmberBulb());
 		
 		if (ConfigManager.enableAluminum){
 			tool_mat_aluminum = EnumHelper.addToolMaterial(Embers.MODID+":aluminum", 2, 220, 5.2f, 1.5f, 14);

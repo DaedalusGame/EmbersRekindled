@@ -31,7 +31,7 @@ import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemClockworkAxe extends ItemTool implements IModeledItem, IEmberChargedTool {
 
-	public static ToolMaterial materialClockworkAxe = EnumHelper.addToolMaterial(Embers.MODID+":clockworkAxe", 3, -1, 12.0f, 5.0f, 15);
+	public static ToolMaterial materialClockworkAxe = EnumHelper.addToolMaterial(Embers.MODID+":clockworkAxe", 3, -1, 16.0f, 5.0f, 15);
 	
 	public ItemClockworkAxe(String name, boolean addToTab) {
 		super(materialClockworkAxe,Sets.newHashSet(new Block[]{Blocks.PLANKS}));

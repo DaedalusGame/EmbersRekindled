@@ -14,9 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 import teamroots.embers.ConfigManager;
+import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.item.EnumStampType;
 
@@ -152,6 +155,9 @@ public class RecipeRegistry {
 	}
 	
 	public static void init(){
+		RecipeSorter.register(Embers.MODID+":ashen_cloak_socket", AshenCloakSocketRecipe.class, Category.SHAPELESS, "");
+		RecipeSorter.register(Embers.MODID+":ashen_cloak_unsocket", AshenCloakUnsocketRecipe.class, Category.SHAPELESS, "");
+		
 		initOreDict();
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.crystal_ember,1),true,new Object[]{
 				"XXX",
@@ -715,13 +721,6 @@ public class RecipeRegistry {
 				"C C",
 				"C C",
 				'C', RegistryManager.ashen_cloth}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.glimmer_lamp,1),true,new Object[]{
-				" P ",
-				"IGI",
-				" P ",
-				'G', RegistryManager.glimmer_shard,
-				'I', "ingotIron",
-				'P', "plateIron"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.sealed_planks,8),true,new Object[]{
 				"PPP",
 				"PSP",
@@ -904,6 +903,27 @@ public class RecipeRegistry {
 				'E', RegistryManager.ember_emitter,
 				'I', "ingotIron",
 				'D', "plateDawnstone"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_ring,1),true,new Object[]{
+				"CN ",
+				"N N",
+				" N ", 
+				'C', RegistryManager.ember_cluster,
+				'N', "nuggetDawnstone"}).setMirrored(true));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_amulet,1),true,new Object[]{
+				" L ",
+				"L L",
+				"NCN", 
+				'C', RegistryManager.ember_cluster,
+				'N', "nuggetDawnstone",
+				'L', Items.LEATHER}).setMirrored(true));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ember_belt,1),true,new Object[]{
+				"LIL",
+				"L L",
+				"PCP", 
+				'C', RegistryManager.ember_cluster,
+				'I', "ingotDawnstone",
+				'P', "plateDawnstone",
+				'L', Items.LEATHER}).setMirrored(true));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		

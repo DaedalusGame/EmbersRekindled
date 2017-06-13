@@ -620,7 +620,8 @@ public class EventManager {
 		if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
 			List<TileEntity> tiles = event.world.loadedTileEntityList;
 			NBTTagList list = new NBTTagList();
-			for (TileEntity t : tiles){
+			for (int i = 0; i < tiles.size(); i ++){
+				TileEntity t = tiles.get(Math.max(tiles.size()-1, i));
 				if (t instanceof ITileEntityBase){
 					if (((ITileEntityBase)t).needsUpdate()){
 						((ITileEntityBase)t).clean();
@@ -628,7 +629,9 @@ public class EventManager {
 					}
 				}
 			}
-			for (TileEntity t : toUpdate.values()){
+			TileEntity[] updateArray = toUpdate.values().toArray(new TileEntity[toUpdate.size()]);
+			for (int i = 0; i < updateArray.length; i ++){
+				TileEntity t = updateArray[i];
 				if (!event.world.isRemote){
 					list.appendTag(t.getUpdateTag());
 				}

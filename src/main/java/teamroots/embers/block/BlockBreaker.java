@@ -53,7 +53,7 @@ public class BlockBreaker extends BlockTEBase {
 	
 	@Override
 	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return side == state.getValue(facing);
+		return side != state.getValue(facing);
 	}
 
 	@Override
