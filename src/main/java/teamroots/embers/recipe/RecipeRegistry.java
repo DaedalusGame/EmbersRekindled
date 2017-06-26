@@ -326,7 +326,7 @@ public class RecipeRegistry {
 				"SAS",
 				" S ",
 				'S', "stone",
-				'A', RegistryManager.dust_ash}));
+				'A', "dustAsh"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_stone_slab,6),true,new Object[]{
 				"XXX",
 				'X', RegistryManager.ashen_stone}));
@@ -344,7 +344,7 @@ public class RecipeRegistry {
 				"SAS",
 				" S ",
 				'S', Blocks.STONEBRICK,
-				'A', RegistryManager.dust_ash}));
+				'A', "dustAsh"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_brick,4),true,new Object[]{
 				"SS",
 				"SS",

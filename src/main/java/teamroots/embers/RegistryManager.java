@@ -491,6 +491,8 @@ public class RegistryManager {
 		GameRegistry.registerWorldGenerator(world_gen_small_ruin = new WorldGenSmallRuin(), weight ++);
 		
 		OreDictionary.registerOre("nuggetIron", nugget_iron);
+		OreDictionary.registerOre("dustAsh", dust_ash);
+		OreDictionary.registerOre("dustAshes", dust_ash);
 		
 		//GameRegistry.register(biomeCave = new BiomeCave());
 		
