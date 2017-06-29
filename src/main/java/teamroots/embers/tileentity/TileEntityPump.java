@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import teamroots.embers.EventManager;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPump.EnumPipeConnection;
@@ -183,6 +184,12 @@ public class TileEntityPump extends TileEntityPipe implements ITileEntityBase, I
 		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
 			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
 			if (face == side){
+				return EnumPipeConnection.LEVER;
+			}
+		}
+		else if (world.getBlockState(pos).getBlock() == RegistryManager.caminite_lever){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
+			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
 				return EnumPipeConnection.LEVER;
 			}
 		}

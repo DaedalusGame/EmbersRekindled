@@ -90,6 +90,7 @@ tile.reactor.name=Ignem Reactor
 tile.field_chart.name=Field Chart
 tile.ember_pulser.name=Ember Ejector
 tile.inferno_forge.name=Inferno Forge
+tile.caminite_lever.name=Caminite Lever
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold

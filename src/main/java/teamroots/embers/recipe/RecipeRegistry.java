@@ -924,6 +924,11 @@ public class RecipeRegistry {
 				'I', "ingotDawnstone",
 				'P', "plateDawnstone",
 				'L', Items.LEATHER}).setMirrored(true));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.caminite_lever,4),true,new Object[]{
+				"S",
+				"P", 
+				'S', "stickWood",
+				'P', new ItemStack(RegistryManager.plate_caminite)}));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		
