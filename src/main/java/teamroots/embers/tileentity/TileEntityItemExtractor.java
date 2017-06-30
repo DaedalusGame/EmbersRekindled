@@ -33,11 +33,11 @@ import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPipe.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
-public class TileEntityItemPump extends TileEntity implements ITileEntityBase, ITickable, IPressurizable {
+public class TileEntityItemExtractor extends TileEntity implements ITileEntityBase, ITickable, IPressurizable {
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
-        	TileEntityItemPump.this.markDirty();
+        	TileEntityItemExtractor.this.markDirty();
         }
 	};
 	public BlockPos lastReceived = new BlockPos(0,0,0);
@@ -65,7 +65,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 	
 	public EnumPipeConnection up = EnumPipeConnection.NONE, down = EnumPipeConnection.NONE, north = EnumPipeConnection.NONE, south = EnumPipeConnection.NONE, east = EnumPipeConnection.NONE, west = EnumPipeConnection.NONE;
 	
-	public TileEntityItemPump(){
+	public TileEntityItemExtractor(){
 		super();
 	}
 	
@@ -188,10 +188,10 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 		if (getConnection(side) == EnumPipeConnection.FORCENONE){
 			return EnumPipeConnection.FORCENONE;
 		}
-		if (world.getTileEntity(pos) instanceof TileEntityItemPipe && !(world.getTileEntity(pos) instanceof TileEntityItemPump)){
+		if (world.getTileEntity(pos) instanceof TileEntityItemPipe && !(world.getTileEntity(pos) instanceof TileEntityItemExtractor)){
 			return EnumPipeConnection.PIPE;
 		}
-		else if (world.getTileEntity(pos) != null && !(world.getTileEntity(pos) instanceof TileEntityItemPump)){
+		else if (world.getTileEntity(pos) != null && !(world.getTileEntity(pos) instanceof TileEntityItemExtractor)){
 			if (world.getTileEntity(pos).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)){
 				return EnumPipeConnection.BLOCK;
 			}
@@ -325,9 +325,9 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 				return true;
 			}
 		}
-		if (tile instanceof TileEntityItemPump){
-			if (((TileEntityItemPump)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.FORCENONE
-					&& ((TileEntityItemPump)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.NONE){
+		if (tile instanceof TileEntityItemExtractor){
+			if (((TileEntityItemExtractor)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.FORCENONE
+					&& ((TileEntityItemExtractor)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.NONE){
 				return true;
 			}
 		}
@@ -388,13 +388,13 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 			if (west == EnumPipeConnection.BLOCK){
 				blockConnections.add(EnumFacing.WEST);
 			}
-			for (int k = 0; k < 1; k ++){
+			//for (int k = 0; k < 1; k ++){
 				boolean takenItems = false;
 				for (int i = 0; i < blockConnections.size() && !takenItems; i ++){
 					EnumFacing face = blockConnections.get(i);
 					TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 					if (tile != null){
-						if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){
+						if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())){
 							IItemHandler handler = getWorld().getTileEntity(getPos().offset(face)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 							if (handler != null){
 								int slot = -1;
@@ -425,7 +425,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 				}
 				
 				if (connections.size() > 0){
-					for (int i = 0; i < 1; i ++){
+					//for (int i = 0; i < 1; i ++){
 						if (!inventory.getStackInSlot(0).isEmpty()){
 							EnumFacing face = connections.get(random.nextInt(connections.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
@@ -472,13 +472,14 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 								}
 							}
 						}
-					}
+					//}
 				}
-			}
+			//}
 			for (int i = 0; i < toUpdate.size(); i ++){
 				TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
 				tile.markDirty();
 				if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+					tile.markDirty();
 					EventManager.markTEForUpdate(toUpdate.get(i),tile);
 				}
 			}
@@ -499,17 +500,7 @@ public class TileEntityItemPump extends TileEntity implements ITileEntityBase, I
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

@@ -15,7 +15,6 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void preInit(FMLPreInitializationEvent event){
 		super.preInit(event);
-		ShaderUtil.init();
 		ModelManager.init();
 		RegistryManager.registerRendering();
 	}

@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.Misc;
@@ -28,8 +29,6 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
-            // We need to tell the tile entity that something has changed so
-            // that the chest contents is persisted
         	TileEntityDropper.this.markDirty();
         }
 	};
@@ -80,17 +79,7 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override
@@ -122,7 +111,7 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 
 	@Override
 	public void update() {
-		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && !getWorld().isRemote){
+		if (!inventory.getStackInSlot(0).isEmpty() && !getWorld().isRemote){
 			ItemStack stack = inventory.extractItem(0, 1, false);
 			EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY(),getPos().getZ()+0.5,stack);
 			item.motionX = 0;

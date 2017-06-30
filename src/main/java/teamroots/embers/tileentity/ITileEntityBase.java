@@ -14,8 +14,4 @@ public interface ITileEntityBase {
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player);
 	
 	public void markForUpdate();
-	
-	public boolean needsUpdate();
-	
-	public void clean();
 }

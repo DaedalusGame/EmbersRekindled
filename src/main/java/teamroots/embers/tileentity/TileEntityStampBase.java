@@ -25,6 +25,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockStampBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -156,17 +157,7 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

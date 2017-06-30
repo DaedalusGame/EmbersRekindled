@@ -61,10 +61,10 @@ public class BlockAlchemyPedestal extends BlockTEBase {
 			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
 		}
 		IBlockState state = world.getBlockState(pos);
-		if (this.getMetaFromState(state) == 1){
+		if (this.getMetaFromState(state) == 1 && world.getTileEntity(pos) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world,pos,state,null);
 		}
-		else {
+		else if (world.getTileEntity(pos.up()) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos.up())).breakBlock(world,pos,state,null);
 		}
 		if (this.getMetaFromState(state) == 0){
@@ -98,10 +98,10 @@ public class BlockAlchemyPedestal extends BlockTEBase {
 				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
 			}
 		}
-		if (this.getMetaFromState(state) == 1){
+		if (this.getMetaFromState(state) == 1 && world.getTileEntity(pos) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world,pos,state,player);
 		}
-		else {
+		else if (world.getTileEntity(pos.up()) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos.up())).breakBlock(world,pos,state,player);
 		}
 		if (this.getMetaFromState(state) == 0){

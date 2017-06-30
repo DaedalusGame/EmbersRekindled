@@ -30,7 +30,7 @@ import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityActivatorBottom;
 import teamroots.embers.tileentity.TileEntityActivatorTop;
 import teamroots.embers.tileentity.TileEntityCombustor;
-import teamroots.embers.tileentity.TileEntityPipe;
+import teamroots.embers.tileentity.TileEntityFluidPipe;
 
 public class BlockCombustor extends BlockTEBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,1,1);

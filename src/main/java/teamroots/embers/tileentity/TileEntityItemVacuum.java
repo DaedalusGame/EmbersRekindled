@@ -212,6 +212,7 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
 			tile.markDirty();
 			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+				tile.markDirty();
 				EventManager.markTEForUpdate(toUpdate.get(i),tile);
 			}
 		}
@@ -236,17 +237,7 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

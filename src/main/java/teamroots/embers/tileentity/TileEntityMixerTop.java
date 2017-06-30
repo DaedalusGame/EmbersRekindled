@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -93,17 +94,7 @@ public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityB
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

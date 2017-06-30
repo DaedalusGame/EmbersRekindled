@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import elucent.albedo.lighting.ILightProvider;
-import elucent.albedo.lighting.Light;
+//import elucent.albedo.lighting.ILightProvider;
+//import elucent.albedo.lighting.Light;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,8 +27,8 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSizedBurstFX;
 import teamroots.embers.particle.ParticleUtil;
 
-@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
-public class EntityEmberProjectile extends Entity implements ILightProvider {
+//@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
+public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ {
     public static final DataParameter<Float> value = EntityDataManager.<Float>createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
     public static final DataParameter<Boolean> dead = EntityDataManager.<Boolean>createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> lifetime = EntityDataManager.<Integer>createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
@@ -158,12 +158,12 @@ public class EntityEmberProjectile extends Entity implements ILightProvider {
 		}
 	}
 
-	@Method(modid = "albedo")
+	/*@Method(modid = "albedo")
 	@Override
 	public Light provideLight() {
 		if (getDataManager().get(dead)){
 			return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.5f,0.0625f,1.0f,(getDataManager().get(value)/2.625f) * ((float)getDataManager().get(lifetime)/20f));
 		}
 		return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.5f,0.0625f,1.0f,(getDataManager().get(value)/2.625f));
-	}
+	}*/
 }

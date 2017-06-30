@@ -14,6 +14,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import teamroots.embers.EventManager;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -66,17 +67,7 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

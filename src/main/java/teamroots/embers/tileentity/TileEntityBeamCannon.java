@@ -24,6 +24,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockBeamCannon;
 import teamroots.embers.block.BlockEmberEmitter;
@@ -104,17 +105,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

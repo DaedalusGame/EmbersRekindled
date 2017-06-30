@@ -39,6 +39,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockBreaker;
 import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.block.BlockVacuum;
@@ -137,17 +138,7 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

@@ -618,17 +618,7 @@ public class EventManager {
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event){
 		if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
-			List<TileEntity> tiles = event.world.loadedTileEntityList;
 			NBTTagList list = new NBTTagList();
-			for (int i = 0; i < tiles.size(); i ++){
-				TileEntity t = tiles.get(Math.min(tiles.size()-1, i));
-				if (t instanceof ITileEntityBase){
-					if (((ITileEntityBase)t).needsUpdate()){
-						((ITileEntityBase)t).clean();
-						list.appendTag(t.getUpdateTag());
-					}
-				}
-			}
 			TileEntity[] updateArray = toUpdate.values().toArray(new TileEntity[toUpdate.size()]);
 			for (int i = 0; i < updateArray.length; i ++){
 				TileEntity t = updateArray[i];

@@ -101,7 +101,7 @@ public class BlockEmberGauge extends BlockBase implements IDial {
 	public void updateTEData(World world, IBlockState state, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(this.facing))));
 		if (tile != null){
-			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdateRequest(Minecraft.getMinecraft().player.getUniqueID(),pos));
+			PacketHandler.INSTANCE.sendToServer(new MessageTEUpdateRequest(Minecraft.getMinecraft().player.getUniqueID(),pos));
 		}
 	}
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
@@ -104,17 +105,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

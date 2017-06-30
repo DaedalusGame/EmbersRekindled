@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:steam_engine", "x": 90 },
+        "facing=up":    { "model": "embers:steam_engine", "x": 270 },
+        "facing=north": { "model": "embers:steam_engine", "y": 0 },
+        "facing=south": { "model": "embers:steam_engine", "y": 180 },
+        "facing=west":  { "model": "embers:steam_engine", "y": 270 },
+        "facing=east":  { "model": "embers:steam_engine", "y": 90 }
+    }
+}

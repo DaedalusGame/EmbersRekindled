@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 
@@ -175,17 +176,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

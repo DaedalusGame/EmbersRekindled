@@ -47,14 +47,16 @@ public class MessageEmberSizedBurstFX implements IMessage {
     public static class MessageHolder implements IMessageHandler<MessageEmberSizedBurstFX,IMessage>
     {
     	@SideOnly(Side.CLIENT)
-        @Override
-        public IMessage onMessage(MessageEmberSizedBurstFX message, MessageContext ctx) {
-    		Minecraft.getMinecraft().addScheduledTask(()-> {
-	    		World world = Minecraft.getMinecraft().world;
-				for (int k = 0; k < 80; k ++){
-					ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 1.0f, (float)message.value, 24);
-				}
-    		});
+    	@Override
+        public IMessage onMessage(final MessageEmberSizedBurstFX message, final MessageContext ctx) {
+    		if (ctx.side == Side.CLIENT){
+	    		Minecraft.getMinecraft().addScheduledTask(()-> {
+	    			World world = Minecraft.getMinecraft().world;
+					for (int k = 0; k < 80; k ++){
+						ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 1.0f, (float)message.value, 24);
+					}
+	    		});
+    		}
     		return null;
         }
     }

@@ -19,18 +19,19 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageEmberSparkleFX.MessageHolder.class,MessageEmberSparkleFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberSphereFX.MessageHolder.class,MessageEmberSphereFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageBeamCannonFX.MessageHolder.class,MessageBeamCannonFX.class,id ++,Side.CLIENT);
-        INSTANCE.registerMessage(MessageTEUpdateRequest.MessageHolder.class,MessageTEUpdateRequest.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageStamperFX.MessageHolder.class,MessageStamperFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageAnvilSparksFX.MessageHolder.class,MessageAnvilSparksFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageTyrfingBurstFX.MessageHolder.class,MessageTyrfingBurstFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberActivationFX.MessageHolder.class,MessageEmberActivationFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberGenOffset.MessageHolder.class,MessageEmberGenOffset.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageSuperheatFX.MessageHolder.class,MessageSuperheatFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessagePlayerJetFX.MessageHolder.class,MessagePlayerJetFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
+        //INSTANCE.registerMessage(MessageEmberSizedBurstFX.MessageHolder.class,MessageEmberSizedBurstFX.class,id ++,Side.CLIENT);
+
         INSTANCE.registerMessage(MessageSpawnEmberProj.MessageHolder.class,MessageSpawnEmberProj.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageRemovePlayerEmber.MessageHolder.class,MessageRemovePlayerEmber.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);
-        INSTANCE.registerMessage(MessagePlayerJetFX.MessageHolder.class,MessagePlayerJetFX.class,id ++,Side.CLIENT);
-        INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
-        INSTANCE.registerMessage(MessageEmberSizedBurstFX.MessageHolder.class,MessageEmberSizedBurstFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageTEUpdateRequest.MessageHolder.class,MessageTEUpdateRequest.class,id ++,Side.SERVER);
     }
 }

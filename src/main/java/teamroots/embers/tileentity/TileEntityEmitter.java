@@ -30,7 +30,7 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.TileEntityItemPump.EnumPipeConnection;
+import teamroots.embers.tileentity.TileEntityItemExtractor.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 public class TileEntityEmitter extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer {
@@ -144,17 +144,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override
@@ -188,6 +178,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
 					getWorld().getTileEntity(offset).markDirty();
 					if (!getWorld().isRemote && !(getWorld().getTileEntity(offset) instanceof ITileEntityBase)){
+						world.getTileEntity(offset).markDirty();
 						EventManager.markTEForUpdate(offset,world.getTileEntity(offset));
 					}
 				}

@@ -1,5 +1,6 @@
 package teamroots.embers.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -16,8 +17,10 @@ import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.items.IItemHandler;
@@ -65,6 +68,17 @@ public class Misc {
 			return mat;
 		}
 		return ItemStack.EMPTY;
+	}
+	
+	public static List<TileEntity> getAdjacentTiles(World world, BlockPos pos){
+		List<TileEntity> tiles = new ArrayList<TileEntity>();
+		tiles.add(world.getTileEntity(pos.up()));
+		tiles.add(world.getTileEntity(pos.down()));
+		tiles.add(world.getTileEntity(pos.west()));
+		tiles.add(world.getTileEntity(pos.east()));
+		tiles.add(world.getTileEntity(pos.north()));
+		tiles.add(world.getTileEntity(pos.south()));
+		return tiles;
 	}
 	
 	public static EntityItem rayTraceItem(World world, double posX, double posY, double posZ, double dirX, double dirY, double dirZ){

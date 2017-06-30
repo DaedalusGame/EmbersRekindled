@@ -1,0 +1,16 @@
+{
+    "variants":{
+        "facing=down,top=false":  { "model": "embers:pump_bottom", "x": 90 },
+        "facing=up,top=false":    { "model": "embers:pump_bottom", "x": 270 },
+        "facing=north,top=false": { "model": "embers:pump_bottom", "y": 0 },
+        "facing=south,top=false": { "model": "embers:pump_bottom", "y": 180 },
+        "facing=west,top=false":  { "model": "embers:pump_bottom", "y": 270 },
+        "facing=east,top=false":  { "model": "embers:pump_bottom", "y": 90 },
+        "facing=down,top=true":  { "model": "embers:pump_top", "x": 90 },
+        "facing=up,top=true":    { "model": "embers:pump_top", "x": 270 },
+        "facing=north,top=true": { "model": "embers:pump_top", "y": 0 },
+        "facing=south,top=true": { "model": "embers:pump_top", "y": 180 },
+        "facing=west,top=true":  { "model": "embers:pump_top", "y": 270 },
+        "facing=east,top=true":  { "model": "embers:pump_top", "y": 90 }
+    }
+}

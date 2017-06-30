@@ -12,6 +12,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -22,12 +23,18 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 
 public class TileEntityLargeTank extends TileFluidHandler implements ITileEntityBase, ITickable, IMultiblockMachine {
 	int ticksExisted = 0;
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox(){
+		return super.getRenderBoundingBox().expand(4.0, 256.0, 4.0);
+	}
 	
 	public TileEntityLargeTank(){
 		super();
@@ -128,17 +135,7 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

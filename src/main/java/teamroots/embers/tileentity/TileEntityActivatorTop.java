@@ -17,6 +17,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import teamroots.embers.EventManager;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
@@ -64,17 +65,7 @@ public class TileEntityActivatorTop extends TileEntity implements ITileEntityBas
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

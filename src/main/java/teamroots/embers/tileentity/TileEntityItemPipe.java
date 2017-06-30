@@ -26,7 +26,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.tileentity.TileEntityItemPump.EnumPipeConnection;
+import teamroots.embers.tileentity.TileEntityItemExtractor.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, ITickable, IPressurizable {
@@ -191,7 +191,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 		if (tile instanceof TileEntityItemPipe){
 			return EnumPipeConnection.PIPE;
 		}
-		else if (tile instanceof TileEntityItemPump){
+		else if (tile instanceof TileEntityItemExtractor){
 			return EnumPipeConnection.BLOCK;
 		}
 		else if (tile != null){
@@ -310,9 +310,9 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 				return true;
 			}
 		}
-		if (tile instanceof TileEntityItemPump){
-			if (((TileEntityItemPump)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemPump.EnumPipeConnection.FORCENONE
-					&& ((TileEntityItemPump)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemPump.EnumPipeConnection.NONE){
+		if (tile instanceof TileEntityItemExtractor){
+			if (((TileEntityItemExtractor)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemExtractor.EnumPipeConnection.FORCENONE
+					&& ((TileEntityItemExtractor)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				return true;
 			}
 		}
@@ -367,7 +367,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 							EnumFacing face = priorities.get(random.nextInt(priorities.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile != null){
-								if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){
+								if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())){
 									IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 									if (handler != null){
 										ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
@@ -412,6 +412,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
 					tile.markDirty();
 					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+						tile.markDirty();
 						EventManager.markTEForUpdate(toUpdate.get(i),tile);
 					}
 				}
@@ -426,7 +427,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 							EnumFacing face = connections.get(random.nextInt(connections.size()));
 							TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 							if (tile != null){
-								if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){
+								if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())){
 									IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 									if (handler != null){
 										ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
@@ -471,6 +472,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
 					tile.markDirty();
 					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+						tile.markDirty();
 						EventManager.markTEForUpdate(toUpdate.get(i),tile);
 					}
 				}
@@ -492,17 +494,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

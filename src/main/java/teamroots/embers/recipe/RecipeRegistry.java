@@ -113,6 +113,7 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("oreCopper", RegistryManager.ore_copper);
 		OreDictionary.registerOre("oreLead", RegistryManager.ore_lead);
 		OreDictionary.registerOre("oreSilver", RegistryManager.ore_silver);
+		OreDictionary.registerOre("oreQuartz", RegistryManager.ore_quartz);
 		OreDictionary.registerOre("slimeball", RegistryManager.adhesive);
 		
 		if (ConfigManager.enableAluminum){

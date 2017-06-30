@@ -13,8 +13,8 @@ import net.minecraft.world.World;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPipe;
-import teamroots.embers.tileentity.TileEntityPipe;
-import teamroots.embers.tileentity.TileEntityPump;
+import teamroots.embers.tileentity.TileEntityFluidPipe;
+import teamroots.embers.tileentity.TileEntityFluidExtractor;
 
 public class BlockItemPipe extends BlockTEBase {
 	

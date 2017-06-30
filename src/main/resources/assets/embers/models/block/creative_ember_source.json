@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "embers:blocks/creative_ember_source",
+        "particle": "embers:blocks/creative_ember_source"
+    }
+}

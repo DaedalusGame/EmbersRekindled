@@ -15,11 +15,13 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -36,6 +38,12 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	int stackShards = 0;
 	int stackCrystals = 1;
 	int stackFuel = 2;
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox(){
+		return super.getRenderBoundingBox().expand(4.0, 8.0, 4.0);
+	}
+	
 	public ItemStackHandler inventory = new ItemStackHandler(3){
         @Override
         protected void onContentsChanged(int slot) {
@@ -173,17 +181,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

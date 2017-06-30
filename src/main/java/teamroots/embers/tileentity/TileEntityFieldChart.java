@@ -33,14 +33,4 @@ public class TileEntityFieldChart extends TileEntity implements ITileEntityBase 
 	public void markForUpdate() {
 		
 	}
-
-	@Override
-	public boolean needsUpdate() {
-		return false;
-	}
-
-	@Override
-	public void clean() {
-		
-	}
 }

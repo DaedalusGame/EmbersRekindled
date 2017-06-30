@@ -1,115 +1,138 @@
 package teamroots.embers.block;
 
-import net.minecraft.block.Block;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.tileentity.TileEntityItemPipe;
-import teamroots.embers.tileentity.TileEntityPipe;
-import teamroots.embers.tileentity.TileEntityPump;
+import teamroots.embers.tileentity.ITileEntityBase;
+import teamroots.embers.tileentity.TileEntityFurnaceBottom;
+import teamroots.embers.tileentity.TileEntityFurnaceTop;
+import teamroots.embers.tileentity.TileEntityMixerBottom;
+import teamroots.embers.tileentity.TileEntityMixerTop;
+import teamroots.embers.tileentity.TileEntityPumpBottom;
+import teamroots.embers.tileentity.TileEntityPumpTop;
+import teamroots.embers.util.Misc;
 
 public class BlockPump extends BlockTEBase {
+	public static final PropertyBool isTop = PropertyBool.create("top");
+	public static final PropertyDirection facing = PropertyDirection.create("facing");
+	
 	public BlockPump(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
-
+	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityPump();
+	public BlockStateContainer createBlockState(){
+		return new BlockStateContainer(this, isTop, facing);
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
-		TileEntityPump p = (TileEntityPump)world.getTileEntity(pos);
-		p.updateNeighbors(world);
-		p.markDirty();
+	public int getMetaFromState(IBlockState state){
+		boolean top = state.getValue(isTop);
+		return (top ? 1 : 0) * 6 + state.getValue(facing).getIndex();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta){
+		return getDefaultState().withProperty(facing, EnumFacing.getFront(meta % 6)).withProperty(isTop,meta >= 6 ? true : false);
 	}
 	
 	@Override
 	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return true;
+		return state.getBlock() instanceof BlockPump && !state.getValue(isTop);
 	}
 	
 	@Override
-	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side){
-		return true;
-	}
-	
-	@Override
-	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return true;
+	public void onBlockExploded(World world, BlockPos pos, Explosion explosion){
+		if (!world.isRemote){
+			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+		}
+		IBlockState state = world.getBlockState(pos);
+		if (this.getMetaFromState(state) < 6){
+			world.setBlockToAir(pos.up());
+		}
+		else {
+			world.setBlockToAir(pos.down());
+		}
+		((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world,pos,state,null);
+		world.setBlockToAir(pos);
 	}
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		if (world.getTileEntity(pos) instanceof TileEntityPump){
-			((TileEntityPump)world.getTileEntity(pos)).updateNeighbors(world);
-			world.getTileEntity(pos).markDirty();
+		if (this.getMetaFromState(state) < 6){
+			world.setBlockState(pos.up(), this.getDefaultState().withProperty(isTop, true).withProperty(facing, state.getValue(facing)));
+		}
+		else {
+			world.setBlockState(pos.down(), this.getDefaultState().withProperty(isTop, false).withProperty(facing, state.getValue(facing)));
 		}
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos){
-		double x1 = 0.3125;
-		double y1 = 0.3125;
-		double z1 = 0.3125;
-		double x2 = 0.6875;
-		double y2 = 0.6875;
-		double z2 = 0.6875;
-		
-		if (source.getTileEntity(pos) instanceof TileEntityPump){
-			TileEntityPump pipe = ((TileEntityPump)source.getTileEntity(pos));
-			if (pipe.up != TileEntityPump.EnumPipeConnection.NONE){
-				y2 = 1;
-			}
-			if (pipe.down != TileEntityPump.EnumPipeConnection.NONE){
-				y1 = 0;
-			}
-			if (pipe.north != TileEntityPump.EnumPipeConnection.NONE){
-				z1 = 0;
-			}
-			if (pipe.south != TileEntityPump.EnumPipeConnection.NONE){
-				z2 = 1;
-			}
-			if (pipe.west != TileEntityPump.EnumPipeConnection.NONE){
-				x1 = 0;
-			}
-			if (pipe.east != TileEntityPump.EnumPipeConnection.NONE){
-				x2 = 1;
-			}
-		}
-		
-		return new AxisAlignedBB(x1,y1,z1,x2,y2,z2);
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer){
+		return getDefaultState().withProperty(facing, Misc.getOppositeFace(placer.getHorizontalFacing())).withProperty(isTop, false);
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
+		return new ArrayList<ItemStack>();
 	}
 	
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
-		super.onBlockHarvested(world, pos, state, player);
-		if (world.getTileEntity(pos.up()) instanceof TileEntityPipe){
-			((TileEntityPipe)world.getTileEntity(pos.up())).updateNeighbors(world);
+		if (state.getValue(isTop) && world.getBlockState(pos.down()).getBlock() == this || !state.getValue(isTop) && world.getBlockState(pos.up()).getBlock() == this){
+			if (!world.isRemote && !player.capabilities.isCreativeMode){
+				world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));
+			}
 		}
-		if (world.getTileEntity(pos.down()) instanceof TileEntityPipe){
-			((TileEntityPipe)world.getTileEntity(pos.down())).updateNeighbors(world);
+		if (this.getMetaFromState(state) < 6){
+			world.setBlockToAir(pos.up());
 		}
-		if (world.getTileEntity(pos.north()) instanceof TileEntityPipe){
-			((TileEntityPipe)world.getTileEntity(pos.north())).updateNeighbors(world);
+		else {
+			world.setBlockToAir(pos.down());
 		}
-		if (world.getTileEntity(pos.south()) instanceof TileEntityPipe){
-			((TileEntityPipe)world.getTileEntity(pos.south())).updateNeighbors(world);
+		((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world,pos,state,player);
+	}
+	
+	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos){
+		if (world.getBlockState(pos.up()) == Blocks.AIR.getDefaultState()){
+			return true;
 		}
-		if (world.getTileEntity(pos.west()) instanceof TileEntityPipe){
-			((TileEntityPipe)world.getTileEntity(pos.west())).updateNeighbors(world);
+		return false;
+	}
+	
+	@Override
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
+		return side != EnumFacing.UP;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		if (meta >= 6){
+			return new TileEntityPumpTop();
 		}
-		if (world.getTileEntity(pos.east()) instanceof TileEntityPipe){
-			((TileEntityPipe)world.getTileEntity(pos.east())).updateNeighbors(world);
-		}
+		return new TileEntityPumpBottom();
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ){
+		return ((ITileEntityBase)world.getTileEntity(pos)).activate(world,pos,state,player,hand,side,hitX,hitY,hitZ);
 	}
 }

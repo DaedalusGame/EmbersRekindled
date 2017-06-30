@@ -2,8 +2,8 @@ package teamroots.embers.entity;
 
 import java.awt.Color;
 
-import elucent.albedo.lighting.ILightProvider;
-import elucent.albedo.lighting.Light;
+//import elucent.albedo.lighting.ILightProvider;
+//import elucent.albedo.lighting.Light;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -24,8 +24,8 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberPacketReceiver;
 import teamroots.embers.util.Misc;
 
-@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
-public class EntityEmberPacket extends Entity implements ILightProvider {
+//@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
+public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 
 	BlockPos pos = new BlockPos(0,0,0);
 	public BlockPos dest = new BlockPos(0,0,0);
@@ -158,7 +158,7 @@ public class EntityEmberPacket extends Entity implements ILightProvider {
 		}
 	}
 
-	@Method(modid = "albedo")
+	/*@Method(modid = "albedo")
 	@Override
 	public Light provideLight() {
 		float hue = this.hue + (EventManager.ticks%90)*4;
@@ -168,6 +168,6 @@ public class EntityEmberPacket extends Entity implements ILightProvider {
 			return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.5f,0.0625f,1.0f,4.0f * ((float)lifetime/20f));
 		}
 		return new Light((float)posX,(float)posY,(float)posZ,1.0f,0.5f,0.0625f,1.0f,4.0f);
-	}
+	}*/
 
 }

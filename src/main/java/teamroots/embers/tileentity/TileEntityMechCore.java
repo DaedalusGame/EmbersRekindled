@@ -17,6 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import teamroots.embers.EventManager;
 
 public class TileEntityMechCore extends TileEntity implements ITileEntityBase {
 	Random random = new Random();
@@ -120,17 +121,7 @@ public class TileEntityMechCore extends TileEntity implements ITileEntityBase {
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

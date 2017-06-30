@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.recipe.ItemMeltingOreRecipe;
@@ -131,17 +132,7 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 	
 	@Override
 	public void markForUpdate(){
-		dirty = true;
-	}
-	
-	@Override
-	public boolean needsUpdate(){
-		return dirty;
-	}
-	
-	@Override
-	public void clean(){
-		dirty = false;
+		EventManager.markTEForUpdate(getPos(), this);
 	}
 	
 	@Override

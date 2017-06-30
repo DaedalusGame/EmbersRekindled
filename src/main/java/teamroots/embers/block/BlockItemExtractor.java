@@ -13,23 +13,23 @@ import net.minecraft.world.World;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityItemPipe;
-import teamroots.embers.tileentity.TileEntityItemPump;
-import teamroots.embers.tileentity.TileEntityPipe;
-import teamroots.embers.tileentity.TileEntityPump;
+import teamroots.embers.tileentity.TileEntityItemExtractor;
+import teamroots.embers.tileentity.TileEntityFluidPipe;
+import teamroots.embers.tileentity.TileEntityFluidExtractor;
 
-public class BlockItemPump extends BlockTEBase {
-	public BlockItemPump(Material material, String name, boolean addToTab) {
+public class BlockItemExtractor extends BlockTEBase {
+	public BlockItemExtractor(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityItemPump();
+		return new TileEntityItemExtractor();
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos){
-		TileEntityItemPump p = (TileEntityItemPump)world.getTileEntity(pos);
+		TileEntityItemExtractor p = (TileEntityItemExtractor)world.getTileEntity(pos);
 		p.updateNeighbors(world);
 		p.markDirty();
 	}
@@ -46,8 +46,8 @@ public class BlockItemPump extends BlockTEBase {
 	
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		if (world.getTileEntity(pos) instanceof TileEntityItemPump){
-			((TileEntityItemPump)world.getTileEntity(pos)).updateNeighbors(world);
+		if (world.getTileEntity(pos) instanceof TileEntityItemExtractor){
+			((TileEntityItemExtractor)world.getTileEntity(pos)).updateNeighbors(world);
 			world.getTileEntity(pos).markDirty();
 		}
 	}
@@ -66,24 +66,24 @@ public class BlockItemPump extends BlockTEBase {
 		double y2 = 0.6875;
 		double z2 = 0.6875;
 		
-		if (source.getTileEntity(pos) instanceof TileEntityItemPump){
-			TileEntityItemPump pipe = ((TileEntityItemPump)source.getTileEntity(pos));
-			if (pipe.up != TileEntityItemPump.EnumPipeConnection.NONE){
+		if (source.getTileEntity(pos) instanceof TileEntityItemExtractor){
+			TileEntityItemExtractor pipe = ((TileEntityItemExtractor)source.getTileEntity(pos));
+			if (pipe.up != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				y2 = 1;
 			}
-			if (pipe.down != TileEntityItemPump.EnumPipeConnection.NONE){
+			if (pipe.down != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				y1 = 0;
 			}
-			if (pipe.north != TileEntityItemPump.EnumPipeConnection.NONE){
+			if (pipe.north != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				z1 = 0;
 			}
-			if (pipe.south != TileEntityItemPump.EnumPipeConnection.NONE){
+			if (pipe.south != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				z2 = 1;
 			}
-			if (pipe.west != TileEntityItemPump.EnumPipeConnection.NONE){
+			if (pipe.west != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				x1 = 0;
 			}
-			if (pipe.east != TileEntityItemPump.EnumPipeConnection.NONE){
+			if (pipe.east != TileEntityItemExtractor.EnumPipeConnection.NONE){
 				x2 = 1;
 			}
 		}

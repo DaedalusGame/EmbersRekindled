@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:gearbox_frame", "x": 90 },
+        "facing=up":    { "model": "embers:gearbox_frame", "x": 270 },
+        "facing=north": { "model": "embers:gearbox_frame", "y": 0 },
+        "facing=south": { "model": "embers:gearbox_frame", "y": 180 },
+        "facing=west":  { "model": "embers:gearbox_frame", "y": 270 },
+        "facing=east":  { "model": "embers:gearbox_frame", "y": 90 }
+    }
+}
