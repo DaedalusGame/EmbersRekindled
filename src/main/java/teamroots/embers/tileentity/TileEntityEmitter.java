@@ -23,6 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -134,6 +135,12 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
 			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
 			if (face == Misc.getOppositeVerticalFace(side)){
+				return EnumConnection.LEVER;
+			}
+		}
+		else if (world.getBlockState(pos).getBlock() == RegistryManager.caminite_lever){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
+			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
 				return EnumConnection.LEVER;
 			}
 		}

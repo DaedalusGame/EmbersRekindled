@@ -327,7 +327,7 @@ public class RecipeRegistry {
 				"SAS",
 				" S ",
 				'S', "stone",
-				'A', RegistryManager.dust_ash}));
+				'A', "dustAsh"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_stone_slab,6),true,new Object[]{
 				"XXX",
 				'X', RegistryManager.ashen_stone}));
@@ -345,7 +345,7 @@ public class RecipeRegistry {
 				"SAS",
 				" S ",
 				'S', Blocks.STONEBRICK,
-				'A', RegistryManager.dust_ash}));
+				'A', "dustAsh"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.ashen_brick,4),true,new Object[]{
 				"SS",
 				"SS",
@@ -925,6 +925,11 @@ public class RecipeRegistry {
 				'I', "ingotDawnstone",
 				'P', "plateDawnstone",
 				'L', Items.LEATHER}).setMirrored(true));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(RegistryManager.caminite_lever,4),true,new Object[]{
+				"S",
+				"P", 
+				'S', "stickWood",
+				'P', new ItemStack(RegistryManager.plate_caminite)}));
 		GameRegistry.addRecipe(new AshenCloakSocketRecipe());
 		GameRegistry.addRecipe(new AshenCloakUnsocketRecipe());
 		

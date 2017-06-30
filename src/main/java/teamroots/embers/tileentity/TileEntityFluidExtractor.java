@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityFluidPipe.EnumPipeConnection;
@@ -292,6 +293,12 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
 			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
 			if (face == side){
+				return EnumPipeConnection.LEVER;
+			}
+		}
+		else if (world.getBlockState(pos).getBlock() == RegistryManager.caminite_lever){
+			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
+			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
 				return EnumPipeConnection.LEVER;
 			}
 		}
