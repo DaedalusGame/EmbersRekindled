@@ -54,7 +54,7 @@ public class ItemGlimmerLamp extends ItemBase {
 				stack.getTagCompound().setInteger("light",stack.getTagCompound().getInteger("light")-10);
 				if (!world.isRemote){
 					EntityEmberLight light = (new EntityEmberLight(world));
-					light.initCustom(player.posX,player.posY+player.getEyeHeight(),player.posZ,player.getLookVec().xCoord,player.getLookVec().yCoord,player.getLookVec().zCoord);
+					light.initCustom(player.posX,player.posY+player.getEyeHeight(),player.posZ,player.getLookVec().x,player.getLookVec().y,player.getLookVec().z);
 					world.spawnEntity(light);
 				}
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);

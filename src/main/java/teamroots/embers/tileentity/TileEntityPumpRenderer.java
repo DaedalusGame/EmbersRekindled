@@ -6,7 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -56,7 +56,7 @@ public class TileEntityPumpRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (t instanceof TileEntityPumpBottom){
 			IBlockState state = t.getWorld().getBlockState(t.getPos());
 			TileEntityPumpBottom pump = (TileEntityPumpBottom)t;
@@ -64,7 +64,7 @@ public class TileEntityPumpRenderer extends TileEntitySpecialRenderer {
             GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
             Tessellator tess = Tessellator.getInstance();
-            VertexBuffer buffer = tess.getBuffer();
+            BufferBuilder buffer = tess.getBuffer();
             
             double power = Math.min(100, Math.max(0, (int)Math.floor(0.5*pump.capability.getPower(null))));
             double amountUp = Math.abs(Math.sin((Math.PI * ((double)(pump.progress) + power*partialTicks))/400.0));

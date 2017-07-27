@@ -15,7 +15,6 @@ public class ItemShovelBase extends ItemSpade implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

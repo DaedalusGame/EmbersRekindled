@@ -22,16 +22,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -518,6 +521,25 @@ public class RegistryManager {
 		GameRegistry.registerFuelHandler(new EmbersFuelHandler());
 	}
 	
+	@SubscribeEvent
+	public void registerBlocks(RegistryEvent.Register<Block> event){
+		for (Block b : blocks){
+			event.getRegistry().register(b);
+		}
+	}
+	
+	@SubscribeEvent
+	public void registerItems(RegistryEvent.Register<Item> event){
+		for (Item i : items){
+			event.getRegistry().register(i);
+		}
+		for (Block b : blocks){
+			if (b instanceof IBlock){
+				event.getRegistry().register(((IBlock) b).getItemBlock());
+			}
+		}
+	}
+	
 	public static void registerFluids(){
 		FluidRegistry.registerFluid(fluid_molten_iron = new FluidMoltenIron());
 		blocks.add(block_molten_iron = (new BlockMoltenIron("iron",false)));
@@ -573,7 +595,7 @@ public class RegistryManager {
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public static void registerRendering(){
+	public static void registerEntityRendering(){
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFluidPipe.class, new TileEntityFluidPipeRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFluidExtractor.class, new TileEntityFluidExtractorRenderer());
@@ -610,6 +632,11 @@ public class RegistryManager {
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAncientGolem.class, new RenderAncientGolem.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberLight.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+    public void registerRendering(ModelRegistryEvent event){
 		
 		for (int i = 0; i < blocks.size(); i ++){
 			if (blocks.get(i) instanceof IModeledBlock){

@@ -103,12 +103,9 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
-			FluidActionResult didFill = FluidUtil.interactWithFluidHandler(heldItem, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side), player);
-			if (didFill.success){
-				player.setHeldItem(hand, didFill.getResult());
-			}
+			boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
 			this.markDirty();
-			return didFill.success;
+			return didFill;
 		}
 		return false;
 	}

@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -30,7 +30,7 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
 		super();
 	}
 	
-	public void drawCrystal(VertexBuffer b, float x, float y, float z, float rotation, float size, float minU, float minV, float maxU, float maxV){
+	public void drawCrystal(BufferBuilder b, float x, float y, float z, float rotation, float size, float minU, float minV, float maxU, float maxV){
 		float offX1 = size * 0.25f * (float)Math.sin(Math.toRadians(rotation));
 		float offZ1 = size * 0.25f * (float)Math.cos(Math.toRadians(rotation));
 		float offX2 = size * 0.25f * (float)Math.sin(Math.toRadians(rotation+90.0f));
@@ -55,50 +55,50 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
 		double pos6Z = z;
 		Vec3d diff1 = new Vec3d(pos3X-pos1X,pos3Y-pos1Y,pos3Z-pos1Z);
 		Vec3d diff2 = new Vec3d(pos2X-pos1X,pos2Y-pos1Y,pos2Z-pos1Z);
-		Vec3d normal1 = new Vec3d(diff1.yCoord*diff2.zCoord-diff1.zCoord*diff2.yCoord,diff1.xCoord*diff2.zCoord-diff1.zCoord*diff2.xCoord,diff1.xCoord*diff2.yCoord-diff1.yCoord*diff2.xCoord).normalize().scale(-1.0);
-		Vec3d normal2 = new Vec3d(normal1.zCoord,-normal1.yCoord,normal1.xCoord).scale(-1.0);
-		Vec3d normal3 = new Vec3d(-normal1.xCoord,-normal1.yCoord,-normal1.zCoord).scale(-1.0);
-		Vec3d normal4 = new Vec3d(-normal1.zCoord,-normal1.yCoord,-normal1.xCoord).scale(-1.0);
-		Vec3d normal5 = new Vec3d(normal1.xCoord,normal1.yCoord,normal1.zCoord).scale(-1.0);
-		Vec3d normal6 = new Vec3d(normal1.zCoord,normal1.yCoord,normal1.xCoord).scale(-1.0);
-		Vec3d normal7 = new Vec3d(-normal1.xCoord,normal1.yCoord,-normal1.zCoord).scale(-1.0);
-		Vec3d normal8 = new Vec3d(-normal1.zCoord,normal1.yCoord,-normal1.xCoord).scale(-1.0);
-		normal1 = new Vec3d(normal1.xCoord,-normal1.yCoord,normal1.zCoord).scale(-1.0); 
-		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal1.xCoord,(float)normal1.yCoord,(float)normal1.zCoord).endVertex();
-		b.pos(pos2X, pos2Y, pos2Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal1.xCoord,(float)normal1.yCoord,(float)normal1.zCoord).endVertex();
-		b.pos(pos3X, pos3Y, pos3Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal1.xCoord,(float)normal1.yCoord,(float)normal1.zCoord).endVertex();
+		Vec3d normal1 = new Vec3d(diff1.y*diff2.z-diff1.z*diff2.y,diff1.x*diff2.z-diff1.z*diff2.x,diff1.x*diff2.y-diff1.y*diff2.x).normalize().scale(-1.0);
+		Vec3d normal2 = new Vec3d(normal1.z,-normal1.y,normal1.x).scale(-1.0);
+		Vec3d normal3 = new Vec3d(-normal1.x,-normal1.y,-normal1.z).scale(-1.0);
+		Vec3d normal4 = new Vec3d(-normal1.z,-normal1.y,-normal1.x).scale(-1.0);
+		Vec3d normal5 = new Vec3d(normal1.x,normal1.y,normal1.z).scale(-1.0);
+		Vec3d normal6 = new Vec3d(normal1.z,normal1.y,normal1.x).scale(-1.0);
+		Vec3d normal7 = new Vec3d(-normal1.x,normal1.y,-normal1.z).scale(-1.0);
+		Vec3d normal8 = new Vec3d(-normal1.z,normal1.y,-normal1.x).scale(-1.0);
+		normal1 = new Vec3d(normal1.x,-normal1.y,normal1.z).scale(-1.0); 
+		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal1.x,(float)normal1.y,(float)normal1.z).endVertex();
+		b.pos(pos2X, pos2Y, pos2Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal1.x,(float)normal1.y,(float)normal1.z).endVertex();
+		b.pos(pos3X, pos3Y, pos3Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal1.x,(float)normal1.y,(float)normal1.z).endVertex();
 	
-		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal2.xCoord,(float)normal2.yCoord,(float)normal2.zCoord).endVertex();
-		b.pos(pos3X, pos3Y, pos3Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal2.xCoord,(float)normal2.yCoord,(float)normal2.zCoord).endVertex();
-		b.pos(pos4X, pos4Y, pos4Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal2.xCoord,(float)normal2.yCoord,(float)normal2.zCoord).endVertex();
+		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal2.x,(float)normal2.y,(float)normal2.z).endVertex();
+		b.pos(pos3X, pos3Y, pos3Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal2.x,(float)normal2.y,(float)normal2.z).endVertex();
+		b.pos(pos4X, pos4Y, pos4Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal2.x,(float)normal2.y,(float)normal2.z).endVertex();
 	
-		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal3.xCoord,(float)normal3.yCoord,(float)normal3.zCoord).endVertex();
-		b.pos(pos4X, pos4Y, pos4Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal3.xCoord,(float)normal3.yCoord,(float)normal3.zCoord).endVertex();
-		b.pos(pos5X, pos5Y, pos5Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal3.xCoord,(float)normal3.yCoord,(float)normal3.zCoord).endVertex();
+		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal3.x,(float)normal3.y,(float)normal3.z).endVertex();
+		b.pos(pos4X, pos4Y, pos4Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal3.x,(float)normal3.y,(float)normal3.z).endVertex();
+		b.pos(pos5X, pos5Y, pos5Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal3.x,(float)normal3.y,(float)normal3.z).endVertex();
 	
-		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal4.xCoord,(float)normal4.yCoord,(float)normal4.zCoord).endVertex();
-		b.pos(pos5X, pos5Y, pos5Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal4.xCoord,(float)normal4.yCoord,(float)normal4.zCoord).endVertex();
-		b.pos(pos2X, pos2Y, pos2Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal4.xCoord,(float)normal4.yCoord,(float)normal4.zCoord).endVertex();
+		b.pos(pos1X, pos1Y, pos1Z).tex((minU+maxU)/2.0, maxV).color(255, 255, 255, 255).normal((float)normal4.x,(float)normal4.y,(float)normal4.z).endVertex();
+		b.pos(pos5X, pos5Y, pos5Z).tex(minU, minV).color(255, 255, 255, 255).normal((float)normal4.x,(float)normal4.y,(float)normal4.z).endVertex();
+		b.pos(pos2X, pos2Y, pos2Z).tex(maxU, minV).color(255, 255, 255, 255).normal((float)normal4.x,(float)normal4.y,(float)normal4.z).endVertex();
 	
-		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal5.xCoord,(float)normal5.yCoord,(float)normal5.zCoord).endVertex();
-		b.pos(pos2X, pos2Y, pos2Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal5.xCoord,(float)normal5.yCoord,(float)normal5.zCoord).endVertex();
-		b.pos(pos3X, pos3Y, pos3Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal5.xCoord,(float)normal5.yCoord,(float)normal5.zCoord).endVertex();
+		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal5.x,(float)normal5.y,(float)normal5.z).endVertex();
+		b.pos(pos2X, pos2Y, pos2Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal5.x,(float)normal5.y,(float)normal5.z).endVertex();
+		b.pos(pos3X, pos3Y, pos3Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal5.x,(float)normal5.y,(float)normal5.z).endVertex();
 	
-		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal6.xCoord,(float)normal6.yCoord,(float)normal6.zCoord).endVertex();
-		b.pos(pos3X, pos3Y, pos3Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal6.xCoord,(float)normal6.yCoord,(float)normal6.zCoord).endVertex();
-		b.pos(pos4X, pos4Y, pos4Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal6.xCoord,(float)normal6.yCoord,(float)normal6.zCoord).endVertex();
+		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal6.x,(float)normal6.y,(float)normal6.z).endVertex();
+		b.pos(pos3X, pos3Y, pos3Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal6.x,(float)normal6.y,(float)normal6.z).endVertex();
+		b.pos(pos4X, pos4Y, pos4Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal6.x,(float)normal6.y,(float)normal6.z).endVertex();
 	
-		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal7.xCoord,(float)normal7.yCoord,(float)normal7.zCoord).endVertex();
-		b.pos(pos4X, pos4Y, pos4Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal7.xCoord,(float)normal7.yCoord,(float)normal7.zCoord).endVertex();
-		b.pos(pos5X, pos5Y, pos5Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal7.xCoord,(float)normal7.yCoord,(float)normal7.zCoord).endVertex();
+		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal7.x,(float)normal7.y,(float)normal7.z).endVertex();
+		b.pos(pos4X, pos4Y, pos4Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal7.x,(float)normal7.y,(float)normal7.z).endVertex();
+		b.pos(pos5X, pos5Y, pos5Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal7.x,(float)normal7.y,(float)normal7.z).endVertex();
 	
-		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal8.xCoord,(float)normal8.yCoord,(float)normal8.zCoord).endVertex();
-		b.pos(pos5X, pos5Y, pos5Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal8.xCoord,(float)normal8.yCoord,(float)normal8.zCoord).endVertex();
-		b.pos(pos2X, pos2Y, pos2Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal8.xCoord,(float)normal8.yCoord,(float)normal8.zCoord).endVertex();
+		b.pos(pos6X, pos6Y, pos6Z).tex((minU+maxU)/2.0, minV).color(255, 255, 255, 255).normal((float)normal8.x,(float)normal8.y,(float)normal8.z).endVertex();
+		b.pos(pos5X, pos5Y, pos5Z).tex(minU, maxV).color(255, 255, 255, 255).normal((float)normal8.x,(float)normal8.y,(float)normal8.z).endVertex();
+		b.pos(pos2X, pos2Y, pos2Z).tex(maxU, maxV).color(255, 255, 255, 255).normal((float)normal8.x,(float)normal8.y,(float)normal8.z).endVertex();
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntitySeed){
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			TileEntitySeed seed = (TileEntitySeed)tile;
@@ -121,7 +121,7 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
             }
             GlStateManager.disableCull();
             Tessellator tess = Tessellator.getInstance();
-            VertexBuffer buffer = tess.getBuffer();
+            BufferBuilder buffer = tess.getBuffer();
             GlStateManager.pushMatrix();
             GlStateManager.translate(x+0.5f, y+0.5f, z+0.5f);
             buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);

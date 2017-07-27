@@ -129,9 +129,9 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 				double posZ = getPos().getZ()+0.5;
 				boolean doContinue = true;
 				for (int i = 0; i < 640 && doContinue; i ++){
-					posX += ray.xCoord*0.1;
-					posY += ray.yCoord*0.1;
-					posZ += ray.zCoord*0.1;
+					posX += ray.x*0.1;
+					posY += ray.y*0.1;
+					posZ += ray.z*0.1;
 					IBlockState state = getWorld().getBlockState(new BlockPos(posX,posY,posZ));
 					TileEntity tile = getWorld().getTileEntity(new BlockPos(posX,posY,posZ));
 					if (tile instanceof TileEntityAlchemyTablet){

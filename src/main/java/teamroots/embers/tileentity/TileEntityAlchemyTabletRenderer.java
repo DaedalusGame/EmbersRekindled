@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -31,7 +31,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityAlchemyTablet){
 			TileEntityAlchemyTablet tablet = (TileEntityAlchemyTablet)tile;
 			
@@ -41,7 +41,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					processSign = 0;
 				}
 				Tessellator tess = Tessellator.getInstance();
-				VertexBuffer b = tess.getBuffer();
+				BufferBuilder b = tess.getBuffer();
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 				GlStateManager.disableLighting();
 				GlStateManager.enableBlend();
@@ -78,7 +78,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					item.isCollided = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getEntityItem().getItem() instanceof ItemBlock){
+					if (item.getItem().getItem() instanceof ItemBlock){
 						GL11.glTranslated(1.0, 1.5, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 					}
 					else {
@@ -99,7 +99,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					item.isCollided = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getEntityItem().getItem() instanceof ItemBlock){
+					if (item.getItem().getItem() instanceof ItemBlock){
 						GL11.glTranslated(1.0, 1.5, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 					}
 					else {
@@ -120,7 +120,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					item.isCollided = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getEntityItem().getItem() instanceof ItemBlock){
+					if (item.getItem().getItem() instanceof ItemBlock){
 						GL11.glTranslated(1.0, 1.5, 1.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 					}
 					else {
@@ -141,7 +141,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					item.isCollided = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getEntityItem().getItem() instanceof ItemBlock){
+					if (item.getItem().getItem() instanceof ItemBlock){
 						GL11.glTranslated(0.5, 1.5, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 					}
 					else {
@@ -162,7 +162,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					item.isCollided = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getEntityItem().getItem() instanceof ItemBlock){
+					if (item.getItem().getItem() instanceof ItemBlock){
 						GL11.glTranslated(1.5, 1.5, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 					}
 					else {

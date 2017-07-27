@@ -157,15 +157,15 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 				}
 				if (items.size() > 0){
 					int i = random.nextInt(items.size());
-					if (FurnaceRecipes.instance().getSmeltingResult(items.get(i).getEntityItem()) != ItemStack.EMPTY){
-						ItemStack recipeStack = new ItemStack(items.get(i).getEntityItem().getItem(),1,items.get(i).getEntityItem().getMetadata());
-						if (items.get(i).getEntityItem().hasTagCompound()){
-							recipeStack.setTagCompound(items.get(i).getEntityItem().getTagCompound());
+					if (FurnaceRecipes.instance().getSmeltingResult(items.get(i).getItem()) != ItemStack.EMPTY){
+						ItemStack recipeStack = new ItemStack(items.get(i).getItem().getItem(),1,items.get(i).getItem().getMetadata());
+						if (items.get(i).getItem().hasTagCompound()){
+							recipeStack.setTagCompound(items.get(i).getItem().getTagCompound());
 						}
 						ItemStack stack = FurnaceRecipes.instance().getSmeltingResult(recipeStack).copy();
 						ItemStack remainder = inventory.insertItem(0, stack, false);
-						items.get(i).getEntityItem().shrink(1);
-						if (items.get(i).getEntityItem().getCount() == 0){
+						items.get(i).getItem().shrink(1);
+						if (items.get(i).getItem().getCount() == 0){
 							items.get(i).setDead();
 							for (int j = 0; j < 3; j ++){
 								if (random.nextBoolean()){

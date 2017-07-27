@@ -19,7 +19,7 @@ public class TileEntityBinRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityBin){
 			TileEntityBin bin = (TileEntityBin)tile;
 			random.setSeed(tile.getWorld().getSeed());

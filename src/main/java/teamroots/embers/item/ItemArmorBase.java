@@ -39,7 +39,6 @@ public class ItemArmorBase extends ItemArmor implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

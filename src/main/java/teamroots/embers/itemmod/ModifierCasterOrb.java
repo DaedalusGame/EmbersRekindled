@@ -62,7 +62,7 @@ public class ModifierCasterOrb extends ModifierBase {
 					float offZ = 0.5f*(float)Math.cos(Math.toRadians(-event.getEntityPlayer().rotationYaw-90));
 					PacketHandler.INSTANCE.sendToServer(new MessageRemovePlayerEmber(event.getEntityPlayer().getUniqueID(),cost));
 					PacketHandler.INSTANCE.sendToServer(new MessageSpawnEmberProj(event.getEntityPlayer().posX+offX,event.getEntityPlayer().posY+event.getEntityPlayer().getEyeHeight(),event.getEntityPlayer().posZ+offZ,
-							0.5*event.getEntityPlayer().getLookVec().xCoord,0.5*event.getEntityPlayer().getLookVec().yCoord,0.5*event.getEntityPlayer().getLookVec().zCoord,
+							0.5*event.getEntityPlayer().getLookVec().x,0.5*event.getEntityPlayer().getLookVec().y,0.5*event.getEntityPlayer().getLookVec().z,
 							8.0*(Math.atan(0.6*(level))/(1.25))));
 					cooldownTicks = 20;
 				}
@@ -81,7 +81,7 @@ public class ModifierCasterOrb extends ModifierBase {
 					float offZ = 0.5f*(float)Math.cos(Math.toRadians(-event.getEntityPlayer().rotationYaw-90));
 					PacketHandler.INSTANCE.sendToServer(new MessageRemovePlayerEmber(event.getEntityPlayer().getUniqueID(),cost));
 					PacketHandler.INSTANCE.sendToServer(new MessageSpawnEmberProj(event.getEntityPlayer().posX+offX,event.getEntityPlayer().posY+event.getEntityPlayer().getEyeHeight(),event.getEntityPlayer().posZ+offZ,
-							0.5*event.getEntityPlayer().getLookVec().xCoord,0.5*event.getEntityPlayer().getLookVec().yCoord,0.5*event.getEntityPlayer().getLookVec().zCoord,
+							0.5*event.getEntityPlayer().getLookVec().x,0.5*event.getEntityPlayer().getLookVec().y,0.5*event.getEntityPlayer().getLookVec().z,
 							8.0*(Math.atan(0.6*(level))/(1.25))));
 					cooldownTicks = 20;
 				}

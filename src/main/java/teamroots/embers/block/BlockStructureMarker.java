@@ -21,8 +21,10 @@ public class BlockStructureMarker extends BlockBase {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
-		list.clear();
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list){
+		if (tab == this.getCreativeTabToDisplayOn()){
+			list.clear();
+		}
 	}
 	
 	@Override

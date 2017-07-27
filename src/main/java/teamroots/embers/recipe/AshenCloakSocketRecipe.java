@@ -10,8 +10,9 @@ import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.item.ItemAshenCloak;
 import teamroots.embers.item.ItemInflictorGem;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class AshenCloakSocketRecipe implements IRecipe {
+public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
@@ -92,11 +93,6 @@ public class AshenCloakSocketRecipe implements IRecipe {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
-	}
-
-	@Override
 	public ItemStack getRecipeOutput() {
 		return new ItemStack(RegistryManager.ashen_cloak_chest,1);
 	}
@@ -106,6 +102,11 @@ public class AshenCloakSocketRecipe implements IRecipe {
 		NonNullList<ItemStack> remaining = NonNullList.create();
 		inv.clear();
 		return remaining;
+	}
+
+	@Override
+	public boolean canFit(int width, int height) {
+		return width > 2 && height > 2;
 	}
 
 }

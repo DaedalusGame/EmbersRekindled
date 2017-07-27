@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL20;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -21,7 +21,7 @@ public class RenderUtil {
 	public static int lighty = 0xF000F0;
     public static final float root2over2 = (float)Math.sqrt(2.0f)/2.0f;
     
-    public static void renderWavyEmberLine(VertexBuffer b, double x1, double y1, double x2, double y2, double thickness){
+    public static void renderWavyEmberLine(BufferBuilder b, double x1, double y1, double x2, double y2, double thickness){
     	double angleRads = Math.atan2(y2-y1, x2-x1);
     	double orthoX = Math.cos(angleRads+(Math.PI/2.0));
     	double orthoY = Math.sin(angleRads+(Math.PI/2.0));
@@ -44,7 +44,7 @@ public class RenderUtil {
     	}
     }
 
-    public static void renderHighlightCircle(VertexBuffer b, double x1, double y1, double thickness){
+    public static void renderHighlightCircle(BufferBuilder b, double x1, double y1, double thickness){
     	for (int i = 0; i < 40; i ++){
     		float coeff = (float)i / 40f;
     		int i2 = i+1;
@@ -68,7 +68,7 @@ public class RenderUtil {
         }
     }
     
-    public static void renderRadiantCircle(VertexBuffer b, double x, double y, double radius){
+    public static void renderRadiantCircle(BufferBuilder b, double x, double y, double radius){
 		for (int i = 0; i < 20; i ++){
     		double angle = Math.PI * 2.0 * ((double)i)/20.0;
     		double angle2 = Math.PI * 2.0 * ((double)(i+1))/20.0;
@@ -84,7 +84,7 @@ public class RenderUtil {
     	}
     }
     
-	public static void renderBeam(VertexBuffer buf, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a, float radius, double angle){
+	public static void renderBeam(BufferBuilder buf, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a, float radius, double angle){
 		double yaw = Misc.yawDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
         double pitch = Misc.pitchDegreesBetweenPoints(x1, y1, z1, x2, y2, z2);
         
@@ -146,7 +146,7 @@ public class RenderUtil {
 	
 	}
 	
-	public static void renderAlchemyCircle(VertexBuffer buf, double x, double y, double z, float r, float g, float b, float a, double radius, double angle){
+	public static void renderAlchemyCircle(BufferBuilder buf, double x, double y, double z, float r, float g, float b, float a, double radius, double angle){
 		double sign = 1;
 		if (Minecraft.getMinecraft().player.posY+Minecraft.getMinecraft().player.getEyeHeight() < y){
 			sign = -1;
@@ -203,7 +203,7 @@ public class RenderUtil {
 	 * 
 	 * Order the textures and inversions like so: up (pos Y), down (neg Y), north (neg Z), south (pos Z), west (neg X), east (pos X)
 	 */
-	public static void addBox(VertexBuffer b, double x1, double y1, double z1, double x2, double y2, double z2, StructUV[] textures, int[] inversions){
+	public static void addBox(BufferBuilder b, double x1, double y1, double z1, double x2, double y2, double z2, StructUV[] textures, int[] inversions){
 		//BOTTOM FACE
 		b.pos(x1, y1, z1).tex(textures[0].minU,textures[0].minV).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
 		b.pos(x1, y1, z2).tex(textures[0].maxU,textures[0].minV).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
@@ -236,7 +236,7 @@ public class RenderUtil {
 		b.pos(x2, y2, z1).tex(textures[5].minU,textures[5].maxV).color(255, 255, 255, 255).normal(1*inversions[5], 0, 0).endVertex();
 	}
 	
-	public static void addBoxWithSprite(VertexBuffer b, double x1, double y1, double z1, double x2, double y2, double z2, TextureAtlasSprite sprite, StructUV[] textures, int[] inversions){
+	public static void addBoxWithSprite(BufferBuilder b, double x1, double y1, double z1, double x2, double y2, double z2, TextureAtlasSprite sprite, StructUV[] textures, int[] inversions){
 		float spriteW = sprite.getMaxU()-sprite.getMinU();
 		float spriteH = sprite.getMaxV()-sprite.getMinV();
 		
@@ -273,7 +273,7 @@ public class RenderUtil {
 	}
 	
 
-	public static void addBoxExt(VertexBuffer b, double x1, double y1, double z1, double x2, double y2, double z2, StructUV[] textures, int[] inversions, boolean[] faceToggles){
+	public static void addBoxExt(BufferBuilder b, double x1, double y1, double z1, double x2, double y2, double z2, StructUV[] textures, int[] inversions, boolean[] faceToggles){
 		//BOTTOM FACE
 		if (faceToggles[0]){
 			b.pos(x1, y1, z1).tex(textures[0].minU,textures[0].minV).color(255, 255, 255, 255).normal(0, -1*inversions[0], 0).endVertex();
@@ -319,60 +319,60 @@ public class RenderUtil {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void drawQuadGui(VertexBuffer vertexbuffer, double zLevel, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double minU, double minV, double maxU, double maxV){
+	public static void drawQuadGui(BufferBuilder BufferBuilder, double zLevel, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double minU, double minV, double maxU, double maxV){
 		float f = 0.00390625F;
         float f1 = 0.00390625F;
-        vertexbuffer.pos((double)x1 + 0.0F, (double)y1 + 0.0F, zLevel).tex(minU,maxV).endVertex();
-        vertexbuffer.pos((double)x2 + 0.0F, (double)y2 + 0.0F, zLevel).tex(maxU, maxV).endVertex();
-        vertexbuffer.pos((double)x3 + 0.0F, (double)y3 + 0.0F, zLevel).tex(maxU, minV).endVertex();
-        vertexbuffer.pos((double)x4 + 0.0F, (double)y4 + 0.0F, zLevel).tex(minU, minV).endVertex();
+        BufferBuilder.pos((double)x1 + 0.0F, (double)y1 + 0.0F, zLevel).tex(minU,maxV).endVertex();
+        BufferBuilder.pos((double)x2 + 0.0F, (double)y2 + 0.0F, zLevel).tex(maxU, maxV).endVertex();
+        BufferBuilder.pos((double)x3 + 0.0F, (double)y3 + 0.0F, zLevel).tex(maxU, minV).endVertex();
+        BufferBuilder.pos((double)x4 + 0.0F, (double)y4 + 0.0F, zLevel).tex(minU, minV).endVertex();
     }
 
 	@SideOnly(Side.CLIENT)
-	public static void drawTexturedModalRect(int xCoord, int yCoord, double zLevel, double minU, double minV, double maxU, double maxV, int widthIn, int heightIn)
+	public static void drawTexturedModalRect(int x, int y, double zLevel, double minU, double minV, double maxU, double maxV, int widthIn, int heightIn)
     {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)zLevel).tex(minU, maxV).endVertex();
-        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)zLevel).tex(maxU, maxV).endVertex();
-        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)zLevel).tex(maxU, minV).endVertex();
-        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).tex(minU, minV).endVertex();
+        BufferBuilder BufferBuilder = tessellator.getBuffer();
+        BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder.pos((double)(x + 0), (double)(y + heightIn), (double)zLevel).tex(minU, maxV).endVertex();
+        BufferBuilder.pos((double)(x + widthIn), (double)(y + heightIn), (double)zLevel).tex(maxU, maxV).endVertex();
+        BufferBuilder.pos((double)(x + widthIn), (double)(y + 0), (double)zLevel).tex(maxU, minV).endVertex();
+        BufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)zLevel).tex(minU, minV).endVertex();
         tessellator.draw();
     }
 
 	@SideOnly(Side.CLIENT)
-	public static void drawTexturedModalRectBatched(VertexBuffer vertexbuffer, int xCoord, int yCoord, double zLevel, double minU, double minV, double maxU, double maxV, int widthIn, int heightIn)
+	public static void drawTexturedModalRectBatched(BufferBuilder BufferBuilder, int x, int y, double zLevel, double minU, double minV, double maxU, double maxV, int widthIn, int heightIn)
     {
-        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)zLevel).tex(minU, maxV).endVertex();
-        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)zLevel).tex(maxU, maxV).endVertex();
-        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)zLevel).tex(maxU, minV).endVertex();
-        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).tex(minU, minV).endVertex();
+        BufferBuilder.pos((double)(x + 0), (double)(y + heightIn), (double)zLevel).tex(minU, maxV).endVertex();
+        BufferBuilder.pos((double)(x + widthIn), (double)(y + heightIn), (double)zLevel).tex(maxU, maxV).endVertex();
+        BufferBuilder.pos((double)(x + widthIn), (double)(y + 0), (double)zLevel).tex(maxU, minV).endVertex();
+        BufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)zLevel).tex(minU, minV).endVertex();
     }
 
 	@SideOnly(Side.CLIENT)
-	public static void drawColorRectBatched(VertexBuffer vertexbuffer, double xCoord, double yCoord, double zLevel, double widthIn, double heightIn,
+	public static void drawColorRectBatched(BufferBuilder BufferBuilder, double x, double y, double zLevel, double widthIn, double heightIn,
 			float r1, float g1, float b1, float a1,
 			float r2, float g2, float b2, float a2,
 			float r3, float g3, float b3, float a3,
 			float r4, float g4, float b4, float a4)
     {
-        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + heightIn), (double)zLevel).color(r1, g1, b1, a1).endVertex();
-        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + heightIn), (double)zLevel).color(r2, g2, b2, a2).endVertex();
-        vertexbuffer.pos((double)(xCoord + widthIn), (double)(yCoord + 0), (double)zLevel).color(r3, g3, b3, a3).endVertex();
-        vertexbuffer.pos((double)(xCoord + 0), (double)(yCoord + 0), (double)zLevel).color(r4, g4, b4, a4).endVertex();
+        BufferBuilder.pos((double)(x + 0), (double)(y + heightIn), (double)zLevel).color(r1, g1, b1, a1).endVertex();
+        BufferBuilder.pos((double)(x + widthIn), (double)(y + heightIn), (double)zLevel).color(r2, g2, b2, a2).endVertex();
+        BufferBuilder.pos((double)(x + widthIn), (double)(y + 0), (double)zLevel).color(r3, g3, b3, a3).endVertex();
+        BufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)zLevel).color(r4, g4, b4, a4).endVertex();
     }
 	
 	@SideOnly(Side.CLIENT)
-	public static void drawQuadGuiExt(VertexBuffer vertexbuffer, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV, int texW, int texH, float r, float g, float b, float a){
+	public static void drawQuadGuiExt(BufferBuilder BufferBuilder, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int minU, int minV, int maxU, int maxV, int texW, int texH, float r, float g, float b, float a){
 		float mU = (float)minU / (float)texW;
 		float mV = (float)minV / (float)texH;
 		float xU = (float)maxU / (float)texW;
 		float xV = (float)maxV / (float)texH;
-        vertexbuffer.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(mU,xV).color(r, g, b, a).endVertex();
-        vertexbuffer.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(xU, xV).color(r, g, b, a).endVertex();
-        vertexbuffer.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(xU, mV).color(r, g, b, a).endVertex();
-        vertexbuffer.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(mU, mV).color(r, g, b, a).endVertex();
+        BufferBuilder.pos(x1 + 0.0F, y1 + 0.0F, 0).tex(mU,xV).color(r, g, b, a).endVertex();
+        BufferBuilder.pos(x2 + 0.0F, y2 + 0.0F, 0).tex(xU, xV).color(r, g, b, a).endVertex();
+        BufferBuilder.pos(x3 + 0.0F, y3 + 0.0F, 0).tex(xU, mV).color(r, g, b, a).endVertex();
+        BufferBuilder.pos(x4 + 0.0F, y4 + 0.0F, 0).tex(mU, mV).color(r, g, b, a).endVertex();
     }
 	
 	public static void drawTextRGBA(FontRenderer font, String s, int x, int y, int r, int g, int b, int a){

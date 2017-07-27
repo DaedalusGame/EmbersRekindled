@@ -39,6 +39,6 @@ public class ResearchBase {
 	
 	@SideOnly(Side.CLIENT)
 	public static List<String> getLines(String s, int width){
-		return Minecraft.getMinecraft().fontRendererObj.listFormattedStringToWidth(s, width);
+		return Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(s, width);
 	}
 }

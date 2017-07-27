@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 
-public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock {
+public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock, IBlock {
 	public Item itemBlock = null;
 	private Block slab;
 	public boolean isOpaqueCube = true, isFullCube = true;
@@ -41,12 +41,11 @@ public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
-        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
+		itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list){
 		
 	}
 	
@@ -151,5 +150,10 @@ public class BlockDoubleSlabBase extends BlockSlab implements IModeledBlock {
 	@Override
 	public Comparable<?> getTypeForItem(ItemStack stack) {
 		return 0;
+	}
+
+	@Override
+	public Item getItemBlock() {
+		return itemBlock;
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -40,7 +40,7 @@ public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityBeamCannon){
 			TileEntityBeamCannon cannon = (TileEntityBeamCannon)tile;
 			float yaw = 0;
@@ -57,7 +57,7 @@ public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer {
 			GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			Tessellator tess = Tessellator.getInstance();
-			VertexBuffer b = tess.getBuffer();
+			BufferBuilder b = tess.getBuffer();
 			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 			RenderUtil.addBox(b, base.x1, base.y1, base.z1, base.x2, base.y2, base.z2, base.textures, new int[]{1,1,1,1,1,1});
 			RenderUtil.addBox(b, disc1.x1, disc1.y1, disc1.z1, disc1.x2, disc1.y2, disc1.z2, disc1.textures, new int[]{1,1,1,1,1,1});

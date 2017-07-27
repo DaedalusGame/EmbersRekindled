@@ -1,22 +1,28 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+#General use .gitignore for Minecraft modding.
 
-# idea
-out
+#Folders
+/.gradle/*
+/.idea/*
+/asm/*
+/bin/*
+/build/*
+/eclipse/*
+/libs/*
+/out/*
+/run/*
+/docs/*
+
+#File Extensions
+*.classpath
+*.db
+*.iml
 *.ipr
 *.iws
-*.iml
-.idea
+*.launch
+*.project
+*.psd
+*.zip
 
-# gradle
-build
-.gradle
-
-# other
-eclipse
-run
+#Specific files
+.floo
+.flooignore

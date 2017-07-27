@@ -15,7 +15,6 @@ public class ItemSwordBase extends ItemSword implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

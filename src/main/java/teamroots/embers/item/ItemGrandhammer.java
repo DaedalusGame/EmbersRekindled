@@ -49,7 +49,6 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 		setHarvestLevel("shovel",this.toolMaterial.getHarvestLevel());
 		this.damageVsEntity = 10.0f;
 		this.attackSpeed = -3.0f;
-		GameRegistry.register(this);
 	}
 	
 	@Override

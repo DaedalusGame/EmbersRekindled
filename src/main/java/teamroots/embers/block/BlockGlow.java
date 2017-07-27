@@ -38,7 +38,7 @@ public class BlockGlow extends BlockBase {
     }
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list){
 		
 	}
 	

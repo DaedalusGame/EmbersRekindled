@@ -53,9 +53,9 @@ public class MessageBeamCannonFX implements IMessage {
 					double posZ = cannon.getPos().getZ()+0.5;
 					boolean doContinue = true;
 					for (int i = 0; i < 640 && doContinue; i ++){
-						posX += ray.xCoord*0.1;
-						posY += ray.yCoord*0.1;
-						posZ += ray.zCoord*0.1;
+						posX += ray.x*0.1;
+						posY += ray.y*0.1;
+						posZ += ray.z*0.1;
 						IBlockState state = cannon.getWorld().getBlockState(new BlockPos(posX,posY,posZ));
 						TileEntity tile = cannon.getWorld().getTileEntity(new BlockPos(posX,posY,posZ));
 						ParticleUtil.spawnParticleStar(cannon.getWorld(), (float)posX, (float)posY, (float)posZ, 0.0125f*(cannon.random.nextFloat()-0.5f), 0.0125f*(cannon.random.nextFloat()-0.5f), 0.0125f*(cannon.random.nextFloat()-0.5f), 255, 64, 16, 5.0f, 60);

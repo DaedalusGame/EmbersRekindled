@@ -48,8 +48,8 @@ public class ModifierEldritchInsignia extends ModifierBase {
 		if (event.getTarget() instanceof EntityPlayer){
 			int level = ItemModUtil.getArmorMod((EntityPlayer)event.getTarget(), ItemModUtil.modifierRegistry.get(RegistryManager.eldritch_insignia).name);
 			if ((event.getEntityLiving().getLastDamageSource() == null 
-					|| event.getEntityLiving().getLastDamageSource() != null && event.getEntityLiving().getLastDamageSource().getEntity() == null
-					|| event.getEntityLiving().getLastDamageSource() != null && event.getEntityLiving().getLastDamageSource().getEntity() != null && event.getEntityLiving().getLastDamageSource().getEntity().getUniqueID().compareTo(event.getTarget().getUniqueID()) != 0
+					|| event.getEntityLiving().getLastDamageSource() != null && event.getEntityLiving().getLastDamageSource().getTrueSource() == null
+					|| event.getEntityLiving().getLastDamageSource() != null && event.getEntityLiving().getLastDamageSource().getTrueSource() != null && event.getEntityLiving().getLastDamageSource().getTrueSource().getUniqueID().compareTo(event.getTarget().getUniqueID()) != 0
 					) 
 					&& event.getEntity().getEntityId() % (3+level) >= 2){
 				if (level > 0 && !(event.getEntityLiving() instanceof EntityPlayer)/* || event.getEntityLiving() instanceof EntityPlayer && ((EntityPlayer)event.getEntityLiving()).getGameProfile().getName().compareToIgnoreCase("yrsegal") == 0*/){

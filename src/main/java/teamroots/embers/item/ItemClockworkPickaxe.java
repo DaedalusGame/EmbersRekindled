@@ -44,7 +44,6 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		setHarvestLevel("shovel",this.toolMaterial.getHarvestLevel());
 		this.damageVsEntity = 6.0f;
 		this.attackSpeed = -3.0f;
-		GameRegistry.register(this);
 	}
 	
 	@Override

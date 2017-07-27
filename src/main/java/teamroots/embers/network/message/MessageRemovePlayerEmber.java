@@ -50,7 +50,7 @@ public class MessageRemovePlayerEmber implements IMessage {
     {
         @Override
         public IMessage onMessage(final MessageRemovePlayerEmber message, final MessageContext ctx) {
-    		World world = ctx.getServerHandler().playerEntity.world;
+    		World world = ctx.getServerHandler().player.world;
     		EntityPlayer p = world.getPlayerEntityByUUID(message.id);
     		if (p != null){
     			EmberInventoryUtil.removeEmber(p, message.amount);

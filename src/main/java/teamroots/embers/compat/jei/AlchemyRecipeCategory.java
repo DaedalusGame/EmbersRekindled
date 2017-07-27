@@ -16,6 +16,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.Embers;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.util.RenderUtil;
 
@@ -91,35 +92,40 @@ public class AlchemyRecipeCategory extends BlankRecipeCategory {
 			IDrawable ashPartialBar = helper.createDrawable(texture, 109, 11, ((52*(lastRecipe.ironAspectMin+lastRecipe.ironAspectRange))/aspectTotal), 8);
 			ashPartialBar.draw(minecraft, 17, 61);
 			ashBar.draw(minecraft, 17, 61);
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(""+lastRecipe.ironAspectMin+"-"+(lastRecipe.ironAspectMin+lastRecipe.ironAspectRange), 75, 61, 0xFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(""+lastRecipe.ironAspectMin+"-"+(lastRecipe.ironAspectMin+lastRecipe.ironAspectRange), 75, 61, 0xFFFFFF);
 		}
 		if (this.lastRecipe.copperAspectMin+this.lastRecipe.copperAspectRange > 0){
 			IDrawable ashBar = helper.createDrawable(texture, 109, 1, ((52*lastRecipe.copperAspectMin)/aspectTotal), 8);
 			IDrawable ashPartialBar = helper.createDrawable(texture, 109, 11, ((52*(lastRecipe.copperAspectMin+lastRecipe.copperAspectRange))/aspectTotal), 8);
 			ashPartialBar.draw(minecraft, 17, 76);
 			ashBar.draw(minecraft, 17, 76);
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(""+lastRecipe.copperAspectMin+"-"+(lastRecipe.copperAspectMin+lastRecipe.copperAspectRange), 75, 76, 0xFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(""+lastRecipe.copperAspectMin+"-"+(lastRecipe.copperAspectMin+lastRecipe.copperAspectRange), 75, 76, 0xFFFFFF);
 		}
 		if (this.lastRecipe.dawnstoneAspectMin+this.lastRecipe.dawnstoneAspectRange > 0){
 			IDrawable ashBar = helper.createDrawable(texture, 109, 1, ((52*lastRecipe.dawnstoneAspectMin)/aspectTotal), 8);
 			IDrawable ashPartialBar = helper.createDrawable(texture, 109, 11, ((52*(lastRecipe.dawnstoneAspectMin+lastRecipe.dawnstoneAspectRange))/aspectTotal), 8);
 			ashPartialBar.draw(minecraft, 17, 91);
 			ashBar.draw(minecraft, 17, 91);
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(""+lastRecipe.dawnstoneAspectMin+"-"+(lastRecipe.dawnstoneAspectMin+lastRecipe.dawnstoneAspectRange), 75, 91, 0xFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(""+lastRecipe.dawnstoneAspectMin+"-"+(lastRecipe.dawnstoneAspectMin+lastRecipe.dawnstoneAspectRange), 75, 91, 0xFFFFFF);
 		}
 		if (this.lastRecipe.leadAspectMin+this.lastRecipe.leadAspectRange > 0){
 			IDrawable ashBar = helper.createDrawable(texture, 109, 1, ((52*lastRecipe.leadAspectMin)/aspectTotal), 8);
 			IDrawable ashPartialBar = helper.createDrawable(texture, 109, 11, ((52*(lastRecipe.leadAspectMin+lastRecipe.leadAspectRange))/aspectTotal), 8);
 			ashPartialBar.draw(minecraft, 17, 106);
 			ashBar.draw(minecraft, 17, 106);
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(""+lastRecipe.leadAspectMin+"-"+(lastRecipe.leadAspectMin+lastRecipe.leadAspectRange), 75, 106, 0xFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(""+lastRecipe.leadAspectMin+"-"+(lastRecipe.leadAspectMin+lastRecipe.leadAspectRange), 75, 106, 0xFFFFFF);
 		}
 		if (this.lastRecipe.silverAspectMin+this.lastRecipe.silverAspectRange > 0){
 			IDrawable ashBar = helper.createDrawable(texture, 109, 1, ((52*lastRecipe.silverAspectMin)/aspectTotal), 8);
 			IDrawable ashPartialBar = helper.createDrawable(texture, 109, 11, ((52*(lastRecipe.silverAspectMin+lastRecipe.silverAspectRange))/aspectTotal), 8);
 			ashPartialBar.draw(minecraft, 17, 121);
 			ashBar.draw(minecraft, 17, 121);
-			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(""+lastRecipe.silverAspectMin+"-"+(lastRecipe.silverAspectMin+lastRecipe.silverAspectRange), 75, 121, 0xFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(""+lastRecipe.silverAspectMin+"-"+(lastRecipe.silverAspectMin+lastRecipe.silverAspectRange), 75, 121, 0xFFFFFF);
 		}
+	}
+
+	@Override
+	public String getModName() {
+		return Embers.MODID;
 	}
 }

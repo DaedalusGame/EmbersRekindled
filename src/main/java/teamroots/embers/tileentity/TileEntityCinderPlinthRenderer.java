@@ -20,7 +20,7 @@ public class TileEntityCinderPlinthRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityCinderPlinth){
 			TileEntityCinderPlinth plinth = (TileEntityCinderPlinth)tile;
 			if (plinth.inventory.getStackInSlot(0) != ItemStack.EMPTY){

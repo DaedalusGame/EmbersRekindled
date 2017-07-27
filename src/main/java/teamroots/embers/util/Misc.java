@@ -47,7 +47,7 @@ public class Misc {
 	
 	public static ItemStack getRepairItem(ItemStack stack){
 		if (stack.getItem() instanceof ItemTool){
-			ItemStack mat = ((ItemTool)stack.getItem()).getToolMaterial().getRepairItemStack().copy();
+			ItemStack mat = ToolMaterial.valueOf(((ItemTool)stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
 			if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE){
 				mat.setItemDamage(0);
 			}

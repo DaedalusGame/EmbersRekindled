@@ -24,7 +24,7 @@ import teamroots.embers.block.IModeledBlock;
 
 public class BlockMoltenDawnstone extends BlockFluidClassic implements IModeledBlock {
 	public static FluidStack stack = new FluidStack(RegistryManager.fluid_molten_dawnstone,1000);
-	
+	public Item itemBlock = null;
 	public BlockMoltenDawnstone(String name, boolean addToTab) {
 		super(RegistryManager.fluid_molten_dawnstone,Material.LAVA);
 		setRegistryName(Embers.MODID+":"+name);
@@ -33,8 +33,7 @@ public class BlockMoltenDawnstone extends BlockFluidClassic implements IModeledB
 		}
 		this.setQuantaPerBlock(6);
 		RegistryManager.fluid_molten_dawnstone.setBlock(this);
-		GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+		itemBlock = new ItemBlock(this).setRegistryName(this.getRegistryName());
 	}
 	
 	@Override
@@ -43,7 +42,7 @@ public class BlockMoltenDawnstone extends BlockFluidClassic implements IModeledB
 	}
 	
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side){
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
 		return false;
 	}
 	

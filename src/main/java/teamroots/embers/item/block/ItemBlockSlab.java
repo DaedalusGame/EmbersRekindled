@@ -30,7 +30,6 @@ public class ItemBlockSlab extends ItemBlock implements IModeledItem {
 		doubleSlab = doubleSlabBlock;
 		setRegistryName(block.getRegistryName());
 		tab = Embers.tab;
-		GameRegistry.register(this);
 	}
 	
 	@Override

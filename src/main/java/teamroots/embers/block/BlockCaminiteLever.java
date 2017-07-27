@@ -100,7 +100,7 @@ public class BlockCaminiteLever extends BlockBase {
 				}
 			}
 
-			if (worldIn.getBlockState(pos.down()).isFullyOpaque()) {
+			if (worldIn.getBlockState(pos.down()).isOpaqueCube()) {
 				return iblockstate.withProperty(FACING,
 						BlockLever.EnumOrientation.forFacings(EnumFacing.UP, placer.getHorizontalFacing()));
 			} else {

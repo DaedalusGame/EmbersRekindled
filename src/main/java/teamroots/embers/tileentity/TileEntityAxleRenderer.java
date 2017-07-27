@@ -6,7 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -41,7 +41,7 @@ public class TileEntityAxleRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (t instanceof TileEntityAxle){
 			IBlockState state = t.getWorld().getBlockState(t.getPos());
 			TileEntityAxle axle = (TileEntityAxle)t;
@@ -55,7 +55,7 @@ public class TileEntityAxleRenderer extends TileEntitySpecialRenderer {
 	            GlStateManager.disableCull();
 	            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 	            Tessellator tess = Tessellator.getInstance();
-	            VertexBuffer buffer = tess.getBuffer();
+	            BufferBuilder buffer = tess.getBuffer();
 	            
 	            GlStateManager.pushMatrix();
 	            GlStateManager.translate(x+0.5, y+0.5, z+0.5);

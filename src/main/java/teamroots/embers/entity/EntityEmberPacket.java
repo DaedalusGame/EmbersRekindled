@@ -98,7 +98,7 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 		lifetime --;
 		if (lifetime <= 0){
 			getEntityWorld().removeEntity(this);
-			this.kill();
+			this.setDead();
 		}
 		if (!dead){
 			if (dest.getX() != 0 || dest.getY() != 0 || dest.getZ() != 0){
@@ -112,9 +112,9 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 				if (length <= 3){
 					weight = 0.9*((3.0-length)/3.0);
 				}
-				motionX = (0.9-weight)*motionX+(0.1+weight)*targetVector.xCoord;
-				motionY = (0.9-weight)*motionY+(0.1+weight)*targetVector.yCoord;
-				motionZ = (0.9-weight)*motionZ+(0.1+weight)*targetVector.zCoord;
+				motionX = (0.9-weight)*motionX+(0.1+weight)*targetVector.x;
+				motionY = (0.9-weight)*motionY+(0.1+weight)*targetVector.y;
+				motionZ = (0.9-weight)*motionZ+(0.1+weight)*targetVector.z;
 			}
 			posX += motionX;
 			posY += motionY;

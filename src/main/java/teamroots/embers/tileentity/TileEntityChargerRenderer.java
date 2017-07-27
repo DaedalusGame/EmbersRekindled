@@ -20,7 +20,7 @@ public class TileEntityChargerRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityCharger){
 			TileEntityCharger charger = (TileEntityCharger)tile;
 			if (charger.inventory.getStackInSlot(0) != ItemStack.EMPTY){

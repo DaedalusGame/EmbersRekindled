@@ -140,18 +140,18 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 				for (EntityItem item : items){
 					Vec3d v = new Vec3d(item.posX-(this.getPos().getX()+0.5),item.posY-(this.getPos().getY()+0.5),item.posZ-(this.getPos().getZ()+0.5));
 					v.normalize();
-					item.motionX = (-v.xCoord*0.25*0.2f + item.motionX*0.8f);
-					item.motionY = (-v.yCoord*0.25*0.2f + item.motionY*0.8f);
-					item.motionZ = (-v.zCoord*0.25*0.2f + item.motionZ*0.8f);
+					item.motionX = (-v.x*0.25*0.2f + item.motionX*0.8f);
+					item.motionY = (-v.y*0.25*0.2f + item.motionY*0.8f);
+					item.motionZ = (-v.z*0.25*0.2f + item.motionZ*0.8f);
 				}
 			}
 			List<EntityItem> nearestItems = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX()-0.25,getPos().getY()-0.25,getPos().getZ()-0.25,getPos().getX()+1.25,getPos().getY()+1.25,getPos().getZ()+1.25));
 			if (nearestItems.size() > 0){
 				for (EntityItem item : nearestItems){
-					ItemStack stack = inventory.insertItem(0, item.getEntityItem(), true);
-					if (stack.getItem() == item.getEntityItem().getItem() && stack.getItemDamage() == item.getEntityItem().getItemDamage() && stack.getCount() < item.getEntityItem().getCount() || stack == ItemStack.EMPTY){
-						item.setEntityItemStack(inventory.insertItem(0, item.getEntityItem(), false));
-						if (item.getEntityItem().isEmpty()){
+					ItemStack stack = inventory.insertItem(0, item.getItem(), true);
+					if (stack.getItem() == item.getItem().getItem() && stack.getItemDamage() == item.getItem().getItemDamage() && stack.getCount() < item.getItem().getCount() || stack == ItemStack.EMPTY){
+						item.setItem(inventory.insertItem(0, item.getItem(), false));
+						if (item.getItem().isEmpty()){
 							world.removeEntity(item);
 						}
 						if (!toUpdate.contains(getPos())){

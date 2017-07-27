@@ -14,7 +14,6 @@ public class ItemBase extends Item implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,7 +29,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityStampBase && !tile.getWorld().isAirBlock(tile.getPos())){
 			TileEntityStampBase tank = (TileEntityStampBase)tile;
 			if (tank.getWorld().getBlockState(tank.getPos()).getBlock() instanceof BlockStampBase){
@@ -94,7 +94,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 						GL11.glTranslated(-0.5, -0.5, -0.5);
 						
 			            Tessellator tess = Tessellator.getInstance();
-			            VertexBuffer buffer = tess.getBuffer();
+			            BufferBuilder buffer = tess.getBuffer();
 			            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 			            buffer.pos(0.25, 0.75+0.1875*((float)amount/(float)capacity), 0.25).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
 						buffer.pos(0.75, 0.75+0.1875*((float)amount/(float)capacity), 0.25).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();

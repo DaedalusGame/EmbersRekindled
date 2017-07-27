@@ -50,7 +50,7 @@ public class EntityEmberLight extends Entity {
 		lifetime --;
 		if (lifetime <= 0){
 			getEntityWorld().removeEntity(this);
-			this.kill();
+			this.setDead();
 		}
 		this.motionY -= 0.05f;
 		

@@ -90,7 +90,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 		getDataManager().setDirty(lifetime);
 		if (getDataManager().get(lifetime) <= 0){
 			getEntityWorld().removeEntity(this);
-			this.kill();
+			this.setDead();
 		}
 		if (!getDataManager().get(dead)){
 			getDataManager().set(value, getDataManager().get(value)-0.025f);
@@ -134,7 +134,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 						source = DamageSource.causePlayerDamage(player);
 						target.setFire(1);
 						target.attackEntityFrom(source, getDataManager().get(value));
-						target.setLastAttacker(player);
+						target.setLastAttackedEntity(player);
 						target.setRevengeTarget(player);
 						target.knockBack(this, 0.5f, -motionX, -motionZ);
 					}

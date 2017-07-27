@@ -24,7 +24,7 @@ import teamroots.embers.block.IModeledBlock;
 
 public class BlockMoltenSilver extends BlockFluidClassic implements IModeledBlock {
 	public static FluidStack stack = new FluidStack(RegistryManager.fluid_molten_silver,1000);
-	
+	public Item itemBlock = null;
 	public BlockMoltenSilver(String name, boolean addToTab) {
 		super(RegistryManager.fluid_molten_silver,Material.LAVA);
 		setRegistryName(Embers.MODID+":"+name);
@@ -33,8 +33,7 @@ public class BlockMoltenSilver extends BlockFluidClassic implements IModeledBloc
 		}
 		this.setQuantaPerBlock(6);
 		RegistryManager.fluid_molten_silver.setBlock(this);
-		GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+		itemBlock = new ItemBlock(this).setRegistryName(this.getRegistryName());
 	}
 	
 	@Override
@@ -43,7 +42,7 @@ public class BlockMoltenSilver extends BlockFluidClassic implements IModeledBloc
 	}
 	
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side){
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
 		return false;
 	}
 	

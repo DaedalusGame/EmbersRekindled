@@ -12,7 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -77,7 +77,7 @@ public class GuiCodex extends GuiScreen {
 			RenderHelper.disableStandardItemLighting();
 			RenderHelper.enableGUIStandardItemLighting();
 			this.itemRender.renderItemIntoGUI(stack, x, y);
-			this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, stack, x, y, stack.getCount() != 1 ? Integer.toString(stack.getCount()) : "");
+			this.itemRender.renderItemOverlayIntoGUI(this.fontRenderer, stack, x, y, stack.getCount() != 1 ? Integer.toString(stack.getCount()) : "");
 			if (mouseX >= x && mouseY >= y && mouseX < x+16 && mouseY < y+16){
 				this.markTooltipForRender(stack, mouseX, mouseY);
 			}
@@ -91,7 +91,7 @@ public class GuiCodex extends GuiScreen {
 			RenderHelper.disableStandardItemLighting();
 			RenderHelper.enableGUIStandardItemLighting();
 			this.itemRender.renderItemIntoGUI(stack, x, y);
-			this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, stack, x, y, stack.getCount() != 1 ? Integer.toString(stack.getCount()) : "");
+			this.itemRender.renderItemOverlayIntoGUI(this.fontRenderer, stack, x, y, stack.getCount() != 1 ? Integer.toString(stack.getCount()) : "");
 			RenderHelper.enableStandardItemLighting();
 		}
 		GlStateManager.disableLighting();
@@ -334,7 +334,7 @@ public class GuiCodex extends GuiScreen {
 			
 			this.drawTexturedModalRect(basePosX+64, basePosY+56, 192, 176, 64, 64);
 			
-			this.drawCenteredTextGlowing(this.fontRendererObj, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
+			this.drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
 		}
 		else {
 			if (this.researchPage == -1){
@@ -367,7 +367,7 @@ public class GuiCodex extends GuiScreen {
 					}
 					if (r.selectedAmount > 0.0f){
 						Tessellator tess = Tessellator.getInstance();
-						VertexBuffer b = tess.getBuffer();
+						BufferBuilder b = tess.getBuffer();
 						float x = r.x;
 						float y = r.y;
 						GlStateManager.color(1, 1, 1, 1);
@@ -387,7 +387,7 @@ public class GuiCodex extends GuiScreen {
 					if (r.ancestors.size() > 0){
 						for (int l = 0; l < r.ancestors.size(); l ++){
 							Tessellator tess = Tessellator.getInstance();
-							VertexBuffer b = tess.getBuffer();
+							BufferBuilder b = tess.getBuffer();
 							float x1 = r.x;
 							float y1 = r.y;
 							float x2 = r.ancestors.get(l).x;
@@ -419,7 +419,7 @@ public class GuiCodex extends GuiScreen {
 				RenderUtil.drawTexturedModalRect(basePosX, basePosY2, zLevel, 0f/256f, 272f/512f, 192f/256f,305f/512f, 384, 33);
 				for (int i = 0; i < category.researches.size(); i ++){
 					if (i == this.selectedPageIndex){
-						this.drawCenteredTextGlowing(this.fontRendererObj, I18n.format("embers.research."+category.name+"."+category.researches.get(i).name), basePosX+192, basePosY2+13);
+						this.drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+category.name+"."+category.researches.get(i).name), basePosX+192, basePosY2+13);
 						GlStateManager.color(1f, 1f, 1f, 1f);
 					}
 				}
@@ -437,11 +437,11 @@ public class GuiCodex extends GuiScreen {
 				
 				ResearchCategory c = ResearchManager.researches.get(this.categoryIndex);
 				ResearchBase r = c.researches.get(this.researchPage);
-				this.drawCenteredTextGlowing(this.fontRendererObj, I18n.format("embers.research."+c.name+"."+r.name+".title"), basePosX+96, basePosY+19);
+				this.drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+c.name+"."+r.name+".title"), basePosX+96, basePosY+19);
 				GlStateManager.color(1f, 1f, 1f, 1f);
 				List<String> strings = r.getLines(I18n.format("embers.research."+c.name+"."+r.name+".desc"), 152);
 				for (int i = 0; i < strings.size(); i ++){
-					this.drawTextGlowing(this.fontRendererObj, strings.get(i), basePosX+20, basePosY+43+i*12);
+					this.drawTextGlowing(this.fontRenderer, strings.get(i), basePosX+20, basePosY+43+i*12);
 				}
 			}
 		}
@@ -462,7 +462,7 @@ public class GuiCodex extends GuiScreen {
 	
 	public void renderAura(float x, float y){
 		Tessellator tess = Tessellator.getInstance();
-		VertexBuffer b = tess.getBuffer();
+		BufferBuilder b = tess.getBuffer();
 		b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		for (float i = -80; i < 80; i += 10f){
 			RenderUtil.drawQuadGuiExt(b, x-10, y-10, x+10, y-10, x+10, y+10, x-10, y+10, 0, 0, 1, 1, 1, 1, 0.25f, 0.25f, 0.25f, 255f);

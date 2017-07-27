@@ -12,6 +12,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.Embers;
 
 public class MixingRecipeCategory extends BlankRecipeCategory {
     private final IDrawable background;
@@ -62,5 +63,10 @@ public class MixingRecipeCategory extends BlankRecipeCategory {
         	}
         }
         fluid.set(3, ingredients.getOutputs(FluidStack.class).get(0));
+	}
+
+	@Override
+	public String getModName() {
+		return Embers.MODID;
 	}
 }

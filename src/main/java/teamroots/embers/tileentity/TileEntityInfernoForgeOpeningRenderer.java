@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -27,7 +27,7 @@ public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRend
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityInfernoForgeOpening){
 			TileEntityInfernoForgeOpening pipe = (TileEntityInfernoForgeOpening)tile;
 			float dx = 0.45f*pipe.openAmount;
@@ -36,7 +36,7 @@ public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRend
             GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
             Tessellator tess = Tessellator.getInstance();
-            VertexBuffer buffer = tess.getBuffer();
+            BufferBuilder buffer = tess.getBuffer();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, left.x1+x-dx, left.y1+y, left.z1+z, left.x2+x-dx, left.y2+y, left.z2+z, left.textures, new int[]{1,1,1,1,1,1});
             RenderUtil.addBox(buffer, right.x1+x+dx, right.y1+y, right.z1+z, right.x2+x+dx, right.y2+y, right.z2+z, right.textures, new int[]{-1,-1,1,1,1,1});

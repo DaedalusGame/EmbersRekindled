@@ -17,7 +17,6 @@ public class ItemAxeBase2 extends ItemAxe implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

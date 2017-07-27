@@ -5,6 +5,7 @@ import java.util.List;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,17 +39,19 @@ public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberC
 	}
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems){
-		ItemStack emptyStack = new ItemStack(this,1);
-		emptyStack.setTagCompound(new NBTTagCompound());
-		setEmberCapacity(emptyStack, 1000.0);
-		setEmber(emptyStack,0.0);
-		subItems.add(emptyStack);
-		ItemStack fullStack = new ItemStack(this,1);
-		fullStack.setTagCompound(new NBTTagCompound());
-		setEmberCapacity(fullStack, 1000.0);
-		setEmber(fullStack,1000.0);
-		subItems.add(fullStack);
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems){
+		if (tab == this.getCreativeTab()){
+			ItemStack emptyStack = new ItemStack(this,1);
+			emptyStack.setTagCompound(new NBTTagCompound());
+			setEmberCapacity(emptyStack, 1000.0);
+			setEmber(emptyStack,0.0);
+			subItems.add(emptyStack);
+			ItemStack fullStack = new ItemStack(this,1);
+			fullStack.setTagCompound(new NBTTagCompound());
+			setEmberCapacity(fullStack, 1000.0);
+			setEmber(fullStack,1000.0);
+			subItems.add(fullStack);
+		}
 	}
 	
 	@Override
@@ -75,7 +78,7 @@ public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberC
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced){
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
 		if (stack.hasTagCompound()){
 			tooltip.add(""+getEmber(stack)+" / "+getEmberCapacity(stack));
 		}

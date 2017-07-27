@@ -365,7 +365,7 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 			for (int i = 0; i < connectedFaces.size(); i ++){
 				TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
 				if (t != null && !(t instanceof TileEntityFluidPipe)){
-					if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
+					if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite())){
 						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 						if (handler != null){
 							from.add(connectedFaces.get(i));

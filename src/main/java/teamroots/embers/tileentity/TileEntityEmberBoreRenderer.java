@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -28,7 +28,7 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (t instanceof TileEntityEmberBore){
 			TileEntityEmberBore tile = (TileEntityEmberBore)t;
 	            
@@ -36,7 +36,7 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
             GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
             Tessellator tess = Tessellator.getInstance();
-            VertexBuffer buffer = tess.getBuffer();
+            BufferBuilder buffer = tess.getBuffer();
             
             float pTicksRotation = partialTicks*12.0f;
             if (tile.ticksFueled <= 0){

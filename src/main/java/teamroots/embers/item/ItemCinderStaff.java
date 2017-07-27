@@ -28,7 +28,7 @@ public class ItemCinderStaff extends ItemBase {
 			double charge = ((Math.min(60, 72000-timeLeft))/60.0)*17.0;
 			float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
 			EntityEmberProjectile proj = new EntityEmberProjectile(world);
-			proj.initCustom(entity.posX+entity.getLookVec().xCoord*spawnDistance,entity.posY+entity.getEyeHeight()+entity.getLookVec().yCoord*spawnDistance,entity.posZ+entity.getLookVec().zCoord*spawnDistance,entity.getLookVec().xCoord*0.85, entity.getLookVec().yCoord*0.85, entity.getLookVec().zCoord*0.85, charge, entity.getUniqueID());
+			proj.initCustom(entity.posX+entity.getLookVec().x*spawnDistance,entity.posY+entity.getEyeHeight()+entity.getLookVec().y*spawnDistance,entity.posZ+entity.getLookVec().z*spawnDistance,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, charge, entity.getUniqueID());
 			world.spawnEntity(proj);
 		}
 		stack.getTagCompound().setInteger("cooldown", 10);
@@ -58,7 +58,7 @@ public class ItemCinderStaff extends ItemBase {
 		double charge = ((Math.min(60, 72000-count))/60.0)*15.0;
 		for (int i = 0; i < 4; i ++){
 			float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
-			ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float)player.posX+spawnDistance*(float)player.getLookVec().xCoord+(itemRand.nextFloat()*0.1f-0.05f), (float)player.posY+player.getEyeHeight()+spawnDistance*(float)player.getLookVec().yCoord+(itemRand.nextFloat()*0.1f-0.05f), (float)player.posZ+spawnDistance*(float)player.getLookVec().zCoord+(itemRand.nextFloat()*0.1f-0.05f), 0, 0, 0, 255, 64, 16, (float)charge/1.75f, 24);
+			ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float)player.posX+spawnDistance*(float)player.getLookVec().x+(itemRand.nextFloat()*0.1f-0.05f), (float)player.posY+player.getEyeHeight()+spawnDistance*(float)player.getLookVec().y+(itemRand.nextFloat()*0.1f-0.05f), (float)player.posZ+spawnDistance*(float)player.getLookVec().z+(itemRand.nextFloat()*0.1f-0.05f), 0, 0, 0, 255, 64, 16, (float)charge/1.75f, 24);
 		}
 	}
 	

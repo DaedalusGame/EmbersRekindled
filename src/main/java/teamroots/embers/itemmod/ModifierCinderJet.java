@@ -50,9 +50,9 @@ public class ModifierCinderJet extends ModifierBase {
 					if (dashStrength > 0 && event.getEntityLiving().onGround && EmberInventoryUtil.getEmberTotal((EntityPlayer)event.getEntity()) > cost){
 						EmberInventoryUtil.removeEmber(((EntityPlayer)event.getEntity()), cost);
 						event.getEntityLiving().velocityChanged = true;
-						event.getEntityLiving().motionX += 2.0*event.getEntityLiving().getLookVec().xCoord*dashStrength;
+						event.getEntityLiving().motionX += 2.0*event.getEntityLiving().getLookVec().x*dashStrength;
 						event.getEntityLiving().motionY += 0.4;
-						event.getEntityLiving().motionZ += 2.0*event.getEntityLiving().getLookVec().zCoord*dashStrength;
+						event.getEntityLiving().motionZ += 2.0*event.getEntityLiving().getLookVec().z*dashStrength;
 						if (!event.getEntity().getEntityWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessagePlayerJetFX(event.getEntity().getUniqueID()));
 						}

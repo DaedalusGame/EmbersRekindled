@@ -35,14 +35,14 @@ public class ModifierFlameBarrier extends ModifierBase {
 	
 	@SubscribeEvent
 	public void onHit(LivingHurtEvent event){
-		if (event.getEntity() instanceof EntityPlayer && event.getSource().getEntity() instanceof EntityLivingBase){
+		if (event.getEntity() instanceof EntityPlayer && event.getSource().getTrueSource() instanceof EntityLivingBase){
 			int blastingLevel = ItemModUtil.getArmorMod((EntityPlayer)event.getEntity(), ItemModUtil.modifierRegistry.get(RegistryManager.flame_barrier).name);
 
 			float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
 			if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(((EntityPlayer)event.getEntity())) >= cost){
 				EmberInventoryUtil.removeEmber(((EntityPlayer)event.getEntity()), cost);
-				((EntityLivingBase)event.getSource().getEntity()).attackEntityFrom(RegistryManager.damage_ember, strength*event.getAmount()*0.5f);
-				((EntityLivingBase)event.getSource().getEntity()).setFire(blastingLevel+1);
+				((EntityLivingBase)event.getSource().getTrueSource()).attackEntityFrom(RegistryManager.damage_ember, strength*event.getAmount()*0.5f);
+				((EntityLivingBase)event.getSource().getTrueSource()).setFire(blastingLevel+1);
 				if (!event.getEntity().world.isRemote){
 					PacketHandler.INSTANCE.sendToAll(new MessageFlameShieldFX(event.getEntity().posX,event.getEntity().posY+event.getEntity().height/2.0,event.getEntity().posZ));
 				}

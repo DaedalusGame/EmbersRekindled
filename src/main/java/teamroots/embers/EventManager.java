@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.Profile;
@@ -146,17 +147,29 @@ public class EventManager {
 	public static boolean allowPlayerRenderEvent = true;
 	public static int ticks = 0;
 	public static float prevCooledStrength = 0;
+	public static boolean acceptUpdates = true;
 	
 	public static Map<BlockPos, TileEntity> toUpdate = new HashMap<BlockPos, TileEntity>();
+	public static Map<BlockPos, TileEntity> overflow = new HashMap<BlockPos, TileEntity>();
 	
 	static EntityPlayer clientPlayer = null;
 	
 	public static void markTEForUpdate(BlockPos pos, TileEntity tile){
-		if (!toUpdate.containsKey(pos)){
-			toUpdate.put(pos, tile);
+		if (!tile.getWorld().isRemote && acceptUpdates){
+			if (!toUpdate.containsKey(pos)){
+				toUpdate.put(pos, tile);
+			}
+			else {
+				toUpdate.replace(pos, tile);
+			}
 		}
-		else {
-			toUpdate.replace(pos, tile);
+		else if (!tile.getWorld().isRemote){
+			if (!overflow.containsKey(pos)){
+				overflow.put(pos, tile);
+			}
+			else {
+				overflow.replace(pos, tile);
+			}
 		}
 	}
 	
@@ -234,8 +247,8 @@ public class EventManager {
 				}
 			}
 		}
-		if (event.getSource().getEntity() instanceof EntityPlayer){
-			EntityPlayer damager = (EntityPlayer)event.getSource().getEntity();
+		if (event.getSource().getTrueSource() instanceof EntityPlayer){
+			EntityPlayer damager = (EntityPlayer)event.getSource().getTrueSource();
 			ItemStack s = damager.getHeldItemMainhand();
 			if (!s.isEmpty()){
 				if (ItemModUtil.hasHeat(s)){
@@ -273,7 +286,7 @@ public class EventManager {
 		}
 		
 		Tessellator tess = Tessellator.getInstance();
-		VertexBuffer b = tess.getBuffer();
+		BufferBuilder b = tess.getBuffer();
 		if (showBar){
 			World world = player.getEntityWorld();
 			if (e.getType() == ElementType.TEXT){
@@ -326,7 +339,7 @@ public class EventManager {
 				if (state.getBlock() instanceof IDial){
 					List<String> text = ((IDial)state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state);
 					for (int i = 0; i < text.size(); i ++){
-						Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text.get(i), x-Minecraft.getMinecraft().fontRendererObj.getStringWidth(text.get(i))/2, y+40+11*i, 0xFFFFFF);
+						Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text.get(i), x-Minecraft.getMinecraft().fontRenderer.getStringWidth(text.get(i))/2, y+40+11*i, 0xFFFFFF);
 					}
 				}
 			}
@@ -375,22 +388,22 @@ public class EventManager {
 				event.setAmount(event.getAmount()*0.5f);
 			}
 		}
-		if (event.getSource().getEntity() != null){
-			if (event.getSource().getEntity() instanceof EntityPlayer){
-				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() == RegistryManager.tyrfing){
+		if (event.getSource().getTrueSource() != null){
+			if (event.getSource().getTrueSource() instanceof EntityPlayer){
+				if (((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().getItem() == RegistryManager.tyrfing){
 					if (!event.getEntity().world.isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageTyrfingBurstFX(event.getEntity().posX,event.getEntity().posY+event.getEntity().height/2.0f,event.getEntity().posZ));
 					}
-					EntityPlayer p = ((EntityPlayer)event.getSource().getEntity());
+					EntityPlayer p = ((EntityPlayer)event.getSource().getTrueSource());
 					event.setAmount((event.getAmount()/4.0f)*(4.0f+(float)event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue()*1.0f));
 				}
-				if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand() != ItemStack.EMPTY){
-					if (((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
-						if (((IEmberChargedTool)((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getItem()).hasEmber(((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getEntity()).capabilities.isCreativeMode){
+				if (((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand() != ItemStack.EMPTY){
+					if (((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
+						if (((IEmberChargedTool)((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().getItem()).hasEmber(((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getTrueSource()).capabilities.isCreativeMode){
 							event.getEntityLiving().setFire(1);
 							if (!event.getEntityLiving().getEntityWorld().isRemote){
 								PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getEntityLiving().posX,event.getEntityLiving().posY+event.getEntityLiving().getEyeHeight()/1.5,event.getEntityLiving().posZ));
-								((EntityPlayer)event.getSource().getEntity()).getHeldItemMainhand().getTagCompound().setBoolean("didUse", true);
+								((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().getTagCompound().setBoolean("didUse", true);
 							}
 						}
 						else {
@@ -497,7 +510,7 @@ public class EventManager {
 						double w = event.getFontRenderer().getStringWidth("                        ");
 						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("embers:textures/gui/heat_bar.png"));
 						Tessellator tess = Tessellator.getInstance();
-						VertexBuffer b = tess.getBuffer();
+						BufferBuilder b = tess.getBuffer();
 						GlStateManager.disableTexture2D();
 						GlStateManager.enableAlpha();
 						int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
@@ -584,7 +597,7 @@ public class EventManager {
 		List<TileEntity> list = Minecraft.getMinecraft().world.loadedTileEntityList;
 		GlStateManager.pushMatrix();
 		for (int i = 0; i < list.size(); i ++){
-			TileEntitySpecialRenderer render = TileEntityRendererDispatcher.instance.getSpecialRenderer(list.get(i));
+			TileEntitySpecialRenderer render = TileEntityRendererDispatcher.instance.getRenderer(list.get(i));
 			if (render instanceof ITileEntitySpecialRendererLater){
 				double x = Minecraft.getMinecraft().player.lastTickPosX + Minecraft.getMinecraft().getRenderPartialTicks()*(Minecraft.getMinecraft().player.posX-Minecraft.getMinecraft().player.lastTickPosX);
 				double y = Minecraft.getMinecraft().player.lastTickPosY + Minecraft.getMinecraft().getRenderPartialTicks()*(Minecraft.getMinecraft().player.posY-Minecraft.getMinecraft().player.lastTickPosY);
@@ -606,12 +619,12 @@ public class EventManager {
         float f = 1.0F / tileWidth;
         float f1 = 1.0F / tileHeight;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)vHeight) * f1)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)uWidth) * f), (double)((v + (float)vHeight) * f1)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)uWidth) * f), (double)(v * f1)).endVertex();
-        vertexbuffer.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
+        BufferBuilder BufferBuilder = tessellator.getBuffer();
+        BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        BufferBuilder.pos((double)x, (double)(y + height), 0.0D).tex((double)(u * f), (double)((v + (float)vHeight) * f1)).endVertex();
+        BufferBuilder.pos((double)(x + width), (double)(y + height), 0.0D).tex((double)((u + (float)uWidth) * f), (double)((v + (float)vHeight) * f1)).endVertex();
+        BufferBuilder.pos((double)(x + width), (double)y, 0.0D).tex((double)((u + (float)uWidth) * f), (double)(v * f1)).endVertex();
+        BufferBuilder.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
         tessellator.draw();
     }
 	
@@ -619,12 +632,16 @@ public class EventManager {
 	public void onWorldTick(TickEvent.WorldTickEvent event){
 		if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
 			NBTTagList list = new NBTTagList();
-			TileEntity[] updateArray = toUpdate.values().toArray(new TileEntity[toUpdate.size()]);
+			acceptUpdates = false;
+			TileEntity[] updateArray = toUpdate.values().toArray(new TileEntity[0]);
+			acceptUpdates = true;
+			for (Entry<BlockPos, TileEntity> e : overflow.entrySet()){
+				toUpdate.put(e.getKey(), e.getValue());
+			}
+			overflow.clear();
 			for (int i = 0; i < updateArray.length; i ++){
 				TileEntity t = updateArray[i];
-				if (!event.world.isRemote){
-					list.appendTag(t.getUpdateTag());
-				}
+				list.appendTag(t.getUpdateTag());
 			}
 			if (!list.hasNoTags()){
 				NBTTagCompound tag = new NBTTagCompound();

@@ -50,8 +50,8 @@ public class ModifierSuperheater extends ModifierBase {
 	
 	@SubscribeEvent
 	public void onHit(LivingHurtEvent event){
-		if (event.getSource().getEntity() instanceof EntityPlayer){
-			EntityPlayer damager = (EntityPlayer)event.getSource().getEntity();
+		if (event.getSource().getTrueSource() instanceof EntityPlayer){
+			EntityPlayer damager = (EntityPlayer)event.getSource().getTrueSource();
 			ItemStack s = damager.getHeldItemMainhand();
 			if (!s.isEmpty()){
 				if (ItemModUtil.hasHeat(s)){

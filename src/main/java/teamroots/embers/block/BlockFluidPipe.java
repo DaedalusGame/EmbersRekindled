@@ -43,10 +43,7 @@ public class BlockFluidPipe extends BlockTEBase {
 	
 	@Override
 	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		if (world.getTileEntity(pos) instanceof TileEntityFluidPipe){
-			return ((TileEntityFluidPipe)world.getTileEntity(pos)).getConnection(side) == TileEntityFluidPipe.EnumPipeConnection.NONE;
-		}
-		return true;
+		return false;
 	}
 	
 	@Override

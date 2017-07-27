@@ -14,6 +14,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.Embers;
 
 public class StampRecipeCategory extends BlankRecipeCategory {
     private final IDrawable background;
@@ -62,5 +63,10 @@ public class StampRecipeCategory extends BlankRecipeCategory {
         IGuiFluidStackGroup fluid = layout.getFluidStacks();
         fluid.init(3, true, 47, 48, 16, 32, 1500, true, null);
         fluid.set(3, ingredients.getInputs(FluidStack.class).get(0));
+	}
+
+	@Override
+	public String getModName() {
+		return Embers.MODID;
 	}
 }

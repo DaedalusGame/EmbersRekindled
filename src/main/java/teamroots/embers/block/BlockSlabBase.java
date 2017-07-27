@@ -29,7 +29,6 @@ public class BlockSlabBase extends BlockSlab {
 			setCreativeTab(Embers.tab);
 		}
 		this.useNeighborBrightness = true;
-		GameRegistry.register(this);
 	}
 	
 	public BlockSlabBase setIsOpaqueCube(boolean b){

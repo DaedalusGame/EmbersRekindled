@@ -15,7 +15,6 @@ public class ItemHoeBase extends ItemHoe implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -40,7 +40,7 @@ public class TileEntityStamperRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityStamper){
 			TileEntityStamper stamp = (TileEntityStamper)tile;
 			IBlockState state = tile.getWorld().getBlockState(tile.getPos());
@@ -48,7 +48,7 @@ public class TileEntityStamperRenderer extends TileEntitySpecialRenderer {
 				Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	            GlStateManager.disableCull();
 	            Tessellator tess = Tessellator.getInstance();
-	            VertexBuffer buffer = tess.getBuffer();
+	            BufferBuilder buffer = tess.getBuffer();
 	            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 	            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 	            float offX = 0;

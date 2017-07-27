@@ -19,7 +19,7 @@ public class TileEntityDawnstoneAnvilRenderer extends TileEntitySpecialRenderer 
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityDawnstoneAnvil){
 			TileEntityDawnstoneAnvil anvil = (TileEntityDawnstoneAnvil)tile;
 			random.setSeed(tile.getWorld().getSeed());

@@ -15,7 +15,6 @@ public class ItemPickaxeBase extends ItemPickaxe implements IModeledItem {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
 	}
 	
 	@Override

@@ -25,7 +25,6 @@ public class ItemAxeBase extends ItemTool implements IModeledItem {
 		setHarvestLevel("axe",this.toolMaterial.getHarvestLevel());
 		this.damageVsEntity = this.toolMaterial.getDamageVsEntity() + 6.0f;
 		this.attackSpeed = -3.1f;
-		GameRegistry.register(this);
 	}
 	
 	@Override

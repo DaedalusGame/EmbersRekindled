@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -25,7 +25,7 @@ public class TileEntityFieldChartRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityFieldChart){
 			TileEntityFieldChart pipe = (TileEntityFieldChart)tile;
 			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
@@ -41,7 +41,7 @@ public class TileEntityFieldChartRenderer extends TileEntitySpecialRenderer {
 			GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
             Tessellator tess = Tessellator.getInstance();
             GlStateManager.shadeModel(GL11.GL_SMOOTH);
-            VertexBuffer buffer = tess.getBuffer();
+            BufferBuilder buffer = tess.getBuffer();
             GlStateManager.depthMask(false);
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
             for (float i = -160; i < 160; i += 32){

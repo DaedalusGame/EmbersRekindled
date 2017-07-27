@@ -31,13 +31,13 @@ public class ItemIgnitionCannon extends ItemBase {
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft){
 		double charge = (Math.min(20, timeLeft))/20.0;
-		double posX = entity.posX+entity.getLookVec().xCoord+(entity.width/2.0)*Math.sin(Math.toRadians(-entity.rotationYaw-90));
-		double posY = entity.posY+entity.getEyeHeight()-0.2+entity.getLookVec().yCoord;
-		double posZ = entity.posZ+entity.getLookVec().zCoord+(entity.width/2.0)*Math.cos(Math.toRadians(-entity.rotationYaw-90));
+		double posX = entity.posX+entity.getLookVec().x+(entity.width/2.0)*Math.sin(Math.toRadians(-entity.rotationYaw-90));
+		double posY = entity.posY+entity.getEyeHeight()-0.2+entity.getLookVec().y;
+		double posZ = entity.posZ+entity.getLookVec().z+(entity.width/2.0)*Math.cos(Math.toRadians(-entity.rotationYaw-90));
 		
-		double targX = entity.posX+entity.getLookVec().xCoord*96.0f+(30.0*(1.0-charge)*(itemRand.nextFloat()-0.5));
-		double targY = entity.posY+entity.getLookVec().yCoord*96.0f+(30.0*(1.0-charge)*(itemRand.nextFloat()-0.5));
-		double targZ = entity.posZ+entity.getLookVec().zCoord*96.0f+(30.0*(1.0-charge)*(itemRand.nextFloat()-0.5));
+		double targX = entity.posX+entity.getLookVec().x*96.0f+(30.0*(1.0-charge)*(itemRand.nextFloat()-0.5));
+		double targY = entity.posY+entity.getLookVec().y*96.0f+(30.0*(1.0-charge)*(itemRand.nextFloat()-0.5));
+		double targZ = entity.posZ+entity.getLookVec().z*96.0f+(30.0*(1.0-charge)*(itemRand.nextFloat()-0.5));
 		
 		double dX = targX-posX;
 		double dY = targY-posY;
@@ -66,7 +66,7 @@ public class ItemIgnitionCannon extends ItemBase {
 			if (entities.size() > 0){
 				entities.get(0).setFire(1);
 				entities.get(0).attackEntityFrom(DamageSource.causeMobDamage(entity), 7.0f);
-				entities.get(0).setLastAttacker(entity);
+				entities.get(0).setLastAttackedEntity(entity);
 				entities.get(0).setRevengeTarget(entity);
 				entities.get(0).knockBack(entity, 0.5f, -dX, -dZ);
 				doContinue = false;

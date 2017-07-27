@@ -10,9 +10,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 
-public class BlockStairsBase extends BlockStairs implements IModeledBlock {
+public class BlockStairsBase extends BlockStairs implements IModeledBlock, IBlock {
 	public boolean isOpaqueCube = true, isFullCube = true;
 	public BlockRenderLayer layer = BlockRenderLayer.SOLID;
+	public Item itemBlock = null;
 	public BlockStairsBase(IBlockState state, String name, boolean addToTab){
 		super(state);
 		this.useNeighborBrightness = true;
@@ -21,8 +22,7 @@ public class BlockStairsBase extends BlockStairs implements IModeledBlock {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+		itemBlock = new ItemBlock(this).setRegistryName(this.getRegistryName());
     }
 	
 	public BlockStairsBase setIsOpaqueCube(boolean b){
@@ -53,5 +53,10 @@ public class BlockStairsBase extends BlockStairs implements IModeledBlock {
 	@Override
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().toString()));
+	}
+
+	@Override
+	public Item getItemBlock() {
+		return itemBlock;
 	}
 }

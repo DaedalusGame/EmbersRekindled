@@ -43,7 +43,6 @@ public class ItemClockworkAxe extends ItemTool implements IModeledItem, IEmberCh
 		setHarvestLevel("axe",this.toolMaterial.getHarvestLevel());
 		this.damageVsEntity = 8.0f;
 		this.attackSpeed = -3.0f;
-		GameRegistry.register(this);
 	}
 	
 	public float getProperEfficiency(){

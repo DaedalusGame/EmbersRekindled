@@ -22,12 +22,11 @@ public class CommonProxy {
 		RegistryManager.registerAll();
 		EmberGenUtil.init();
 		ItemModUtil.init();
-		RecipeRegistry.init();
 		ResearchManager.initResearches();
 	}
 	
 	public void init(FMLInitializationEvent event){
-		
+		RecipeRegistry.initOreDict();
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){

@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -31,7 +31,7 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityAlchemyPedestal){
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			TileEntityAlchemyPedestal pedestal = (TileEntityAlchemyPedestal)tile;
@@ -50,7 +50,7 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 	            
 	            Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	            Tessellator tess = Tessellator.getInstance();
-	            VertexBuffer buffer = tess.getBuffer();
+	            BufferBuilder buffer = tess.getBuffer();
 	            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 	            RenderUtil.addBoxExt(buffer, x+0.3125, y+0.125+coeff*0.375, z+0.3125, x+0.6875, y+0.125+coeff*0.35, z+0.6875, new StructUV[]{null,new StructUV(1, 1, 7, 7, 16, 16),null,null,null,null}, new int[]{1,1,1,1,1,1}, new boolean[]{false,true,false,false,false,false});
 	            tess.draw();

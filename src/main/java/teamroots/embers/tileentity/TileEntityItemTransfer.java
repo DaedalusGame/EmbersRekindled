@@ -130,20 +130,23 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
-			this.filterItem = heldItem.copy();
-			markDirty();
-			world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, true), 8);
-			world.notifyBlockUpdate(pos, state, state.withProperty(BlockItemTransfer.filter, true), 8);
-			return true;
+		if (!world.isRemote){
+			if (heldItem != ItemStack.EMPTY){
+				this.filterItem = heldItem.copy();
+				markDirty();
+				world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, true), 8);
+				world.notifyBlockUpdate(pos, state, state.withProperty(BlockItemTransfer.filter, true), 8);
+				return true;
+			}
+			else {
+				this.filterItem = ItemStack.EMPTY;
+				markDirty();
+				world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, false), 8);
+				world.notifyBlockUpdate(pos, state, state.withProperty(BlockItemTransfer.filter, false), 8);
+				return true;
+			}
 		}
-		else {
-			this.filterItem = ItemStack.EMPTY;
-			markDirty();
-			world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, false), 8);
-			world.notifyBlockUpdate(pos, state, state.withProperty(BlockItemTransfer.filter, false), 8);
-			return true;
-		}
+		return true;
 	}
 
 	@Override

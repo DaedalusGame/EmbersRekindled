@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +28,7 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void renderTileEntityAt(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage){
+	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (t instanceof TileEntityBreaker && t.getWorld().getBlockState(t.getPos()).getBlock() == RegistryManager.breaker){
 			float ticks = ((TileEntityBreaker)t).ticksExisted;
 			    
@@ -36,7 +36,7 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer {
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             GlStateManager.disableCull();
             Tessellator tess = Tessellator.getInstance();
-            VertexBuffer buffer = tess.getBuffer();
+            BufferBuilder buffer = tess.getBuffer();
             GlStateManager.translate(x, y, z);
             EnumFacing facing = t.getWorld().getBlockState(t.getPos()).getValue(BlockAutoHammer.facing);
             float angle = 0;

@@ -3,6 +3,7 @@ package teamroots.embers.item;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -80,7 +81,7 @@ public class ItemTinkerHammer extends ItemBase {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced){
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
 		if (stack.hasTagCompound()){
 			if (stack.getTagCompound().hasKey("targetX")){
 				tooltip.add(I18n.format("embers.tooltip.targetingBlock"));

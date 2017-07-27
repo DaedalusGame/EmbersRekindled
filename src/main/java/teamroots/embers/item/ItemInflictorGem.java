@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -42,7 +43,7 @@ public class ItemInflictorGem extends ItemBase {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced){
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
 		if (stack.hasTagCompound()){
 			if (stack.getTagCompound().hasKey("type")){
 				tooltip.add(I18n.format("embers.tooltip.inflictor")+stack.getTagCompound().getString("type"));

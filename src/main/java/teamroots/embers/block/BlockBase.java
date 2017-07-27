@@ -13,7 +13,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 
-public class BlockBase extends Block implements IModeledBlock {
+public class BlockBase extends Block implements IModeledBlock, IBlock {
 	public Item itemBlock = null;
 	public boolean isOpaqueCube = true, isFullCube = true, isBeaconBase = false;
 	public BlockRenderLayer layer = BlockRenderLayer.SOLID;
@@ -24,8 +24,7 @@ public class BlockBase extends Block implements IModeledBlock {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
-        GameRegistry.register(itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName())));
+		itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName()));
     }
 	
 	public BlockBase setIsOpaqueCube(boolean b){
@@ -71,5 +70,10 @@ public class BlockBase extends Block implements IModeledBlock {
 	@Override
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().toString(),"inventory"));
+	}
+
+	@Override
+	public Item getItemBlock() {
+		return itemBlock;
 	}
 }

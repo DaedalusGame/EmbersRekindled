@@ -19,9 +19,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 
-public class BlockWallBase extends BlockWall implements IModeledBlock {
+public class BlockWallBase extends BlockWall implements IModeledBlock, IBlock {
 	public boolean isOpaqueCube = true, isFullCube = true;
 	public BlockRenderLayer layer = BlockRenderLayer.SOLID;
+	public Item itemBlock = null;
 	public BlockWallBase(Block block, String name, boolean addToTab){
 		super(block);
 		setUnlocalizedName(name);
@@ -29,8 +30,7 @@ public class BlockWallBase extends BlockWall implements IModeledBlock {
 		if (addToTab){
 			setCreativeTab(Embers.tab);
 		}
-		GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+		itemBlock = new ItemBlock(this).setRegistryName(this.getRegistryName());
     }
 	
 	@Override
@@ -39,8 +39,10 @@ public class BlockWallBase extends BlockWall implements IModeledBlock {
 	}
 	
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
-		list.add(new ItemStack(this,1));
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list){
+		if (tab == this.getCreativeTabToDisplayOn()){
+			list.add(new ItemStack(this,1));
+		}
 	}
 	
 	public BlockWallBase setIsOpaqueCube(boolean b){
@@ -71,5 +73,10 @@ public class BlockWallBase extends BlockWall implements IModeledBlock {
 	@Override
 	public void initModel(){
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName().toString()));
+	}
+
+	@Override
+	public Item getItemBlock() {
+		return itemBlock;
 	}
 }
