@@ -29,10 +29,10 @@ public class TileEntityChargerRenderer extends TileEntitySpecialRenderer {
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(charger.inventory.getStackInSlot(0).getItem(),1,charger.inventory.getStackInSlot(0).getMetadata()));
 					item.hoverStart = 0;
-					item.isCollided = false;
+					item.onGround = false;
 					GL11.glTranslated(x+0.5, y+0.0625, z+0.5);
 					GL11.glRotated(charger.angle+((charger.turnRate))*partialTicks, 0, 1.0, 0);
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}

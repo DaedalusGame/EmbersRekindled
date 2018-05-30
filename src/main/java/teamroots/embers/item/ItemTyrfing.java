@@ -39,7 +39,7 @@ public class ItemTyrfing extends ItemSword implements IModeledItem {
 	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			if (tintIndex == 1){
 				if (stack.getItem() == RegistryManager.tyrfing){
 					float timerSine = ((float)Math.sin(8.0*Math.toRadians(EventManager.ticks % 360))+1.0f)/2.0f;

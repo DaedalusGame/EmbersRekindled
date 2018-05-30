@@ -44,7 +44,7 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 					GlStateManager.rotate(1.0f*((float)furnace.angle+partialTicks),0,1,0);
 					EntityItem item = new EntityItem(tile.getWorld(),0,0,0,stack);
 					item.hoverStart = 0;
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, true);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
 					GlStateManager.popMatrix();
 				}
 			}

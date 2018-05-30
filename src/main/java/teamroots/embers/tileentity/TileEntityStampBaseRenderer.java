@@ -140,7 +140,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 					}
 					
 					GL11.glScaled(1.0, 1.0, 1.0);
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, true);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
 					GL11.glPopMatrix();
 				}
 			}

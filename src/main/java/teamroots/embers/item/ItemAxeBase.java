@@ -23,14 +23,14 @@ public class ItemAxeBase extends ItemTool implements IModeledItem {
 			setCreativeTab(Embers.tab);
 		}
 		setHarvestLevel("axe",this.toolMaterial.getHarvestLevel());
-		this.damageVsEntity = this.toolMaterial.getDamageVsEntity() + 6.0f;
+		this.attackDamage = this.toolMaterial.getAttackDamage() + 6.0f;
 		this.attackSpeed = -3.1f;
 	}
 	
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state){
+	public float getDestroySpeed(ItemStack stack, IBlockState state){
         Material material = state.getMaterial();
-        return material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getStrVsBlock(stack, state) : this.efficiencyOnProperMaterial;
+        return material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
     }
 	
 	@Override

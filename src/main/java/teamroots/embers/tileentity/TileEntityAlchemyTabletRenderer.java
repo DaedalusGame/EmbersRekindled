@@ -75,7 +75,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.center.getStackInSlot(0));
 					item.hoverStart = 0;
-					item.isCollided = false;
+					item.onGround = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
 					if (item.getItem().getItem() instanceof ItemBlock){
@@ -85,7 +85,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 						GL11.glTranslated(1.0, 1.75, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
@@ -96,7 +96,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.north.getStackInSlot(0));
 					item.hoverStart = 0;
-					item.isCollided = false;
+					item.onGround = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
 					if (item.getItem().getItem() instanceof ItemBlock){
@@ -106,7 +106,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 						GL11.glTranslated(1.0, 1.75, 0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
@@ -117,7 +117,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.south.getStackInSlot(0));
 					item.hoverStart = 0;
-					item.isCollided = false;
+					item.onGround = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
 					if (item.getItem().getItem() instanceof ItemBlock){
@@ -127,7 +127,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 						GL11.glTranslated(1.0, 1.75, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
@@ -138,7 +138,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.west.getStackInSlot(0));
 					item.hoverStart = 0;
-					item.isCollided = false;
+					item.onGround = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
 					if (item.getItem().getItem() instanceof ItemBlock){
@@ -148,7 +148,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 						GL11.glTranslated(0.5, 1.75, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
@@ -159,7 +159,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 					GL11.glPushMatrix();
 					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.east.getStackInSlot(0));
 					item.hoverStart = 0;
-					item.isCollided = false;
+					item.onGround = false;
 					GL11.glTranslated(x,y,z);
 					GL11.glScalef(0.5f, 0.5f, 0.5f);
 					if (item.getItem().getItem() instanceof ItemBlock){
@@ -169,7 +169,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 						GL11.glTranslated(1.5, 1.75, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}

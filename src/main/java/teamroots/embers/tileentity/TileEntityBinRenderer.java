@@ -36,7 +36,7 @@ public class TileEntityBinRenderer extends TileEntitySpecialRenderer {
 					GL11.glRotated(90, 1, 0, 0);
 					GL11.glTranslated(0.5+0.1*random.nextFloat(), -0.1875+0.1*random.nextFloat(), 0);
 					GL11.glScaled(1.5, 1.5, 1.5);
-					Minecraft.getMinecraft().getRenderManager().doRenderEntity(item, 0, 0, 0, 0, 0, true);
+					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
 					GL11.glPopMatrix();
 				}
 			}

@@ -167,7 +167,7 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 		}
 
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int layer) {
+		public int colorMultiplier(ItemStack stack, int layer) {
 			if (layer == 0 && stack.hasTagCompound()){
 				if (stack.getItem() instanceof IEmberItem){
 					double coeff = ((IEmberItem)stack.getItem()).getEmber(stack)/((IEmberItem)stack.getItem()).getEmberCapacity(stack);
@@ -185,7 +185,7 @@ public class ItemEmberCartridge extends ItemBase implements IHeldEmberCell, IEmb
 	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			if (tintIndex == 1){
 				if (stack.hasTagCompound() && stack.getItem() == RegistryManager.ember_cartridge){
 					float coeff = (float)(((IEmberItem)stack.getItem()).getEmber(stack) / ((IEmberItem)stack.getItem()).getEmberCapacity(stack));

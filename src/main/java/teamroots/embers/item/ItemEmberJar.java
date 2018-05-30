@@ -164,7 +164,7 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 	@SideOnly(Side.CLIENT)
 	public static class ColorHandler implements IItemColor {
 		@Override
-		public int getColorFromItemstack(ItemStack stack, int tintIndex) { 
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			if (tintIndex == 1){
 				if (stack.hasTagCompound() && stack.getItem() == RegistryManager.ember_jar){
 					float coeff = (float)(((IEmberItem)stack.getItem()).getEmber(stack) / ((IEmberItem)stack.getItem()).getEmberCapacity(stack));
@@ -176,6 +176,6 @@ public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeld
 				}
 			}
 			return Misc.intColor(255, 255, 255);
-		}		
+		}
 	}
 }

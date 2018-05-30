@@ -42,7 +42,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		}
 		setHarvestLevel("pickaxe",this.toolMaterial.getHarvestLevel());
 		setHarvestLevel("shovel",this.toolMaterial.getHarvestLevel());
-		this.damageVsEntity = 6.0f;
+		this.attackDamage = 6.0f;
 		this.attackSpeed = -3.0f;
 	}
 	
@@ -67,7 +67,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	}
 	
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state){
+	public float getDestroySpeed(ItemStack stack, IBlockState state){
         Material material = state.getMaterial();
         if (stack.hasTagCompound()){
         	if (!stack.getTagCompound().getBoolean("poweredOn")){
@@ -87,7 +87,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
                 && material != Material.ICE
                 && material != Material.PACKED_ICE
                 && material != Material.PISTON  
-        		? super.getStrVsBlock(stack, state) : this.efficiencyOnProperMaterial;
+        		? super.getDestroySpeed(stack, state) : this.efficiency;
     }
 	
 	@Override

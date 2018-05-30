@@ -47,7 +47,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 		setHarvestLevel("pickaxe",this.toolMaterial.getHarvestLevel());
 		setHarvestLevel("axe",this.toolMaterial.getHarvestLevel());
 		setHarvestLevel("shovel",this.toolMaterial.getHarvestLevel());
-		this.damageVsEntity = 10.0f;
+		this.attackDamage = 10.0f;
 		this.attackSpeed = -3.0f;
 	}
 	
@@ -72,13 +72,13 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	}
 	
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state){
+	public float getDestroySpeed(ItemStack stack, IBlockState state){
         if (stack.hasTagCompound()){
         	if (!stack.getTagCompound().getBoolean("poweredOn")){
         		return 0;
         	}
         }
-		return this.efficiencyOnProperMaterial;
+		return this.efficiency;
     }
 	
 	@Override
