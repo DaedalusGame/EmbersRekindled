@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -58,6 +59,17 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	};
 	
 	public boolean dirty = false;
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		double xPos = pos.getX() + 0.5;
+		double yPos = pos.getX() + 0.5;
+		double zPos = pos.getX() + 0.5;
+		double layerHeight = 0.25;
+		double numLayers = 2+Math.floor(capability.getEmberCapacity()/128000.0);
+		double size = numLayers * layerHeight;
+		return new AxisAlignedBB(xPos-size/2, yPos+0.5, zPos-size/2, xPos+size/2, yPos+0.5+size, zPos+size/2);
+	}
 	
 	@Override
 	public void markForUpdate(){
