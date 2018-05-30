@@ -17,6 +17,10 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemCinderStaff extends ItemBase {
+
+	public static final double EMBER_COST = 25.0;
+	public static final int COOLDOWN = 10;
+
 	public ItemCinderStaff() {
 		super("staff_ember", true);
 		this.setMaxStackSize(1);
@@ -31,7 +35,7 @@ public class ItemCinderStaff extends ItemBase {
 			proj.initCustom(entity.posX+entity.getLookVec().x*spawnDistance,entity.posY+entity.getEyeHeight()+entity.getLookVec().y*spawnDistance,entity.posZ+entity.getLookVec().z*spawnDistance,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, charge, entity.getUniqueID());
 			world.spawnEntity(proj);
 		}
-		stack.getTagCompound().setInteger("cooldown", 10);
+		stack.getTagCompound().setInteger("cooldown", COOLDOWN);
 	}
 	
 	@Override
@@ -75,11 +79,11 @@ public class ItemCinderStaff extends ItemBase {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
 		ItemStack stack = player.getHeldItem(hand);
-		if (EmberInventoryUtil.getEmberTotal(player) >= 25.0 && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
-			EmberInventoryUtil.removeEmber(player, 25.0);
+		if (EmberInventoryUtil.getEmberTotal(player) >= EMBER_COST && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
+			EmberInventoryUtil.removeEmber(player, EMBER_COST);
 			player.setActiveHand(hand);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
+		return new ActionResult<>(EnumActionResult.FAIL, stack);
 	}
 }

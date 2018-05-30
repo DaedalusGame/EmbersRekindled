@@ -1,0 +1,193 @@
+{
+  "block.alchemy.fail": {
+    "category": "block",
+    "sounds": [
+      "embers:alchemy_end_fail"
+    ],
+    "subtitle": "subtitles.alchemy.fail"
+  },
+  "block.alchemy.success": {
+    "category": "block",
+    "sounds": [
+      "embers:alchemy_end_success"
+    ],
+    "subtitle": "subtitles.alchemy.success"
+  },
+  "block.alchemy.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:alchemy_mid_loop"
+    ],
+    "subtitle": "subtitles.alchemy.loop"
+  },
+  "block.embers.alchemy.start": {
+    "category": "block",
+    "sounds": [
+      "embers:alchemy_start"
+    ],
+    "subtitle": "subtitles.alchemy.start"
+  },
+  "block.embers.beam_cannon.fire": {
+    "category": "block",
+    "sounds": [
+      "embers:beam_cannon_fire"
+    ],
+    "subtitle": "subtitles.beam_cannon.fire"
+  },
+  "block.embers.beam_cannon.hit": {
+    "category": "block",
+    "sounds": [
+      "embers:beam_cannon_hit_1",
+      "embers:beam_cannon_hit_2"
+    ],
+    "subtitle": "subtitles.beam_cannon.hit"
+  },
+  "block.embers.crystalcell": {
+    "category": "block",
+    "sounds": [
+      "embers:crystalcell"
+    ],
+    "subtitle": "subtitles.crystalcell"
+  },
+  "block.embers.pedestal.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:pedestal_ashes_loop"
+    ],
+    "subtitle": "subtitles.pedestal.loop"
+  },
+  "block.embers.activator": {
+    "category": "block",
+    "sounds": [
+      "embers:ember_activatorplume",
+      "embers:ember_activatorplume_alt"
+    ],
+    "subtitle": "subtitles.activator"
+  },
+  "block.embers.stamper.down": {
+    "category": "block",
+    "sounds": [
+      "embers:stamp_down1",
+      "embers:stamp_down2",
+      "embers:stamp_down3"
+    ],
+    "subtitle": "subtitles.stamp.down"
+  },
+  "block.embers.stamper.up": {
+    "category": "block",
+    "sounds": [
+      "embers:stamp_up1",
+      "embers:stamp_up2",
+      "embers:stamp_up3"
+    ],
+    "subtitle": "subtitles.stamp.up"
+  },
+  "block.embers.bore.start": {
+    "category": "block",
+    "sounds": [
+      "embers:ember_bore_start_up"
+    ],
+    "subtitle": "subtitles.bore.start"
+  },
+  "block.embers.bore.stop": {
+    "category": "block",
+    "sounds": [
+      "embers:ember_bore_stop"
+    ],
+    "subtitle": "subtitles.bore.stop"
+  },
+  "block.embers.bore.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:ember_bore_run_loop"
+    ],
+    "subtitle": "subtitles.bore.loop"
+  },
+  "block.embers.bore.loop_mine": {
+    "category": "block",
+    "sounds": [
+      "embers:ember_bore_mine_loop"
+    ]
+  },
+  "block.embers.melter.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:melter_loop"
+    ],
+    "subtitle": "subtitles.melter.loop"
+  },
+  "block.embers.mixer.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:mixer_loop"
+    ],
+    "subtitle": "subtitles.mixer.loop"
+  },
+  "block.embers.plinth.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:cinder_plinth_loop"
+    ],
+    "subtitle": "subtitles.plinth.loop"
+  },
+  "block.embers.still.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:still_heated_no_brew"
+    ],
+    "subtitle": "subtitles.still.loop"
+  },
+  "block.embers.still.slow": {
+    "category": "block",
+    "sounds": [
+      "embers:still_brewing_slow"
+    ]
+  },
+  "block.embers.still.fast": {
+    "category": "block",
+    "sounds": [
+      "embers:still_brewing_fast"
+    ]
+  },
+  "fireball.small.fire": {
+    "sounds": [
+      "embers:fireball_small_launch1",
+      "embers:fireball_small_launch2"
+    ],
+    "subtitle": "subtitles.fireball.small.fire"
+  },
+  "fireball.small.hit": {
+    "sounds": [
+      "embers:fireball_small_hit1",
+      "embers:fireball_small_hit2"
+    ],
+    "subtitle": "subtitles.fireball.small.hit"
+  },
+  "fireball.big.fire": {
+    "sounds": [
+      "embers:fireball_small_launch1",
+      "embers:fireball_small_launch2"
+    ],
+    "subtitle": "subtitles.fireball.big.fire"
+  },
+  "fireball.big.hit": {
+    "sounds": [
+      "embers:fireball_small_hit1",
+      "embers:fireball_small_hit2"
+    ],
+    "subtitle": "subtitles.fireball.big.hit"
+  },
+  "item.blazing_ray.fire": {
+    "sounds": [
+      "embers:blray_fire1",
+      "embers:blray_fire2"
+    ],
+    "subtitle": "subtitles.blazing_ray.fire"
+  },
+  "item.blazing_ray.empty": {
+    "sounds": [
+      "embers:blray_empty"
+    ],
+    "subtitle": "subtitles.blazing_ray.empty"
+  }
+}
