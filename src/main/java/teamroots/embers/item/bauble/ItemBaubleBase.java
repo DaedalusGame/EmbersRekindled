@@ -33,7 +33,7 @@ public class ItemBaubleBase extends ItemBase implements IBauble {
 	}
 
 	/**
-	 * All following code is borrowed from Vazkii's ItemBauble because I'm a lazy piece of trash.
+	 * All following code is borrowed from Vazkii's ItemBauble because I'm a lazy piece of trash. - Thank you elu for your words of wisdom
 	 * https://github.com/Vazkii/Botania/blob/master/src/main/java/vazkii/botania/common/item/equipment/bauble/ItemBauble.java
 	 */
 	

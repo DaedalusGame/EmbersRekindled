@@ -36,10 +36,12 @@ repositories {
     maven { url 'http://dvs1.progwml6.com/files/maven' }
     maven { url "http://blamejared.com/maven" }
     maven { url "http://www.ryanliptak.com/maven/" }
+    maven { url "https://maven.thiakil.com/"}
 }
 
 dependencies {
     deobfCompile "mezz.jei:jei_1.12.2:4.8.3.128"
+    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2:deobf"
     compile files('libs/')
 }
 
