@@ -38,10 +38,10 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	int stackShards = 0;
 	int stackCrystals = 1;
 	int stackFuel = 2;
-	
+
 	@Override
-	public AxisAlignedBB getRenderBoundingBox(){
-		return super.getRenderBoundingBox().expand(4.0, 8.0, 4.0);
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(pos.add(-1, -2, -1), pos.add(2, 1, 2));
 	}
 	
 	public ItemStackHandler inventory = new ItemStackHandler(3){
