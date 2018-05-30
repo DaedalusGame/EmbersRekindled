@@ -1,132 +1,74 @@
 buildscript {
     repositories {
-        mavenCentral()
-        maven { url = "http://files.minecraftforge.net/maven" }
-        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'org.ajoberstar:gradle-git:0.10.1'
     }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.9'
-	id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
 
-apply plugin: 'maven-publish'
+version = "0.1"
+group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Embers"
 
-def username = "${mod_name}"
-if (project.hasProperty('dev_username'))
-    username = "${dev_username}"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-def build_number = 'CUSTOM'
-if (System.getenv('BUILD_NUMBER') != null)
-    build_number = System.getenv('BUILD_NUMBER')
-
-group = package_group
-archivesBaseName = mod_name
-version = "${mc_version}-${mod_version}-${build_number}"
-
-repositories {
-    maven { url "http://tehnut.info/maven" }
-    maven { url "http://dvs1.progwml6.com/files/maven" }
-}
-
-dependencies {
-    // TehNut Maven
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.13-B26_1.11"
-
-    // Prog Maven
-    deobfProvided "mezz.jei:jei_1.12:4.7.2.77:api"
-    runtime "mezz.jei:jei_1.12:4.7.2.77"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "${mc_version}-${forge_version}"
+    version = "1.12.2-14.23.1.2607"
+    //version = "1.12.2-14.23.0.2512"
     runDir = "run"
+    mappings = "snapshot_20171003"
+    useDepAts = true
+}
 
-    replaceIn "Embers.java"
-    replace "@VERSION@", project.version
+repositories {
+    maven { url 'http://dvs1.progwml6.com/files/maven' }
+    maven { url "http://blamejared.com/maven" }
+    maven { url "http://www.ryanliptak.com/maven/" }
+}
 
-    clientRunArgs += "--username=${username}"
+dependencies {
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.3.128"
+    compile files('libs/')
+}
 
-    if (project.hasProperty('mappings_version'))
-        mappings = project.mappings_version
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier "dev"
+}
+
+artifacts {
+    archives deobfJar
 }
 
 processResources {
+    // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
+    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include '**/*.info'
-        include '**/*.properties'
+        include 'mcmod.info'
 
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
+
+    // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.info'
-        exclude '**/*.properties'
+        exclude 'mcmod.info'
     }
 }
 
-tasks.build.dependsOn sourceJar
-
-publishing {
-    tasks.publish.dependsOn 'build'
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-            artifact sourceJar
-        }
-    }
-    repositories {
-        if (project.hasProperty('maven_repo')) {
-            maven { url maven_repo }
-        } else {
-            mavenLocal()
-        }
-    }
-}
-
-static String getChangelogText() {
-    def changelogFile = new File('changelog.txt')
-    if (!changelogFile.exists())
-        return ""
-    String str = ''
-    String separator = '---'
-    int lineCount = 0
-    boolean done = false
-    changelogFile.eachLine {
-        if (done || it == null) {
-            return
-        }
-        if (lineCount < 3) {
-            lineCount++
-            if (it.startsWith(separator)) {
-                return
-            }
-        }
-        if (!it.startsWith(separator)) {
-            str += "$it" + (lineCount < 3 ? ':\n\n' : '\n')
-            return
-        }
-        done = true // once we go past the first version block, parse no more
-    }
-    return str
-}
-
-curseforge {
-    if (project.hasProperty('curse_key_TehNut'))
-        apiKey = project.curse_key_TehNut
-
-    project {
-        id = "${curse_id}"
-		changelog = getChangelogText()
-        releaseType = 'beta'
-
-        addArtifact sourceJar
-    }
-}
+idea { module { inheritOutputDirs = true } }
