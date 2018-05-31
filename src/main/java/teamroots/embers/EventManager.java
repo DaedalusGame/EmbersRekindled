@@ -122,7 +122,6 @@ import teamroots.embers.tileentity.TileEntityKnowledgeTable;
 import teamroots.embers.util.BlockTextureUtil;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.FluidTextureUtil;
 import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
@@ -171,12 +170,6 @@ public class EventManager {
 				overflow.replace(pos, tile);
 			}
 		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onTextureStitchPre(TextureStitchEvent.Pre event){
-		FluidTextureUtil.initTextures(event.getMap());
 	}
 	
 	@SideOnly(Side.CLIENT)

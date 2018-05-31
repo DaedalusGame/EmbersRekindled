@@ -17,7 +17,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
-import teamroots.embers.util.FluidTextureUtil;
 
 public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -54,40 +53,38 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 	            green = (c >> 8) & 0xFF;
 	            red = (c >> 16) & 0xFF;
 	            alpha = (c >> 24) & 0xFF;
-	            
-	            TextureAtlasSprite sprite = FluidTextureUtil.stillTextures.get(fluid);
+
+	            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill().toString());
 	            diffU = maxU-minU;
 	            diffV = maxV-minV;
-	            
-	            if (sprite != null){
-		            minU = sprite.getMinU()+diffU*0.25;
-		            maxU = sprite.getMaxU()-diffU*0.25;
-		            minV = sprite.getMinV()+diffV*0.25;
-		            maxV = sprite.getMaxV()-diffV*0.25;
-		            
-		            int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
-		            lightx = i >> 0x10 & 0xFFFF;
-		            lighty = i & 0xFFFF;
-		            
-		            GlStateManager.disableCull();
-		            GlStateManager.disableLighting();
-		            GlStateManager.enableBlend();
-		            GlStateManager.enableAlpha();
-		            
-		            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		            Tessellator tess = Tessellator.getInstance();
-		            BufferBuilder buffer = tess.getBuffer();
-		            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
-		            buffer.pos(x+0.25, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.25).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					buffer.pos(x+0.75, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.25).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					buffer.pos(x+0.75, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.75).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					buffer.pos(x+0.25, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.75).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
-					tess.draw();
-					
-					GlStateManager.disableAlpha();
-					GlStateManager.disableBlend();
-					GlStateManager.enableLighting();
-	            }
+
+				minU = sprite.getMinU()+diffU*0.25;
+				maxU = sprite.getMaxU()-diffU*0.25;
+				minV = sprite.getMinV()+diffV*0.25;
+				maxV = sprite.getMaxV()-diffV*0.25;
+
+				int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
+				lightx = i >> 0x10 & 0xFFFF;
+				lighty = i & 0xFFFF;
+
+				GlStateManager.disableCull();
+				GlStateManager.disableLighting();
+				GlStateManager.enableBlend();
+				GlStateManager.enableAlpha();
+
+				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				Tessellator tess = Tessellator.getInstance();
+				BufferBuilder buffer = tess.getBuffer();
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+				buffer.pos(x+0.25, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.25).tex(minU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+				buffer.pos(x+0.75, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.25).tex(maxU, minV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+				buffer.pos(x+0.75, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.75).tex(maxU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+				buffer.pos(x+0.25, y+0.0625+0.8125*((float)amount/(float)capacity), z+0.75).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
+				tess.draw();
+
+				GlStateManager.disableAlpha();
+				GlStateManager.disableBlend();
+				GlStateManager.enableLighting();
 			}
 		}
 	}
