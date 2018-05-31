@@ -1,11 +1,14 @@
 package teamroots.embers.recipe;
 
+import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.IHasSize;
+
+import java.util.List;
 
 public class ItemStampingRecipe {
 	@Deprecated
@@ -57,6 +60,13 @@ public class ItemStampingRecipe {
 	public FluidStack getFluid(){
 		return fluid;
 	}
+
+	public List<ItemStack> getInputs()
+	{
+		return Lists.newArrayList(input.getMatchingStacks());
+	}
+
+	public List<ItemStack> getOutputs() { return Lists.newArrayList(result); }
 
 	@Deprecated
 	public boolean matches(ItemStack input, FluidStack fluid, EnumStampType type){

@@ -110,10 +110,21 @@ public class AspectList {
             return maxAspects;
         }
 
+        public AspectRangeList() {
+            minAspects = new AspectList();
+            maxAspects = new AspectList();
+        }
+
         public AspectRangeList(AspectList min, AspectList max)
         {
             minAspects = min;
             maxAspects = max;
+        }
+
+        public AspectRangeList setRange(String aspect, int min, int max) {
+            minAspects.setAspect(aspect,min);
+            maxAspects.setAspect(aspect,max);
+            return this;
         }
 
         //This will fix one of the two 'problems' with Embers' alchemy system. Two recipes with the same ranges defined will require the same amount of ash.

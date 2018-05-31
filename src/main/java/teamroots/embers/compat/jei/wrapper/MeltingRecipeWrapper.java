@@ -1,15 +1,13 @@
-package teamroots.embers.compat.jei;
+package teamroots.embers.compat.jei.wrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.Embers;
-import teamroots.embers.recipe.ItemMeltingOreRecipe;
+import teamroots.embers.compat.jei.EmbersJEIPlugin;
 import teamroots.embers.recipe.ItemMeltingRecipe;
 
-public class MeltingRecipeWrapper extends BlankRecipeWrapper {
+public class MeltingRecipeWrapper implements IRecipeWrapper {
 
 	public ItemMeltingRecipe recipe = null;
 
@@ -19,7 +17,7 @@ public class MeltingRecipeWrapper extends BlankRecipeWrapper {
 	
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInput(ItemStack.class, recipe.getStack());
+		ingredients.setInputLists(ItemStack.class, EmbersJEIPlugin.expandIngredients(recipe.getInput()));
 		ingredients.setOutput(FluidStack.class, recipe.getFluid());
 	}
 }

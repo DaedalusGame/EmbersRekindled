@@ -16,9 +16,10 @@ import teamroots.embers.item.ItemAlchemicWaste;
 import teamroots.embers.util.AlchemyResult;
 import teamroots.embers.util.AspectList;
 import teamroots.embers.util.AspectList.AspectRangeList;
+import teamroots.embers.util.IHasAspects;
 import teamroots.embers.util.MatchUtil;
 
-public class AlchemyRecipe {
+public class AlchemyRecipe implements IHasAspects {
 	//Binary compat
 	@Deprecated
 	public int ironAspectMin = 0, dawnstoneAspectMin = 0, copperAspectMin = 0, silverAspectMin = 0, leadAspectMin = 0;
@@ -53,30 +54,35 @@ public class AlchemyRecipe {
 		outsideIngredients = new ArrayList<>();
 		this.result = result;
 	}
-	
+
+	@Deprecated
 	public int getIron(World world){
-		random = new Random(world.getSeed());
-		return this.ironAspectMin+random.nextInt(this.ironAspectRange+1);
+		return aspectRange.getExact("iron",world);
 	}
-	
+
+	@Deprecated
 	public int getDawnstone(World world){
-		random = new Random(world.getSeed());
-		return this.dawnstoneAspectMin+random.nextInt(this.dawnstoneAspectRange+1);
+		return aspectRange.getExact("dawnstone",world);
 	}
-	
+
+	@Deprecated
 	public int getCopper(World world){
-		random = new Random(world.getSeed());
-		return this.copperAspectMin+random.nextInt(this.copperAspectRange+1);
+		return aspectRange.getExact("copper",world);
 	}
-	
+
+	@Deprecated
 	public int getSilver(World world){
-		random = new Random(world.getSeed());
-		return this.silverAspectMin+random.nextInt(this.silverAspectRange+1);
+		return aspectRange.getExact("silver",world);
 	}
-	
+
+	@Deprecated
 	public int getLead(World world){
-		random = new Random(world.getSeed());
-		return this.leadAspectMin+random.nextInt(this.leadAspectRange+1);
+		return aspectRange.getExact("lead",world);
+	}
+
+	@Override
+	public AspectRangeList getAspects() {
+		return aspectRange;
 	}
 
 	public AlchemyResult matchAshes(AspectList list, World world) {
@@ -85,11 +91,7 @@ public class AlchemyRecipe {
 
 	public ItemStack getResult(TileEntity tile, AspectList aspects) {
 		World world = tile.getWorld();
-		AlchemyResult result = matchAshes(aspects, world);
-		if (result.getAccuracy() == 1.0)
-			return this.result.copy();
-		else
-			return result.createFailure();
+		return getResultInternal(world, aspects);
 	}
 
 	public boolean matches(ItemStack center, List<ItemStack> test) {
@@ -111,18 +113,18 @@ public class AlchemyRecipe {
 		return true;
 	}
 
-
+	@Deprecated
 	public ItemStack getResult(World world, int iron, int dawnstone, int copper, int silver, int lead){
-		double dIron = Math.abs((double)(iron-getIron(world)));
-		double dDawnstone = Math.abs((double)(dawnstone-getDawnstone(world)));
-		double dCopper = Math.abs((double)(copper-getCopper(world)));
-		double dSilver = Math.abs((double)(silver-getSilver(world)));
-		double dLead = Math.abs((double)(lead-getLead(world)));
-		double accuracy = Math.max(0, 1.0-(dIron+dDawnstone+dCopper+dSilver+dLead)/(double)(getIron(world)+getDawnstone(world)+getCopper(world)+getSilver(world)+getLead(world)));
-		accuracy = Math.round(accuracy*100.0)/100.0;
-		if (accuracy == 1.0){
-			return this.result;
-		}
-		return ItemAlchemicWaste.create((int)dIron, (int)dCopper, (int)dSilver, (int)dDawnstone, (int)dLead, iron+dawnstone+copper+silver+lead);
+		AspectList inputAspects = AspectList.createStandard(iron, dawnstone, copper, silver, lead);
+		return getResultInternal(world, inputAspects);
+	}
+
+	//Inline after removal of the old getResult method.
+	private ItemStack getResultInternal(World world, AspectList inputAspects) {
+		AlchemyResult result = matchAshes(inputAspects, world);
+		if (result.getAccuracy() == 1.0)
+			return this.result.copy();
+		else
+			return result.createFailure();
 	}
 }

@@ -1,6 +1,4 @@
-package teamroots.embers.compat.jei;
-
-import java.util.List;
+package teamroots.embers.compat.jei.category;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -15,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.Embers;
+
+import java.util.List;
 
 public class MelterRecipeCategory extends BlankRecipeCategory {
     private final IDrawable background;

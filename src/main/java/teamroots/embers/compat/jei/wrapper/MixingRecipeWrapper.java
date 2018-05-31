@@ -1,11 +1,11 @@
-package teamroots.embers.compat.jei;
+package teamroots.embers.compat.jei.wrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.recipe.FluidMixingRecipe;
 
-public class MixingRecipeWrapper extends BlankRecipeWrapper {
+public class MixingRecipeWrapper implements IRecipeWrapper {
 
 	public FluidMixingRecipe recipe = null;
 	

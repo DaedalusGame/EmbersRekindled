@@ -1,8 +1,12 @@
 package teamroots.embers.recipe;
 
+import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.List;
 
 public class ItemMeltingRecipe {
 	@Deprecated
@@ -38,8 +42,17 @@ public class ItemMeltingRecipe {
 	public FluidStack getFluid(){
 		return fluid;
 	}
-	
+
+	public List<ItemStack> getInputs()
+	{
+		return Lists.newArrayList(input.getMatchingStacks());
+	}
+
 	public boolean matches(ItemStack stack){
 		return input.apply(stack);
+	}
+
+	public FluidStack getResult(TileEntity tile, ItemStack input){
+		return fluid.copy();
 	}
 }
