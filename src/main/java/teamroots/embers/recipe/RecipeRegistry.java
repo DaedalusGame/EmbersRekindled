@@ -12,6 +12,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
@@ -26,6 +27,7 @@ import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.item.EnumStampType;
+import teamroots.embers.util.AlchemyUtil;
 
 public class RecipeRegistry {
 	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<ItemMeltingRecipe>();
@@ -159,6 +161,11 @@ public class RecipeRegistry {
 	
 	@SubscribeEvent
 	public void init(RegistryEvent.Register<IRecipe> event){
+		AlchemyUtil.registerAspect("iron", Ingredient.fromItem(RegistryManager.aspectus_iron));
+		AlchemyUtil.registerAspect("copper", Ingredient.fromItem(RegistryManager.aspectus_copper));
+		AlchemyUtil.registerAspect("dawnstone", Ingredient.fromItem(RegistryManager.aspectus_dawnstone));
+		AlchemyUtil.registerAspect("lead", Ingredient.fromItem(RegistryManager.aspectus_lead));
+		AlchemyUtil.registerAspect("silver", Ingredient.fromItem(RegistryManager.aspectus_silver));
 		
 		event.getRegistry().register(new ShapedOreRecipe(getRL("crystal_ember"),new ItemStack(RegistryManager.crystal_ember,1),true,new Object[]{
 				"XXX",

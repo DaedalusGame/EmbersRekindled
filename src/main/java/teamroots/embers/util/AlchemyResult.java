@@ -42,13 +42,7 @@ public class AlchemyResult {
         return result;
     }
 
-    public ItemStack createFailure()
-    {
-        int ironDelta = deltas.getOrDefault("iron",0);
-        int dawnstoneDelta = deltas.getOrDefault("dawnstone",0);
-        int copperDelta = deltas.getOrDefault("copper",0);
-        int silverDelta = deltas.getOrDefault("silver",0);
-        int leadDelta = deltas.getOrDefault("lead",0);
-        return ItemAlchemicWaste.create(ironDelta,copperDelta,silverDelta,dawnstoneDelta,leadDelta,totalAsh);
+    public ItemStack createFailure() {
+        return ItemAlchemicWaste.create(new AspectList(deltas)); //Could pass the hashmap directly
     }
 }

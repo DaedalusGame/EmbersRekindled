@@ -43,6 +43,7 @@ public class AlchemyRecipe {
 		this.aspectRange = range;
 	}
 
+	@Deprecated
 	public AlchemyRecipe(int ironMin, int ironMax, int dawnstoneMin, int dawnstoneMax, int copperMin, int copperMax, int silverMin, int silverMax, int leadMin, int leadMax, ItemStack center, ItemStack east, ItemStack west, ItemStack north, ItemStack south, ItemStack result){
 		new AspectRangeList(
 				AspectList.createStandard(ironMin,dawnstoneMin,copperMin,silverMin,leadMin),

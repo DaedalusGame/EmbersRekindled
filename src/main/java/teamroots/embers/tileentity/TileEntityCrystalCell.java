@@ -68,7 +68,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 		double layerHeight = 0.25;
 		double numLayers = 2+Math.floor(capability.getEmberCapacity()/128000.0);
 		double size = numLayers * layerHeight;
-		return new AxisAlignedBB(xPos-size/2, yPos+0.5, zPos-size/2, xPos+size/2, yPos+0.5+size, zPos+size/2);
+		return new AxisAlignedBB(xPos-size/2, yPos+1.0, zPos-size/2, xPos+size/2, yPos+1.0+size, zPos+size/2);
 	}
 	
 	@Override

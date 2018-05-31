@@ -7,8 +7,16 @@ import teamroots.embers.tileentity.TileEntityAlchemyPedestal;
 
 import java.util.*;
 
+//TODO: This class is clunky. Can we improve this?
 public class AspectList {
     HashMap<String,Integer> aspectList = new HashMap<>();
+
+    public AspectList() {
+    }
+
+    public AspectList(HashMap<String, Integer> map) {
+        aspectList.putAll(map);
+    }
 
     public void addAspect(String aspect, int amount)
     {
@@ -75,8 +83,7 @@ public class AspectList {
         return compound;
     }
 
-    public static AspectList createStandard(int iron, int dawnstone, int copper, int silver, int lead)
-    {
+    public static AspectList createStandard(int iron, int dawnstone, int copper, int silver, int lead) {
         AspectList rList = new AspectList();
         rList.setAspect("iron",iron);
         rList.setAspect("dawnstone",dawnstone);
