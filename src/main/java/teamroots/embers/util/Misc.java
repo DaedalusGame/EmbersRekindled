@@ -54,10 +54,6 @@ public class Misc {
 			EnumFacing face = state.getValue(BlockRedstoneTorch.FACING);
 			return face == Misc.getOppositeVerticalFace(side);
 		}
-		else if (block == RegistryManager.caminite_lever){
-			EnumFacing face = state.getValue(BlockCaminiteLever.FACING).getFacing();
-			return face == Misc.getOppositeVerticalFace(side);
-		}
 		return false;
 	}
 

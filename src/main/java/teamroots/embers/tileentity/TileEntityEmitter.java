@@ -120,31 +120,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	}
 	
 	public EnumConnection getConnection(IBlockAccess world, BlockPos pos, EnumFacing side){
-		if (world.getBlockState(pos).getBlock() == Blocks.LEVER){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
-			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
-				return EnumConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.STONE_BUTTON){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockButton.FACING);
-			if (face == Misc.getOppositeVerticalFace(side)){
-				return EnumConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
-			if (face == Misc.getOppositeVerticalFace(side)){
-				return EnumConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == RegistryManager.caminite_lever){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
-			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
-				return EnumConnection.LEVER;
-			}
-		}
-		return EnumConnection.NONE;
+		return Misc.isValidLever(world,pos,side) ? EnumConnection.LEVER : EnumConnection.NONE;
 	}
 	
 	public boolean dirty = false;
