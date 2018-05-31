@@ -79,28 +79,32 @@ public class BlockInfernoForge extends BlockTEBase {
 	public IBlockState getStateFromMeta(int meta){
 		return getDefaultState().withProperty(isTop,meta == 1 ? true : false);
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos){
-		if (world.isAirBlock(pos.east())
-			&& world.isAirBlock(pos.west())
-			&& world.isAirBlock(pos.north())
-			&& world.isAirBlock(pos.south())
-			&& world.isAirBlock(pos.east().north())
-			&& world.isAirBlock(pos.east().south())
-			&& world.isAirBlock(pos.west().north())
-			&& world.isAirBlock(pos.west().south())
-			&& world.isAirBlock(pos.east().up())
-			&& world.isAirBlock(pos.west().up())
-			&& world.isAirBlock(pos.north().up())
-			&& world.isAirBlock(pos.south().up())
-			&& world.isAirBlock(pos.east().north().up())
-			&& world.isAirBlock(pos.east().south().up())
-			&& world.isAirBlock(pos.west().north().up())
-			&& world.isAirBlock(pos.west().south().up())){
-			return true;
+		if (isReplaceable(world,pos.east())
+				&& isReplaceable(world,pos.west())
+				&& isReplaceable(world,pos.north())
+				&& isReplaceable(world,pos.south())
+				&& isReplaceable(world,pos.east().north())
+				&& isReplaceable(world,pos.east().south())
+				&& isReplaceable(world,pos.west().north())
+				&& isReplaceable(world,pos.west().south())
+				&& isReplaceable(world,pos.east().up())
+				&& isReplaceable(world,pos.west().up())
+				&& isReplaceable(world,pos.north().up())
+				&& isReplaceable(world,pos.south().up())
+				&& isReplaceable(world,pos.east().north().up())
+				&& isReplaceable(world,pos.east().south().up())
+				&& isReplaceable(world,pos.west().north().up())
+				&& isReplaceable(world,pos.west().south().up())){
+			return super.canPlaceBlockAt(world,pos);
 		}
 		return false;
+	}
+
+	private boolean isReplaceable(World world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock().isReplaceable(world, pos);
 	}
 	
 	@Override

@@ -229,20 +229,24 @@ public class BlockStoneEdge extends BlockBase {
 			breakBlockSafe(world,pos.east(),player);
 		}
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos){
-		if (world.isAirBlock(pos.east())
-			&& world.isAirBlock(pos.west())
-			&& world.isAirBlock(pos.north())
-			&& world.isAirBlock(pos.south())
-			&& world.isAirBlock(pos.east().north())
-			&& world.isAirBlock(pos.east().south())
-			&& world.isAirBlock(pos.west().north())
-			&& world.isAirBlock(pos.west().south())){
-			return true;
+		if (isReplaceable(world,pos.east())
+				&& isReplaceable(world,pos.west())
+				&& isReplaceable(world,pos.north())
+				&& isReplaceable(world,pos.south())
+				&& isReplaceable(world,pos.east().north())
+				&& isReplaceable(world,pos.east().south())
+				&& isReplaceable(world,pos.west().north())
+				&& isReplaceable(world,pos.west().south())){
+			return super.canPlaceBlockAt(world,pos);
 		}
 		return false;
+	}
+
+	private boolean isReplaceable(World world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock().isReplaceable(world, pos);
 	}
 	
 	@Override
