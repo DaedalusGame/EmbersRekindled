@@ -1,7 +1,7 @@
 package teamroots.embers.itemmod;
 
 public class ModifierBase {
-	public static enum EnumType {
+	public enum EnumType {
 		TOOL, ARMOR, ALL, CHESTPLATE
 	}
 	

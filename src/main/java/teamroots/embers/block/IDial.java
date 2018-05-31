@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IDial {
-	public List<String> getDisplayInfo(World world, BlockPos pos, IBlockState state);
+	List<String> getDisplayInfo(World world, BlockPos pos, IBlockState state);
 
-	public void updateTEData(World world, IBlockState state, BlockPos pos);
+	void updateTEData(World world, IBlockState state, BlockPos pos);
 }

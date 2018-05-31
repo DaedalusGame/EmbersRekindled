@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import teamroots.embers.event.EmberRemoveEvent;
+import teamroots.embers.api.event.EmberRemoveEvent;
 
 public class ItemEmberAmulet extends ItemBaubleBase {
 

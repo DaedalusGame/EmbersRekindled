@@ -1,7 +1,7 @@
-package teamroots.embers.tileentity;
+package teamroots.embers.api.tile;
 
 import net.minecraft.util.math.BlockPos;
 
 public interface ITargetable {
-	public void setTarget(BlockPos pos);
+	void setTarget(BlockPos pos);
 }

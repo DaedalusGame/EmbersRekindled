@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.ITargetable;
+import teamroots.embers.api.tile.ITargetable;
 import teamroots.embers.util.Misc;
 
 public class ItemTinkerHammer extends ItemBase {

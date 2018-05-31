@@ -1,4 +1,4 @@
-package teamroots.embers.event;
+package teamroots.embers.api.event;
 
 import java.util.ArrayList;
 import java.util.List;

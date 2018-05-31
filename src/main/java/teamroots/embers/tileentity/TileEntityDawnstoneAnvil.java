@@ -32,6 +32,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAnvilSparksFX;
 import teamroots.embers.network.message.MessageStamperFX;
@@ -39,7 +40,7 @@ import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 
-public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityBase {
+public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityBase, IHammerable {
 	int ticksExisted = 0;
 	int progress = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(2){
@@ -280,5 +281,16 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 				PacketHandler.INSTANCE.sendToAll(new MessageAnvilSparksFX(getPos().getX()+0.5,getPos().getY()+1.0625,getPos().getZ()+0.5));
 			}
 		}
+	}
+
+	@Override
+	public void onHit(TileEntity hammer) {
+		progress = 40;
+		onHit();
+	}
+
+	@Override
+	public boolean isValid() {
+		return isValid(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
 	}
 }

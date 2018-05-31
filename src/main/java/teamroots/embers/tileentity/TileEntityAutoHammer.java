@@ -28,6 +28,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.block.BlockAutoHammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAnvilSparksFX;
@@ -114,8 +115,8 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 		ticksExisted ++;
 		if (ticksExisted % 20 == 0){
 			TileEntity tile = world.getTileEntity(getPos().down().offset(world.getBlockState(getPos()).getValue(BlockAutoHammer.facing)));
-			if (tile instanceof TileEntityDawnstoneAnvil && progress == -1 && capability.getEmber() >= 40.0f && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
-				if (((TileEntityDawnstoneAnvil)tile).isValid(((TileEntityDawnstoneAnvil)tile).inventory.getStackInSlot(0), ((TileEntityDawnstoneAnvil)tile).inventory.getStackInSlot(1))){
+			if (tile instanceof IHammerable && progress == -1 && capability.getEmber() >= 40.0f && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
+				if (((IHammerable) tile).isValid()){
 					progress = 10;
 					markDirty();
 				}
@@ -125,10 +126,9 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 			progress --;
 			if (progress == 5){
 				TileEntity tile = world.getTileEntity(getPos().down().offset(world.getBlockState(getPos()).getValue(BlockAutoHammer.facing)));
-				if (tile instanceof TileEntityDawnstoneAnvil && capability.getEmber() >= 40.0f){
+				if (tile instanceof IHammerable && capability.getEmber() >= 40.0f){
 					capability.removeAmount(40.0f, true);
-					((TileEntityDawnstoneAnvil)tile).progress = 40;
-					((TileEntityDawnstoneAnvil)tile).onHit();
+					((IHammerable) tile).onHit(this);
 					markDirty();
 				}
 			}

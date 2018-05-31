@@ -2,14 +2,11 @@ package teamroots.embers.item.bauble;
 
 import baubles.api.BaubleType;
 import baubles.api.cap.BaublesCapabilities;
-import baubles.api.cap.BaublesContainer;
-import baubles.api.cap.BaublesContainerProvider;
-import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import teamroots.embers.event.EmberRemoveEvent;
+import teamroots.embers.api.event.EmberRemoveEvent;
 
 public class ItemEmberRing extends ItemBaubleBase {
 

@@ -31,27 +31,51 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 	public FluidTank south = new FluidTank(8000);
 	public FluidTank east = new FluidTank(8000);
 	public FluidTank west = new FluidTank(8000);
+	public FluidTank[] tanks;
 	Random random = new Random();
 	int progress = -1;
 	
 	public TileEntityMixerBottom(){
 		super();
+		tanks = new FluidTank[]{north,south,east,west};
+	}
+
+	public FluidTank[] getTanks()
+	{
+		return tanks;
+	}
+
+	public ArrayList<FluidStack> getFluids() {
+		ArrayList<FluidStack> fluids = new ArrayList<>();
+		if (north.getFluid() != null) {
+			fluids.add(north.getFluid());
+		}
+		if (south.getFluid() != null) {
+			fluids.add(south.getFluid());
+		}
+		if (east.getFluid() != null) {
+			fluids.add(east.getFluid());
+		}
+		if (west.getFluid() != null) {
+			fluids.add(west.getFluid());
+		}
+		return fluids;
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
 		NBTTagCompound northTank = new NBTTagCompound();
-		north.writeToNBT(tag);
+		north.writeToNBT(northTank);
 		tag.setTag("northTank", northTank);
 		NBTTagCompound southTank = new NBTTagCompound();
-		south.writeToNBT(tag);
+		south.writeToNBT(southTank);
 		tag.setTag("southTank", southTank);
 		NBTTagCompound eastTank = new NBTTagCompound();
-		east.writeToNBT(tag);
+		east.writeToNBT(eastTank);
 		tag.setTag("eastTank", eastTank);
 		NBTTagCompound westTank = new NBTTagCompound();
-		west.writeToNBT(tag);
+		west.writeToNBT(westTank);
 		tag.setTag("westTank", westTank);
 		tag.setInteger("progress", progress);
 		return tag;
@@ -130,43 +154,39 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
 	@Override
 	public void update() {
-		TileEntityMixerTop top = (TileEntityMixerTop)getWorld().getTileEntity(getPos().up());
-		if (top != null){
-			if (top.capability.getEmber() >= 2.0){
-				ArrayList<FluidStack> fluids = new ArrayList<FluidStack>();
-				if (north.getFluid() != null){
-					fluids.add(north.getFluid());
-				}
-				if (south.getFluid() != null){
-					fluids.add(south.getFluid());
-				}
-				if (east.getFluid() != null){
-					fluids.add(east.getFluid());
-				}
-				if (west.getFluid() != null){
-					fluids.add(west.getFluid());
-				}
+		World world = getWorld();
+		BlockPos pos = getPos();
+		TileEntityMixerTop top = (TileEntityMixerTop) world.getTileEntity(pos.up());
+		if (top != null) {
+			double emberCost = 2.0;
+			if (top.capability.getEmber() >= emberCost) {
+				ArrayList<FluidStack> fluids = getFluids();
 				FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
-				if (recipe != null){
+				if (recipe != null) {
 					IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-					int amount = tank.fill(recipe.output, false);
-					if (amount != 0){
-						tank.fill(recipe.output, true);		
-						for (int i = 0; i < fluids.size(); i ++){
-							boolean doContinue = true;
-							for (int j = 0; j < recipe.inputs.size() && doContinue; j ++){
-								if (recipe.inputs.get(j) != null && fluids.get(i) != null && recipe.inputs.get(j).getFluid() == fluids.get(i).getFluid()){
-									doContinue = false;
-									fluids.get(i).amount -= recipe.inputs.get(j).amount;
-								}
-							}
-						}
-						top.capability.removeAmount(2.0, true);
+					FluidStack output = recipe.getResult(fluids);
+					int amount = tank.fill(output, false);
+					if (amount != 0) {
+						tank.fill(output, true);
+						consumeFluids(recipe);
+						top.capability.removeAmount(emberCost, true);
 						markDirty();
-						IBlockState state = getWorld().getBlockState(getPos());
 						top.markDirty();
-						IBlockState topState = getWorld().getBlockState(getPos().up());
 					}
+				}
+			}
+		}
+	}
+
+	public void consumeFluids(FluidMixingRecipe recipe) {
+		for (FluidTank tank : tanks) {
+			FluidStack tankFluid = tank.getFluid();
+			boolean doContinue = true;
+			for (int j = 0; j < recipe.inputs.size() && doContinue; j++) {
+				FluidStack recipeFluid = recipe.inputs.get(j);
+				if (recipeFluid != null && tankFluid != null && recipeFluid.getFluid() == tankFluid.getFluid()) {
+					doContinue = false;
+					tank.drain(recipeFluid.amount,true);
 				}
 			}
 		}

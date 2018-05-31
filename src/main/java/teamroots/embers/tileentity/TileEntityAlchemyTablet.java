@@ -1,7 +1,6 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -23,12 +22,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.tile.ISparkable;
 import teamroots.embers.item.ItemAlchemicWaste;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSphereFX;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.IEmberCapability;
@@ -190,7 +188,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 		return center;
 	}
 
-	public void sparkProgress(TileEntityBeamCannon tile, double ember){
+	public void sparkProgress(TileEntity tile, double ember){
 		if(progress != 0)
 			return;
 		AlchemyRecipe recipe = getRecipe();

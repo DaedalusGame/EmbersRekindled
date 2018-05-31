@@ -4,11 +4,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
-import teamroots.embers.event.EmberRemoveEvent;
+import teamroots.embers.api.event.EmberRemoveEvent;
 import teamroots.embers.item.IEmberItem;
 import teamroots.embers.item.IHeldEmberCell;
 import teamroots.embers.item.IInventoryEmberCell;
-import teamroots.embers.power.EmberCapabilityProvider;
 
 public class EmberInventoryUtil {
 	public static double getEmberCapacityTotal(EntityPlayer player){
