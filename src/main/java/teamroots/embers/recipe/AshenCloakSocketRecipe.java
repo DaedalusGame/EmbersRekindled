@@ -54,7 +54,7 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 						hasGem = true;
 					}
 					else {
-						if (inv.getStackInSlot(i) != ItemStack.EMPTY){
+						if (!inv.getStackInSlot(i).isEmpty()){
 							return false;
 						}
 					}
@@ -74,7 +74,7 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 				}
 			}
 		}
-		if (capeStack != ItemStack.EMPTY){
+		if (!capeStack.isEmpty()){
 			if (!capeStack.hasTagCompound()){
 				capeStack.setTagCompound(new NBTTagCompound());
 			}

@@ -159,7 +159,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
 			if (progress > 20) {
 				progress = 0;
 				int i = random.nextInt(inventory.getSlots());
-				if (inventory.getStackInSlot(i) != ItemStack.EMPTY) {
+				if (!inventory.getStackInSlot(i).isEmpty()) {
 					Item emberStack = inventory.getStackInSlot(i).getItem();
 					double emberValue = EmberGenUtil.getEmberForItem(emberStack);
 					if (emberValue > 0) {

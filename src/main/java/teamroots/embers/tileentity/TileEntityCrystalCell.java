@@ -151,10 +151,10 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 			renderCapacity += Math.min(10000,this.capability.getEmberCapacity() - renderCapacity);
 		else
 			renderCapacity -= Math.min(10000,renderCapacity - this.capability.getEmberCapacity());
-		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && ticksExisted % 4 == 0){
+		if (!inventory.getStackInSlot(0).isEmpty() && ticksExisted % 4 == 0){
 			ItemStack stack = inventory.extractItem(0, 1, true);
 
-			if (!getWorld().isRemote && stack != ItemStack.EMPTY){
+			if (!getWorld().isRemote && !stack.isEmpty()){
 				inventory.extractItem(0, 1, false);
 				if (EmberGenUtil.getEmberForItem(stack.getItem()) > 0){
 					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+EmberGenUtil.getEmberForItem(stack.getItem())*10));

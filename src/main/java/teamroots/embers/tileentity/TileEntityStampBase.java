@@ -88,7 +88,7 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
+		if (!heldItem.isEmpty()){
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
 				this.markDirty();
@@ -101,7 +101,7 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 			}
 		}
 		else {
-			if (inputs.getStackInSlot(0) != ItemStack.EMPTY && !world.isRemote){
+			if (!inputs.getStackInSlot(0).isEmpty() && !world.isRemote){
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inputs.getStackInSlot(0)));
 				inputs.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();

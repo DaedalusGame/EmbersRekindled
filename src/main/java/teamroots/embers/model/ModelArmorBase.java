@@ -297,7 +297,7 @@ public class ModelArmorBase extends ModelBiped {
 			ModelBiped.ArmPose mainPose = ArmPose.EMPTY;
 			ModelBiped.ArmPose offPose = ArmPose.EMPTY;
 
-			if(living.getHeldItemMainhand() != ItemStack.EMPTY) {
+			if(!living.getHeldItemMainhand().isEmpty()) {
 				mainPose = ArmPose.ITEM;
 				if (living.getItemInUseCount() > 0) {
 					EnumAction enumaction = living.getHeldItemMainhand().getItemUseAction();
@@ -310,7 +310,7 @@ public class ModelArmorBase extends ModelBiped {
 				}
 			}
 
-			if (living.getHeldItemOffhand() != ItemStack.EMPTY) {
+			if (!living.getHeldItemOffhand().isEmpty()) {
 				offPose = ModelBiped.ArmPose.ITEM;
 
 				if (living.getItemInUseCount() > 0) {

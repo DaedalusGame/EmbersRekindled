@@ -23,7 +23,7 @@ public class TileEntityCinderPlinthRenderer extends TileEntitySpecialRenderer {
 	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile instanceof TileEntityCinderPlinth){
 			TileEntityCinderPlinth plinth = (TileEntityCinderPlinth)tile;
-			if (plinth.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!plinth.inventory.getStackInSlot(0).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();

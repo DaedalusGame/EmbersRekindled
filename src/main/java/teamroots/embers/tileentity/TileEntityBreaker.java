@@ -115,7 +115,7 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 					if (getWorld().getTileEntity(binPos) instanceof TileEntityBin){
 						TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(binPos);
 						ItemStack remainder = bin.inventory.insertItem(0, i, false);
-						if (remainder != ItemStack.EMPTY && !getWorld().isRemote){
+						if (!remainder.isEmpty() && !getWorld().isRemote){
 							EntityItem item = new EntityItem(getWorld(),getPos().offset(state.getValue(BlockBreaker.facing)).getX()+0.5,getPos().offset(state.getValue(BlockBreaker.facing)).getY()+1.0625f,getPos().offset(state.getValue(BlockBreaker.facing)).getZ()+0.5,remainder);
 							getWorld().spawnEntity(item);
 						}

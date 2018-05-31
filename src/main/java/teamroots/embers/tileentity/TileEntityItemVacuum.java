@@ -149,7 +149,7 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 			if (nearestItems.size() > 0){
 				for (EntityItem item : nearestItems){
 					ItemStack stack = inventory.insertItem(0, item.getItem(), true);
-					if (stack.getItem() == item.getItem().getItem() && stack.getItemDamage() == item.getItem().getItemDamage() && stack.getCount() < item.getItem().getCount() || stack == ItemStack.EMPTY){
+					if (stack.getItem() == item.getItem().getItem() && stack.getItemDamage() == item.getItem().getItemDamage() && stack.getCount() < item.getItem().getCount() || stack.isEmpty()){
 						item.setItem(inventory.insertItem(0, item.getItem(), false));
 						if (item.getItem().isEmpty()){
 							world.removeEntity(item);

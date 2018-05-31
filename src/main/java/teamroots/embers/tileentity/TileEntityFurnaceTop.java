@@ -94,7 +94,7 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
+		if (!heldItem.isEmpty()){
 			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
 				boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
 				this.markDirty();
@@ -107,7 +107,7 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 			}
 		}
 		else {
-			if (inventory.getStackInSlot(0) != ItemStack.EMPTY && !world.isRemote){
+			if (!inventory.getStackInSlot(0).isEmpty() && !world.isRemote){
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
 				inventory.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
@@ -184,7 +184,7 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY(),getPos().getZ(),getPos().getX()+1,getPos().getY()+1.25,getPos().getZ()+1));
 			for (int i = 0; i < items.size(); i ++){
 				ItemStack stack = inventory.insertItem(0, items.get(i).getItem(), false);
-				if (stack != ItemStack.EMPTY){
+				if (!stack.isEmpty()){
 					items.get(i).setItem(stack);
 				}
 				else {

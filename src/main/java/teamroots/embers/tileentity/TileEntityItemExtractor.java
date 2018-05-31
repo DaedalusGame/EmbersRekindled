@@ -241,78 +241,67 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
-			if (heldItem.getItem() instanceof ItemTinkerHammer){
-				if (side == EnumFacing.UP || side == EnumFacing.DOWN){
-					if (Math.abs(hitX-0.5) > Math.abs(hitZ-0.5)){
-						if (hitX < 0.5){
-							this.west = reverseForce(west);
-							this.reverseConnection(EnumFacing.WEST);
-						}
-						else {
-							this.east = reverseForce(east);
-							this.reverseConnection(EnumFacing.EAST);
-						}
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemTinkerHammer) {
+			if (side == EnumFacing.UP || side == EnumFacing.DOWN) {
+				if (Math.abs(hitX - 0.5) > Math.abs(hitZ - 0.5)) {
+					if (hitX < 0.5) {
+						this.west = reverseForce(west);
+						this.reverseConnection(EnumFacing.WEST);
+					} else {
+						this.east = reverseForce(east);
+						this.reverseConnection(EnumFacing.EAST);
 					}
-					else {
-						if (hitZ < 0.5){
-							this.north = reverseForce(north);
-							this.reverseConnection(EnumFacing.NORTH);
-						}
-						else {
-							this.south = reverseForce(south);
-							this.reverseConnection(EnumFacing.SOUTH);
-						}
+				} else {
+					if (hitZ < 0.5) {
+						this.north = reverseForce(north);
+						this.reverseConnection(EnumFacing.NORTH);
+					} else {
+						this.south = reverseForce(south);
+						this.reverseConnection(EnumFacing.SOUTH);
 					}
 				}
-				if (side == EnumFacing.EAST || side == EnumFacing.WEST){
-					if (Math.abs(hitY-0.5) > Math.abs(hitZ-0.5)){
-						if (hitY < 0.5){
-							this.down = reverseForce(down);
-							this.reverseConnection(EnumFacing.DOWN);
-						}
-						else {
-							this.up = reverseForce(up);
-							this.reverseConnection(EnumFacing.UP);
-						}
-					}
-					else {
-						if (hitZ < 0.5){
-							this.north = reverseForce(north);
-							this.reverseConnection(EnumFacing.NORTH);
-						}
-						else {
-							this.south = reverseForce(south);
-							this.reverseConnection(EnumFacing.SOUTH);
-						}
-					}
-				}
-				if (side == EnumFacing.NORTH || side == EnumFacing.SOUTH){
-					if (Math.abs(hitX-0.5) > Math.abs(hitY-0.5)){
-						if (hitX < 0.5){
-							this.west = reverseForce(west);
-							this.reverseConnection(EnumFacing.WEST);
-						}
-						else {
-							this.east = reverseForce(east);
-							this.reverseConnection(EnumFacing.EAST);
-						}
-					}
-					else {
-						if (hitY < 0.5){
-							this.down = reverseForce(down);
-							this.reverseConnection(EnumFacing.DOWN);
-						}
-						else {
-							this.up = reverseForce(up);
-							this.reverseConnection(EnumFacing.UP);
-						}
-					}
-				}
-				updateNeighbors(world);
-				markDirty();
-				return true;
 			}
+			if (side == EnumFacing.EAST || side == EnumFacing.WEST) {
+				if (Math.abs(hitY - 0.5) > Math.abs(hitZ - 0.5)) {
+					if (hitY < 0.5) {
+						this.down = reverseForce(down);
+						this.reverseConnection(EnumFacing.DOWN);
+					} else {
+						this.up = reverseForce(up);
+						this.reverseConnection(EnumFacing.UP);
+					}
+				} else {
+					if (hitZ < 0.5) {
+						this.north = reverseForce(north);
+						this.reverseConnection(EnumFacing.NORTH);
+					} else {
+						this.south = reverseForce(south);
+						this.reverseConnection(EnumFacing.SOUTH);
+					}
+				}
+			}
+			if (side == EnumFacing.NORTH || side == EnumFacing.SOUTH) {
+				if (Math.abs(hitX - 0.5) > Math.abs(hitY - 0.5)) {
+					if (hitX < 0.5) {
+						this.west = reverseForce(west);
+						this.reverseConnection(EnumFacing.WEST);
+					} else {
+						this.east = reverseForce(east);
+						this.reverseConnection(EnumFacing.EAST);
+					}
+				} else {
+					if (hitY < 0.5) {
+						this.down = reverseForce(down);
+						this.reverseConnection(EnumFacing.DOWN);
+					} else {
+						this.up = reverseForce(up);
+						this.reverseConnection(EnumFacing.UP);
+					}
+				}
+			}
+			updateNeighbors(world);
+			markDirty();
+			return true;
 		}
 		return false;
 	}

@@ -202,7 +202,7 @@ public class Misc {
 	public static void spawnInventoryInWorld(World world, double x, double y, double z, IItemHandler inventory){
 		if (inventory != null && !world.isRemote){
 			for (int i = 0; i < inventory.getSlots(); i ++){
-				if (inventory.getStackInSlot(i) != ItemStack.EMPTY){
+				if (!inventory.getStackInSlot(i).isEmpty()){
 					world.spawnEntity(new EntityItem(world,x,y,z,inventory.getStackInSlot(i)));
 				}
 			}

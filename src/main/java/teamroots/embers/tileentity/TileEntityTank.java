@@ -57,7 +57,7 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
+		if (!heldItem.isEmpty()){
 			boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
 			this.markDirty();
 			return didFill;

@@ -174,7 +174,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 					for(ItemStack stack : returns) {
 						ItemStack remainder = inventory.insertItem(0, stack, false);
 						dirty = true;
-						if (remainder != ItemStack.EMPTY)
+						if (!remainder.isEmpty())
 							getWorld().spawnEntity(new EntityItem(getWorld(), entityItem.posX, entityItem.posY, entityItem.posZ, remainder));
 					}
 					if(dirty)

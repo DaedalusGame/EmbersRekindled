@@ -227,13 +227,13 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
+		if (!heldItem.isEmpty()){
 			player.setHeldItem(hand, getInventoryForFace(side).insertItem(0,heldItem,false));
 			markDirty();
 			return true;
 		}
 		else {
-			if (getInventoryForFace(side).getStackInSlot(0) != ItemStack.EMPTY){
+			if (!getInventoryForFace(side).getStackInSlot(0).isEmpty()){
 				if (!getWorld().isRemote){
 					player.setHeldItem(hand, getInventoryForFace(side).extractItem(0, getInventoryForFace(side).getStackInSlot(0).getCount(), false));
 					markDirty();
@@ -271,7 +271,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	public int getNearbyAsh(List<TileEntityAlchemyPedestal> pedestals){
 		int count = 0;
 		for (TileEntityAlchemyPedestal pedestal : pedestals){
-			if (pedestal.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!pedestal.inventory.getStackInSlot(0).isEmpty()){
 				count += pedestal.inventory.getStackInSlot(0).getCount();
 			}
 		}
@@ -351,7 +351,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	}
 	
 	public ItemStack decrStack(ItemStack stack){
-		if (stack != ItemStack.EMPTY){
+		if (!stack.isEmpty()){
 			stack.shrink(1);
 			if (stack.getCount() == 0){
 				return ItemStack.EMPTY;

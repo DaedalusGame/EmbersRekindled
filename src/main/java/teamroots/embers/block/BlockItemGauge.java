@@ -93,7 +93,7 @@ public class BlockItemGauge extends BlockBase implements IDial {
 				if (handler != null){
 					for (int i = 0; i < handler.getSlots(); i ++){
 						String line = I18n.format("embers.tooltip.itemdial.slot").replace("{0}", Integer.toString(i))+": ";
-						if (handler.getStackInSlot(i) == ItemStack.EMPTY){
+						if (handler.getStackInSlot(i).isEmpty()){
 							text.add(line+I18n.format("embers.tooltip.itemdial.noitem"));
 						}
 						else {

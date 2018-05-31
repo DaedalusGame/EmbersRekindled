@@ -23,7 +23,7 @@ public class TileEntityBinRenderer extends TileEntitySpecialRenderer {
 		if (tile instanceof TileEntityBin){
 			TileEntityBin bin = (TileEntityBin)tile;
 			random.setSeed(tile.getWorld().getSeed());
-			if (bin.inventory.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!bin.inventory.getStackInSlot(0).isEmpty()){
 				int itemCount = (int)Math.ceil((bin.inventory.getStackInSlot(0).getCount())/4.0);
 				for (int i = 0; i < itemCount; i ++){
 					GL11.glPushMatrix();

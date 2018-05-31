@@ -70,7 +70,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<T
 
 			float itemScale = 0.25f;
 
-			if (tile.center.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!tile.center.getStackInSlot(0).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
@@ -89,7 +89,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<T
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tile.north.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!tile.north.getStackInSlot(0).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
@@ -108,7 +108,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<T
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tile.south.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!tile.south.getStackInSlot(0).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
@@ -127,7 +127,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<T
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tile.west.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!tile.west.getStackInSlot(0).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
@@ -146,7 +146,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<T
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tile.east.getStackInSlot(0) != ItemStack.EMPTY){
+			if (!tile.east.getStackInSlot(0).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();

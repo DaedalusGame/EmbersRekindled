@@ -7,7 +7,7 @@ import teamroots.embers.RegistryManager;
 public enum EnumStampType {
 	TYPE_FLAT, TYPE_BAR, TYPE_PLATE, TYPE_NULL;
 	public static EnumStampType getType(ItemStack stack){
-		if (stack != ItemStack.EMPTY){
+		if (!stack.isEmpty()){
 			if (stack.getItem() == RegistryManager.stamp_bar){
 				return TYPE_BAR;
 			}

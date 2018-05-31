@@ -204,13 +204,13 @@ public class EventManager {
 			EntityPlayer player = (EntityPlayer)event.getEntity();
 			String source = event.getSource().getDamageType();
 			if (source.compareTo("mob") != 0 && source.compareTo("generic") != 0 && source.compareTo("player") != 0 && source.compareTo("arrow") != 0){
-				if (player.getHeldItemMainhand() != ItemStack.EMPTY){
+				if (!player.getHeldItemMainhand().isEmpty()){
 					if (player.getHeldItemMainhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemMainhand().hasTagCompound()){
 						player.getHeldItemMainhand().setItemDamage(1);
 						player.getHeldItemMainhand().getTagCompound().setString("type", event.getSource().getDamageType());
 					}
 				}
-				if (player.getHeldItemOffhand() != ItemStack.EMPTY){
+				if (!player.getHeldItemOffhand().isEmpty()){
 					if (player.getHeldItemOffhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemOffhand().hasTagCompound()){
 						player.getHeldItemOffhand().setItemDamage(1);
 						player.getHeldItemOffhand().getTagCompound().setString("type", event.getSource().getDamageType());
@@ -218,10 +218,10 @@ public class EventManager {
 				}
 			}
 		}
-		if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD) != ItemStack.EMPTY &&
-				event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST) != ItemStack.EMPTY &&
-				event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS) != ItemStack.EMPTY &&
-				event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET) != ItemStack.EMPTY){
+		if (!event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() &&
+				!event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty() &&
+				!event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty() &&
+				!event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty()){
 			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemAshenCloak &&
 					event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemAshenCloak &&
 					event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemAshenCloak &&
@@ -267,12 +267,12 @@ public class EventManager {
 		
 		int x = w/2;
 		int y = h/2;
-		if (player.getHeldItemMainhand() != ItemStack.EMPTY){
+		if (!player.getHeldItemMainhand().isEmpty()){
 			if (player.getHeldItemMainhand().getItem() instanceof ItemEmberGauge){
 				showBar = true;
 			}
 		}
-		if (player.getHeldItemOffhand() != ItemStack.EMPTY){
+		if (!player.getHeldItemOffhand().isEmpty()){
 			if (player.getHeldItemOffhand().getItem() instanceof ItemEmberGauge){
 				showBar = true;
 			}
@@ -390,7 +390,7 @@ public class EventManager {
 					EntityPlayer p = ((EntityPlayer)event.getSource().getTrueSource());
 					event.setAmount((event.getAmount()/4.0f)*(4.0f+(float)event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue()*1.0f));
 				}
-				if (((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand() != ItemStack.EMPTY){
+				if (!((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().isEmpty()){
 					if (((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
 						if (((IEmberChargedTool)((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand().getItem()).hasEmber(((EntityPlayer)event.getSource().getTrueSource()).getHeldItemMainhand()) || ((EntityPlayer)event.getSource().getTrueSource()).capabilities.isCreativeMode){
 							event.getEntityLiving().setFire(1);
@@ -411,7 +411,7 @@ public class EventManager {
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event){
 		if (event.getPlayer() != null){
-			if (event.getPlayer().getHeldItemMainhand() != ItemStack.EMPTY){
+			if (!event.getPlayer().getHeldItemMainhand().isEmpty()){
 				ItemStack s = event.getPlayer().getHeldItemMainhand();
 				if (!s.isEmpty() && event.getState().getBlockHardness(event.getWorld(), event.getPos()) > 0){
 					if (ItemModUtil.hasHeat(s)){

@@ -160,23 +160,14 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	}
 
 	protected ItemStack getDrop() {
-		ItemStack nuggetStack = ItemStack.EMPTY;
-		if (material == 0){
-            nuggetStack = new ItemStack(Items.IRON_NUGGET,1);
-        }
-		if (material == 1){
-            nuggetStack = new ItemStack(Items.GOLD_NUGGET,1);
-        }
-		if (material == 2){
-            nuggetStack = new ItemStack(RegistryManager.nugget_copper,1);
-        }
-		if (material == 3){
-            nuggetStack = new ItemStack(RegistryManager.nugget_lead,1);
-        }
-		if (material == 4){
-            nuggetStack = new ItemStack(RegistryManager.nugget_silver,1);
-        }
-		return nuggetStack;
+		switch (material) {
+			case 0: return new ItemStack(Items.IRON_NUGGET,1);
+			case 1: return new ItemStack(Items.GOLD_NUGGET,1);
+			case 2: return new ItemStack(RegistryManager.nugget_copper,1);
+			case 3: return new ItemStack(RegistryManager.nugget_lead,1);
+			case 4: return new ItemStack(RegistryManager.nugget_silver,1);
+			default: return ItemStack.EMPTY;
+		}
 	}
 
 	@Override
