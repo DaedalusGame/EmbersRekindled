@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -21,28 +26,52 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import teamroots.embers.RegistryManager;
+import teamroots.embers.block.BlockCaminiteLever;
 
 public class Misc {
 	public static Random random = new Random();
-	
-	public static boolean isExtremeHills(Biome biome){
-		return biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS_EDGE.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS_WITH_TREES.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_EXTREME_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_EXTREME_HILLS_WITH_TREES.getBiomeName()) == 0;
+
+	public static boolean isValidLever(IBlockAccess world, BlockPos pos, EnumFacing side)
+	{
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block instanceof BlockLever){
+			EnumFacing face = state.getValue(BlockLever.FACING).getFacing();
+			return face == Misc.getOppositeVerticalFace(side);
+		}
+		else if (block instanceof BlockButton){
+			EnumFacing face = state.getValue(BlockButton.FACING);
+			return face == Misc.getOppositeVerticalFace(side);
+		}
+		else if (block instanceof BlockRedstoneTorch){
+			EnumFacing face = state.getValue(BlockRedstoneTorch.FACING);
+			return face == Misc.getOppositeVerticalFace(side);
+		}
+		else if (block == RegistryManager.caminite_lever){
+			EnumFacing face = state.getValue(BlockCaminiteLever.FACING).getFacing();
+			return face == Misc.getOppositeVerticalFace(side);
+		}
+		return false;
 	}
-	
+
+	//TODO: DANNY DELETO
+	public static EnumFacing getOppositeFace(EnumFacing face){
+		return face.getOpposite();
+	}
+
 	public static EnumFacing getOppositeHorizontalFace(EnumFacing face){
-		if (face == EnumFacing.DOWN){
-			return EnumFacing.DOWN;
-		}
-		else if (face == EnumFacing.UP){
-			return EnumFacing.UP;
-		}
-		else {
-			return face.getOpposite();
-		}
+		return face.getAxis().isHorizontal() ? face.getOpposite() : face;
+	}
+
+	public static EnumFacing getOppositeVerticalFace(EnumFacing face){
+		return face.getAxis().isVertical() ? face.getOpposite() : face;
 	}
 	
 	public static ItemStack getRepairItem(ItemStack stack){
@@ -71,7 +100,7 @@ public class Misc {
 	}
 	
 	public static List<TileEntity> getAdjacentTiles(World world, BlockPos pos){
-		List<TileEntity> tiles = new ArrayList<TileEntity>();
+		List<TileEntity> tiles = new ArrayList<>();
 		tiles.add(world.getTileEntity(pos.up()));
 		tiles.add(world.getTileEntity(pos.down()));
 		tiles.add(world.getTileEntity(pos.west()));
@@ -130,56 +159,35 @@ public class Misc {
 	public static float pitchDegreesBetweenPoints(double posX, double posY, double posZ, double posX2, double posY2, double posZ2){
 		return (float)Math.toDegrees(Math.atan2(posY2-posY,Math.sqrt((posX2-posX)*(posX2-posX)+(posZ2-posZ)*(posZ2-posZ))));
 	}
-
-	//TODO: DANNY DELETO
-	public static EnumFacing getOppositeFace(EnumFacing face){
-		if (face == EnumFacing.DOWN){
-			return EnumFacing.UP;
-		}
-		else if (face == EnumFacing.UP){
-			return EnumFacing.DOWN;
-		}
-		else {
-			return face.getOpposite();
-		}
-	}
 	
 	public static int getResourceCount(ItemStack stack){
 		int baseCount = 0;
 		if (stack.getItem() instanceof ItemArmor){
-			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.HEAD){
+			ItemArmor armor = (ItemArmor) stack.getItem();
+			if (armor.getEquipmentSlot() == EntityEquipmentSlot.HEAD)
 				baseCount = 5;
-			}
-			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.CHEST){
+			if (armor.getEquipmentSlot() == EntityEquipmentSlot.CHEST)
 				baseCount = 8;
-			}
-			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.LEGS){
+			if (armor.getEquipmentSlot() == EntityEquipmentSlot.LEGS)
 				baseCount = 7;
-			}
-			if (((ItemArmor)stack.getItem()).armorType == EntityEquipmentSlot.FEET){
+			if (armor.getEquipmentSlot() == EntityEquipmentSlot.FEET)
 				baseCount = 4;
-			}
 		}
-		if (stack.getItem() instanceof ItemSword){
+		if (stack.getItem() instanceof ItemSword)
 			baseCount = 2;
-		}
-		if (stack.getItem() instanceof ItemBow){
+		if (stack.getItem() instanceof ItemBow)
 			baseCount = 3;
-		}
 		if (stack.getItem() instanceof ItemTool){
-			if (stack.getItem() instanceof ItemPickaxe || stack.getItem().getHarvestLevel(stack, "pickaxe", null, null) > -1){
+			if (stack.getItem() instanceof ItemPickaxe || stack.getItem().getHarvestLevel(stack, "pickaxe", null, null) > -1)
 				baseCount = 3;
-			}
-			if (stack.getItem() instanceof ItemAxe || stack.getItem().getHarvestLevel(stack, "axe", null, null) > -1){
+			else if (stack.getItem() instanceof ItemAxe || stack.getItem().getHarvestLevel(stack, "axe", null, null) > -1)
 				baseCount = 3;
-			}
-			if (stack.getItem() instanceof ItemHoe){
+			else if (stack.getItem() instanceof ItemHoe)
 				baseCount = 2;
-			}
-			if (stack.getItem() instanceof ItemSpade){
+			else if (stack.getItem() instanceof ItemSpade)
 				baseCount = 1;
-			}
-			baseCount = 1;
+			else
+				baseCount = 1;
 		}
 		if (baseCount > 0){
 			return (int)((float)baseCount * (1.0f-(float)stack.getItemDamage() / (float)stack.getMaxDamage()));
@@ -187,20 +195,12 @@ public class Misc {
 		return -1;
 	}
 	
-	public static EnumFacing getOppositeVerticalFace(EnumFacing face){
-		if (face == EnumFacing.DOWN){
-			return EnumFacing.UP;
-		}
-		else if (face == EnumFacing.UP){
-			return EnumFacing.DOWN;
-		}
-		else {
-			return face;
-		}
-	}
-	
 	public static boolean isHills(Biome biome){
-		return biome.getBiomeName().compareTo(Biomes.BIRCH_FOREST_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.COLD_TAIGA_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.DESERT_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.FOREST_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.JUNGLE_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_BIRCH_FOREST_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_REDWOOD_TAIGA_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.REDWOOD_TAIGA_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.TAIGA_HILLS.getBiomeName()) == 0;
+		return BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS);
+	}
+
+	public static boolean isExtremeHills(Biome biome){
+		return biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS_EDGE.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.EXTREME_HILLS_WITH_TREES.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_EXTREME_HILLS.getBiomeName()) == 0 || biome.getBiomeName().compareTo(Biomes.MUTATED_EXTREME_HILLS_WITH_TREES.getBiomeName()) == 0;
 	}
 	
 	public static void spawnInventoryInWorld(World world, double x, double y, double z, IItemHandler inventory){

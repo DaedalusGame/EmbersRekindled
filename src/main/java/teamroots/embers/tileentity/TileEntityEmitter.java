@@ -40,7 +40,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	public long ticksExisted = 0;
 	Random random = new Random();
 	int offset = random.nextInt(40);
-	public static enum EnumConnection{
+	public enum EnumConnection{
 		NONE, LEVER
 	}
 	
