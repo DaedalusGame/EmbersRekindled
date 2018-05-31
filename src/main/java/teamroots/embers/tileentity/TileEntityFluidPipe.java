@@ -36,8 +36,8 @@ import teamroots.embers.util.Misc;
 
 public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntityBase, ITickable {
 	Random random = new Random();
-	List<EnumFacing> from = new ArrayList<EnumFacing>();
-	public static enum EnumPipeConnection{
+	List<EnumFacing> from = new ArrayList<>();
+	public enum EnumPipeConnection{
 		NONE, PIPE, BLOCK, LEVER, FORCENONE
 	}
 	
@@ -310,37 +310,7 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 		if (tank.getFluid() != null){
 			ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
 			int distAmount = Math.min(tank.getFluidAmount(),120);
-			ArrayList<EnumFacing> connectedFaces = new ArrayList<EnumFacing>();
-			if (up == EnumPipeConnection.PIPE || up == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.UP) && !from.contains(EnumFacing.UP)){
-					connectedFaces.add(EnumFacing.UP);
-				}
-			}
-			if (down == EnumPipeConnection.PIPE || down == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.DOWN) && !from.contains(EnumFacing.DOWN)){
-					connectedFaces.add(EnumFacing.DOWN);
-				}
-			}
-			if (north == EnumPipeConnection.PIPE || north == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.NORTH) && !from.contains(EnumFacing.NORTH)){
-					connectedFaces.add(EnumFacing.NORTH);
-				}
-			}
-			if (south == EnumPipeConnection.PIPE || south == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.SOUTH) && !from.contains(EnumFacing.SOUTH)){
-					connectedFaces.add(EnumFacing.SOUTH);
-				}
-			}
-			if (west == EnumPipeConnection.PIPE || west == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.WEST) && !from.contains(EnumFacing.WEST)){
-					connectedFaces.add(EnumFacing.WEST);
-				}
-			}
-			if (east == EnumPipeConnection.PIPE || east == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.EAST) && !from.contains(EnumFacing.EAST)){
-					connectedFaces.add(EnumFacing.EAST);
-				}
-			}
+			ArrayList<EnumFacing> connectedFaces = getConnectedFaces();
 			
 			for (int i = 0; i < connectedFaces.size(); i ++){
 				TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
@@ -357,18 +327,8 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 					if (t != null && tank.getFluid() != null){
 						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFaces.get(i)))){
 							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-							if (handler != null){
-								int capacity = 0;
-								int amount = 0;
-								for (IFluidTankProperties p : handler.getTankProperties()){
-									capacity += p.getCapacity();
-									if (p.getContents() != null){
-										amount += p.getContents().amount;
-									}
-								}
-								if (amount < capacity){
-									count ++;
-								}
+							if (handler != null && handler.fill(tank.getFluid(),false) > 0){
+								count++;
 							}
 						}
 					}
@@ -379,15 +339,16 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 				for (int i = 0; i < connectedFaces.size(); i ++){
 					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
 					if (t != null && toEach > 0 && tank.getFluid() != null){
-						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFaces.get(i)))){
+						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite())){
 							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
 							if (handler != null){
-								if (t.getClass() == TileEntityFluidPipe.class){
+								if (t instanceof TileEntityFluidPipe){
 									((TileEntityFluidPipe) t).from.add(Misc.getOppositeFace(connectedFaces.get(i)));
 								}
-								FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
+								FluidStack toAdd = tank.getFluid();
+								toAdd.amount = toEach;
 								int filled = handler.fill(toAdd, true);
-								tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
+								tank.drainInternal(filled, true);
 								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
 									toUpdate.add(getPos().offset(connectedFaces.get(i)));
 								}
@@ -410,7 +371,42 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 		}
 		from.clear();
 	}
-	
+
+	private ArrayList<EnumFacing> getConnectedFaces() {
+		ArrayList<EnumFacing> connectedFaces = new ArrayList<>();
+		if (up == EnumPipeConnection.PIPE || up == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.UP) && !from.contains(EnumFacing.UP)){
+                connectedFaces.add(EnumFacing.UP);
+            }
+        }
+		if (down == EnumPipeConnection.PIPE || down == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.DOWN) && !from.contains(EnumFacing.DOWN)){
+                connectedFaces.add(EnumFacing.DOWN);
+            }
+        }
+		if (north == EnumPipeConnection.PIPE || north == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.NORTH) && !from.contains(EnumFacing.NORTH)){
+                connectedFaces.add(EnumFacing.NORTH);
+            }
+        }
+		if (south == EnumPipeConnection.PIPE || south == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.SOUTH) && !from.contains(EnumFacing.SOUTH)){
+                connectedFaces.add(EnumFacing.SOUTH);
+            }
+        }
+		if (west == EnumPipeConnection.PIPE || west == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.WEST) && !from.contains(EnumFacing.WEST)){
+                connectedFaces.add(EnumFacing.WEST);
+            }
+        }
+		if (east == EnumPipeConnection.PIPE || east == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.EAST) && !from.contains(EnumFacing.EAST)){
+                connectedFaces.add(EnumFacing.EAST);
+            }
+        }
+		return connectedFaces;
+	}
+
 	public boolean dirty = false;
 	
 	@Override

@@ -331,71 +331,11 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 		boolean on = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
 		ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
 		if (tank.getFluidAmount() < tank.getCapacity() && on){
-			ArrayList<EnumFacing> connectedFaces = new ArrayList<EnumFacing>();
-			if (up == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.UP)){
-					connectedFaces.add(EnumFacing.UP);
-				}
-			}
-			if (down == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.DOWN)){
-					connectedFaces.add(EnumFacing.DOWN);
-				}
-			}
-			if (north == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.NORTH)){
-					connectedFaces.add(EnumFacing.NORTH);
-				}
-			}
-			if (south == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.SOUTH)){
-					connectedFaces.add(EnumFacing.SOUTH);
-				}
-			}
-			if (west == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.WEST)){
-					connectedFaces.add(EnumFacing.WEST);
-				}
-			}
-			if (east == EnumPipeConnection.BLOCK){
-				if (isConnected(EnumFacing.EAST)){
-					connectedFaces.add(EnumFacing.EAST);
-				}
-			}
-			for (int i = 0; i < connectedFaces.size(); i ++){
-				TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
-				if (t != null && !(t instanceof TileEntityFluidPipe)){
-					if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite())){
-						IFluidHandler handler = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i))).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-						if (handler != null){
-							from.add(connectedFaces.get(i));
-							IFluidTankProperties[] properties = handler.getTankProperties();
-							for (int j = 0; j < properties.length && tank.getFluidAmount() < tank.getCapacity(); j ++){
-								FluidStack stack = properties[j].getContents();
-								if (stack != null){
-									if (t.getClass() == TileEntityFluidPipe.class){
-										((TileEntityFluidPipe) t).from.add(Misc.getOppositeFace(connectedFaces.get(i)));
-									}
-									int toFill = tank.fill(stack, false);
-									FluidStack taken = handler.drain(new FluidStack(stack.getFluid(),toFill), true);
-									tank.fill(taken, true);
-									IBlockState state = getWorld().getBlockState(getPos());
-									if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-										toUpdate.add(getPos().offset(connectedFaces.get(i)));
-									}
-									if (!toUpdate.contains(getPos())){
-										toUpdate.add(getPos());
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			tryDrain(toUpdate);
 		}
 		if (tank.getFluid() != null){
 			int distAmount = Math.min(tank.getFluidAmount(),120);
-			ArrayList<EnumFacing> connectedFaces = new ArrayList<EnumFacing>();
+			ArrayList<EnumFacing> connectedFaces = new ArrayList<>();
 			if (up == EnumPipeConnection.PIPE || !on && up == EnumPipeConnection.BLOCK){
 				if (!from.contains(EnumFacing.UP)){
 					connectedFaces.add(EnumFacing.UP);
@@ -429,23 +369,13 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 			
 			int count = 0;
 			if (connectedFaces.size() >= 1){
-				for (int i = 0; i < connectedFaces.size(); i ++){
-					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
-					if (t != null && tank.getFluid() != null){
-						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFaces.get(i)))){
-							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-							if (handler != null){
-								int capacity = 0;
-								int amount = 0;
-								for (IFluidTankProperties p : handler.getTankProperties()){
-									capacity += p.getCapacity();
-									if (p.getContents() != null){
-										amount += p.getContents().amount;
-									}
-								}
-								if (amount < capacity){
-									count ++;
-								}
+				for (EnumFacing connectedFace : connectedFaces) {
+					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFace));
+					if (t != null && tank.getFluid() != null) {
+						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFace))) {
+							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite());
+							if (handler != null && handler.fill(tank.getFluid(),false) > 0){
+								count++;
 							}
 						}
 					}
@@ -454,24 +384,25 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 			
 			if (count >= 1){
 				int toEach = Math.max(1, distAmount / count);
-				for (int i = 0; i < connectedFaces.size(); i ++){
-					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
-					if (t != null && toEach > 0 && tank.getFluid() != null){
-						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite())){
-							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-							if (handler != null){
-								if (tank.getFluid() != null){
-									if (tank.getFluid().getFluid() != null){
-										if (t instanceof TileEntityFluidPipe){
-											((TileEntityFluidPipe) t).from.add(connectedFaces.get(i).getOpposite());
+				for (EnumFacing connectedFace : connectedFaces) {
+					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFace));
+					if (t != null && toEach > 0 && tank.getFluid() != null) {
+						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite())) {
+							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite());
+							if (handler != null) {
+								if (tank.getFluid() != null) {
+									if (tank.getFluid().getFluid() != null) {
+										if (t instanceof TileEntityFluidPipe) {
+											((TileEntityFluidPipe) t).from.add(connectedFace.getOpposite());
 										}
-										FluidStack toAdd = new FluidStack(tank.getFluid().getFluid(),toEach);
+										FluidStack toAdd = tank.getFluid();
+										toAdd.amount = toEach;
 										int filled = handler.fill(toAdd, true);
-										tank.drainInternal(new FluidStack(tank.getFluid().getFluid(),filled), true);
-										if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-											toUpdate.add(getPos().offset(connectedFaces.get(i)));
+										tank.drainInternal(filled, true);
+										if (!toUpdate.contains(getPos().offset(connectedFace))) {
+											toUpdate.add(getPos().offset(connectedFace));
 										}
-										if (!toUpdate.contains(getPos())){
+										if (!toUpdate.contains(getPos())) {
 											toUpdate.add(getPos());
 										}
 									}
@@ -482,17 +413,76 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 				}
 			}
 		}
-		for (int i = 0; i < toUpdate.size(); i ++){
-			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+		for (BlockPos aToUpdate : toUpdate) {
+			TileEntity tile = getWorld().getTileEntity(aToUpdate);
 			tile.markDirty();
-			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 				tile.markDirty();
-				EventManager.markTEForUpdate(toUpdate.get(i),tile);
+				EventManager.markTEForUpdate(aToUpdate, tile);
 			}
 		}
 		markDirty();
 	}
-	
+
+	private void tryDrain(ArrayList<BlockPos> toUpdate) {
+		ArrayList<EnumFacing> connectedFaces = new ArrayList<>();
+		if (up == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.UP)){
+                connectedFaces.add(EnumFacing.UP);
+            }
+        }
+		if (down == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.DOWN)){
+                connectedFaces.add(EnumFacing.DOWN);
+            }
+        }
+		if (north == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.NORTH)){
+                connectedFaces.add(EnumFacing.NORTH);
+            }
+        }
+		if (south == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.SOUTH)){
+                connectedFaces.add(EnumFacing.SOUTH);
+            }
+        }
+		if (west == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.WEST)){
+                connectedFaces.add(EnumFacing.WEST);
+            }
+        }
+		if (east == EnumPipeConnection.BLOCK){
+            if (isConnected(EnumFacing.EAST)){
+                connectedFaces.add(EnumFacing.EAST);
+            }
+        }
+		for (EnumFacing connectedFace : connectedFaces) {
+            TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFace));
+            if (t != null && !(t instanceof TileEntityFluidPipe)) {
+                if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite())) {
+                    IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite());
+                    if (handler != null) {
+                        from.add(connectedFace);
+						FluidStack taken = handler.drain(tank.getCapacity(), false);
+						if(taken != null) {
+							int toFill = tank.fill(taken, true);
+							taken.amount = toFill;
+							if (toFill > 0) {
+								handler.drain(toFill, true);
+								if (!toUpdate.contains(getPos().offset(connectedFace))) {
+									toUpdate.add(getPos().offset(connectedFace));
+								}
+								if (!toUpdate.contains(getPos())) {
+									toUpdate.add(getPos());
+								}
+							}
+						}
+                    }
+                }
+            }
+        }
+	}
+
 	public boolean dirty = false;
 	
 	@Override
