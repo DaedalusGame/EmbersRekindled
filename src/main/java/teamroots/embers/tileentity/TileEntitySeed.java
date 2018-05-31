@@ -38,6 +38,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.tile.IEmberInjectable;
 import teamroots.embers.block.BlockBreaker;
 import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.block.BlockSeed;
@@ -47,47 +48,38 @@ import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
 
-public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable {
-	int size = 0;
-	int ticksExisted = 0;
-	int material = -1;
+public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable {
+	@Deprecated
 	boolean[] willSpawn = new boolean[12];
-	Random random = new Random();
-	
-	public TileEntitySeed(){
-		super();
-		resetSpawns();
-	}
-	
+
+	protected int size = 0;
+	protected int ticksExisted = 0;
+	protected int material = -1;
+	protected Random random = new Random();
+
+	@Deprecated
 	public void resetSpawns(){
-		for (int i = 0; i < 12; i ++){
-			willSpawn[i] = random.nextInt(3) == 0;
-		}
+		//NOOP
 	}
 	
 	public TileEntitySeed setMaterial(int material){
 		this.material = material;
 		return this;
 	}
-	
+
+	@Deprecated
 	public String getSpawnString(){
-		String result = "";
-		for (int i = 0; i < 12; i ++){
-			result += willSpawn[i] ? "1" : "0";
-		}
-		return result;
+		return "";
 	}
-	
+
+	@Deprecated
 	public void loadSpawnsFromString(String s){
-		for (int i = 0; i < 12; i ++){
-			willSpawn[i] = s.substring(i, i+1).compareTo("1") == 0;
-		}
+		//NOOP
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		tag.setString("spawns", getSpawnString());
 		tag.setInteger("size", size);
 		tag.setInteger("material", material);
 		return tag;
@@ -96,7 +88,6 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		loadSpawnsFromString(tag.getString("spawns"));
 		size = tag.getInteger("size");
 		material = tag.getInteger("material");
 	}
@@ -138,33 +129,47 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		if (size > 1000){
 			size = 0;
 			for (int i = 0; i < 12; i ++){
-				if (willSpawn[i] && !getWorld().isRemote){
-					ItemStack nuggetStack = ItemStack.EMPTY;
-					if (material == 0){
-						nuggetStack = new ItemStack(RegistryManager.nugget_iron,1);
-					}
-					if (material == 1){
-						nuggetStack = new ItemStack(Items.GOLD_NUGGET,1);
-					}
-					if (material == 2){
-						nuggetStack = new ItemStack(RegistryManager.nugget_copper,1);
-					}
-					if (material == 3){
-						nuggetStack = new ItemStack(RegistryManager.nugget_lead,1);
-					}
-					if (material == 4){
-						nuggetStack = new ItemStack(RegistryManager.nugget_silver,1);
-					}
+				if (random.nextDouble() < 0.33 && !getWorld().isRemote){
+					ItemStack nuggetStack = getDrop();
 					float offX = 0.4f*(float)Math.sin(Math.toRadians(i*30.0));
 					float offZ = 0.4f*(float)Math.cos(Math.toRadians(i*30.0));
 					world.spawnEntity(new EntityItem(world,getPos().getX()+0.5+offX,getPos().getY()+0.5f,getPos().getZ()+0.5+offZ,nuggetStack));
 				}
 			}
-			resetSpawns();
 			markDirty();
 		}
 	}
-	
+
+	protected ItemStack getDrop() {
+		ItemStack nuggetStack = ItemStack.EMPTY;
+		if (material == 0){
+            nuggetStack = new ItemStack(Items.IRON_NUGGET,1);
+        }
+		if (material == 1){
+            nuggetStack = new ItemStack(Items.GOLD_NUGGET,1);
+        }
+		if (material == 2){
+            nuggetStack = new ItemStack(RegistryManager.nugget_copper,1);
+        }
+		if (material == 3){
+            nuggetStack = new ItemStack(RegistryManager.nugget_lead,1);
+        }
+		if (material == 4){
+            nuggetStack = new ItemStack(RegistryManager.nugget_silver,1);
+        }
+		return nuggetStack;
+	}
+
+	@Override
+	public void inject(TileEntity injector, double ember) {
+		size++;
+		markDirty();
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 	public boolean dirty = false;
 	
 	@Override

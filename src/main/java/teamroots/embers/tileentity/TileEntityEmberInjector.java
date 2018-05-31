@@ -28,6 +28,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.tile.IEmberInjectable;
 import teamroots.embers.block.BlockAutoHammer;
 import teamroots.embers.block.BlockEmberInjector;
 import teamroots.embers.network.PacketHandler;
@@ -126,9 +127,8 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 	public void update(){
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
-		if (tile instanceof TileEntitySeed && capability.getEmber() > 1.0){
-			((TileEntitySeed)tile).size ++;
-			((TileEntitySeed)tile).markDirty();
+		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > 1.0){
+			((IEmberInjectable) tile).inject(this,1.0);
 			this.capability.removeAmount(1.0, true);
 			markDirty();
 			if (world.isRemote){
