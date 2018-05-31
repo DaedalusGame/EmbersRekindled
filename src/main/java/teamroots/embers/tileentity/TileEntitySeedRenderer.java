@@ -19,11 +19,16 @@ import net.minecraft.util.math.Vec3d;
 import teamroots.embers.Embers;
 
 public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
-	public ResourceLocation textureIron = new ResourceLocation(Embers.MODID + ":textures/blocks/material_iron.png");
-	public ResourceLocation textureGold = new ResourceLocation(Embers.MODID + ":textures/blocks/material_gold.png");
-	public ResourceLocation textureCopper = new ResourceLocation(Embers.MODID + ":textures/blocks/material_copper.png");
-	public ResourceLocation textureLead = new ResourceLocation(Embers.MODID + ":textures/blocks/material_lead.png");
-	public ResourceLocation textureSilver = new ResourceLocation(Embers.MODID + ":textures/blocks/material_silver.png");
+	@Deprecated
+	public ResourceLocation textureIron = TileEntitySeed.TEXTURE_IRON;
+	@Deprecated
+	public ResourceLocation textureGold = TileEntitySeed.TEXTURE_GOLD;
+	@Deprecated
+	public ResourceLocation textureCopper = TileEntitySeed.TEXTURE_COPPER;
+	@Deprecated
+	public ResourceLocation textureLead = TileEntitySeed.TEXTURE_LEAD;
+	@Deprecated
+	public ResourceLocation textureSilver = TileEntitySeed.TEXTURE_SILVER;
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public TileEntitySeedRenderer(){
@@ -103,22 +108,7 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			TileEntitySeed seed = (TileEntitySeed)tile;
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(textureIron);
-            if (seed.material == 0){
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureIron);
-            }
-            if (seed.material == 1){
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureGold);
-            }
-            if (seed.material == 2){
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureCopper);
-            }
-            if (seed.material == 3){
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureLead);
-            }
-            if (seed.material == 4){
-                Minecraft.getMinecraft().renderEngine.bindTexture(textureSilver);
-            }
+            Minecraft.getMinecraft().renderEngine.bindTexture(seed.getTexture());
             GlStateManager.disableCull();
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();

@@ -1,10 +1,12 @@
 package teamroots.embers.tileentity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +22,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -31,16 +34,23 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.recipe.HeatCoilRecipe;
+import teamroots.embers.recipe.RecipeRegistry;
 
 public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
+	public static final double EMBER_COST = 1.0;
+	public static final double HEATING_SPEED = 1.0;
+	public static final double COOLING_SPEED = 1.0;
+	public static final double MAX_HEAT = 280;
+	public static final int MIN_COOK_TIME = 20;
+	public static final int MAX_COOK_TIME = 300;
+
 	public IEmberCapability capability = new DefaultEmberCapability();
-	public ItemStackHandler inventory = new ItemStackHandler(1){
-        
-	};
-	Random random = new Random();
-	int progress = 0;
-	int heat = 0;
-	int ticksExisted = 0;
+	public ItemStackHandler inventory = new ItemStackHandler(1);
+	protected Random random = new Random();
+	protected int progress = 0;
+	public double heat = 0;
+	protected int ticksExisted = 0;
 	
 	public TileEntityHeatCoil(){
 		super();
@@ -52,7 +62,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 		super.writeToNBT(tag);
 		capability.writeToNBT(tag);
 		tag.setInteger("progress", progress);
-		tag.setInteger("heat", heat);
+		tag.setDouble("heat", heat);
 		tag.setTag("inventory", inventory.serializeNBT());
 		return tag;
 	}
@@ -66,7 +76,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			progress = tag.getInteger("progress");
 		}
 		if (tag.hasKey("heat")){
-			heat = tag.getInteger("heat");
+			heat = tag.getDouble("heat");
 		}
 	}
 
@@ -130,70 +140,73 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 
 	@Override
 	public void update() {
-		//if (getWorld().provider.getDimensionType() == DimensionType.OVERWORLD){
-			ticksExisted ++;
-			if (capability.getEmber() >= 1.0){
-				capability.removeAmount(1.0, true);
-				if (ticksExisted % 20 == 0){
-					heat ++;
-					if (heat > 280){
-						heat = 280;
-					}
-				}
+		ticksExisted ++;
+
+		if (capability.getEmber() >= EMBER_COST){
+			capability.removeAmount(EMBER_COST, true);
+			if (ticksExisted % 20 == 0){
+				heat += HEATING_SPEED;
 			}
-			else {
-				if (ticksExisted % 20 == 0){
-					heat --;
-					if (heat < 0){
-						heat = 0;
-					}
-				}
+		}
+		else {
+			if (ticksExisted % 20 == 0){
+				heat -= COOLING_SPEED;
 			}
-			if (heat > 0 && ticksExisted % (300-heat) == 0 && !getWorld().isRemote){
-				List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX()-1,getPos().getY(),getPos().getZ()-1,getPos().getX()+2,getPos().getY()+2,getPos().getZ()+2));
-				for (int i = 0; i < items.size(); i ++){
-					items.get(i).setAgeToCreativeDespawnTime();
-					items.get(i).lifespan = 10800;
-				}
-				if (items.size() > 0){
-					int i = random.nextInt(items.size());
-					if (FurnaceRecipes.instance().getSmeltingResult(items.get(i).getItem()) != ItemStack.EMPTY){
-						ItemStack recipeStack = new ItemStack(items.get(i).getItem().getItem(),1,items.get(i).getItem().getMetadata());
-						if (items.get(i).getItem().hasTagCompound()){
-							recipeStack.setTagCompound(items.get(i).getItem().getTagCompound());
-						}
-						ItemStack stack = FurnaceRecipes.instance().getSmeltingResult(recipeStack).copy();
+		}
+		heat = MathHelper.clamp(heat,0, MAX_HEAT);
+
+		int cookTime = (int)Math.ceil(MathHelper.clampedLerp(MIN_COOK_TIME,MAX_COOK_TIME,1.0-(heat / MAX_HEAT)));
+		if (heat > 0 && ticksExisted % cookTime == 0 && !getWorld().isRemote){
+			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX()-1,getPos().getY(),getPos().getZ()-1,getPos().getX()+2,getPos().getY()+2,getPos().getZ()+2));
+			for (EntityItem item : items) {
+				item.setAgeToCreativeDespawnTime();
+				item.lifespan = 10800;
+			}
+			if (items.size() > 0){
+				int i = random.nextInt(items.size());
+				EntityItem entityItem = items.get(i);
+				HeatCoilRecipe recipe = RecipeRegistry.getHeatCoilRecipe(entityItem.getItem());
+				if (recipe != null){
+					ArrayList<ItemStack> returns = Lists.newArrayList(recipe.getResult(this, entityItem.getItem()));
+					int inputCount = recipe.getInputConsumed();
+					depleteItem(entityItem, inputCount);
+					boolean dirty = false;
+					for(ItemStack stack : returns) {
 						ItemStack remainder = inventory.insertItem(0, stack, false);
-						items.get(i).getItem().shrink(1);
-						if (items.get(i).getItem().getCount() == 0){
-							items.get(i).setDead();
-							for (int j = 0; j < 3; j ++){
-								if (random.nextBoolean()){
-									getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, items.get(i).posX, items.get(i).posY, items.get(i).posZ, 0, 0, 0, 0);
-								}
-								else {
-									getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, items.get(i).posX, items.get(i).posY, items.get(i).posZ, 0, 0, 0, 0);
-								}
-							}
-							getWorld().removeEntity(items.get(i));
-						}
-						markDirty();
-						IBlockState state = getWorld().getBlockState(getPos());
-						if (remainder != ItemStack.EMPTY){
-							getWorld().spawnEntity(new EntityItem(getWorld(),items.get(i).posX,items.get(i).posY,items.get(i).posZ,remainder));
-						}
+						dirty = true;
+						if (remainder != ItemStack.EMPTY)
+							getWorld().spawnEntity(new EntityItem(getWorld(), entityItem.posX, entityItem.posY, entityItem.posZ, remainder));
 					}
+					if(dirty)
+						markDirty();
 				}
 			}
-			if (getWorld().isRemote && heat > 0){
-				float particleCount = (1+random.nextInt(2))*(1+(float)Math.sqrt(heat));
-				for (int i = 0; i < particleCount; i ++){
-					ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
-				}
+		}
+		if (getWorld().isRemote && heat > 0){
+			float particleCount = (1+random.nextInt(2))*(1+(float)Math.sqrt(heat));
+			for (int i = 0; i < particleCount; i ++){
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 			}
-		//}
+		}
 	}
-	
+
+	public void depleteItem(EntityItem entityItem, int inputCount) {
+		ItemStack stack = entityItem.getItem();
+		stack.shrink(inputCount);
+		entityItem.setItem(stack);
+		if (stack.isEmpty()) {
+			entityItem.setDead();
+			for (int j = 0; j < 3; j++) {
+				if (random.nextBoolean()) {
+					getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, entityItem.posX, entityItem.posY, entityItem.posZ, 0, 0, 0, 0);
+				} else {
+					getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, entityItem.posX, entityItem.posY, entityItem.posZ, 0, 0, 0, 0);
+				}
+			}
+			getWorld().removeEntity(entityItem);
+		}
+	}
+
 	public boolean dirty = false;
 	
 	@Override

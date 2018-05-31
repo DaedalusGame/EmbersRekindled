@@ -26,10 +26,10 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent event){
-		RecipeRegistry.initOreDict();
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){
 		NetworkRegistry.INSTANCE.registerGuiHandler(Embers.instance, new GuiHandler());
+		RecipeRegistry.mergeOreRecipes();
 	}
 }

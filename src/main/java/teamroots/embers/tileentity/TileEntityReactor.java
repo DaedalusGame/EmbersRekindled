@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -31,6 +32,7 @@ import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable {
+	public static final float BASE_MULTIPLIER = 1.0f;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
@@ -131,30 +133,13 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 			if (progress > 20){
 				float catalyzerMult = 0.0f;
 				float combustorMult = 0.0f;
-				float multiplier = 1.0f;
-				if (world.getTileEntity(getPos().north().down()) instanceof TileEntityCatalyzer){
-					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().north().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().south().down()) instanceof TileEntityCatalyzer){
-					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().south().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().east().down()) instanceof TileEntityCatalyzer){
-					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().east().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().west().down()) instanceof TileEntityCatalyzer){
-					catalyzerMult += ((TileEntityCatalyzer)world.getTileEntity(getPos().west().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().north().down()) instanceof TileEntityCombustor){
-					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().north().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().south().down()) instanceof TileEntityCombustor){
-					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().south().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().east().down()) instanceof TileEntityCombustor){
-					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().east().down())).multiplier;
-				}
-				if (world.getTileEntity(getPos().west().down()) instanceof TileEntityCombustor){
-					combustorMult += ((TileEntityCombustor)world.getTileEntity(getPos().west().down())).multiplier;
+				float multiplier = BASE_MULTIPLIER;
+				for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+					TileEntity tile = world.getTileEntity(getPos().offset(facing).down());
+					if(tile instanceof TileEntityCatalyzer)
+						catalyzerMult += ((TileEntityCatalyzer)tile).multiplier;
+					if(tile instanceof TileEntityCombustor)
+						catalyzerMult += ((TileEntityCombustor)tile).multiplier;
 				}
 				if (Math.max(combustorMult, catalyzerMult) < 2.0f*Math.min(combustorMult, catalyzerMult)){
 					multiplier += combustorMult;
@@ -162,8 +147,10 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 					progress = 0;
 					int i = 0;
 					if (inventory != null){
-						if (EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem()) > 0){
-							double ember = multiplier*EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem());
+						Item emberStack = inventory.getStackInSlot(i).getItem();
+						double emberValue = EmberGenUtil.getEmberForItem(emberStack);
+						if (emberValue > 0){
+							double ember = multiplier * emberValue;
 							if (capability.getEmber() <= capability.getEmberCapacity()-ember){
 								if (!world.isRemote){
 									PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+0.5f,getPos().getZ()+0.5f));
@@ -171,9 +158,6 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 								capability.addAmount(ember, true);
 								inventory.extractItem(i, 1, false);
 								markDirty();
-								IBlockState state = getWorld().getBlockState(getPos());
-								markDirty();
-								state = getWorld().getBlockState(getPos().up());
 							}
 						}
 					}

@@ -30,6 +30,8 @@ import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.Misc;
 
 public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable {
+	public static final double MAX_TRANSFER = 10.0;
+
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
 	int turnRate = 0;
@@ -106,21 +108,18 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
-			if (heldItem.getItem() instanceof IEmberItem){
-				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
-				markDirty();
-				return true;
-			}
+		ItemStack stack = inventory.getStackInSlot(0);
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof IEmberItem){
+			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
+			markDirty();
+			return true;
 		}
-		else {
-			if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
-				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
-					markDirty();
-				}
-				return true;
+		else if (!stack.isEmpty()) {
+			if (!getWorld().isRemote) {
+				player.setHeldItem(hand, inventory.extractItem(0, stack.getCount(), false));
+				markDirty();
 			}
+			return true;
 		}
 		return false;
 	}
@@ -135,18 +134,14 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public void update() {
 		turnRate = 1;
-		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && capability.getEmber() > 0){
-			if (inventory.getStackInSlot(0).getItem() instanceof IEmberItem){
-				//turnRate = 6;
-				double emberAdded = ((IEmberItem)inventory.getStackInSlot(0).getItem()).addAmount(inventory.getStackInSlot(0),Math.min(10.0, capability.getEmber()), true);
-				capability.removeAmount(emberAdded, true);
-				markDirty();
-				if (getWorld().isRemote) {
-					if (this.capability.getEmber() > 0 && getWorld().isRemote){
-						for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
-							ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
-						}
-					}
+		ItemStack stack = inventory.getStackInSlot(0);
+		if (!stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
+			double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(MAX_TRANSFER, capability.getEmber()), true);
+			capability.removeAmount(emberAdded, true);
+			markDirty();
+			if (getWorld().isRemote && this.capability.getEmber() > 0 && getWorld().isRemote) {
+				for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
+					ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 				}
 			}
 		}

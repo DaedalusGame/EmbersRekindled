@@ -34,13 +34,16 @@ public class RecipeRegistry {
 	public static ArrayList<ItemMeltingOreRecipe> meltingOreRecipes = new ArrayList<>();
 	
 	public static ArrayList<ItemStampingRecipe> stampingRecipes = new ArrayList<>();
+	@Deprecated
 	public static ArrayList<ItemStampingOreRecipe> stampingOreRecipes = new ArrayList<>();
 	
 	public static ArrayList<FluidMixingRecipe> mixingRecipes = new ArrayList<>();
 	
 	public static ArrayList<AlchemyRecipe> alchemyRecipes = new ArrayList<>();
-    
-    public static ResourceLocation getRL(String s){
+	public static ArrayList<DawnstoneAnvilRecipe> dawnstoneAnvilRecipes = new ArrayList<>();
+	public static ArrayList<HeatCoilRecipe> heatCoilRecipes = new ArrayList<>();
+
+	public static ResourceLocation getRL(String s){
     	return new ResourceLocation(Embers.MODID,s);
     }
 	
@@ -94,7 +97,7 @@ public class RecipeRegistry {
 				ingotKey, ingotKey, ingotKey, ingotKey, RegistryManager.tinker_hammer}).setRegistryName(getRL(ingotKey+"_plate")));
 	}
 	
-	public static void initOreDict(){
+	public void initOreDict(){
 		OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
 		OreDictionary.registerOre("ingotCopper", RegistryManager.ingot_copper);
 		OreDictionary.registerOre("ingotLead", RegistryManager.ingot_lead);
@@ -158,9 +161,16 @@ public class RecipeRegistry {
 			OreDictionary.registerOre("plateElectrum", RegistryManager.plate_electrum);
 		}
 	}
+
+	public static void mergeOreRecipes() {
+		stampingRecipes.addAll(stampingOreRecipes);
+		meltingRecipes.addAll(meltingOreRecipes);
+	}
 	
 	@SubscribeEvent
 	public void init(RegistryEvent.Register<IRecipe> event){
+		initOreDict();
+
 		AlchemyUtil.registerAspect("iron", Ingredient.fromItem(RegistryManager.aspectus_iron));
 		AlchemyUtil.registerAspect("copper", Ingredient.fromItem(RegistryManager.aspectus_copper));
 		AlchemyUtil.registerAspect("dawnstone", Ingredient.fromItem(RegistryManager.aspectus_dawnstone));
@@ -1200,5 +1210,23 @@ public class RecipeRegistry {
 	@Deprecated
 	public static AlchemyRecipe getAlchemyRecipe(ItemStack center, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4){
 		return getAlchemyRecipe(center, Lists.newArrayList(stack1,stack2,stack3,stack4));
+	}
+
+	public static DawnstoneAnvilRecipe getDawnstoneAnvilRecipe(ItemStack bottom, ItemStack top) {
+		for (DawnstoneAnvilRecipe recipe : dawnstoneAnvilRecipes) {
+			if (recipe.matches(bottom, top))
+				return recipe;
+		}
+
+		return null;
+	}
+
+	public static HeatCoilRecipe getHeatCoilRecipe(ItemStack input) {
+		for (HeatCoilRecipe recipe : heatCoilRecipes) {
+			if (recipe.matches(input))
+				return recipe;
+		}
+
+		return null;
 	}
 }

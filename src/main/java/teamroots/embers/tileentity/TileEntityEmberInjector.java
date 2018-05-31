@@ -43,9 +43,9 @@ import teamroots.embers.util.Misc;
 
 public class TileEntityEmberInjector extends TileEntity implements ITileEntityBase, ITickable {
 	public IEmberCapability capability = new DefaultEmberCapability();
-	int ticksExisted = 0;
-	int progress = -1;
-	Random random = new Random();
+	protected int ticksExisted = 0;
+	protected int progress = -1;
+	protected Random random = new Random();
 	
 	public TileEntityEmberInjector(){
 		super();
@@ -127,9 +127,10 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 	public void update(){
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
-		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > 1.0){
-			((IEmberInjectable) tile).inject(this,1.0);
-			this.capability.removeAmount(1.0, true);
+		double emberCost = 1.0;
+		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > emberCost){
+			((IEmberInjectable) tile).inject(this, emberCost);
+			this.capability.removeAmount(emberCost, true);
 			markDirty();
 			if (world.isRemote){
 				for (int i = 0; i < 2; i ++){

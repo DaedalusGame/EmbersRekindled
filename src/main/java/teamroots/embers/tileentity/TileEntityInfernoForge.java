@@ -44,7 +44,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	int progress = 0;
 	int heat = 0;
 	int ticksExisted = 0;
-	
+	public static final double EMBER_COST = 16.0;
+
 	public TileEntityInfernoForge(){
 		super();
 		capability.setEmberCapacity(32000);
@@ -120,8 +121,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	public void update() {
 		ticksExisted ++;
 		if (progress > 0){
-			if (capability.getEmber() >= 16.0){
-				capability.removeAmount(16.0, true);
+			if (capability.getEmber() >= EMBER_COST){
+				capability.removeAmount(EMBER_COST, true);
 				progress --;
 				if (getWorld().isRemote){
 					if (random.nextInt(10) == 0){
@@ -189,21 +190,20 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 						if (tile instanceof TileEntityInfernoForgeOpening){
 							((TileEntityInfernoForgeOpening)tile).isOpen = true;
 							((TileEntityInfernoForgeOpening)tile).prevState = false;
-							((TileEntityInfernoForgeOpening)tile).markDirty();
+							tile.markDirty();
 						}
 						if (!world.isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5));
 						}
-						for (int i = 0; i < items.size(); i ++){
-							if (!ItemModUtil.hasHeat(items.get(i).getItem())){
-								world.removeEntity(items.get(i));
-								items.get(i).setDead();
-							}
-							else if (Math.atan(emberValue/1200.0f) > Misc.random.nextFloat()){
-								ItemStack stack = items.get(i).getItem();
+						for (EntityItem item1 : items) {
+							if (!ItemModUtil.hasHeat(item1.getItem())) {
+								world.removeEntity(item1);
+								item1.setDead();
+							} else if (Math.atan(emberValue / 1200.0f) > Misc.random.nextFloat()) {
+								ItemStack stack = item1.getItem();
 								ItemModUtil.setHeat(stack, 0);
-								ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack)+1);
-								items.get(i).setItem(stack);
+								ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
+								item1.setItem(stack);
 								progress = 0;
 							}
 						}

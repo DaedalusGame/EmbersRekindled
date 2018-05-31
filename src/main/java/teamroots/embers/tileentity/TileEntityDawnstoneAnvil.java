@@ -216,8 +216,7 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 				}
 			}
 		}
-		if (stack1.getItem().getIsRepairable(stack1, stack2)
-				|| stack1.getItem().isRepairable() && stack2.getItem() == RegistryManager.isolated_materia){
+		if (stack1.getItem().getIsRepairable(stack1, stack2) || stack1.getItem().isRepairable() && stack2.getItem() == RegistryManager.isolated_materia){
 			inventory.setStackInSlot(1, ItemStack.EMPTY);
 			inventory.getStackInSlot(0).setItemDamage(Math.max(0, inventory.getStackInSlot(0).getItemDamage() - inventory.getStackInSlot(0).getMaxDamage()));
 			ItemStack result = inventory.getStackInSlot(0).copy();

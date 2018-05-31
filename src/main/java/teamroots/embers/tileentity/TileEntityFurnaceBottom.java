@@ -36,7 +36,8 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
-	
+	public static final double EMBER_COST = 1.0;
+
 	public TileEntityFurnaceBottom(){
 		super();
 		capability.setEmberCapacity(8000);
@@ -125,8 +126,8 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 					progress = 200;
 					markDirty();
 				}
-				else if (capability.getEmber() >= 1){
-					capability.removeAmount(1.0, true);
+				else if (capability.getEmber() >= EMBER_COST){
+					capability.removeAmount(EMBER_COST, true);
 					if (world.isRemote){
 						if (random.nextInt(20) == 0){
 							ParticleUtil.spawnParticleSpark(world, getPos().getX()+0.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.25f, getPos().getZ()+0.5f+0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);

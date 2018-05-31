@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -36,6 +37,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.tile.IEmberInjectable;
@@ -49,17 +51,27 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable {
-	@Deprecated
 	boolean[] willSpawn = new boolean[12];
+
+	public static ResourceLocation TEXTURE_IRON = new ResourceLocation(Embers.MODID + ":textures/blocks/material_iron.png");
+	public static ResourceLocation TEXTURE_GOLD = new ResourceLocation(Embers.MODID + ":textures/blocks/material_gold.png");
+	public static ResourceLocation TEXTURE_COPPER = new ResourceLocation(Embers.MODID + ":textures/blocks/material_copper.png");
+	public static ResourceLocation TEXTURE_LEAD = new ResourceLocation(Embers.MODID + ":textures/blocks/material_lead.png");
+	public static ResourceLocation TEXTURE_SILVER = new ResourceLocation(Embers.MODID + ":textures/blocks/material_silver.png");
 
 	protected int size = 0;
 	protected int ticksExisted = 0;
 	protected int material = -1;
 	protected Random random = new Random();
 
-	@Deprecated
+	public TileEntitySeed() {
+		resetSpawns();
+	}
+
 	public void resetSpawns(){
-		//NOOP
+		for (int i = 0; i < 12; i ++){
+			willSpawn[i] = random.nextInt(3) == 0;
+		}
 	}
 	
 	public TileEntitySeed setMaterial(int material){
@@ -67,19 +79,24 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		return this;
 	}
 
-	@Deprecated
 	public String getSpawnString(){
-		return "";
+		String result = "";
+		for (int i = 0; i < 12; i ++){
+			result += willSpawn[i] ? "1" : "0";
+		}
+		return result;
 	}
 
-	@Deprecated
 	public void loadSpawnsFromString(String s){
-		//NOOP
+		for (int i = 0; i < 12; i ++){
+			willSpawn[i] = s.substring(i, i+1).compareTo("1") == 0;
+		}
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
+		tag.setString("spawns", getSpawnString());
 		tag.setInteger("size", size);
 		tag.setInteger("material", material);
 		return tag;
@@ -88,6 +105,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
+		loadSpawnsFromString(tag.getString("spawns"));
 		size = tag.getInteger("size");
 		material = tag.getInteger("material");
 	}
@@ -129,7 +147,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		if (size > 1000){
 			size = 0;
 			for (int i = 0; i < 12; i ++){
-				if (random.nextDouble() < 0.33 && !getWorld().isRemote){
+				if (willSpawn[i] && !getWorld().isRemote){
 					ItemStack nuggetStack = getDrop();
 					float offX = 0.4f*(float)Math.sin(Math.toRadians(i*30.0));
 					float offZ = 0.4f*(float)Math.cos(Math.toRadians(i*30.0));
@@ -137,6 +155,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 				}
 			}
 			markDirty();
+			resetSpawns();
 		}
 	}
 
@@ -171,6 +190,17 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	}
 
 	public boolean dirty = false;
+
+	public ResourceLocation getTexture() {
+		switch (material) {
+			case 0: return TEXTURE_IRON;
+			case 1: return TEXTURE_GOLD;
+			case 2: return TEXTURE_COPPER;
+			case 3: return TEXTURE_LEAD;
+			case 4: return TEXTURE_SILVER;
+			default: return TEXTURE_IRON;
+		}
+	}
 	
 	@Override
 	public void markForUpdate(){

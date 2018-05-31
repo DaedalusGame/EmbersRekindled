@@ -117,30 +117,28 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 			TileEntity tile = getWorld().getTileEntity(getPos().up());
 			if (tile instanceof TileEntityActivatorTop){
 				TileEntityActivatorTop top = (TileEntityActivatorTop)tile;
-				if (top != null){
-					progress ++;
-					if (progress > 40){
-						progress = 0;
-						int i = 0;
-						if (inventory != null){
-							if (EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem()) > 0){
-								double ember = EmberGenUtil.getEmberForItem(inventory.getStackInSlot(i).getItem());
-								if (top.capability.getEmber() <= top.capability.getEmberCapacity()-ember){
-									if (!world.isRemote){
-										PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+1.5f,getPos().getZ()+0.5f));
-									}
-									top.capability.addAmount(ember, true);
-									inventory.extractItem(i, 1, false);
-									markDirty();
-									IBlockState state = getWorld().getBlockState(getPos());
-									top.markDirty();
-									state = getWorld().getBlockState(getPos().up());
-								}
+				progress ++;
+				if (progress > 40){
+                    progress = 0;
+                    int i = 0;
+                    if (inventory != null){
+						ItemStack emberStack = inventory.getStackInSlot(i);
+						double emberValue = EmberGenUtil.getEmberForItem(emberStack.getItem());
+						if (emberValue > 0){
+                            double ember = emberValue;
+                            if (top.capability.getEmber() <= top.capability.getEmberCapacity()-ember){
+                                if (!world.isRemote){
+                                    PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+1.5f,getPos().getZ()+0.5f));
+                                }
+                                top.capability.addAmount(ember, true);
+                                inventory.extractItem(i, 1, false);
+                                markDirty();
+								top.markDirty();
 							}
-						}
-					}
-					markDirty();
-				}
+                        }
+                    }
+                }
+				markDirty();
 			}
 		}
 	}
