@@ -46,12 +46,12 @@ public class AlchemyRecipe implements IHasAspects {
 
 	@Deprecated
 	public AlchemyRecipe(int ironMin, int ironMax, int dawnstoneMin, int dawnstoneMax, int copperMin, int copperMax, int silverMin, int silverMax, int leadMin, int leadMax, ItemStack center, ItemStack east, ItemStack west, ItemStack north, ItemStack south, ItemStack result){
-		new AspectRangeList(
+		this.aspectRange = new AspectRangeList(
 				AspectList.createStandard(ironMin,dawnstoneMin,copperMin,silverMin,leadMin),
 				AspectList.createStandard(ironMax,dawnstoneMax,copperMax,silverMax,leadMax)
 		);
-		centerIngredient = Ingredient.fromStacks(center);
-		outsideIngredients = new ArrayList<>();
+		this.centerIngredient = Ingredient.fromStacks(center);
+		this.outsideIngredients = new ArrayList<>();
 		this.result = result;
 	}
 

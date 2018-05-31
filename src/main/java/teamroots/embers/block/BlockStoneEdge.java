@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -264,8 +265,9 @@ public class BlockStoneEdge extends BlockBase {
 		}
 		boolean foundBlock = false;
 		for (int i = 0; i < 64 && !foundBlock; i ++){
-			if (world.getTileEntity(pos.add(0,-i,0)) instanceof TileEntityLargeTank){
-				((TileEntityLargeTank)world.getTileEntity(pos.add(0,-i,0))).updateCapacity();
+			TileEntity tileEntity = world.getTileEntity(pos.add(0, -i, 0));
+			if (tileEntity instanceof TileEntityLargeTank){
+				((TileEntityLargeTank) tileEntity).updateCapacity();
 			}
 		}
 	}

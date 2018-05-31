@@ -210,7 +210,7 @@ public class RegistryManager {
 		blocks.add(ember_pulser = (new BlockEmberPulser(Material.ROCK,"ember_pulser",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(inferno_forge_edge = (new BlockInfernoForgeEdge(unpushable,"inferno_forge_edge",false)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(inferno_forge = (new BlockInfernoForge(Material.ROCK,"inferno_forge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
-		blocks.add(caminite_lever = (new BlockCaminiteLever(Material.ROCK, "caminite_lever", true)).setHardness(0.75f));
+		blocks.add(caminite_lever = (new BlockCaminiteLever("caminite_lever",true)).setHardness(0.75f));
 		//blocks.add(axle_iron = (new BlockAxle(Material.ROCK,"axle_iron",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		//blocks.add(creative_mech_source = (new BlockCreativeMechSource(Material.ROCK,"creative_mech_source",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(creative_ember_source = (new BlockCreativeEmberSource(Material.ROCK,"creative_ember_source",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
