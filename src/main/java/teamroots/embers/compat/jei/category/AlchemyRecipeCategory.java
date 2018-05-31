@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapper> {
 	public static final int WIDTH = 108;
 	public static final int HEIGHT = 121;
-	public static final String UID = "soot.alchemy_tablet";
+	public static final String UID = "embers.alchemy";
 	public static final String L18N_KEY = "embers.jei.recipe.alchemy";
 	public static final int ASPECTBARS_X = 16;
 	public static final int ASPECTBARS_Y = 64;

@@ -20,21 +20,21 @@
     ],
     "subtitle": "subtitles.alchemy.loop"
   },
-  "block.embers.alchemy.start": {
+  "block.alchemy.start": {
     "category": "block",
     "sounds": [
       "embers:alchemy_start"
     ],
     "subtitle": "subtitles.alchemy.start"
   },
-  "block.embers.beam_cannon.fire": {
+  "block.beam_cannon.fire": {
     "category": "block",
     "sounds": [
       "embers:beam_cannon_fire"
     ],
     "subtitle": "subtitles.beam_cannon.fire"
   },
-  "block.embers.beam_cannon.hit": {
+  "block.beam_cannon.hit": {
     "category": "block",
     "sounds": [
       "embers:beam_cannon_hit_1",
@@ -42,21 +42,21 @@
     ],
     "subtitle": "subtitles.beam_cannon.hit"
   },
-  "block.embers.crystalcell": {
+  "block.crystalcell": {
     "category": "block",
     "sounds": [
       "embers:crystalcell"
     ],
     "subtitle": "subtitles.crystalcell"
   },
-  "block.embers.pedestal.loop": {
+  "block.pedestal.loop": {
     "category": "block",
     "sounds": [
       "embers:pedestal_ashes_loop"
     ],
     "subtitle": "subtitles.pedestal.loop"
   },
-  "block.embers.activator": {
+  "block.activator": {
     "category": "block",
     "sounds": [
       "embers:ember_activatorplume",
@@ -64,7 +64,7 @@
     ],
     "subtitle": "subtitles.activator"
   },
-  "block.embers.stamper.down": {
+  "block.stamper.down": {
     "category": "block",
     "sounds": [
       "embers:stamp_down1",
@@ -73,7 +73,7 @@
     ],
     "subtitle": "subtitles.stamp.down"
   },
-  "block.embers.stamper.up": {
+  "block.stamper.up": {
     "category": "block",
     "sounds": [
       "embers:stamp_up1",
@@ -82,72 +82,53 @@
     ],
     "subtitle": "subtitles.stamp.up"
   },
-  "block.embers.bore.start": {
+  "block.bore.start": {
     "category": "block",
     "sounds": [
       "embers:ember_bore_start_up"
     ],
     "subtitle": "subtitles.bore.start"
   },
-  "block.embers.bore.stop": {
+  "block.bore.stop": {
     "category": "block",
     "sounds": [
       "embers:ember_bore_stop"
     ],
     "subtitle": "subtitles.bore.stop"
   },
-  "block.embers.bore.loop": {
+  "block.bore.loop": {
     "category": "block",
     "sounds": [
       "embers:ember_bore_run_loop"
     ],
     "subtitle": "subtitles.bore.loop"
   },
-  "block.embers.bore.loop_mine": {
+  "block.bore.loop_mine": {
     "category": "block",
     "sounds": [
       "embers:ember_bore_mine_loop"
     ]
   },
-  "block.embers.melter.loop": {
+  "block.melter.loop": {
     "category": "block",
     "sounds": [
       "embers:melter_loop"
     ],
     "subtitle": "subtitles.melter.loop"
   },
-  "block.embers.mixer.loop": {
+  "block.mixer.loop": {
     "category": "block",
     "sounds": [
       "embers:mixer_loop"
     ],
     "subtitle": "subtitles.mixer.loop"
   },
-  "block.embers.plinth.loop": {
+  "block.plinth.loop": {
     "category": "block",
     "sounds": [
       "embers:cinder_plinth_loop"
     ],
     "subtitle": "subtitles.plinth.loop"
-  },
-  "block.embers.still.loop": {
-    "category": "block",
-    "sounds": [
-      "embers:still_heated_no_brew"
-    ],
-    "subtitle": "subtitles.still.loop"
-  },
-  "block.embers.still.slow": {
-    "category": "block",
-    "sounds": [
-      "embers:still_brewing_slow"
-    ]
-  },
-  "block.embers.still.fast": {
-    "category": "block",
-    "sounds": [
-      "embers:still_brewing_fast"
-    ]
   },
   "fireball.small.fire": {
     "sounds": [

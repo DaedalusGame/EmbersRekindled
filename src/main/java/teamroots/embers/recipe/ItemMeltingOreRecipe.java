@@ -5,8 +5,14 @@ import net.minecraftforge.oredict.OreIngredient;
 
 @Deprecated
 public class ItemMeltingOreRecipe extends ItemMeltingRecipe {
-	@Deprecated
+	String ore;
+
 	public ItemMeltingOreRecipe(String oreDict, FluidStack fluid){
 		super(new OreIngredient(oreDict),fluid);
+		this.ore = oreDict;
+	}
+
+	public String getOreName(){
+		return ore;
 	}
 }

@@ -19,6 +19,7 @@ import java.util.List;
 public class MixingRecipeCategory implements IRecipeCategory<MixingRecipeWrapper> {
     private final IDrawable background;
     private final String name;
+    public static final String UID = "embers.mixer";
     
     public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jei_mixer.png");
 
@@ -62,7 +63,7 @@ public class MixingRecipeCategory implements IRecipeCategory<MixingRecipeWrapper
 
     @Override
 	public String getUid() {
-		return "embers.mixer";
+		return UID;
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import java.util.List;
 public class StampRecipeCategory implements IRecipeCategory<StampingRecipeWrapper> {
     private final IDrawable background;
     private final String name;
+    public static final String UID = "embers.stamp";
     
     public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jei_stamp.png");
 
@@ -62,7 +63,7 @@ public class StampRecipeCategory implements IRecipeCategory<StampingRecipeWrappe
 
     @Override
 	public String getUid() {
-		return "embers.stamp";
+		return UID;
 	}
 
 	@Override

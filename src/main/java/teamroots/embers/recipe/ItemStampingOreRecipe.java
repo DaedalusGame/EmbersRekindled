@@ -7,6 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import teamroots.embers.item.EnumStampType;
 
+@Deprecated
 public class ItemStampingOreRecipe extends ItemStampingRecipe {
 	String ore;
 

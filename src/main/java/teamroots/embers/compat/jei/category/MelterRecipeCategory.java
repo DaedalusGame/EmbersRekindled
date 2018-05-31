@@ -21,6 +21,7 @@ import java.util.List;
 public class MelterRecipeCategory implements IRecipeCategory<MeltingRecipeWrapper> {
     private final IDrawable background;
     private final String name;
+    public static final String UID = "embers.melter";
     
     public static ResourceLocation texture = new ResourceLocation("embers:textures/gui/jei_melter.png");
 
@@ -58,7 +59,7 @@ public class MelterRecipeCategory implements IRecipeCategory<MeltingRecipeWrappe
 
     @Override
 	public String getUid() {
-		return "embers.melter";
+		return UID;
 	}
 
 	@Override

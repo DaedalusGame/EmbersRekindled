@@ -38,20 +38,20 @@ public class EmbersJEIPlugin implements IModPlugin {
     {
         HELPER = reg.getJeiHelpers();
 
-        reg.handleRecipes(ItemStampingRecipe.class,StampingRecipeWrapper::new,"embers.stamp");
-        reg.handleRecipes(ItemMeltingRecipe.class,MeltingRecipeWrapper::new,"embers.melter");
-        reg.handleRecipes(FluidMixingRecipe.class,MixingRecipeWrapper::new,"embers.mixer");
-        reg.handleRecipes(AlchemyRecipe.class,AlchemyRecipeWrapper::new,"embers.alchemy");
+        reg.handleRecipes(ItemStampingRecipe.class,StampingRecipeWrapper::new,StampRecipeCategory.UID);
+        reg.handleRecipes(ItemMeltingRecipe.class,MeltingRecipeWrapper::new,MelterRecipeCategory.UID);
+        reg.handleRecipes(FluidMixingRecipe.class,MixingRecipeWrapper::new,MixingRecipeCategory.UID);
+        reg.handleRecipes(AlchemyRecipe.class,AlchemyRecipeWrapper::new,AlchemyRecipeCategory.UID);
 
-        reg.addRecipes(RecipeRegistry.stampingRecipes,"embers.stamp");
-        reg.addRecipes(RecipeRegistry.meltingRecipes,"embers.melter");
-        reg.addRecipes(RecipeRegistry.mixingRecipes,"embers.mixer");
-        reg.addRecipes(RecipeRegistry.alchemyRecipes,"embers.alchemy");
+        reg.addRecipes(RecipeRegistry.stampingRecipes,StampRecipeCategory.UID);
+        reg.addRecipes(RecipeRegistry.meltingRecipes,MelterRecipeCategory.UID);
+        reg.addRecipes(RecipeRegistry.mixingRecipes,MixingRecipeCategory.UID);
+        reg.addRecipes(RecipeRegistry.alchemyRecipes,AlchemyRecipeCategory.UID);
 
-        reg.addRecipeCatalyst(new ItemStack(RegistryManager.stamper),"embers.stamp");
-        reg.addRecipeCatalyst(new ItemStack(RegistryManager.block_furnace),"embers.melter");
-        reg.addRecipeCatalyst(new ItemStack(RegistryManager.mixer),"embers.mixer");
-        reg.addRecipeCatalyst(new ItemStack(RegistryManager.alchemy_tablet),"embers.alchemy");
+        reg.addRecipeCatalyst(new ItemStack(RegistryManager.stamper),StampRecipeCategory.UID);
+        reg.addRecipeCatalyst(new ItemStack(RegistryManager.block_furnace),MelterRecipeCategory.UID);
+        reg.addRecipeCatalyst(new ItemStack(RegistryManager.mixer),MixingRecipeCategory.UID);
+        reg.addRecipeCatalyst(new ItemStack(RegistryManager.alchemy_tablet),AlchemyRecipeCategory.UID);
     }
 
     public static List<List<ItemStack>> expandIngredients(Ingredient ingredient) {
