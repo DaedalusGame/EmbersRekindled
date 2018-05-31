@@ -17,6 +17,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.EventManager;
@@ -116,9 +118,9 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 
 	@Override
 	public void update() {
-		TileEntityFurnaceTop furnace = (TileEntityFurnaceTop)getWorld().getTileEntity(getPos().up());
-		if (furnace != null){
-			if (!furnace.inventory.getStackInSlot(0).isEmpty()){
+		TileEntityFurnaceTop top = (TileEntityFurnaceTop) world.getTileEntity(getPos().up());
+		if (top != null){
+			if (!top.inventory.getStackInSlot(0).isEmpty()){
 				if (progress == -1){
 					progress = 200;
 					markDirty();
@@ -138,67 +140,16 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 					progress --;
 					markDirty();
 					if (progress == 0){
-						ItemStack stack = furnace.inventory.getStackInSlot(0);
-						ItemStack recipeStack = new ItemStack(stack.getItem(),1,stack.getMetadata());
-						if (stack.hasTagCompound()){
-							recipeStack.setTagCompound(stack.getTagCompound());
-						}
+						ItemStack recipeStack = top.inventory.getStackInSlot(0);
 						ItemMeltingRecipe recipe = RecipeRegistry.getMeltingRecipe(recipeStack);
-						if (recipe != null && !getWorld().isRemote){
-							TileEntityFurnaceTop t = (TileEntityFurnaceTop)getWorld().getTileEntity(getPos().up());
-							if (t.getFluid() != null){
-								if (recipe.getFluid().getFluid().getName().compareTo(t.getFluid().getName()) == 0 && t.getAmount() < t.getCapacity()){
-									t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(recipe.getFluid(), true);
-									t.markDirty();
-									if (!getWorld().isRemote){
-										furnace.inventory.getStackInSlot(0).shrink(1);
-										if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
-											furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
-										}
-									}
-									markDirty();
-									return;
-								}
-							}
-							else {
-								t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(recipe.getFluid(), true);
-								t.markDirty();
-								if (!getWorld().isRemote){
-									furnace.inventory.getStackInSlot(0).shrink(1);
-									if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
-										furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
-									}
-								}
+						if (recipe != null && !world.isRemote){
+							FluidStack output = recipe.getResult(this,recipeStack);
+							FluidTank tank = top.getTank();
+							if(output != null && tank.fill(output,false) >= output.amount) {
+								tank.fill(output,true);
+								top.markDirty();
+								top.inventory.extractItem(0, recipe.getInputConsumed(), false);
 								markDirty();
-								return;
-							}
-						}
-						ItemMeltingOreRecipe oreRecipe = RecipeRegistry.getMeltingOreRecipe(recipeStack);
-						if (oreRecipe != null && !getWorld().isRemote){
-							TileEntityFurnaceTop t = (TileEntityFurnaceTop)getWorld().getTileEntity(getPos().up());
-							if (t.getFluid() != null){
-								if (oreRecipe.getFluid().getFluid().getName().compareTo(t.getFluid().getName()) == 0 && t.getAmount() < t.getCapacity()){
-									t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(oreRecipe.getFluid(), true);
-									t.markDirty();
-									if (!getWorld().isRemote){
-										furnace.inventory.getStackInSlot(0).shrink(1);
-										if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
-											furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
-										}
-									}
-									markDirty();
-									return;
-								}
-							}
-							else {
-								t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(oreRecipe.getFluid(), true);
-								t.markDirty();
-								furnace.inventory.getStackInSlot(0).shrink(1);
-								if (furnace.inventory.getStackInSlot(0).getCount() <= 0){
-									furnace.inventory.setStackInSlot(0, ItemStack.EMPTY);
-								}
-								markDirty();
-								return;
 							}
 						}
 					}

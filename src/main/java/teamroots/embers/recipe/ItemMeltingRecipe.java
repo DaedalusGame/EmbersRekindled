@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.util.IHasSize;
 
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class ItemMeltingRecipe {
 	public ItemMeltingRecipe(Ingredient input, FluidStack fluid) {
 		this.input = input;
 		this.fluid = fluid;
+	}
+
+	public int getInputConsumed() {
+		return input instanceof IHasSize ? ((IHasSize) input).getSize() : 1;
 	}
 
 	@Deprecated

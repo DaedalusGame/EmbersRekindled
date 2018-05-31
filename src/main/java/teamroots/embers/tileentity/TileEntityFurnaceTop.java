@@ -116,15 +116,7 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 		}
 		return false;
 	}
-	
-	public int getCapacity(){
-		return tank.getCapacity();
-	}
-	
-	public int getAmount(){
-		return tank.getFluidAmount();
-	}
-	
+
 	public boolean dirty = false;
 	
 	@Override
@@ -137,13 +129,29 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 		markForUpdate();
 		super.markDirty();
 	}
-	
+
+	public FluidTank getTank() {
+		return tank;
+	}
+
+	@Deprecated
 	public Fluid getFluid(){
 		if (tank.getFluid() != null){
 			return tank.getFluid().getFluid();
 		}
 		return null;
 	}
+
+	@Deprecated
+	public int getCapacity(){
+		return tank.getCapacity();
+	}
+
+	@Deprecated
+	public int getAmount(){
+		return tank.getFluidAmount();
+	}
+
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
