@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
@@ -96,22 +98,19 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem != ItemStack.EMPTY){
-			if (EnumStampType.getType(heldItem) != EnumStampType.TYPE_NULL){
-				if (stamp.getStackInSlot(0) == ItemStack.EMPTY){
-					ItemStack newStack = new ItemStack(heldItem.getItem(),1,heldItem.getMetadata());
-					if (heldItem.hasTagCompound()){
-						newStack.setTagCompound(heldItem.getTagCompound());
-					}
-					player.setHeldItem(hand, this.stamp.insertItem(0,newStack,false));
-					markDirty();
-					return true;
+		if (heldItem != ItemStack.EMPTY) {
+			if (stamp.getStackInSlot(0) == ItemStack.EMPTY) {
+				ItemStack newStack = new ItemStack(heldItem.getItem(), 1, heldItem.getMetadata());
+				if (heldItem.hasTagCompound()) {
+					newStack.setTagCompound(heldItem.getTagCompound());
 				}
+				player.setHeldItem(hand, this.stamp.insertItem(0, newStack, false));
+				markDirty();
+				return true;
 			}
-		}
-		else {
-			if (stamp.getStackInSlot(0) != ItemStack.EMPTY && !world.isRemote){
-				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,stamp.getStackInSlot(0)));
+		} else {
+			if (stamp.getStackInSlot(0) != ItemStack.EMPTY && !world.isRemote) {
+				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, stamp.getStackInSlot(0)));
 				stamp.setStackInSlot(0, ItemStack.EMPTY);
 				markDirty();
 				return true;
@@ -131,98 +130,64 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	public void update() {
 		this.ticksExisted ++;
 		prevPowered = powered;
-		if (true){
-			EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
-			if (getWorld().getBlockState(getPos().offset(face,2)).getBlock() == RegistryManager.stamp_base){
-				if (this.ticksExisted % 80 == 0 && !powered && !getWorld().isRemote){
-					TileEntityStampBase stamp = (TileEntityStampBase)getWorld().getTileEntity(getPos().offset(face,2));
-					FluidStack fluid = null;
-					if (stamp.getFluid() != null){
-						fluid = new FluidStack(stamp.getFluid(),stamp.getAmount());
-					}
-					ItemStampingRecipe recipe = RecipeRegistry.getStampingRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
-					if (recipe != null){
-						if (this.capability.getEmber() > 80.0){
-							this.capability.removeAmount(80.0, true);
-							if (!world.isRemote){
-								PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().offset(face,2).getX()+0.5f,getPos().offset(face,2).getY()+1.0f,getPos().offset(face,2).getZ()+0.5f));
-							}
-							powered = true;
-							ItemStack result = recipe.getResult(stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,EnumStampType.getType(this.stamp.getStackInSlot(0))).copy();
-							if (recipe.getStack() != ItemStack.EMPTY){
-								stamp.inputs.extractItem(0, recipe.getStack().getCount(), false);
-							}
-							if (recipe.getFluid() != null){
-								stamp.getTank().drain(recipe.getFluid(), true);
-							}
-							BlockPos off = getPos().offset(face,1);
-							if (getWorld().getTileEntity(getPos().offset(face,3)) instanceof TileEntityBin){
-								TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(getPos().offset(face,3));
-								ItemStack remainder = bin.inventory.insertItem(0, result, false);
-								if (remainder != ItemStack.EMPTY && !getWorld().isRemote){
-									EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,remainder);
-									getWorld().spawnEntity(item);
-								}
-								bin.markDirty();
-								IBlockState state = getWorld().getBlockState(getPos().offset(face,3));
-								markDirty();
-							}
-							else if (!getWorld().isRemote){
-								EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
-								getWorld().spawnEntity(item);
-							}
-							stamp.markDirty();
-							IBlockState state = getWorld().getBlockState(getPos().offset(face,2));
-						}
-					}
-					ItemStampingOreRecipe oreRecipe = RecipeRegistry.getStampingOreRecipe(stamp.inputs.getStackInSlot(0), fluid, EnumStampType.getType(this.stamp.getStackInSlot(0)));
-					if (oreRecipe != null){
-						if (this.capability.getEmber() > 80.0){
-							this.capability.removeAmount(80.0, true);
-							powered = true;
-							ItemStack result = oreRecipe.getResult(stamp.inputs.getStackInSlot(0), new FluidStack(stamp.getFluid(), stamp.getAmount()),EnumStampType.getType(this.stamp.getStackInSlot(0))).copy();
-							if (oreRecipe.getClass() != null){
-								stamp.inputs.extractItem(0, 1, false);
-							}
-							if (recipe.getFluid() != null){
-								stamp.getTank().drain(recipe.getFluid(), true);
-							}
-							BlockPos off = getPos().offset(face,1);
-							if (getWorld().getTileEntity(getPos().offset(face,3)) instanceof TileEntityBin){
-								TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(getPos().offset(face,3));
-								ItemStack remainder = bin.inventory.insertItem(0, result, false);
-								if (remainder != ItemStack.EMPTY && !getWorld().isRemote){
-									EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,remainder);
-									getWorld().spawnEntity(item);
-								}
-								bin.markDirty();
-								markDirty();
-							}
-							else if (!getWorld().isRemote){
-								EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
-								getWorld().spawnEntity(item);
-							}
-							stamp.markDirty();
-							IBlockState state = getWorld().getBlockState(getPos().offset(face,2));
-						}
-					}
-					markDirty();
-					IBlockState state = getWorld().getBlockState(getPos());
-				}
-				else if (this.ticksExisted % 80 == 10 && powered && !getWorld().isRemote){
-					powered = false;
-					markDirty();
-					IBlockState state = getWorld().getBlockState(getPos());
-				}
-			}
-			else if (powered){
-				powered = false;
-				markDirty();
-				IBlockState state = getWorld().getBlockState(getPos());
-			}
-		}
+		EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
+		if (getWorld().getBlockState(getPos().offset(face,2)).getBlock() == RegistryManager.stamp_base){
+            if (this.ticksExisted % 80 == 0 && !powered && !getWorld().isRemote){
+                TileEntityStampBase stamp = (TileEntityStampBase)getWorld().getTileEntity(getPos().offset(face,2));
+                FluidStack fluid = null;
+				IFluidHandler handler = stamp.getTank();
+				if (handler != null)
+					fluid = handler.drain(stamp.getCapacity(), false);
+                ItemStampingRecipe recipe = getRecipe(stamp.inputs.getStackInSlot(0), fluid, this.stamp.getStackInSlot(0));
+                if (recipe != null){
+                    if (this.capability.getEmber() > 80.0){
+                        this.capability.removeAmount(80.0, true);
+                        if (!world.isRemote){
+                            PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().offset(face,2).getX()+0.5f,getPos().offset(face,2).getY()+1.0f,getPos().offset(face,2).getZ()+0.5f));
+                        }
+                        powered = true;
+                        ItemStack result = recipe.getResult(this,stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,this.stamp.getStackInSlot(0));
+						stamp.inputs.extractItem(0, recipe.getInputConsumed(), false);
+                        if (recipe.getFluid() != null){
+                            stamp.getTank().drain(recipe.getFluid(), true);
+                        }
+                        BlockPos off = getPos().offset(face,1);
+						BlockPos outputPos = getPos().offset(face, 3);
+						TileEntity outputTile = getWorld().getTileEntity(outputPos);
+						if (outputTile instanceof TileEntityBin){
+                            TileEntityBin bin = (TileEntityBin) outputTile;
+                            ItemStack remainder = bin.inventory.insertItem(0, result, false);
+                            if (remainder != ItemStack.EMPTY && !getWorld().isRemote){
+                                EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,remainder);
+                                getWorld().spawnEntity(item);
+                            }
+                            bin.markDirty();
+                            markDirty();
+                        }
+                        else if (!getWorld().isRemote){
+                            EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
+                            getWorld().spawnEntity(item);
+                        }
+                        stamp.markDirty();
+                    }
+                }
+                markDirty();
+            }
+            else if (this.ticksExisted % 80 == 10 && powered && !getWorld().isRemote){
+                powered = false;
+                markDirty();
+            }
+        }
+        else if (powered){
+            powered = false;
+            markDirty();
+        }
 	}
-	
+
+	private ItemStampingRecipe getRecipe(ItemStack input, FluidStack fluid, ItemStack stamp) {
+		return RecipeRegistry.getStampingRecipe(input, fluid, stamp);
+	}
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
 		if (capability == EmberCapabilityProvider.emberCapability){
