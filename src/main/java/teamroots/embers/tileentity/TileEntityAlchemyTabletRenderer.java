@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import java.util.Random;
 
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.util.RenderUtil;
 
-public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer implements ITileEntitySpecialRendererLater {
+public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<TileEntityAlchemyTablet> implements ITileEntitySpecialRendererLater {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/entity/beam.png");
@@ -31,13 +32,11 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityAlchemyTablet){
-			TileEntityAlchemyTablet tablet = (TileEntityAlchemyTablet)tile;
-			
-			if (tablet.process != 0){
-				float processSign = (tablet.progress == 1) ? 1 : -1;
-				if (tablet.process == 20){
+	public void render(TileEntityAlchemyTablet tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
+			if (tile.process != 0){
+				float processSign = (tile.progress == 1) ? 1 : -1;
+				if (tile.process == 20){
 					processSign = 0;
 				}
 				Tessellator tess = Tessellator.getInstance();
@@ -47,7 +46,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 				GlStateManager.enableBlend();
 				GlStateManager.enableAlpha();
 				GlStateManager.disableCull();
-				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 				int dfunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
 				GlStateManager.depthFunc(GL11.GL_LEQUAL);
 				int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
@@ -59,117 +58,109 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer i
 				}
 				b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 				for (double i = 0; i < 8; i ++){
-					RenderUtil.renderAlchemyCircle(b, x+0.5, y+1.0+sign*(i/1000.0), z+0.5, 1.0f, 0.25f, 0.0625f, (tablet.process + (partialTicks*processSign))/40.0f, 0.4f*(tablet.process + (partialTicks*processSign))/10.0f, ((TileEntityAlchemyTablet) tile).angle+partialTicks);
+					RenderUtil.renderAlchemyCircle(b, x+0.5, y+1.0+sign*(i/1000.0), z+0.5, 1.0f, 0.25f, 0.0625f, (tile.process + (partialTicks*processSign))/40.0f, 0.4f*(tile.process + (partialTicks*processSign))/10.0f, tile.angle+partialTicks);
 				}
 				tess.draw();
 				GlStateManager.alphaFunc(func, ref);
 				GlStateManager.depthFunc(dfunc);
 				GlStateManager.disableBlend();
 				GlStateManager.enableLighting();
-				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			}
-			
-			if (tablet.center.getStackInSlot(0) != ItemStack.EMPTY){
+
+			float itemScale = 0.25f;
+
+			if (tile.center.getStackInSlot(0) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.center.getStackInSlot(0));
-					item.hoverStart = 0;
-					item.onGround = false;
+					ItemStack item = tile.center.getStackInSlot(0);
 					GL11.glTranslated(x,y,z);
-					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getItem().getItem() instanceof ItemBlock){
-						GL11.glTranslated(1.0, 1.5, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
-					}
-					else {
-						GL11.glTranslated(1.0, 1.75, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
+					if (item.getItem() instanceof ItemBlock){
+						GL11.glTranslated(0.5, 15.0/16, 0.5);
+						GL11.glScalef(itemScale, itemScale, itemScale);
+					} else {
+						GL11.glTranslated(0.5, 14.25/16, 0.5);
+						GL11.glScalef(itemScale, itemScale, itemScale);
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.FIXED);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tablet.north.getStackInSlot(0) != ItemStack.EMPTY){
+			if (tile.north.getStackInSlot(0) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.north.getStackInSlot(0));
-					item.hoverStart = 0;
-					item.onGround = false;
+					ItemStack item = tile.north.getStackInSlot(0);
 					GL11.glTranslated(x,y,z);
-					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getItem().getItem() instanceof ItemBlock){
-						GL11.glTranslated(1.0, 1.5, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
-					}
-					else {
-						GL11.glTranslated(1.0, 1.75, 0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
+					if (item.getItem() instanceof ItemBlock){
+						GL11.glTranslated(0.5, 15.0/16, 0.25);
+						GL11.glScalef(itemScale, itemScale, itemScale);
+					} else {
+						GL11.glTranslated(0.5, 14.25/16, 0.25);
+						GL11.glScalef(itemScale, itemScale, itemScale);
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.FIXED);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tablet.south.getStackInSlot(0) != ItemStack.EMPTY){
+			if (tile.south.getStackInSlot(0) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.south.getStackInSlot(0));
-					item.hoverStart = 0;
-					item.onGround = false;
+					ItemStack item = tile.south.getStackInSlot(0);
 					GL11.glTranslated(x,y,z);
-					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getItem().getItem() instanceof ItemBlock){
-						GL11.glTranslated(1.0, 1.5, 1.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
-					}
-					else {
-						GL11.glTranslated(1.0, 1.75, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
+					if (item.getItem() instanceof ItemBlock){
+						GL11.glTranslated(0.5, 15.0/16, 0.75);
+						GL11.glScalef(itemScale, itemScale, itemScale);
+					} else {
+						GL11.glTranslated(0.5, 14.25/16, 0.75);
+						GL11.glScalef(itemScale, itemScale, itemScale);
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.FIXED);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tablet.west.getStackInSlot(0) != ItemStack.EMPTY){
+			if (tile.west.getStackInSlot(0) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.west.getStackInSlot(0));
-					item.hoverStart = 0;
-					item.onGround = false;
+					ItemStack item = tile.west.getStackInSlot(0);
 					GL11.glTranslated(x,y,z);
-					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getItem().getItem() instanceof ItemBlock){
-						GL11.glTranslated(0.5, 1.5, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
-					}
-					else {
-						GL11.glTranslated(0.5, 1.75, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
+					if (item.getItem() instanceof ItemBlock){
+						GL11.glTranslated(0.25, 15.0/16, 0.5);
+						GL11.glScalef(itemScale, itemScale, itemScale);
+					} else {
+						GL11.glTranslated(0.25, 14.25/16, 0.5);
+						GL11.glScalef(itemScale, itemScale, itemScale);
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.FIXED);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}
 			}
-			if (tablet.east.getStackInSlot(0) != ItemStack.EMPTY){
+			if (tile.east.getStackInSlot(0) != ItemStack.EMPTY){
 				if (Minecraft.getMinecraft().world != null){
 					GlStateManager.pushAttrib();
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,tablet.east.getStackInSlot(0));
-					item.hoverStart = 0;
-					item.onGround = false;
+					ItemStack item = tile.east.getStackInSlot(0);
 					GL11.glTranslated(x,y,z);
-					GL11.glScalef(0.5f, 0.5f, 0.5f);
-					if (item.getItem().getItem() instanceof ItemBlock){
-						GL11.glTranslated(1.5, 1.5, 1.0); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
-					}
-					else {
-						GL11.glTranslated(1.5, 1.75, 0.5); //Decrease X by 0.5 to go one slot towards positive X, Decrease Z by 0.5 to go one slot towards positive Z
+					if (item.getItem() instanceof ItemBlock){
+						GL11.glTranslated(0.75, 15.0/16, 0.5);
+						GL11.glScalef(itemScale, itemScale, itemScale);
+					} else {
+						GL11.glTranslated(0.75, 14.25/16, 0.5);
+						GL11.glScalef(itemScale, itemScale, itemScale);
 						GlStateManager.rotate(90, 1, 0, 0);
 					}
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
+					Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.FIXED);
 					GL11.glPopMatrix();
 					GlStateManager.popAttrib();
 				}

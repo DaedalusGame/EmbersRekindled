@@ -130,7 +130,8 @@ public class Misc {
 	public static float pitchDegreesBetweenPoints(double posX, double posY, double posZ, double posX2, double posY2, double posZ2){
 		return (float)Math.toDegrees(Math.atan2(posY2-posY,Math.sqrt((posX2-posX)*(posX2-posX)+(posZ2-posZ)*(posZ2-posZ))));
 	}
-	
+
+	//TODO: DANNY DELETO
 	public static EnumFacing getOppositeFace(EnumFacing face){
 		if (face == EnumFacing.DOWN){
 			return EnumFacing.UP;

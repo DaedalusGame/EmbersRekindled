@@ -1140,26 +1140,29 @@ public class RecipeRegistry {
 		}
 		return null;
 	}
-	
+
+	public static AlchemyRecipe getAlchemyRecipe(ItemStack center, List<ItemStack> outside) {
+		AlchemyRecipe matchedRecipe = null;
+
+		for (AlchemyRecipe recipe : alchemyRecipes) {
+			if (recipe.matches(center, outside) && (matchedRecipe == null || recipe.outsideIngredients.size() > matchedRecipe.outsideIngredients.size()))
+				matchedRecipe = recipe;
+		}
+
+		return matchedRecipe;
+	}
+
+
 	public static AlchemyRecipe getAlchemyRecipe(ItemStack center, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4){
-		List<ItemStack> list = new ArrayList<ItemStack>();
-		if (stack1 != ItemStack.EMPTY){
+		List<ItemStack> list = new ArrayList<>();
+		if (stack1 != ItemStack.EMPTY)
 			list.add(stack1);
-		}
-		if (stack2 != ItemStack.EMPTY){
+		if (stack2 != ItemStack.EMPTY)
 			list.add(stack2);
-		}
-		if (stack3 != ItemStack.EMPTY){
+		if (stack3 != ItemStack.EMPTY)
 			list.add(stack3);
-		}
-		if (stack4 != ItemStack.EMPTY){
+		if (stack4 != ItemStack.EMPTY)
 			list.add(stack4);
-		}
-		for (int i = 0; i < alchemyRecipes.size(); i ++){
-			if (alchemyRecipes.get(i).matches(center, list)){
-				return alchemyRecipes.get(i);
-			}
-		}
-		return null;
+		return getAlchemyRecipe(center,list);
 	}
 }

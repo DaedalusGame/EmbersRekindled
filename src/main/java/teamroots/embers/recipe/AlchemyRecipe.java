@@ -2,47 +2,54 @@ package teamroots.embers.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.item.ItemAlchemicWaste;
+import teamroots.embers.util.AlchemyResult;
+import teamroots.embers.util.AspectList;
+import teamroots.embers.util.AspectList.AspectRangeList;
 import teamroots.embers.util.MatchUtil;
 
 public class AlchemyRecipe {
-	Random random = new Random();
+	//Binary compat
+	@Deprecated
 	public int ironAspectMin = 0, dawnstoneAspectMin = 0, copperAspectMin = 0, silverAspectMin = 0, leadAspectMin = 0;
+	@Deprecated
 	public int ironAspectRange = 0, dawnstoneAspectRange = 0, copperAspectRange = 0, silverAspectRange = 0, leadAspectRange = 0;
-	public List<ItemStack> inputs = new ArrayList<ItemStack>();
+	@Deprecated
+	public List<ItemStack> inputs = new ArrayList<>();
+	@Deprecated
 	public ItemStack centerInput = ItemStack.EMPTY;
+
+	public Ingredient centerIngredient;
+	public List<Ingredient> outsideIngredients;
+	public AspectRangeList aspectRange;
 	public ItemStack result = ItemStack.EMPTY;
+
+	Random random = new Random();
+
+	public AlchemyRecipe(AspectRangeList range, Ingredient center, List<Ingredient> outside, ItemStack result) {
+		this.result = result;
+		this.centerIngredient = center;
+		this.outsideIngredients = outside;
+		this.aspectRange = range;
+	}
+
 	public AlchemyRecipe(int ironMin, int ironMax, int dawnstoneMin, int dawnstoneMax, int copperMin, int copperMax, int silverMin, int silverMax, int leadMin, int leadMax, ItemStack center, ItemStack east, ItemStack west, ItemStack north, ItemStack south, ItemStack result){
-		this.ironAspectMin = ironMin;
-		this.ironAspectRange = ironMax-ironMin;
-		this.dawnstoneAspectMin = dawnstoneMin;
-		this.dawnstoneAspectRange = dawnstoneMax-dawnstoneMin;
-		this.copperAspectMin = copperMin;
-		this.copperAspectRange = copperMax-copperMin;
-		this.silverAspectMin = silverMin;
-		this.silverAspectRange = silverMax-silverMin;
-		this.leadAspectMin = leadMin;
-		this.leadAspectRange = leadMax-leadMin;
-		this.centerInput = center;
-		if (east != ItemStack.EMPTY){
-			inputs.add(east);
-		}
-		if (west != ItemStack.EMPTY){
-			inputs.add(west);
-		}
-		if (north != ItemStack.EMPTY){
-			inputs.add(north);
-		}
-		if (south != ItemStack.EMPTY){
-			inputs.add(south);
-		}
+		new AspectRangeList(
+				AspectList.createStandard(ironMin,dawnstoneMin,copperMin,silverMin,leadMin),
+				AspectList.createStandard(ironMax,dawnstoneMax,copperMax,silverMax,leadMax)
+		);
+		centerIngredient = Ingredient.fromStacks(center);
+		outsideIngredients = new ArrayList<>();
 		this.result = result;
 	}
 	
@@ -70,7 +77,40 @@ public class AlchemyRecipe {
 		random = new Random(world.getSeed());
 		return this.leadAspectMin+random.nextInt(this.leadAspectRange+1);
 	}
-	
+
+	public AlchemyResult matchAshes(AspectList list, World world) {
+		return AlchemyResult.create(list, aspectRange, world);
+	}
+
+	public ItemStack getResult(TileEntity tile, AspectList aspects) {
+		World world = tile.getWorld();
+		AlchemyResult result = matchAshes(aspects, world);
+		if (result.getAccuracy() == 1.0)
+			return this.result.copy();
+		else
+			return result.createFailure();
+	}
+
+	public boolean matches(ItemStack center, List<ItemStack> test) {
+		if (!centerIngredient.apply(center))
+			return false;
+
+		ArrayList<Ingredient> ingredients = new ArrayList<>(outsideIngredients);
+		while (test.size() > ingredients.size()) {
+			ingredients.add(Ingredient.EMPTY);
+		}
+		for (ItemStack stack : test) {
+			Optional<Ingredient> found = ingredients.stream().filter(x -> x.apply(stack)).findFirst();
+			if (found.isPresent())
+				ingredients.remove(found.get());
+			else
+				return false;
+		}
+
+		return true;
+	}
+
+
 	public ItemStack getResult(World world, int iron, int dawnstone, int copper, int silver, int lead){
 		double dIron = Math.abs((double)(iron-getIron(world)));
 		double dDawnstone = Math.abs((double)(dawnstone-getDawnstone(world)));
@@ -83,12 +123,5 @@ public class AlchemyRecipe {
 			return this.result;
 		}
 		return ItemAlchemicWaste.create((int)dIron, (int)dCopper, (int)dSilver, (int)dDawnstone, (int)dLead, iron+dawnstone+copper+silver+lead);
-	}
-	
-	public boolean matches(ItemStack center, List<ItemStack> test){
-		if (MatchUtil.areStacksEqualOreDict(center, this.centerInput)){
-			return MatchUtil.stackListsMatch(this.inputs, test);
-		}
-		return false;
 	}
 }

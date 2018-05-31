@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +24,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntityBase, ITickable {
@@ -39,14 +41,12 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
             // that the chest contents is persisted
         	TileEntityAlchemyPedestal.this.markDirty();
         }
-        
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (slot == stackAsh && stack.getItem() != RegistryManager.dust_ash){
-        		return insertItem(slot+1,stack,simulate);
-        	}
-        	return super.insertItem(slot, stack, simulate);
-        }
+
+		@Nonnull
+		@Override
+		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+			return slot == stackAsh && !ItemUtil.matchesOreDict(stack,"dustAsh") ? this.insertItem(slot + 1, stack, simulate) : super.insertItem(slot, stack, simulate);
+		}
 	};
 	Random random = new Random();
 	
@@ -116,31 +116,31 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	}
 
 	@Override
-	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (heldItem != ItemStack.EMPTY){
-			if (heldItem.getItem() == RegistryManager.dust_ash){
-				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
-				markDirty();
-			}
-			else {
-				player.setHeldItem(hand, this.inventory.insertItem(1,heldItem,false));
-				markDirty();
-			}
+			boolean isAsh = ItemUtil.matchesOreDict(heldItem,"dustAsh");
+
+			if (isAsh)
+				player.setHeldItem(hand, inventory.insertItem(stackAsh,heldItem,false));
+			else
+				player.setHeldItem(hand, inventory.insertItem(stackItem,heldItem,false));
+			markDirty();
 			return true;
 		}
 		else {
-			if (inventory.getStackInSlot(1) != ItemStack.EMPTY){
-				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(1, inventory.getStackInSlot(1).getCount(), false));
+			ItemStack ashStack = inventory.getStackInSlot(stackAsh);
+			ItemStack itemStack = inventory.getStackInSlot(stackItem);
+			if (ashStack != ItemStack.EMPTY){
+				if (!world.isRemote){
+					player.setHeldItem(hand, inventory.extractItem(stackAsh, ashStack.getCount(), false));
 					markDirty();
 				}
 				return true;
 			}
-			else if (inventory.getStackInSlot(0) != ItemStack.EMPTY){
-				if (!getWorld().isRemote){
-					player.setHeldItem(hand, inventory.extractItem(0, inventory.getStackInSlot(0).getCount(), false));
+			else if (itemStack != ItemStack.EMPTY) {
+				if (!world.isRemote) {
+					player.setHeldItem(hand, inventory.extractItem(stackItem, itemStack.getCount(), false));
 					markDirty();
 				}
 				return true;

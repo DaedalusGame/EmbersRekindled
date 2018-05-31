@@ -7,6 +7,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,9 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,6 +24,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
+import teamroots.embers.item.ItemAlchemicWaste;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSphereFX;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -33,16 +34,20 @@ import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.AlchemyResult;
+import teamroots.embers.util.AlchemyUtil;
+import teamroots.embers.util.AspectList;
 import teamroots.embers.util.Misc;
 
-public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
 	int turnRate = 0;
 	public int progress = 0;
-	int ash = 0;
 	public int process = 0;
+	@Deprecated
 	int copper = 0, iron = 0, dawnstone = 0, silver = 0, lead = 0;
+	private AspectList aspects = new AspectList();
 	public ItemStackHandler north = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -93,11 +98,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
 		tag.setInteger("progress", progress);
-		tag.setInteger("iron", iron);
-		tag.setInteger("dawnstone", dawnstone);
-		tag.setInteger("copper", copper);
-		tag.setInteger("silver", silver);
-		tag.setInteger("lead", lead);
+		tag.setTag("aspects", aspects.serializeNBT());
 		tag.setTag("north", north.serializeNBT());
 		tag.setTag("south", south.serializeNBT());
 		tag.setTag("east", east.serializeNBT());
@@ -110,11 +111,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
 		progress = tag.getInteger("progress");
-		iron = tag.getInteger("iron");
-		dawnstone = tag.getInteger("dawnstone");
-		copper = tag.getInteger("copper");
-		silver = tag.getInteger("silver");
-		lead = tag.getInteger("lead");
+		aspects.deserializeNBT(tag.getCompoundTag("aspects"));
 		north.deserializeNBT(tag.getCompoundTag("north"));
 		south.deserializeNBT(tag.getCompoundTag("south"));
 		east.deserializeNBT(tag.getCompoundTag("east"));
@@ -192,17 +189,29 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 		}
 		return center;
 	}
-	
-	public void sparkProgress(){
-		AlchemyRecipe recipe = RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), east.getStackInSlot(0), west.getStackInSlot(0), north.getStackInSlot(0), south.getStackInSlot(0));
-		if (recipe != null){
-			if (getNearbyAsh(getNearbyPedestals()) >= recipe.dawnstoneAspectMin+recipe.copperAspectMin+recipe.ironAspectMin+recipe.silverAspectMin+recipe.leadAspectMin){
-				this.progress = 1;
-				markDirty();
-			}
+
+	public void sparkProgress(TileEntityBeamCannon tile, double ember){
+		if(progress != 0)
+			return;
+		AlchemyRecipe recipe = getRecipe();
+		if(recipe == null)
+			return;
+		List<TileEntityAlchemyPedestal> pedestals = AlchemyUtil.getNearbyPedestals(getWorld(),getPos());
+		AspectList list = new AspectList();
+		list.collect(pedestals);
+		AlchemyResult result = recipe.matchAshes(list,world);
+		if(result.areAllPresent()) {
+			aspects.reset();
+			progress = 1;
+			markDirty();
+			world.playSound(null,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,SoundManager.ALCHEMY_START, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		}
 	}
-	
+
+	private AlchemyRecipe getRecipe() {
+		return RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), Lists.newArrayList(north.getStackInSlot(0),east.getStackInSlot(0),south.getStackInSlot(0),west.getStackInSlot(0)));
+	}
+
 	public boolean dirty = false;
 	
 	@Override
@@ -278,26 +287,28 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 			if (process < 20){
 				process ++;
 			}
-			List<TileEntityAlchemyPedestal> pedestals = getNearbyPedestals();
+			List<TileEntityAlchemyPedestal> pedestals = AlchemyUtil.getNearbyPedestals(getWorld(),getPos());
 			if (getWorld().isRemote){
-				for (int i = 0; i < pedestals.size(); i ++){
-					ParticleUtil.spawnParticleStar(getWorld(), pedestals.get(i).getPos().getX()+0.5f, pedestals.get(i).getPos().getY()+1.0f, pedestals.get(i).getPos().getZ()+0.5f, 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 3.5f+0.5f*random.nextFloat(), 40);
-					for (int j = 0; j < 8; j ++){
+				for (TileEntityAlchemyPedestal pedestal : pedestals) {
+					//if(pedestal instanceof TileEntityAlchemyPedestal && !pedestal.inventory.getStackInSlot(1).isEmpty()) //If there's ash in the pedestal
+					//	((TileEntityAlchemyPedestal) pedestal).setActive(3);
+					ParticleUtil.spawnParticleStar(getWorld(), pedestal.getPos().getX() + 0.5f, pedestal.getPos().getY() + 1.0f, pedestal.getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 3.5f + 0.5f * random.nextFloat(), 40);
+					for (int j = 0; j < 8; j++) {
 						float coeff = random.nextFloat();
-						float x = (getPos().getX()+0.5f)*coeff + (1.0f-coeff)*(pedestals.get(i).getPos().getX()+0.5f);
-						float y = (getPos().getY()+0.875f)*coeff + (1.0f-coeff)*(pedestals.get(i).getPos().getY()+1.0f);
-						float z = (getPos().getZ()+0.5f)*coeff + (1.0f-coeff)*(pedestals.get(i).getPos().getZ()+0.5f);
-						ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 24);
+						float x = (getPos().getX() + 0.5f) * coeff + (1.0f - coeff) * (pedestal.getPos().getX() + 0.5f);
+						float y = (getPos().getY() + 0.875f) * coeff + (1.0f - coeff) * (pedestal.getPos().getY() + 1.0f);
+						float z = (getPos().getZ() + 0.5f) * coeff + (1.0f - coeff) * (pedestal.getPos().getZ() + 0.5f);
+						ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 24);
 					}
 				}
 			}
 			if (angle % 10 == 0){
 				if (getNearbyAsh(pedestals) > 0){
 					TileEntityAlchemyPedestal pedestal = pedestals.get(random.nextInt(pedestals.size()));
-					while (pedestal.inventory.extractItem(0, 1, true) == ItemStack.EMPTY){
+					while (pedestal.inventory.extractItem(0, 1, true).isEmpty()){
 						pedestal = pedestals.get(random.nextInt(pedestals.size()));
 					}
-					if (pedestal.inventory.getStackInSlot(1) != ItemStack.EMPTY){
+					if (!pedestal.inventory.getStackInSlot(1).isEmpty()){
 						if (getWorld().isRemote){
 							for (int j = 0; j < 20; j ++){
 								float dx = (getPos().getX()+0.5f) - (pedestal.getPos().getX()+0.5f);
@@ -307,46 +318,29 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 								ParticleUtil.spawnParticleStar(getWorld(), pedestal.getPos().getX()+0.5f, pedestal.getPos().getY()+1.0f, pedestal.getPos().getZ()+0.5f, dx/lifetime, dy/lifetime, dz/lifetime, 255, 64, 16, 4.0f, (int)lifetime);
 							}
 						}
-						ItemStack stack = pedestal.inventory.extractItem(0, 1, false);
-						if (pedestal.inventory.getStackInSlot(1).getItem() == RegistryManager.aspectus_iron){
-							this.iron ++;
-						}
-						if (pedestal.inventory.getStackInSlot(1).getItem() == RegistryManager.aspectus_dawnstone){
-							this.dawnstone ++;
-						}
-						if (pedestal.inventory.getStackInSlot(1).getItem() == RegistryManager.aspectus_copper){
-							this.copper ++;
-						}
-						if (pedestal.inventory.getStackInSlot(1).getItem() == RegistryManager.aspectus_silver){
-							this.silver ++;
-						}
-						if (pedestal.inventory.getStackInSlot(1).getItem() == RegistryManager.aspectus_lead){
-							this.lead ++;
-						}
+						pedestal.inventory.extractItem(0, 1, false);
+						aspects.addAspect(AlchemyUtil.getAspect(pedestal.inventory.getStackInSlot(1)),1);
 						markDirty();
 						pedestal.markDirty();
 					}
 				}
 				else {
-					AlchemyRecipe recipe = RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), east.getStackInSlot(0), west.getStackInSlot(0), north.getStackInSlot(0), south.getStackInSlot(0));
+					AlchemyRecipe recipe = getRecipe();
 					if (recipe != null && !getWorld().isRemote){
-						ItemStack stack = recipe.getResult(getWorld(), iron, dawnstone, copper, silver, lead).copy();
+						ItemStack stack = recipe.getResult(this, aspects);
 						if (!getWorld().isRemote){
+							SoundEvent finishSound = stack.getItem() instanceof ItemAlchemicWaste ? SoundManager.ALCHEMY_FAIL : SoundManager.ALCHEMY_SUCCESS;
+							world.playSound(null,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5, finishSound, SoundCategory.BLOCKS, 1.0f, 1.0f);
 							getWorld().spawnEntity(new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0f,getPos().getZ()+0.5,stack));
 							PacketHandler.INSTANCE.sendToAll(new MessageEmberSphereFX(getPos().getX()+0.5,getPos().getY()+0.875,getPos().getZ()+0.5));
 						}
 						this.progress = 0;
-			        	this.iron = 0;
-			        	this.dawnstone = 0;
-			        	this.copper = 0;
-			        	this.silver = 0;
-			        	this.lead = 0;
-			        	this.center.setStackInSlot(0, decrStack(this.center.getStackInSlot(0)));
-			        	this.north.setStackInSlot(0, decrStack(this.north.getStackInSlot(0)));
-			        	this.south.setStackInSlot(0, decrStack(this.south.getStackInSlot(0)));
-			        	this.east.setStackInSlot(0, decrStack(this.east.getStackInSlot(0)));
-			        	this.west.setStackInSlot(0, decrStack(this.west.getStackInSlot(0)));
-			        	markDirty();
+						this.center.setStackInSlot(0, decrStack(this.center.getStackInSlot(0)));
+						this.north.setStackInSlot(0, decrStack(this.north.getStackInSlot(0)));
+						this.south.setStackInSlot(0, decrStack(this.south.getStackInSlot(0)));
+						this.east.setStackInSlot(0, decrStack(this.east.getStackInSlot(0)));
+						this.west.setStackInSlot(0, decrStack(this.west.getStackInSlot(0)));
+						markDirty();
 					}
 				}
 			}

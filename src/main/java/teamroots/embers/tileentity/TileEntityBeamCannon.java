@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -26,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.block.BlockBeamCannon;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.entity.EntityEmberPacket;
@@ -116,47 +118,15 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public void update() {
+		IBlockState cannonstate = getWorld().getBlockState(getPos());
+		EnumFacing facing = cannonstate.getValue(BlockBeamCannon.facing);
 		if (this.target == null && this.ticksExisted == 0){
-			IBlockState state = getWorld().getBlockState(getPos());
-			this.target = getPos().offset(state.getValue(BlockBeamCannon.facing));
+			this.target = getPos().offset(facing);
 		}
-		ticksExisted ++;
-		if (this.capability.getEmber() >= 400 && this.ticksExisted % 200 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0){
-			Vec3d ray = (new Vec3d(target.getX()-getPos().getX(),target.getY()-getPos().getY(),target.getZ()-getPos().getZ())).normalize();
-			if (!getWorld().isRemote){
-				double posX = getPos().getX()+0.5;
-				double posY = getPos().getY()+0.5;
-				double posZ = getPos().getZ()+0.5;
-				boolean doContinue = true;
-				for (int i = 0; i < 640 && doContinue; i ++){
-					posX += ray.x*0.1;
-					posY += ray.y*0.1;
-					posZ += ray.z*0.1;
-					IBlockState state = getWorld().getBlockState(new BlockPos(posX,posY,posZ));
-					TileEntity tile = getWorld().getTileEntity(new BlockPos(posX,posY,posZ));
-					if (tile instanceof TileEntityAlchemyTablet){
-						((TileEntityAlchemyTablet)tile).sparkProgress();
-						doContinue = false;
-					}
-					if (tile instanceof IEmberPacketReceiver){
-						if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
-							tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(capability.getEmber(), true);
-							tile.markDirty();
-						}
-						doContinue = false;
-					}
-					if (state.isFullCube() && state.isOpaqueCube()){
-						doContinue = false;
-					}
-					List<EntityLivingBase> rawEntities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-0.85,posY-0.85,posZ-0.85,posX+0.85,posY+0.85,posZ+0.85));
-					for (int j = 0; j < rawEntities.size(); j ++){
-						rawEntities.get(j).attackEntityFrom(RegistryManager.damage_ember, 25.0f);
-					}
-				}
-				this.capability.setEmber(0);
-				markDirty();	
-				PacketHandler.INSTANCE.sendToAll(new MessageBeamCannonFX(this));
-			}
+		ticksExisted++;
+		boolean isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+		if (this.capability.getEmber() >= 400 && isPowered){
+			fire();
 		}
 	}
 	
@@ -180,5 +150,54 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	public void setTarget(BlockPos pos) {
 		this.target = pos;
 		markDirty();
+	}
+
+	public void fire() {
+		Vec3d ray = (new Vec3d(target.getX()-getPos().getX(),target.getY()-getPos().getY(),target.getZ()-getPos().getZ())).normalize();
+		if (!getWorld().isRemote){
+			float damage = 25.0f;
+			double posX = getPos().getX()+0.5;
+			double posY = getPos().getY()+0.5;
+			double posZ = getPos().getZ()+0.5;
+			boolean doContinue = true;
+			for (int i = 0; i < 640 && doContinue; i++){
+				posX += ray.x*0.1;
+				posY += ray.y*0.1;
+				posZ += ray.z*0.1;
+				IBlockState state = getWorld().getBlockState(new BlockPos(posX,posY,posZ));
+				TileEntity tile = getWorld().getTileEntity(new BlockPos(posX,posY,posZ));
+				if(sparkTarget(tile))
+					doContinue = false;
+				else if (tile instanceof IEmberPacketReceiver){
+					if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+						tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(capability.getEmber(), true);
+						tile.markDirty();
+					}
+					doContinue = false;
+				}
+				else if (state.isFullCube() && state.isOpaqueCube()){
+					doContinue = false;
+				}
+				//TODO: OPTIMIZE THIS, THIS CALL IS GARBAGE
+				List<EntityLivingBase> rawEntities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-0.85,posY-0.85,posZ-0.85,posX+0.85,posY+0.85,posZ+0.85));
+				for (EntityLivingBase rawEntity : rawEntities) {
+					rawEntity.attackEntityFrom(RegistryManager.damage_ember, damage);
+				}
+				if(!doContinue)
+					world.playSound(null,posX,posY,posZ, SoundManager.BEAM_CANNON_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			}
+			this.capability.setEmber(0);
+			markDirty();
+			PacketHandler.INSTANCE.sendToAll(new MessageBeamCannonFX(this));
+			world.playSound(null,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5, SoundManager.BEAM_CANNON_FIRE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+		}
+	}
+
+	public boolean sparkTarget(TileEntity target) {
+		if (target instanceof ISparkable) {
+			((ISparkable) target).sparkProgress(this,capability.getEmber());
+			return true;
+		}
+		return false;
 	}
 }
