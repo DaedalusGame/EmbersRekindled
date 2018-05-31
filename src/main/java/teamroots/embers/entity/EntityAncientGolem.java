@@ -1,5 +1,6 @@
 package teamroots.embers.entity;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -15,10 +16,13 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 
 public class EntityAncientGolem extends EntityMob {
 
@@ -66,15 +70,32 @@ public class EntityAncientGolem extends EntityMob {
     	this.rotationYaw = this.rotationYawHead;
     	if (this.ticksExisted % 100 == 0 && this.getAttackTarget() != null){
     		if (!getEntityWorld().isRemote){
+                playSound(SoundManager.FIREBALL,1.0f,1.0f);
     			EntityEmberProjectile proj = new EntityEmberProjectile(getEntityWorld());
     			proj.initCustom(posX, posY+1.6, posZ, getLookVec().x*0.5, getLookVec().y*0.5, getLookVec().z*0.5, 4.0f, this.getUniqueID());
     			getEntityWorld().spawnEntity(proj);
     		}
     	}
     }
-	
-	@Override
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundManager.ANCIENT_GOLEM_DEATH;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundManager.ANCIENT_GOLEM_HURT;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        super.playStepSound(pos, blockIn);
+        this.playSound(SoundManager.ANCIENT_GOLEM_STEP,1.0f,1.0f);
+    }
+
+    @Override
 	public ResourceLocation getLootTable(){
-		return new ResourceLocation(Embers.MODID+":entity/ancient_golem");
+		return new ResourceLocation(Embers.MODID,"entity/ancient_golem");
 	}
 }

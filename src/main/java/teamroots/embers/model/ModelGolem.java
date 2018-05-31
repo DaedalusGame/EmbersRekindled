@@ -83,15 +83,8 @@ public class ModelGolem extends ModelBase
   public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
   {
 	GlStateManager.pushMatrix();
-	float speed = (float)Math.min(0.25f, ((new Vec3d(entity.motionX,0,entity.motionZ)).lengthVector() * 4.0f));
     super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-    legR.rotateAngleX = (float)Math.toRadians(speed*180f*(float) Math.sin(Math.toRadians(ageInTicks/2 % 360)*24F));
-    legL.rotateAngleX = -(float)Math.toRadians(speed*180f*(float) Math.sin(Math.toRadians(ageInTicks/2 % 360)*24F));
-    armL.rotateAngleX = (float)Math.toRadians(speed*180f*(float) Math.sin(Math.toRadians(ageInTicks/2 % 360)*24F));
-    armR.rotateAngleX = -(float)Math.toRadians(speed*180f*(float) Math.sin(Math.toRadians(ageInTicks/2 % 360)*24F));
-    fistL.rotateAngleX = (float)Math.toRadians(speed*180f*(float) Math.sin(Math.toRadians(ageInTicks/2 % 360)*24F));
-    fistR.rotateAngleX = -(float)Math.toRadians(speed*180f*(float) Math.sin(Math.toRadians(ageInTicks/2 % 360)*24F));
     legL.render(scale);
     legR.render(scale);
     body1.render(scale);
@@ -111,9 +104,14 @@ public class ModelGolem extends ModelBase
     model.rotateAngleZ = z;
   }
   
-  public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+  public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
   {
-    super.setRotationAngles(f, f1, f2, f3, f4, f5, null);
+    legR.rotateAngleX = (float)Math.toRadians(180f*(float) Math.sin(limbSwing*0.5)*limbSwingAmount*0.5);
+    legL.rotateAngleX = -(float)Math.toRadians(180f*(float) Math.sin(limbSwing*0.5)*limbSwingAmount*0.5);
+    armL.rotateAngleX = (float)Math.toRadians(180f*(float) Math.sin(limbSwing*0.5)*limbSwingAmount*0.5);
+    armR.rotateAngleX = -(float)Math.toRadians(180f*(float) Math.sin(limbSwing*0.5)*limbSwingAmount*0.5);
+    fistL.rotateAngleX = (float)Math.toRadians(180f*(float) Math.sin(limbSwing*0.5)*limbSwingAmount*0.5);
+    fistR.rotateAngleX = -(float)Math.toRadians(180f*(float) Math.sin(limbSwing*0.5)*limbSwingAmount*0.5);
   }
 
 }

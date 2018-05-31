@@ -23,8 +23,10 @@ public class SoundManager {
     public static SoundEvent BEAM_CANNON_FIRE;
     @GameRegistry.ObjectHolder("embers:block.beam_cannon.hit")
     public static SoundEvent BEAM_CANNON_HIT;
-    @GameRegistry.ObjectHolder("embers:block.crystalcell")
-    public static SoundEvent CRYSTAL_CELL;
+    @GameRegistry.ObjectHolder("embers:block.crystalcell.loop")
+    public static SoundEvent CRYSTAL_CELL_LOOP;
+    @GameRegistry.ObjectHolder("embers:block.crystalcell.grow")
+    public static SoundEvent CRYSTAL_CELL_GROW;
     @GameRegistry.ObjectHolder("embers:block.activator")
     public static SoundEvent ACTIVATOR;
     @GameRegistry.ObjectHolder("embers:block.bore.start")
@@ -55,6 +57,12 @@ public class SoundManager {
     public static SoundEvent BLAZING_RAY_FIRE;
     @GameRegistry.ObjectHolder("embers:item.blazing_ray.empty")
     public static SoundEvent BLAZING_RAY_EMPTY;
+    @GameRegistry.ObjectHolder("embers:entity.ancient_golem.step")
+    public static SoundEvent ANCIENT_GOLEM_STEP;
+    @GameRegistry.ObjectHolder("embers:entity.ancient_golem.hurt")
+    public static SoundEvent ANCIENT_GOLEM_HURT;
+    @GameRegistry.ObjectHolder("embers:entity.ancient_golem.death")
+    public static SoundEvent ANCIENT_GOLEM_DEATH;
 
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
@@ -65,7 +73,8 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.pedestal.loop"));
         event.getRegistry().register(registerSound("block.beam_cannon.fire"));
         event.getRegistry().register(registerSound("block.beam_cannon.hit"));
-        event.getRegistry().register(registerSound("block.crystalcell"));
+        event.getRegistry().register(registerSound("block.crystalcell.loop"));
+        event.getRegistry().register(registerSound("block.crystalcell.grow"));
         event.getRegistry().register(registerSound("block.activator"));
         event.getRegistry().register(registerSound("block.bore.start"));
         event.getRegistry().register(registerSound("block.bore.stop"));
@@ -82,6 +91,9 @@ public class SoundManager {
         event.getRegistry().register(registerSound("fireball.big.hit"));
         event.getRegistry().register(registerSound("item.blazing_ray.fire"));
         event.getRegistry().register(registerSound("item.blazing_ray.empty"));
+        event.getRegistry().register(registerSound("entity.ancient_golem.death"));
+        event.getRegistry().register(registerSound("entity.ancient_golem.hurt"));
+        event.getRegistry().register(registerSound("entity.ancient_golem.step"));
     }
 
     public static SoundEvent registerSound(String soundName) {

@@ -42,12 +42,20 @@
     ],
     "subtitle": "subtitles.beam_cannon.hit"
   },
-  "block.crystalcell": {
+  "block.crystalcell.loop": {
     "category": "block",
     "sounds": [
       "embers:crystalcell"
     ],
-    "subtitle": "subtitles.crystalcell"
+    "subtitle": "subtitles.crystalcell.loop"
+  },
+  "block.crystalcell.grow": {
+    "sounds": [
+      "embers:metal_crystal_ping1",
+      "embers:metal_crystal_ping2",
+      "embers:metal_crystal_ping3"
+    ],
+    "subtitle": "subtitles.crystalcell.grow"
   },
   "block.pedestal.loop": {
     "category": "block",
@@ -130,6 +138,28 @@
     ],
     "subtitle": "subtitles.plinth.loop"
   },
+  "block.injector.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:injector_active_loop"
+    ],
+    "subtitle": "subtitles.injector.loop"
+  },
+  "block.metal_seed.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:metal_crystal_loop"
+    ],
+    "subtitle": "subtitles.metal_seed.loop"
+  },
+  "block.metal_seed.ping": {
+    "sounds": [
+      "embers:metal_crystal_ping1",
+      "embers:metal_crystal_ping2",
+      "embers:metal_crystal_ping3"
+    ],
+    "subtitle": "subtitles.metal_seed.ping"
+  },
   "fireball.small.fire": {
     "sounds": [
       "embers:fireball_small_launch1",
@@ -170,5 +200,29 @@
       "embers:blray_empty"
     ],
     "subtitle": "subtitles.blazing_ray.empty"
+  },
+  "entity.ancient_golem.death": {
+    "sounds": [
+      "embers:agolem_die"
+    ],
+    "subtitle": "subtitles.ancient_golem.death"
+  },
+  "entity.ancient_golem.hurt": {
+    "sounds": [
+      "embers:agolem_hit1",
+      "embers:agolem_hit2",
+      "embers:agolem_hit3",
+      "embers:agolem_hit4"
+    ],
+    "subtitle": "subtitles.ancient_golem.hurt"
+  },
+  "entity.ancient_golem.step": {
+    "sounds": [
+      "embers:agolem_step1",
+      "embers:agolem_step2",
+      "embers:agolem_step3",
+      "embers:agolem_step4"
+    ],
+    "subtitle": "subtitles.ancient_golem.step"
   }
 }

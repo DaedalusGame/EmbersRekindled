@@ -11,8 +11,8 @@ public class MeltingRecipeWrapper implements IRecipeWrapper {
 
 	public ItemMeltingRecipe recipe = null;
 
-	
 	public MeltingRecipeWrapper(ItemMeltingRecipe recipe){
+		this.recipe = recipe;
 	}
 	
 	@Override

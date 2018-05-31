@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,8 +23,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.SoundManager;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
@@ -35,8 +35,9 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	Random random = new Random();
 	public long ticksExisted = 0;
 	public float angle = 0;
-	public int ticksFueled = 0;
 	public long seed = 0;
+	public double renderCapacity;
+	public double renderCapacityLast;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
@@ -63,12 +64,12 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		double xPos = pos.getX() + 0.5;
-		double yPos = pos.getX() + 0.5;
-		double zPos = pos.getX() + 0.5;
+		double yPos = pos.getY() + 0.5;
+		double zPos = pos.getZ() + 0.5;
 		double layerHeight = 0.25;
 		double numLayers = 2+Math.floor(capability.getEmberCapacity()/128000.0);
 		double size = numLayers * layerHeight;
-		return new AxisAlignedBB(xPos-size/2, yPos+1.0, zPos-size/2, xPos+size/2, yPos+1.0+size, zPos+size/2);
+		return new AxisAlignedBB(xPos-size/2, yPos+0.5, zPos-size/2, xPos+size/2, yPos+0.5+size, zPos+size/2);
 	}
 	
 	@Override
@@ -145,8 +146,14 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	@Override
 	public void update() {
 		ticksExisted ++;
+		renderCapacityLast = renderCapacity;
+		if(renderCapacity < this.capability.getEmberCapacity())
+			renderCapacity += Math.min(10000,this.capability.getEmberCapacity() - renderCapacity);
+		else
+			renderCapacity -= Math.min(10000,renderCapacity - this.capability.getEmberCapacity());
 		if (inventory.getStackInSlot(0) != ItemStack.EMPTY && ticksExisted % 4 == 0){
 			ItemStack stack = inventory.extractItem(0, 1, true);
+
 			if (!getWorld().isRemote && stack != ItemStack.EMPTY){
 				inventory.extractItem(0, 1, false);
 				if (EmberGenUtil.getEmberForItem(stack.getItem()) > 0){
@@ -154,10 +161,10 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 					markDirty();
 				}
 			}
-			if (getWorld().isRemote && stack != ItemStack.EMPTY){
-				double angle = random.nextDouble()*2.0*Math.PI;
-				double x = getPos().getX()+0.5+0.5*Math.sin(angle);
-				double z = getPos().getZ()+0.5+0.5*Math.cos(angle);
+			double angle = random.nextDouble()*2.0*Math.PI;
+			double x = getPos().getX()+0.5+0.5*Math.sin(angle);
+			double z = getPos().getZ()+0.5+0.5*Math.cos(angle);
+			if (getWorld().isRemote && !stack.isEmpty()){
 				double x2 = getPos().getX()+0.5;
 				double z2 = getPos().getZ()+0.5;
 				float layerHeight = 0.25f;
@@ -168,6 +175,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 					ParticleUtil.spawnParticleGlow(getWorld(), (float)x*(1.0f-coeff)+(float)x2*coeff, getPos().getY()+(1.0f-coeff)+(height/2.0f+1.5f)*coeff, (float)z*(1.0f-coeff)+(float)z2*coeff, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 				}
 			}
+			world.playSound(null,x,pos.getY()+0.5,z, SoundManager.CRYSTAL_CELL_GROW, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		}
 		float numLayers = 2+(float) Math.floor(capability.getEmberCapacity()/128000.0f);
 		for (int i = 0; i < numLayers/2; i ++){
@@ -180,7 +188,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 			float z = getPos().getZ()+0.5f+2.0f*(random.nextFloat()-0.5f);
 			float y = getPos().getY()+1.0f;
 			if (getWorld().isRemote){
-				ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, (xDest-x)/24.0f, (yDest-y)/24.0f, (zDest-z)/24.0f, 255, 64, 16, 2.0f, 24);
+				ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, (xDest-x)/24.0f * random.nextFloat(), (yDest-y)/24.0f * random.nextFloat(), (zDest-z)/24.0f * random.nextFloat(), 255, 64, 16, 2.0f, 24);
 			}
 		}
 	}

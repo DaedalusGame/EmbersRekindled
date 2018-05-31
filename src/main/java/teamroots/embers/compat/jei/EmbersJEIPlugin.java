@@ -39,7 +39,7 @@ public class EmbersJEIPlugin implements IModPlugin {
         HELPER = reg.getJeiHelpers();
 
         reg.handleRecipes(ItemStampingRecipe.class,StampingRecipeWrapper::new,StampRecipeCategory.UID);
-        reg.handleRecipes(ItemMeltingRecipe.class,MeltingRecipeWrapper::new,MelterRecipeCategory.UID);
+        reg.handleRecipes(ItemMeltingRecipe.class, MeltingRecipeWrapper::new,MelterRecipeCategory.UID);
         reg.handleRecipes(FluidMixingRecipe.class,MixingRecipeWrapper::new,MixingRecipeCategory.UID);
         reg.handleRecipes(AlchemyRecipe.class,AlchemyRecipeWrapper::new,AlchemyRecipeCategory.UID);
 
