@@ -18,7 +18,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer {
+public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer<TileEntityBreaker> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/breaker_blade.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox blade = new StructBox(-0.375,0.5f,-0.375,0.375,0.625,0.375,new StructUV[]{new StructUV(0,0,12,12,16,16),new StructUV(0,0,12,12,16,16),new StructUV(0,10,12,12,16,16),new StructUV(0,10,12,12,16,16),new StructUV(0,10,12,12,16,16),new StructUV(0,10,12,12,16,16)});
@@ -28,9 +28,9 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (t instanceof TileEntityBreaker && t.getWorld().getBlockState(t.getPos()).getBlock() == RegistryManager.breaker){
-			float ticks = ((TileEntityBreaker)t).ticksExisted;
+	public void render(TileEntityBreaker tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null && tile.getWorld().getBlockState(tile.getPos()).getBlock() == RegistryManager.breaker){
+			float ticks = tile.ticksExisted;
 			    
 			GlStateManager.pushMatrix();
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
@@ -38,7 +38,7 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer {
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
             GlStateManager.translate(x, y, z);
-            EnumFacing facing = t.getWorld().getBlockState(t.getPos()).getValue(BlockAutoHammer.facing);
+            EnumFacing facing = tile.getWorld().getBlockState(tile.getPos()).getValue(BlockAutoHammer.facing);
             float angle = 0;
             float pitch = -90;
             if (facing == EnumFacing.SOUTH){

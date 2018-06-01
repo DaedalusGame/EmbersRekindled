@@ -24,27 +24,24 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityGearboxRenderer extends TileEntitySpecialRenderer {
+public class TileEntityGearboxRenderer extends TileEntitySpecialRenderer<TileEntityGearbox> {
 	public TileEntityGearboxRenderer(){
 		super();
 	}
 	
 	@Override
-	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (t instanceof TileEntityGearbox){
-			IBlockState state = t.getWorld().getBlockState(t.getPos());
-			TileEntityGearbox box = (TileEntityGearbox)t;
+	public void render(TileEntityGearbox tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
+			IBlockState state = tile.getWorld().getBlockState(tile.getPos());
 			if (state.getBlock() instanceof BlockGearbox){
 				for (int i = 0; i < 6; i ++){
-					if (!box.gears[i].isEmpty()){
+					if (!tile.gears[i].isEmpty()){
 						EnumFacing face = EnumFacing.getFront(i);
 				        
 			            GlStateManager.disableCull();
 			            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			            Tessellator tess = Tessellator.getInstance();
-			            BufferBuilder buffer = tess.getBuffer();
 
-						double power = box.capability.getPower(face);
+						double power = tile.capability.getPower(face);
 			            GlStateManager.pushMatrix();
 			            GlStateManager.translate(x+0.5, y+0.5, z+0.5);
 			            if (face == EnumFacing.DOWN){
@@ -73,7 +70,7 @@ public class TileEntityGearboxRenderer extends TileEntitySpecialRenderer {
 						GlStateManager.translate(0, 0, -0.375);
 						GlStateManager.scale(0.875, 0.875, 0.875);
 						GlStateManager.rotate(((float)(EventManager.ticks%360)+partialTicks)*(float)power, 0, 0, 1);
-						Minecraft.getMinecraft().getRenderItem().renderItem(box.gears[i], TransformType.FIXED);
+						Minecraft.getMinecraft().getRenderItem().renderItem(tile.gears[i], TransformType.FIXED);
 			            GlStateManager.popMatrix();
 					}
 				}

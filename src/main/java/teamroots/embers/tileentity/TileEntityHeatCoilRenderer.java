@@ -17,7 +17,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityHeatCoilRenderer extends TileEntitySpecialRenderer {
+public class TileEntityHeatCoilRenderer extends TileEntitySpecialRenderer<TileEntityHeatCoil> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/furnace_coil.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox coil = new StructBox(-1,0,-1,1,0.25,1,new StructUV[]{new StructUV(0,0,32,32,64,64),new StructUV(0,0,32,32,64,64),new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64)});
@@ -27,9 +27,8 @@ public class TileEntityHeatCoilRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (t instanceof TileEntityHeatCoil){
-	            
+	public void render(TileEntityHeatCoil tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

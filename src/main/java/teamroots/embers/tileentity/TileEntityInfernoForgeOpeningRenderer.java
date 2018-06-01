@@ -17,7 +17,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRenderer {
+public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRenderer<TileEntityInfernoForgeOpening> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/forge_opening.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox left = new StructBox(0.0, 0.625, 0.0, 0.5, 0.75, 1.0,new StructUV[]{new StructUV(0,0,16,8,16,16),new StructUV(0,8,16,0,16,16),new StructUV(0,14,8,16,16,16),new StructUV(0,14,8,16,16,16),new StructUV(0,0,16,2,16,16),new StructUV(0,0,16,2,16,16)});
@@ -27,10 +27,9 @@ public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRend
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityInfernoForgeOpening){
-			TileEntityInfernoForgeOpening pipe = (TileEntityInfernoForgeOpening)tile;
-			float dx = 0.45f*pipe.openAmount;
+	public void render(TileEntityInfernoForgeOpening tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
+			float dx = 0.45f* tile.openAmount;
 	            
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             GlStateManager.disableCull();

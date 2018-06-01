@@ -18,16 +18,15 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityFieldChartRenderer extends TileEntitySpecialRenderer {
+public class TileEntityFieldChartRenderer extends TileEntitySpecialRenderer<TileEntityFieldChart> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/field_square.png");
 	public TileEntityFieldChartRenderer(){
 		super();
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityFieldChart){
-			TileEntityFieldChart pipe = (TileEntityFieldChart)tile;
+	public void render(TileEntityFieldChart tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
 			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 			GlStateManager.disableCull();
             GlStateManager.enableBlend();

@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import teamroots.embers.Embers;
 
-public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
+public class TileEntitySeedRenderer extends TileEntitySpecialRenderer<TileEntitySeed> {
 	@Deprecated
 	public ResourceLocation textureIron = TileEntitySeed.TEXTURE_IRON;
 	@Deprecated
@@ -103,29 +103,28 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntitySeed){
+	public void render(TileEntitySeed tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			TileEntitySeed seed = (TileEntitySeed)tile;
 
-            Minecraft.getMinecraft().renderEngine.bindTexture(seed.getTexture());
+			Minecraft.getMinecraft().renderEngine.bindTexture(tile.getTexture());
             GlStateManager.disableCull();
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
             GlStateManager.pushMatrix();
             GlStateManager.translate(x+0.5f, y+0.5f, z+0.5f);
             buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-    		GlStateManager.rotate(15.0f*(float)Math.sin(Math.toRadians(seed.ticksExisted+partialTicks)), 1, 0, 0);
-            this.drawCrystal(buffer, 0, 0, 0, ((float)seed.ticksExisted+partialTicks)*6.0f, 1.0f, 0.25f, 0.0f, 0.75f, 1.0f);
+    		GlStateManager.rotate(15.0f*(float)Math.sin(Math.toRadians(tile.ticksExisted+partialTicks)), 1, 0, 0);
+            this.drawCrystal(buffer, 0, 0, 0, ((float) tile.ticksExisted+partialTicks)*6.0f, 1.0f, 0.25f, 0.0f, 0.75f, 1.0f);
     		tess.draw();
-            GlStateManager.rotate(-15.0f*(float)Math.sin(Math.toRadians(seed.ticksExisted+partialTicks)), 1, 0, 0);
-            GlStateManager.rotate(-15.0f*(float)Math.sin(Math.toRadians(2.5f*(seed.ticksExisted+partialTicks))), 1, 0, 0);
+            GlStateManager.rotate(-15.0f*(float)Math.sin(Math.toRadians(tile.ticksExisted+partialTicks)), 1, 0, 0);
+            GlStateManager.rotate(-15.0f*(float)Math.sin(Math.toRadians(2.5f*(tile.ticksExisted+partialTicks))), 1, 0, 0);
             buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             for (int i = 0; i < 12; i += 1){
-            	if (seed.willSpawn[i]){
-	            	float offX = 0.4f * (float)Math.sin(Math.toRadians(30*i+((float)seed.ticksExisted+partialTicks)*2.0f));
-	            	float offZ = 0.4f * (float)Math.cos(Math.toRadians(30*i+((float)seed.ticksExisted+partialTicks)*2.0f));
-	            	this.drawCrystal(buffer, offX, 0, offZ, ((float)seed.ticksExisted+partialTicks)*2.0f, 0.4f*((float)seed.size/1000.0f), 0.0f, 0.0f, 0.125f, 0.25f);
+            	if (tile.willSpawn[i]){
+	            	float offX = 0.4f * (float)Math.sin(Math.toRadians(30*i+((float) tile.ticksExisted+partialTicks)*2.0f));
+	            	float offZ = 0.4f * (float)Math.cos(Math.toRadians(30*i+((float) tile.ticksExisted+partialTicks)*2.0f));
+	            	this.drawCrystal(buffer, offX, 0, offZ, ((float) tile.ticksExisted+partialTicks)*2.0f, 0.4f*((float) tile.size/1000.0f), 0.0f, 0.0f, 0.125f, 0.25f);
             	}
             }
     		tess.draw();

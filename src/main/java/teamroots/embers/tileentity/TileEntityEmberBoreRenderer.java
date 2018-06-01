@@ -17,7 +17,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
+public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer<TileEntityEmberBore> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/bore_blade.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox blade = new StructBox(-0.125,-1,-1,0.125,1,1,new StructUV[]{new StructUV(0,32,32,36,64,64),new StructUV(0,32,32,36,64,64),new StructUV(32,0,36,32,64,64),new StructUV(32,0,36,32,64,64),new StructUV(0,0,32,32,64,64),new StructUV(0,0,32,32,64,64)});
@@ -28,10 +28,9 @@ public class TileEntityEmberBoreRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (t instanceof TileEntityEmberBore){
-			TileEntityEmberBore tile = (TileEntityEmberBore)t;
-	            
+	public void render(TileEntityEmberBore tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
+
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

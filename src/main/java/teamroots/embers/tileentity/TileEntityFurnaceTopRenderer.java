@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
+public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer<TileEntityFurnaceTop> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	int blue, green, red, alpha;
 	int lightx, lighty;
@@ -28,19 +29,19 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityFurnaceTop){
-			TileEntityFurnaceTop furnace = (TileEntityFurnaceTop)tile;
-			int amount = furnace.getAmount();
-			int capacity = furnace.getCapacity();
-			Fluid fluid = furnace.getFluid();
+	public void render(TileEntityFurnaceTop tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
+			FluidStack fluidStack = tile.getFluidStack();
+			int capacity = tile.getCapacity();
+			Fluid fluid = fluidStack.getFluid();
+			int amount = fluidStack.amount;
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			for (int i = 0; i < furnace.inventory.getSlots(); i ++){
-				ItemStack stack = furnace.inventory.getStackInSlot(i);
+			for (int i = 0; i < tile.inventory.getSlots(); i ++){
+				ItemStack stack = tile.inventory.getStackInSlot(i);
 				if (!stack.isEmpty()){
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(x+0.5,y,z+0.5);
-					GlStateManager.rotate(1.0f*((float)furnace.angle+partialTicks),0,1,0);
+					GlStateManager.rotate(1.0f*((float) tile.angle+partialTicks),0,1,0);
 					EntityItem item = new EntityItem(tile.getWorld(),0,0,0,stack);
 					item.hoverStart = 0;
 					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);

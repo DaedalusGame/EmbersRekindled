@@ -19,7 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import teamroots.embers.block.BlockStampBase;
 
-public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
+public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileEntityStampBase> {
 	int blue, green, red, alpha;
 	int lightx, lighty;
 	double minU, minV, maxU, maxV, diffU, diffV;
@@ -28,15 +28,14 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityStampBase && !tile.getWorld().isAirBlock(tile.getPos())){
-			TileEntityStampBase tank = (TileEntityStampBase)tile;
-			if (tank.getWorld().getBlockState(tank.getPos()).getBlock() instanceof BlockStampBase){
-				EnumFacing face = tank.getWorld().getBlockState(tank.getPos()).getValue(BlockStampBase.facing);
-				int amount = tank.getAmount();
-				int capacity = tank.getCapacity();
+	public void render(TileEntityStampBase tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null && !tile.getWorld().isAirBlock(tile.getPos())){
+			if (tile.getWorld().getBlockState(tile.getPos()).getBlock() instanceof BlockStampBase){
+				EnumFacing face = tile.getWorld().getBlockState(tile.getPos()).getValue(BlockStampBase.facing);
+				int amount = tile.getAmount();
+				int capacity = tile.getCapacity();
 	            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				Fluid fluid = tank.getFluid();
+				Fluid fluid = tile.getFluid();
 				if (fluid != null){
 					int c = fluid.getColor();
 		            blue = c & 0xFF;
@@ -106,9 +105,9 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer {
 					GlStateManager.enableLighting();
 					GlStateManager.enableCull();
 				}
-				if (!tank.inputs.getStackInSlot(0).isEmpty()){
+				if (!tile.inputs.getStackInSlot(0).isEmpty()){
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(tank.inputs.getStackInSlot(0).getItem(),1,tank.inputs.getStackInSlot(0).getMetadata()));
+					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(tile.inputs.getStackInSlot(0).getItem(),1, tile.inputs.getStackInSlot(0).getMetadata()));
 					item.hoverStart = 0;
 					GL11.glTranslated(x, y, z);
 					GL11.glTranslated(0.5, 0.5, 0.5);

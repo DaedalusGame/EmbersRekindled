@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
+public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntityTank> {
 	int blue, green, red, alpha;
 	int lightx, lighty;
 	double minU, minV, maxU, maxV, diffU, diffV;
@@ -24,12 +24,11 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityTank){
-			TileEntityTank tank = (TileEntityTank)tile;
-			int amount = tank.getAmount();
-			int capacity = tank.getCapacity();
-			Fluid fluid = tank.getFluid();
+	public void render(TileEntityTank tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
+			int amount = tile.getAmount();
+			int capacity = tile.getCapacity();
+			Fluid fluid = tile.getFluid();
 			if (fluid != null){
 				int c = fluid.getColor();
 	            blue = c & 0xFF;

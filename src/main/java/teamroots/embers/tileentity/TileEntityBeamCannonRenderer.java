@@ -25,7 +25,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer {
+public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer<TileEntityBeamCannon> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public StructBox base = new StructBox(-2.5*(0.0625),-2.5*(0.0625),-2.5*(0.0625),2.5*(0.0625),2.5*(0.0625),2.5*(0.0625),new StructUV[]{new StructUV(0,0,5,5,16,16),new StructUV(0,0,5,5,16,16),new StructUV(0,0,5,5,16,16),new StructUV(0,0,5,5,16,16),new StructUV(0,0,5,5,16,16),new StructUV(0,0,5,5,16,16)});
@@ -40,14 +40,13 @@ public class TileEntityBeamCannonRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityBeamCannon){
-			TileEntityBeamCannon cannon = (TileEntityBeamCannon)tile;
+	public void render(TileEntityBeamCannon tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
 			float yaw = 0;
 			float pitch = 0;
-			if (cannon.target != null){
-				yaw = Misc.yawDegreesBetweenPoints(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), cannon.target.getX(), cannon.target.getY(), cannon.target.getZ());
-				pitch = Misc.pitchDegreesBetweenPoints(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), cannon.target.getX(), cannon.target.getY(), cannon.target.getZ());
+			if (tile.target != null){
+				yaw = Misc.yawDegreesBetweenPoints(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), tile.target.getX(), tile.target.getY(), tile.target.getZ());
+				pitch = Misc.pitchDegreesBetweenPoints(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), tile.target.getX(), tile.target.getY(), tile.target.getZ());
 			}
             GlStateManager.pushMatrix();
 			Minecraft.getMinecraft().renderEngine.bindTexture(texture);

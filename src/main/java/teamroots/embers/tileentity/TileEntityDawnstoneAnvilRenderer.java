@@ -11,7 +11,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityDawnstoneAnvilRenderer extends TileEntitySpecialRenderer {
+public class TileEntityDawnstoneAnvilRenderer extends TileEntitySpecialRenderer<TileEntityDawnstoneAnvil> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public TileEntityDawnstoneAnvilRenderer(){
@@ -19,13 +19,12 @@ public class TileEntityDawnstoneAnvilRenderer extends TileEntitySpecialRenderer 
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityDawnstoneAnvil){
-			TileEntityDawnstoneAnvil anvil = (TileEntityDawnstoneAnvil)tile;
+	public void render(TileEntityDawnstoneAnvil tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
 			random.setSeed(tile.getWorld().getSeed());
-			if (!anvil.inventory.getStackInSlot(0).isEmpty()){
+			if (!tile.inventory.getStackInSlot(0).isEmpty()){
 				GL11.glPushMatrix();
-				EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(anvil.inventory.getStackInSlot(0).getItem(),1,anvil.inventory.getStackInSlot(0).getMetadata()));
+				EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(tile.inventory.getStackInSlot(0).getItem(),1, tile.inventory.getStackInSlot(0).getMetadata()));
 				item.hoverStart = 0;
 				GL11.glTranslated(x, y+1.0f, z);
 				GL11.glTranslated(0.5, 0, 0.5);
@@ -37,9 +36,9 @@ public class TileEntityDawnstoneAnvilRenderer extends TileEntitySpecialRenderer 
 				Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
 				GL11.glPopMatrix();
 			}
-			if (!anvil.inventory.getStackInSlot(1).isEmpty()){
+			if (!tile.inventory.getStackInSlot(1).isEmpty()){
 				GL11.glPushMatrix();
-				EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(anvil.inventory.getStackInSlot(1).getItem(),1,anvil.inventory.getStackInSlot(1).getMetadata()));
+				EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(tile.inventory.getStackInSlot(1).getItem(),1, tile.inventory.getStackInSlot(1).getMetadata()));
 				item.hoverStart = 0;
 				GL11.glTranslated(x, y+1.0625f, z);
 				GL11.glTranslated(0.5, 0, 0.5);

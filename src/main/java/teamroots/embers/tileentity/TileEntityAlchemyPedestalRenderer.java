@@ -22,7 +22,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer {
+public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer<TileEntityAlchemyPedestal> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/ash.png");
@@ -31,22 +31,21 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 	}
 	
 	@Override
-	public void render(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile instanceof TileEntityAlchemyPedestal){
+	public void render(TileEntityAlchemyPedestal tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null){
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			TileEntityAlchemyPedestal pedestal = (TileEntityAlchemyPedestal)tile;
-			if (!pedestal.inventory.getStackInSlot(1).isEmpty()){
+			if (!tile.inventory.getStackInSlot(1).isEmpty()){
 				if (Minecraft.getMinecraft().world != null){
 					GL11.glPushMatrix();
 					GL11.glTranslated(x+0.5, y+0.75, z+0.5);
-					GL11.glRotated(pedestal.angle+((pedestal.turnRate))*partialTicks, 0, 1.0, 0);
-					Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(pedestal.inventory.getStackInSlot(1).getItem(),1,pedestal.inventory.getStackInSlot(1).getMetadata()), TransformType.GROUND);
+					GL11.glRotated(tile.angle+((tile.turnRate))*partialTicks, 0, 1.0, 0);
+					Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(tile.inventory.getStackInSlot(1).getItem(),1, tile.inventory.getStackInSlot(1).getMetadata()), TransformType.GROUND);
 					GL11.glPopMatrix();
 				}
 			}
 			
-			if (!pedestal.inventory.getStackInSlot(0).isEmpty()){
-				float coeff = pedestal.inventory.getStackInSlot(0).getCount()/64.0f;
+			if (!tile.inventory.getStackInSlot(0).isEmpty()){
+				float coeff = tile.inventory.getStackInSlot(0).getCount()/64.0f;
 	            
 	            Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	            Tessellator tess = Tessellator.getInstance();

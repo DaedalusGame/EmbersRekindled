@@ -20,7 +20,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
 
-public class TileEntityAutoHammerRenderer extends TileEntitySpecialRenderer {
+public class TileEntityAutoHammerRenderer extends TileEntitySpecialRenderer<TileEntityAutoHammer> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/auto_hammer.png");
 	public int lightx = 0, lighty = 0;
 	public StructBox hammerShaft = new StructBox(-0.0625,0,-0.0625,0.0625,0.625,0.0625,new StructUV[]{new StructUV(1,1,3,3,16,16),new StructUV(2,2,4,4,16,16),new StructUV(0,4,2,14,16,16),new StructUV(0,4,2,14,16,16),new StructUV(0,4,2,14,16,16),new StructUV(0,4,2,14,16,16)});
@@ -31,9 +31,9 @@ public class TileEntityAutoHammerRenderer extends TileEntitySpecialRenderer {
 	}
 	
 	@Override
-	public void render(TileEntity t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (t instanceof TileEntityAutoHammer && t.getWorld().getBlockState(t.getPos()).getBlock() == RegistryManager.auto_hammer){
-			float progress = ((TileEntityAutoHammer)t).progress;
+	public void render(TileEntityAutoHammer tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+		if (tile != null && tile.getWorld().getBlockState(tile.getPos()).getBlock() == RegistryManager.auto_hammer){
+			float progress = tile.progress;
 	            
 			GlStateManager.pushMatrix();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -42,7 +42,7 @@ public class TileEntityAutoHammerRenderer extends TileEntitySpecialRenderer {
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
             GlStateManager.translate(x, y, z);
-            EnumFacing facing = t.getWorld().getBlockState(t.getPos()).getValue(BlockAutoHammer.facing);
+            EnumFacing facing = tile.getWorld().getBlockState(tile.getPos()).getValue(BlockAutoHammer.facing);
             float angle = 0;
             if (facing == EnumFacing.SOUTH){
             	angle = 180;

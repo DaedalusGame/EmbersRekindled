@@ -19,11 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -130,6 +126,14 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 		super.markDirty();
 	}
 
+	public int getCapacity(){
+		return tank.getCapacity();
+	}
+
+	public FluidStack getFluidStack() {
+		return tank.getFluid();
+	}
+
 	public FluidTank getTank() {
 		return tank;
 	}
@@ -140,11 +144,6 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 			return tank.getFluid().getFluid();
 		}
 		return null;
-	}
-
-	@Deprecated
-	public int getCapacity(){
-		return tank.getCapacity();
 	}
 
 	@Deprecated
