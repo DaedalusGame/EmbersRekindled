@@ -267,16 +267,18 @@ item.shovel_tin.name=Tin Shovel
 item.sword_tin.name=Tin Sword
 fluid.tin=Molten Tin
 
+embers.aspect.iron=Iron
+embers.aspect.copper=Copper
+embers.aspect.dawnstone=Dawnstone
+embers.aspect.lead=Lead
+embers.aspect.silver=Silver
+
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
 embers.tooltip.itemdial.slot=Slot {0}
 embers.tooltip.itemdial.noitem=NONE
 embers.tooltip.emberdial.ember=Ember: 
-embers.tooltip.iron_accuracy=Iron Inaccuracy: 
-embers.tooltip.copper_accuracy=Copper Inaccuracy: 
-embers.tooltip.lead_accuracy=Lead Inaccuracy: 
-embers.tooltip.silver_accuracy=Silver Inaccuracy: 
-embers.tooltip.dawnstone_accuracy=Dawnstone Inaccuracy: 
+embers.tooltip.accuracy=%s Inaccuracy: %d
 embers.tooltip.inflictor=Attuned Damage: 
 embers.tooltip.tyrfing=Deals damage based on the target's armor.
 embers.tooltip.heat_amount=Heat:

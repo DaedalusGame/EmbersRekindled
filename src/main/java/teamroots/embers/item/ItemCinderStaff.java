@@ -9,9 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.SoundManager;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
@@ -32,8 +34,12 @@ public class ItemCinderStaff extends ItemBase {
 			double charge = ((Math.min(60, 72000-timeLeft))/60.0)*17.0;
 			float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
 			EntityEmberProjectile proj = new EntityEmberProjectile(world);
-			proj.initCustom(entity.posX+entity.getLookVec().x*spawnDistance,entity.posY+entity.getEyeHeight()+entity.getLookVec().y*spawnDistance,entity.posZ+entity.getLookVec().z*spawnDistance,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, charge, entity.getUniqueID());
+			double posX = entity.posX + entity.getLookVec().x * spawnDistance;
+			double posY = entity.posY + entity.getEyeHeight() + entity.getLookVec().y * spawnDistance;
+			double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
+			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, charge, entity.getUniqueID());
 			world.spawnEntity(proj);
+			world.playSound(null,posX,posY,posZ, SoundManager.FIREBALL_BIG, SoundCategory.PLAYERS, 1.0f, 1.0f);
 		}
 		stack.getTagCompound().setInteger("cooldown", COOLDOWN);
 	}

@@ -19,10 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -40,6 +37,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.tile.IEmberInjectable;
 import teamroots.embers.block.BlockBreaker;
 import teamroots.embers.block.BlockItemTransfer;
@@ -152,6 +150,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 					float offX = 0.4f*(float)Math.sin(Math.toRadians(i*30.0));
 					float offZ = 0.4f*(float)Math.cos(Math.toRadians(i*30.0));
 					world.spawnEntity(new EntityItem(world,getPos().getX()+0.5+offX,getPos().getY()+0.5f,getPos().getZ()+0.5+offZ,nuggetStack));
+					world.playSound(null,getPos().getX()+0.5+offX,getPos().getY()+0.5f,getPos().getZ()+0.5+offZ, SoundManager.METAL_SEED_PING, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				}
 			}
 			markDirty();

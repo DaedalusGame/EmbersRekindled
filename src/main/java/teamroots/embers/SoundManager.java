@@ -45,6 +45,11 @@ public class SoundManager {
     public static SoundEvent MELTER_LOOP;
     @GameRegistry.ObjectHolder("embers:block.mixer.loop")
     public static SoundEvent MIXER_LOOP;
+    @GameRegistry.ObjectHolder("embers:block.metal_seed.loop")
+    public static SoundEvent METAL_SEED_LOOP;
+    @GameRegistry.ObjectHolder("embers:block.metal_seed.ping")
+    public static SoundEvent METAL_SEED_PING;
+
     @GameRegistry.ObjectHolder("embers:fireball.big.fire")
     public static SoundEvent FIREBALL_BIG;
     @GameRegistry.ObjectHolder("embers:fireball.big.hit")
@@ -53,10 +58,19 @@ public class SoundManager {
     public static SoundEvent FIREBALL;
     @GameRegistry.ObjectHolder("embers:fireball.small.hit")
     public static SoundEvent FIREBALL_HIT;
+
     @GameRegistry.ObjectHolder("embers:item.blazing_ray.fire")
     public static SoundEvent BLAZING_RAY_FIRE;
     @GameRegistry.ObjectHolder("embers:item.blazing_ray.empty")
     public static SoundEvent BLAZING_RAY_EMPTY;
+
+    @GameRegistry.ObjectHolder("embers:item.cinder_staff.charge")
+    public static SoundEvent CINDER_STAFF_CHARGE;
+    @GameRegistry.ObjectHolder("embers:item.cinder_staff.fail")
+    public static SoundEvent CINDER_STAFF_FAIL;
+    @GameRegistry.ObjectHolder("embers:item.cinder_staff.loop")
+    public static SoundEvent CINDER_STAFF_LOOP;
+
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.step")
     public static SoundEvent ANCIENT_GOLEM_STEP;
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.hurt")
@@ -85,12 +99,17 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.melter.loop"));
         event.getRegistry().register(registerSound("block.mixer.loop"));
         event.getRegistry().register(registerSound("block.plinth.loop"));
+        event.getRegistry().register(registerSound("block.metal_seed.loop"));
+        event.getRegistry().register(registerSound("block.metal_seed.ping"));
         event.getRegistry().register(registerSound("fireball.small.fire"));
         event.getRegistry().register(registerSound("fireball.small.hit"));
         event.getRegistry().register(registerSound("fireball.big.fire"));
         event.getRegistry().register(registerSound("fireball.big.hit"));
         event.getRegistry().register(registerSound("item.blazing_ray.fire"));
         event.getRegistry().register(registerSound("item.blazing_ray.empty"));
+        event.getRegistry().register(registerSound("item.cinder_staff.charge"));
+        event.getRegistry().register(registerSound("item.cinder_staff.fail"));
+        event.getRegistry().register(registerSound("item.cinder_staff.loop"));
         event.getRegistry().register(registerSound("entity.ancient_golem.death"));
         event.getRegistry().register(registerSound("entity.ancient_golem.hurt"));
         event.getRegistry().register(registerSound("entity.ancient_golem.step"));

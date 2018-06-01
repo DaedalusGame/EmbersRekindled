@@ -201,6 +201,24 @@
     ],
     "subtitle": "subtitles.blazing_ray.empty"
   },
+  "item.cinder_staff.charge": {
+    "sounds": [
+      "embers:cinder_staff_charge"
+    ],
+    "subtitle": "subtitles.blazing_ray.empty"
+  },
+  "item.cinder_staff.fail": {
+    "sounds": [
+      "embers:cinder_staff_fail"
+    ],
+    "subtitle": "subtitles.blazing_ray.empty"
+  },
+  "item.cinder_staff.loop": {
+    "sounds": [
+      "embers:cinder_staff_hold_loop"
+    ],
+    "subtitle": "subtitles.blazing_ray.empty"
+  },
   "entity.ancient_golem.death": {
     "sounds": [
       "embers:agolem_die"

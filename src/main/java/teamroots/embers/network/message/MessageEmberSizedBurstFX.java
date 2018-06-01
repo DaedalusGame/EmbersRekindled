@@ -3,12 +3,14 @@ package teamroots.embers.network.message;
 import java.util.Random;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.SoundManager;
 import teamroots.embers.particle.ParticleUtil;
 
 public class MessageEmberSizedBurstFX implements IMessage {
@@ -52,6 +54,7 @@ public class MessageEmberSizedBurstFX implements IMessage {
     		if (ctx.side == Side.CLIENT){
 	    		Minecraft.getMinecraft().addScheduledTask(()-> {
 	    			World world = Minecraft.getMinecraft().world;
+					world.playSound(message.posX, message.posY, message.posZ, SoundManager.FIREBALL_BIG_HIT, SoundCategory.NEUTRAL, 1.0f, 1.0f, false);
 					for (int k = 0; k < 80; k ++){
 						ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 1.0f, (float)message.value, 24);
 					}

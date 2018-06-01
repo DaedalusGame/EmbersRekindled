@@ -21,7 +21,7 @@ import teamroots.embers.itemmod.ModifierBase.EnumType;
 public class ItemModUtil {
 	public static final String HEAT_TAG = Embers.MODID+":heat_tag";
 	
-	public static Map<Item, ModifierBase> modifierRegistry = new HashMap<Item, ModifierBase>();
+	public static Map<Item, ModifierBase> modifierRegistry = new HashMap<>();
 	
 	public static void init(){
 		modifierRegistry.put(RegistryManager.ancient_motive_core, new ModifierCore());
@@ -49,16 +49,8 @@ public class ItemModUtil {
 	
 	public static boolean isModValid(ItemStack stack, ItemStack mod){
 		ModifierBase b = modifierRegistry.get(mod.getItem());
-		if (b.type == EnumType.ALL){
-			return true;
-		}
-		else if (b.type == EnumType.ARMOR){
-			return stack.getItem() instanceof ItemArmor;
-		}
-		else if (b.type == EnumType.TOOL){
-			return stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemTool;
-		}
-		return false;
+
+		return b.canApplyTo(stack);
 	}
 	
 	public static boolean hasModifier(ItemStack stack, String name){
