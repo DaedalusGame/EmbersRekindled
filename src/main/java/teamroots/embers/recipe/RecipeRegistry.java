@@ -98,6 +98,8 @@ public class RecipeRegistry {
 	}
 	
 	public void initOreDict(){
+		OreDictionary.registerOre("dustAsh", RegistryManager.dust_ash);
+		OreDictionary.registerOre("dustAshes", RegistryManager.dust_ash);
 		OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
 		OreDictionary.registerOre("ingotCopper", RegistryManager.ingot_copper);
 		OreDictionary.registerOre("ingotLead", RegistryManager.ingot_lead);

@@ -10,7 +10,6 @@ import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,12 +18,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.block.BlockEmberPulser;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -32,15 +31,18 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketProducer;
 import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.TileEntityItemExtractor.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer {
+	public static final double PULL_RATE = 100.0;
+	public static final double TRANSFER_RATE = 400.0;
+
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public BlockPos target = null;
 	public long ticksExisted = 0;
 	Random random = new Random();
 	int offset = random.nextInt(40);
+
 	public enum EnumConnection{
 		NONE, LEVER
 	}
@@ -119,33 +121,9 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 	}
-	
+
 	public EnumConnection getConnection(IBlockAccess world, BlockPos pos, EnumFacing side){
-		if (world.getBlockState(pos).getBlock() == Blocks.LEVER){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
-			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
-				return EnumConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.STONE_BUTTON){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockButton.FACING);
-			if (face == Misc.getOppositeVerticalFace(side)){
-				return EnumConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
-			if (face == Misc.getOppositeVerticalFace(side)){
-				return EnumConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == RegistryManager.caminite_lever){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
-			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
-				return EnumConnection.LEVER;
-			}
-		}
-		return EnumConnection.NONE;
+		return Misc.isValidLever(world,pos,side) ? EnumConnection.LEVER : EnumConnection.NONE;
 	}
 	
 	public boolean dirty = false;
@@ -176,61 +154,55 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 	@Override
 	public void update() {
 		this.ticksExisted ++;
-		if (ticksExisted % 5 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberPulser.facing),-1)) != null){
-			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberPulser.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
-				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberPulser.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockEmberPulser.facing);
+		TileEntity attachedTile = getWorld().getTileEntity(getPos().offset(facing.getOpposite()));
+		if (ticksExisted % 5 == 0 && attachedTile != null){
+			if (attachedTile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+				IEmberCapability cap = attachedTile.getCapability(EmberCapabilityProvider.emberCapability, null);
 				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
-					double removed = cap.removeAmount(100, true);
-					double added = capability.addAmount(removed, true);
+					double removed = cap.removeAmount(PULL_RATE, true);
+					capability.addAmount(removed, true);
 					markDirty();
-					BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberPulser.facing),-1);
-					getWorld().getTileEntity(offset).markDirty();
-					if (!getWorld().isRemote && !(getWorld().getTileEntity(offset) instanceof ITileEntityBase)){
-						world.getTileEntity(offset).markDirty();
-						EventManager.markTEForUpdate(offset,world.getTileEntity(offset));
-					}
+					attachedTile.markDirty();
 				}
 			}
 		}
-		if ((this.ticksExisted+offset) % 20 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && target != null && !getWorld().isRemote && this.capability.getEmber() > 100){
-			if (getWorld().getTileEntity(target) instanceof IEmberPacketReceiver){
-				if (!(((IEmberPacketReceiver)getWorld().getTileEntity(target)).isFull())){
+		if ((this.ticksExisted+offset) % 20 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && target != null && !getWorld().isRemote && this.capability.getEmber() > PULL_RATE){
+			TileEntity targetTile = getWorld().getTileEntity(target);
+			if (targetTile instanceof IEmberPacketReceiver){
+				if (!(((IEmberPacketReceiver) targetTile).isFull())){
 					EntityEmberPacket packet = new EntityEmberPacket(getWorld());
-					IBlockState state = getWorld().getBlockState(getPos());
-					double vx = 0, vy = 0, vz = 0;
-		
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.UP){
-						vy = 0.5;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.DOWN){
-						vy = -0.5;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.NORTH){
-						vz = -0.5;
-						vy = -0.01;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.SOUTH){
-						vz = 0.5;
-						vy = -0.01;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.WEST){
-						vx = -0.5;
-						vy = -0.01;
-					}
-					if (state.getValue(BlockEmberEmitter.facing) == EnumFacing.EAST){
-						vx = 0.5;
-						vy = -0.01;
-					}
-					
-					packet.initCustom(getPos(), target, vx, vy, vz, Math.min(400.0,capability.getEmber()));
-					this.capability.removeAmount(Math.min(400.0,capability.getEmber()), true);
+					Vec3d velocity = getBurstVelocity(facing);
+					packet.initCustom(getPos(), target, velocity.x, velocity.y, velocity.z, Math.min(TRANSFER_RATE,capability.getEmber()));
+					this.capability.removeAmount(Math.min(TRANSFER_RATE,capability.getEmber()), true);
 					getWorld().spawnEntity(packet);
 					markDirty();
 				}
 			}
 		}
 	}
-	
+
+	private Vec3d getBurstVelocity(EnumFacing facing) {
+		switch(facing)
+        {
+            case DOWN:
+                return new Vec3d(0, -0.5, 0);
+            case UP:
+				return new Vec3d(0, 0.5, 0);
+            case NORTH:
+				return new Vec3d(0, -0.01, -0.5);
+            case SOUTH:
+				return new Vec3d(0, -0.01, 0.5);
+            case WEST:
+				return new Vec3d(-0.5, -0.01, 0);
+            case EAST:
+				return new Vec3d(0.5, -0.01, 0);
+			default:
+				return Vec3d.ZERO;
+        }
+	}
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
 		if (capability == EmberCapabilityProvider.emberCapability){

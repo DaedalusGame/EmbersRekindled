@@ -28,9 +28,12 @@ import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.power.IEmberPacketReceiver;
 
 public class TileEntityReceiver extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketReceiver {
+	public static final int TRANSFER_RATE = 10;
+
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	long ticksExisted = 0;
+
 	public TileEntityReceiver(){
 		super();
 		capability.setEmberCapacity(2000);
@@ -80,19 +83,22 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void update() {
 		this.ticksExisted ++;
-		if (ticksExisted % 2 == 0 && getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)) != null){
-			if (getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).hasCapability(EmberCapabilityProvider.emberCapability, null)){
-				IEmberCapability cap = getWorld().getTileEntity(getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1)).getCapability(EmberCapabilityProvider.emberCapability, null);
+		BlockPos pos = getPos();
+		IBlockState state = getWorld().getBlockState(pos);
+		EnumFacing facing = state.getValue(BlockEmberEmitter.facing);
+		TileEntity attachedTile = getWorld().getTileEntity(pos.offset(facing.getOpposite()));
+		if (ticksExisted % 2 == 0 && attachedTile != null){
+			if (attachedTile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+				IEmberCapability cap = attachedTile.getCapability(EmberCapabilityProvider.emberCapability, null);
 				if (cap != null){
 					if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
-						double added = cap.addAmount(Math.min(10,capability.getEmber()), true);
-						double removed = capability.removeAmount(added, true);
+						double added = cap.addAmount(Math.min(TRANSFER_RATE,capability.getEmber()), true);
+						capability.removeAmount(added, true);
 						markDirty();
-						BlockPos offset = getPos().offset(getWorld().getBlockState(getPos()).getValue(BlockEmberEmitter.facing),-1);
-						getWorld().getTileEntity(offset).markDirty();
-						if (!(getWorld().getTileEntity(offset) instanceof ITileEntityBase) && !getWorld().isRemote){
-							world.getTileEntity(offset).markDirty();
-							EventManager.markTEForUpdate(offset,world.getTileEntity(offset));
+
+						attachedTile.markDirty();
+						if (!getWorld().isRemote){
+							attachedTile.markDirty();
 						}
 					}
 				}

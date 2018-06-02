@@ -54,7 +54,7 @@ public class MessageEmberSizedBurstFX implements IMessage {
     		if (ctx.side == Side.CLIENT){
 	    		Minecraft.getMinecraft().addScheduledTask(()-> {
 	    			World world = Minecraft.getMinecraft().world;
-					world.playSound(message.posX, message.posY, message.posZ, SoundManager.FIREBALL_BIG_HIT, SoundCategory.NEUTRAL, 1.0f, 1.0f, false);
+					world.playSound(message.posX, message.posY, message.posZ, message.value > 7.0 ? SoundManager.FIREBALL_BIG_HIT : SoundManager.FIREBALL_HIT, SoundCategory.NEUTRAL, 1.0f, 1.0f, false);
 					for (int k = 0; k < 80; k ++){
 						ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 1.0f, (float)message.value, 24);
 					}

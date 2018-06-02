@@ -1,5 +1,9 @@
 package teamroots.embers.proxy;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -15,7 +19,6 @@ import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.ItemModUtil;
 
 public class CommonProxy {
-	
 	public void preInit(FMLPreInitializationEvent event){
 		Fields.init();
 		PacketHandler.registerMessages();
@@ -26,10 +29,15 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent event){
+		//NOOP
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){
 		NetworkRegistry.INSTANCE.registerGuiHandler(Embers.instance, new GuiHandler());
 		RecipeRegistry.mergeOreRecipes();
+	}
+
+	public void playItemSound(EntityLivingBase entity, Item item, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch) {
+		//NOOP
 	}
 }

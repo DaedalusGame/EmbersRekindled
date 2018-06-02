@@ -176,15 +176,15 @@
   },
   "fireball.big.fire": {
     "sounds": [
-      "embers:fireball_small_launch1",
-      "embers:fireball_small_launch2"
+      "embers:fireball_big_launch1",
+      "embers:fireball_big_launch2"
     ],
     "subtitle": "subtitles.fireball.big.fire"
   },
   "fireball.big.hit": {
     "sounds": [
-      "embers:fireball_small_hit1",
-      "embers:fireball_small_hit2"
+      "embers:fireball_big_hit1",
+      "embers:fireball_big_hit2"
     ],
     "subtitle": "subtitles.fireball.big.hit"
   },

@@ -13,6 +13,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.particle.ParticleUtil;
@@ -39,7 +40,7 @@ public class ItemCinderStaff extends ItemBase {
 			double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
 			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, charge, entity.getUniqueID());
 			world.spawnEntity(proj);
-			world.playSound(null,posX,posY,posZ, SoundManager.FIREBALL_BIG, SoundCategory.PLAYERS, 1.0f, 1.0f);
+			world.playSound(null,posX,posY,posZ, charge > 10.0 ? SoundManager.FIREBALL_BIG : SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
 		}
 		stack.getTagCompound().setInteger("cooldown", COOLDOWN);
 	}
@@ -71,7 +72,7 @@ public class ItemCinderStaff extends ItemBase {
 			ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float)player.posX+spawnDistance*(float)player.getLookVec().x+(itemRand.nextFloat()*0.1f-0.05f), (float)player.posY+player.getEyeHeight()+spawnDistance*(float)player.getLookVec().y+(itemRand.nextFloat()*0.1f-0.05f), (float)player.posZ+spawnDistance*(float)player.getLookVec().z+(itemRand.nextFloat()*0.1f-0.05f), 0, 0, 0, 255, 64, 16, (float)charge/1.75f, 24);
 		}
 	}
-	
+
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack){
 		return 72000;
@@ -88,6 +89,10 @@ public class ItemCinderStaff extends ItemBase {
 		if (EmberInventoryUtil.getEmberTotal(player) >= EMBER_COST && stack.getTagCompound().getInteger("cooldown") <= 0 || player.capabilities.isCreativeMode){
 			EmberInventoryUtil.removeEmber(player, EMBER_COST);
 			player.setActiveHand(hand);
+			if(world.isRemote) {
+				Embers.proxy.playItemSound(player, this, SoundManager.CINDER_STAFF_CHARGE, SoundCategory.PLAYERS, false, 1.0f, 1.0f);
+				Embers.proxy.playItemSound(player, this, SoundManager.CINDER_STAFF_LOOP, SoundCategory.PLAYERS, true, 1.0f, 1.0f);
+			}
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 		return new ActionResult<>(EnumActionResult.FAIL, stack);
