@@ -782,7 +782,7 @@ public class RecipeRegistry {
 		event.getRegistry().register(new ShapedOreRecipe(getRL("archaic_bricks"),new ItemStack(RegistryManager.archaic_bricks,4),true,new Object[]{
 				"BB",
 				"BB",
-				'B', RegistryManager.archaic_tile}).setRegistryName(getRL("archaic_bricks")));
+				'B', RegistryManager.archaic_tile}).setRegistryName(getRL("archaic_bricks_2")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("breaker"),new ItemStack(RegistryManager.breaker,1),true,new Object[]{
 				"PIP",
 				"LRL",
