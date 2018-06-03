@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.util.NonNullList;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -171,7 +172,41 @@ public class EventManager {
 			}
 		}
 	}
-	
+
+	private static ThreadLocal<Boolean> captureDrops = ThreadLocal.withInitial(() -> false);
+	private static ThreadLocal<NonNullList<ItemStack>> capturedDrops = ThreadLocal.withInitial(NonNullList::create);
+
+	public static NonNullList<ItemStack> captureDrops(boolean start)
+	{
+		if (start)
+		{
+			captureDrops.set(true);
+			capturedDrops.get().clear();
+			return NonNullList.create();
+		}
+		else
+		{
+			captureDrops.set(false);
+			return capturedDrops.get();
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void captureDrops(HarvestDropsEvent event) {
+		World world = event.getWorld();
+		if(world.isRemote)
+			return;
+		float chance = event.getDropChance();
+		if(captureDrops.get()) {
+			NonNullList<ItemStack> stacks = capturedDrops.get();
+			for(ItemStack stack : event.getDrops()) {
+				if(stack != null && !stack.isEmpty() && world.rand.nextFloat() <= chance)
+					stacks.add(stack);
+			}
+			event.getDrops().clear();
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTextureStitch(TextureStitchEvent event){
