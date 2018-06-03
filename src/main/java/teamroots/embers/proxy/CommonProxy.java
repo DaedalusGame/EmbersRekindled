@@ -25,7 +25,6 @@ public class CommonProxy {
 		RegistryManager.registerAll();
 		EmberGenUtil.init();
 		ItemModUtil.init();
-		ResearchManager.initResearches();
 	}
 	
 	public void init(FMLInitializationEvent event){
@@ -33,6 +32,7 @@ public class CommonProxy {
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){
+		ResearchManager.initResearches();
 		NetworkRegistry.INSTANCE.registerGuiHandler(Embers.instance, new GuiHandler());
 		RecipeRegistry.mergeOreRecipes();
 	}
