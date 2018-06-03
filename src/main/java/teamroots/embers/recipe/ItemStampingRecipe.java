@@ -73,8 +73,11 @@ public class ItemStampingRecipe {
 		return matches(input,fluid,EnumStampType.getStack(type));
 	}
 
-	public boolean matches(ItemStack input, FluidStack fluid, ItemStack stamp) {
-		return this.input.apply(input) && this.stamp.apply(stamp) && (fluid == null || ((exactMatch ? fluid.isFluidEqual(fluid) : fluid.getFluid() == fluid.getFluid())));
+	public boolean matches(ItemStack item, FluidStack fluid, ItemStack stamp) {
+		FluidStack inputFluid = this.fluid;
+		boolean hasEnoughFluid = inputFluid == null || (fluid != null && fluid.amount >= inputFluid.amount);
+		boolean fluidMatches = inputFluid == null || (fluid != null && (exactMatch ? inputFluid.isFluidEqual(fluid) : inputFluid.getFluid() == fluid.getFluid()));
+		return this.input.apply(item) && this.stamp.apply(stamp) && fluidMatches && hasEnoughFluid;
 	}
 
 	public ItemStack getResult(TileEntity tile, ItemStack input, FluidStack fluid, ItemStack stamp) {
