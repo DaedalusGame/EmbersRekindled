@@ -46,9 +46,11 @@ public class MessageTyrfingBurstFX implements IMessage {
         @Override
         public IMessage onMessage(final MessageTyrfingBurstFX message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
-			for (int k = 0; k < 80; k ++){
-				ParticleUtil.spawnParticleTyrfing(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 4.0f, 24);
-			}
+			Minecraft.getMinecraft().addScheduledTask(()-> {
+				for (int k = 0; k < 80; k++) {
+					ParticleUtil.spawnParticleTyrfing(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 4.0f, 24);
+				}
+			});
     		return null;
         }
     }

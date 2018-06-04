@@ -54,11 +54,13 @@ public class MessageAnvilSparksFX implements IMessage {
         @Override
         public IMessage onMessage(final MessageAnvilSparksFX message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
-    		for (float a = 0; a < 1.0f; a += random.nextFloat()*4.0f){
-    			if (a < random.nextFloat()*4.0f){
-    				ParticleUtil.spawnParticleSpark(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(random.nextFloat()-0.5f), 0.0625f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);
-    			}
-    		}
+			Minecraft.getMinecraft().addScheduledTask(()-> {
+				for (float a = 0; a < 1.0f; a += random.nextFloat() * 4.0f) {
+					if (a < random.nextFloat() * 4.0f) {
+						ParticleUtil.spawnParticleSpark(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (random.nextFloat() - 0.5f), 0.0625f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
+					}
+				}
+			});
     		return null;
         }
     }

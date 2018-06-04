@@ -112,8 +112,12 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 				}
 			}
 			if (getEntityWorld().isRemote){
-				for (double i = 0; i < 9; i ++){
-					double coeff = i/9.0;
+				double deltaX = posX - prevPosX;
+				double deltaY = posY - prevPosY;
+				double deltaZ = posZ - prevPosZ;
+				double dist = Math.ceil(Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ));
+				for (double i = 0; i < dist; i ++){
+					double coeff = i/dist;
 					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f, 24);
 				}
 			}

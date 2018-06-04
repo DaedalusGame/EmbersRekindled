@@ -147,11 +147,15 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 
 	public void fire() {
 		Vec3d ray = (new Vec3d(target.getX()-getPos().getX(),target.getY()-getPos().getY(),target.getZ()-getPos().getZ())).normalize();
+		double impactDist = Double.POSITIVE_INFINITY;
 		if (!getWorld().isRemote){
 			float damage = 25.0f;
 			double posX = getPos().getX()+0.5;
 			double posY = getPos().getY()+0.5;
 			double posZ = getPos().getZ()+0.5;
+			double startX = posX;
+			double startY = posY;
+			double startZ = posZ;
 			boolean doContinue = true;
 			for (int i = 0; i < 640 && doContinue; i++){
 				posX += ray.x*0.1;
@@ -176,12 +180,15 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 				for (EntityLivingBase rawEntity : rawEntities) {
 					rawEntity.attackEntityFrom(RegistryManager.damage_ember, damage);
 				}
-				if(!doContinue)
-					world.playSound(null,posX,posY,posZ, SoundManager.BEAM_CANNON_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+				if(!doContinue) {
+					world.playSound(null, posX, posY, posZ, SoundManager.BEAM_CANNON_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+					impactDist = i;
+				}
 			}
+			PacketHandler.INSTANCE.sendToAll(new MessageBeamCannonFX(startX,startY,startZ,ray.x,ray.y,ray.z,impactDist));
 			this.capability.setEmber(0);
 			markDirty();
-			PacketHandler.INSTANCE.sendToAll(new MessageBeamCannonFX(this));
+
 			world.playSound(null,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5, SoundManager.BEAM_CANNON_FIRE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		}
 	}

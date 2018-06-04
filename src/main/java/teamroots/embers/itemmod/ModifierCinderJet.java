@@ -43,7 +43,7 @@ public class ModifierCinderJet extends ModifierBase {
 	public void onLivingTick(LivingUpdateEvent event){
 		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().world.isRemote){
 			UUID id = event.getEntity().getUniqueID();
-			if (this.sprinting.containsKey(id)){
+			if (sprinting.containsKey(id)){
 				if (event.getEntity().isSprinting() && !sprinting.get(id)){
 					int level = ItemModUtil.getArmorMod((EntityPlayer)event.getEntity(), ItemModUtil.modifierRegistry.get(RegistryManager.jet_augment).name);
 					float dashStrength = (float)(2.0*(Math.atan(0.6*(level))/(1.25)));

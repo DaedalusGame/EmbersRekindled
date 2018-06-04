@@ -3,6 +3,7 @@ package teamroots.embers.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.BlockPurpurSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,6 +41,10 @@ public class ItemIgnitionCannon extends ItemBase {
 		double posY = entity.posY+entity.getEyeHeight()-0.2+entity.getLookVec().y;
 		double posZ = entity.posZ+entity.getLookVec().z+handmod*(entity.width/2.0)*Math.cos(Math.toRadians(-entity.rotationYaw-90));
 
+		double startX = posX;
+		double startY = posY;
+		double startZ = posZ;
+
 		double targX = entity.posX+entity.getLookVec().x*MAX_DISTANCE+(MAX_SPREAD*(1.0-charge)*(itemRand.nextFloat()-0.5));
 		double targY = entity.posY+entity.getLookVec().y*MAX_DISTANCE+(MAX_SPREAD*(1.0-charge)*(itemRand.nextFloat()-0.5));
 		double targZ = entity.posZ+entity.getLookVec().z*MAX_DISTANCE+(MAX_SPREAD*(1.0-charge)*(itemRand.nextFloat()-0.5));
@@ -49,10 +54,8 @@ public class ItemIgnitionCannon extends ItemBase {
 		double dZ = targZ-posZ;
 		boolean doContinue = true;
 
-		if (!world.isRemote){
-			PacketHandler.INSTANCE.sendToAll(new MessageCannonBeamFX(entity.getUniqueID(),posX,posY,posZ,dX,dY,dZ));
-		}
 		world.playSound(null,entity.posX,entity.posY,entity.posZ, SoundManager.BLAZING_RAY_FIRE, SoundCategory.PLAYERS, 1.0f, 1.0f);
+		double impactDist = Double.POSITIVE_INFINITY;
 		for (double i = 0; i < 384.0 && doContinue; i ++){
 			posX += i*dX/384.0;
 			posY += i*dY/384.0;
@@ -76,8 +79,15 @@ public class ItemIgnitionCannon extends ItemBase {
 				entities.get(0).knockBack(entity, 0.5f, -dX, -dZ);
 				doContinue = false;
 			}
+			if(!doContinue) {
+				world.playSound(null,posX,posY,posZ, SoundManager.FIREBALL_BIG_HIT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+				impactDist = i;
+			}
 		}
-		world.playSound(null,posX,posY,posZ, SoundManager.FIREBALL_BIG_HIT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+		if (!world.isRemote){
+			PacketHandler.INSTANCE.sendToAll(new MessageCannonBeamFX(startX,startY,startZ,dX,dY,dZ,impactDist));
+		}
 		stack.getTagCompound().setInteger("cooldown", COOLDOWN);
 	}
 	

@@ -47,20 +47,22 @@ public class MessageSuperheatFX implements IMessage {
         @Override
         public IMessage onMessage(final MessageSuperheatFX message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
-			for (int j = 0; j < 8; j ++){
-				float pitch = random.nextFloat()*360.0f;
-				float yaw = random.nextFloat()*360.0f;
-				for (float i = 0; i < 0.8; i += 0.05f){
-					float tx = (float)message.posX + i*(float)Math.sin(Math.toRadians(yaw))*(float)Math.sin(Math.toRadians(pitch));
-					float ty = (float)message.posY + i*(float)Math.cos(Math.toRadians(pitch));
-					float tz = (float)message.posZ + i*(float)Math.cos(Math.toRadians(yaw))*(float)Math.sin(Math.toRadians(pitch));
-					float coeff = i/0.8f;
-					ParticleUtil.spawnParticleGlow(world, tx, ty, tz, 0, 0, 0, 255, 64, 16, 0.5f*(1.0f-coeff), 6.0f*(1.0f-coeff), 20);
+			Minecraft.getMinecraft().addScheduledTask(()-> {
+				for (int j = 0; j < 8; j++) {
+					float pitch = random.nextFloat() * 360.0f;
+					float yaw = random.nextFloat() * 360.0f;
+					for (float i = 0; i < 0.8; i += 0.05f) {
+						float tx = (float) message.posX + i * (float) Math.sin(Math.toRadians(yaw)) * (float) Math.sin(Math.toRadians(pitch));
+						float ty = (float) message.posY + i * (float) Math.cos(Math.toRadians(pitch));
+						float tz = (float) message.posZ + i * (float) Math.cos(Math.toRadians(yaw)) * (float) Math.sin(Math.toRadians(pitch));
+						float coeff = i / 0.8f;
+						ParticleUtil.spawnParticleGlow(world, tx, ty, tz, 0, 0, 0, 255, 64, 16, 0.5f * (1.0f - coeff), 6.0f * (1.0f - coeff), 20);
+					}
 				}
-			}
-			for (int j = 0; j < 12; j ++){
-				ParticleUtil.spawnParticleSpark(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(Misc.random.nextFloat()-0.5f), 0.125f*(Misc.random.nextFloat()), 0.125f*(Misc.random.nextFloat()-0.5f), 255, 64, 16, 1.0f+Misc.random.nextFloat(), 60);
-			}
+				for (int j = 0; j < 12; j++) {
+					ParticleUtil.spawnParticleSpark(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (Misc.random.nextFloat() - 0.5f), 0.125f * (Misc.random.nextFloat()), 0.125f * (Misc.random.nextFloat() - 0.5f), 255, 64, 16, 1.0f + Misc.random.nextFloat(), 60);
+				}
+			});
     		return null;
         }
     }

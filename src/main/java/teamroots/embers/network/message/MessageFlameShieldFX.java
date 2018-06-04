@@ -47,22 +47,22 @@ public class MessageFlameShieldFX implements IMessage {
         @Override
         public IMessage onMessage(final MessageFlameShieldFX message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
-			for (int j = 0; j < 360; j += 18){
-				float offX = 0.65f*(float)Math.sin(Math.toRadians(j));
-				float offZ = 0.65f*(float)Math.cos(Math.toRadians(j));
-				if (random.nextBoolean()){
-					if (random.nextBoolean()){
-						ParticleUtil.spawnParticleGlow(world, (float)message.posX+offX, (float)message.posY, (float)message.posZ+offZ, 0.03125f*(random.nextFloat()-0.5f), 0.03125f*(random.nextFloat()-0.5f), 0.03125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*4.0f, 40);
-					}
-					else {
-						ParticleUtil.spawnParticleStar(world, (float)message.posX+offX, (float)message.posY, (float)message.posZ+offZ, 0.03125f*(random.nextFloat()-0.5f), 0.03125f*(random.nextFloat()-0.5f), 0.03125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*4.0f, 40);
+			Minecraft.getMinecraft().addScheduledTask(()-> {
+				for (int j = 0; j < 360; j += 18) {
+					float offX = 0.65f * (float) Math.sin(Math.toRadians(j));
+					float offZ = 0.65f * (float) Math.cos(Math.toRadians(j));
+					if (random.nextBoolean()) {
+						if (random.nextBoolean()) {
+							ParticleUtil.spawnParticleGlow(world, (float) message.posX + offX, (float) message.posY, (float) message.posZ + offZ, 0.03125f * (random.nextFloat() - 0.5f), 0.03125f * (random.nextFloat() - 0.5f), 0.03125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 4.0f, 40);
+						} else {
+							ParticleUtil.spawnParticleStar(world, (float) message.posX + offX, (float) message.posY, (float) message.posZ + offZ, 0.03125f * (random.nextFloat() - 0.5f), 0.03125f * (random.nextFloat() - 0.5f), 0.03125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 4.0f, 40);
+						}
+					} else {
+						ParticleUtil.spawnParticleGlow(world, (float) message.posX + offX, (float) message.posY, (float) message.posZ + offZ, 0.03125f * (random.nextFloat() - 0.5f), 0.0625f * (random.nextFloat()), 0.03125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f + random.nextFloat() * 6.0f, 40);
+						ParticleUtil.spawnParticleGlow(world, (float) message.posX + offX, (float) message.posY, (float) message.posZ + offZ, 0.03125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.03125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f + random.nextFloat() * 2.0f, 40);
 					}
 				}
-				else {
-					ParticleUtil.spawnParticleGlow(world, (float)message.posX+offX, (float)message.posY, (float)message.posZ+offZ, 0.03125f*(random.nextFloat()-0.5f), 0.0625f*(random.nextFloat()), 0.03125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f+random.nextFloat()*6.0f, 40);
-					ParticleUtil.spawnParticleGlow(world, (float)message.posX+offX, (float)message.posY, (float)message.posZ+offZ, 0.03125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.03125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f+random.nextFloat()*2.0f, 40);
-				}
-			}
+			});
     		return null;
         }
     }

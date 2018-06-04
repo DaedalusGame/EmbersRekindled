@@ -23,13 +23,13 @@ public class MessageCannonBeamFX implements IMessage {
 	public static Random random = new Random();
 	double posX = 0, posY = 0, posZ = 0;
 	double dX = 0, dY = 0, dZ = 0;
-	public UUID id = null;
+	double hitDistance = Double.POSITIVE_INFINITY;
 	
 	public MessageCannonBeamFX(){
 		super();
 	}
 	
-	public MessageCannonBeamFX(UUID id, double x, double y, double z, double dX, double dY, double dZ){
+	public MessageCannonBeamFX(double x, double y, double z, double dX, double dY, double dZ, double hitDistance){
 		super();
 		this.posX = x;
 		this.posY = y;
@@ -37,7 +37,7 @@ public class MessageCannonBeamFX implements IMessage {
 		this.dX = dX;
 		this.dY = dY;
 		this.dZ = dZ;
-		this.id = id;
+		this.hitDistance = hitDistance;
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class MessageCannonBeamFX implements IMessage {
 		dX = buf.readDouble();
 		dY = buf.readDouble();
 		dZ = buf.readDouble();
-		id = new UUID(buf.readLong(),buf.readLong());
+		hitDistance = buf.readDouble();
 	}
 
 	@Override
@@ -59,8 +59,7 @@ public class MessageCannonBeamFX implements IMessage {
 		buf.writeDouble(dX);
 		buf.writeDouble(dY);
 		buf.writeDouble(dZ);
-		buf.writeLong(id.getMostSignificantBits());
-		buf.writeLong(id.getLeastSignificantBits());
+		buf.writeDouble(hitDistance);
 	}
 
     public static class MessageHolder implements IMessageHandler<MessageCannonBeamFX,IMessage>
@@ -69,35 +68,22 @@ public class MessageCannonBeamFX implements IMessage {
         @Override
         public IMessage onMessage(final MessageCannonBeamFX message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
-    		boolean doContinue = true;
-    		for (double i = 0; i < 384.0 && doContinue; i ++){
-    			for (int j = 0; j < 5; j ++){
-    				message.posX += 0.2*i*message.dX/384.0;
-    				message.posY += 0.2*i*message.dY/384.0;
-    				message.posZ += 0.2*i*message.dZ/384.0;
-    				ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0, 0, 0, 255, 64, 16, 2.0f, 24);
-    			}
-    			IBlockState state = world.getBlockState(new BlockPos(message.posX,message.posY,message.posZ));
-    			if (state.isFullCube() && state.isOpaqueCube()){
-    				doContinue = false;
-    				for (int k = 0; k < 80; k ++){
-    					ParticleUtil.spawnParticleGlow(world, (float)message.posX-(float)(i*message.dX/384.0f), (float)message.posY-(float)(i*message.dY/384.0f), (float)message.posZ-(float)(i*message.dZ/384.0f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 24);
-    				}
-    			}
-    			List<EntityLivingBase> rawEntities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(message.posX-0.85,message.posY-0.85,message.posZ-0.85,message.posX+0.85,message.posY+0.85,message.posZ+0.85));
-    			ArrayList<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
-    			for (int j = 0; j < rawEntities.size(); j ++){
-    				if (rawEntities.get(j).getUniqueID().compareTo(message.id) != 0){
-    					entities.add(rawEntities.get(j));
-    				}
-    			}
-    			if (entities.size() > 0){
-    				doContinue = false;
-    				for (int k = 0; k < 80; k ++){
-    					ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 24);
-    				}
-    			}
-    		}
+			Minecraft.getMinecraft().addScheduledTask(()-> {
+				for (double i = 0; i < 384.0; i++) {
+					for (int j = 0; j < 5; j++) {
+						message.posX += 0.2 * i * message.dX / 384.0;
+						message.posY += 0.2 * i * message.dY / 384.0;
+						message.posZ += 0.2 * i * message.dZ / 384.0;
+						ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+					}
+					if(i > message.hitDistance) {
+						for (int k = 0; k < 80; k++) {
+							ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 24);
+						}
+						break;
+					}
+				}
+			});
     		return null;
         }
     }

@@ -1,41 +1,58 @@
 package teamroots.embers.network.message;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.TileEntityBeamCannon;
+
+import java.util.Random;
 
 public class MessageBeamCannonFX implements IMessage {
-	public NBTTagCompound tag = new NBTTagCompound();
-	
+	public static Random random = new Random();
+	double posX = 0, posY = 0, posZ = 0;
+	double rayX = 0, rayY = 0, rayZ = 0;
+	double hitDistance = Double.POSITIVE_INFINITY;
+
 	public MessageBeamCannonFX(){
-		//
+		super();
 	}
-	
-	public MessageBeamCannonFX(TileEntity tile){
-		this.tag = tile.getUpdateTag();
+
+	public MessageBeamCannonFX(double x, double y, double z, double rayX, double rayY, double rayZ, double hitDistance){
+		super();
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		this.rayX = rayX;
+		this.rayY = rayY;
+		this.rayZ = rayZ;
+		this.hitDistance = hitDistance;
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		tag = ByteBufUtils.readTag(buf);
+		posX = buf.readDouble();
+		posY = buf.readDouble();
+		posZ = buf.readDouble();
+		rayX = buf.readDouble();
+		rayY = buf.readDouble();
+		rayZ = buf.readDouble();
+		hitDistance = buf.readDouble();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, tag);
+		buf.writeDouble(posX);
+		buf.writeDouble(posY);
+		buf.writeDouble(posZ);
+		buf.writeDouble(rayX);
+		buf.writeDouble(rayY);
+		buf.writeDouble(rayZ);
+		buf.writeDouble(hitDistance);
 	}
 
     public static class MessageHolder implements IMessageHandler<MessageBeamCannonFX,IMessage>
@@ -43,28 +60,21 @@ public class MessageBeamCannonFX implements IMessage {
     	@SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(final MessageBeamCannonFX message, final MessageContext ctx) {
+			World world = Minecraft.getMinecraft().world;
     		Minecraft.getMinecraft().addScheduledTask(()-> {
-	    		if ((Minecraft.getMinecraft().player.getEntityWorld()).getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z"))) instanceof TileEntityBeamCannon){
-	    			TileEntityBeamCannon cannon = (TileEntityBeamCannon)Minecraft.getMinecraft().player.getEntityWorld().getTileEntity(new BlockPos(message.tag.getInteger("x"),message.tag.getInteger("y"),message.tag.getInteger("z")));
-
-	    			Vec3d ray = (new Vec3d(cannon.target.getX()-cannon.getPos().getX(),cannon.target.getY()-cannon.getPos().getY(),cannon.target.getZ()-cannon.getPos().getZ())).normalize();
-					double posX = cannon.getPos().getX()+0.5;
-					double posY = cannon.getPos().getY()+0.5;
-					double posZ = cannon.getPos().getZ()+0.5;
-					boolean doContinue = true;
-					for (int i = 0; i < 640 && doContinue; i ++){
-						posX += ray.x*0.1;
-						posY += ray.y*0.1;
-						posZ += ray.z*0.1;
-						IBlockState state = cannon.getWorld().getBlockState(new BlockPos(posX,posY,posZ));
-						TileEntity tile = cannon.getWorld().getTileEntity(new BlockPos(posX,posY,posZ));
-						ParticleUtil.spawnParticleStar(cannon.getWorld(), (float)posX, (float)posY, (float)posZ, 0.0125f*(cannon.random.nextFloat()-0.5f), 0.0125f*(cannon.random.nextFloat()-0.5f), 0.0125f*(cannon.random.nextFloat()-0.5f), 255, 64, 16, 5.0f, 60);
-						if (state.isFullCube() && state.isOpaqueCube() || tile instanceof IEmberPacketReceiver){
-							doContinue = false;
-							for (int k = 0; k < 80; k ++){
-								ParticleUtil.spawnParticleGlow(cannon.getWorld(), (float)posX, (float)posY, (float)posZ, 0.125f*(cannon.random.nextFloat()-0.5f), 0.125f*(cannon.random.nextFloat()-0.5f), 0.125f*(cannon.random.nextFloat()-0.5f), 255, 64, 16, 8.0f, 60);
-							}
+				double rayX = message.rayX;
+				double rayY = message.rayY;
+				double rayZ = message.rayZ;
+				for (double i = 0; i < 640.0; i++) {
+					message.posX += 0.1 * rayX;
+					message.posY += 0.1 * rayY;
+					message.posZ += 0.1 * rayZ;
+					ParticleUtil.spawnParticleStar(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 5.0f, 60);
+					if(i > message.hitDistance) {
+						for (int k = 0; k < 80; k ++){
+							ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 8.0f, 60);
 						}
+						break;
 					}
 				}
 	    	});

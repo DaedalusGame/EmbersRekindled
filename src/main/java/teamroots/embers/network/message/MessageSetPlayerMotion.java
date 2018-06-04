@@ -60,12 +60,14 @@ public class MessageSetPlayerMotion implements IMessage {
         @Override
         public IMessage onMessage(final MessageSetPlayerMotion message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
-    		EntityPlayer p = world.getPlayerEntityByUUID(message.id);
-    		if (p != null){
-    			p.motionX = message.posX;
-    			p.motionY = message.posY;
-    			p.motionZ = message.posZ;
-    		}
+			Minecraft.getMinecraft().addScheduledTask(()-> {
+				EntityPlayer p = world.getPlayerEntityByUUID(message.id);
+				if (p != null) {
+					p.motionX = message.posX;
+					p.motionY = message.posY;
+					p.motionZ = message.posZ;
+				}
+			});
     		return null;
         }
     }

@@ -18,7 +18,7 @@ import teamroots.embers.network.message.MessageItemUpdate;
 import teamroots.embers.network.message.MessagePlayerJetFX;
 import teamroots.embers.network.message.MessageRemovePlayerEmber;
 import teamroots.embers.network.message.MessageSetPlayerMotion;
-import teamroots.embers.network.message.MessageSpawnEmberProj;
+import teamroots.embers.network.message.MessageCasterOrb;
 import teamroots.embers.network.message.MessageStamperFX;
 import teamroots.embers.network.message.MessageSuperheatFX;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -48,7 +48,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberSizedBurstFX.MessageHolder.class,MessageEmberSizedBurstFX.class,id ++,Side.CLIENT);
 
-        INSTANCE.registerMessage(MessageSpawnEmberProj.MessageHolder.class,MessageSpawnEmberProj.class,id ++,Side.SERVER);
+        INSTANCE.registerMessage(MessageCasterOrb.MessageHolder.class,MessageCasterOrb.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageRemovePlayerEmber.MessageHolder.class,MessageRemovePlayerEmber.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageTEUpdateRequest.MessageHolder.class,MessageTEUpdateRequest.class,id ++,Side.SERVER);
