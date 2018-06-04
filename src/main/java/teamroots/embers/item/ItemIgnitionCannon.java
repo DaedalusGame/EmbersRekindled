@@ -57,9 +57,9 @@ public class ItemIgnitionCannon extends ItemBase {
 		world.playSound(null,entity.posX,entity.posY,entity.posZ, SoundManager.BLAZING_RAY_FIRE, SoundCategory.PLAYERS, 1.0f, 1.0f);
 		double impactDist = Double.POSITIVE_INFINITY;
 		for (double i = 0; i < 384.0 && doContinue; i ++){
-			posX += i*dX/384.0;
-			posY += i*dY/384.0;
-			posZ += i*dZ/384.0;
+			posX += dX/384.0;
+			posY += dY/384.0;
+			posZ += dZ/384.0;
 			IBlockState state = world.getBlockState(new BlockPos(posX,posY,posZ));
 			if (state.isFullCube() && state.isOpaqueCube()){
 				doContinue = false;

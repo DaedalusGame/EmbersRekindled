@@ -134,7 +134,7 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 				double deltaX = posX - prevPosX;
 				double deltaY = posY - prevPosY;
 				double deltaZ = posZ - prevPosZ;
-				double dist = Math.ceil(Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ));
+				double dist = Math.ceil(Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ) * 5);
 				for (double i = 0; i < dist; i ++){
 					double coeff = i/dist;
 					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+ deltaX *coeff), (float)(prevPosY+ deltaY *coeff), (float)(prevPosZ+ deltaZ *coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, 2.0f, 24);

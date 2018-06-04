@@ -497,12 +497,14 @@ public class EventManager {
 						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 						double x1 = baseX + x + 4;
 						double x2 = baseX + w - 3;
-						x2 = x1 + (x2 - x1)*(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack()));
+						float heat = ItemModUtil.getHeat(event.getStack());
+						float maxHeat = ItemModUtil.getMaxHeat(event.getStack());
+						x2 = x1 + (x2 - x1)*(heat / maxHeat);
 						for (double j = 0; j < 10; j ++){
 							double coeff = j/10.0;
 							double coeff2 = (j+1.0)/10.0;
 							for (double k = 0; k < 4; k += 0.5){
-								float thick = (float)(k/4.0);
+								float thick = (float)(k/4.0) * (heat >= maxHeat ? (float)Math.sin(ticks*0.5)*2+3 : 1);
 								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
 										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
 										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
@@ -512,7 +514,7 @@ public class EventManager {
 						}
 						x1 = baseX + x + 4;
 						x2 = baseX + w - 3;
-						double point = x1 + (x2 - x1)*(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack()));
+						double point = x1 + (x2 - x1)*(heat / maxHeat);
 						
 						for (double k = 0; k < 4; k += 0.5){
 							float thick = (float)(k/4.0);
@@ -526,7 +528,7 @@ public class EventManager {
 						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 						x1 = baseX + x + 4;
 						x2 = baseX + w - 3;
-						x1 = x2 - (x2 - x1)*(1.0f-(ItemModUtil.getHeat(event.getStack())/ItemModUtil.getMaxHeat(event.getStack())));
+						x1 = x2 - (x2 - x1)*(1.0f-(heat / maxHeat));
 						for (double j = 0; j < 10; j ++){
 							double coeff = j/10.0;
 							double coeff2 = (j+1.0)/10.0;

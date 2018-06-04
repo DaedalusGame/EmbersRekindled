@@ -61,7 +61,7 @@ public class MessageCasterOrb implements IMessage {
                     ModifierBase casterOrb = ItemModUtil.modifierRegistry.get(RegistryManager.caster_orb);
                     int level = ItemModUtil.getModifierLevel(heldStack, casterOrb.name);
                     UUID uuid = player.getUniqueID();
-                    if (world.isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(player) > casterOrb.cost && !ModifierCasterOrb.hasCooldown(uuid)) {
+                    if (level > 0 && EmberInventoryUtil.getEmberTotal(player) > casterOrb.cost && !ModifierCasterOrb.hasCooldown(uuid)) {
                         float offX = 0.5f * (float) Math.sin(Math.toRadians(-player.rotationYaw - 90));
                         float offZ = 0.5f * (float) Math.cos(Math.toRadians(-player.rotationYaw - 90));
                         EmberInventoryUtil.removeEmber(player, casterOrb.cost);
