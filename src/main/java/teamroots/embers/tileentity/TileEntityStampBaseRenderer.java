@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -32,11 +33,13 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileE
 		if (tile != null && !tile.getWorld().isAirBlock(tile.getPos())){
 			if (tile.getWorld().getBlockState(tile.getPos()).getBlock() instanceof BlockStampBase){
 				EnumFacing face = tile.getWorld().getBlockState(tile.getPos()).getValue(BlockStampBase.facing);
-				int amount = tile.getAmount();
 				int capacity = tile.getCapacity();
 	            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				Fluid fluid = tile.getFluid();
-				if (fluid != null){
+				FluidStack fluidStack = tile.getFluidStack();
+
+				if (fluidStack != null){
+					Fluid fluid = fluidStack.getFluid();
+					int amount = fluidStack.amount;
 					int c = fluid.getColor();
 		            blue = c & 0xFF;
 		            green = (c >> 8) & 0xFF;

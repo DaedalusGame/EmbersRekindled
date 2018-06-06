@@ -157,7 +157,8 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 	@Override
 	public void update() {
 		turnRate = 1;
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		if (shouldWork()){
 			progress ++;
 			if (getWorld().isRemote){

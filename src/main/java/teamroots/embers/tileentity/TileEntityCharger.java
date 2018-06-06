@@ -145,7 +145,8 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public void update() {
 		turnRate = 1;
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		ItemStack stack = inventory.getStackInSlot(0);
 		isWorking = false;
 		if (!stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {

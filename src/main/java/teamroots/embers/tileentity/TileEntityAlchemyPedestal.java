@@ -175,7 +175,8 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	public void update() {
 		turnRate = 1;
 		angle += turnRate;
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		active--;
 	}
 

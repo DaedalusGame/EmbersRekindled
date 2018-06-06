@@ -33,8 +33,6 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer<Tile
 		if (tile != null){
 			FluidStack fluidStack = tile.getFluidStack();
 			int capacity = tile.getCapacity();
-			Fluid fluid = fluidStack.getFluid();
-			int amount = fluidStack.amount;
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			for (int i = 0; i < tile.inventory.getSlots(); i ++){
 				ItemStack stack = tile.inventory.getStackInSlot(i);
@@ -48,14 +46,16 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer<Tile
 					GlStateManager.popMatrix();
 				}
 			}
-			if (fluid != null){
-				int c = fluid.getColor();
+			if (fluidStack != null){
+				Fluid fluid = fluidStack.getFluid();
+				int amount = fluidStack.amount;
+				int c = fluid.getColor(fluidStack);
 	            blue = c & 0xFF;
 	            green = (c >> 8) & 0xFF;
 	            red = (c >> 16) & 0xFF;
 	            alpha = (c >> 24) & 0xFF;
 
-	            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill().toString());
+	            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill(fluidStack).toString());
 	            diffU = maxU-minU;
 	            diffV = maxV-minV;
 
@@ -64,7 +64,7 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer<Tile
 				minV = sprite.getMinV()+diffV*0.25;
 				maxV = sprite.getMaxV()-diffV*0.25;
 
-				int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
+				int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity(fluidStack));
 				lightx = i >> 0x10 & 0xFFFF;
 				lighty = i & 0xFFFF;
 

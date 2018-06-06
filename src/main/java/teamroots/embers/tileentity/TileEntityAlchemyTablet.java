@@ -289,7 +289,8 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	@Override
 	public void update() {
 		angle += 1.0f;
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		if (progress == 1){
 			if (process < 20){
 				process ++;

@@ -164,7 +164,8 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
     @Override
     public void update() {
-        handleSound();
+        if(getWorld().isRemote)
+            handleSound();
         World world = getWorld();
         BlockPos pos = getPos();
         TileEntityMixerTop top = (TileEntityMixerTop) world.getTileEntity(pos.up());

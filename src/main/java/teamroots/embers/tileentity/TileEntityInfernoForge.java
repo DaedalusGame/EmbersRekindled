@@ -127,7 +127,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 
 	@Override
 	public void update() {
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		ticksExisted ++;
 		if (progress > 0){
 			if (capability.getEmber() >= EMBER_COST){
@@ -201,13 +202,16 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 							if (!ItemModUtil.hasHeat(item1.getItem())) {
 								world.removeEntity(item1);
 								item1.setDead();
-							} else if (Math.atan(emberValue / 1200.0f) > Misc.random.nextFloat()) {
-								ItemStack stack = item1.getItem();
-								ItemModUtil.setHeat(stack, 0);
-								ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
-								item1.setItem(stack);
-								progress = 0;
-								success = true;
+							} else {
+								double test = Math.atan(emberValue / 1200.0f);
+								if (test > Misc.random.nextFloat()) {
+                                    ItemStack stack = item1.getItem();
+                                    ItemModUtil.setHeat(stack, 0);
+                                    ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
+                                    item1.setItem(stack);
+                                    progress = 0;
+                                    success = true;
+                                }
 							}
 						}
 						if (!world.isRemote){

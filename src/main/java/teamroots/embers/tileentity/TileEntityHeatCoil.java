@@ -153,7 +153,8 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	public void update() {
 		ticksExisted ++;
 
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 
 		if (capability.getEmber() >= EMBER_COST){
 			capability.removeAmount(EMBER_COST, true);

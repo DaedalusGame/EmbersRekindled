@@ -15,11 +15,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
@@ -122,7 +118,18 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	public int getAmount(){
 		return tank.getFluidAmount();
 	}
-	
+
+	public Fluid getFluid(){
+		if (tank.getFluid() != null){
+			return tank.getFluid().getFluid();
+		}
+		return null;
+	}
+
+	public FluidStack getFluidStack() {
+		return tank.getFluid();
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
@@ -134,13 +141,6 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
 		inputs.deserializeNBT(tag.getCompoundTag("inputs"));
-	}
-	
-	public Fluid getFluid(){
-		if (tank.getFluid() != null){
-			return tank.getFluid().getFluid();
-		}
-		return null;
 	}
 
 	@Override

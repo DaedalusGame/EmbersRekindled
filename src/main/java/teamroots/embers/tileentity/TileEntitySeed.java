@@ -145,7 +145,8 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 
 	@Override
 	public void update() {
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		if (material == -1){
 			material = world.getBlockState(getPos()).getValue(BlockSeed.type);
 		}

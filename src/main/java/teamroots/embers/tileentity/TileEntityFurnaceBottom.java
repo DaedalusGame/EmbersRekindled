@@ -125,7 +125,8 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 
 	@Override
 	public void update() {
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		TileEntityFurnaceTop top = (TileEntityFurnaceTop) world.getTileEntity(getPos().up());
 		if(top != null && !top.inventory.getStackInSlot(0).isEmpty()) {
 			if (progress == -1) {

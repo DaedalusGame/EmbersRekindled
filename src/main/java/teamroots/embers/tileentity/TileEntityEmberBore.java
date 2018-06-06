@@ -76,7 +76,9 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+		NBTTagCompound inventoryTag = tag.getCompoundTag("inventory");
+		inventoryTag.removeTag("Size"); //Migrating old Ember Bores
+		this.inventory.deserializeNBT(inventoryTag);
 		ticksFueled = tag.getInteger("fueled");
 	}
 
@@ -149,7 +151,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public void update() {
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		if (ticksFueled > 0){
 			lastAngle = angle;
 			angle += 12.0f;

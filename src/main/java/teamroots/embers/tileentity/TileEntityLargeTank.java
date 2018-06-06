@@ -94,6 +94,10 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 		return null;
 	}
 
+	public FluidStack getFluidStack() {
+		return tank.getFluid();
+	}
+
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();

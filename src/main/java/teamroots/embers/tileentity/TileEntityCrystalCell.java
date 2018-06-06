@@ -153,7 +153,8 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
 	@Override
 	public void update() {
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		ticksExisted ++;
 		renderCapacityLast = renderCapacity;
 		if(renderCapacity < this.capability.getEmberCapacity())

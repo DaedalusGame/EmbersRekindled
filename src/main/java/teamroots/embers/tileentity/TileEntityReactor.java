@@ -29,6 +29,7 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
@@ -139,7 +140,8 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 
 	@Override
 	public void update() {
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		if (!inventory.getStackInSlot(0).isEmpty()){
 			progress ++;
 			if (progress > 20){
@@ -151,7 +153,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 					if(tile instanceof TileEntityCatalyzer)
 						catalyzerMult += ((TileEntityCatalyzer)tile).multiplier;
 					if(tile instanceof TileEntityCombustor)
-						catalyzerMult += ((TileEntityCombustor)tile).multiplier;
+						combustorMult += ((TileEntityCombustor)tile).multiplier;
 				}
 				if (Math.max(combustorMult, catalyzerMult) < 2.0f*Math.min(combustorMult, catalyzerMult)){
 					multiplier += combustorMult;
@@ -177,6 +179,11 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 				}
 			}
 			markDirty();
+		}
+		if (this.capability.getEmber() > 0 && getWorld().isRemote){
+			for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, random.nextFloat()*0.1f, 0, 255, 64, 16, 2.0f, 12+random.nextInt(8));
+			}
 		}
 	}
 

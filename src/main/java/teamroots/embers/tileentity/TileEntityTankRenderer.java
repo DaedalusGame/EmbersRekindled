@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -26,10 +27,11 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 	@Override
 	public void render(TileEntityTank tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile != null){
-			int amount = tile.getAmount();
+			FluidStack fluidStack = tile.getFluidStack();
 			int capacity = tile.getCapacity();
-			Fluid fluid = tile.getFluid();
-			if (fluid != null){
+			if (fluidStack != null){
+				Fluid fluid = fluidStack.getFluid();
+				int amount = fluidStack.amount;
 				int c = fluid.getColor();
 	            blue = c & 0xFF;
 	            green = (c >> 8) & 0xFF;

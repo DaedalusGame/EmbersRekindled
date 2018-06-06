@@ -136,7 +136,8 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 	
 	@Override
 	public void update(){
-		handleSound();
+		if(getWorld().isRemote)
+			handleSound();
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
 		isWorking = false;

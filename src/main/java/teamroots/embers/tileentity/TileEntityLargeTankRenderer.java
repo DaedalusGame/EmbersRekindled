@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -27,17 +28,18 @@ public class TileEntityLargeTankRenderer extends TileEntitySpecialRenderer<TileE
 	public void render(TileEntityLargeTank tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile != null){
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			int amount = tile.getAmount();
+			FluidStack fluidStack = tile.getFluidStack();
 			int capacity = tile.getCapacity();
-			Fluid fluid = tile.getFluid();
-			if (fluid != null){
-				int c = fluid.getColor();
+			if (fluidStack != null){
+				Fluid fluid = fluidStack.getFluid();
+				int amount = fluidStack.amount;
+				int c = fluid.getColor(fluidStack);
 	            blue = c & 0xFF;
 	            green = (c >> 8) & 0xFF;
 	            red = (c >> 16) & 0xFF;
 	            alpha = (c >> 24) & 0xFF;
 	            
-	            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill().toString());
+	            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill(fluidStack).toString());
 	            diffU = maxU-minU;
 	            diffV = maxV-minV;
 
@@ -46,7 +48,7 @@ public class TileEntityLargeTankRenderer extends TileEntitySpecialRenderer<TileE
 				minV = sprite.getMinV();
 				maxV = sprite.getMaxV();
 
-				int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
+				int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity(fluidStack));
 				lightx = i >> 0x10 & 0xFFFF;
 				lighty = i & 0xFFFF;
 
