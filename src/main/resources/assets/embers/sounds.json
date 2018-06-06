@@ -135,6 +135,30 @@
       "embers:ember_bore/mine_loop"
     ]
   },
+  "block.heat_coil.high_loop": {
+    "category": "block",
+    "sounds": [
+      "embers:heat_coil/high_loop"
+    ]
+  },
+  "block.heat_coil.mid_loop": {
+    "category": "block",
+    "sounds": [
+      "embers:heat_coil/mid_loop"
+    ]
+  },
+  "block.heat_coil.low_loop": {
+    "category": "block",
+    "sounds": [
+      "embers:heat_coil/low_loop"
+    ]
+  },
+  "block.heat_coil.cooking_loop": {
+    "category": "block",
+    "sounds": [
+      "embers:heat_coil/cooking_loop"
+    ]
+  },
   "block.melter.loop": {
     "category": "block",
     "sounds": [

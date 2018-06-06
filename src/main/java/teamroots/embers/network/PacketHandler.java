@@ -4,26 +4,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import teamroots.embers.Embers;
-import teamroots.embers.network.message.MessageAnvilSparksFX;
-import teamroots.embers.network.message.MessageBeamCannonFX;
-import teamroots.embers.network.message.MessageCannonBeamFX;
-import teamroots.embers.network.message.MessageEmberActivationFX;
-import teamroots.embers.network.message.MessageEmberBurstFX;
-import teamroots.embers.network.message.MessageEmberGenOffset;
-import teamroots.embers.network.message.MessageEmberSizedBurstFX;
-import teamroots.embers.network.message.MessageEmberSparkleFX;
-import teamroots.embers.network.message.MessageEmberSphereFX;
-import teamroots.embers.network.message.MessageFlameShieldFX;
-import teamroots.embers.network.message.MessageItemUpdate;
-import teamroots.embers.network.message.MessagePlayerJetFX;
-import teamroots.embers.network.message.MessageRemovePlayerEmber;
-import teamroots.embers.network.message.MessageSetPlayerMotion;
-import teamroots.embers.network.message.MessageCasterOrb;
-import teamroots.embers.network.message.MessageStamperFX;
-import teamroots.embers.network.message.MessageSuperheatFX;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.network.message.MessageTEUpdateRequest;
-import teamroots.embers.network.message.MessageTyrfingBurstFX;
+import teamroots.embers.network.message.*;
 
 public class PacketHandler {
 	public static SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Embers.MODID);
@@ -47,6 +28,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessagePlayerJetFX.MessageHolder.class,MessagePlayerJetFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberSizedBurstFX.MessageHolder.class,MessageEmberSizedBurstFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageCookItemFX.MessageHolder.class,MessageCookItemFX.class,id ++,Side.CLIENT);
 
         INSTANCE.registerMessage(MessageCasterOrb.MessageHolder.class,MessageCasterOrb.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageRemovePlayerEmber.MessageHolder.class,MessageRemovePlayerEmber.class,id ++,Side.SERVER);

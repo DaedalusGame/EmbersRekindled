@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -14,12 +15,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.item.IEmberItem;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -28,8 +32,9 @@ import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
 	public static final double MAX_TRANSFER = 10.0;
 
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -44,7 +49,13 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
         }
 	};
 	Random random = new Random();
-	
+	boolean isWorking;
+
+	public static final int SOUND_PROCESS = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
+
 	public TileEntityCharger(){
 		super();
 		capability.setEmberCapacity(24000);
@@ -134,10 +145,14 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public void update() {
 		turnRate = 1;
+		handleSound();
 		ItemStack stack = inventory.getStackInSlot(0);
+		isWorking = false;
 		if (!stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
 			double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(MAX_TRANSFER, capability.getEmber()), true);
 			capability.removeAmount(emberAdded, true);
+			if(emberAdded > 0)
+				isWorking = true;
 			markDirty();
 			if (getWorld().isRemote && this.capability.getEmber() > 0 && getWorld().isRemote) {
 				for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
@@ -147,7 +162,37 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 		}
 		angle += turnRate;
 	}
-	
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_PROCESS:
+				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.COPPER_CHARGER_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_PROCESS && isWorking;
+	}
+
 	public boolean dirty = false;
 	
 	@Override

@@ -62,6 +62,8 @@ public class SoundManager {
     public static SoundEvent MIXER_LOOP;
     @GameRegistry.ObjectHolder("embers:block.copper_charger.loop")
     public static SoundEvent COPPER_CHARGER_LOOP;
+    @GameRegistry.ObjectHolder("embers:block.injector.loop")
+    public static SoundEvent INJECTOR_LOOP;
 
     @GameRegistry.ObjectHolder("embers:block.metal_seed.loop")
     public static SoundEvent METAL_SEED_LOOP;
@@ -141,6 +143,7 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.mixer.loop"));
         event.getRegistry().register(registerSound("block.plinth.loop"));
         event.getRegistry().register(registerSound("block.copper_charger.loop"));
+        event.getRegistry().register(registerSound("block.injector.loop"));
 
         event.getRegistry().register(registerSound("block.metal_seed.loop"));
         event.getRegistry().register(registerSound("block.metal_seed.ping"));

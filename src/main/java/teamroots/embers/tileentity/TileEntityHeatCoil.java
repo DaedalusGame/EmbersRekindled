@@ -29,6 +29,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageCookItemFX;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -196,13 +197,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 		entityItem.setItem(stack);
 		if (stack.isEmpty()) {
 			entityItem.setDead();
-			for (int j = 0; j < 3; j++) {
-				if (random.nextBoolean()) {
-					getWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, entityItem.posX, entityItem.posY, entityItem.posZ, 0, 0, 0, 0);
-				} else {
-					getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, entityItem.posX, entityItem.posY, entityItem.posZ, 0, 0, 0, 0);
-				}
-			}
+			PacketHandler.INSTANCE.sendToAll(new MessageCookItemFX(entityItem.posX,entityItem.posY,entityItem.posZ));
 			getWorld().removeEntity(entityItem);
 		}
 	}

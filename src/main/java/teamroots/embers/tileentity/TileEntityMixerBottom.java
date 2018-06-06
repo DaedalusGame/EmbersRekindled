@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -15,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -22,11 +24,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
     public static final double EMBER_COST = 2.0;
 
     public FluidTank north = new FluidTank(8000);
@@ -36,6 +41,12 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
     public FluidTank[] tanks;
     Random random = new Random();
     int progress = -1;
+    boolean isWorking;
+
+    public static final int SOUND_PROCESS = 1;
+    public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
+
+    HashSet<Integer> soundsPlaying = new HashSet<>();
 
     public TileEntityMixerBottom() {
         super();
@@ -153,9 +164,11 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
     @Override
     public void update() {
+        handleSound();
         World world = getWorld();
         BlockPos pos = getPos();
         TileEntityMixerTop top = (TileEntityMixerTop) world.getTileEntity(pos.up());
+        isWorking = false;
         if (top != null) {
             double emberCost = EMBER_COST;
             if (top.capability.getEmber() >= emberCost) {
@@ -166,6 +179,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
                     FluidStack output = recipe.getResult(fluids);
                     int amount = tank.fill(output, false);
                     if (amount != 0) {
+                        isWorking = true;
                         tank.fill(output, true);
                         consumeFluids(recipe);
                         top.capability.removeAmount(emberCost, true);
@@ -189,6 +203,36 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
                 }
             }
         }
+    }
+
+    @Override
+    public void playSound(int id) {
+        switch (id) {
+            case SOUND_PROCESS:
+                Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.MIXER_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+1.0f,(float)pos.getZ()+0.5f);
+                break;
+        }
+        soundsPlaying.add(id);
+    }
+
+    @Override
+    public void stopSound(int id) {
+        soundsPlaying.remove(id);
+    }
+
+    @Override
+    public boolean isSoundPlaying(int id) {
+        return soundsPlaying.contains(id);
+    }
+
+    @Override
+    public int[] getSoundIDs() {
+        return SOUND_IDS;
+    }
+
+    @Override
+    public boolean shouldPlaySound(int id) {
+        return id == SOUND_PROCESS && isWorking;
     }
 
     public boolean dirty = false;

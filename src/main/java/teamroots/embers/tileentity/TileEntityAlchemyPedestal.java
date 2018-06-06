@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -15,19 +16,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
 	int angle = 0;
 	int turnRate = 0;
 	int progress = 0;
@@ -49,11 +54,21 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 		}
 	};
 	Random random = new Random();
+
+	public static final int SOUND_PROCESS = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
+	int active = 0;
 	
 	public TileEntityAlchemyPedestal(){
 		super();
 	}
-	
+
+	public void setActive(int time) {
+		active = time;
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
@@ -160,5 +175,37 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	public void update() {
 		turnRate = 1;
 		angle += turnRate;
+		handleSound();
+		active--;
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_PROCESS:
+				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.PEDESTAL_LOOP, SoundCategory.BLOCKS, true, 0.1f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+1.0f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_PROCESS && active > 0;
 	}
 }

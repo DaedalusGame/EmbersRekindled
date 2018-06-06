@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.tile.ISparkable;
@@ -36,8 +38,9 @@ import teamroots.embers.util.AlchemyResult;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.util.AspectList;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable {
+public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable, ISoundController {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
 	int turnRate = 0;
@@ -87,6 +90,11 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
         }
 	};
 	Random random = new Random();
+
+	public static final int SOUND_PROCESS = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
 	
 	public TileEntityAlchemyTablet(){
 		super();
@@ -281,6 +289,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	@Override
 	public void update() {
 		angle += 1.0f;
+		handleSound();
 		if (progress == 1){
 			if (process < 20){
 				process ++;
@@ -358,5 +367,35 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 			}
 		}
 		return stack;
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_PROCESS:
+				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.ALCHEMY_LOOP, SoundCategory.BLOCKS, true, 1.5f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+1.0f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_PROCESS && progress > 0;
 	}
 }

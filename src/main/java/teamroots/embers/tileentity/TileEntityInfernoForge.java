@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
@@ -35,8 +37,9 @@ import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityInfernoForge extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
+public class TileEntityInfernoForge extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
 	public static final double EMBER_COST = 16.0;
 	public static final int MAX_LEVEL = 5;
 	public static final int PROCESS_TIME = 200;
@@ -45,6 +48,11 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	int progress = 0;
 	int heat = 0;
 	int ticksExisted = 0;
+
+	public static final int SOUND_PROCESS = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
 
 	public TileEntityInfernoForge(){
 		super();
@@ -119,6 +127,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 
 	@Override
 	public void update() {
+		handleSound();
 		ticksExisted ++;
 		if (progress > 0){
 			if (capability.getEmber() >= EMBER_COST){
@@ -246,6 +255,36 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 				markDirty();
 			}
 		}
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_PROCESS:
+				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.INFERNO_FORGE_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_PROCESS && progress > 0;
 	}
 	
 	public boolean dirty = false;
