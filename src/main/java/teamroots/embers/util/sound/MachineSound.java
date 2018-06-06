@@ -11,7 +11,7 @@ public class MachineSound extends PositionedSound implements ITickableSound {
     protected boolean donePlaying;
     protected int id;
 
-    public MachineSound(TileEntity tile, int id, SoundEvent soundIn, SoundCategory categoryIn, float volumeIn, float pitchIn, boolean repeatIn, float xIn, float yIn, float zIn) {
+    public MachineSound(TileEntity tile, int id, SoundEvent soundIn, SoundCategory categoryIn, boolean repeatIn, float volumeIn, float pitchIn, float xIn, float yIn, float zIn) {
         super(soundIn, categoryIn);
         this.boundTile = tile;
         this.id = id;

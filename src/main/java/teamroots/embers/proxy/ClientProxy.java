@@ -3,6 +3,7 @@ package teamroots.embers.proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -13,6 +14,7 @@ import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.util.ShaderUtil;
 import teamroots.embers.util.sound.ItemUseSound;
+import teamroots.embers.util.sound.MachineSound;
 
 public class ClientProxy extends CommonProxy{
 
@@ -39,5 +41,10 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void playItemSound(EntityLivingBase entity, Item item, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(new ItemUseSound(entity,item,soundIn,categoryIn,repeat,volume,pitch));
+	}
+
+	@Override
+	public void playMachineSound(TileEntity tile, int id, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch, float xIn, float yIn, float zIn) {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new MachineSound(tile,id,soundIn,categoryIn,repeat,volume,pitch,xIn,yIn,zIn));
 	}
 }

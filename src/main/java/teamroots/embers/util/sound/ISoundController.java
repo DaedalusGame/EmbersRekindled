@@ -3,6 +3,8 @@ package teamroots.embers.util.sound;
 public interface ISoundController {
     void playSound(int id);
 
+    void stopSound(int id);
+
     boolean isSoundPlaying(int id);
 
     int[] getSoundIDs();
@@ -11,6 +13,8 @@ public interface ISoundController {
         for (int id : getSoundIDs()) {
             if(shouldPlaySound(id) && !isSoundPlaying(id))
                 playSound(id);
+            if(!shouldPlaySound(id) && isSoundPlaying(id))
+                stopSound(id);
         }
     }
 
