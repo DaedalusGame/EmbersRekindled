@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -20,6 +21,19 @@ import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockMechAccessor;
 
 public class TileEntityMechAccessor extends TileEntity implements ITileEntityBase {
+	static HashSet<Class<? extends TileEntity>> ACCESSIBLE_TILES = new HashSet<>();
+
+	public static void registerAccessibleTile(Class<? extends TileEntity> type)
+	{
+		ACCESSIBLE_TILES.add(type);
+	}
+
+	public static boolean canAccess(TileEntity tile)
+	{
+		Class<? extends TileEntity> tileClass = tile.getClass();
+		return  ACCESSIBLE_TILES.stream().anyMatch(type -> type.isAssignableFrom(tileClass));
+	}
+
 	Random random = new Random();
 	
 	public TileEntityMechAccessor(){
@@ -51,23 +65,34 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 	}
-	
+
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		IBlockState state = getWorld().getBlockState(getPos());
-		if (getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite())) instanceof TileEntityMechCore){
-			return ((TileEntityMechCore)getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite()))).hasCapability(capability, facing);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() instanceof BlockMechAccessor)
+		{
+			EnumFacing accessFace = state.getValue(BlockMechAccessor.facing).getOpposite();
+			TileEntity tile = world.getTileEntity(pos.offset(accessFace));
+			return tile != null && canAccess(tile) && tile.hasCapability(capability, accessFace);
 		}
-		return super.hasCapability(capability, facing);
+		return false;
 	}
-	
+
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		IBlockState state = getWorld().getBlockState(getPos());
-		if (getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite())) instanceof TileEntityMechCore){
-			return getWorld().getTileEntity(getPos().offset(state.getValue(BlockMechAccessor.facing).getOpposite())).getCapability(capability, facing);
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() instanceof BlockMechAccessor)
+		{
+			EnumFacing accessFace = state.getValue(BlockMechAccessor.facing).getOpposite();
+			TileEntity tile = world.getTileEntity(pos.offset(accessFace));
+			return tile != null && canAccess(tile) ? tile.getCapability(capability, accessFace) : null;
 		}
-		return super.getCapability(capability, facing);
+		return null;
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return oldState.getBlock() != newSate.getBlock();
 	}
 
 	@Override
