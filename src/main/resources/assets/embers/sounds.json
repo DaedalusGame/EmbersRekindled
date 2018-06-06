@@ -2,127 +2,144 @@
   "block.alchemy.fail": {
     "category": "block",
     "sounds": [
-      "embers:alchemy_end_fail"
+      "embers:alchemy_tablet/fail"
     ],
     "subtitle": "subtitles.alchemy.fail"
   },
   "block.alchemy.success": {
     "category": "block",
     "sounds": [
-      "embers:alchemy_end_success"
+      "embers:alchemy_tablet/success"
     ],
     "subtitle": "subtitles.alchemy.success"
   },
   "block.alchemy.loop": {
     "category": "block",
     "sounds": [
-      "embers:alchemy_mid_loop"
-    ],
-    "subtitle": "subtitles.alchemy.loop"
+      "embers:alchemy_tablet/loop"
+    ]
   },
   "block.alchemy.start": {
     "category": "block",
     "sounds": [
-      "embers:alchemy_start"
+      "embers:alchemy_tablet/start"
     ],
     "subtitle": "subtitles.alchemy.start"
   },
   "block.beam_cannon.fire": {
     "category": "block",
     "sounds": [
-      "embers:beam_cannon_fire"
+      "embers:beam_cannon/fire"
     ],
     "subtitle": "subtitles.beam_cannon.fire"
   },
   "block.beam_cannon.hit": {
     "category": "block",
     "sounds": [
-      "embers:beam_cannon_hit_1",
-      "embers:beam_cannon_hit_2"
+      "embers:beam_cannon/hit1",
+      "embers:beam_cannon/hit2"
     ],
     "subtitle": "subtitles.beam_cannon.hit"
   },
-  "block.crystalcell.loop": {
+  "block.crystal_cell.loop": {
     "category": "block",
     "sounds": [
-      "embers:crystalcell"
-    ],
-    "subtitle": "subtitles.crystalcell.loop"
+      "embers:crystal_cell_loop"
+    ]
   },
-  "block.crystalcell.grow": {
+  "block.crystal_cell.grow": {
     "sounds": [
-      "embers:metal_crystal_ping1",
-      "embers:metal_crystal_ping2",
-      "embers:metal_crystal_ping3"
+      "embers:metal_seed/ping1",
+      "embers:metal_seed/ping2",
+      "embers:metal_seed/ping3"
     ],
-    "subtitle": "subtitles.crystalcell.grow"
+    "subtitle": "subtitles.crystal_cell.grow"
   },
   "block.pedestal.loop": {
     "category": "block",
     "sounds": [
-      "embers:pedestal_ashes_loop"
-    ],
-    "subtitle": "subtitles.pedestal.loop"
+      "embers:pedestal_loop"
+    ]
   },
-  "block.activator": {
+  "block.generator.loop": {
     "category": "block",
     "sounds": [
-      "embers:ember_activatorplume",
-      "embers:ember_activatorplume_alt"
+      "embers:generator_hold_embers"
+    ]
+  },
+  "block.activator.plume": {
+    "category": "block",
+    "sounds": [
+      "embers:activator/plume1",
+      "embers:activator/plume2"
     ],
-    "subtitle": "subtitles.activator"
+    "subtitle": "subtitles.activator.plume"
+  },
+  "block.boiler.plume": {
+    "category": "block",
+    "sounds": [
+      "embers:boiler/plume1",
+      "embers:boiler/plume2"
+    ],
+    "subtitle": "subtitles.boiler.plume"
+  },
+  "block.ignem_reactor.plume": {
+    "category": "block",
+    "sounds": [
+      "embers:ignem_reactor/plume1",
+      "embers:ignem_reactor/plume2"
+    ],
+    "subtitle": "subtitles.ignem_reactor.plume"
   },
   "block.stamper.down": {
     "category": "block",
     "sounds": [
-      "embers:stamp_down1",
-      "embers:stamp_down2",
-      "embers:stamp_down3"
+      "embers:stamper/down1",
+      "embers:stamper/down2",
+      "embers:stamper/down3"
     ],
     "subtitle": "subtitles.stamp.down"
   },
   "block.stamper.up": {
     "category": "block",
     "sounds": [
-      "embers:stamp_up1",
-      "embers:stamp_up2",
-      "embers:stamp_up3"
+      "embers:stamper/up1",
+      "embers:stamper/up2",
+      "embers:stamper/up3"
     ],
     "subtitle": "subtitles.stamp.up"
   },
   "block.bore.start": {
     "category": "block",
     "sounds": [
-      "embers:ember_bore_start_up"
+      "embers:ember_bore/start"
     ],
     "subtitle": "subtitles.bore.start"
   },
   "block.bore.stop": {
     "category": "block",
     "sounds": [
-      "embers:ember_bore_stop"
+      "embers:ember_bore/stop"
     ],
     "subtitle": "subtitles.bore.stop"
   },
   "block.bore.loop": {
     "category": "block",
     "sounds": [
-      "embers:ember_bore_run_loop"
-    ],
-    "subtitle": "subtitles.bore.loop"
+      "embers:ember_bore/run_loop"
+    ]
   },
   "block.bore.loop_mine": {
     "category": "block",
     "sounds": [
-      "embers:ember_bore_mine_loop"
+      "embers:ember_bore/mine_loop"
     ]
   },
   "block.melter.loop": {
     "category": "block",
     "sounds": [
       "embers:melter_loop"
-    ],
-    "subtitle": "subtitles.melter.loop"
+    ]
   },
   "block.mixer.loop": {
     "category": "block",
@@ -131,34 +148,79 @@
     ],
     "subtitle": "subtitles.mixer.loop"
   },
+  "block.copper_charger.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:copper_charger_loop"
+    ],
+    "subtitle": "subtitles.copper_charger.loop"
+  },
   "block.plinth.loop": {
     "category": "block",
     "sounds": [
       "embers:cinder_plinth_loop"
-    ],
-    "subtitle": "subtitles.plinth.loop"
+    ]
   },
   "block.injector.loop": {
     "category": "block",
     "sounds": [
-      "embers:injector_active_loop"
-    ],
-    "subtitle": "subtitles.injector.loop"
+      "embers:injector_loop"
+    ]
   },
   "block.metal_seed.loop": {
     "category": "block",
     "sounds": [
-      "embers:metal_crystal_loop"
-    ],
-    "subtitle": "subtitles.metal_seed.loop"
+      "embers:metal_seed/loop"
+    ]
   },
   "block.metal_seed.ping": {
     "sounds": [
-      "embers:metal_crystal_ping1",
-      "embers:metal_crystal_ping2",
-      "embers:metal_crystal_ping3"
+      "embers:metal_seed/ping1",
+      "embers:metal_seed/ping2",
+      "embers:metal_seed/ping3"
     ],
     "subtitle": "subtitles.metal_seed.ping"
+  },
+  "block.inferno_forge.fail": {
+    "category": "block",
+    "sounds": [
+      "embers:inferno_forge/fail"
+    ],
+    "subtitle": "subtitles.inferno_forge.fail"
+  },
+  "block.inferno_forge.success": {
+    "category": "block",
+    "sounds": [
+      "embers:inferno_forge/success"
+    ],
+    "subtitle": "subtitles.inferno_forge.success"
+  },
+  "block.inferno_forge.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:inferno_forge/loop"
+    ]
+  },
+  "block.inferno_forge.start": {
+    "category": "block",
+    "sounds": [
+      "embers:inferno_forge/start"
+    ],
+    "subtitle": "subtitles.inferno_forge.start"
+  },
+  "block.inferno_forge.open": {
+    "category": "block",
+    "sounds": [
+      "embers:inferno_forge/open"
+    ],
+    "subtitle": "subtitles.inferno_forge.open"
+  },
+  "block.inferno_forge.close": {
+    "category": "block",
+    "sounds": [
+      "embers:inferno_forge/close"
+    ],
+    "subtitle": "subtitles.inferno_forge.close"
   },
   "fireball.small.fire": {
     "sounds": [
@@ -190,56 +252,55 @@
   },
   "item.blazing_ray.fire": {
     "sounds": [
-      "embers:blray_fire1",
-      "embers:blray_fire2"
+      "embers:ignition_cannon/fire1",
+      "embers:ignition_cannon/fire2"
     ],
     "subtitle": "subtitles.blazing_ray.fire"
   },
   "item.blazing_ray.empty": {
     "sounds": [
-      "embers:blray_empty"
+      "embers:ignition_cannon/empty"
     ],
     "subtitle": "subtitles.blazing_ray.empty"
   },
   "item.cinder_staff.charge": {
     "sounds": [
-      "embers:cinder_staff_charge"
+      "embers:cinder_staff/charge"
     ],
-    "subtitle": "subtitles.blazing_ray.empty"
+    "subtitle": "subtitles.cinder_staff.charge"
   },
   "item.cinder_staff.fail": {
     "sounds": [
-      "embers:cinder_staff_fail"
+      "embers:cinder_staff/fail"
     ],
-    "subtitle": "subtitles.blazing_ray.empty"
+    "subtitle": "subtitles.cinder_staff.fail"
   },
   "item.cinder_staff.loop": {
     "sounds": [
-      "embers:cinder_staff_hold_loop"
-    ],
-    "subtitle": "subtitles.blazing_ray.empty"
+      "embers:cinder_staff/loop"
+    ]
   },
   "entity.ancient_golem.death": {
     "sounds": [
-      "embers:agolem_die"
+      "embers:agolem/die"
     ],
     "subtitle": "subtitles.ancient_golem.death"
   },
   "entity.ancient_golem.hurt": {
     "sounds": [
-      "embers:agolem_hit1",
-      "embers:agolem_hit2",
-      "embers:agolem_hit3",
-      "embers:agolem_hit4"
+      "embers:agolem/hit1",
+      "embers:agolem/hit2",
+      "embers:agolem/hit3",
+      "embers:agolem/hit4"
     ],
     "subtitle": "subtitles.ancient_golem.hurt"
   },
   "entity.ancient_golem.step": {
     "sounds": [
-      "embers:agolem_step1",
-      "embers:agolem_step2",
-      "embers:agolem_step3",
-      "embers:agolem_step4"
+      "embers:agolem/step1",
+      "embers:agolem/step2",
+      "embers:agolem/step3",
+      "embers:agolem/step4"
     ],
     "subtitle": "subtitles.ancient_golem.step"
   }
