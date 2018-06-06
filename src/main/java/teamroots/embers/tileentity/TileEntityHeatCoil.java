@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -16,10 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -27,7 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCookItemFX;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -37,8 +37,9 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.recipe.HeatCoilRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
+public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
 	public static final double EMBER_COST = 1.0;
 	public static final double HEATING_SPEED = 1.0;
 	public static final double COOLING_SPEED = 1.0;
@@ -52,6 +53,15 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	protected int progress = 0;
 	public double heat = 0;
 	protected int ticksExisted = 0;
+
+	public static final int SOUND_LOW_LOOP = 1;
+	public static final int SOUND_MID_LOOP = 2;
+	public static final int SOUND_HIGH_LOOP = 3;
+	public static final int SOUND_PROCESS = 4;
+	public static final int[] SOUND_IDS = new int[]{SOUND_LOW_LOOP, SOUND_MID_LOOP, SOUND_HIGH_LOOP, SOUND_PROCESS};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
+	boolean isWorking;
 	
 	public TileEntityHeatCoil(){
 		super();
@@ -143,6 +153,8 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	public void update() {
 		ticksExisted ++;
 
+		handleSound();
+
 		if (capability.getEmber() >= EMBER_COST){
 			capability.removeAmount(EMBER_COST, true);
 			if (ticksExisted % 20 == 0){
@@ -155,6 +167,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			}
 		}
 		heat = MathHelper.clamp(heat,0, MAX_HEAT);
+		isWorking = false;
 
 		int cookTime = (int)Math.ceil(MathHelper.clampedLerp(MIN_COOK_TIME,MAX_COOK_TIME,1.0-(heat / MAX_HEAT)));
 		if (heat > 0 && ticksExisted % cookTime == 0 && !getWorld().isRemote){
@@ -199,6 +212,70 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			entityItem.setDead();
 			PacketHandler.INSTANCE.sendToAll(new MessageCookItemFX(entityItem.posX,entityItem.posY,entityItem.posZ));
 			getWorld().removeEntity(entityItem);
+		}
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_LOW_LOOP:
+				Embers.proxy.playMachineSound(this, SOUND_LOW_LOOP, SoundManager.HEATCOIL_LOW, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+			case SOUND_MID_LOOP:
+				Embers.proxy.playMachineSound(this, SOUND_MID_LOOP, SoundManager.HEATCOIL_MID, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+			case SOUND_HIGH_LOOP:
+				Embers.proxy.playMachineSound(this, SOUND_HIGH_LOOP, SoundManager.HEATCOIL_HIGH, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+			case SOUND_PROCESS:
+				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.HEATCOIL_COOK, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		double heatRatio = heat / MAX_HEAT;
+		float highVolume = (float)MathHelper.clampedLerp(0,1,(heatRatio -0.75) * 4);
+		float midVolume = (float)MathHelper.clampedLerp(0,1,(heatRatio -0.25) * 4) - highVolume;
+		float lowVolume = (float)MathHelper.clampedLerp(0,1, heatRatio * 10) - midVolume;
+
+		switch (id) {
+			case SOUND_LOW_LOOP: return lowVolume > 0;
+			case SOUND_MID_LOOP: return midVolume > 0;
+			case SOUND_HIGH_LOOP: return highVolume > 0;
+			default: return false;
+		}
+	}
+
+	@Override
+	public float getCurrentVolume(int id, float volume) {
+		double heatRatio = heat / MAX_HEAT;
+		float highVolume = (float)MathHelper.clampedLerp(0,1,(heatRatio -0.75) * 4);
+		float midVolume = (float)MathHelper.clampedLerp(0,1,(heatRatio -0.25) * 4) - highVolume;
+		float lowVolume = (float)MathHelper.clampedLerp(0,1, heatRatio * 10) - midVolume;
+
+		switch (id) {
+			case SOUND_LOW_LOOP: return lowVolume;
+			case SOUND_MID_LOOP: return midVolume;
+			case SOUND_HIGH_LOOP: return highVolume;
+			default: return 0.0f;
 		}
 	}
 

@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,6 +26,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.block.BlockStamper;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.network.PacketHandler;
@@ -39,6 +41,10 @@ import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.Misc;
 
 public class TileEntityStamper extends TileEntity implements ITileEntityBase, ITickable {
+	public static final double EMBER_COST = 80.0;
+	public static final int STAMP_TIME = 70;
+	public static final int RETRACT_TIME = 10;
+
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public boolean prevPowered = false;
 	public boolean powered = false;
@@ -132,7 +138,9 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 		prevPowered = powered;
 		EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
 		if (getWorld().getBlockState(getPos().offset(face,2)).getBlock() == RegistryManager.stamp_base){
-            if (this.ticksExisted % 80 == 0 && !powered && !getWorld().isRemote){
+			int stampTime = (int) Math.ceil(STAMP_TIME);
+			int retractTime = (int) Math.ceil(RETRACT_TIME);
+            if (!powered && !getWorld().isRemote && this.ticksExisted >= stampTime){
                 TileEntityStampBase stamp = (TileEntityStampBase)getWorld().getTileEntity(getPos().offset(face,2));
                 FluidStack fluid = null;
 				IFluidHandler handler = stamp.getTank();
@@ -140,32 +148,37 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 					fluid = handler.drain(stamp.getCapacity(), false);
                 ItemStampingRecipe recipe = getRecipe(stamp.inputs.getStackInSlot(0), fluid, this.stamp.getStackInSlot(0));
                 if (recipe != null){
-                    if (this.capability.getEmber() > 80.0){
-                        this.capability.removeAmount(80.0, true);
+                    if (this.capability.getEmber() > EMBER_COST){
+                        this.capability.removeAmount(EMBER_COST, true);
                         if (!world.isRemote){
                             PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().offset(face,2).getX()+0.5f,getPos().offset(face,2).getY()+1.0f,getPos().offset(face,2).getZ()+0.5f));
                         }
-                        powered = true;
-                        ItemStack result = recipe.getResult(this,stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,this.stamp.getStackInSlot(0));
+
+						world.playSound(null,getPos().getX()+0.5,getPos().getY()-0.5,getPos().getZ()+0.5, SoundManager.STAMPER_DOWN, SoundCategory.BLOCKS, 1.0f, 1.0f);
+						powered = true;
+						ticksExisted = 0;
+
+						ItemStack result = recipe.getResult(this,stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,this.stamp.getStackInSlot(0));
 						stamp.inputs.extractItem(0, recipe.getInputConsumed(), false);
                         if (recipe.getFluid() != null){
                             stamp.getTank().drain(recipe.getFluid(), true);
                         }
-                        BlockPos off = getPos().offset(face,1);
+
+                        BlockPos middlePos = getPos().offset(face, 1);
 						BlockPos outputPos = getPos().offset(face, 3);
 						TileEntity outputTile = getWorld().getTileEntity(outputPos);
 						if (outputTile instanceof TileEntityBin){
                             TileEntityBin bin = (TileEntityBin) outputTile;
                             ItemStack remainder = bin.inventory.insertItem(0, result, false);
                             if (!remainder.isEmpty() && !getWorld().isRemote){
-                                EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,remainder);
+                                EntityItem item = new EntityItem(getWorld(),middlePos.getX()+0.5,middlePos.getY()+0.5,middlePos.getZ()+0.5,remainder);
                                 getWorld().spawnEntity(item);
                             }
                             bin.markDirty();
                             markDirty();
                         }
                         else if (!getWorld().isRemote){
-                            EntityItem item = new EntityItem(getWorld(),off.getX()+0.5,off.getY()+0.5,off.getZ()+0.5,result);
+                            EntityItem item = new EntityItem(getWorld(),middlePos.getX()+0.5,middlePos.getY()+0.5,middlePos.getZ()+0.5,result);
                             getWorld().spawnEntity(item);
                         }
                         stamp.markDirty();
@@ -173,15 +186,20 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
                 }
                 markDirty();
             }
-            else if (this.ticksExisted % 80 == 10 && powered && !getWorld().isRemote){
-                powered = false;
-                markDirty();
+            else if (powered && !getWorld().isRemote && this.ticksExisted >= retractTime){
+				retract();
             }
         }
         else if (powered){
-            powered = false;
-            markDirty();
+			retract();
         }
+	}
+
+	private void retract() {
+		world.playSound(null,getPos().getX()+0.5,getPos().getY()-0.5,getPos().getZ()+0.5, SoundManager.STAMPER_UP, SoundCategory.BLOCKS, 1.0f, 1.0f);
+		powered = false;
+		ticksExisted = 0;
+		markDirty();
 	}
 
 	private ItemStampingRecipe getRecipe(ItemStack input, FluidStack fluid, ItemStack stamp) {

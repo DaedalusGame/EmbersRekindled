@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -26,8 +27,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.tile.IEmberInjectable;
 import teamroots.embers.block.BlockAutoHammer;
 import teamroots.embers.block.BlockEmberInjector;
@@ -40,13 +43,21 @@ import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityEmberInjector extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityEmberInjector extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	protected int ticksExisted = 0;
 	protected int progress = -1;
 	protected Random random = new Random();
-	
+	public static final double EMBER_COST = 1.0;
+
+	public static final int SOUND_PROCESS = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
+	boolean isWorking;
+
 	public TileEntityEmberInjector(){
 		super();
 		capability.setEmberCapacity(24000);
@@ -125,12 +136,14 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 	
 	@Override
 	public void update(){
+		handleSound();
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
-		double emberCost = 1.0;
-		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > emberCost){
-			((IEmberInjectable) tile).inject(this, emberCost);
-			this.capability.removeAmount(emberCost, true);
+		isWorking = false;
+		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > EMBER_COST){
+			((IEmberInjectable) tile).inject(this, EMBER_COST);
+			this.capability.removeAmount(EMBER_COST, true);
+			isWorking = true;
 			markDirty();
 			if (world.isRemote){
 				for (int i = 0; i < 2; i ++){
@@ -138,5 +151,35 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 				}
 			}
 		}
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_PROCESS:
+				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.INJECTOR_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_PROCESS && progress > 0;
 	}
 }

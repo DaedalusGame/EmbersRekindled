@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -47,8 +48,9 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable {
+public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable, ISoundController {
 	boolean[] willSpawn = new boolean[12];
 
 	public static ResourceLocation TEXTURE_IRON = new ResourceLocation(Embers.MODID + ":textures/blocks/material_iron.png");
@@ -61,6 +63,11 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	protected int ticksExisted = 0;
 	protected int material = -1;
 	protected Random random = new Random();
+
+	public static final int SOUND_AMBIENT = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_AMBIENT};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
 
 	public TileEntitySeed() {
 		resetSpawns();
@@ -138,6 +145,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 
 	@Override
 	public void update() {
+		handleSound();
 		if (material == -1){
 			material = world.getBlockState(getPos()).getValue(BlockSeed.type);
 		}
@@ -177,6 +185,36 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_AMBIENT:
+				Embers.proxy.playMachineSound(this, SOUND_AMBIENT, SoundManager.METAL_SEED_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_AMBIENT;
 	}
 
 	public boolean dirty = false;

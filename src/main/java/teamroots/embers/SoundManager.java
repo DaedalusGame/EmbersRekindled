@@ -54,6 +54,15 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:block.stamper.up")
     public static SoundEvent STAMPER_UP;
 
+    @GameRegistry.ObjectHolder("embers:block.heat_coil.high_loop")
+    public static SoundEvent HEATCOIL_HIGH;
+    @GameRegistry.ObjectHolder("embers:block.heat_coil.mid_loop")
+    public static SoundEvent HEATCOIL_MID;
+    @GameRegistry.ObjectHolder("embers:block.heat_coil.low_loop")
+    public static SoundEvent HEATCOIL_LOW;
+    @GameRegistry.ObjectHolder("embers:block.heat_coil.cooking_loop")
+    public static SoundEvent HEATCOIL_COOK;
+
     @GameRegistry.ObjectHolder("embers:block.plinth.loop")
     public static SoundEvent PLINTH_LOOP;
     @GameRegistry.ObjectHolder("embers:block.melter.loop")
@@ -135,6 +144,11 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.bore.stop"));
         event.getRegistry().register(registerSound("block.bore.loop"));
         event.getRegistry().register(registerSound("block.bore.loop_mine"));
+
+        event.getRegistry().register(registerSound("block.heat_coil.high_loop"));
+        event.getRegistry().register(registerSound("block.heat_coil.mid_loop"));
+        event.getRegistry().register(registerSound("block.heat_coil.low_loop"));
+        event.getRegistry().register(registerSound("block.heat_coil.cooking_loop"));
 
         event.getRegistry().register(registerSound("block.stamper.down"));
         event.getRegistry().register(registerSound("block.stamper.up"));

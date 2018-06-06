@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -21,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
@@ -30,8 +32,9 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
+public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
 	Random random = new Random();
 	public long ticksExisted = 0;
 	public float angle = 0;
@@ -58,7 +61,12 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
         }
         
 	};
-	
+
+	public static final int SOUND_AMBIENT = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_AMBIENT};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
+
 	public boolean dirty = false;
 
 	@Override
@@ -145,6 +153,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
 	@Override
 	public void update() {
+		handleSound();
 		ticksExisted ++;
 		renderCapacityLast = renderCapacity;
 		if(renderCapacity < this.capability.getEmberCapacity())
@@ -191,6 +200,36 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 				ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, (xDest-x)/24.0f * random.nextFloat(), (yDest-y)/24.0f * random.nextFloat(), (zDest-z)/24.0f * random.nextFloat(), 255, 64, 16, 2.0f, 24);
 			}
 		}
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_AMBIENT:
+				Embers.proxy.playMachineSound(this, SOUND_AMBIENT, SoundManager.CRYSTAL_CELL_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_AMBIENT;
 	}
 	
 	@Override
