@@ -40,13 +40,13 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileE
 				if (fluidStack != null){
 					Fluid fluid = fluidStack.getFluid();
 					int amount = fluidStack.amount;
-					int c = fluid.getColor();
+					int c = fluid.getColor(fluidStack);
 		            blue = c & 0xFF;
 		            green = (c >> 8) & 0xFF;
 		            red = (c >> 16) & 0xFF;
 		            alpha = (c >> 24) & 0xFF;
 		            
-		            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill().toString());
+		            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill(fluidStack).toString());
 		            diffU = maxU-minU;
 		            diffV = maxV-minV;
 
@@ -55,7 +55,7 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileE
 					minV = sprite.getMinV()+diffV*0.25;
 					maxV = sprite.getMaxV()-diffV*0.25;
 
-					int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity());
+					int i = getWorld().getCombinedLight(tile.getPos(), fluid.getLuminosity(fluidStack));
 					lightx = i >> 0x10 & 0xFFFF;
 					lighty = i & 0xFFFF;
 
