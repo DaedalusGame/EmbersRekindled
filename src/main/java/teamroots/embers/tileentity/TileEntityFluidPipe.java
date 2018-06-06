@@ -332,7 +332,7 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 								if (t instanceof TileEntityFluidPipe){
 									((TileEntityFluidPipe) t).from.add(Misc.getOppositeFace(connectedFaces.get(i)));
 								}
-								FluidStack toAdd = tank.getFluid();
+								FluidStack toAdd = tank.getFluid().copy();
 								toAdd.amount = toEach;
 								int filled = handler.fill(toAdd, true);
 								tank.drainInternal(filled, true);

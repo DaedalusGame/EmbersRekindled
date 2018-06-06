@@ -382,7 +382,7 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 										if (t instanceof TileEntityFluidPipe) {
 											((TileEntityFluidPipe) t).from.add(connectedFace.getOpposite());
 										}
-										FluidStack toAdd = tank.getFluid();
+										FluidStack toAdd = tank.getFluid().copy();
 										toAdd.amount = toEach;
 										int filled = handler.fill(toAdd, true);
 										tank.drainInternal(filled, true);
