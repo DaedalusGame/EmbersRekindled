@@ -37,12 +37,14 @@ import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntityInfernoForge extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine {
+	public static final double EMBER_COST = 16.0;
+	public static final int MAX_LEVEL = 5;
+	public static final int PROCESS_TIME = 200;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = 0;
 	int heat = 0;
 	int ticksExisted = 0;
-	public static final double EMBER_COST = 16.0;
 
 	public TileEntityInfernoForge(){
 		super();
@@ -159,41 +161,33 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 					e.setPickupDelay(20);
 				}
 				if (progress == 0 && !world.isRemote){
-					ItemStack item = ItemStack.EMPTY;
+					ItemStack pickedItem = ItemStack.EMPTY;
 					double emberValue = 0;
-					for (int i = 0; i < items.size(); i ++){
-						if (ItemModUtil.hasHeat(items.get(i).getItem())){
-							if (item.isEmpty() && ItemModUtil.getLevel(items.get(i).getItem()) <= 5 && ItemModUtil.getHeat(items.get(i).getItem()) >= ItemModUtil.getMaxHeat(items.get(i).getItem())){
-								item = items.get(i).getItem();
-							}
-							else {
+					for (EntityItem item : items) {
+						if (ItemModUtil.hasHeat(item.getItem())) {
+							if (pickedItem.isEmpty() && ItemModUtil.getLevel(item.getItem()) <= MAX_LEVEL && ItemModUtil.getHeat(item.getItem()) >= ItemModUtil.getMaxHeat(item.getItem())) {
+								pickedItem = item.getItem();
+							} else {
 								progress = 0;
 								markDirty();
 								return;
 							}
-						}
-						else {
-							if (EmberGenUtil.getEmberForItem(items.get(i).getItem().getItem()) > 0){
-								emberValue += EmberGenUtil.getEmberForItem(items.get(i).getItem().getItem());
-							}
-							else {
+						} else {
+							if (EmberGenUtil.getEmberForItem(item.getItem().getItem()) > 0) {
+								emberValue += EmberGenUtil.getEmberForItem(item.getItem().getItem());
+							} else {
 								progress = 0;
 								markDirty();
 								return;
 							}
 						}
 					}
-					if (!item.isEmpty() && emberValue > 0 && emberValue <= EmberGenUtil.getEmberForItem(RegistryManager.ember_cluster)*3.0){
-						TileEntity tile = world.getTileEntity(pos.up());
-						if (tile instanceof TileEntityInfernoForgeOpening){
-							((TileEntityInfernoForgeOpening)tile).isOpen = true;
-							((TileEntityInfernoForgeOpening)tile).prevState = false;
-							tile.markDirty();
+					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= EmberGenUtil.getEmberForItem(RegistryManager.ember_cluster)*3.0){
+						TileEntityInfernoForgeOpening opening = getOpening();
+						if (opening != null){
+							opening.open();
 						}
-						if (!world.isRemote){
-							world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, SoundManager.ACTIVATOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
-							PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5));
-						}
+						boolean success = false;
 						for (EntityItem item1 : items) {
 							if (!ItemModUtil.hasHeat(item1.getItem())) {
 								world.removeEntity(item1);
@@ -204,7 +198,12 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 								ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
 								item1.setItem(stack);
 								progress = 0;
+								success = true;
 							}
+						}
+						if (!world.isRemote){
+							world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, success ? SoundManager.INFERNO_FORGE_SUCCESS : SoundManager.INFERNO_FORGE_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
+							PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5));
 						}
 					}
 				}
@@ -215,32 +214,35 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 			markDirty();
 		}
 	}
-	
+
+	private TileEntityInfernoForgeOpening getOpening() {
+		TileEntity tile = world.getTileEntity(pos.up());
+		return tile instanceof TileEntityInfernoForgeOpening ? (TileEntityInfernoForgeOpening) tile : null;
+	}
+
 	public void updateProgress(){
 		if (progress == 0){
 			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY()+0.25,getPos().getZ(),getPos().getX()+1,getPos().getY()+1,getPos().getZ()+1));
-			ItemStack item = ItemStack.EMPTY;
+			ItemStack pickedItem = ItemStack.EMPTY;
 			double emberValue = 0;
-			for (int i = 0; i < items.size(); i ++){
-				if (ItemModUtil.hasHeat(items.get(i).getItem())){
-					if (item.isEmpty() && ItemModUtil.getLevel(items.get(i).getItem()) < 5 && ItemModUtil.getHeat(items.get(i).getItem()) >= ItemModUtil.getMaxHeat(items.get(i).getItem())){
-						item = items.get(i).getItem();
-					}
-					else {
+			for (EntityItem item : items) {
+				if (ItemModUtil.hasHeat(item.getItem())) {
+					if (pickedItem.isEmpty() && ItemModUtil.getLevel(item.getItem()) < MAX_LEVEL && ItemModUtil.getHeat(item.getItem()) >= ItemModUtil.getMaxHeat(item.getItem())) {
+						pickedItem = item.getItem();
+					} else {
 						return;
 					}
-				}
-				else {
-					if (EmberGenUtil.getEmberForItem(items.get(i).getItem().getItem()) > 0){
-						emberValue += EmberGenUtil.getEmberForItem(items.get(i).getItem().getItem());
-					}
-					else {
+				} else {
+					if (EmberGenUtil.getEmberForItem(item.getItem().getItem()) > 0) {
+						emberValue += EmberGenUtil.getEmberForItem(item.getItem().getItem());
+					} else {
 						return;
 					}
 				}
 			}
-			if (!item.isEmpty() && emberValue > 0 && emberValue < EmberGenUtil.getEmberForItem(RegistryManager.ember_cluster)*3.0){
-				progress = 200;
+			if (!pickedItem.isEmpty() && emberValue > 0 && emberValue < EmberGenUtil.getEmberForItem(RegistryManager.ember_cluster)*3.0){
+				progress = PROCESS_TIME;
+				world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.INFERNO_FORGE_START, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				markDirty();
 			}
 		}

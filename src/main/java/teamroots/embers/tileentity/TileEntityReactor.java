@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -21,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
@@ -32,12 +34,19 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
-public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
 	public static final float BASE_MULTIPLIER = 1.0f;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
+
+	public static final int SOUND_HAS_EMBER = 1;
+	public static final int[] SOUND_IDS = new int[]{SOUND_HAS_EMBER};
+
+	HashSet<Integer> soundsPlaying = new HashSet<>();
+
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -130,6 +139,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 
 	@Override
 	public void update() {
+		handleSound();
 		if (!inventory.getStackInSlot(0).isEmpty()){
 			progress ++;
 			if (progress > 20){
@@ -155,7 +165,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 							double ember = multiplier * emberValue;
 							if (capability.getEmber() <= capability.getEmberCapacity()-ember){
 								if (!world.isRemote){
-									world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.ACTIVATOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
+									world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.IGNEM_REACTOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
 									PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+0.5f,getPos().getZ()+0.5f));
 								}
 								capability.addAmount(ember, true);
@@ -168,6 +178,36 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 			}
 			markDirty();
 		}
+	}
+
+	@Override
+	public void playSound(int id) {
+		switch (id) {
+			case SOUND_HAS_EMBER:
+				Embers.proxy.playMachineSound(this,SOUND_HAS_EMBER, SoundManager.GENERATOR_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
+				break;
+		}
+		soundsPlaying.add(id);
+	}
+
+	@Override
+	public void stopSound(int id) {
+		soundsPlaying.remove(id);
+	}
+
+	@Override
+	public boolean isSoundPlaying(int id) {
+		return soundsPlaying.contains(id);
+	}
+
+	@Override
+	public int[] getSoundIDs() {
+		return SOUND_IDS;
+	}
+
+	@Override
+	public boolean shouldPlaySound(int id) {
+		return id == SOUND_HAS_EMBER && capability.getEmber() > 0;
 	}
 	
 	public boolean dirty = false;

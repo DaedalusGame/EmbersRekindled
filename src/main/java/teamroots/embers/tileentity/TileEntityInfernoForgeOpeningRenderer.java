@@ -29,7 +29,7 @@ public class TileEntityInfernoForgeOpeningRenderer extends TileEntitySpecialRend
 	@Override
 	public void render(TileEntityInfernoForgeOpening tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile != null){
-			float dx = 0.45f* tile.openAmount;
+			float dx = 0.45f*tile.openAmount*partialTicks + 0.45f*tile.lastOpenAmount*(1-partialTicks);
 	            
             Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             GlStateManager.disableCull();

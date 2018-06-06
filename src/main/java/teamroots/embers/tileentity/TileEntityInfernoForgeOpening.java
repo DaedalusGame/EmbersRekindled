@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,6 +24,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.block.BlockInfernoForge;
 import teamroots.embers.block.BlockInfernoForgeEdge;
 import teamroots.embers.network.PacketHandler;
@@ -30,9 +32,10 @@ import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.Misc;
 
 public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEntityBase, ITickable {
-	public boolean isOpen = false;
-	public boolean prevState = false;
-	public float openAmount = 0.0f;
+	public boolean isOpen;
+	public boolean prevState;
+	public float openAmount;
+	public float lastOpenAmount;
 	
 	public TileEntityInfernoForgeOpening(){
 		super();
@@ -84,20 +87,45 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 		super.markDirty();
 	}
 
+	public void toggle() {
+		if(isOpen)
+			close();
+		else
+			open();
+	}
+
+	public void open() {
+		isOpen = true;
+		prevState = false;
+		world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.INFERNO_FORGE_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
+		markDirty();
+	}
+
+	public void close() {
+		isOpen = false;
+		prevState = true;
+		world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.INFERNO_FORGE_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+		markDirty();
+	}
+
 	@Override
 	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!player.isSneaking()){
 			if (world.getTileEntity(pos.down()) instanceof TileEntityInfernoForge){
-				if (((TileEntityInfernoForge)world.getTileEntity(pos.down())).progress == 0){
-					prevState = isOpen;
-					isOpen = !isOpen;
-					markDirty();
+				TileEntityInfernoForge forge = getForge(world, pos);
+				if (forge != null && forge.progress == 0){
+					toggle();
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	private TileEntityInfernoForge getForge(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos.down());
+		return tile instanceof TileEntityInfernoForge ? (TileEntityInfernoForge) tile : null;
 	}
 
 	@Override
@@ -109,7 +137,8 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 
 	@Override
 	public void update() {
-		if (isOpen && !prevState && this.openAmount < 1.0f){
+		lastOpenAmount = openAmount;
+		if (isOpen && !prevState && openAmount < 1.0f){
 			openAmount = 0.5f+0.5f*openAmount;
 			if (openAmount > 0.99f){
 				openAmount = 1.0f;
@@ -117,13 +146,13 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 				markDirty();
 			}
 		}
-		if (!isOpen && prevState && this.openAmount > 0.0f){
+		if (!isOpen && prevState && openAmount > 0.0f){
 			openAmount = 0.5f*openAmount;
 			if (openAmount < 0.01f){
 				openAmount = 0.0f;
-				if (world.getTileEntity(pos.down()) instanceof TileEntityInfernoForge){
-					((TileEntityInfernoForge)world.getTileEntity(pos.down())).updateProgress();
-				}
+				TileEntityInfernoForge forge = getForge(world, pos);
+				if(forge != null)
+					forge.updateProgress();
 				prevState = isOpen;
 				markDirty();
 			}

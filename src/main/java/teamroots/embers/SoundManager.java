@@ -163,7 +163,7 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.cinder_staff.charge"));
         event.getRegistry().register(registerSound("item.cinder_staff.fail"));
         event.getRegistry().register(registerSound("item.cinder_staff.loop"));
-        
+
         event.getRegistry().register(registerSound("entity.ancient_golem.death"));
         event.getRegistry().register(registerSound("entity.ancient_golem.hurt"));
         event.getRegistry().register(registerSound("entity.ancient_golem.step"));

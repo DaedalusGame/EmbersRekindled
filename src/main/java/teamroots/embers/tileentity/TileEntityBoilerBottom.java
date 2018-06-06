@@ -169,7 +169,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
 						if (top.capability.getEmber() <= top.capability.getEmberCapacity() - ember) {
 							tank.drain(FLUID_CONSUMED,true);
 							if (!world.isRemote) {
-								world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, SoundManager.ACTIVATOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
+								world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, SoundManager.PRESSURE_REFINERY, SoundCategory.BLOCKS, 1.0f, 1.0f);
 								PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 1.5f, getPos().getZ() + 0.5f));
 							}
 							top.capability.addAmount(ember, true);
