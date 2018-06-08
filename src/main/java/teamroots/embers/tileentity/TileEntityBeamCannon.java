@@ -24,15 +24,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.tile.ISparkable;
 import teamroots.embers.api.tile.ITargetable;
 import teamroots.embers.block.BlockBeamCannon;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageBeamCannonFX;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 
 public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase, ITickable, ITargetable {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -128,7 +128,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -136,7 +136,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);
@@ -169,8 +169,8 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 				if(sparkTarget(tile))
 					doContinue = false;
 				else if (tile instanceof IEmberPacketReceiver){
-					if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
-						tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(capability.getEmber(), true);
+					if (tile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
+						tile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null).addAmount(capability.getEmber(), true);
 						tile.markDirty();
 					}
 					doContinue = false;

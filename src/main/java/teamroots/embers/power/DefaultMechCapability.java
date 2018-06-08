@@ -3,6 +3,7 @@ package teamroots.embers.power;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import teamroots.embers.Embers;
+import teamroots.embers.api.power.IMechCapability;
 
 public class DefaultMechCapability implements IMechCapability {
 	private double power = 0;

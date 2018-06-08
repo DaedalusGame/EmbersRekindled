@@ -2,7 +2,6 @@ package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -11,27 +10,20 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockAxle;
 import teamroots.embers.block.BlockGearbox;
 import teamroots.embers.item.ItemGear;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.power.DefaultMechCapability;
-import teamroots.embers.power.MechCapabilityProvider;
 import teamroots.embers.util.Misc;
 
 public class TileEntityGearbox extends TileEntity implements ITileEntityBase {
@@ -96,7 +88,7 @@ public class TileEntityGearbox extends TileEntity implements ITileEntityBase {
 		for (EnumFacing f : EnumFacing.values()){
 			if (f != null && f != from){
 				TileEntity t = world.getTileEntity(getPos().offset(f));
-				if (t != null && t.hasCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(f))){
+				if (t != null && t.hasCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(f))){
 					toUpdate.add(f);
 				}
 			}
@@ -117,7 +109,7 @@ public class TileEntityGearbox extends TileEntity implements ITileEntityBase {
 				}
 			}
 			if (!(t instanceof TileEntityAxle) || t instanceof TileEntityAxle && ((TileEntityAxle)t).front == f.getOpposite()){
-				t.getCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(f)).setPower(capability.getPower(f),Misc.getOppositeFace(f));
+				t.getCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(f)).setPower(capability.getPower(f),Misc.getOppositeFace(f));
 				t.markDirty();	
 			}
 		}
@@ -172,7 +164,7 @@ public class TileEntityGearbox extends TileEntity implements ITileEntityBase {
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == MechCapabilityProvider.mechCapability){
+		if (capability == EmbersCapabilities.MECH_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -180,7 +172,7 @@ public class TileEntityGearbox extends TileEntity implements ITileEntityBase {
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == MechCapabilityProvider.mechCapability){
+		if (capability == EmbersCapabilities.MECH_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

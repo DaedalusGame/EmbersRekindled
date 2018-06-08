@@ -17,8 +17,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import teamroots.embers.power.IEmberPacketProducer;
-import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.api.power.IEmberPacketProducer;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.api.tile.ITargetable;
 import teamroots.embers.util.Misc;
 

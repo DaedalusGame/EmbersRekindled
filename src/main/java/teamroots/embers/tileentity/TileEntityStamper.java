@@ -20,22 +20,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockStamper;
-import teamroots.embers.item.EnumStampType;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageStamperFX;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.recipe.ItemStampingOreRecipe;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.recipe.ItemStampingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.Misc;
@@ -208,7 +204,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
@@ -219,7 +215,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){

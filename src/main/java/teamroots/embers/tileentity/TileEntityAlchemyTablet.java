@@ -31,7 +31,7 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSphereFX;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.AlchemyResult;

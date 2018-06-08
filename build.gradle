@@ -13,9 +13,9 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "0.1"
+version = "1.0"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Embers"
+archivesBaseName = "EmbersRekindled"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8

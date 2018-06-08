@@ -1,27 +1,19 @@
 package teamroots.embers.entity;
 
-import java.awt.Color;
-
 //import elucent.albedo.lighting.ILightProvider;
 //import elucent.albedo.lighting.Light;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
+		import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional.Interface;
-import net.minecraftforge.fml.common.Optional.Method;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import teamroots.embers.EventManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSparkleFX;
 import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.util.Misc;
 
 //@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
@@ -146,11 +138,11 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 	public void affectTileEntity(IBlockState state, TileEntity tile){
 		if (tile instanceof IEmberPacketReceiver){
 			if (((IEmberPacketReceiver)tile).onReceive(this)){
-				if (tile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
+				if (tile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
 					if (!getEntityWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
 					}
-					tile.getCapability(EmberCapabilityProvider.emberCapability, null).addAmount(value, true);
+					tile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null).addAmount(value, true);
 					tile.markDirty();
 					this.motionX = 0;
 					this.motionY = 0;

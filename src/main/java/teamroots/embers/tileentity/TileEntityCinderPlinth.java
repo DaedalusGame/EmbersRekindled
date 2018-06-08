@@ -23,10 +23,10 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
@@ -96,7 +96,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -107,7 +107,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return (T)this.inventory;
 		}
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

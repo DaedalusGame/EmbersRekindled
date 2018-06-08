@@ -1,34 +1,22 @@
 package teamroots.embers.tileentity;
 
-import java.util.List;
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockAxle;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.power.DefaultMechCapability;
-import teamroots.embers.power.MechCapabilityProvider;
 import teamroots.embers.util.Misc;
 
 public class TileEntityAxle extends TileEntity implements ITileEntityBase {
@@ -63,12 +51,12 @@ public class TileEntityAxle extends TileEntity implements ITileEntityBase {
 				markDirty();
 			}
 			else {
-				if (!lastTile.hasCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(front))){
+				if (!lastTile.hasCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(front))){
 					capability.setPower(0,null);
 					markDirty();
 				}
 				else {
-					capability.setPower(lastTile.getCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(front)).getPower(Misc.getOppositeFace(front)), front);
+					capability.setPower(lastTile.getCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(front)).getPower(Misc.getOppositeFace(front)), front);
 				}
 			}
 		}
@@ -82,9 +70,9 @@ public class TileEntityAxle extends TileEntity implements ITileEntityBase {
 				}
 				if (fromPos == null || fromPos != null && !p1.equals(fromPos)){
 					TileEntity t = world.getTileEntity(p1);
-					if (t != null && t.hasCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(face))){
+					if (t != null && t.hasCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(face))){
 						if (!(t instanceof TileEntityAxle && ((TileEntityAxle) t).front == Misc.getOppositeFace(front))){
-							t.getCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(face)).setPower(capability.getPower(face),Misc.getOppositeFace(face));
+							t.getCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(face)).setPower(capability.getPower(face),Misc.getOppositeFace(face));
 							t.markDirty();
 						}
 					}
@@ -140,7 +128,7 @@ public class TileEntityAxle extends TileEntity implements ITileEntityBase {
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == MechCapabilityProvider.mechCapability){
+		if (capability == EmbersCapabilities.MECH_CAPABILITY){
 			IBlockState state = world.getBlockState(getPos());
 			if (state.getBlock() instanceof BlockAxle){
 				EnumFacing face = state.getValue(BlockAxle.facing);
@@ -156,7 +144,7 @@ public class TileEntityAxle extends TileEntity implements ITileEntityBase {
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == MechCapabilityProvider.mechCapability){
+		if (capability == EmbersCapabilities.MECH_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

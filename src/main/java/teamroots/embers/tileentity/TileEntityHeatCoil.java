@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -28,13 +27,12 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCookItemFX;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.recipe.HeatCoilRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.sound.ISoundController;
@@ -129,7 +127,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
@@ -140,7 +138,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
@@ -209,9 +207,9 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 		ItemStack stack = entityItem.getItem();
 		stack.shrink(inputCount);
 		entityItem.setItem(stack);
+		PacketHandler.INSTANCE.sendToAll(new MessageCookItemFX(entityItem.posX,entityItem.posY,entityItem.posZ));
 		if (stack.isEmpty()) {
 			entityItem.setDead();
-			PacketHandler.INSTANCE.sendToAll(new MessageCookItemFX(entityItem.posX,entityItem.posY,entityItem.posZ));
 			getWorld().removeEntity(entityItem);
 		}
 	}

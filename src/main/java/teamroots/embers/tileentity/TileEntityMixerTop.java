@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -18,9 +17,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberCapability;
 
 public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityBase {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -76,7 +75,7 @@ public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityB
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -84,7 +83,7 @@ public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityB
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

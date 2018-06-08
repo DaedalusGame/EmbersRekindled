@@ -4,13 +4,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -24,16 +19,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.block.BlockEmberEmitter;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockEmberPulser;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.power.IEmberPacketProducer;
-import teamroots.embers.power.IEmberPacketReceiver;
-import teamroots.embers.tileentity.TileEntityItemExtractor.EnumPipeConnection;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberPacketProducer;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.util.Misc;
 
 public class TileEntityEmitter extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer {
@@ -161,8 +153,8 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 		EnumFacing facing = state.getValue(BlockEmberPulser.facing);
 		TileEntity attachedTile = getWorld().getTileEntity(getPos().offset(facing.getOpposite()));
 		if (ticksExisted % 5 == 0 && attachedTile != null){
-			if (attachedTile.hasCapability(EmberCapabilityProvider.emberCapability, null)){
-				IEmberCapability cap = attachedTile.getCapability(EmberCapabilityProvider.emberCapability, null);
+			if (attachedTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
+				IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
 				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
 					double removed = cap.removeAmount(PULL_RATE, true);
 					capability.addAmount(removed, true);
@@ -208,7 +200,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -216,7 +208,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

@@ -25,15 +25,13 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
@@ -124,7 +122,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return true;
 		}
-		else if (capability == EmberCapabilityProvider.emberCapability){
+		else if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -135,7 +133,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return (T)this.inventory;
 		}
-		else if (capability == EmberCapabilityProvider.emberCapability){
+		else if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

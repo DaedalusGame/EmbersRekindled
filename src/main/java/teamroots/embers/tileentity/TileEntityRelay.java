@@ -8,7 +8,6 @@ import net.minecraft.block.BlockLever;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -21,13 +20,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
-import teamroots.embers.block.BlockEmberEmitter;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
-import teamroots.embers.power.IEmberPacketProducer;
-import teamroots.embers.power.IEmberPacketReceiver;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberPacketProducer;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 
 public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmberPacketProducer, IEmberPacketReceiver, ITickable {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -139,7 +137,7 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmb
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return true;
 		}
 		return super.hasCapability(capability, facing);
@@ -147,7 +145,7 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmb
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmberCapabilityProvider.emberCapability){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);

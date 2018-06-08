@@ -17,11 +17,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.EventManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdateRequest;
-import teamroots.embers.power.EmberCapabilityProvider;
-import teamroots.embers.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.util.Misc;
 
 public class BlockEmberGauge extends BlockBase implements IDial {
@@ -87,8 +86,8 @@ public class BlockEmberGauge extends BlockBase implements IDial {
 	public List<String> getDisplayInfo(World world, BlockPos pos, IBlockState state) {
 		ArrayList<String> text = new ArrayList<String>();
 		if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))) != null){
-			if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).hasCapability(EmberCapabilityProvider.emberCapability, state.getValue(facing))){
-				IEmberCapability handler = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).getCapability(EmberCapabilityProvider.emberCapability, state.getValue(facing));
+			if (world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).hasCapability(EmbersCapabilities.EMBER_CAPABILITY, state.getValue(facing))){
+				IEmberCapability handler = world.getTileEntity(pos.offset(Misc.getOppositeFace(state.getValue(facing)))).getCapability(EmbersCapabilities.EMBER_CAPABILITY, state.getValue(facing));
 				if (handler != null){
 					text.add(I18n.format("embers.tooltip.emberdial.ember")+handler.getEmber()+"/"+handler.getEmberCapacity());
 				}

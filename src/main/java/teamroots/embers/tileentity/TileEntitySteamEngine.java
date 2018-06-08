@@ -1,12 +1,8 @@
 package teamroots.embers.tileentity;
 
-import java.util.List;
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,24 +13,19 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidEvent.FluidSpilledEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
-import teamroots.embers.block.BlockAxle;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockSteamEngine;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultMechCapability;
-import teamroots.embers.power.MechCapabilityProvider;
 import teamroots.embers.util.Misc;
 
 public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable {
@@ -110,7 +101,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == MechCapabilityProvider.mechCapability){
+		if (capability == EmbersCapabilities.MECH_CAPABILITY){
 			return facing == front;
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
@@ -124,7 +115,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == MechCapabilityProvider.mechCapability){
+		if (capability == EmbersCapabilities.MECH_CAPABILITY){
 			return (T)this.capability;
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
@@ -168,8 +159,8 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 		for (EnumFacing f : EnumFacing.values()){
 			TileEntity t = world.getTileEntity(getPos().offset(f));
 			if (t != null && f == front){
-				if (t.hasCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(f))){
-					t.getCapability(MechCapabilityProvider.mechCapability, Misc.getOppositeFace(f)).setPower(capability.getPower(Misc.getOppositeFace(f)),Misc.getOppositeFace(f));
+				if (t.hasCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(f))){
+					t.getCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(f)).setPower(capability.getPower(Misc.getOppositeFace(f)),Misc.getOppositeFace(f));
 					t.markDirty();
 				}
 			}
