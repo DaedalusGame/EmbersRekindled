@@ -181,6 +181,6 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 
 	@Override
 	public boolean shouldPlaySound(int id) {
-		return id == SOUND_PROCESS && progress > 0;
+		return id == SOUND_PROCESS && isWorking;
 	}
 }

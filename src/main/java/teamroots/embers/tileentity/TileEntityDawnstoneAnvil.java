@@ -37,6 +37,8 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAnvilSparksFX;
 import teamroots.embers.network.message.MessageStamperFX;
 import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.recipe.DawnstoneAnvilRecipe;
+import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 
@@ -153,17 +155,15 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 	}
 	
 	public boolean isValid(ItemStack stack1, ItemStack stack2){
-		if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
+		/*if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
 			if (!ItemModUtil.hasHeat(stack1) && stack2.getItem() == RegistryManager.ancient_motive_core){
 				return true;
 			}
 			else if (ItemModUtil.hasHeat(stack1) && ItemModUtil.modifierRegistry.containsKey(stack2.getItem()) && ItemModUtil.getLevel(stack1) > ItemModUtil.getTotalModLevel(stack1) && ItemModUtil.isModValid(stack1,stack2)){
 				return true;
 			}
-			else if (ItemModUtil.hasHeat(stack1)){
-				if (stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0 && stack2.isEmpty()){
-					return true;
-				}
+			else if (ItemModUtil.hasHeat(stack1) && stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0 && stack2.isEmpty()) {
+				return true;
 			}
 		}
 		if (stack1.getItem().getIsRepairable(stack1,stack2)
@@ -172,12 +172,14 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 		}
 		if (!Misc.getRepairItem(stack1).isEmpty() && stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2.isEmpty()){
 			return true;
-		}
-		return false;
+		}*/
+		DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1,stack2);
+
+		return recipe != null;
 	}
 	
 	public ItemStack[] getResult(ItemStack stack1, ItemStack stack2){
-		if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
+		/*if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
 			if ((!ItemModUtil.hasHeat(stack1) || !ItemModUtil.hasModifier(stack1, ItemModUtil.modifierRegistry.get(RegistryManager.ancient_motive_core).name)) && stack2.getItem() == RegistryManager.ancient_motive_core){
 				ItemModUtil.checkForTag(stack1);
 				ItemModUtil.addModifier(stack1, stack2.copy());
@@ -198,7 +200,7 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			}
 			else if (ItemModUtil.hasHeat(stack1) && stack2.isEmpty()){
 				if (stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 0){
-					List<ItemStack> stacks = new ArrayList<ItemStack>();
+					List<ItemStack> stacks = new ArrayList<>();
 					for (int i = 0; i < stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount(); i ++){
 						ItemStack s = new ItemStack(stack1.getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).getCompoundTagAt(i).getCompoundTag("item"));
 						if (ItemModUtil.modifierRegistry.get(s.getItem()) != null && ItemModUtil.modifierRegistry.get(s.getItem()).countTowardsTotalLevel){
@@ -230,7 +232,16 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			markDirty();
 			return new ItemStack[]{new ItemStack(Misc.getRepairItem(stack1).getItem(),resourceAmount,Misc.getRepairItem(stack1).getItemDamage())};		
 		}
-		return new ItemStack[]{};
+		return new ItemStack[]{};*/
+		DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1,stack2);
+		if(recipe != null) {
+			inventory.setStackInSlot(1, ItemStack.EMPTY);
+			inventory.setStackInSlot(0, ItemStack.EMPTY);
+			markDirty();
+			List<ItemStack> results = recipe.getResult(this, stack1, stack2);
+			return results.toArray(new ItemStack[results.size()]);
+		}
+		return new ItemStack[0];
 	}
 	
 	public boolean dirty = false;

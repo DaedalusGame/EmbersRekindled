@@ -16,6 +16,7 @@ import teamroots.embers.network.PacketHandler;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchManager;
+import teamroots.embers.tileentity.*;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.ItemModUtil;
 
@@ -33,6 +34,15 @@ public class CommonProxy {
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityMechCore.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityMixerBottom.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityMixerTop.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityActivatorBottom.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityFurnaceBottom.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityFurnaceTop.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityBoilerBottom.class);
+		TileEntityMechAccessor.registerAccessibleTile(TileEntityReactor.class);
+
 		ResearchManager.initResearches();
 		NetworkRegistry.INSTANCE.registerGuiHandler(Embers.instance, new GuiHandler());
 		RecipeRegistry.mergeOreRecipes();

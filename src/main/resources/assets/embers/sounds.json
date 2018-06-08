@@ -44,14 +44,15 @@
   "block.crystal_cell.loop": {
     "category": "block",
     "sounds": [
-      "embers:crystal_cell_loop"
+      "embers:crystal_cell/loop"
     ]
   },
   "block.crystal_cell.grow": {
     "sounds": [
-      "embers:metal_seed/ping1",
-      "embers:metal_seed/ping2",
-      "embers:metal_seed/ping3"
+      "embers:crystal_cell/zap1",
+      "embers:crystal_cell/zap2",
+      "embers:crystal_cell/zap3",
+      "embers:crystal_cell/zap4"
     ],
     "subtitle": "subtitles.crystal_cell.grow"
   },

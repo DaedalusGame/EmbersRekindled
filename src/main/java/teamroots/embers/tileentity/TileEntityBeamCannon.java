@@ -37,7 +37,9 @@ import teamroots.embers.power.IEmberPacketReceiver;
 public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase, ITickable, ITargetable {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public BlockPos target = null;
+	public BlockPos lastTarget = null;
 	public long ticksExisted = 0;
+	public boolean lastPowered = false;
 	public Random random = new Random();
 	int offset = random.nextInt(40);
 	
@@ -118,9 +120,10 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		}
 		ticksExisted++;
 		boolean isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
-		if (this.capability.getEmber() >= 400 && isPowered){
+		if (this.capability.getEmber() >= 400 && isPowered && !lastPowered){
 			fire();
 		}
+		lastPowered = isPowered;
 	}
 	
 	@Override

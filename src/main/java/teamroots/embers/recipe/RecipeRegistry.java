@@ -10,8 +10,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,6 +32,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.util.AspectList.AspectRangeList;
+import teamroots.embers.util.Misc;
 import teamroots.embers.util.WeightedItemStack;
 
 public class RecipeRegistry {
@@ -1158,6 +1161,15 @@ public class RecipeRegistry {
 				emberCrystal,
 				Lists.newArrayList(plateDawnstone, plateDawnstone, plateDawnstone, ingotSilver),
 				new ItemStack(RegistryManager.flame_barrier,1)));
+
+		heatCoilRecipes.add(new HeatCoilFurnaceRecipe());
+
+		dawnstoneAnvilRecipes.add(new AnvilAddCoreRecipe());
+		dawnstoneAnvilRecipes.add(new AnvilAddModifierRecipe());
+		dawnstoneAnvilRecipes.add(new AnvilRemoveModifierRecipe());
+		dawnstoneAnvilRecipes.add(new AnvilRepairRecipe()); //Repair with repair item
+		dawnstoneAnvilRecipes.add(new AnvilRepairMateriaRecipe()); //Repair with Isolated Materia
+		dawnstoneAnvilRecipes.add(new AnvilBreakdownRecipe()); //BREAKDOWN BREAKDOWN
 	}
 
 	public static BoreOutput getBoreOutput(World world, BlockPos pos) {

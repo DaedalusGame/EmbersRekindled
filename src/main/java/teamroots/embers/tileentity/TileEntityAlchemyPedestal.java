@@ -47,6 +47,11 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
         	TileEntityAlchemyPedestal.this.markDirty();
         }
 
+		@Override
+		public int getSlotLimit(int slot) {
+			return slot == stackItem ? 1 : super.getSlotLimit(slot);
+		}
+
 		@Nonnull
 		@Override
 		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
@@ -102,11 +107,8 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	}
 	
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		}
-		return super.hasCapability(capability, facing);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override

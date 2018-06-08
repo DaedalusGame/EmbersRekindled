@@ -298,8 +298,8 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 			List<TileEntityAlchemyPedestal> pedestals = AlchemyUtil.getNearbyPedestals(getWorld(),getPos());
 			if (getWorld().isRemote){
 				for (TileEntityAlchemyPedestal pedestal : pedestals) {
-					//if(pedestal instanceof TileEntityAlchemyPedestal && !pedestal.inventory.getStackInSlot(1).isEmpty()) //If there's ash in the pedestal
-					//	((TileEntityAlchemyPedestal) pedestal).setActive(3);
+					if(pedestal != null && !pedestal.inventory.getStackInSlot(1).isEmpty()) //If there's ash in the pedestal
+						pedestal.setActive(3);
 					ParticleUtil.spawnParticleStar(getWorld(), pedestal.getPos().getX() + 0.5f, pedestal.getPos().getY() + 1.0f, pedestal.getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 3.5f + 0.5f * random.nextFloat(), 40);
 					for (int j = 0; j < 8; j++) {
 						float coeff = random.nextFloat();

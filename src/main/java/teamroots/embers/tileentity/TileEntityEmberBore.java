@@ -242,13 +242,13 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 				Embers.proxy.playMachineSound(this,SOUND_ON_DRILL, SoundManager.BORE_LOOP_MINE, SoundCategory.BLOCKS, true, 1.0f, 1.0f, soundX, soundY, soundZ);
 				break;
 		}
-		world.playSound(null,soundX,soundY,soundZ,SoundManager.BORE_START,SoundCategory.BLOCKS,1.0f,1.0f);
+		world.playSound(soundX,soundY,soundZ,SoundManager.BORE_START,SoundCategory.BLOCKS,1.0f,1.0f,false);
 		soundsPlaying.add(id);
 	}
 
 	@Override
 	public void stopSound(int id) {
-		world.playSound(null, (float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f,SoundManager.BORE_STOP,SoundCategory.BLOCKS,1.0f,1.0f);
+		world.playSound((float) pos.getX() + 0.5f, (float) pos.getY() - 0.5f, (float) pos.getZ() + 0.5f,SoundManager.BORE_STOP,SoundCategory.BLOCKS,1.0f,1.0f,false);
 		soundsPlaying.remove(id);
 	}
 
@@ -264,7 +264,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public boolean shouldPlaySound(int id) {
-		return isRunning;
+		/*if(ticksFueled > 0) {
+			return isRunning && id == SOUND_ON_DRILL || id == SOUND_ON && !isRunning;
+		}*/
+
+		return ticksFueled > 0;
 	}
 
 	@Override

@@ -13,8 +13,9 @@ public class DawnstoneAnvilRecipe {
     public Ingredient top;
     public List<ItemStack> result;
 
-    public DawnstoneAnvilRecipe(Ingredient bottom, Ingredient top, ItemStack[] result)
-    {
+    public DawnstoneAnvilRecipe() {}
+
+    public DawnstoneAnvilRecipe(Ingredient bottom, Ingredient top, ItemStack[] result) {
         this.result = Lists.newArrayList(result);
         this.bottom = bottom;
         this.top = top;
@@ -28,10 +29,5 @@ public class DawnstoneAnvilRecipe {
     public List<ItemStack> getResult(TileEntity tile, ItemStack input1, ItemStack input2) //For when you need your own handling
     {
         return result.stream().map(ItemStack::copy).collect(Collectors.toList());
-    }
-
-    public List<ItemStack> getJEIResult()
-    {
-        return result;
     }
 }

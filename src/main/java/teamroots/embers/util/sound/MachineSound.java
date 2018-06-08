@@ -39,6 +39,8 @@ public class MachineSound extends PositionedSound implements ITickableSound {
                 donePlaying = true;
             volume = controller.getCurrentVolume(id,volume);
             pitch = controller.getCurrentPitch(id,pitch);
+            if(donePlaying && controller.isSoundPlaying(id))
+                controller.stopSound(id);
         }
     }
 }

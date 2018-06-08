@@ -18,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -63,7 +64,9 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
         	return super.insertItem(slot, stack, simulate);
         }
 	};
-	
+	private float catalyzerMult;
+	private float combustorMult;
+
 	public TileEntityReactor(){
 		super();
 	}
@@ -145,8 +148,8 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 		if (!inventory.getStackInSlot(0).isEmpty()){
 			progress ++;
 			if (progress > 20){
-				float catalyzerMult = 0.0f;
-				float combustorMult = 0.0f;
+				catalyzerMult = 0.0f;
+				combustorMult = 0.0f;
 				float multiplier = BASE_MULTIPLIER;
 				for (EnumFacing facing : EnumFacing.HORIZONTALS) {
 					TileEntity tile = world.getTileEntity(getPos().offset(facing).down());
@@ -181,8 +184,19 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 			markDirty();
 		}
 		if (this.capability.getEmber() > 0 && getWorld().isRemote){
+			float catalyzerRatio = 0.0f;
+			if(catalyzerMult > 0 || combustorMult > 0)
+				catalyzerRatio = catalyzerMult / (catalyzerMult + combustorMult);
+			int r = (int)MathHelper.clampedLerp(255,255,catalyzerRatio);
+			int g = (int)MathHelper.clampedLerp(64,64,catalyzerRatio);
+			int b = (int)MathHelper.clampedLerp(16,64,catalyzerRatio);
 			for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
-				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, 0, random.nextFloat()*0.1f, 0, 255, 64, 16, 2.0f, 12+random.nextInt(8));
+				float vx = (float)MathHelper.clampedLerp(0,(random.nextFloat()-0.5)*0.1f,catalyzerRatio);
+				float vy = (float)MathHelper.clampedLerp(random.nextFloat() * 0.05f,(random.nextFloat()-0.5) * 0.2f,catalyzerRatio);
+				float vz = (float)MathHelper.clampedLerp(0,(random.nextFloat()-0.5)*0.1f,catalyzerRatio);
+				float size = (float)MathHelper.clampedLerp(4.0,2.0,catalyzerRatio);
+				int lifetime = (16 + random.nextInt(16));
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, vx, vy, vz, r, g, b, size, lifetime);
 			}
 		}
 	}
