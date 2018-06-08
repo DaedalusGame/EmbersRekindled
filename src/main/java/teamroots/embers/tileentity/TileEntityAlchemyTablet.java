@@ -196,6 +196,11 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 		return center;
 	}
 
+	@Deprecated
+	public void sparkProgress(){
+		sparkProgress(null,0);
+	}
+	
 	public void sparkProgress(TileEntity tile, double ember){
 		if(progress != 0)
 			return;
