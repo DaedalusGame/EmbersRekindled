@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -160,7 +161,7 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 	public void update() {
 		angle += turnRate;
 		IBlockState state = getWorld().getBlockState(getPos());
-		ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
+		HashSet<BlockPos> toUpdate = new HashSet<>();
 		ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 		connections.add(state.getValue(BlockItemTransfer.facing));
 		if (connections.size() > 0){
@@ -200,12 +201,12 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 				}
 			}
 		}
-		for (int i = 0; i < toUpdate.size(); i ++){
-			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+		for (BlockPos aToUpdate : toUpdate) {
+			TileEntity tile = getWorld().getTileEntity(aToUpdate);
 			tile.markDirty();
-			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 				tile.markDirty();
-				EventManager.markTEForUpdate(toUpdate.get(i),tile);
+				EventManager.markTEForUpdate(aToUpdate, tile);
 			}
 		}
 	}

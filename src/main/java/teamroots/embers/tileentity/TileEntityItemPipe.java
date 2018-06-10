@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -315,7 +316,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 	public void update() {
 		ticksExisted ++;
 		if (ticksExisted % 1 == 0 && !world.isRemote){
-			ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
+			HashSet<BlockPos> toUpdate = new HashSet<>();
 			ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.FORCENONE && up != EnumPipeConnection.LEVER && isConnected(EnumFacing.UP)){
 				connections.add(EnumFacing.UP);
@@ -335,18 +336,11 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 			if (west != EnumPipeConnection.NONE && west != EnumPipeConnection.FORCENONE && west != EnumPipeConnection.LEVER && isConnected(EnumFacing.WEST)){
 				connections.add(EnumFacing.WEST);
 			}
-			for (int i = 0; i < connections.size(); i ++){
-				if ((getPos().offset(connections.get(i))).getX() == this.lastReceived.getX()
-						&& (getPos().offset(connections.get(i))).getY() == this.lastReceived.getY()
-						&& (getPos().offset(connections.get(i))).getZ() == this.lastReceived.getZ()){
-					connections.remove(i);
-					i = Math.max(0, i-1);
-				}
-			}
-			ArrayList<EnumFacing> priorities = new ArrayList<EnumFacing>();
-			for (int i = 0; i < connections.size(); i ++){
-				if (getWorld().getTileEntity(getPos().offset(connections.get(i))) instanceof IItemPipePriority){
-					priorities.add(connections.get(i));
+			connections.removeIf(connectDir -> lastReceived.equals(getPos().offset(connectDir)));
+			ArrayList<EnumFacing> priorities = new ArrayList<>();
+			for (EnumFacing connection : connections) {
+				if (getWorld().getTileEntity(getPos().offset(connection)) instanceof IItemPipePriority) {
+					priorities.add(connection);
 				}
 			}
 			if (priorities.size() > 0){
@@ -389,12 +383,12 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
-				for (int i = 0; i < toUpdate.size(); i ++){
-					TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+				for (BlockPos aToUpdate : toUpdate) {
+					TileEntity tile = getWorld().getTileEntity(aToUpdate);
 					tile.markDirty();
-					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 						tile.markDirty();
-						EventManager.markTEForUpdate(toUpdate.get(i),tile);
+						EventManager.markTEForUpdate(aToUpdate, tile);
 					}
 				}
 				if (toUpdate.size() > 0){
@@ -441,12 +435,12 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
-				for (int i = 0; i < toUpdate.size(); i ++){
-					TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+				for (BlockPos aToUpdate : toUpdate) {
+					TileEntity tile = getWorld().getTileEntity(aToUpdate);
 					tile.markDirty();
-					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 						tile.markDirty();
-						EventManager.markTEForUpdate(toUpdate.get(i),tile);
+						EventManager.markTEForUpdate(aToUpdate, tile);
 					}
 				}
 			}

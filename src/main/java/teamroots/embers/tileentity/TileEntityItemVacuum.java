@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -130,7 +131,7 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 	@Override
 	public void update() {
 		IBlockState state = getWorld().getBlockState(getPos());
-		ArrayList<BlockPos> toUpdate = new ArrayList<BlockPos>();
+		HashSet<BlockPos> toUpdate = new HashSet<>();
 		ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 		if (world.isBlockPowered(getPos())){
 			EnumFacing face = state.getValue(BlockVacuum.facing);
@@ -200,12 +201,12 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 				}
 			}
 		}
-		for (int i = 0; i < toUpdate.size(); i ++){
-			TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
+		for (BlockPos aToUpdate : toUpdate) {
+			TileEntity tile = getWorld().getTileEntity(aToUpdate);
 			tile.markDirty();
-			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
+			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 				tile.markDirty();
-				EventManager.markTEForUpdate(toUpdate.get(i),tile);
+				EventManager.markTEForUpdate(aToUpdate, tile);
 			}
 		}
 	}
