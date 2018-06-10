@@ -359,19 +359,11 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 								if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())){
 									IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 									if (handler != null){
-										ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
-										if (inventory.getStackInSlot(0).hasTagCompound()){
-											passStack.setTagCompound(inventory.getStackInSlot(0).getTagCompound());
-										}
+										ItemStack passStack = this.inventory.extractItem(0, 1, true);
 										int slot = -1;
 										for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-											if (handler.getStackInSlot(j).isEmpty()){
+											if (handler.insertItem(j,passStack,true).isEmpty()){
 												slot = j;
-											}
-											else {
-												if (handler.getStackInSlot(j).getCount() < handler.getSlotLimit(j) && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
-													slot = j;
-												}
 											}
 										}
 										if (slot != -1){
@@ -419,19 +411,11 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 								if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())){
 									IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 									if (handler != null){
-										ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
-										if (inventory.getStackInSlot(0).hasTagCompound()){
-											passStack.setTagCompound(inventory.getStackInSlot(0).getTagCompound());
-										}
+										ItemStack passStack = this.inventory.extractItem(0, 1, true);
 										int slot = -1;
 										for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-											if (handler.getStackInSlot(j).isEmpty()){
+											if (handler.insertItem(j,passStack,true).isEmpty()){ //We can do it this way chiefly because the passStack has size 1
 												slot = j;
-											}
-											else {
-												if (handler.getStackInSlot(j).getCount() < handler.getSlotLimit(j) && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
-													slot = j;
-												}
 											}
 										}
 										if (slot != -1){

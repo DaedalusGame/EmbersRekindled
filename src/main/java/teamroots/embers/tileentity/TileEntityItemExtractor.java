@@ -395,10 +395,8 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 							if (handler != null){
 								int slot = -1;
 								for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-									if (!handler.getStackInSlot(j).isEmpty()){
-										if (handler.getStackInSlot(j).getCount() > 0){
-											slot = j;
-										}
+									if (!handler.extractItem(j,1,true).isEmpty()){
+										slot = j;
 									}
 								}
 								if (slot != -1){
@@ -433,19 +431,11 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 									toUpdate.add(pos.offset(face));
 								}
 								if (handler != null){
-									ItemStack passStack = new ItemStack(inventory.getStackInSlot(0).getItem(),1,inventory.getStackInSlot(0).getMetadata());
-									if (inventory.getStackInSlot(0).hasTagCompound()){
-										passStack.setTagCompound(inventory.getStackInSlot(0).getTagCompound());
-									}
+									ItemStack passStack = this.inventory.extractItem(0, 1, true);
 									int slot = -1;
 									for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-										if (handler.getStackInSlot(j).isEmpty()){
+										if (handler.insertItem(j,passStack,true).isEmpty()){
 											slot = j;
-										}
-										else {
-											if (handler.getStackInSlot(j).getCount() < handler.getSlotLimit(j) && ItemStack.areItemsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0)) && ItemStack.areItemStackTagsEqual(handler.getStackInSlot(j), inventory.getStackInSlot(0))){
-												slot = j;
-											}
 										}
 									}
 									if (slot != -1){
