@@ -9,6 +9,7 @@ public class ResearchCategory {
 	public double u = 192.0;
 	public double v = 0;
 	public ResourceLocation texture = new ResourceLocation("embers:textures/gui/codex_index.png");
+	public ResourceLocation background = new ResourceLocation("embers:textures/gui/codex_category.png");
 	public ArrayList<ResearchBase> researches = new ArrayList<ResearchBase>();
 	
 	public ResearchCategory(String name, double v){
@@ -25,5 +26,21 @@ public class ResearchCategory {
 	public ResearchCategory addResearch(ResearchBase base){
 		researches.add(base);
 		return this;
+	}
+
+	public double getIconU() {
+		return u;
+	}
+
+	public double getIconV() {
+		return v;
+	}
+
+	public ResourceLocation getBackgroundTexture() {
+		return background;
+	}
+
+	public ResourceLocation getIndexTexture() {
+		return texture;
 	}
 }

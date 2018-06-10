@@ -247,14 +247,15 @@ public class GuiCodex extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks){
 		boolean doUpdateSynced = ticks > partialTicks;
 		ticks = partialTicks;
+		int numResearches = ResearchManager.researches.size();
 		if (this.raise == null){
-			this.raise = new float[ResearchManager.researches.size()];
+			this.raise = new float[numResearches];
 			for (int i = 0; i < raise.length; i ++){
 				raise[i] = 0f;
 			}
 		}
 		if (this.raiseTargets == null){
-			this.raiseTargets = new float[ResearchManager.researches.size()];
+			this.raiseTargets = new float[numResearches];
 			for (int i = 0; i < raiseTargets.length; i ++){
 				raiseTargets[i] = 0f;
 			}
@@ -300,25 +301,26 @@ public class GuiCodex extends GuiScreen {
 			this.drawTexturedModalRect(basePosX+72, basePosY+224, 0, 48, 48, 48);
 			this.drawTexturedModalRect(basePosX-16, basePosY+64, 0, 48, 48, 48);
 			this.drawTexturedModalRect(basePosX+160, basePosY+64, 0, 48, 48, 48);
-			
-			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_index.png"));
-			for (float i = 0; i < ResearchManager.researches.size(); i ++){
+
+			for (float i = 0; i < numResearches; i ++){
 				float mouseDir = (float)Math.toDegrees(Math.atan2(mouseY-(basePosY+88), mouseX-(basePosX+96)))+90f;
 				float distSq = (mouseX - (basePosX+96))*(mouseX - (basePosX+96)) + (mouseY - (basePosY+96))*(mouseY - (basePosY+96));
-				float angle = i * (360.0f/(float)ResearchManager.researches.size());
+				float angle = i * (360.0f/(float) numResearches);
 				boolean selected = false;
 				float diff = Math.min(Math.min(Math.abs(mouseDir - angle),Math.abs((mouseDir-360f) - angle)), (Math.abs(mouseDir+360f) - angle));
-				if (diff < 180.0f/(float)ResearchManager.researches.size() && distSq < 16000){
+				ResearchCategory category = ResearchManager.researches.get((int) i);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getIndexTexture());
+				if (diff < 180.0f/(float) numResearches && distSq < 16000){
 					selected = true;
 					selectedIndex = (int)i;
-					categoryString = ResearchManager.researches.get((int)i).name;
+					categoryString = category.name;
 					if (raise[(int)i] < 1.0f && doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
 						raiseTargets[(int)i] = raiseTargets[(int)i] * 0.5f + 0.5f;
 					}
 				}
 				else {
-					if (raise[(int)i] > 0.0f && doUpdateSynced){
+					if (/*raise[(int)i] > 0.0f && */doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
 						raiseTargets[(int)i] = raiseTargets[(int)i] * 0.5f;
 					}
@@ -327,14 +329,14 @@ public class GuiCodex extends GuiScreen {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(basePosX+96, basePosY+88, 0);
 				GlStateManager.rotate(angle, 0, 0, 1);
-				this.drawTexturedModalRect(-16, -88-12f*instRaise, 192, 112, 32, 64);	
-				this.drawTexturedModalRect(-6, -80-12f*instRaise, 192+(selected ? 16 : 0), (int)ResearchManager.researches.get((int)i).v, 12, 12);	
+				this.drawTexturedModalRect(-16, -88-12f*instRaise, 192, 112, 32, 64);
+				this.drawTexturedModalRect(-6, -80-12f*instRaise, (int) category.getIconU()+(selected ? 16 : 0), (int) category.getIconV(), 12, 12);
 				GlStateManager.popMatrix();
 			}
 			
 			this.drawTexturedModalRect(basePosX+64, basePosY+56, 192, 176, 64, 64);
 			
-			this.drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
+			drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
 		}
 		else {
 			if (this.researchPage == -1){
@@ -345,11 +347,10 @@ public class GuiCodex extends GuiScreen {
 				basePosX = (int)((float)width/2.0f)-192;
 				basePosY = (int)((float)height/2.0f)-136;
 				int basePosY2 = Math.min(height-33, basePosY+272);
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_category.png"));
 				GlStateManager.color(1, 1, 1, 1);
 				
 				ResearchCategory category = ResearchManager.researches.get(categoryIndex);
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_category.png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getBackgroundTexture());
 				
 				RenderUtil.drawTexturedModalRect(basePosX, basePosY, zLevel, 0f/256f, 0f/256f, 192f/256f, 272f/512f, 384, 272);
 				for (int i = 0; i < category.researches.size(); i ++){
@@ -358,14 +359,14 @@ public class GuiCodex extends GuiScreen {
 						this.selectedPageIndex = i;
 						if (r.selectedAmount < 1.0f && doUpdateSynced){
 							r.selectedAmount = r.selectionTarget;
-							r.selectionTarget = r.selectionTarget * 0.8f + 0.2f;
+							r.selectionTarget = r.selectionTarget*(1.0f-partialTicks) + (r.selectionTarget * 0.8f + 0.2f) *partialTicks;
 						}
 					}
 					else if (r.selectedAmount > 0.0f && doUpdateSynced){
 						r.selectedAmount = r.selectionTarget;
-						r.selectionTarget = r.selectionTarget * 0.8f;
+						r.selectionTarget = r.selectionTarget*(1.0f-partialTicks) + (r.selectionTarget * 0.9f) *partialTicks;
 					}
-					if (r.selectedAmount > 0.0f){
+					if (r.selectedAmount > 0.1f){
 						Tessellator tess = Tessellator.getInstance();
 						BufferBuilder b = tess.getBuffer();
 						float x = r.x;
@@ -374,10 +375,11 @@ public class GuiCodex extends GuiScreen {
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 						GlStateManager.shadeModel(GL11.GL_SMOOTH);
 						GlStateManager.disableTexture2D();
+						float amt = r.selectedAmount;
 						for (float j = 0; j < 8; j ++){
-							float coeff = (float)(j+1.0f)/8.0f;
+							float coeff = (j+1.0f) /8.0f;
 							b.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-							RenderUtil.renderHighlightCircle(b,basePosX+x,basePosY+y,(25.0f+20.0f*coeff*coeff)*r.selectedAmount);
+							RenderUtil.renderHighlightCircle(b,basePosX+x,basePosY+y,(25.0f+20.0f*coeff*coeff)* amt);
 							tess.draw();
 						}
 						GlStateManager.shadeModel(GL11.GL_FLAT);
@@ -410,16 +412,18 @@ public class GuiCodex extends GuiScreen {
 					}
 				}
 				for (int i = 0; i < category.researches.size(); i ++){
-					Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_category.png"));
 					ResearchBase r = category.researches.get(i);
-					RenderUtil.drawTexturedModalRect(basePosX+r.x-24, basePosY+r.y-24, zLevel, 192f/256f, 0f/256f, 216f/256f, 24f/256f, 48, 48);
+					Minecraft.getMinecraft().getTextureManager().bindTexture(r.getIconBackground());
+					double u = r.getIconBackgroundU();
+					double v = r.getIconBackgroundV();
+					RenderUtil.drawTexturedModalRect(basePosX+r.x-24, basePosY+r.y-24, zLevel, u, v, u + 24f/256f, v + 24f/256f, 48, 48);
 					this.renderItemStackMinusTooltipAt(r.icon, basePosX+r.x-8, basePosY+r.y-8, mouseX, mouseY);
 				}
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_category.png"));
+				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getBackgroundTexture());
 				RenderUtil.drawTexturedModalRect(basePosX, basePosY2, zLevel, 0f/256f, 272f/512f, 192f/256f,305f/512f, 384, 33);
 				for (int i = 0; i < category.researches.size(); i ++){
 					if (i == this.selectedPageIndex){
-						this.drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+category.name+"."+category.researches.get(i).name), basePosX+192, basePosY2+13);
+						drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+category.name+"."+category.researches.get(i).name), basePosX+192, basePosY2+13);
 						GlStateManager.color(1f, 1f, 1f, 1f);
 					}
 				}
@@ -428,20 +432,21 @@ public class GuiCodex extends GuiScreen {
 				GlStateManager.enableAlpha();
 			}
 			else {
-				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_normal.png"));
+				ResearchCategory c = ResearchManager.researches.get(this.categoryIndex);
+				ResearchBase r = c.researches.get(this.researchPage);
+
+				Minecraft.getMinecraft().getTextureManager().bindTexture(r.getBackground());
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.enableBlend();
 				GlStateManager.disableLighting();
 				GlStateManager.enableAlpha();
 				this.drawTexturedModalRect(basePosX, basePosY, 0, 0, 192, 256);
-				
-				ResearchCategory c = ResearchManager.researches.get(this.categoryIndex);
-				ResearchBase r = c.researches.get(this.researchPage);
-				this.drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+c.name+"."+r.name+".title"), basePosX+96, basePosY+19);
+
+				drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+c.name+"."+r.name+".title"), basePosX+96, basePosY+19);
 				GlStateManager.color(1f, 1f, 1f, 1f);
 				List<String> strings = r.getLines(I18n.format("embers.research."+c.name+"."+r.name+".desc"), 152);
 				for (int i = 0; i < strings.size(); i ++){
-					this.drawTextGlowing(this.fontRenderer, strings.get(i), basePosX+20, basePosY+43+i*12);
+					drawTextGlowing(this.fontRenderer, strings.get(i), basePosX+20, basePosY+43+i*12);
 				}
 			}
 		}
