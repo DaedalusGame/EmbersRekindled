@@ -12,13 +12,16 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.itemmod.IItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.itemmod.*;
 
+//TODO: Phase out
 public class ItemModUtil {
-	public static final String HEAT_TAG = Embers.MODID+":heat_tag";
+	public static final String HEAT_TAG = IItemModUtil.HEAT_TAG;
 
 	//Ingredient? Not really as critical as the other ones.
+	//TODO: Move these to registry
 	public static Map<Item, ModifierBase> modifierRegistry = new HashMap<>();
 	public static Map<String, ModifierBase> nameToModifier = new HashMap<>();
 

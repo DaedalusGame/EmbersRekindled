@@ -2,10 +2,13 @@ package teamroots.embers.api.itemmod;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import teamroots.embers.Embers;
 
 import java.util.List;
 
 public interface IItemModUtil {
+    String HEAT_TAG = Embers.MODID+":heat_tag";
+
     ModifierBase getModifier(ItemStack modStack);
 
     boolean isModValid(ItemStack stack, ModifierBase modifier);

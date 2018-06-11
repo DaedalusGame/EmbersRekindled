@@ -29,7 +29,7 @@ public class EmbersAPIImpl {
             @Override
             public List<ModifierBase> getModifiers(ItemStack stack) {
                     NBTTagCompound tagCompound = stack.getTagCompound();
-                    NBTTagList tagModifiers = tagCompound.getCompoundTag(teamroots.embers.util.ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
+                    NBTTagList tagModifiers = tagCompound.getCompoundTag(IItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
                     if (tagModifiers.tagCount() > 0) {
                         List<ModifierBase> results = new ArrayList<>();
                         for (int i = 0; i < tagModifiers.tagCount(); i++) {
@@ -61,7 +61,7 @@ public class EmbersAPIImpl {
             @Override
             public List<ItemStack> removeAllModifiers(ItemStack stack) {
                 NBTTagCompound tagCompound = stack.getTagCompound();
-                NBTTagList tagModifiers = tagCompound.getCompoundTag(teamroots.embers.util.ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
+                NBTTagList tagModifiers = tagCompound.getCompoundTag(IItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
                 if (tagModifiers.tagCount() > 0){ //TODO: cleanup
                     List<ItemStack> results = new ArrayList<>();
                     NBTTagList remainingModifiers = new NBTTagList();
@@ -79,7 +79,7 @@ public class EmbersAPIImpl {
                             }
                         }
                     }
-                    tagCompound.getCompoundTag(teamroots.embers.util.ItemModUtil.HEAT_TAG).setTag("modifiers", remainingModifiers);
+                    tagCompound.getCompoundTag(IItemModUtil.HEAT_TAG).setTag("modifiers", remainingModifiers);
                     return results;
                 }
                 return Lists.newArrayList();
