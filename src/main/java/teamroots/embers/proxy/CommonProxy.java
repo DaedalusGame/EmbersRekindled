@@ -5,11 +5,13 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import teamroots.embers.Embers;
+import teamroots.embers.EmbersAPIImpl;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.network.PacketHandler;
@@ -21,6 +23,10 @@ import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.ItemModUtil;
 
 public class CommonProxy {
+	public void constructing(FMLConstructionEvent event){
+		EmbersAPIImpl.init();
+	}
+
 	public void preInit(FMLPreInitializationEvent event){
 		Fields.init();
 		PacketHandler.registerMessages();
