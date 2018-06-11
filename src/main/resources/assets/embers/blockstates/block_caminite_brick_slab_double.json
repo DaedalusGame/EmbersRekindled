@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom": { "model": "embers:block_caminite_brick_slab_double" },
+        "half=top": { "model": "embers:block_caminite_brick_slab_double" }
+    }
+}

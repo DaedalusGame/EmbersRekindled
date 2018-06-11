@@ -1,0 +1,8 @@
+{
+    "parent" : "item/generated",
+    "textures" : {
+        "layer0" : "embers:items/ember_jar",
+        "layer1" : "embers:items/ember_jar_glass",
+        "layer2" : "embers:items/ember_jar_glass_shine"
+    }
+}

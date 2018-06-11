@@ -1,0 +1,5 @@
+{
+    "variants":{
+        "normal":{"model": "embers:large_tank", "x":180}
+    }
+}

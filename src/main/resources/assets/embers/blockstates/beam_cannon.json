@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:beam_cannon_base", "x": 180 },
+        "facing=up":    { "model": "embers:beam_cannon_base" },
+        "facing=north": { "model": "embers:beam_cannon_base", "x": 90 },
+        "facing=south": { "model": "embers:beam_cannon_base", "x": 90, "y": 180 },
+        "facing=west":  { "model": "embers:beam_cannon_base", "x": 90, "y": 270 },
+        "facing=east":  { "model": "embers:beam_cannon_base", "x": 90, "y": 90 }
+    }
+}

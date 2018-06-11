@@ -1,0 +1,9 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "top": "embers:blocks/block_caminite_brick",
+        "side": "embers:blocks/block_caminite_brick",
+        "bottom": "embers:blocks/block_caminite_brick",
+        "particle": "embers:blocks/block_caminite_brick"
+    }
+}

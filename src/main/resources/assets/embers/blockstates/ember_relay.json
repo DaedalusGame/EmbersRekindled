@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:ember_relay", "x": 180 },
+        "facing=up":    { "model": "embers:ember_relay" },
+        "facing=north": { "model": "embers:ember_relay", "x": 90 },
+        "facing=south": { "model": "embers:ember_relay", "x": 90, "y": 180 },
+        "facing=west":  { "model": "embers:ember_relay", "x": 90, "y": 270 },
+        "facing=east":  { "model": "embers:ember_relay", "x": 90, "y": 90 }
+    }
+}

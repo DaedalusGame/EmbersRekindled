@@ -1,0 +1,16 @@
+[
+{
+  "modid": "embers",
+  "name": "Embers",
+  "description": "Dwarven-style Magitech Mod",
+  "version": "0.230",
+  "mcversion": "1.12",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Elucent","AlexisMachina","ShadowGamerXY","werty1124"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,6 @@
+{
+    "variants":{
+        "top=true":{"model": "embers:activator_top"},
+        "top=false":{"model": "embers:activator_bottom"}
+    }
+}

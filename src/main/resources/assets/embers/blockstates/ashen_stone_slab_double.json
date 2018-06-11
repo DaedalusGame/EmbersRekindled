@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom": { "model": "embers:ashen_stone_slab_double" },
+        "half=top": { "model": "embers:ashen_stone_slab_double" }
+    }
+}

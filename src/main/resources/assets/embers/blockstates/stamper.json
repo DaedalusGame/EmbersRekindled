@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=up":  { "model": "embers:stamper_top", "x": 180 },
+        "facing=down":    { "model": "embers:stamper_top" },
+        "facing=south": { "model": "embers:stamper_top", "x": 90 },
+        "facing=north": { "model": "embers:stamper_top", "x": 90, "y": 180 },
+        "facing=east":  { "model": "embers:stamper_top", "x": 90, "y": 270 },
+        "facing=west":  { "model": "embers:stamper_top", "x": 90, "y": 90 }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "variants":{
+        "state=9":  { "model": "embers:stone_border_straight", "y": 0 },
+        "state=1":  { "model": "embers:stone_border_corner", "y": 0 },
+        "state=2":  { "model": "embers:stone_border_straight", "y": 270 },
+        "state=3":  { "model": "embers:stone_border_corner", "y": 270 },
+        "state=4":  { "model": "embers:stone_border_straight", "y": 180 },
+        "state=5":  { "model": "embers:stone_border_corner", "y": 180 },
+        "state=6":  { "model": "embers:stone_border_straight", "y": 90 },
+        "state=7":  { "model": "embers:stone_border_corner", "y": 90 },
+        "state=8":  { "model": "embers:null", "y": 0 },
+        "state=0":  { "model": "embers:null", "y": 0 }
+    }
+}

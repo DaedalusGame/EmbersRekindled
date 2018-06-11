@@ -1,0 +1,85 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "forge:fluid"
+    },
+    "variants": {
+        "iron": [
+            {
+                "custom": {
+                    "fluid": "iron"
+                }
+            }
+        ],
+        "gold": [
+            {
+                "custom": {
+                    "fluid": "gold"
+                }
+            }
+        ],
+        "silver": [
+            {
+                "custom": {
+                    "fluid": "silver"
+                }
+            }
+        ],
+        "copper": [
+            {
+                "custom": {
+                    "fluid": "copper"
+                }
+            }
+        ],
+        "lead": [
+            {
+                "custom": {
+                    "fluid": "lead"
+                }
+            }
+        ],
+        "dawnstone": [
+            {
+                "custom": {
+                    "fluid": "dawnstone"
+                }
+            }
+        ],
+        "electrum": [
+            {
+                "custom": {
+                    "fluid": "electrum"
+                }
+            }
+        ],
+        "bronze": [
+            {
+                "custom": {
+                    "fluid": "bronze"
+                }
+            }
+        ],
+        "aluminum": [
+            {
+                "custom": {
+                    "fluid": "aluminum"
+                }
+            }
+        ],
+        "nickel": [
+            {
+                "custom": {
+                    "fluid": "nickel"
+                }
+            }
+        ],
+        "tin": [
+            {
+                "custom": {
+                    "fluid": "tin"
+                }
+            }
+        ]
+    }
+}

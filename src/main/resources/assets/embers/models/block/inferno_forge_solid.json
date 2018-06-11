@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "embers:blocks/inferno_forge_solid",
+        "particle": "embers:blocks/inferno_forge_solid"
+    }
+}

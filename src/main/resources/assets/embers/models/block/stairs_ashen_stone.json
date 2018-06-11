@@ -1,0 +1,9 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "bottom": "embers:blocks/ashen_stone",
+        "top": "embers:blocks/ashen_stone",
+        "side": "embers:blocks/ashen_stone",
+        "particle": "embers:blocks/ashen_stone"
+    }
+}

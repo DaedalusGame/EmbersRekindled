@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "type=0":{"model": "embers:catalyzer"},
+        "type=1":{"model": "embers:refinery_connector_off"},
+        "type=2":{"model": "embers:refinery_connector_on"},
+        "type=3":{"model": "embers:refinery_connector_on", "y": 90},
+        "type=4":{"model": "embers:refinery_connector_on", "y": 180},
+        "type=5":{"model": "embers:refinery_connector_on", "y": 270}
+    }
+}

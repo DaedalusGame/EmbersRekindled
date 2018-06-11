@@ -1,0 +1,10 @@
+{
+    "variants":{
+        "facing=down":  { "model": "embers:charger", "x": 180 },
+        "facing=up":    { "model": "embers:charger" },
+        "facing=north": { "model": "embers:charger"},
+        "facing=south": { "model": "embers:charger", "y": 180 },
+        "facing=west":  { "model": "embers:charger", "y": 270 },
+        "facing=east":  { "model": "embers:charger", "y": 90 }
+    }
+}

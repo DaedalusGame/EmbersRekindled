@@ -1,0 +1,8 @@
+{
+    "variants":{
+        "connectedup=false,xaligned=false":  { "model": "embers:beam_splitter_down", "y": 0 },
+        "connectedup=true,xaligned=false":  { "model": "embers:beam_splitter_up", "y": 0 },
+        "connectedup=false,xaligned=true":  { "model": "embers:beam_splitter_down", "y": 90 },
+        "connectedup=true,xaligned=true":  { "model": "embers:beam_splitter_up", "y": 90 }
+    }
+}

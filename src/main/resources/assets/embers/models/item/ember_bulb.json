@@ -1,0 +1,8 @@
+{
+    "parent" : "item/generated",
+    "textures" : {
+        "layer0" : "embers:items/mantle_bulb",
+        "layer1" : "embers:items/mantle_bulb_glass",
+        "layer2" : "embers:items/mantle_bulb_glass_shine"
+    }
+}

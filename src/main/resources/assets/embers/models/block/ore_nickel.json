@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "embers:blocks/ore_nickel_vanilla",
+        "particle": "embers:blocks/ore_nickel_vanilla"
+    }
+}

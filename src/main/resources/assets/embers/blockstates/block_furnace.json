@@ -1,0 +1,6 @@
+{
+    "variants":{
+        "top=true":{"model": "embers:tile_furnace_top"},
+        "top=false":{"model": "embers:tile_furnace_bottom"}
+    }
+}
