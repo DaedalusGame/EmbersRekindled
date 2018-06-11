@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -186,9 +187,9 @@ public class RecipeRegistry {
 		stampingRecipes.addAll(stampingOreRecipes);
 		meltingRecipes.addAll(meltingOreRecipes);
 	}
-	
-	@SubscribeEvent
-	public void init(RegistryEvent.Register<IRecipe> event){
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void initEarly(RegistryEvent.Register<IRecipe> event) {
 		initOreDict();
 
 		AlchemyUtil.registerAspect("iron", Ingredient.fromItem(RegistryManager.aspectus_iron));
@@ -202,7 +203,10 @@ public class RecipeRegistry {
 				new WeightedItemStack(new ItemStack(RegistryManager.shard_ember),60)
 		));
 		setDefaultBoreOutput(defaultOutput);
-		
+	}
+
+	@SubscribeEvent
+	public void init(RegistryEvent.Register<IRecipe> event){
 		event.getRegistry().register(new ShapedOreRecipe(getRL("crystal_ember"),new ItemStack(RegistryManager.crystal_ember,1),true,new Object[]{
 				"XXX",
 				"XXX",

@@ -185,7 +185,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 					ParticleUtil.spawnParticleGlow(getWorld(), (float)x*(1.0f-coeff)+(float)x2*coeff, getPos().getY()+(1.0f-coeff)+(height/2.0f+1.5f)*coeff, (float)z*(1.0f-coeff)+(float)z2*coeff, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 				}
 			}
-			world.playSound(null,x,pos.getY()+0.5,z, SoundManager.CRYSTAL_CELL_GROW, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			world.playSound(null,x,pos.getY()+0.5,z, SoundManager.CRYSTAL_CELL_GROW, SoundCategory.BLOCKS, 1.0f, 1.0f+random.nextFloat());
 		}
 		float numLayers = 2+(float) Math.floor(capability.getEmberCapacity()/128000.0f);
 		for (int i = 0; i < numLayers/2; i ++){

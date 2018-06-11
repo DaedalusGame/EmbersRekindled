@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.itemmod.ModifierBase;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.util.ItemModUtil;
 
 import java.util.List;

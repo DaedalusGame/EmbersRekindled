@@ -6,23 +6,22 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.itemmod.*;
-import teamroots.embers.itemmod.ModifierBase.EnumType;
 
 public class ItemModUtil {
 	public static final String HEAT_TAG = Embers.MODID+":heat_tag";
-	
+
+	//Ingredient? Not really as critical as the other ones.
 	public static Map<Item, ModifierBase> modifierRegistry = new HashMap<>();
-	
+	public static Map<String, ModifierBase> nameToModifier = new HashMap<>();
+
 	public static void init(){
 		modifierRegistry.put(RegistryManager.ancient_motive_core, new ModifierCore());
 		modifierRegistry.put(RegistryManager.superheater, new ModifierSuperheater());

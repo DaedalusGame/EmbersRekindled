@@ -6,6 +6,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.util.ItemModUtil;
 
 public class ModifierEldritchInsignia extends ModifierBase {

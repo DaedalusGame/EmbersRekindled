@@ -1,4 +1,4 @@
-package teamroots.embers.itemmod;
+package teamroots.embers.api.itemmod;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
@@ -46,5 +46,13 @@ public class ModifierBase {
 			default:
 				return false;
 		}
+	}
+
+	public void onApply(ItemStack stack) {
+		//NOOP
+	}
+
+	public void onRemove(ItemStack stack) {
+		//NOOP
 	}
 }

@@ -6,16 +6,14 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.entity.EntityEmberProjectile;
-import teamroots.embers.itemmod.ModifierBase;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.itemmod.ModifierCasterOrb;
-import teamroots.embers.network.PacketHandler;
 import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.ItemModUtil;
 

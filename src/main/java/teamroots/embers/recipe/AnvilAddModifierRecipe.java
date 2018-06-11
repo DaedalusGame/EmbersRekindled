@@ -3,14 +3,16 @@ package teamroots.embers.recipe;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import teamroots.embers.util.ItemModUtil;
+import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.itemmod.ModifierBase;
 
 import java.util.List;
 
 public class AnvilAddModifierRecipe extends DawnstoneAnvilRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
-        return ItemModUtil.hasHeat(input1) && ItemModUtil.modifierRegistry.containsKey(input2.getItem()) && ItemModUtil.getLevel(input1) > ItemModUtil.getTotalModLevel(input1) && ItemModUtil.isModValid(input1,input2);
+        ModifierBase modifier = ItemModUtil.getModifier(input2);
+        return ItemModUtil.hasHeat(input1) && modifier != null && ItemModUtil.getLevel(input1) > ItemModUtil.getTotalModifierLevel(input1) && ItemModUtil.isModValid(input1,modifier);
     }
 
     @Override
