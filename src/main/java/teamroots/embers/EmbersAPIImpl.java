@@ -2,10 +2,13 @@ package teamroots.embers;
 
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.IEmbersAPI;
 import teamroots.embers.api.itemmod.IItemModUtil;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
@@ -15,6 +18,16 @@ import java.util.List;
 
 public class EmbersAPIImpl {
     public static void init() {
+        //TODO: Extract to non-anon class
+        EmbersAPI.IMPL = new IEmbersAPI() {
+            @Override
+            public void registerModifier(ModifierBase modifier, Item item) {
+                teamroots.embers.util.ItemModUtil.modifierRegistry.put(item,modifier);
+                teamroots.embers.util.ItemModUtil.nameToModifier.put(modifier.name,modifier);
+            }
+        };
+
+        //TODO: Extract to non-anon class
         ItemModUtil.IMPL = new IItemModUtil() {
             @Override
             public ModifierBase getModifier(ItemStack modStack) {

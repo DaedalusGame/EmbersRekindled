@@ -11,12 +11,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageRemovePlayerEmber;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 
 public class ModifierResonatingBell extends ModifierBase {
@@ -41,7 +42,7 @@ public class ModifierResonatingBell extends ModifierBase {
 	public void onClick(PlayerInteractEvent.RightClickBlock event){
 		ItemStack s = event.getItemStack();
 		if (ItemModUtil.hasHeat(s) && cooldown == 0){
-			int level = ItemModUtil.getModifierLevel(s, ItemModUtil.modifierRegistry.get(RegistryManager.resonating_bell).name);
+			int level = ItemModUtil.getModifierLevel(s, EmbersAPI.RESONATING_BELL);
 			if (event.getWorld().isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(event.getEntityPlayer()) > cost){
 				cooldown = 80;
 				IBlockState state = event.getWorld().getBlockState(event.getPos());

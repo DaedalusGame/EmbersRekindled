@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import teamroots.embers.Embers;
 import teamroots.embers.EmbersAPIImpl;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.compat.thaumcraft.ThaumcraftIntegration;
 import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.recipe.RecipeRegistry;
@@ -32,11 +34,11 @@ public class CommonProxy {
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
 		EmberGenUtil.init();
-		ItemModUtil.init();
 	}
 	
 	public void init(FMLInitializationEvent event){
-		//NOOP
+		if(Loader.isModLoaded("thaumcraft"))
+			ThaumcraftIntegration.init();
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){

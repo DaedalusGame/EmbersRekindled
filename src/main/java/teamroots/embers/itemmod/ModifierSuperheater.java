@@ -11,11 +11,12 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageSuperheatFX;
 import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.ItemModUtil;
 
 public class ModifierSuperheater extends ModifierBase {
 
@@ -30,7 +31,7 @@ public class ModifierSuperheater extends ModifierBase {
 			if (!event.getHarvester().getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
 				ItemStack s = event.getHarvester().getHeldItem(EnumHand.MAIN_HAND);
 				if (ItemModUtil.hasHeat(s)){
-					if (ItemModUtil.getModifierLevel(s, ItemModUtil.modifierRegistry.get(RegistryManager.superheater).name) > 0 && EmberInventoryUtil.getEmberTotal(event.getHarvester()) >= cost){
+					if (ItemModUtil.getModifierLevel(s, EmbersAPI.SUPERHEATER) > 0 && EmberInventoryUtil.getEmberTotal(event.getHarvester()) >= cost){
 						if (!event.getWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageSuperheatFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 						}
@@ -56,7 +57,7 @@ public class ModifierSuperheater extends ModifierBase {
 			ItemStack s = damager.getHeldItemMainhand();
 			if (!s.isEmpty()){
 				if (ItemModUtil.hasHeat(s)){
-					int superheatLevel = ItemModUtil.getModifierLevel(s, ItemModUtil.modifierRegistry.get(RegistryManager.superheater).name);
+					int superheatLevel = ItemModUtil.getModifierLevel(s, EmbersAPI.SUPERHEATER);
 					if (superheatLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
 						event.getEntityLiving().setFire(1);
 						if (!damager.world.isRemote){

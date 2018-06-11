@@ -24,6 +24,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.block.BlockInfernoForge;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
@@ -31,7 +32,6 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.util.EmberGenUtil;
-import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 

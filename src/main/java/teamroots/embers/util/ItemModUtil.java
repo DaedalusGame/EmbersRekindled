@@ -17,6 +17,7 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.itemmod.*;
 
 //TODO: Phase out
+@Deprecated
 public class ItemModUtil {
 	public static final String HEAT_TAG = IItemModUtil.HEAT_TAG;
 
@@ -73,16 +74,18 @@ public class ItemModUtil {
 	public static void addModifier(ItemStack stack, ItemStack mod){
 		checkForTag(stack);
 		NBTTagList list = stack.getTagCompound().getCompoundTag(HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
-		if (getModifierLevel(stack, modifierRegistry.get(mod.getItem()).name) == 0){
-			NBTTagCompound modifier = new NBTTagCompound();
-			modifier.setString("name", modifierRegistry.get(mod.getItem()).name);
-			modifier.setTag("item", mod.writeToNBT(new NBTTagCompound()));
-			modifier.setInteger("level", 1);
-			list.appendTag(modifier);
+		ModifierBase modifier = modifierRegistry.get(mod.getItem());
+		if (getModifierLevel(stack, modifier.name) == 0){
+			NBTTagCompound modifierCompound = new NBTTagCompound();
+			modifierCompound.setString("name", modifier.name);
+			modifierCompound.setTag("item", mod.writeToNBT(new NBTTagCompound()));
+			modifierCompound.setInteger("level", 1);
+			list.appendTag(modifierCompound);
 		}
 		else {
-			incModifierLevel(stack,modifierRegistry.get(mod.getItem()).name);
+			incModifierLevel(stack, modifier.name);
 		}
+		modifier.onApply(stack);
 	}
 	
 	public static int incModifierLevel(ItemStack stack, String name){

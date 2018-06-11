@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.block.*;
 import teamroots.embers.block.fluid.*;
 import teamroots.embers.damage.*;
@@ -41,6 +42,7 @@ import teamroots.embers.entity.*;
 import teamroots.embers.fluid.*;
 import teamroots.embers.item.*;
 import teamroots.embers.item.block.*;
+import teamroots.embers.itemmod.*;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
 import teamroots.embers.api.power.IEmberCapability;
@@ -89,9 +91,8 @@ public class RegistryManager {
 	public static IWorldGenerator world_gen_small_ruin;
 	
 	public static void registerAll(){
-		
-		CapabilityManager.INSTANCE.register(IEmberCapability.class, new EmberCapabilityStorage(), DefaultEmberCapability.class);
-		
+		registerCapabilities();
+
 		damage_ember = new DamageEmber();
 		
 		tool_mat_copper = EnumHelper.addToolMaterial(Embers.MODID+":copper", 2, 181, 5.4f, 1.5f, 16);
@@ -417,7 +418,47 @@ public class RegistryManager {
 		items.add(ingotUmberSteel = new ItemBase("ingotUmberSteel",true));*/
 		
 		registerFluids();
+		registerTileEntities();
+		registerEntities();
+		registerItemModifiers();
 		
+		List<BiomeEntry> biomeEntries = new ArrayList<BiomeEntry>();
+		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.COOL));
+		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.DESERT));
+		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.ICY));
+		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.WARM));
+		List<Biome> biomes = new ArrayList<Biome>();
+		for (BiomeEntry b : biomeEntries){
+			biomes.add(b.biome);
+		}
+		biomes.addAll(BiomeManager.oceanBiomes);
+		
+		EntityRegistry.addSpawn(EntityAncientGolem.class, ConfigManager.ancientGolemSpawnWeight, 1, 1, EnumCreatureType.MONSTER, biomes.toArray(new Biome[biomes.size()]));
+		
+		world_gen_ores = new WorldGenOres();
+		GameRegistry.registerWorldGenerator(world_gen_ores, 1);
+		int weight = 400;
+		GameRegistry.registerWorldGenerator(world_gen_small_ruin = new WorldGenSmallRuin(), weight ++);
+
+		//GameRegistry.register(biomeCave = new BiomeCave());
+		
+		//dimensionCave = DimensionType.register("cave", "cave", 90, CaveProvider.class, false);
+		//BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(biomeCave, 10000));
+		
+		GameRegistry.registerFuelHandler(new EmbersFuelHandler());
+	}
+
+	private static void registerEntities() {
+		int id = 0;
+
+		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_packet"),EntityEmberPacket.class, "ember_packet", id++, Embers.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_projectile"),EntityEmberProjectile.class, "ember_projectile", id++, Embers.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ancient_golem"),EntityAncientGolem.class, "ancient_golem", id++, Embers.instance, 64, 1, true);
+		EntityRegistry.registerEgg(new ResourceLocation(Embers.MODID+":ancient_golem"), Misc.intColor(48, 38, 35), Misc.intColor(79, 66, 61));
+		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_light"),EntityEmberLight.class, "ember_light", id++, Embers.instance, 64, 1, true);
+	}
+
+	private static void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityTank.class, Embers.MODID+":tile_entity_tank");
 		GameRegistry.registerTileEntity(TileEntityFluidPipe.class, Embers.MODID+":tile_entity_pipe");
 		GameRegistry.registerTileEntity(TileEntityFluidExtractor.class, Embers.MODID+":tile_entity_pump");
@@ -473,41 +514,34 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
 		GameRegistry.registerTileEntity(TileEntityPumpBottom.class, Embers.MODID+":tile_entity_pump_bottom");
 		GameRegistry.registerTileEntity(TileEntityPumpTop.class, Embers.MODID+":tile_entity_pump_top");
-		
-		int id = 0;
-		
-		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_packet"),EntityEmberPacket.class, "ember_packet", id++, Embers.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_projectile"),EntityEmberProjectile.class, "ember_projectile", id++, Embers.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ancient_golem"),EntityAncientGolem.class, "ancient_golem", id++, Embers.instance, 64, 1, true);
-		EntityRegistry.registerEgg(new ResourceLocation(Embers.MODID+":ancient_golem"), Misc.intColor(48, 38, 35), Misc.intColor(79, 66, 61));
-		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_light"),EntityEmberLight.class, "ember_light", id++, Embers.instance, 64, 1, true);
-		
-		List<BiomeEntry> biomeEntries = new ArrayList<BiomeEntry>();
-		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.COOL));
-		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.DESERT));
-		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.ICY));
-		biomeEntries.addAll(BiomeManager.getBiomes(BiomeType.WARM));
-		List<Biome> biomes = new ArrayList<Biome>();
-		for (BiomeEntry b : biomeEntries){
-			biomes.add(b.biome);
-		}
-		biomes.addAll(BiomeManager.oceanBiomes);
-		
-		EntityRegistry.addSpawn(EntityAncientGolem.class, ConfigManager.ancientGolemSpawnWeight, 1, 1, EnumCreatureType.MONSTER, biomes.toArray(new Biome[biomes.size()]));
-		
-		world_gen_ores = new WorldGenOres();
-		GameRegistry.registerWorldGenerator(world_gen_ores, 1);
-		int weight = 400;
-		GameRegistry.registerWorldGenerator(world_gen_small_ruin = new WorldGenSmallRuin(), weight ++);
-
-		//GameRegistry.register(biomeCave = new BiomeCave());
-		
-		//dimensionCave = DimensionType.register("cave", "cave", 90, CaveProvider.class, false);
-		//BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(biomeCave, 10000));
-		
-		GameRegistry.registerFuelHandler(new EmbersFuelHandler());
 	}
-	
+
+	private static void registerCapabilities() {
+		CapabilityManager.INSTANCE.register(IEmberCapability.class, new EmberCapabilityStorage(), DefaultEmberCapability.class);
+	}
+
+	public static void registerItemModifiers(){
+		EmbersAPI.CORE = new ModifierCore();
+		EmbersAPI.SUPERHEATER = new ModifierSuperheater();
+		EmbersAPI.JET_AUGMENT = new ModifierCinderJet();
+		EmbersAPI.CASTER_ORB = new ModifierCasterOrb();
+		EmbersAPI.RESONATING_BELL = new ModifierResonatingBell();
+		EmbersAPI.BLASTING_CORE = new ModifierBlastingCore();
+		EmbersAPI.FLAME_BARRIER = new ModifierFlameBarrier();
+		EmbersAPI.ELDRITCH_INSIGNIA = new ModifierEldritchInsignia();
+		EmbersAPI.INTELLIGENT_APPARATUS = new ModifierIntelligentApparatus();
+
+		EmbersAPI.registerModifier(EmbersAPI.CORE, ancient_motive_core);
+		EmbersAPI.registerModifier(EmbersAPI.SUPERHEATER, superheater);
+		EmbersAPI.registerModifier(EmbersAPI.JET_AUGMENT, jet_augment);
+		EmbersAPI.registerModifier(EmbersAPI.CASTER_ORB, caster_orb);
+		EmbersAPI.registerModifier(EmbersAPI.RESONATING_BELL, resonating_bell);
+		EmbersAPI.registerModifier(EmbersAPI.BLASTING_CORE, blasting_core);
+		EmbersAPI.registerModifier(EmbersAPI.FLAME_BARRIER, flame_barrier);
+		EmbersAPI.registerModifier(EmbersAPI.ELDRITCH_INSIGNIA, eldritch_insignia);
+		EmbersAPI.registerModifier(EmbersAPI.INTELLIGENT_APPARATUS, intelligent_apparatus);
+	}
+
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event){
 		for (Block b : blocks){

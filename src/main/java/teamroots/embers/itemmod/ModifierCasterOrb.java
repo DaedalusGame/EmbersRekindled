@@ -11,11 +11,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCasterOrb;
 import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.ItemModUtil;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -80,7 +81,7 @@ public class ModifierCasterOrb extends ModifierBase {
 	private void tryShoot(EntityPlayer player, World world, ItemStack heldStack) {
 		if (prevCooledStrength == 1.0f){
 			if (ItemModUtil.hasHeat(heldStack)){
-				int level = ItemModUtil.getModifierLevel(heldStack, ItemModUtil.modifierRegistry.get(RegistryManager.caster_orb).name);
+				int level = ItemModUtil.getModifierLevel(heldStack, EmbersAPI.CASTER_ORB);
 				if (world.isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(player) > cost && cooldownTicks == 0){
 					PacketHandler.INSTANCE.sendToServer(new MessageCasterOrb(player.getLookVec().x, player.getLookVec().y, player.getLookVec().z));
 					cooldownTicks = 20;

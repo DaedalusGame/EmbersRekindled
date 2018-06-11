@@ -55,6 +55,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.block.IDial;
 import teamroots.embers.gui.GuiCodex;
 import teamroots.embers.item.IEmberChargedTool;
@@ -70,7 +72,6 @@ import teamroots.embers.proxy.ClientProxy;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
 import teamroots.embers.util.EmberGenUtil;
-import teamroots.embers.util.ItemModUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
 import teamroots.embers.world.EmberWorldData;
@@ -440,13 +441,7 @@ public class EventManager {
 			if (ItemModUtil.hasHeat(event.getStack())){
 				for (int i = 0; i < event.getLines().size(); i ++){
 					if (event.getLines().get(i).compareTo(TextFormatting.GRAY+""+TextFormatting.GRAY+I18n.format("embers.tooltip.modifiers")) == 0){
-						List<String> modifiers = new ArrayList<String>();
-						NBTTagList l = event.getStack().getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND);
-						for (int j = 0; j < l.tagCount(); j ++){
-							if (l.getCompoundTagAt(j).getString("name").compareTo(ItemModUtil.modifierRegistry.get(RegistryManager.ancient_motive_core).name) != 0){
-								modifiers.add(l.getCompoundTagAt(j).getString("name"));
-							}
-						}
+						List<ModifierBase> modifiers = ItemModUtil.getModifiers(event.getStack());
 						GlStateManager.disableDepth();
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 						if (ItemModUtil.getLevel(event.getStack()) > 0){
@@ -456,7 +451,8 @@ public class EventManager {
 							float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
 							GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
 							for (int j = 0; j < modifiers.size(); j ++){
-								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier."+modifiers.get(j))+" "+I18n.format("embers.tooltip.num"+ItemModUtil.getModifierLevel(event.getStack(), modifiers.get(j))), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i+j+1)+2);
+								ModifierBase modifier = modifiers.get(j);
+								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier."+ modifier.name)+" "+I18n.format("embers.tooltip.num"+ItemModUtil.getModifierLevel(event.getStack(), modifier)), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i+j+1)+2);
 							}
 							GlStateManager.alphaFunc(func, ref);
 							GlStateManager.disableAlpha();

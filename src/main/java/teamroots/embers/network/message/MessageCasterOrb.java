@@ -11,11 +11,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.itemmod.ModifierCasterOrb;
 import teamroots.embers.util.EmberInventoryUtil;
-import teamroots.embers.util.ItemModUtil;
 
 public class MessageCasterOrb implements IMessage {
     public static Random random = new Random();
@@ -56,13 +57,12 @@ public class MessageCasterOrb implements IMessage {
             world.addScheduledTask(() -> {
                 ItemStack heldStack = player.getHeldItemMainhand();
                 if (ItemModUtil.hasHeat(heldStack)) {
-                    ModifierBase casterOrb = ItemModUtil.modifierRegistry.get(RegistryManager.caster_orb);
-                    int level = ItemModUtil.getModifierLevel(heldStack, casterOrb.name);
+                    int level = ItemModUtil.getModifierLevel(heldStack, EmbersAPI.CASTER_ORB);
                     UUID uuid = player.getUniqueID();
-                    if (level > 0 && EmberInventoryUtil.getEmberTotal(player) > casterOrb.cost && !ModifierCasterOrb.hasCooldown(uuid)) {
+                    if (level > 0 && EmberInventoryUtil.getEmberTotal(player) > EmbersAPI.CASTER_ORB.cost && !ModifierCasterOrb.hasCooldown(uuid)) {
                         float offX = 0.5f * (float) Math.sin(Math.toRadians(-player.rotationYaw - 90));
                         float offZ = 0.5f * (float) Math.cos(Math.toRadians(-player.rotationYaw - 90));
-                        EmberInventoryUtil.removeEmber(player, casterOrb.cost);
+                        EmberInventoryUtil.removeEmber(player, EmbersAPI.CASTER_ORB.cost);
                         double lookDist = Math.sqrt(message.lookX * message.lookX + message.lookY * message.lookY + message.lookZ * message.lookZ);
                         if (lookDist == 0)
                             return;
