@@ -187,40 +187,20 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	}
 	
 	public EnumPipeConnection getConnection(IBlockAccess world, BlockPos pos, EnumFacing side){
+		TileEntity tile = world.getTileEntity(pos);
 		if (getConnection(side) == EnumPipeConnection.FORCENONE){
 			return EnumPipeConnection.FORCENONE;
 		}
-		if (world.getTileEntity(pos) instanceof TileEntityItemPipe && !(world.getTileEntity(pos) instanceof TileEntityItemExtractor)){
+		else if (tile instanceof TileEntityItemPipe){
 			return EnumPipeConnection.PIPE;
 		}
-		else if (world.getTileEntity(pos) != null && !(world.getTileEntity(pos) instanceof TileEntityItemExtractor)){
-			if (world.getTileEntity(pos).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)){
+		else if (tile != null && !(tile instanceof TileEntityItemExtractor)){
+			if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite())){
 				return EnumPipeConnection.BLOCK;
 			}
 		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.LEVER){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
-			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
-				return EnumPipeConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.STONE_BUTTON){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockButton.FACING);
-			if (face == side){
-				return EnumPipeConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == Blocks.REDSTONE_TORCH){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockRedstoneTorch.FACING);
-			if (face == side){
-				return EnumPipeConnection.LEVER;
-			}
-		}
-		else if (world.getBlockState(pos).getBlock() == RegistryManager.caminite_lever){
-			EnumFacing face = world.getBlockState(pos).getValue(BlockLever.FACING).getFacing();
-			if (face == side || face == EnumFacing.DOWN && side == EnumFacing.UP || face == EnumFacing.UP && side == EnumFacing.DOWN){
-				return EnumPipeConnection.LEVER;
-			}
+		else if (Misc.isValidLever(world,pos,side)){
+			return EnumPipeConnection.LEVER;
 		}
 		return EnumPipeConnection.NONE;
 	}
