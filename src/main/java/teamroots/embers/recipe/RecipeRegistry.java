@@ -6,14 +6,13 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,10 +29,13 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.misc.ICoefficientFuel;
+import teamroots.embers.api.misc.IFuel;
+import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.AlchemyUtil;
-import teamroots.embers.util.AspectList.AspectRangeList;
-import teamroots.embers.util.Misc;
+import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.util.WeightedItemStack;
 
 public class RecipeRegistry {
@@ -203,6 +205,39 @@ public class RecipeRegistry {
 				new WeightedItemStack(new ItemStack(RegistryManager.shard_ember),60)
 		));
 		setDefaultBoreOutput(defaultOutput);
+
+		EmbersAPI.registerEmberFuel(Ingredient.fromItem(RegistryManager.shard_ember),400);
+		EmbersAPI.registerEmberFuel(Ingredient.fromItem(RegistryManager.crystal_ember),2400);
+		EmbersAPI.registerEmberFuel(Ingredient.fromItem(RegistryManager.ember_cluster),3600);
+
+		EmbersAPI.registerMetalCoefficient("blockGold",1.0);
+		EmbersAPI.registerMetalCoefficient("blockSilver",1.0);
+		EmbersAPI.registerMetalCoefficient("blockCopper",1.0);
+		if (ConfigManager.enableElectrum){
+			EmbersAPI.registerMetalCoefficient("blockElectrum",1.0);
+		}
+		if (ConfigManager.enableAluminum){
+			EmbersAPI.registerMetalCoefficient("blockAluminum",0.9);
+		}
+		if (ConfigManager.enableNickel){
+			EmbersAPI.registerMetalCoefficient("blockNickel",0.9);
+		}
+		if (ConfigManager.enableTin){
+			EmbersAPI.registerMetalCoefficient("blockTin",0.9);
+		}
+		EmbersAPI.registerMetalCoefficient("blockIron",0.75);
+		EmbersAPI.registerMetalCoefficient("blockLead",0.75);
+		if (ConfigManager.enableBronze){
+			EmbersAPI.registerMetalCoefficient("blockBronze",0.75);
+		}
+
+		EmbersAPI.registerCombustionFuel(Ingredient.fromItem(Items.COAL),2.0);
+		EmbersAPI.registerCombustionFuel(new OreIngredient("ingotBrickNether"),3.0);
+		EmbersAPI.registerCombustionFuel(Ingredient.fromItem(Items.BLAZE_POWDER),4.0);
+
+		EmbersAPI.registerCatalysisFuel(new OreIngredient("dustRedstone"),2.0);
+		EmbersAPI.registerCatalysisFuel(new OreIngredient("gunpowder"),3.0);
+		EmbersAPI.registerCatalysisFuel(new OreIngredient("dustGlowstone"),4.0);
 	}
 
 	@SubscribeEvent

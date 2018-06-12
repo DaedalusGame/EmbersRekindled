@@ -6,12 +6,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.util.AspectList;
+import teamroots.embers.api.alchemy.AspectList;
 
 public class ItemAlchemicWaste extends ItemBase {
 	public static final String TAG_IRON = "ironInaccuracy";

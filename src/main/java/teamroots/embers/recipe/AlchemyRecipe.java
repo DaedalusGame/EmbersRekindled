@@ -5,19 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import teamroots.embers.item.ItemAlchemicWaste;
-import teamroots.embers.util.AlchemyResult;
-import teamroots.embers.util.AspectList;
-import teamroots.embers.util.AspectList.AspectRangeList;
+import teamroots.embers.api.alchemy.AlchemyResult;
+import teamroots.embers.api.alchemy.AspectList;
+import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.util.IHasAspects;
-import teamroots.embers.util.MatchUtil;
 
 public class AlchemyRecipe implements IHasAspects {
 	//Binary compat

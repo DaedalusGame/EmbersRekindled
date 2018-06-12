@@ -108,7 +108,8 @@ public class EmberGenUtil {
 		}
 		return 0;
 	}
-	
+
+	@Deprecated
 	public static void init(){
 		registerEmberFuelItem(RegistryManager.shard_ember,400);
 		registerEmberFuelItem(RegistryManager.crystal_ember,2400);

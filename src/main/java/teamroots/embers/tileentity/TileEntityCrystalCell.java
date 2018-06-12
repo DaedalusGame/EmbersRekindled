@@ -26,6 +26,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -166,8 +167,8 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
 			if (!getWorld().isRemote && !stack.isEmpty()){
 				inventory.extractItem(0, 1, false);
-				if (EmberGenUtil.getEmberForItem(stack.getItem()) > 0){
-					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+EmberGenUtil.getEmberForItem(stack.getItem())*10));
+				if (EmbersAPI.getEmberValue(stack) > 0){
+					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+EmbersAPI.getEmberValue(stack)*10));
 					markDirty();
 				}
 			}

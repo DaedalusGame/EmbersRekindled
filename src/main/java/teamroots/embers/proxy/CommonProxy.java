@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import teamroots.embers.Embers;
-import teamroots.embers.EmbersAPIImpl;
+import teamroots.embers.apiimpl.EmbersAPIImpl;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.thaumcraft.ThaumcraftIntegration;
 import teamroots.embers.gui.GuiHandler;
@@ -22,7 +22,6 @@ import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.*;
 import teamroots.embers.util.EmberGenUtil;
-import teamroots.embers.util.ItemModUtil;
 
 public class CommonProxy {
 	public void constructing(FMLConstructionEvent event){
@@ -33,7 +32,6 @@ public class CommonProxy {
 		Fields.init();
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
-		EmberGenUtil.init();
 	}
 	
 	public void init(FMLInitializationEvent event){

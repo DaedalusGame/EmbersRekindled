@@ -208,4 +208,12 @@ public class Misc {
 			}
 		}
 	}
+
+	public static ItemStack getStackFromState(IBlockState state) {
+		if (state == null)
+			return ItemStack.EMPTY;
+		Block block = state.getBlock();
+		int meta = block.damageDropped(state);
+		return new ItemStack(block, 1, meta);
+	}
 }

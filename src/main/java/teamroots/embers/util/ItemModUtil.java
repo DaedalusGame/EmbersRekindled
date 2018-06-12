@@ -26,16 +26,8 @@ public class ItemModUtil {
 	public static Map<Item, ModifierBase> modifierRegistry = new HashMap<>();
 	public static Map<String, ModifierBase> nameToModifier = new HashMap<>();
 
+	@Deprecated
 	public static void init(){
-		modifierRegistry.put(RegistryManager.ancient_motive_core, new ModifierCore());
-		modifierRegistry.put(RegistryManager.superheater, new ModifierSuperheater());
-		modifierRegistry.put(RegistryManager.jet_augment, new ModifierCinderJet());
-		modifierRegistry.put(RegistryManager.caster_orb, new ModifierCasterOrb());
-		modifierRegistry.put(RegistryManager.resonating_bell, new ModifierResonatingBell());
-		modifierRegistry.put(RegistryManager.blasting_core, new ModifierBlastingCore());
-		modifierRegistry.put(RegistryManager.flame_barrier, new ModifierFlameBarrier());
-		modifierRegistry.put(RegistryManager.eldritch_insignia, new ModifierEldritchInsignia());
-		modifierRegistry.put(RegistryManager.intelligent_apparatus, new ModifierIntelligentApparatus());
 	}
 	
 	public static void checkForTag(ItemStack stack){

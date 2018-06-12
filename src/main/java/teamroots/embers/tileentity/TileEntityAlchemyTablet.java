@@ -34,9 +34,9 @@ import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
-import teamroots.embers.util.AlchemyResult;
+import teamroots.embers.api.alchemy.AlchemyResult;
 import teamroots.embers.util.AlchemyUtil;
-import teamroots.embers.util.AspectList;
+import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 

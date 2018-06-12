@@ -1,4 +1,4 @@
-package teamroots.embers.util;
+package teamroots.embers.api.alchemy;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;

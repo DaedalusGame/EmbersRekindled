@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -444,8 +445,8 @@ public class RegistryManager {
 		
 		//dimensionCave = DimensionType.register("cave", "cave", 90, CaveProvider.class, false);
 		//BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(biomeCave, 10000));
-		
-		GameRegistry.registerFuelHandler(new EmbersFuelHandler());
+
+		MinecraftForge.EVENT_BUS.register(EmbersFuelHandler.class);
 	}
 
 	private static void registerEntities() {
@@ -531,15 +532,15 @@ public class RegistryManager {
 		EmbersAPI.ELDRITCH_INSIGNIA = new ModifierEldritchInsignia();
 		EmbersAPI.INTELLIGENT_APPARATUS = new ModifierIntelligentApparatus();
 
-		EmbersAPI.registerModifier(EmbersAPI.CORE, ancient_motive_core);
-		EmbersAPI.registerModifier(EmbersAPI.SUPERHEATER, superheater);
-		EmbersAPI.registerModifier(EmbersAPI.JET_AUGMENT, jet_augment);
-		EmbersAPI.registerModifier(EmbersAPI.CASTER_ORB, caster_orb);
-		EmbersAPI.registerModifier(EmbersAPI.RESONATING_BELL, resonating_bell);
-		EmbersAPI.registerModifier(EmbersAPI.BLASTING_CORE, blasting_core);
-		EmbersAPI.registerModifier(EmbersAPI.FLAME_BARRIER, flame_barrier);
-		EmbersAPI.registerModifier(EmbersAPI.ELDRITCH_INSIGNIA, eldritch_insignia);
-		EmbersAPI.registerModifier(EmbersAPI.INTELLIGENT_APPARATUS, intelligent_apparatus);
+		EmbersAPI.registerModifier(ancient_motive_core, EmbersAPI.CORE);
+		EmbersAPI.registerModifier(superheater, EmbersAPI.SUPERHEATER);
+		EmbersAPI.registerModifier(jet_augment, EmbersAPI.JET_AUGMENT);
+		EmbersAPI.registerModifier(caster_orb, EmbersAPI.CASTER_ORB);
+		EmbersAPI.registerModifier(resonating_bell, EmbersAPI.RESONATING_BELL);
+		EmbersAPI.registerModifier(blasting_core, EmbersAPI.BLASTING_CORE);
+		EmbersAPI.registerModifier(flame_barrier, EmbersAPI.FLAME_BARRIER);
+		EmbersAPI.registerModifier(eldritch_insignia, EmbersAPI.ELDRITCH_INSIGNIA);
+		EmbersAPI.registerModifier(intelligent_apparatus, EmbersAPI.INTELLIGENT_APPARATUS);
 	}
 
 	@SubscribeEvent

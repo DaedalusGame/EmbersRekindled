@@ -23,6 +23,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.block.BlockInfernoForge;
@@ -179,8 +180,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 								return;
 							}
 						} else {
-							if (EmberGenUtil.getEmberForItem(item.getItem().getItem()) > 0) {
-								emberValue += EmberGenUtil.getEmberForItem(item.getItem().getItem());
+							if (EmbersAPI.getEmberValue(item.getItem()) > 0) {
+								emberValue += EmbersAPI.getEmberValue(item.getItem());
 							} else {
 								progress = 0;
 								markDirty();
@@ -188,7 +189,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 							}
 						}
 					}
-					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= EmberGenUtil.getEmberForItem(RegistryManager.ember_cluster)*3.0){
+					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= EmbersAPI.getEmberValue(new ItemStack(RegistryManager.ember_cluster))*3.0){ //TODO: Replace cluster reference with actual value methinks
 						TileEntityInfernoForgeOpening opening = getOpening();
 						if (opening != null){
 							opening.open();
@@ -242,14 +243,14 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 						return;
 					}
 				} else {
-					if (EmberGenUtil.getEmberForItem(item.getItem().getItem()) > 0) {
-						emberValue += EmberGenUtil.getEmberForItem(item.getItem().getItem());
+					if (EmbersAPI.getEmberValue(item.getItem()) > 0) {
+						emberValue += EmbersAPI.getEmberValue(item.getItem());
 					} else {
 						return;
 					}
 				}
 			}
-			if (!pickedItem.isEmpty() && emberValue > 0 && emberValue < EmberGenUtil.getEmberForItem(RegistryManager.ember_cluster)*3.0){
+			if (!pickedItem.isEmpty() && emberValue > 0 && emberValue < EmbersAPI.getEmberValue(new ItemStack(RegistryManager.ember_cluster))*3.0){ //TODO: Ditto, replace cluster with actual value
 				progress = PROCESS_TIME;
 				world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.INFERNO_FORGE_START, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				markDirty();

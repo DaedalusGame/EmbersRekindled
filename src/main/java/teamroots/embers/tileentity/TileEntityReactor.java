@@ -26,6 +26,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
@@ -56,14 +57,14 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (EmberGenUtil.getEmberForItem(stack.getItem()) == 0){
+        	if (EmbersAPI.getEmberValue(stack) == 0){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
         }
 	};
-	private float catalyzerMult;
-	private float combustorMult;
+	private double catalyzerMult;
+	private double combustorMult;
 
 	public TileEntityReactor(){
 		super();
@@ -162,8 +163,8 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 					progress = 0;
 					int i = 0;
 					if (inventory != null){
-						Item emberStack = inventory.getStackInSlot(i).getItem();
-						double emberValue = EmberGenUtil.getEmberForItem(emberStack);
+						ItemStack emberStack = inventory.getStackInSlot(i);
+						double emberValue = EmbersAPI.getEmberValue(emberStack);
 						if (emberValue > 0){
 							double ember = multiplier * emberValue;
 							if (capability.getEmber() <= capability.getEmberCapacity()-ember){
@@ -182,7 +183,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 			markDirty();
 		}
 		if (this.capability.getEmber() > 0 && getWorld().isRemote){
-			float catalyzerRatio = 0.0f;
+			double catalyzerRatio = 0.0;
 			if(catalyzerMult > 0 || combustorMult > 0)
 				catalyzerRatio = catalyzerMult / (catalyzerMult + combustorMult);
 			int r = (int)MathHelper.clampedLerp(255,255,catalyzerRatio);

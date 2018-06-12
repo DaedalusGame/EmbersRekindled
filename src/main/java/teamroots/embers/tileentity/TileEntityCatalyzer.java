@@ -21,6 +21,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -28,9 +30,10 @@ import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 
 public class TileEntityCatalyzer extends TileEntity implements ITileEntityBase, ITickable {
+	public static final int PROCESS_TIME = 400;
 	Random random = new Random();
 	int progress = 0;
-	float multiplier = 0;
+	double multiplier = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -39,7 +42,7 @@ public class TileEntityCatalyzer extends TileEntity implements ITileEntityBase, 
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (EmberGenUtil.getCatalysisCoefficient(stack.getItem()) == 0){
+        	if (EmbersAPI.getCatalysisFuel(stack) == null){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -55,7 +58,7 @@ public class TileEntityCatalyzer extends TileEntity implements ITileEntityBase, 
 		super.writeToNBT(tag);
 		tag.setTag("inventory", inventory.serializeNBT());
 		tag.setInteger("progress", progress);
-		tag.setFloat("multiplier", multiplier);
+		tag.setDouble("multiplier", multiplier);
 		return tag;
 	}
 	
@@ -66,7 +69,7 @@ public class TileEntityCatalyzer extends TileEntity implements ITileEntityBase, 
 		if (tag.hasKey("progress")){
 			progress = tag.getInteger("progress");
 		}
-		multiplier = tag.getFloat("multiplier");
+		multiplier = tag.getDouble("multiplier");
 	}
 
 	@Override
@@ -123,10 +126,12 @@ public class TileEntityCatalyzer extends TileEntity implements ITileEntityBase, 
 			}
 			markDirty();
 		}
-		if (progress == 0 && !inventory.getStackInSlot(0).isEmpty()){
-			if (EmberGenUtil.getCatalysisCoefficient(inventory.getStackInSlot(0).getItem()) > 0){
-				multiplier = EmberGenUtil.getCatalysisCoefficient(inventory.getStackInSlot(0).getItem());
-				progress = 400;
+		ItemStack fuel = inventory.getStackInSlot(0);
+		if (progress == 0 && !fuel.isEmpty()){
+			ICoefficientFuel coefficient = EmbersAPI.getCatalysisFuel(fuel);
+			if (coefficient != null){
+				multiplier = coefficient.getCoefficient(fuel);
+				progress = coefficient.getDuration(fuel);
 				inventory.extractItem(0, 1, false);
 				markDirty();
 			}

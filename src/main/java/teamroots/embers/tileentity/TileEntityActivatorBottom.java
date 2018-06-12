@@ -23,6 +23,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -40,7 +41,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (EmberGenUtil.getEmberForItem(stack.getItem()) == 0){
+        	if (EmbersAPI.getEmberValue(stack) == 0){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -125,7 +126,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
                     int i = 0;
                     if (inventory != null){
 						ItemStack emberStack = inventory.getStackInSlot(i);
-						double emberValue = EmberGenUtil.getEmberForItem(emberStack.getItem());
+						double emberValue = EmbersAPI.getEmberValue(emberStack);
 						if (emberValue > 0){
                             double ember = emberValue;
                             if (top.capability.getEmber() <= top.capability.getEmberCapacity()-ember){

@@ -35,6 +35,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.network.message.MessageTEUpdate;
@@ -56,7 +57,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
         
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (EmberGenUtil.getEmberForItem(stack.getItem()) == 0){
+        	if (EmbersAPI.getEmberValue(stack) == 0){
         		return stack;
         	}
         	return super.insertItem(slot, stack, simulate);
@@ -124,9 +125,9 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
 		world.setTileEntity(pos, null);
 	}
 	
-	public float getMultiplier(){
-		float metalMultiplier = EmberGenUtil.getMetalCoefficient(world.getBlockState(pos.down()));
-		float totalMult = BASE_MULTIPLIER;
+	public double getMultiplier(){
+		double metalMultiplier = EmbersAPI.getMetalCoefficient(world.getBlockState(pos.down()));
+		double totalMult = BASE_MULTIPLIER;
 		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
 			IBlockState state = world.getBlockState(pos.down().offset(facing));
 			if (state.getBlock() == Blocks.LAVA || state.getBlock() == Blocks.FLOWING_LAVA || state.getBlock() == Blocks.FIRE){
@@ -162,8 +163,8 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
 				progress = 0;
 				int i = random.nextInt(inventory.getSlots());
 				if (!inventory.getStackInSlot(i).isEmpty()) {
-					Item emberStack = inventory.getStackInSlot(i).getItem();
-					double emberValue = EmberGenUtil.getEmberForItem(emberStack);
+					ItemStack emberStack = inventory.getStackInSlot(i);
+					double emberValue = EmbersAPI.getEmberValue(emberStack);
 					if (emberValue > 0) {
 						double ember = emberValue * getMultiplier();
 						if (top.capability.getEmber() <= top.capability.getEmberCapacity() - ember) {

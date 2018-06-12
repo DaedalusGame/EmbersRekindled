@@ -5,7 +5,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import teamroots.embers.util.AspectList.AspectRangeList;
+import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 
 import java.util.ArrayList;
 
