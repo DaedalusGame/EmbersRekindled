@@ -6,11 +6,13 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.entity.EntityEmberProjectile;
@@ -72,6 +74,7 @@ public class MessageCasterOrb implements IMessage {
                         EntityEmberProjectile proj = new EntityEmberProjectile(world);
                         proj.initCustom(player.posX + offX, player.posY + player.getEyeHeight(), player.posZ + offZ, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), uuid);
                         world.spawnEntity(proj);
+                        world.playSound(null,proj.posX,proj.posY,proj.posZ,SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                         ModifierCasterOrb.setCooldown(uuid, 20);
                     }
                 }

@@ -6,11 +6,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
@@ -35,6 +37,7 @@ public class ModifierSuperheater extends ModifierBase {
 						if (!event.getWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageSuperheatFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 						}
+						event.getWorld().playSound(null,event.getPos(),SoundManager.FIREBALL_BIG_HIT, SoundCategory.PLAYERS, 1.0f, 1.0f);
 						EmberInventoryUtil.removeEmber(event.getHarvester(), cost);
 						List<ItemStack> stacks = event.getDrops();
 						for (int i = 0; i < stacks.size(); i ++){

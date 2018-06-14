@@ -1,12 +1,13 @@
 package teamroots.embers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.NonNullList;
 import org.lwjgl.opengl.GL11;
 
@@ -190,12 +191,14 @@ public class EventManager {
 					if (player.getHeldItemMainhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemMainhand().hasTagCompound()){
 						player.getHeldItemMainhand().setItemDamage(1);
 						player.getHeldItemMainhand().getTagCompound().setString("type", event.getSource().getDamageType());
+						player.playSound(SoundManager.INFLICTOR_GEM,1.0f,1.0f);
 					}
 				}
 				if (!player.getHeldItemOffhand().isEmpty()){
 					if (player.getHeldItemOffhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemOffhand().hasTagCompound()){
 						player.getHeldItemOffhand().setItemDamage(1);
 						player.getHeldItemOffhand().getTagCompound().setString("type", event.getSource().getDamageType());
+						player.playSound(SoundManager.INFLICTOR_GEM,1.0f,1.0f);
 					}
 				}
 			}
@@ -217,22 +220,30 @@ public class EventManager {
 		}
 		for (ItemStack s : event.getEntityLiving().getEquipmentAndArmor()){
 			if (s.getItem() instanceof ItemArmor){
-				if (ItemModUtil.hasHeat(s)){
-					ItemModUtil.addHeat(s, 5.0f);
-				}
+				addHeat(event.getEntityLiving(), s, 5.0f);
 			}
 		}
 		if (event.getSource().getTrueSource() instanceof EntityPlayer){
 			EntityPlayer damager = (EntityPlayer)event.getSource().getTrueSource();
 			ItemStack s = damager.getHeldItemMainhand();
 			if (!s.isEmpty()){
-				if (ItemModUtil.hasHeat(s)){
-					ItemModUtil.addHeat(s, 1.0f);
-				}
+				addHeat(event.getEntityLiving(), s, 1.0f);
 			}
 		}
 	}
-	
+
+	private void addHeat(EntityLivingBase entity, ItemStack stack, float added) {
+		if (ItemModUtil.hasHeat(stack)) {
+			double maxHeat = ItemModUtil.getMaxHeat(stack);
+			double heat = ItemModUtil.getHeat(stack);
+			if(heat < maxHeat) {
+				ItemModUtil.addHeat(stack, added);
+				if(heat + added > maxHeat)
+					entity.playSound(SoundManager.HEATED_ITEM_LEVELUP,1.0f,1.0f);
+			}
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onGameOverlayRender(RenderGameOverlayEvent.Post e){
@@ -392,18 +403,17 @@ public class EventManager {
 	
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event){
-		if (event.getPlayer() != null){
-			if (!event.getPlayer().getHeldItemMainhand().isEmpty()){
-				ItemStack s = event.getPlayer().getHeldItemMainhand();
+		EntityPlayer player = event.getPlayer();
+		if (player != null){
+			if (!player.getHeldItemMainhand().isEmpty()){
+				ItemStack s = player.getHeldItemMainhand();
 				if (!s.isEmpty() && event.getState().getBlockHardness(event.getWorld(), event.getPos()) > 0){
-					if (ItemModUtil.hasHeat(s)){
-						ItemModUtil.addHeat(s, 1.0f);
-					}
+					addHeat(player, s, 1.0f);
 				}
 				/*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
 					PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 				}*/
-				if (event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemGrandhammer){
+				if (player.getHeldItemMainhand().getItem() instanceof ItemGrandhammer){
 					event.setCanceled(true);
 					event.getWorld().setBlockToAir(event.getPos());
 				}

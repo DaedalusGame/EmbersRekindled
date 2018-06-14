@@ -3,6 +3,9 @@ package teamroots.embers.gui;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.util.SoundEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -25,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchCategory;
 import teamroots.embers.research.ResearchManager;
@@ -103,15 +107,21 @@ public class GuiCodex extends GuiScreen {
 			if (categoryIndex != -1){
 				if (researchPage != -1){
 					researchPage = -1;
+					playSound(SoundManager.CODEX_PAGE_CLOSE);
 					return;
 				}
 				categoryIndex = -1;
+				playSound(SoundManager.CODEX_CATEGORY_CLOSE);
 				return;
 			}
 		}
 		super.keyTyped(typedChar, keyCode);
 	}
-	
+
+	private void playSound(SoundEvent sound) {
+		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound,1.0f));
+	}
+
 	@Override
 	public boolean doesGuiPauseGame(){
 		return false;
@@ -121,9 +131,11 @@ public class GuiCodex extends GuiScreen {
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton){
 		if (selectedIndex != -1 && this.categoryIndex == -1){
 			this.categoryIndex = selectedIndex;
+			playSound(SoundManager.CODEX_CATEGORY_OPEN);
 		}
 		if (selectedPageIndex != -1 && this.researchPage == -1){
 			this.researchPage = selectedPageIndex;
+			playSound(SoundManager.CODEX_PAGE_OPEN);
 		}
 	}
 	
@@ -314,12 +326,16 @@ public class GuiCodex extends GuiScreen {
 					selected = true;
 					selectedIndex = (int)i;
 					categoryString = category.name;
+					if (raise[(int)i] <= 0.0f)
+						playSound(SoundManager.CODEX_CATEGORY_SELECT);
 					if (raise[(int)i] < 1.0f && doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
 						raiseTargets[(int)i] = raiseTargets[(int)i] * 0.5f + 0.5f;
 					}
 				}
 				else {
+					if (raise[(int)i] >= 1.0f)
+						playSound(SoundManager.CODEX_CATEGORY_UNSELECT);
 					if (/*raise[(int)i] > 0.0f && */doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
 						raiseTargets[(int)i] = raiseTargets[(int)i] * 0.5f;
@@ -489,5 +505,6 @@ public class GuiCodex extends GuiScreen {
 				base.selectedAmount = 0.0f;
 			}
 		}
+		playSound(SoundManager.CODEX_CLOSE);
 	}
 }
