@@ -1,9 +1,11 @@
 package teamroots.embers.tileentity;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +29,8 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockStamper;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageStamperFX;
@@ -134,9 +138,12 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 		prevPowered = powered;
 		EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
 		if (getWorld().getBlockState(getPos().offset(face,2)).getBlock() == RegistryManager.stamp_base){
-			int stampTime = (int) Math.ceil(STAMP_TIME);
-			int retractTime = (int) Math.ceil(RETRACT_TIME);
-            if (!powered && !getWorld().isRemote && this.ticksExisted >= stampTime){
+			List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+			UpgradeUtil.verifyUpgrades(this,upgrades);
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			int stampTime = UpgradeUtil.getWorkTime(this,STAMP_TIME,upgrades);
+			int retractTime = UpgradeUtil.getWorkTime(this,RETRACT_TIME,upgrades);
+            if (!cancel && !powered && !getWorld().isRemote && this.ticksExisted >= stampTime){
                 TileEntityStampBase stamp = (TileEntityStampBase)getWorld().getTileEntity(getPos().offset(face,2));
                 FluidStack fluid = null;
 				IFluidHandler handler = stamp.getTank();
@@ -144,8 +151,9 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 					fluid = handler.drain(stamp.getCapacity(), false);
                 ItemStampingRecipe recipe = getRecipe(stamp.inputs.getStackInSlot(0), fluid, this.stamp.getStackInSlot(0));
                 if (recipe != null){
-                    if (this.capability.getEmber() > EMBER_COST){
-                        this.capability.removeAmount(EMBER_COST, true);
+					double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+					if (this.capability.getEmber() > emberCost){
+                        this.capability.removeAmount(emberCost, true);
                         if (!world.isRemote){
                             PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().offset(face,2).getX()+0.5f,getPos().offset(face,2).getY()+1.0f,getPos().offset(face,2).getZ()+0.5f));
                         }
@@ -154,35 +162,29 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 						powered = true;
 						ticksExisted = 0;
 
-						ItemStack result = recipe.getResult(this,stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,this.stamp.getStackInSlot(0));
+						List<ItemStack> results = Lists.newArrayList(recipe.getResult(this,stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null,this.stamp.getStackInSlot(0)));
+						UpgradeUtil.transformOutput(this,results,upgrades);
 						stamp.inputs.extractItem(0, recipe.getInputConsumed(), false);
                         if (recipe.getFluid() != null){
                             stamp.getTank().drain(recipe.getFluid(), true);
                         }
-
                         BlockPos middlePos = getPos().offset(face, 1);
 						BlockPos outputPos = getPos().offset(face, 3);
 						TileEntity outputTile = getWorld().getTileEntity(outputPos);
-						if (outputTile instanceof TileEntityBin){
-                            TileEntityBin bin = (TileEntityBin) outputTile;
-                            ItemStack remainder = bin.inventory.insertItem(0, result, false);
-                            if (!remainder.isEmpty() && !getWorld().isRemote){
-                                EntityItem item = new EntityItem(getWorld(),middlePos.getX()+0.5,middlePos.getY()+0.5,middlePos.getZ()+0.5,remainder);
-                                getWorld().spawnEntity(item);
-                            }
-                            bin.markDirty();
-                            markDirty();
-                        }
-                        else if (!getWorld().isRemote){
-                            EntityItem item = new EntityItem(getWorld(),middlePos.getX()+0.5,middlePos.getY()+0.5,middlePos.getZ()+0.5,result);
-                            getWorld().spawnEntity(item);
-                        }
+						for(ItemStack remainder : results) {
+							if (outputTile instanceof TileEntityBin) {
+								remainder = ((TileEntityBin) outputTile).inventory.insertItem(0, remainder, false);
+							}
+							if (!remainder.isEmpty() && !getWorld().isRemote) {
+								getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, remainder));
+							}
+						}
                         stamp.markDirty();
                     }
                 }
                 markDirty();
             }
-            else if (powered && !getWorld().isRemote && this.ticksExisted >= retractTime){
+            else if (!cancel && powered && !getWorld().isRemote && this.ticksExisted >= retractTime){
 				retract();
             }
         }

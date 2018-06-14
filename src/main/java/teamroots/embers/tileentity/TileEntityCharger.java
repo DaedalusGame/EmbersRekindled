@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -25,6 +26,8 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.item.IEmberItem;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -143,12 +146,16 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	@Override
 	public void update() {
 		turnRate = 1;
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.VALUES);
+		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if(getWorld().isRemote)
 			handleSound();
 		ItemStack stack = inventory.getStackInSlot(0);
 		isWorking = false;
-		if (!stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
-			double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(MAX_TRANSFER, capability.getEmber()), true);
+		boolean cancel = UpgradeUtil.doWork(this,upgrades);
+		if (!cancel && !stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
+			double transferRate = UpgradeUtil.getTotalSpeedModifier(this,upgrades) * MAX_TRANSFER;
+			double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(transferRate, capability.getEmber()), true);
 			capability.removeAmount(emberAdded, true);
 			if(emberAdded > 0)
 				isWorking = true;

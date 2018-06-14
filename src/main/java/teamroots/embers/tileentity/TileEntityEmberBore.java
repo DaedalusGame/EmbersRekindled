@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -25,6 +26,8 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.particle.ParticleUtil;
@@ -153,11 +156,15 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	public void update() {
 		if(getWorld().isRemote)
 			handleSound();
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.UP});
+		UpgradeUtil.verifyUpgrades(this, upgrades);
+		double speedMod = UpgradeUtil.getTotalSpeedModifier(this,upgrades);
 		if (ticksFueled > 0){
 			lastAngle = angle;
-			angle += 12.0f;
+			angle += 12.0f * speedMod;
 		}
-		if (!getWorld().isRemote){
+		boolean cancel = UpgradeUtil.doWork(this,upgrades);
+		if (!cancel && !getWorld().isRemote){
 			ticksExisted ++;
 			if (ticksFueled > 0){
 				ticksFueled --;
@@ -175,7 +182,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 					markDirty();
 				}
 			} else if(canMine()) {
-				int boreTime = (int)Math.ceil(BORE_TIME);
+				int boreTime = (int)Math.ceil(BORE_TIME * (1 / speedMod));
 				if (ticksExisted % boreTime == 0){
 					if (random.nextFloat() < EmberGenUtil.getEmberDensity(world.getSeed(), getPos().getX(), getPos().getZ())){
 						BoreOutput output = RecipeRegistry.getBoreOutput(world,getPos());
@@ -185,6 +192,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 								WeightedItemStack picked = WeightedRandom.getRandomItem(random, output.stacks);
 								returns.add(picked.getStack().copy());
 							}
+							UpgradeUtil.transformOutput(this,returns,upgrades);
 							if(canInsert(returns)) {
 								insert(returns);
 							}

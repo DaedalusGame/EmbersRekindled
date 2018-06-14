@@ -573,7 +573,7 @@ public class RecipeRegistry {
 				"Y Y",
 				"XXX",
 				'Y', RegistryManager.brick_caminite,
-				'X', RegistryManager.wall_caminite_brick}).setRegistryName(getRL("stone_edge")));
+				'X', new ItemStack(RegistryManager.wall_caminite_brick)}).setRegistryName(getRL("stone_edge")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("mixer"),new ItemStack(RegistryManager.mixer,1),true,new Object[]{
 				"PPP",
 				"PCP",

@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -28,6 +29,8 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.api.power.IEmberCapability;
@@ -36,6 +39,7 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
+	public static final int MAX_CAPACITY = 1440000;
 	Random random = new Random();
 	public long ticksExisted = 0;
 	public float angle = 0;
@@ -154,6 +158,8 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
 	@Override
 	public void update() {
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
+		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if(getWorld().isRemote)
 			handleSound();
 		ticksExisted ++;
@@ -162,13 +168,15 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 			renderCapacity += Math.min(10000,this.capability.getEmberCapacity() - renderCapacity);
 		else
 			renderCapacity -= Math.min(10000,renderCapacity - this.capability.getEmberCapacity());
-		if (!inventory.getStackInSlot(0).isEmpty() && ticksExisted % 4 == 0){
+		boolean cancel = UpgradeUtil.doWork(this,upgrades);
+		if (!cancel && !inventory.getStackInSlot(0).isEmpty() && ticksExisted % 4 == 0){
 			ItemStack stack = inventory.extractItem(0, 1, true);
 
 			if (!getWorld().isRemote && !stack.isEmpty()){
 				inventory.extractItem(0, 1, false);
-				if (EmbersAPI.getEmberValue(stack) > 0){
-					this.capability.setEmberCapacity(Math.min(1440000, this.capability.getEmberCapacity()+EmbersAPI.getEmberValue(stack)*10));
+				int maxCapacity = UpgradeUtil.getOtherParameter(this,"max_capacity",MAX_CAPACITY,upgrades);
+				if (EmbersAPI.getEmberValue(stack) > 0 && this.capability.getEmberCapacity() < maxCapacity){
+					this.capability.setEmberCapacity(Math.min(maxCapacity, this.capability.getEmberCapacity()+EmbersAPI.getEmberValue(stack)*10));
 					markDirty();
 				}
 			}

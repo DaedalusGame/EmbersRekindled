@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -23,6 +24,8 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.tile.IEmberInjectable;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockEmberInjector;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -122,12 +125,16 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 	public void update(){
 		if(getWorld().isRemote)
 			handleSound();
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.VALUES);
+		UpgradeUtil.verifyUpgrades(this, upgrades);
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
 		isWorking = false;
-		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > EMBER_COST){
-			((IEmberInjectable) tile).inject(this, EMBER_COST);
-			this.capability.removeAmount(EMBER_COST, true);
+		boolean cancel = UpgradeUtil.doWork(this,upgrades);
+		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades) * UpgradeUtil.getTotalSpeedModifier(this,upgrades);
+		if (!cancel && tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > emberCost){
+			((IEmberInjectable) tile).inject(this, emberCost);
+			this.capability.removeAmount(emberCost, true);
 			isWorking = true;
 			markDirty();
 			if (world.isRemote){

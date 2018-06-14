@@ -28,6 +28,8 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCookItemFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -154,22 +156,28 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 		if(getWorld().isRemote)
 			handleSound();
 
-		if (capability.getEmber() >= EMBER_COST){
-			capability.removeAmount(EMBER_COST, true);
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
+		UpgradeUtil.verifyUpgrades(this, upgrades);
+
+		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+		if (capability.getEmber() >= emberCost){
+			capability.removeAmount(emberCost, true);
 			if (ticksExisted % 20 == 0){
-				heat += HEATING_SPEED;
+				heat += UpgradeUtil.getOtherParameter(this,"heating_speed",HEATING_SPEED,upgrades);
 			}
 		}
 		else {
 			if (ticksExisted % 20 == 0){
-				heat -= COOLING_SPEED;
+				heat -= UpgradeUtil.getOtherParameter(this,"cooling_speed",COOLING_SPEED,upgrades);
 			}
 		}
-		heat = MathHelper.clamp(heat,0, MAX_HEAT);
+		double maxHeat = UpgradeUtil.getOtherParameter(this,"max_heat",MAX_HEAT,upgrades);
+		heat = MathHelper.clamp(heat,0, maxHeat);
 		isWorking = false;
 
-		int cookTime = (int)Math.ceil(MathHelper.clampedLerp(MIN_COOK_TIME,MAX_COOK_TIME,1.0-(heat / MAX_HEAT)));
-		if (heat > 0 && ticksExisted % cookTime == 0 && !getWorld().isRemote){
+		boolean cancel = UpgradeUtil.doWork(this,upgrades);
+		int cookTime = UpgradeUtil.getWorkTime(this,(int)Math.ceil(MathHelper.clampedLerp(MIN_COOK_TIME,MAX_COOK_TIME,1.0-(heat / maxHeat))),upgrades);
+		if (!cancel && heat > 0 && ticksExisted % cookTime == 0 && !getWorld().isRemote){
 			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX()-1,getPos().getY(),getPos().getZ()-1,getPos().getX()+2,getPos().getY()+2,getPos().getZ()+2));
 			for (EntityItem item : items) {
 				item.setAgeToCreativeDespawnTime();
@@ -184,6 +192,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 					int inputCount = recipe.getInputConsumed();
 					depleteItem(entityItem, inputCount);
 					boolean dirty = false;
+					UpgradeUtil.transformOutput(this,returns,upgrades);
 					for(ItemStack stack : returns) {
 						ItemStack remainder = inventory.insertItem(0, stack, false);
 						dirty = true;

@@ -116,11 +116,11 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 			BlockPos pos = getPosition();
 			if (posX > pos.getX()+0.25 && posX < pos.getX()+0.75 && posY > pos.getY()+0.25 && posY < pos.getY()+0.75 && posZ > pos.getZ()+0.25 && posZ < pos.getZ()+0.75){
 				affectTileEntity(state,tile);
-				if (state.isFullCube() && state.isOpaqueCube()){
+				/*if (state.isFullCube() && state.isOpaqueCube()){ //Why do we need this even?
 					if (!getEntityWorld().isRemote){
 						PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
 					}
-				}
+				}*/
 			}
 			if (getEntityWorld().isRemote){
 				double deltaX = posX - prevPosX;

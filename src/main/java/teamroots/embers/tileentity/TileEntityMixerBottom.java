@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -27,6 +28,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.sound.ISoundController;
@@ -171,13 +174,17 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
         TileEntityMixerTop top = (TileEntityMixerTop) world.getTileEntity(pos.up());
         isWorking = false;
         if (top != null) {
-            double emberCost = EMBER_COST;
-            if (top.capability.getEmber() >= emberCost) {
+            List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos.up(), EnumFacing.VALUES);
+            UpgradeUtil.verifyUpgrades(this, upgrades);
+            boolean cancel = UpgradeUtil.doWork(this,upgrades);
+            double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+            if (!cancel && top.capability.getEmber() >= emberCost) {
                 ArrayList<FluidStack> fluids = getFluids();
                 FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
                 if (recipe != null) {
                     IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                     FluidStack output = recipe.getResult(fluids);
+                    output = UpgradeUtil.transformOutput(this,output,upgrades);
                     int amount = tank.fill(output, false);
                     if (amount != 0) {
                         isWorking = true;

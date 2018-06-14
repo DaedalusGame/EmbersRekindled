@@ -1,4 +1,4 @@
-package teamroots.embers.util;
+package teamroots.embers.apiimpl;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -8,14 +8,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.IUpgradeUtil;
 import teamroots.embers.tileentity.TileEntityMechCore;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class UpgradeUtil {
-    public static List<IUpgradeProvider> getUpgrades(World world, BlockPos pos, EnumFacing[] facings)
+public class UpgradeUtilImpl implements IUpgradeUtil {
+    public List<IUpgradeProvider> getUpgrades(World world, BlockPos pos, EnumFacing[] facings)
     {
         LinkedList<IUpgradeProvider> upgrades = new LinkedList<>();
         for (EnumFacing facing: facings) {
@@ -28,7 +29,7 @@ public class UpgradeUtil {
         return upgrades;
     }
 
-    public static List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings)
+    public List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings)
     {
         LinkedList<IUpgradeProvider> upgrades = new LinkedList<>();
         for (EnumFacing facing: facings) {
@@ -41,7 +42,7 @@ public class UpgradeUtil {
         return upgrades;
     }
 
-    public static void verifyUpgrades(TileEntity tile,List<IUpgradeProvider> list)
+    public void verifyUpgrades(TileEntity tile,List<IUpgradeProvider> list)
     {
         //Count, remove, sort
         //This call is expensive. Ideally should be cached. The total time complexity is O(n + n^2 + n log n) = O(n^2) for an ArrayList.
@@ -55,7 +56,15 @@ public class UpgradeUtil {
         list.sort((x,y) -> Integer.compare(x.getPriority(),y.getPriority()));
     }
 
-    public static double getTotalSpeedModifier(TileEntity tile,List<IUpgradeProvider> list)
+    @Override
+    public int getWorkTime(TileEntity tile, int time, List<IUpgradeProvider> list) {
+        double speedmod = getTotalSpeedModifier(tile,list);
+        if(speedmod == 0) //Stop.
+            return Integer.MAX_VALUE;
+        return (int)(time * (1.0 / speedmod));
+    }
+
+    public double getTotalSpeedModifier(TileEntity tile,List<IUpgradeProvider> list)
     {
         double total = 1.0f;
 
@@ -67,7 +76,7 @@ public class UpgradeUtil {
     }
 
     //DO NOT CALL FROM AN UPGRADE'S doWork METHOD!!
-    public static boolean doWork(TileEntity tile, List<IUpgradeProvider> list)
+    public boolean doWork(TileEntity tile, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade: list) {
             if(upgrade.doWork(tile,list))
@@ -77,7 +86,7 @@ public class UpgradeUtil {
         return false;
     }
 
-    public static double getTotalEmberConsumption(TileEntity tile, double ember, List<IUpgradeProvider> list)
+    public double getTotalEmberConsumption(TileEntity tile, double ember, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             ember = upgrade.transformEmberConsumption(tile, ember);
@@ -86,7 +95,7 @@ public class UpgradeUtil {
         return ember;
     }
 
-    public static double getTotalEmberProduction(TileEntity tile, double ember, List<IUpgradeProvider> list)
+    public double getTotalEmberProduction(TileEntity tile, double ember, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             ember = upgrade.transformEmberProduction(tile, ember);
@@ -95,14 +104,14 @@ public class UpgradeUtil {
         return ember;
     }
 
-    public static void transformOutput(TileEntity tile, List<ItemStack> outputs, List<IUpgradeProvider> list)
+    public void transformOutput(TileEntity tile, List<ItemStack> outputs, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             upgrade.transformOutput(tile,outputs);
         }
     }
 
-    public static FluidStack transformOutput(TileEntity tile, FluidStack output, List<IUpgradeProvider> list)
+    public FluidStack transformOutput(TileEntity tile, FluidStack output, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             output = upgrade.transformOutput(tile,output);
@@ -111,7 +120,7 @@ public class UpgradeUtil {
         return output;
     }
 
-    public static boolean getOtherParameter(TileEntity tile, String type, boolean initial, List<IUpgradeProvider> list)
+    public boolean getOtherParameter(TileEntity tile, String type, boolean initial, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             initial = upgrade.getOtherParameter(tile,type,initial);
@@ -120,7 +129,7 @@ public class UpgradeUtil {
         return initial;
     }
 
-    public static double getOtherParameter(TileEntity tile, String type, double initial, List<IUpgradeProvider> list)
+    public double getOtherParameter(TileEntity tile, String type, double initial, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             initial = upgrade.getOtherParameter(tile,type,initial);
@@ -129,7 +138,7 @@ public class UpgradeUtil {
         return initial;
     }
 
-    public static int getOtherParameter(TileEntity tile, String type, int initial, List<IUpgradeProvider> list)
+    public int getOtherParameter(TileEntity tile, String type, int initial, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             initial = upgrade.getOtherParameter(tile,type,initial);
@@ -138,7 +147,7 @@ public class UpgradeUtil {
         return initial;
     }
 
-    public static String getOtherParameter(TileEntity tile, String type, String initial, List<IUpgradeProvider> list)
+    public String getOtherParameter(TileEntity tile, String type, String initial, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             initial = upgrade.getOtherParameter(tile,type,initial);
@@ -147,7 +156,7 @@ public class UpgradeUtil {
         return initial;
     }
 
-    public static <T> T getOtherParameter(TileEntity tile, String type, T initial, List<IUpgradeProvider> list)
+    public <T> T getOtherParameter(TileEntity tile, String type, T initial, List<IUpgradeProvider> list)
     {
         for (IUpgradeProvider upgrade : list) {
             initial = upgrade.getOtherParameter(tile,type,initial);

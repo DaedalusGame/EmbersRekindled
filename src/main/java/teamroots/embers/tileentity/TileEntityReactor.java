@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -28,6 +29,8 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -38,208 +41,210 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
-	public static final float BASE_MULTIPLIER = 1.0f;
-	public IEmberCapability capability = new DefaultEmberCapability();
-	Random random = new Random();
-	int progress = -1;
+    public static final float BASE_MULTIPLIER = 1.0f;
+    public static final int PROCESS_TIME = 20;
+    public IEmberCapability capability = new DefaultEmberCapability();
+    Random random = new Random();
+    int progress = -1;
 
-	public static final int SOUND_HAS_EMBER = 1;
-	public static final int[] SOUND_IDS = new int[]{SOUND_HAS_EMBER};
+    public static final int SOUND_HAS_EMBER = 1;
+    public static final int[] SOUND_IDS = new int[]{SOUND_HAS_EMBER};
 
-	HashSet<Integer> soundsPlaying = new HashSet<>();
+    HashSet<Integer> soundsPlaying = new HashSet<>();
 
-	public ItemStackHandler inventory = new ItemStackHandler(1){
+    public ItemStackHandler inventory = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
-        	TileEntityReactor.this.markDirty();
-    		capability.setEmberCapacity(64000);
+            TileEntityReactor.this.markDirty();
+            capability.setEmberCapacity(64000);
         }
-        
+
         @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate){
-        	if (EmbersAPI.getEmberValue(stack) == 0){
-        		return stack;
-        	}
-        	return super.insertItem(slot, stack, simulate);
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if (EmbersAPI.getEmberValue(stack) == 0) {
+                return stack;
+            }
+            return super.insertItem(slot, stack, simulate);
         }
-	};
-	private double catalyzerMult;
-	private double combustorMult;
+    };
+    private double catalyzerMult;
+    private double combustorMult;
 
-	public TileEntityReactor(){
-		super();
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag){
-		super.writeToNBT(tag);
-		tag.setTag("inventory", inventory.serializeNBT());
-		capability.writeToNBT(tag);
-		tag.setInteger("progress", progress);
-		return tag;
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tag){
-		super.readFromNBT(tag);
-		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
-		capability.readFromNBT(tag);
-		if (tag.hasKey("progress")){
-			progress = tag.getInteger("progress");
-		}
-	}
+    public TileEntityReactor() {
+        super();
+    }
 
-	@Override
-	public NBTTagCompound getUpdateTag() {
-		return writeToNBT(new NBTTagCompound());
-	}
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setTag("inventory", inventory.serializeNBT());
+        capability.writeToNBT(tag);
+        tag.setInteger("progress", progress);
+        return tag;
+    }
 
-	@Nullable
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+        capability.readFromNBT(tag);
+        if (tag.hasKey("progress")) {
+            progress = tag.getInteger("progress");
+        }
+    }
 
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.getNbtCompound());
-	}
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
 
-	@Override
-	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+    }
 
-	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		this.invalidate();
-		Misc.spawnInventoryInWorld(getWorld(), pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
-		world.setTileEntity(pos, null);
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		}
-		else if (capability == EmbersCapabilities.EMBER_CAPABILITY){
-			return true;
-		}
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return (T)this.inventory;
-		}
-		else if (capability == EmbersCapabilities.EMBER_CAPABILITY){
-			return (T)this.capability;
-		}
-		return super.getCapability(capability, facing);
-	}
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
+    }
 
-	@Override
-	public void update() {
-		if(getWorld().isRemote)
-			handleSound();
-		if (!inventory.getStackInSlot(0).isEmpty()){
-			progress ++;
-			if (progress > 20){
-				catalyzerMult = 0.0f;
-				combustorMult = 0.0f;
-				float multiplier = BASE_MULTIPLIER;
-				for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-					TileEntity tile = world.getTileEntity(getPos().offset(facing).down());
-					if(tile instanceof TileEntityCatalyzer)
-						catalyzerMult += ((TileEntityCatalyzer)tile).multiplier;
-					if(tile instanceof TileEntityCombustor)
-						combustorMult += ((TileEntityCombustor)tile).multiplier;
-				}
-				if (Math.max(combustorMult, catalyzerMult) < 2.0f*Math.min(combustorMult, catalyzerMult)){
-					multiplier += combustorMult;
-					multiplier += catalyzerMult;
-					progress = 0;
-					int i = 0;
-					if (inventory != null){
-						ItemStack emberStack = inventory.getStackInSlot(i);
-						double emberValue = EmbersAPI.getEmberValue(emberStack);
-						if (emberValue > 0){
-							double ember = multiplier * emberValue;
-							if (capability.getEmber() <= capability.getEmberCapacity()-ember){
-								if (!world.isRemote){
-									world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.IGNEM_REACTOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
-									PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5f,getPos().getY()+0.5f,getPos().getZ()+0.5f));
-								}
-								capability.addAmount(ember, true);
-								inventory.extractItem(i, 1, false);
-								markDirty();
-							}
-						}
-					}
-				}
-			}
-			markDirty();
-		}
-		if (this.capability.getEmber() > 0 && getWorld().isRemote){
-			double catalyzerRatio = 0.0;
-			if(catalyzerMult > 0 || combustorMult > 0)
-				catalyzerRatio = catalyzerMult / (catalyzerMult + combustorMult);
-			int r = (int)MathHelper.clampedLerp(255,255,catalyzerRatio);
-			int g = (int)MathHelper.clampedLerp(64,64,catalyzerRatio);
-			int b = (int)MathHelper.clampedLerp(16,64,catalyzerRatio);
-			for (int i = 0; i < Math.ceil(this.capability.getEmber()/500.0); i ++){
-				float vx = (float)MathHelper.clampedLerp(0,(random.nextFloat()-0.5)*0.1f,catalyzerRatio);
-				float vy = (float)MathHelper.clampedLerp(random.nextFloat() * 0.05f,(random.nextFloat()-0.5) * 0.2f,catalyzerRatio);
-				float vz = (float)MathHelper.clampedLerp(0,(random.nextFloat()-0.5)*0.1f,catalyzerRatio);
-				float size = (float)MathHelper.clampedLerp(4.0,2.0,catalyzerRatio);
-				int lifetime = (16 + random.nextInt(16));
-				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()+0.25f+random.nextFloat()*0.5f, getPos().getY()+0.25f+random.nextFloat()*0.5f, getPos().getZ()+0.25f+random.nextFloat()*0.5f, vx, vy, vz, r, g, b, size, lifetime);
-			}
-		}
-	}
+    @Override
+    public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
+                            EnumFacing side, float hitX, float hitY, float hitZ) {
+        return false;
+    }
 
-	@Override
-	public void playSound(int id) {
-		switch (id) {
-			case SOUND_HAS_EMBER:
-				Embers.proxy.playMachineSound(this,SOUND_HAS_EMBER, SoundManager.GENERATOR_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
-				break;
-		}
-		soundsPlaying.add(id);
-	}
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        this.invalidate();
+        Misc.spawnInventoryInWorld(getWorld(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, inventory);
+        world.setTileEntity(pos, null);
+    }
 
-	@Override
-	public void stopSound(int id) {
-		soundsPlaying.remove(id);
-	}
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return true;
+        } else if (capability == EmbersCapabilities.EMBER_CAPABILITY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
+    }
 
-	@Override
-	public boolean isSoundPlaying(int id) {
-		return soundsPlaying.contains(id);
-	}
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) this.inventory;
+        } else if (capability == EmbersCapabilities.EMBER_CAPABILITY) {
+            return (T) this.capability;
+        }
+        return super.getCapability(capability, facing);
+    }
 
-	@Override
-	public int[] getSoundIDs() {
-		return SOUND_IDS;
-	}
+    @Override
+    public void update() {
+        List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+        UpgradeUtil.verifyUpgrades(this, upgrades);
+        if (getWorld().isRemote)
+            handleSound();
+        boolean cancel = UpgradeUtil.doWork(this,upgrades);
+        if (!cancel && !inventory.getStackInSlot(0).isEmpty()) {
+            progress++;
+            if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
+                catalyzerMult = 0.0f;
+                combustorMult = 0.0f;
+                float multiplier = BASE_MULTIPLIER;
+                for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+                    TileEntity tile = world.getTileEntity(getPos().offset(facing).down());
+                    if (tile instanceof TileEntityCatalyzer)
+                        catalyzerMult += ((TileEntityCatalyzer) tile).multiplier;
+                    if (tile instanceof TileEntityCombustor)
+                        combustorMult += ((TileEntityCombustor) tile).multiplier;
+                }
+                if (Math.max(combustorMult, catalyzerMult) < 2.0f * Math.min(combustorMult, catalyzerMult)) {
+                    multiplier += combustorMult;
+                    multiplier += catalyzerMult;
+                    progress = 0;
+                    int i = 0;
+                    if (inventory != null) {
+                        ItemStack emberStack = inventory.getStackInSlot(i);
+                        double emberValue = EmbersAPI.getEmberValue(emberStack);
+                        if (emberValue > 0) {
+                            double ember = UpgradeUtil.getTotalEmberProduction(this, multiplier * emberValue, upgrades);
+                            if (capability.getEmber() <= capability.getEmberCapacity() - ember) {
+                                if (!world.isRemote) {
+                                    world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, SoundManager.IGNEM_REACTOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                                    PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 0.5f, getPos().getZ() + 0.5f));
+                                }
+                                capability.addAmount(ember, true);
+                                inventory.extractItem(i, 1, false);
+                                markDirty();
+                            }
+                        }
+                    }
+                }
+            }
+            markDirty();
+        }
+        if (this.capability.getEmber() > 0 && getWorld().isRemote) {
+            double catalyzerRatio = 0.0;
+            if (catalyzerMult > 0 || combustorMult > 0)
+                catalyzerRatio = catalyzerMult / (catalyzerMult + combustorMult);
+            int r = (int) MathHelper.clampedLerp(255, 255, catalyzerRatio);
+            int g = (int) MathHelper.clampedLerp(64, 64, catalyzerRatio);
+            int b = (int) MathHelper.clampedLerp(16, 64, catalyzerRatio);
+            for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
+                float vx = (float) MathHelper.clampedLerp(0, (random.nextFloat() - 0.5) * 0.1f, catalyzerRatio);
+                float vy = (float) MathHelper.clampedLerp(random.nextFloat() * 0.05f, (random.nextFloat() - 0.5) * 0.2f, catalyzerRatio);
+                float vz = (float) MathHelper.clampedLerp(0, (random.nextFloat() - 0.5) * 0.1f, catalyzerRatio);
+                float size = (float) MathHelper.clampedLerp(4.0, 2.0, catalyzerRatio);
+                int lifetime = (16 + random.nextInt(16));
+                ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, vx, vy, vz, r, g, b, size, lifetime);
+            }
+        }
+    }
 
-	@Override
-	public boolean shouldPlaySound(int id) {
-		return id == SOUND_HAS_EMBER && capability.getEmber() > 0;
-	}
-	
-	public boolean dirty = false;
-	
-	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
-		super.markDirty();
-	}
+    @Override
+    public void playSound(int id) {
+        switch (id) {
+            case SOUND_HAS_EMBER:
+                Embers.proxy.playMachineSound(this, SOUND_HAS_EMBER, SoundManager.GENERATOR_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f);
+                break;
+        }
+        soundsPlaying.add(id);
+    }
+
+    @Override
+    public void stopSound(int id) {
+        soundsPlaying.remove(id);
+    }
+
+    @Override
+    public boolean isSoundPlaying(int id) {
+        return soundsPlaying.contains(id);
+    }
+
+    @Override
+    public int[] getSoundIDs() {
+        return SOUND_IDS;
+    }
+
+    @Override
+    public boolean shouldPlaySound(int id) {
+        return id == SOUND_HAS_EMBER && capability.getEmber() > 0;
+    }
+
+    public boolean dirty = false;
+
+    @Override
+    public void markForUpdate() {
+        EventManager.markTEForUpdate(getPos(), this);
+    }
+
+    @Override
+    public void markDirty() {
+        markForUpdate();
+        super.markDirty();
+    }
 }

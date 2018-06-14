@@ -26,6 +26,8 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.tile.ISparkable;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.item.ItemAlchemicWaste;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSphereFX;
@@ -41,6 +43,7 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable, ISoundController {
+	public static final EnumFacing[] UPGRADE_SIDES = new EnumFacing[]{EnumFacing.DOWN};
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
 	int turnRate = 0;
@@ -294,6 +297,8 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	@Override
 	public void update() {
 		angle += 1.0f;
+		//List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, UPGRADE_SIDES); //Defer to when events are added to the upgrade system
+		//UpgradeUtil.verifyUpgrades(this, upgrades);
 		if(getWorld().isRemote)
 			handleSound();
 		if (progress == 1){

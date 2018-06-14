@@ -27,6 +27,8 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.tile.ISparkable;
 import teamroots.embers.api.tile.ITargetable;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockBeamCannon;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageBeamCannonFX;
@@ -35,6 +37,9 @@ import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.power.IEmberPacketReceiver;
 
 public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase, ITickable, ITargetable {
+	public static final int FIRE_THRESHOLD = 400;
+	public static final float DAMAGE = 25.0f;
+	public static final int MAX_DISTANCE = 64;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public BlockPos target = null;
 	public BlockPos lastTarget = null;
@@ -42,7 +47,8 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	public boolean lastPowered = false;
 	public Random random = new Random();
 	int offset = random.nextInt(40);
-	
+	private List<IUpgradeProvider> upgrades;
+
 	public TileEntityBeamCannon(){
 		super();
 		this.onLoad();
@@ -118,9 +124,14 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		if (this.target == null && this.ticksExisted == 0){
 			this.target = getPos().offset(facing);
 		}
+		upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{facing.getOpposite()});
+		UpgradeUtil.verifyUpgrades(this, upgrades);
 		ticksExisted++;
+		boolean cancel = UpgradeUtil.doWork(this,upgrades);
 		boolean isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
-		if (this.capability.getEmber() >= 400 && isPowered && !lastPowered){
+		boolean redstoneEnabled = UpgradeUtil.getOtherParameter(this,"redstone_enabled",true,upgrades);
+		int threshold = UpgradeUtil.getOtherParameter(this,"fire_threshold",FIRE_THRESHOLD,upgrades);
+		if (!cancel && this.capability.getEmber() >= threshold && redstoneEnabled && isPowered && !lastPowered){
 			fire();
 		}
 		lastPowered = isPowered;
@@ -151,8 +162,8 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	public void fire() {
 		Vec3d ray = (new Vec3d(target.getX()-getPos().getX(),target.getY()-getPos().getY(),target.getZ()-getPos().getZ())).normalize();
 		double impactDist = Double.POSITIVE_INFINITY;
+		double damage = UpgradeUtil.getOtherParameter(this,"damage",DAMAGE,upgrades);
 		if (!getWorld().isRemote){
-			float damage = 25.0f;
 			double posX = getPos().getX()+0.5;
 			double posY = getPos().getY()+0.5;
 			double posZ = getPos().getZ()+0.5;
@@ -160,7 +171,8 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 			double startY = posY;
 			double startZ = posZ;
 			boolean doContinue = true;
-			for (int i = 0; i < 640 && doContinue; i++){
+			int maxDist = UpgradeUtil.getOtherParameter(this,"distance",MAX_DISTANCE,upgrades);
+			for (int i = 0; i < maxDist * 10 && doContinue; i++){
 				posX += ray.x*0.1;
 				posY += ray.y*0.1;
 				posZ += ray.z*0.1;
@@ -181,7 +193,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 				//TODO: OPTIMIZE THIS, THIS CALL IS GARBAGE
 				List<EntityLivingBase> rawEntities = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-0.85,posY-0.85,posZ-0.85,posX+0.85,posY+0.85,posZ+0.85));
 				for (EntityLivingBase rawEntity : rawEntities) {
-					rawEntity.attackEntityFrom(RegistryManager.damage_ember, damage);
+					rawEntity.attackEntityFrom(RegistryManager.damage_ember, (float)damage);
 				}
 				if(!doContinue) {
 					world.playSound(null, posX, posY, posZ, SoundManager.BEAM_CANNON_HIT, SoundCategory.BLOCKS, 1.0f, 1.0f);

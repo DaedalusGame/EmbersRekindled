@@ -26,6 +26,8 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockInfernoForge;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
@@ -126,10 +128,14 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	public void update() {
 		if(getWorld().isRemote)
 			handleSound();
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
+		UpgradeUtil.verifyUpgrades(this, upgrades);
 		ticksExisted ++;
 		if (progress > 0){
-			if (capability.getEmber() >= EMBER_COST){
-				capability.removeAmount(EMBER_COST, true);
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+			if (!cancel && capability.getEmber() >= emberCost){
+				capability.removeAmount(emberCost, true);
 				progress --;
 				if (getWorld().isRemote){
 					if (random.nextInt(10) == 0){
@@ -172,7 +178,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 					double emberValue = 0;
 					for (EntityItem item : items) {
 						if (ItemModUtil.hasHeat(item.getItem())) {
-							if (pickedItem.isEmpty() && ItemModUtil.getLevel(item.getItem()) <= MAX_LEVEL && ItemModUtil.getHeat(item.getItem()) >= ItemModUtil.getMaxHeat(item.getItem())) {
+							int maxLevel = UpgradeUtil.getOtherParameter(this,"max_level",MAX_LEVEL,upgrades);
+							if (pickedItem.isEmpty() && ItemModUtil.getLevel(item.getItem()) <= maxLevel && ItemModUtil.getHeat(item.getItem()) >= ItemModUtil.getMaxHeat(item.getItem())) {
 								pickedItem = item.getItem();
 							} else {
 								progress = 0;
@@ -200,8 +207,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 								world.removeEntity(item1);
 								item1.setDead();
 							} else {
-								double test = Math.atan(emberValue / 1200.0f);
-								if (test > Misc.random.nextFloat()) {
+								double chance = UpgradeUtil.getOtherParameter(this,"reforge_chance",Math.atan(emberValue / 1200.0)/(Math.PI / 2.0),upgrades); //clockwork arcane business
+								if (Misc.random.nextDouble() < chance) {
                                     ItemStack stack = item1.getItem();
                                     ItemModUtil.setHeat(stack, 0);
                                     ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
@@ -231,6 +238,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	}
 
 	public void updateProgress(){
+
+
 		if (progress == 0){
 			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY()+0.25,getPos().getZ(),getPos().getX()+1,getPos().getY()+1,getPos().getZ()+1));
 			ItemStack pickedItem = ItemStack.EMPTY;
