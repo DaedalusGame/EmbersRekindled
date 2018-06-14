@@ -9,6 +9,8 @@ import java.util.List;
 public interface IItemModUtil {
     String HEAT_TAG = Embers.MODID+":heat_tag";
 
+    ModifierBase getModifier(String name);
+
     ModifierBase getModifier(ItemStack modStack);
 
     boolean isModValid(ItemStack stack, ModifierBase modifier);

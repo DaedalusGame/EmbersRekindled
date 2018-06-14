@@ -2,6 +2,7 @@ package teamroots.embers.compat.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraftforge.fluids.FluidStack;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ZenRegister
 @ZenClass(Mixer.CLASS)
 public class Mixer {
     public static final String NAME = "Mixer";
@@ -29,7 +31,7 @@ public class Mixer {
     @ZenMethod
     public static void remove(ILiquidStack output)
     {
-        CraftTweakerAPI.apply(new Remove(CraftTweakerMC.getLiquidStack(output)));
+        CraftTweakerAPI.apply(new RemoveByOutput(CraftTweakerMC.getLiquidStack(output)));
     }
 
     private static List<FluidMixingRecipe> getRecipesByOutput(FluidStack stack)
@@ -56,11 +58,11 @@ public class Mixer {
         }
     }
 
-    public static class Remove implements IAction
+    public static class RemoveByOutput implements IAction
     {
         FluidStack output;
 
-        protected Remove(FluidStack output) {
+        protected RemoveByOutput(FluidStack output) {
             this.output = output;
         }
 

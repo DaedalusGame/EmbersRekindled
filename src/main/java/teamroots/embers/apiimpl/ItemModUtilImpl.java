@@ -14,6 +14,11 @@ import java.util.List;
 
 class ItemModUtilImpl implements IItemModUtil {
     @Override
+    public ModifierBase getModifier(String name) {
+        return teamroots.embers.util.ItemModUtil.nameToModifier.get(name);
+    }
+
+    @Override
     public ModifierBase getModifier(ItemStack modStack) {
         return teamroots.embers.util.ItemModUtil.modifierRegistry.get(modStack.getItem());
     }
@@ -32,7 +37,7 @@ class ItemModUtilImpl implements IItemModUtil {
                 for (int i = 0; i < tagModifiers.tagCount(); i++) {
                     NBTTagCompound tagModifier = tagModifiers.getCompoundTagAt(i);
                     String name = tagModifier.getString("name");
-                    ModifierBase modifier = teamroots.embers.util.ItemModUtil.nameToModifier.get(name);
+                    ModifierBase modifier = getModifier(name);
                     results.add(modifier);
                 }
                 return results;

@@ -9,6 +9,10 @@ public class ItemModUtil {
     public static IItemModUtil IMPL;
     public static final String HEAT_TAG = IItemModUtil.HEAT_TAG; //I'm gonna be honest with you, I have no idea where to put this.
 
+    public static ModifierBase getModifier(String name) {
+        return IMPL.getModifier(name);
+    }
+
     public static ModifierBase getModifier(ItemStack modStack) {
         return IMPL.getModifier(modStack);
     }

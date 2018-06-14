@@ -2,6 +2,7 @@ package teamroots.embers.compat.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ZenRegister
 @ZenClass(Stamper.CLASS)
 public class Stamper {
     public static final String NAME = "Stamper";
@@ -30,9 +32,8 @@ public class Stamper {
     }
 
     @ZenMethod
-    public static void remove(IItemStack output)
-    {
-        CraftTweakerAPI.apply(new Remove(CraftTweakerMC.getItemStack(output)));
+    public static void remove(IItemStack output) {
+        CraftTweakerAPI.apply(new RemoveByOutput(CraftTweakerMC.getItemStack(output)));
     }
 
     private static List<ItemStampingRecipe> getRecipesByOutput(ItemStack stack)
@@ -59,11 +60,11 @@ public class Stamper {
         }
     }
 
-    public static class Remove implements IAction
+    public static class RemoveByOutput implements IAction
     {
         ItemStack output;
 
-        protected Remove(ItemStack output) {
+        protected RemoveByOutput(ItemStack output) {
             this.output = output;
         }
 
