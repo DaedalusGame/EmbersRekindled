@@ -7,6 +7,7 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import teamroots.embers.recipe.DawnstoneAnvilRecipe;
@@ -31,6 +32,21 @@ public class DawnstoneAnvil {
     @ZenMethod
     public static void remove(IItemStack bottom,IItemStack top) {
         CraftTweakerAPI.apply(new RemoveByInput(CraftTweakerMC.getItemStack(bottom),CraftTweakerMC.getItemStack(top)));
+    }
+
+    @ZenMethod
+    public static void blacklistRepair(IIngredient match) {
+        CraftTweakerAPI.apply(new BlacklistRepair(CTUtil.toIngredient(match)));
+    }
+
+    @ZenMethod
+    public static void blacklistMateriaRepair(IIngredient match) {
+        CraftTweakerAPI.apply(new BlacklistMateria(CTUtil.toIngredient(match)));
+    }
+
+    @ZenMethod
+    public static void blacklistBreakdown(IIngredient match) {
+        CraftTweakerAPI.apply(new BlacklistBreakdown(CTUtil.toIngredient(match)));
     }
 
     private static List<DawnstoneAnvilRecipe> getRecipesByInput(ItemStack bottom, ItemStack top) {
@@ -74,6 +90,63 @@ public class DawnstoneAnvil {
         @Override
         public String describe() {
             return String.format("Removing %s recipes with inputs: %s,%s",NAME,bottom,top);
+        }
+    }
+
+    public static class BlacklistRepair implements IAction
+    {
+        Ingredient match;
+
+        public BlacklistRepair(Ingredient match) {
+            this.match = match;
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.dawnstoneRepairBlacklist.add(match);
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Blacklisting %s from being repaired at Dawnstone Anvil.",match);
+        }
+    }
+
+    public static class BlacklistMateria implements IAction
+    {
+        Ingredient match;
+
+        public BlacklistMateria(Ingredient match) {
+            this.match = match;
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.dawnstoneMateriaBlacklist.add(match);
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Blacklisting %s from being repaired with Isolated Materia.",match);
+        }
+    }
+
+    public static class BlacklistBreakdown implements IAction
+    {
+        Ingredient match;
+
+        public BlacklistBreakdown(Ingredient match) {
+            this.match = match;
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.dawnstoneBreakdownBlacklist.add(match);
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Blacklisting %s from being broken down at Dawnstone Anvil.",match);
         }
     }
 }

@@ -11,7 +11,7 @@ public class AnvilBreakdownRecipe extends DawnstoneAnvilRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
         ItemStack repairItem = Misc.getRepairItem(input1);
-        return !input1.isEmpty() && input1.getItem().getIsRepairable(input1,repairItem) && input2.isEmpty() && Misc.getResourceCount(input1) != -1;
+        return !input1.isEmpty() && input1.getItem().getIsRepairable(input1,repairItem) && input2.isEmpty() && Misc.getResourceCount(input1) != -1 && !RecipeRegistry.isBlacklistedFromBreakdown(input1);
     }
 
     @Override

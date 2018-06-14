@@ -50,7 +50,12 @@ public class RecipeRegistry {
 	public static ArrayList<FluidMixingRecipe> mixingRecipes = new ArrayList<>();
 	
 	public static ArrayList<AlchemyRecipe> alchemyRecipes = new ArrayList<>();
+
 	public static ArrayList<DawnstoneAnvilRecipe> dawnstoneAnvilRecipes = new ArrayList<>();
+	public static ArrayList<Ingredient> dawnstoneRepairBlacklist = new ArrayList<>();
+	public static ArrayList<Ingredient> dawnstoneMateriaBlacklist = new ArrayList<>();
+	public static ArrayList<Ingredient> dawnstoneBreakdownBlacklist = new ArrayList<>();
+
 	public static ArrayList<HeatCoilRecipe> heatCoilRecipes = new ArrayList<>();
 
 	public static ArrayList<BoreOutput> boreOutputSets = new ArrayList<>();
@@ -1304,6 +1309,19 @@ public class RecipeRegistry {
 
 		return null;
 	}
+
+	public static boolean isBlacklistedFromRepair(ItemStack stack) {
+		return dawnstoneRepairBlacklist.stream().anyMatch(ingredient -> ingredient.apply(stack));
+	}
+
+	public static boolean isBlacklistedFromMateriaRepair(ItemStack stack) {
+		return dawnstoneMateriaBlacklist.stream().anyMatch(ingredient -> ingredient.apply(stack));
+	}
+
+	public static boolean isBlacklistedFromBreakdown(ItemStack stack) {
+		return dawnstoneBreakdownBlacklist.stream().anyMatch(ingredient -> ingredient.apply(stack));
+	}
+
 
 	public static HeatCoilRecipe getHeatCoilRecipe(ItemStack input) {
 		for (HeatCoilRecipe recipe : heatCoilRecipes) {

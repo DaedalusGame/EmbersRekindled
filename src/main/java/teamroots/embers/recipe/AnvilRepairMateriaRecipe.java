@@ -10,7 +10,7 @@ import java.util.List;
 public class AnvilRepairMateriaRecipe extends DawnstoneAnvilRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
-        return !input1.isEmpty() && input1.getItem().isRepairable() && input2.getItem() == RegistryManager.isolated_materia;
+        return !input1.isEmpty() && input1.getItem().isRepairable() && input2.getItem() == RegistryManager.isolated_materia && !RecipeRegistry.isBlacklistedFromMateriaRepair(input1);
     }
 
     @Override
