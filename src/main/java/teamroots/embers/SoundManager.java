@@ -92,6 +92,20 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:block.inferno_forge.close")
     public static SoundEvent INFERNO_FORGE_CLOSE;
 
+    @GameRegistry.ObjectHolder("embers:block.field_chart.loop")
+    public static SoundEvent FIELD_CHART_LOOP;
+
+    @GameRegistry.ObjectHolder("embers:block.ember_transfer.emit.small")
+    public static SoundEvent EMBER_EMIT;
+    @GameRegistry.ObjectHolder("embers:block.ember_transfer.emit.big")
+    public static SoundEvent EMBER_EMIT_BIG;
+    @GameRegistry.ObjectHolder("embers:block.ember_transfer.receive.small")
+    public static SoundEvent EMBER_RECEIVE;
+    @GameRegistry.ObjectHolder("embers:block.ember_transfer.receive.big")
+    public static SoundEvent EMBER_RECEIVE_BIG;
+    @GameRegistry.ObjectHolder("embers:block.ember_transfer.relay")
+    public static SoundEvent EMBER_RELAY;
+
     @GameRegistry.ObjectHolder("embers:fireball.big.fire")
     public static SoundEvent FIREBALL_BIG;
     @GameRegistry.ObjectHolder("embers:fireball.big.hit")
@@ -113,10 +127,38 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:item.cinder_staff.loop")
     public static SoundEvent CINDER_STAFF_LOOP;
 
+    @GameRegistry.ObjectHolder("embers:item.heated.level_up")
+    public static SoundEvent HEATED_ITEM_LEVELUP;
+    @GameRegistry.ObjectHolder("embers:item.resonating_bell.ring")
+    public static SoundEvent RESONATING_BELL;
+    @GameRegistry.ObjectHolder("embers:item.cinder_jet.boost")
+    public static SoundEvent CINDER_JET;
+    @GameRegistry.ObjectHolder("embers:item.inflictor_gem.absorb")
+    public static SoundEvent INFLICTOR_GEM;
+
+    @GameRegistry.ObjectHolder("embers:item.codex.open")
+    public static SoundEvent CODEX_OPEN;
+    @GameRegistry.ObjectHolder("embers:item.codex.close")
+    public static SoundEvent CODEX_CLOSE;
+    @GameRegistry.ObjectHolder("embers:item.codex.category.open")
+    public static SoundEvent CODEX_CATEGORY_OPEN;
+    @GameRegistry.ObjectHolder("embers:item.codex.category.close")
+    public static SoundEvent CODEX_CATEGORY_CLOSE;
+    @GameRegistry.ObjectHolder("embers:item.codex.category.select")
+    public static SoundEvent CODEX_CATEGORY_SELECT;
+    @GameRegistry.ObjectHolder("embers:item.codex.category.unselect")
+    public static SoundEvent CODEX_CATEGORY_UNSELECT;
+    @GameRegistry.ObjectHolder("embers:item.codex.page.open")
+    public static SoundEvent CODEX_PAGE_OPEN;
+    @GameRegistry.ObjectHolder("embers:item.codex.page.close")
+    public static SoundEvent CODEX_PAGE_CLOSE;
+
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.step")
     public static SoundEvent ANCIENT_GOLEM_STEP;
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.hurt")
     public static SoundEvent ANCIENT_GOLEM_HURT;
+    @GameRegistry.ObjectHolder("embers:entity.ancient_golem.punch")
+    public static SoundEvent ANCIENT_GOLEM_PUNCH;
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.death")
     public static SoundEvent ANCIENT_GOLEM_DEATH;
 
@@ -169,6 +211,14 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.inferno_forge.open"));
         event.getRegistry().register(registerSound("block.inferno_forge.close"));
 
+        event.getRegistry().register(registerSound("block.field_chart.loop"));
+
+        event.getRegistry().register(registerSound("block.ember_transfer.emit.small"));
+        event.getRegistry().register(registerSound("block.ember_transfer.emit.big"));
+        event.getRegistry().register(registerSound("block.ember_transfer.receive.small"));
+        event.getRegistry().register(registerSound("block.ember_transfer.receive.big"));
+        event.getRegistry().register(registerSound("block.ember_transfer.relay"));
+
         event.getRegistry().register(registerSound("fireball.small.fire"));
         event.getRegistry().register(registerSound("fireball.small.hit"));
         event.getRegistry().register(registerSound("fireball.big.fire"));
@@ -181,8 +231,23 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.cinder_staff.fail"));
         event.getRegistry().register(registerSound("item.cinder_staff.loop"));
 
+        event.getRegistry().register(registerSound("item.heated.level_up"));
+        event.getRegistry().register(registerSound("item.cinder_jet.boost"));
+        event.getRegistry().register(registerSound("item.resonating_bell.ring"));
+        event.getRegistry().register(registerSound("item.inflictor_gem.absorb"));
+
+        event.getRegistry().register(registerSound("item.codex.open"));
+        event.getRegistry().register(registerSound("item.codex.close"));
+        event.getRegistry().register(registerSound("item.codex.category.open"));
+        event.getRegistry().register(registerSound("item.codex.category.close"));
+        event.getRegistry().register(registerSound("item.codex.category.select"));
+        event.getRegistry().register(registerSound("item.codex.category.unselect"));
+        event.getRegistry().register(registerSound("item.codex.page.open"));
+        event.getRegistry().register(registerSound("item.codex.page.close"));
+
         event.getRegistry().register(registerSound("entity.ancient_golem.death"));
         event.getRegistry().register(registerSound("entity.ancient_golem.hurt"));
+        event.getRegistry().register(registerSound("entity.ancient_golem.punch"));
         event.getRegistry().register(registerSound("entity.ancient_golem.step"));
     }
 
