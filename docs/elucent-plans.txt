@@ -1,0 +1,314 @@
+Listed in intended order of implementation.
+    
+    Mechanical Power:
+        
+        Mechanical power was intended to be a secondary power system for some of the physical heavy lifting in Embers. It was intended to have more
+        mundane yet varied power generation to offer more versatility in the early game. Old functionalities would be moved over to use the system,
+        while new ones would be introduced. Embers at the moment is not wholly internally automatable -- I wanted to introduce some more standard
+        machines to change that.
+    
+        Axles:
+            Axles aligned in the same direction spin together.
+            Power level is the same for the whole axle.
+        Gearboxes:
+            Require a gear for each functioning face, have an input face.
+            Will take in power from input face, redirect it or split it between axles on other faces.
+        Steam Engine:
+            Takes water and furnace fuel and creates mechanical power from its front face.
+        Fluid Pump:
+            Two blocks tall.
+            Bottom block receives mechanical power, top block has a fluid tank.
+            When the bottom is powered, the pump will pick up fluids from the world into its internal tank.
+            Fluid can then be piped out of the top.
+        Mechanical Ember Bore:
+            The new bore would take mechanical power exclusively.
+            The early game setup would be the same but with extra steps. Still Coal -> Ember at bedrock but this time you need a Steam Engine and axles.
+            Bore speed would increase as mechanical power increased.
+            The bore also harvests new products: In addition to the simple shard and crystal, the bore can also dig up resources like redstone or
+            gunpowder, or a new Ember Grit material which can be used as a furnace fuel, or for Ember power using an upgraded Activator.
+        Mechanical Ember Refinery:
+            The new refinery would be a larger multiblock than any previous ones.
+            There would only be one -- no more Activator, Pressure Refinery, and Ignem Reactor.
+            The refinery would take mechanical power and speed up its processing rate as mechanical power fed to it increased.
+        Ignem Reactor:
+            Would have a new, mechanical, larger model.
+            Would take special catalyst items along with Ember to produce mechanical power.
+            Similar tiering mechanic -- gunpowder would be weakest, nether brick better, blaze powder best. Maybe with more tiers though.
+            Cheaper than existing Ignem Reactor in fuel costs, probably between two and four times as good as the Steam Engine.
+        Brewery Still:
+            Would take wheat and water to make Ale, a new fluid.
+            Fermentation would happen naturally over time, slowly -- maybe 1mB/t.
+            Ember could be added to speed fermentation by a factor of 5.
+        Underburner Engine:
+            Would take burnable fuels and produce mechanical power.
+            Within the mod, this is basically an Ale generator.
+            Could potentially support other modded fuels like Diesel, Biodiesel, or Fuel.
+        Bottling Machine:
+            Takes Ale fluid, a small amount of mechanical power, bottles, and potentially several other items.
+            Can be used to craft special brews, or simply bottle ale.
+            Ale on its own could be drank to give +20% damage dealt and +20% damage taken, stacking up to 5x, with a chance of a few seconds of nausea.
+            Other items could be added to make the ale give special effects:
+                Nether wart - small healing effect at the expense of hunger.
+                Blaze powder - fire aspect and extra fire damage dealt to enemies at the cost of occasionally being set on fire while the effect is 
+                active.
+                Ghast tear - gain a small health buffer with each kill.
+                Glowstone dust - nearby creatures are highlighted with particles visible through walls.
+                Redstone dust - gain a boost in speed, maybe also take extra knockback, though the latter may be hard to implement.
+        Spinning Blade:
+            Large spinning metal blade. Requires mechanical power to run.
+            Would break crops at their full growth state, hurt creatures in its radius.
+            5x5 area of effect.
+        Changed Stamper:
+            Would require mechanical power, not Ember.
+    
+    Improved Automation:
+    
+        Embers automation is very unintuitive, and this was a cause of great stress for me. I had some ideas for how to address it but they would have
+        taken a very long time to implement.
+        
+        Tinker's Goggles:
+            Looking at a machine with these on will show the different parts that are accessible from each face. For example, you could look at the
+            base of a Mixer and see that each one connects to a different fluid tank. This would be displayed through a special render like Botania's
+            monocle thing.
+        General Changes -- new capability!:
+            All machines would have a new capability adding support for "modules". I never figured out quite how I wanted to implement the capability
+            itself but had loose ideas about what it could be used for. This system would be used to both make automation a little more visible and
+            intuitive while also allowing for things like machine upgrades.
+        New Mechanical Core:
+            Instead of the Mechanical Core and Machine Accessors, there would just be Mechanical Cores, now able to point in a direction. Placing one
+            on top of an Ember bore, for example, would visibly display it pointing down, with some difference between its top and bottom parts of its
+            model.
+            Mechanical cores can proxy the capabilities of a machine two blocks away from the actual machine, and you can use a lot of them! You could
+            place one at the center and then have two others branching off it in two different directions, all pointing towards the same core tile.
+        Caches:
+            Can be attached to the sides of machines.
+            Can be set to input or output mode with hammer.
+            Input caches will input their contents if possible into the tile, while output caches will pull from the tile's outputs if they can.
+            They come in several varieties:
+                Item Cache:
+                    Handles items.
+                    Internal buffer of one slot (1 stack).
+                Fluid Cache:
+                    Handles fluids.
+                    Internal buffer of 1000mB
+                Ember Cache:
+                    Handles ember.
+                    Internal buffer of 2000 ember.
+                Cog:
+                    Handles mechanical power -- maybe not necessary?
+                    Mechanical power is only a power level -- there is no quantity to store, so these would just be a form of IO block.
+        Overclocked Mechanism:
+            Take mechanical power to function.
+            Can increase the speed of an attached machine by 150%.
+            Two can be attached per machine.
+            Attached to an Ember Refinery, each one will increase the activated Ember yield by 50%.
+        Catalytic Plug:
+            Takes Alchemic Slurry to function, not too much though -- 1 mB/t maybe.
+            Can increase the speed of an attached machine by 200%.
+            Two can be attached per machine.
+            Between this and the Overclocked Mechanisms, a max of 8x speed would be achievable, though at high cost and being tricky to automate.
+        Clockwork Arcana:
+            Gated after Wildfire Core.
+            Slowly drains a Transmutation Stone when in function.
+            Gives any Ember-related machine a special unique ability:
+                Melter -- 3x ore multiplication.
+                Cinder Plinth -- two ash per item, rare chance of certain other raw items like coal, charcoal, gunpowder, clay, or metal nuggets.
+                Inferno Forge -- items always go up a level no matter how many ember crystals you add.
+                Mixer -- 1.5x yield on some alloy recipes (configurable whether or not this applies to just Dawnstone or mod compat alloys as well)
+                Brewery Still -- Produces Umber Ale, a strange concoction that will provide stronger effects than normal ale, and also burn for more
+                power.
+                Pyromantic Artillery -- special effects on fired projectiles. Red particles, some armor piercing damage, boosted damage.
+                Chain-loaded Artillery -- bullets fired have special red trails and home in on enemies.
+                Ember Refinery -- Allows the refining of less bright Ember products, increases yield by 200%.
+                Ember Injector -- Gives a chance for the Crystal seed to output an ingot instead of a nugget.
+        Pyromantic Artillery:
+            Not automation related, just a new machine.
+            Turret made of Dawnstone and Silver.
+            Takes Ember and will fire Ember projectiles at targets.
+        Chain-loaded Artillery:
+            Not automation related, just a new machine.
+            Turret made of Dawnstone and Copper.
+            Takes Ember and Bullets and will fire bullets at targets.
+            More damaging and longer-ranged than Pyromantic Artillery.
+            Bullets must be crafted:
+                New stamper press -- bullet.
+                1 ingot's worth of molten metal = 4 bullets.
+            Different metals do different damage. Lead is highest.
+        Artifice Cards:
+            Small caminite tablets used to give Artillery target rules.
+            Monster card: targets monsters.
+            Animal card: targets animals.
+            Player card: targets all players besides the one that last gave it a card.        
+    
+    Enhanced Alchemy:
+           
+        Embers' alchemy system was originally inspired by my first mod ever, Arcane Arts -- or even one of its early 1.7 predecessors. I've always
+        liked the idea of having to discover recipes that vary based on the world. You can create banks of knowledge on servers for other players
+        to have an easier time, or on your own it really makes you feel like an alchemist or scientist fiddling with some strange concoction. I think
+        the system works okay, but it's definitely far from good. The pedestals are basically impossible to automate, and the beam cannon is a stupid
+        cumbersome piece of garbage. Something different was definitely needed, and I had some ideas for how to improve it while simultaneously doing
+        some fleshing out of Embers' magical side.
+    
+        Alchemic Slurry:
+            Made by melting redstone. 144mB per dust. Wouldn't have compat with other molten redstones.
+        Transmutation Stones:
+            Small red crystals with alchemical power.
+            They come in tiers:
+                Dim - crafted at a Stamper with quartz and 576mB of Alchemic Slurry.
+                Glowing - crafted with an alchemy recipe using some redstone, gunpowder, and quartz.
+                Shining - crafted with an alchemy recipe using the previous tier along with gunpowder, blaze powder, and a redstone block.
+                Perfect - crafted with an alchemy recipe using the previous tier along with glowstone, mithril nuggets, and a redstone block.
+            Each tier has more durability than the last. Durability is used up through various operations.
+            At lowest durability, stones will look a little dull, but will not break.
+        Spark Recharger:
+            Takes Ember and Alchemic Slurry to repair Transmutation Stones.
+        Transform Ray:
+            Replaces the Beam Cannon.
+            Points along any of the XYZ axes. Can't be arbitrarily targeted like the Beam Cannon.
+            Takes Ember and a Transmutation Stone.
+            On a redstone pulse it will fire a beam in the direction it's pointing, using up a use of the Transmutation stone along with some Ember.
+            Used to initiate Alchemy.
+        Skycall Antenna:
+            Takes Ember and a Transmutation Stone.
+            Will charge up slowly. At max charge it will call down a lightning strike where it is.
+            Essential for producing Fulgurites.
+        Fulgurites:
+            New red and yellow crystalline item.
+            Used to create various powerful items or FE-related blocks.
+            Created when lightning strikes sand.
+        Ember Solenoid:
+            Requires fulgurites.
+            Takes Ember and transmutes it into FE. Up to 5 ember a tick, equalling 100 FE/t.
+        Red Field Emitter:
+            Requires fulgurites.
+            Takes FE and distributes it to all nearby FE containers.
+            9x9x9 AoE.
+        Red Field Conduit:
+            Requires fulgurites.
+            Conduits can be linked together with the Tinker Hammer and will send FE through their network wirelessly.
+        Energetic Wand:
+            Crafted using fulgurites and a Transmutation Stone.
+            Can cast one of four spells:
+                Bolt -- fires a orange-red lightning bolt ahead, like a Shock Focus but longer range and without homing and with chaining by default.
+                Missile -- fires a orange-red projectile directly ahead. Does not home in, creates a large AoE of damage on striking a block.
+                Seekers -- fires an array of small red projectiles. Home in on enemies slightly, do not do very much damage.
+                Orb -- conjures a floating red orb that fires small bolts at all nearby enemies within a radius.
+            On a melee hit, will deal an explosive attack that knocks everything, including the player, away.
+            The spell it casts changes randomly when it is used, or definitely when it is used to strike a mob.
+            Has durability and power based on the Transmutation Stone used to craft it.
+        Energetic Staff:
+            Crafted using fulgurites, a Transmutation Stone, and a Wildfire Core.
+            Basically the same as the Energetic Wand, but with a few key differences:
+                Less volatile, which means less powerful. Its attacks are 80% the strength of the Energetic Wand's.
+                The Staff does not randomly change spells when used, only when used to strike something.
+                The Staff's melee attack is less damaging but does not blast back the player or other mobs. It is more focused and highly damaging.
+                The Staff has innate melee attack damage unlike the wand which relies wholly on the chaotic blast it creates.
+        Metallurgic Dust:
+            Can be crafted through an alchemic process, involves Ember Grit and Redstone.
+            Right-click on any ore, and it will transmute that entire vein of ore to another one.
+            But be careful! Using too many will cause some of the ore to turn to gravel or stone.
+        Repeller:
+            Crafted using a Transmutation Stone.
+            Creates a red field around you that reduces damage, especially from magical or energetic attacks.
+            Drains the stone's power while active.
+    
+    Mithril:
+    
+        One of the biggest issues I had with Embers was how weak it was. It rarely ever saw serious use in most packs because nearly everything
+        will beat it in nearly every field. Mithril was my plan for more "endgame" content. I think it would have been really cool but first I would
+        have had to get through all the other content, which was just a huge burden.
+    
+        New structures:
+            Larger underground dungeons.
+            Loot boxes:
+                Old ancient stone and caminite crates. Can have copper, iron, dawnstone, or mithril caps to denote tier:
+                    Copper tier -- wood, stone, copper, tin, gunpowder, redstone, ember shards.
+                    Iron tier -- any mundane metal, redstone, lapis, ember crystals.
+                    Dawnstone tier -- dawnstone, any mundane metal, lapis, ember crystals, diamonds, emeralds.
+                    Mithril tier -- diamonds, gold, emeralds, ender pearls, and mithril nuggets.
+            Protected by larger golems:
+                40 hearts, bulkier.
+                Shoot larger projectiles that do AoE damage but they need to charge up first, and they slow movement as they do so.
+                Have various metal plates of iron or copper or dawnstone.
+        Mithril Forging:
+            Obtain Mithril through looting.
+            Mithril cannot be crafted together. You must melt it in a Melter with the Clockwork Arcana attached, then stamp it into shapes.
+        Mithril Crystal Seed:
+            Requires the highest tier Transmutation Stone.
+            The only way to grow more Mithril without looting it.
+        Mithril Weapons:
+            Obtained through alchemical processes of the highest degree.
+            Extremely powerful, all with special models.
+            Not particularly unique in functionality, but very strong.
+            All have something like 4300 durability and naturally regenerate at the expense of a little bit of hunger.
+            All tools deal half their attack damage as void damage.
+            Mithril Sword -- 15 base damage. Attacking will fire a bolt of lighting ahead of you.
+            Mithril Axe -- 21 base damage. Breaking a wood block will create a small sparking orb that travels through wood blocks and shatters them.
+            Mithril Pickaxe -- 13 base damage. Breaking a block will create a small sparking orb that mines veins of ore.
+            Mithril Shovel -- 12 base damage. Breaking a block will create a small area that quickly mines itself out.
+            Mithril Hoe -- 9 base damage. It's a hoe.
+        Mithril Armor:
+            Obtained through alchemical processes of the highest degree.
+            Extremely powerful, all with special models.
+            24 armor for the whole set, 12 armor toughness total.
+            Every time Mithril armor is struck with an attack, it hardens against it. Each piece will block 1/16th of the damage per hit. For example,
+            if you're wearing a full set of Mithril Armor, per hit your armor is reducing damage to 75%. If you are hit three times, the fourth hit
+            will deal 75% of 75% of 75% of full damage, or a little over 42%. This is before any armor calculations whatsoever.
+        A Price For Everything:
+            Mithril Armor or Tools will cause problems for you. Over time, they will start to poison you and cause you great harm. Small bits of
+            Mithril or keeping items in your inventory is fine -- but the equipment itself will cause issues when equipped.
+            As your poisoning builds up, you will get increasingly frequent poisoning effects (not the potion, this is unblockable), blindness, blurred
+            vision, or bouts of nausea. Eventually, you may start to get extremely fast poisoning and come to the brink of death (or perhaps to death,
+            if you're on hard mode and you have Mithril poisoning draining your health and hunger).
+            Basically, Mithril is extremely powerful, but you don't want to use it all the time. Keep it for specific tasks and take breaks.
+        Metallic Introspector:
+            A small handheld gauge that will display how bad your Mithril poisoning is. Requires only one Mithril nugget to craft.
+        Mithril augments:
+            Mithril can be used to produce a variety of different augments for tools and weapons:
+                Imperial Plating:
+                    Mithril armor augment.
+                    Adds 10% damage reduction per level to all damage sources.
+                Vorpal Edges:
+                    Mithril tool augment.
+                    Adds 3/4 heart armor piercing damage per level, increases mining speed against blocks with a lower mining level.
+    
+    Miscellaneous additional features:
+    
+        There was a ton of Embers that was just never very fleshed out. Overwhelmingly the biggest comment on the mod I got (besides the whole "backport
+        to 1.10" crowd) was that the mod felt unfinished, and people were "excited to see it expand". Never really got there, did it. Not being
+        fleshed out was not for lack of ideas though.
+    
+        Block Placer:
+            Places blocks. Can be toggled with redstone.
+        Advanced Placer:
+            Places blocks in a line. Can only place in a line as long as the ground below is composed of the same block. Max range of 9.
+        Advanced Breaker:
+            Breaks blocks in a line. Can only break in a line as long as the broken line is composed of the same block. Max range of 9.
+        Baubles Support:
+            Ember Ring -- 10% reduction in Ember cost for Ember-using items.
+            Ember Amulet -- 15% reduction in Ember cost for Ember-using items.
+            Ember Belt -- 25% reduction in Ember cost for Ember-using items.
+            Crystal Lenses (HEAD) -- Reduce all fog effects massively.
+            Climber's Belt (BELT) -- Climb sides of blocks.
+            Explosion Charm (CHARM) -- Cancel explosions nearby, 5 second cooldown.
+            Dawnstone Mail (CHEST) -- Blocks knockback.
+            Amulet of the Heretic (AMULET) -- Blocks magic damage.
+            Glimmer Charm (CHARM) -- Place a glimmer whenever you are in low light.
+            Ashen Amulet (AMULET) -- Reduce all mob and block drops to ash.
+            Rocket Booster (BELT) -- Jump in midair to boost upwards. (if you've played Cave Story, think Booster v0.8. v2.0 would be a secret recipe)
+            Radiant Crown (HEAD) -- Anything that looks at you catches on fire.
+            Mantle Bulb (TRINKET) -- 1000 Ember capacity. Like a mantle jar but for any bauble slot.
+        Additional Augments:
+            Spark Plug -- Tool augment, 15% chance to stun a mob for a second per level on hit.
+            Winding Gears -- Tool augment, right-click the air with a tool to wind it up, then get up to 2x mining and attacking speed while it winds 
+            down.
+            Phantom Cloth -- Armor augment, do not collide with living entities, player renders somewhat invisible based on augment level.
+            Shifting Scales -- Armor augment, gain two hearts of extra protection per level that are regenerated by standing still and not being
+            attacked.
+            Core Stone -- Armor augment, mends armor slowly when underground, the deeper the faster.
+            Smoke Bomb -- Armor augment, entities that strike you get blinded by smoke for 2 seconds per level.
+            Shoe Springs -- Armor augment, adds a simple jump boost that increases with level.
+        Augment Changes:
+            Instead of armor augments taking the maximum augment level from all pieces, they take the combined level of all pieces, capped at 5.
+            Augmented items show their maximum augment slots and the number of those slots that are taken.
+            Armor augment tooltips show the augment levels for the full set, not the individual item.
