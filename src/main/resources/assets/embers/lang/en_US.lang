@@ -97,6 +97,7 @@ tile.gearbox_frame.name=Gearbox Frame
 tile.steam_engine.name=Steam Engine
 tile.mechanical_pump.name=Mechanical Pump
 tile.caminite_lever.name=Caminite Lever
+tile.catalytic_plug.name=Catalytic Plug
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -106,6 +107,7 @@ fluid.silver=Molten Silver
 fluid.astralite=Molten Astralite
 fluid.dawnstone=Molten Dawnstone
 fluid.umberSteel=Molten Umber Steel
+fluid.alchemical_redstone=Alchemical Slurry
 
 item.ingot_copper.name=Copper Ingot
 item.ingot_silver.name=Silver Ingot
@@ -134,6 +136,7 @@ item.stamp_plate.name=Plate Stamp
 item.stamp_bar_raw.name=Raw Bar Stamp
 item.stamp_flat_raw.name=Raw Flat Stamp
 item.stamp_plate_raw.name=Raw Plate Stamp
+item.dust_ember.name=Ember Grit
 item.shard_ember.name=Ember Shard
 item.crystal_ember.name=Ember Crystal
 item.ingot_dawnstone.name=Dawnstone Ingot
@@ -206,6 +209,7 @@ item.ember_amulet.name=Ember Amulet
 item.ember_bulb.name=Mantle Bulb
 item.gear_iron.name=Iron Gear
 item.gear_dawnstone.name=Dawnstone Gear
+item.dust_metallurgic.name=Metallurgic Dust
 
 tile.block_aluminum.name=Aluminum Block
 tile.ore_aluminum.name=Aluminum Ore
@@ -304,6 +308,7 @@ embers.jei.recipe.stamp=Stamping Recipe
 embers.jei.recipe.melter=Melting Recipe
 embers.jei.recipe.mixer=Mixing Recipe
 embers.jei.recipe.alchemy=Alchemy Recipe
+embers.jei.recipe.dawnstone_anvil=Dawnstone Anvil Recipe
 
 entity.ancient_golem.name=Ancient Golem
 
@@ -484,6 +489,10 @@ embers.research.metallurgy.alchemy.desc=Ember alchemy is truly a marvelous disco
 embers.research.metallurgy.ejector=Ember Ejector
 embers.research.metallurgy.ejector.title=Boosted Output
 embers.research.metallurgy.ejector.desc=Simple Ember Emitters are useful and all, but sometimes you may want a bit more raw throughput. The Ember Ejector is a sturdier Emitter -- functionally identical to its predecessor, but capable of draining and emitting ten times as much Ember in a given time.
+
+embers.research.metallurgy.catalytic_plug=Catalytic Plug
+embers.research.metallurgy.catalytic_plug.title=Overdrive Injection
+embers.research.metallurgy.catalytic_plug.desc=Catalytic Plugs are fantastic devices for the impatient. When hooked up to a machine the plug double the speed of the machine, but only if also supplied with Alchemical Slurry from the back, which is consumed in the process. Up to 2 Catalytic Plugs can be attached to a single machine, to quadruple its speed.
 
 
 

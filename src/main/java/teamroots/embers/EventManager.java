@@ -1,15 +1,15 @@
 package teamroots.embers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
+import com.google.common.collect.Sets;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.event.RegistryEvent;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
@@ -635,6 +635,18 @@ public class EventManager {
 				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tag));
 			}
 			toUpdate.clear();
+		}
+	}
+
+	static HashSet<String> removedItems = Sets.newHashSet("embers:advanced_edge","embers:inferno_forge_edge","embers:mech_edge","embers:stone_edge","embers:glow","embers:structure_marker");
+
+	@SubscribeEvent
+	public void missingItemMappings(RegistryEvent.MissingMappings<Item> event) { //Thanks to KnightMiner for linking the relevant code for me to copy
+		for(RegistryEvent.MissingMappings.Mapping<Item> entry : event.getAllMappings()) {
+			String path = entry.key.toString();
+			if(removedItems.contains(path)) {
+				entry.ignore();
+			}
 		}
 	}
 }

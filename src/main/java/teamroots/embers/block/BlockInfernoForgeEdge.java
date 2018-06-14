@@ -76,4 +76,9 @@ public class BlockInfernoForgeEdge extends BlockBase {
 			}
 		}
 	}
+
+	@Override
+	public Item getItemBlock() {
+		return null;
+	}
 }

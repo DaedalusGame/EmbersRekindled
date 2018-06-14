@@ -37,7 +37,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.block.*;
-import teamroots.embers.block.fluid.*;
 import teamroots.embers.damage.*;
 import teamroots.embers.entity.*;
 import teamroots.embers.fluid.*;
@@ -68,9 +67,11 @@ public class RegistryManager {
 	public static Block ore_tin, block_tin;
 	public static Block block_bronze;
 	public static Block block_electrum;
+	public static Block catalytic_plug;
+	public static Block block_alchemical_redstone;
 	
 	public static Fluid fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
-						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel;
+						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
 	
 	public static Item gear_iron, gear_dawnstone, mantle_bulb, radiant_crown, rocket_booster, ashen_amulet, glimmer_charm, nonbeliever_amulet, dawnstone_mail, explosion_charm, climbers_belt, crystal_lenses, ember_amulet, ember_belt, ember_ring, archaic_circuit, flame_barrier, eldritch_insignia, intelligent_apparatus, caster_orb, resonating_bell, superheater, jet_augment, blasting_core, codex, wildfire_core, ember_cluster, adhesive, tyrfing, isolated_materia, archaic_brick, ancient_motive_core, ashen_cloth, glimmer_shard, glimmer_lamp, inflictor_gem, ashen_cloak_head, ashen_cloak_chest, ashen_cloak_legs, ashen_cloak_boots, aster, shard_aster, alchemic_waste, aspectus_iron, aspectus_copper, aspectus_dawnstone, aspectus_lead, aspectus_silver, golems_eye, dust_ash, grandhammer, pickaxe_clockwork, axe_clockwork, staff_ember, ignition_cannon, ember_jar, ember_cartridge, pickaxe_copper, axe_copper, shovel_copper, hoe_copper, sword_copper, pickaxe_silver, axe_silver, shovel_silver, hoe_silver, sword_silver, pickaxe_lead, axe_lead, shovel_lead, hoe_lead, sword_lead, pickaxe_dawnstone, axe_dawnstone, shovel_dawnstone, hoe_dawnstone, sword_dawnstone, debug, plate_gold, plate_iron, plate_caminite_raw, plate_mithril, stamp_bar_raw, stamp_plate_raw, stamp_flat_raw, nugget_dawnstone, plate_copper, plate_lead, plate_silver, plate_dawnstone, nugget_iron, nugget_mithril, ingot_astralite, ingot_dawnstone, ingot_umber_steel, ingot_mithril, crystal_ember, shard_ember, stamp_bar, stamp_plate, stamp_flat, tinker_hammer, ember_detector, ingot_copper, ingot_silver, ingot_lead, nugget_copper, nugget_silver, nugget_lead, brick_caminite, blend_caminite, plate_caminite;
 	public static Item ingot_nickel, nugget_nickel, plate_nickel, pickaxe_nickel, axe_nickel, shovel_nickel, hoe_nickel, sword_nickel;
@@ -78,6 +79,8 @@ public class RegistryManager {
 	public static Item ingot_tin, nugget_tin, plate_tin, pickaxe_tin, axe_tin, shovel_tin, hoe_tin, sword_tin;
 	public static Item ingot_bronze, nugget_bronze, plate_bronze, pickaxe_bronze, axe_bronze, shovel_bronze, hoe_bronze, sword_bronze;
 	public static Item ingot_electrum, nugget_electrum, plate_electrum, pickaxe_electrum, axe_electrum, shovel_electrum, hoe_electrum, sword_electrum;
+	public static Item dust_ember;
+	public static Item dust_metallurgic;
 	
 	public static DamageSource damage_ember;
 	
@@ -210,7 +213,8 @@ public class RegistryManager {
 		//blocks.add(gearbox_frame = (new BlockGearbox(Material.ROCK,"gearbox_frame",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		//blocks.add(steam_engine = (new BlockSteamEngine(Material.ROCK,"steam_engine",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		//blocks.add(mechanical_pump = (new BlockPump(Material.ROCK,"mechanical_pump",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
-		
+		blocks.add(catalytic_plug = (new BlockCatalyticPlug(Material.ROCK,"catalytic_plug",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+
 		if (ConfigManager.enableAluminum){
 			blocks.add(block_aluminum = (new BlockBase(Material.ROCK,"block_aluminum",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
 			blocks.add(ore_aluminum = (new BlockBase(Material.ROCK,"ore_aluminum",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
@@ -267,6 +271,7 @@ public class RegistryManager {
 		items.add(stamp_flat_raw = new ItemBase("stamp_flat_raw",true));
 		items.add(stamp_plate_raw = new ItemBase("stamp_plate_raw",true));
 		items.add(ember_detector = new ItemEmberGauge());
+		items.add(dust_ember = new ItemBase("dust_ember",true));
 		items.add(shard_ember = new ItemBase("shard_ember",true));
 		items.add(crystal_ember = new ItemBase("crystal_ember",true));
 		items.add(pickaxe_copper = new ItemPickaxeBase(tool_mat_copper,"pickaxe_copper",true).setCreativeTab(Embers.resource_tab));
@@ -335,6 +340,7 @@ public class RegistryManager {
 		//items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
 		//items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
 		//items.add(mantle_bulb = new ItemEmberBulb());
+		items.add(dust_metallurgic = new ItemMetallurgicDust("dust_metallurgic",true));
 		
 		if (ConfigManager.enableAluminum){
 			tool_mat_aluminum = EnumHelper.addToolMaterial(Embers.MODID+":aluminum", 2, 220, 5.2f, 1.5f, 14);
@@ -515,6 +521,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
 		GameRegistry.registerTileEntity(TileEntityPumpBottom.class, Embers.MODID+":tile_entity_pump_bottom");
 		GameRegistry.registerTileEntity(TileEntityPumpTop.class, Embers.MODID+":tile_entity_pump_top");
+		GameRegistry.registerTileEntity(TileEntityCatalyticPlug.class, Embers.MODID+":tile_entity_catalytic_plug");
 	}
 
 	private static void registerCapabilities() {
@@ -557,55 +564,61 @@ public class RegistryManager {
 		}
 		for (Block b : blocks){
 			if (b instanceof IBlock){
-				event.getRegistry().register(((IBlock) b).getItemBlock());
+				Item itemBlock = ((IBlock) b).getItemBlock();
+				if(itemBlock != null)
+					event.getRegistry().register(itemBlock);
 			}
 		}
 	}
 	
 	public static void registerFluids(){
 		FluidRegistry.registerFluid(fluid_molten_iron = new FluidMoltenIron());
-		blocks.add(block_molten_iron = (new BlockMoltenIron("iron",false)));
+		blocks.add(block_molten_iron = (new BlockMolten(fluid_molten_iron)));
 		FluidRegistry.addBucketForFluid(fluid_molten_iron);
 		
 		FluidRegistry.registerFluid(fluid_molten_gold = new FluidMoltenGold());
-		blocks.add(block_molten_gold = (new BlockMoltenGold("gold",false)));
+		blocks.add(block_molten_gold = (new BlockMolten(fluid_molten_gold)));
 		FluidRegistry.addBucketForFluid(fluid_molten_gold);
 		
 		FluidRegistry.registerFluid(fluid_molten_lead = new FluidMoltenLead());
-		blocks.add(block_molten_lead = (new BlockMoltenLead("lead",false)));
+		blocks.add(block_molten_lead = (new BlockMolten(fluid_molten_lead)));
 		FluidRegistry.addBucketForFluid(fluid_molten_lead);
 		
 		FluidRegistry.registerFluid(fluid_molten_copper = new FluidMoltenCopper());
-		blocks.add(block_molten_copper = (new BlockMoltenCopper("copper",false)));
+		blocks.add(block_molten_copper = (new BlockMolten(fluid_molten_copper)));
 		FluidRegistry.addBucketForFluid(fluid_molten_copper);
 		
 		FluidRegistry.registerFluid(fluid_molten_silver = new FluidMoltenSilver());
-		blocks.add(block_molten_silver = (new BlockMoltenSilver("silver",false)));
+		blocks.add(block_molten_silver = (new BlockMolten(fluid_molten_silver)));
 		FluidRegistry.addBucketForFluid(fluid_molten_silver);
 		
 		FluidRegistry.registerFluid(fluid_molten_dawnstone = new FluidMoltenDawnstone());
-		blocks.add(block_molten_dawnstone = (new BlockMoltenDawnstone("dawnstone",false)));
+		blocks.add(block_molten_dawnstone = (new BlockMolten(fluid_molten_dawnstone)));
 		FluidRegistry.addBucketForFluid(fluid_molten_dawnstone);
 		
 		FluidRegistry.registerFluid(fluid_molten_tin = new FluidMoltenTin());
-		blocks.add(block_molten_tin = (new BlockMoltenTin("tin",false)));
+		blocks.add(block_molten_tin = (new BlockMolten(fluid_molten_tin)));
 		FluidRegistry.addBucketForFluid(fluid_molten_tin);
 		
 		FluidRegistry.registerFluid(fluid_molten_aluminum = new FluidMoltenAluminum());
-		blocks.add(block_molten_aluminum = (new BlockMoltenAluminum("aluminum",false)));
+		blocks.add(block_molten_aluminum = (new BlockMolten(fluid_molten_aluminum)));
 		FluidRegistry.addBucketForFluid(fluid_molten_aluminum);
 		
 		FluidRegistry.registerFluid(fluid_molten_nickel = new FluidMoltenNickel());
-		blocks.add(block_molten_nickel = (new BlockMoltenNickel("nickel",false)));
+		blocks.add(block_molten_nickel = (new BlockMolten(fluid_molten_nickel)));
 		FluidRegistry.addBucketForFluid(fluid_molten_nickel);
 		
 		FluidRegistry.registerFluid(fluid_molten_bronze = new FluidMoltenBronze());
-		blocks.add(block_molten_bronze = (new BlockMoltenBronze("bronze",false)));
+		blocks.add(block_molten_bronze = (new BlockMolten(fluid_molten_bronze)));
 		FluidRegistry.addBucketForFluid(fluid_molten_bronze);
 		
 		FluidRegistry.registerFluid(fluid_molten_electrum = new FluidMoltenElectrum());
-		blocks.add(block_molten_electrum = (new BlockMoltenElectrum("electrum",false)));
+		blocks.add(block_molten_electrum = (new BlockMolten(fluid_molten_electrum)));
 		FluidRegistry.addBucketForFluid(fluid_molten_electrum);
+
+		FluidRegistry.registerFluid(fluid_alchemical_redstone = new FluidMoltenMetal("alchemical_redstone","alchemic_slurry"));
+		blocks.add(block_alchemical_redstone = (new BlockMolten(fluid_alchemical_redstone)));
+		FluidRegistry.addBucketForFluid(fluid_alchemical_redstone);
 	}
 	
 	@SideOnly(Side.CLIENT)

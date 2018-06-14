@@ -11,12 +11,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -30,12 +32,15 @@ import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.api.misc.IFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
+import teamroots.embers.block.BlockSeed;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
+import teamroots.embers.util.IngredientSpecial;
 import teamroots.embers.util.WeightedItemStack;
 
 public class RecipeRegistry {
@@ -207,7 +212,8 @@ public class RecipeRegistry {
 
 		BoreOutput defaultOutput = new BoreOutput(Sets.newHashSet(), Sets.newHashSet(), Lists.newArrayList(
 				new WeightedItemStack(new ItemStack(RegistryManager.crystal_ember),20),
-				new WeightedItemStack(new ItemStack(RegistryManager.shard_ember),60)
+				new WeightedItemStack(new ItemStack(RegistryManager.shard_ember),60),
+				new WeightedItemStack(new ItemStack(RegistryManager.dust_ember),20)
 		));
 		setDefaultBoreOutput(defaultOutput);
 
@@ -1088,6 +1094,10 @@ public class RecipeRegistry {
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("plateElectrum"),new FluidStack(RegistryManager.fluid_molten_electrum,144)));
 		}
 
+		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("oreRedstone"),new FluidStack(RegistryManager.fluid_alchemical_redstone,1008)));
+		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("dustRedstone"),new FluidStack(RegistryManager.fluid_alchemical_redstone,144)));
+		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("blockRedstone"),new FluidStack(RegistryManager.fluid_alchemical_redstone,1296)));
+
 		Ingredient stampBar = Ingredient.fromItem(RegistryManager.stamp_bar);
 		Ingredient stampPlate = Ingredient.fromItem(RegistryManager.stamp_plate);
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_iron,144), stampBar,new ItemStack(Items.IRON_INGOT,1)));
@@ -1166,11 +1176,18 @@ public class RecipeRegistry {
 		Ingredient soulsand = Ingredient.fromItem(Item.getItemFromBlock(Blocks.SOUL_SAND));
 		OreIngredient obsidian = new OreIngredient("obsidian");
 		OreIngredient blockCoal = new OreIngredient("blockCoal");
-		Ingredient leadSword = Ingredient.fromItem(RegistryManager.sword_lead);
+		Ingredient leadSword = new IngredientSpecial(stack -> {
+			Item item = stack.getItem();
+			return item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().toLowerCase().contains("lead");
+		}); //Any lead sword.
 		Ingredient emberCrystal = Ingredient.fromItem(RegistryManager.crystal_ember);
 		Ingredient emberCluster = Ingredient.fromItem(RegistryManager.ember_cluster);
 		Ingredient archaicBrick = Ingredient.fromItem(RegistryManager.archaic_brick);
 		Ingredient archaicCircuit = Ingredient.fromItem(RegistryManager.archaic_circuit);
+		OreIngredient redstoneBlock = new OreIngredient("blockRedstone");
+		OreIngredient glass = new OreIngredient("blockGlass");
+		Ingredient fluidPipe = Ingredient.fromStacks(new ItemStack(RegistryManager.pipe));
+
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 48, 64).setRange("copper", 48, 64), quartz, Lists.newArrayList(ingotCopper, ingotCopper, emberShard, emberShard), new ItemStack(RegistryManager.seed,1,2)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 48, 64).setRange("silver", 48, 64), quartz, Lists.newArrayList(ingotSilver, ingotSilver, emberShard, emberShard), new ItemStack(RegistryManager.seed,1,4)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 48, 64).setRange("lead", 48, 64), quartz, Lists.newArrayList(ingotLead, ingotLead, emberShard, emberShard), new ItemStack(RegistryManager.seed,1,3)));
@@ -1205,6 +1222,18 @@ public class RecipeRegistry {
 				emberCrystal,
 				Lists.newArrayList(plateDawnstone, plateDawnstone, plateDawnstone, ingotSilver),
 				new ItemStack(RegistryManager.flame_barrier,1)));
+
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 20, 30).setRange("silver", 32, 64),
+				ingotSilver,
+				Lists.newArrayList(fluidPipe, glass, fluidPipe, redstoneBlock),
+				new ItemStack(RegistryManager.catalytic_plug,1)));
+
+		Ingredient anyMetalSeed = new IngredientSpecial(stack -> Block.getBlockFromItem(stack.getItem()) instanceof BlockSeed);
+
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList(AspectList.createStandard(0, 0, 0, 0, 0), AspectList.createStandard(16, 16, 16, 16, 16)),
+				anyMetalSeed,
+				Lists.newArrayList(Ingredient.fromItem(RegistryManager.dust_ember), new OreIngredient("dustRedstone")),
+				new ItemStack(RegistryManager.dust_metallurgic,3)));
 
 		heatCoilRecipes.add(new HeatCoilFurnaceRecipe());
 

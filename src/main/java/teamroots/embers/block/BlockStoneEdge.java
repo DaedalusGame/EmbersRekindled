@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -270,5 +271,10 @@ public class BlockStoneEdge extends BlockBase {
 				((TileEntityLargeTank) tileEntity).updateCapacity();
 			}
 		}
+	}
+
+	@Override
+	public Item getItemBlock() {
+		return null;
 	}
 }

@@ -41,5 +41,9 @@ public class BlockStructureMarker extends BlockBase {
 	public IBlockState getStateFromMeta(int meta){
 		return getDefaultState().withProperty(marker_value,meta);
 	}
-	
+
+	@Override
+	public Item getItemBlock() {
+		return null;
+	}
 }

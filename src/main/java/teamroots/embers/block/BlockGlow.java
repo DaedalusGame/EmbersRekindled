@@ -74,4 +74,9 @@ public class BlockGlow extends BlockBase {
 	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
+
+	@Override
+	public Item getItemBlock() {
+		return null;
+	}
 }

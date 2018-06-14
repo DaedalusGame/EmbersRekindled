@@ -136,6 +136,11 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:item.inflictor_gem.absorb")
     public static SoundEvent INFLICTOR_GEM;
 
+    @GameRegistry.ObjectHolder("embers:item.metallurgic_dust.convert")
+    public static SoundEvent METALLURGIC_DUST;
+    @GameRegistry.ObjectHolder("embers:item.metallurgic_dust.fail")
+    public static SoundEvent METALLURGIC_DUST_FAIL;
+
     @GameRegistry.ObjectHolder("embers:item.codex.open")
     public static SoundEvent CODEX_OPEN;
     @GameRegistry.ObjectHolder("embers:item.codex.close")
@@ -235,6 +240,9 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.cinder_jet.boost"));
         event.getRegistry().register(registerSound("item.resonating_bell.ring"));
         event.getRegistry().register(registerSound("item.inflictor_gem.absorb"));
+
+        event.getRegistry().register(registerSound("item.metallurgic_dust.convert"));
+        event.getRegistry().register(registerSound("item.metallurgic_dust.fail"));
 
         event.getRegistry().register(registerSound("item.codex.open"));
         event.getRegistry().register(registerSound("item.codex.close"));

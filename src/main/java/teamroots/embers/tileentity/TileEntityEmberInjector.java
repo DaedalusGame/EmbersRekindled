@@ -130,16 +130,18 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
 		isWorking = false;
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
 		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades) * UpgradeUtil.getTotalSpeedModifier(this,upgrades);
-		if (!cancel && tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > emberCost){
-			((IEmberInjectable) tile).inject(this, emberCost);
-			this.capability.removeAmount(emberCost, true);
-			isWorking = true;
-			markDirty();
-			if (world.isRemote){
-				for (int i = 0; i < 2; i ++){
-					ParticleUtil.spawnParticleLineGlow(world, pos.getX()+0.5f+0.25f*(random.nextFloat()-0.5f), pos.getY()+0.625f, pos.getZ()+0.5f+0.25f*(random.nextFloat()-0.5f), tile.getPos().getX()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getX()+0.5f*(random.nextFloat()-0.5f), tile.getPos().getY()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getY()+0.5f*(random.nextFloat()-0.5f), tile.getPos().getZ()+0.5f+state.getValue(BlockEmberInjector.facing).getDirectionVec().getZ()+0.5f*(random.nextFloat()-0.5f), 255, 64, 16, 4.0f+random.nextFloat()*2.0f, 40);
+		if (tile instanceof IEmberInjectable && ((IEmberInjectable) tile).isValid() && capability.getEmber() > emberCost){
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			if(!cancel) {
+				((IEmberInjectable) tile).inject(this, emberCost);
+				this.capability.removeAmount(emberCost, true);
+				isWorking = true;
+				markDirty();
+				if (world.isRemote) {
+					for (int i = 0; i < 2; i++) {
+						ParticleUtil.spawnParticleLineGlow(world, pos.getX() + 0.5f + 0.25f * (random.nextFloat() - 0.5f), pos.getY() + 0.625f, pos.getZ() + 0.5f + 0.25f * (random.nextFloat() - 0.5f), tile.getPos().getX() + 0.5f + state.getValue(BlockEmberInjector.facing).getDirectionVec().getX() + 0.5f * (random.nextFloat() - 0.5f), tile.getPos().getY() + 0.5f + state.getValue(BlockEmberInjector.facing).getDirectionVec().getY() + 0.5f * (random.nextFloat() - 0.5f), tile.getPos().getZ() + 0.5f + state.getValue(BlockEmberInjector.facing).getDirectionVec().getZ() + 0.5f * (random.nextFloat() - 0.5f), 255, 64, 16, 4.0f + random.nextFloat() * 2.0f, 40);
+					}
 				}
 			}
 		}

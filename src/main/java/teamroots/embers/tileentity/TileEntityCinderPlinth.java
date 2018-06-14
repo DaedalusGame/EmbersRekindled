@@ -165,30 +165,33 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if(getWorld().isRemote)
 			handleSound();
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
-		if (!cancel && shouldWork()){
-			progress ++;
-			if (getWorld().isRemote){
-				ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()+0.5f, (float)getPos().getY()+0.875f, (float)getPos().getZ()+0.5f, 0.0125f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 72, 72, 72, 1.0f, 3.0f+random.nextFloat(), 48);
-			}
-			double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
-			capability.removeAmount(emberCost, true);
-			if (progress > UpgradeUtil.getWorkTime(this,PROCESS_TIME,upgrades)){
-				progress = 0;
-				inventory.extractItem(0, 1, false);
-				TileEntity tile = getWorld().getTileEntity(getPos().down());
-				List<ItemStack> outputs = Lists.newArrayList(new ItemStack(RegistryManager.dust_ash,1));
-				UpgradeUtil.transformOutput(this,outputs,upgrades);
-				for(ItemStack remainder : outputs) {
-					if (tile instanceof TileEntityBin) {
-						remainder = ((TileEntityBin) tile).inventory.insertItem(0, remainder, false);
-					}
-					if (!remainder.isEmpty() && !getWorld().isRemote) {
-						getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, remainder));
+
+		if (shouldWork()){
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			if(!cancel) {
+				progress++;
+				if (getWorld().isRemote) {
+					ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() + 0.5f, (float) getPos().getY() + 0.875f, (float) getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + random.nextFloat(), 48);
+				}
+				double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
+				capability.removeAmount(emberCost, true);
+				if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
+					progress = 0;
+					inventory.extractItem(0, 1, false);
+					TileEntity tile = getWorld().getTileEntity(getPos().down());
+					List<ItemStack> outputs = Lists.newArrayList(new ItemStack(RegistryManager.dust_ash, 1));
+					UpgradeUtil.transformOutput(this, outputs, upgrades);
+					for (ItemStack remainder : outputs) {
+						if (tile instanceof TileEntityBin) {
+							remainder = ((TileEntityBin) tile).inventory.insertItem(0, remainder, false);
+						}
+						if (!remainder.isEmpty() && !getWorld().isRemote) {
+							getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, remainder));
+						}
 					}
 				}
+				markDirty();
 			}
-			markDirty();
 		}
 		else {
 			if (progress != 0){

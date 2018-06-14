@@ -382,6 +382,20 @@
     ],
     "subtitle": "subtitles.inflictor_gem.absorb"
   },
+  "item.metallurgic_dust.convert": {
+    "sounds": [
+      "embers:metallurgic_dust/convert1",
+      "embers:metallurgic_dust/convert2"
+    ],
+    "subtitle": "subtitles.metallurgic_dust.convert"
+  },
+  "item.metallurgic_dust.fail": {
+    "sounds": [
+      "embers:metallurgic_dust/fail1",
+      "embers:metallurgic_dust/fail2"
+    ],
+    "subtitle": "subtitles.metallurgic_dust.fail"
+  },
   "item.codex.open": {
     "sounds": [
       "embers:ancient_codex/open"

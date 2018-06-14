@@ -90,6 +90,7 @@ tile.reactor.name=Ignem Reactor
 tile.field_chart.name=Диаграмма поля
 tile.ember_pulser.name=Эмбер-эжектор
 tile.inferno_forge.name=Адская кузница
+tile.catalytic_plug.name=Каталитический затвор
 
 fluid.iron=Расплавленное железо
 fluid.gold=Расплавленное золото
@@ -99,6 +100,7 @@ fluid.silver=Расплавленное серебро
 fluid.astralite=Расплавленный астралит
 fluid.dawnstone=Расплавленный золотит
 fluid.umberSteel=Расплавленная жженая сталь
+fluid.alchemical_redstone=Разжиженный красный камень
 
 item.ingot_copper.name=Медный слиток
 item.ingot_silver.name=Серебряный слиток
@@ -127,6 +129,7 @@ item.stamp_plate.name=Штамп пластины
 item.stamp_bar_raw.name=Сырой штамп слитка
 item.stamp_flat_raw.name=Сырой плоский штамп
 item.stamp_plate_raw.name=Сырой штамп пластины
+item.dust_ember.name=Пыль эмбера
 item.shard_ember.name=Эмбер-осколок
 item.crystal_ember.name=Эмбер-кристалл
 item.ingot_dawnstone.name=Золотитовый слиток
@@ -197,6 +200,7 @@ item.ember_ring.name=Эмбер-кольцо
 item.ember_belt.name=Эмбер-пояс
 item.ember_amulet.name=Эмбер-амулет
 item.ember_bulb.name=Мэнтл-колба
+item.dust_metallurgic.name=Металлургическая пыль
 
 tile.block_aluminum.name=Алюминиевый блок
 tile.ore_aluminum.name=Алюминиевая руда
@@ -293,6 +297,7 @@ embers.jei.recipe.stamp=Штамповка
 embers.jei.recipe.melter=Плавление
 embers.jei.recipe.mixer=Смешивание
 embers.jei.recipe.alchemy=Алхимия
+embers.jei.recipe.dawnstone_anvil=Рецепт золотитовой наковальни
 
 entity.ancient_golem.name=Древний голем
 
@@ -470,6 +475,10 @@ embers.research.metallurgy.alchemy.desc=Ember alchemy is truly a marvelous disco
 embers.research.metallurgy.ejector=Эмбер-эжектор
 embers.research.metallurgy.ejector.title=Boosted Output
 embers.research.metallurgy.ejector.desc=Simple Ember Emitters are useful and all, but sometimes you may want a bit more raw throughput. The Ember Ejector is a sturdier Emitter -- functionally identical to its predecessor, but capable of draining and emitting ten times as much Ember in a given time.
+
+embers.research.metallurgy.catalytic_plug=Каталитический затвор
+embers.research.metallurgy.catalytic_plug.title=Внедрение изнурения
+embers.research.metallurgy.catalytic_plug.desc=Каталитические затворы - фантастические устройства для самых нетерпеливых. При подключении к машине они будут удваивать общую скорость производства устройства, но только в том случае, если оно также снабжено алхимическим мусором со спины, который потребляется в процессе. На каждое устройство можно подключить только 2 каталитических затвора, тем самым ускорив его в 4 раза.
 
 
 

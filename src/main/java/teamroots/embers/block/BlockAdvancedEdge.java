@@ -169,4 +169,9 @@ public class BlockAdvancedEdge extends BlockBase {
 		}
 		return false;
 	}
+
+	@Override
+	public Item getItemBlock() {
+		return null;
+	}
 }

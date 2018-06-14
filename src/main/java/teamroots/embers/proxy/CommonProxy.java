@@ -22,6 +22,7 @@ import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.*;
 import teamroots.embers.util.EmberGenUtil;
+import teamroots.embers.util.OreTransmutationUtil;
 
 public class CommonProxy {
 	public void constructing(FMLConstructionEvent event){
@@ -52,6 +53,8 @@ public class CommonProxy {
 		ResearchManager.initResearches();
 		NetworkRegistry.INSTANCE.registerGuiHandler(Embers.instance, new GuiHandler());
 		RecipeRegistry.mergeOreRecipes();
+
+		OreTransmutationUtil.init(); //oof
 	}
 
 	public void playItemSound(EntityLivingBase entity, Item item, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch) {
