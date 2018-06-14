@@ -425,10 +425,13 @@ embers.research.mechanisms.copper_cell.title=Capacitor
 embers.research.mechanisms.copper_cell.desc=The Copper Cell fulfills a very simple purpose: Ember storage. It can be given Ember using an Ember Receptor, or have Ember removed from it through an Ember Emitter.
 
 
+embers.research.metallurgy.pulser=Ember Ejector
+embers.research.metallurgy.pulser.title=Full Power Destruction
+embers.research.metallurgy.pulser.desc=By plating a normal Ember Emitter with Dawnstone alloy, you've vastly increased its potential output. Dawnstone is highly conductive to Ember and this device will send 10 times the amount per burst. This doesn't come without downsides however, as Receptors are quickly overwhelmed with this massive quantity and any surplus Ember may be lost in transfer.
 
 embers.research.metallurgy.splitter=Beam Splitter
 embers.research.metallurgy.splitter.title=Ember Division
-embers.research.metallurgy.splitter.desc=Using the new Dawnstone alloy, you have discovered a way to divide Ember bursts. The Beam Splitter has four faces: two with a smaller copper port, and two with larger copper-and-dawnstone ports. Each of the larger ports will function as its own Ember Emitter. When Ember is fed into the Splitter with an Ember Receiver, it will split the Ember it receives between those two ports, which can each be bound independently.
+embers.research.metallurgy.splitter.desc=Using the new Dawnstone alloy, you have discovered a way to divide Ember bursts. The Beam Splitter has four faces: two with a smaller copper port, and two with larger copper-and-dawnstone ports. Each of the larger ports will function as its own Ember Emitter. When Ember is fed into the Splitter, it will split the Ember it receives between those two ports, which can each be bound independently.
 
 embers.research.metallurgy.dawnstone_anvil=Dawnstone Anvil
 embers.research.metallurgy.dawnstone_anvil.title=Repairs
@@ -511,6 +514,10 @@ embers.research.alchemy.inflictor.desc=The Inflictor Gem is a strange crystal in
 embers.research.alchemy.cluster=Ember Clusters
 embers.research.alchemy.cluster.title=Purified Crystals
 embers.research.alchemy.cluster.desc=The smaller crystalline Ember items you have used in the past are handy, but you believe you will soon require more power. By alchemically fusing several Ember Crystals and Ember Shards together, you have created the Ember Cluster, a larger bunch of crystals that you believe will help you energize future machines.
+
+embers.research.alchemy.field_chart=Field Chart
+embers.research.alchemy.field_chart.title=Tactical Overview
+embers.research.alchemy.field_chart.desc=Finding spots with High Ember concentration can be tedious when your only measurement device is an Atmospheric Gauge. However, it seems that Ember resonates with itself, and by suitable manufacture you've devised the Field Chart, a map of Ember concentrations for a larger area than can be covered on foot.
 
 embers.research.alchemy.wildfire=Wildfire Core
 embers.research.alchemy.wildfire.title=Controlling the Flame

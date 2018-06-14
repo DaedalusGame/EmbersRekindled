@@ -16,11 +16,11 @@ public class ResearchManager {
 	
 	public static ResearchBase dials, boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, pipes, tank, bin,//WORLD
 							   copper_cell, emitters, dawnstone, dropper, melter, stamper, mixer, breaker, hearth_coil, access, reservoir, vacuum, transfer, //MECHANISMS
-							   ember_ejector, beam_cannon, splitter, dawnstone_anvil, autohammer, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, //METALLURGY
-							   tyrfing, waste, wildfire, cluster, combustor, catalyzer, reactor, injector, ashen_cloak, inflictor, materia, misc_alchemy, adhesive, //ALCHEMY
+							   ember_ejector, beam_cannon, pulser, splitter, dawnstone_anvil, autohammer, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, //METALLURGY
+							   tyrfing, waste, wildfire, cluster, combustor, catalyzer, reactor, injector, ashen_cloak, inflictor, materia, misc_alchemy, adhesive, field_chart, //ALCHEMY
 							   modifiers, inferno_forge, heat, superheater, cinder_jet, caster_orb, resonating_bell, eldritch_insignia, blasting_core, intelligent_apparatus, flame_barrier //SMITHING
 	;
-	
+
 	public static void initResearches(){
 		//WORLD
 		ores = new ResearchBase("ores", new ItemStack(RegistryManager.ore_copper), 0, 7);
@@ -53,7 +53,6 @@ public class ResearchManager {
 		copper_cell = new ResearchBase("copper_cell", new ItemStack(RegistryManager.copper_cell), 0, 5).addAncestor(emitters);
 		
 		//METALLURGY
-		splitter = new ResearchBase("splitter", new ItemStack(RegistryManager.beam_splitter), 0, 6);
 		ember_ejector = new ResearchBase("ember_ejector", new ItemStack(RegistryManager.ember_pulser), 0, 3.5);
 		dawnstone_anvil = new ResearchBase("dawnstone_anvil", new ItemStack(RegistryManager.dawnstone_anvil), 3, 7);
 		autohammer = new ResearchBase("autohammer", new ItemStack(RegistryManager.auto_hammer), 7, 7).addAncestor(dawnstone_anvil);
@@ -64,7 +63,9 @@ public class ResearchManager {
 		((IEmberItem)RegistryManager.ember_jar).setEmberCapacity(fullJar, 1000.0);
 		((IEmberItem)RegistryManager.ember_jar).setEmber(fullJar, ((IEmberItem)RegistryManager.ember_jar).getEmberCapacity(fullJar));
 		jars = new ResearchBase("jars", fullJar, 6, 1).addAncestor(charger);
-		clockwork_tools = new ResearchBase("clockwork_tools", new ItemStack(RegistryManager.axe_clockwork), 2, 4).addAncestor(jars);
+		clockwork_tools = new ResearchBase("clockwork_tools", new ItemStack(RegistryManager.axe_clockwork), 2, 2).addAncestor(jars);
+		pulser = new ResearchBase("pulser", new ItemStack(RegistryManager.ember_pulser), 2, 5).addAncestor(crystal_cell);
+		splitter = new ResearchBase("splitter", new ItemStack(RegistryManager.beam_splitter), 0, 6).addAncestor(pulser);
 		cinder_staff = new ResearchBase("cinder_staff", new ItemStack(RegistryManager.staff_ember), 5, 5).addAncestor(jars);
 		blazing_ray = new ResearchBase("blazing_ray", new ItemStack(RegistryManager.ignition_cannon), 8, 4).addAncestor(jars);
 		aspecti = new ResearchBase("aspecti", new ItemStack(RegistryManager.aspectus_dawnstone), 12, 1);
@@ -79,7 +80,8 @@ public class ResearchManager {
 		adhesive = new ResearchBase("adhesive", new ItemStack(RegistryManager.adhesive), 12, 1).addAncestor(waste);
 		cluster = new ResearchBase("cluster", new ItemStack(RegistryManager.ember_cluster), 3, 2).addAncestor(waste);
 		ashen_cloak = new ResearchBase("ashen_cloak", new ItemStack(RegistryManager.ashen_cloak_chest), 9, 2).addAncestor(waste);
-		wildfire = new ResearchBase("wildfire", new ItemStack(RegistryManager.wildfire_core), 1, 4).addAncestor(cluster);
+		field_chart = new ResearchBase("field_chart", new ItemStack(RegistryManager.field_chart), 0, 3).addAncestor(cluster);
+		wildfire = new ResearchBase("wildfire", new ItemStack(RegistryManager.wildfire_core), 1, 5).addAncestor(cluster);
 		inflictor = new ResearchBase("inflictor", new ItemStack(RegistryManager.inflictor_gem), 11, 5).addAncestor(ashen_cloak);
 		injector = new ResearchBase("injector", new ItemStack(RegistryManager.ember_injector), 0, 7).addAncestor(wildfire);
 		combustor = new ResearchBase("combustor", new ItemStack(RegistryManager.combustor), 6, 5).addAncestor(wildfire);
@@ -130,6 +132,7 @@ public class ResearchManager {
 				.addResearch(copper_cell));
 		researches.add(new ResearchCategory("metallurgy", 48)
 				.addResearch(splitter)
+				.addResearch(pulser)
 				.addResearch(dawnstone_anvil)
 				.addResearch(autohammer)
 				.addResearch(crystal_cell)
@@ -149,6 +152,7 @@ public class ResearchManager {
 				.addResearch(cluster)
 				.addResearch(ashen_cloak)
 				.addResearch(inflictor)
+				.addResearch(field_chart)
 				.addResearch(wildfire)
 				.addResearch(injector)
 				.addResearch(reactor)

@@ -287,7 +287,8 @@ public class GuiCodex extends GuiScreen {
 		int basePosY = (int)((float)height/2.0f)-128;
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
-		selectedIndex = -1;
+		int lastSelectedIndex = this.selectedIndex;
+		this.selectedIndex = -1;
 		this.selectedPageIndex = -1;
 		if (this.categoryIndex == -1){
 			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_index.png"));
@@ -323,18 +324,18 @@ public class GuiCodex extends GuiScreen {
 				ResearchCategory category = ResearchManager.researches.get((int) i);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getIndexTexture());
 				if (diff < 180.0f/(float) numResearches && distSq < 16000){
+					if (lastSelectedIndex != (int)i)
+						playSound(SoundManager.CODEX_CATEGORY_SELECT);
 					selected = true;
 					selectedIndex = (int)i;
 					categoryString = category.name;
-					if (raise[(int)i] <= 0.001f)
-						playSound(SoundManager.CODEX_CATEGORY_SELECT);
 					if (raise[(int)i] < 1.0f && doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
 						raiseTargets[(int)i] = raiseTargets[(int)i] * 0.5f + 0.5f;
 					}
 				}
 				else {
-					if (raise[(int)i] >= 0.999f)
+					if (lastSelectedIndex == (int)i)
 						playSound(SoundManager.CODEX_CATEGORY_UNSELECT);
 					if (/*raise[(int)i] > 0.0f && */doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
@@ -349,7 +350,8 @@ public class GuiCodex extends GuiScreen {
 				this.drawTexturedModalRect(-6, -80-12f*instRaise, (int) category.getIconU()+(selected ? 16 : 0), (int) category.getIconV(), 12, 12);
 				GlStateManager.popMatrix();
 			}
-			
+
+			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_index.png"));
 			this.drawTexturedModalRect(basePosX+64, basePosY+56, 192, 176, 64, 64);
 			
 			drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
