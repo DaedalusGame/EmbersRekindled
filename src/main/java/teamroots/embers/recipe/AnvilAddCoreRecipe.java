@@ -13,7 +13,7 @@ public class AnvilAddCoreRecipe extends DawnstoneAnvilRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
         ModifierBase modifier = ItemModUtil.getModifier(input2); //TODO: instead of hardcoding this, see if the modifier can be applied as a core
-        return (!ItemModUtil.hasHeat(input1) || !ItemModUtil.hasModifier(input1, modifier)) && modifier.canApplyTo(input1) && input2.getItem() == RegistryManager.ancient_motive_core;
+        return input2.getItem() == RegistryManager.ancient_motive_core && (!ItemModUtil.hasHeat(input1) || !ItemModUtil.hasModifier(input1, modifier)) && modifier.canApplyTo(input1);
     }
 
     @Override

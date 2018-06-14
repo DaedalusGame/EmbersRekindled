@@ -55,7 +55,7 @@ public class ModifierCinderJet extends ModifierBase {
 						entity.motionX += 2.0* entity.getLookVec().x*dashStrength;
 						entity.motionY += 0.4;
 						entity.motionZ += 2.0* entity.getLookVec().z*dashStrength;
-						entity.playSound(SoundManager.CINDER_JET,1.0f,1.0f);
+						entity.getEntityWorld().playSound(null,entity.posX, entity.posY, entity.posZ, SoundManager.CINDER_JET, SoundCategory.PLAYERS, 1.0f, 1.0f);
 						if (!entity.getEntityWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessagePlayerJetFX(entity.getUniqueID()));
 						}

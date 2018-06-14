@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
@@ -191,14 +192,14 @@ public class EventManager {
 					if (player.getHeldItemMainhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemMainhand().hasTagCompound()){
 						player.getHeldItemMainhand().setItemDamage(1);
 						player.getHeldItemMainhand().getTagCompound().setString("type", event.getSource().getDamageType());
-						player.playSound(SoundManager.INFLICTOR_GEM,1.0f,1.0f);
+						player.getEntityWorld().playSound(null,player.posX, player.posY, player.posZ, SoundManager.INFLICTOR_GEM, SoundCategory.PLAYERS, 1.0f, 1.0f);
 					}
 				}
 				if (!player.getHeldItemOffhand().isEmpty()){
 					if (player.getHeldItemOffhand().getItem() == RegistryManager.inflictor_gem && player.getHeldItemOffhand().hasTagCompound()){
 						player.getHeldItemOffhand().setItemDamage(1);
 						player.getHeldItemOffhand().getTagCompound().setString("type", event.getSource().getDamageType());
-						player.playSound(SoundManager.INFLICTOR_GEM,1.0f,1.0f);
+						player.getEntityWorld().playSound(null,player.posX, player.posY, player.posZ, SoundManager.INFLICTOR_GEM, SoundCategory.PLAYERS, 1.0f, 1.0f);
 					}
 				}
 			}
@@ -238,8 +239,8 @@ public class EventManager {
 			double heat = ItemModUtil.getHeat(stack);
 			if(heat < maxHeat) {
 				ItemModUtil.addHeat(stack, added);
-				if(heat + added > maxHeat)
-					entity.playSound(SoundManager.HEATED_ITEM_LEVELUP,1.0f,1.0f);
+				if(heat + added >= maxHeat)
+					entity.getEntityWorld().playSound(null,entity.posX, entity.posY, entity.posZ, SoundManager.HEATED_ITEM_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
 			}
 		}
 	}
@@ -460,9 +461,12 @@ public class EventManager {
 							int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
 							float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
 							GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
-							for (int j = 0; j < modifiers.size(); j ++){
-								ModifierBase modifier = modifiers.get(j);
-								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier."+ modifier.name)+" "+I18n.format("embers.tooltip.num"+ItemModUtil.getModifierLevel(event.getStack(), modifier)), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i+j+1)+2);
+							int j = 0;
+							for (ModifierBase modifier : modifiers) {
+								if (modifier.countTowardsTotalLevel) {
+									GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier." + modifier.name) + " " + I18n.format("embers.tooltip.num" + ItemModUtil.getModifierLevel(event.getStack(), modifier)), event.getX(), event.getY() + (event.getFontRenderer().FONT_HEIGHT + 1) * (i + j + 1) + 2);
+									j++;
+								}
 							}
 							GlStateManager.alphaFunc(func, ref);
 							GlStateManager.disableAlpha();

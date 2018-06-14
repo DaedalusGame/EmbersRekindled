@@ -326,7 +326,7 @@ public class GuiCodex extends GuiScreen {
 					selected = true;
 					selectedIndex = (int)i;
 					categoryString = category.name;
-					if (raise[(int)i] <= 0.0f)
+					if (raise[(int)i] <= 0.001f)
 						playSound(SoundManager.CODEX_CATEGORY_SELECT);
 					if (raise[(int)i] < 1.0f && doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
@@ -334,7 +334,7 @@ public class GuiCodex extends GuiScreen {
 					}
 				}
 				else {
-					if (raise[(int)i] >= 1.0f)
+					if (raise[(int)i] >= 0.999f)
 						playSound(SoundManager.CODEX_CATEGORY_UNSELECT);
 					if (/*raise[(int)i] > 0.0f && */doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];

@@ -2,6 +2,7 @@ package teamroots.embers.itemmod;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,6 +33,8 @@ public class ModifierFlameBarrier extends ModifierBase {
 				event.getSource().getTrueSource().attackEntityFrom(RegistryManager.damage_ember, strength*event.getAmount()*0.5f);
 				event.getSource().getTrueSource().setFire(blastingLevel+1);
 				event.getEntity().playSound(SoundManager.FIREBALL_HIT,1.0f,1.0f);
+				event.getEntity().getEntityWorld().playSound(null,event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, SoundManager.FIREBALL_HIT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
 				if (!event.getEntity().world.isRemote){
 					PacketHandler.INSTANCE.sendToAll(new MessageFlameShieldFX(event.getEntity().posX,event.getEntity().posY+event.getEntity().height/2.0,event.getEntity().posZ));
 				}

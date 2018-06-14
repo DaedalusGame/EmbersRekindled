@@ -37,7 +37,7 @@ public class ModifierSuperheater extends ModifierBase {
 						if (!event.getWorld().isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageSuperheatFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 						}
-						event.getWorld().playSound(null,event.getPos(),SoundManager.FIREBALL_BIG_HIT, SoundCategory.PLAYERS, 1.0f, 1.0f);
+						event.getWorld().playSound(null,event.getPos(),SoundManager.FIREBALL_HIT, SoundCategory.PLAYERS, 0.5f, event.getWorld().rand.nextFloat()*0.5f + 0.2f);
 						EmberInventoryUtil.removeEmber(event.getHarvester(), cost);
 						List<ItemStack> stacks = event.getDrops();
 						for (int i = 0; i < stacks.size(); i ++){

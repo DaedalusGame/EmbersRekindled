@@ -5,6 +5,6 @@ import teamroots.embers.api.itemmod.ModifierBase;
 public class ModifierCore extends ModifierBase {
 
 	public ModifierCore() {
-		super(EnumType.TOOL,"core",0.0,false);
+		super(EnumType.ALL,"core",0.0,false);
 	}	
 }
