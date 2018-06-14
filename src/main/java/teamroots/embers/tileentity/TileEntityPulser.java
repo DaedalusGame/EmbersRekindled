@@ -13,12 +13,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockEmberPulser;
 import teamroots.embers.entity.EntityEmberPacket;
@@ -172,6 +174,7 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 					packet.initCustom(getPos(), target, velocity.x, velocity.y, velocity.z, Math.min(TRANSFER_RATE,capability.getEmber()));
 					this.capability.removeAmount(Math.min(TRANSFER_RATE,capability.getEmber()), true);
 					getWorld().spawnEntity(packet);
+					getWorld().playSound(null, pos, SoundManager.EMBER_EMIT_BIG, SoundCategory.BLOCKS, 1.0f, 1.0f);
 					markDirty();
 				}
 			}

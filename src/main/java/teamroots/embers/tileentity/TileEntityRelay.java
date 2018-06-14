@@ -15,11 +15,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -190,6 +192,7 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmb
 		else {
 			packet.dest = getPos();
 		}
+		getWorld().playSound(null, pos, SoundManager.EMBER_RELAY, SoundCategory.BLOCKS, 1.0f, 1.0f);
 		return false;
 	}
 	

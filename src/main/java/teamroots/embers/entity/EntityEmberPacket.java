@@ -6,9 +6,11 @@ import net.minecraft.block.state.IBlockState;
 		import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSparkleFX;
@@ -149,6 +151,7 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 					this.motionZ = 0;
 					this.lifetime = 20;
 					this.dead = true;
+					world.playSound(null, posX, posY, posZ, this.value >= 100 ? SoundManager.EMBER_RECEIVE_BIG : SoundManager.EMBER_RECEIVE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				}
 			}
 		}
