@@ -16,7 +16,7 @@ public class ResearchManager {
 	
 	public static ResearchBase dials, boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, pipes, tank, bin,//WORLD
 							   copper_cell, emitters, dawnstone, dropper, melter, stamper, mixer, breaker, hearth_coil, access, reservoir, vacuum, transfer, //MECHANISMS
-							   ember_ejector, beam_cannon, pulser, splitter, dawnstone_anvil, autohammer, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, //METALLURGY
+							   ember_ejector, beam_cannon, pulser, splitter, dawnstone_anvil, autohammer, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, catalytic_plug, //METALLURGY
 							   tyrfing, waste, wildfire, cluster, combustor, catalyzer, reactor, injector, ashen_cloak, inflictor, materia, misc_alchemy, adhesive, field_chart, //ALCHEMY
 							   modifiers, inferno_forge, heat, superheater, cinder_jet, caster_orb, resonating_bell, eldritch_insignia, blasting_core, intelligent_apparatus, flame_barrier //SMITHING
 	;
@@ -72,7 +72,8 @@ public class ResearchManager {
 		cinder_plinth = new ResearchBase("cinder_plinth", new ItemStack(RegistryManager.cinder_plinth), 9, 0);
 		beam_cannon = new ResearchBase("beam_cannon", new ItemStack(RegistryManager.beam_cannon), 12, 7);
 		alchemy = new ResearchBase("alchemy", new ItemStack(RegistryManager.alchemy_tablet), 9, 6).addAncestor(cinder_plinth).addAncestor(aspecti).addAncestor(beam_cannon);
-		
+		catalytic_plug = new ResearchBase("catalytic_plug",new ItemStack(RegistryManager.catalytic_plug), 12, 3).addAncestor(ResearchManager.alchemy);
+
 		//TRANSMUTATION
 		waste = new ResearchBase("waste", new ItemStack(RegistryManager.alchemic_waste), 6, 0);
 		misc_alchemy = new ResearchBase("misc_alchemy", new ItemStack(Blocks.NETHERRACK), 0, 1).addAncestor(waste);
@@ -144,7 +145,8 @@ public class ResearchManager {
 				.addResearch(cinder_plinth)
 				.addResearch(aspecti)
 				.addResearch(alchemy)
-				.addResearch(beam_cannon));
+				.addResearch(beam_cannon)
+				.addResearch(catalytic_plug));
 		researches.add(new ResearchCategory("alchemy", 64)
 				.addResearch(waste)
 				.addResearch(misc_alchemy)
