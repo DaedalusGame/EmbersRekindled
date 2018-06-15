@@ -638,7 +638,7 @@ public class EventManager {
 		}
 	}
 
-	static HashSet<String> removedItems = Sets.newHashSet("embers:advanced_edge","embers:inferno_forge_edge","embers:mech_edge","embers:stone_edge","embers:glow","embers:structure_marker");
+	static HashSet<String> removedItems = Sets.newHashSet("embers:advanced_edge","embers:inferno_forge_edge","embers:mech_edge","embers:glow","embers:structure_marker");
 
 	@SubscribeEvent
 	public void missingItemMappings(RegistryEvent.MissingMappings<Item> event) { //Thanks to KnightMiner for linking the relevant code for me to copy

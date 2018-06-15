@@ -269,12 +269,8 @@ public class BlockStoneEdge extends BlockBase {
 			TileEntity tileEntity = world.getTileEntity(pos.add(0, -i, 0));
 			if (tileEntity instanceof TileEntityLargeTank){
 				((TileEntityLargeTank) tileEntity).updateCapacity();
+				foundBlock = true;
 			}
 		}
-	}
-
-	@Override
-	public Item getItemBlock() {
-		return null;
 	}
 }
