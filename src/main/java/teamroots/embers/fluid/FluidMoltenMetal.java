@@ -9,7 +9,7 @@ import java.awt.Color;
 public class FluidMoltenMetal extends Fluid {
 
     public FluidMoltenMetal(String fluidName, String resourceName) {
-        super(fluidName, new ResourceLocation(Embers.MODID, "blocks/molten_" + resourceName + "_still"), new ResourceLocation(Embers.MODID, "blocks/molten_" + resourceName + "_flowing"));
+        super(fluidName, new ResourceLocation(Embers.MODID, "blocks/" + resourceName + "_still"), new ResourceLocation(Embers.MODID, "blocks/" + resourceName + "_flowing"));
 
         setViscosity(6000);
         setDensity(2000);
