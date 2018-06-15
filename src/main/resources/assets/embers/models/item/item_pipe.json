@@ -1,22 +1,53 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "block/block",
     "textures": {
-        "0": "embers:blocks/item_pipe_tex",
-        "particle": "embers:blocks/item_pipe_tex"
+        "item": "embers:blocks/item_pipe_tex"
     },
     "elements": [
         {
-            "name": "Cube",
-            "from": [ 6.0, 6.0, 6.0 ], 
-            "to": [ 10.0, 10.0, 10.0 ], 
+            "name": "cube",
+            "from": [6, 6, 6],
+            "to": [10, 10, 10],
+            "shade": true,
             "faces": {
-                "north": { "texture": "#0", "uv": [ 1.0, 1.0, 5.0, 5.0 ] },
-                "east": { "texture": "#0", "uv": [ 1.0, 1.0, 5.0, 5.0 ] },
-                "south": { "texture": "#0", "uv": [ 1.0, 1.0, 5.0, 5.0 ] },
-                "west": { "texture": "#0", "uv": [ 1.0, 1.0, 5.0, 5.0 ] },
-                "up": { "texture": "#0", "uv": [ 1.0, 1.0, 5.0, 5.0 ] },
-                "down": { "texture": "#0", "uv": [ 1.0, 1.0, 5.0, 5.0 ] }
+                "north": {"uv": [1, 1, 5, 5], "texture": "#item"},
+                "south": {"uv": [1, 1, 5, 5], "texture": "#item"},
+                "up": {"uv": [1, 1, 5, 5], "texture": "#item"},
+                "down": {"uv": [1, 1, 5, 5], "texture": "#item"}
+            }
+        },
+        {
+            "name": "cube",
+            "from": [10, 6, 6],
+            "to": [16, 10, 10],
+            "shade": true,
+            "faces": {
+                "north": {
+                    "uv": [0, 12, 6, 16],
+                    "texture": "#item",
+                    "rotation": 180
+                },
+                "east": {"uv": [12, 12, 16, 16], "texture": "#item"},
+                "south": {"uv": [0, 12, 6, 16], "texture": "#item"},
+                "up": {"uv": [0, 12, 6, 16], "texture": "#item"},
+                "down": {"uv": [0, 12, 6, 16], "texture": "#item"}
+            }
+        },
+        {
+            "name": "cube",
+            "from": [0, 6, 6],
+            "to": [6, 10, 10],
+            "shade": true,
+            "faces": {
+                "north": {
+                    "uv": [6, 12, 12, 16],
+                    "texture": "#item",
+                    "rotation": 180
+                },
+                "south": {"uv": [6, 12, 12, 16], "texture": "#item"},
+                "west": {"uv": [12, 12, 16, 16], "texture": "#item"},
+                "up": {"uv": [6, 12, 12, 16], "texture": "#item"},
+                "down": {"uv": [6, 12, 12, 16], "texture": "#item"}
             }
         }
     ]

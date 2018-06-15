@@ -13,7 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
@@ -22,6 +24,7 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -36,6 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.block.*;
 import teamroots.embers.damage.*;
 import teamroots.embers.entity.*;
@@ -47,9 +51,12 @@ import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.tileentity.*;
+import teamroots.embers.util.DefaultUpgradeProvider;
 import teamroots.embers.util.EmbersFuelHandler;
 import teamroots.embers.util.Misc;
 import teamroots.embers.world.*;
+
+import javax.annotation.Nullable;
 
 public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
@@ -526,6 +533,20 @@ public class RegistryManager {
 
 	private static void registerCapabilities() {
 		CapabilityManager.INSTANCE.register(IEmberCapability.class, new EmberCapabilityStorage(), DefaultEmberCapability.class);
+		CapabilityManager.INSTANCE.register(IUpgradeProvider.class, new Capability.IStorage<IUpgradeProvider>() {
+			@Nullable
+			@Override
+			public NBTBase writeNBT(Capability<IUpgradeProvider> capability, IUpgradeProvider instance, EnumFacing side) {
+				return null;
+			}
+
+			@Override
+			public void readNBT(Capability<IUpgradeProvider> capability, IUpgradeProvider instance, EnumFacing side, NBTBase nbt) {
+				//NOOP
+			}
+		}, () -> {
+			return new DefaultUpgradeProvider("none", null);
+		});
 	}
 
 	public static void registerItemModifiers(){
