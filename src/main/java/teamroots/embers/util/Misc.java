@@ -44,15 +44,15 @@ public class Misc {
 		Block block = state.getBlock();
 		if (block instanceof BlockLever){
 			EnumFacing face = state.getValue(BlockLever.FACING).getFacing();
-			return face == Misc.getOppositeVerticalFace(side);
+			return face == side;
 		}
 		else if (block instanceof BlockButton){
 			EnumFacing face = state.getValue(BlockButton.FACING);
-			return face == Misc.getOppositeVerticalFace(side);
+			return face == side;
 		}
 		else if (block instanceof BlockRedstoneTorch){
 			EnumFacing face = state.getValue(BlockRedstoneTorch.FACING);
-			return face == Misc.getOppositeVerticalFace(side);
+			return face == side;
 		}
 		return false;
 	}
