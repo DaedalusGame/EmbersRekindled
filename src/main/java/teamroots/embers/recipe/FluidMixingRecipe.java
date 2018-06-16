@@ -15,13 +15,6 @@ public class FluidMixingRecipe {
 	}
 	
 	public FluidStack getResult(ArrayList<FluidStack> fluids){
-		for (FluidStack fluid : fluids) {
-			boolean doContinue = true;
-			for (int j = 0; j < inputs.size() && doContinue; j++) {
-				doContinue = false;
-				fluid.amount -= inputs.get(j).amount;
-			}
-		}
 		return output;
 	}
 	

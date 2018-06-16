@@ -147,7 +147,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			if (facing != EnumFacing.UP){
+			if (facing != EnumFacing.UP && facing != null){
 				return true;
 			}
 		}

@@ -138,7 +138,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && facing != EnumFacing.UP && facing != EnumFacing.DOWN) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && facing != EnumFacing.UP && facing != EnumFacing.DOWN && facing != null) {
             return true;
         }
         return super.hasCapability(capability, facing);
