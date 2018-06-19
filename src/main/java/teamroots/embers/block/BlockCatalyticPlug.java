@@ -46,8 +46,8 @@ public class BlockCatalyticPlug extends BlockTEBase {
     }
 
     @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        return BlockRenderLayer.SOLID == layer || BlockRenderLayer.TRANSLUCENT == layer;
     }
 
     @Override

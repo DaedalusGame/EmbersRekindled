@@ -1,11 +1,17 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "embers:catalytic_plug",
-    "transform": "forge:default-block"
+    "model": "forge:multi-layer",
+    "custom": {
+      "base": "embers:catalytic_plug#base",
+      "Solid": "embers:catalytic_plug#base",
+      "Translucent": "embers:catalytic_plug#glass"
+    }
   },
   "variants":{
-    "inventory":[{}],
+    "inventory":[{ "transform": "forge:default-block" }],
+    "base": [{ "model": "embers:catalytic_plug_base" }],
+    "glass": [{ "model": "embers:catalytic_plug_glass" }],
     "facing":{
       "down":  { "x": 180 },
       "up":    { },
