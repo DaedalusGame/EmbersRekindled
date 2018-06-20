@@ -176,7 +176,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 								remainder = ((TileEntityBin) outputTile).inventory.insertItem(0, remainder, false);
 							}
 							if (!remainder.isEmpty() && !getWorld().isRemote) {
-								getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, remainder));
+								getWorld().spawnEntity(new EntityItem(getWorld(), middlePos.getX() + 0.5, middlePos.getY() + 0.5, middlePos.getZ() + 0.5, remainder));
 							}
 						}
                         stamp.markDirty();

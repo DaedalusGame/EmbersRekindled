@@ -162,6 +162,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
                                 tank.fill(output, true);
                                 top.markDirty();
                                 top.inventory.extractItem(0, recipe.getInputConsumed(), false);
+								progress = 0;
                                 markDirty();
                             }
                         }
