@@ -29,9 +29,10 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageFlameShieldFX.MessageHolder.class,MessageFlameShieldFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageEmberSizedBurstFX.MessageHolder.class,MessageEmberSizedBurstFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageCookItemFX.MessageHolder.class,MessageCookItemFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageResonatingBellFX.MessageHolder.class,MessageResonatingBellFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageMetallurgicDustFX.MessageHolder.class,MessageMetallurgicDustFX.class,id ++,Side.CLIENT);
 
         INSTANCE.registerMessage(MessageCasterOrb.MessageHolder.class,MessageCasterOrb.class,id ++,Side.SERVER);
-        INSTANCE.registerMessage(MessageRemovePlayerEmber.MessageHolder.class,MessageRemovePlayerEmber.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageTEUpdateRequest.MessageHolder.class,MessageTEUpdateRequest.class,id ++,Side.SERVER);
     }
