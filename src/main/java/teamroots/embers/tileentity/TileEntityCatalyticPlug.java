@@ -157,4 +157,12 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
     @Override
     public void markForUpdate() {
     }
+
+    public FluidStack getFluidStack() {
+        return tank.getFluid();
+    }
+
+    public int getCapacity() {
+        return tank.getCapacity();
+    }
 }

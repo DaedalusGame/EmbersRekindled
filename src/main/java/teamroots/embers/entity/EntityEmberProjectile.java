@@ -39,9 +39,9 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 	public EntityEmberProjectile(World worldIn) {
 		super(worldIn);
 		this.setInvisible(true);
-		this.getDataManager().register(value, Float.valueOf(0));
+		this.getDataManager().register(value, 0f);
 		this.getDataManager().register(dead, false);
-		this.getDataManager().register(lifetime, Integer.valueOf(160));
+		this.getDataManager().register(lifetime, 160);
 	}
 	
 	public void initCustom(double x, double y, double z, double vx, double vy, double vz, double value, UUID playerId){
@@ -83,9 +83,9 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 	@Override
 	public void onUpdate(){
 		super.onUpdate();
-		if (!getEntityWorld().isRemote && getDataManager().get(lifetime) > 18 && getDataManager().get(dead)){
-			PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
-		}
+		//if (!getEntityWorld().isRemote && getDataManager().get(lifetime) > 18 && getDataManager().get(dead)){
+			//PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
+		//}
 		getDataManager().set(lifetime, getDataManager().get(lifetime)-1);
 		getDataManager().setDirty(lifetime);
 		if (getDataManager().get(lifetime) <= 0){
@@ -115,7 +115,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 				double deltaX = posX - prevPosX;
 				double deltaY = posY - prevPosY;
 				double deltaZ = posZ - prevPosZ;
-				double dist = Math.ceil(Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ) * 4);
+				double dist = Math.ceil(Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ) * 10);
 				for (double i = 0; i < dist; i ++){
 					double coeff = i/dist;
 					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f, 24);

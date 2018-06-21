@@ -6,6 +6,8 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -62,8 +64,9 @@ public class MessageCasterOrb implements IMessage {
                     int level = ItemModUtil.getModifierLevel(heldStack, EmbersAPI.CASTER_ORB);
                     UUID uuid = player.getUniqueID();
                     if (level > 0 && EmberInventoryUtil.getEmberTotal(player) > EmbersAPI.CASTER_ORB.cost && !ModifierCasterOrb.hasCooldown(uuid)) {
-                        float offX = 0.5f * (float) Math.sin(Math.toRadians(-player.rotationYaw - 90));
-                        float offZ = 0.5f * (float) Math.cos(Math.toRadians(-player.rotationYaw - 90));
+                        float handmod = player.getPrimaryHand() == EnumHandSide.RIGHT ? 1.0f : -1.0f;
+                        float offX = handmod * 0.5f * (float) Math.sin(Math.toRadians(-player.rotationYaw - 90));
+                        float offZ = handmod * 0.5f * (float) Math.cos(Math.toRadians(-player.rotationYaw - 90));
                         EmberInventoryUtil.removeEmber(player, EmbersAPI.CASTER_ORB.cost);
                         double lookDist = Math.sqrt(message.lookX * message.lookX + message.lookY * message.lookY + message.lookZ * message.lookZ);
                         if (lookDist == 0)

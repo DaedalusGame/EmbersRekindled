@@ -37,6 +37,7 @@ public class ItemIgnitionCannon extends ItemBase {
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft){
 		double charge = (Math.min(20, getMaxItemUseDuration(stack)-timeLeft))/20.0;
 		double handmod = entity.getActiveHand() == EnumHand.MAIN_HAND ? 1.0 : -1.0;
+		handmod *= entity.getPrimaryHand() == EnumHandSide.RIGHT ? 1.0 : -1.0;
 		double posX = entity.posX+entity.getLookVec().x+handmod*(entity.width/2.0)*Math.sin(Math.toRadians(-entity.rotationYaw-90));
 		double posY = entity.posY+entity.getEyeHeight()-0.2+entity.getLookVec().y;
 		double posZ = entity.posZ+entity.getLookVec().z+handmod*(entity.width/2.0)*Math.cos(Math.toRadians(-entity.rotationYaw-90));

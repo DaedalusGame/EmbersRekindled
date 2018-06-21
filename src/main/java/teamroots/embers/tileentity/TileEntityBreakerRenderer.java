@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockAutoHammer;
+import teamroots.embers.block.BlockBreaker;
 import teamroots.embers.util.RenderUtil;
 import teamroots.embers.util.StructBox;
 import teamroots.embers.util.StructUV;
@@ -29,7 +30,7 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer<TileEnt
 	
 	@Override
 	public void render(TileEntityBreaker tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
-		if (tile != null && tile.getWorld().getBlockState(tile.getPos()).getBlock() == RegistryManager.breaker){
+		if (tile != null && tile.getWorld().getBlockState(tile.getPos()).getBlock() instanceof BlockBreaker){
 			float ticks = tile.ticksExisted;
 			    
 			GlStateManager.pushMatrix();

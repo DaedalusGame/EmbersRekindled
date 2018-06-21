@@ -6,10 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,10 +35,20 @@ public class ItemCinderStaff extends ItemBase {
 			double posX = entity.posX + entity.getLookVec().x * spawnDistance;
 			double posY = entity.posY + entity.getEyeHeight() + entity.getLookVec().y * spawnDistance;
 			double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
-			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, charge, entity.getUniqueID());
+			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, Math.max(charge,0.5), entity.getUniqueID());
+			if(charge < 1.0)
+				proj.getDataManager().set(proj.lifetime,5);
 			world.spawnEntity(proj);
-			world.playSound(null,posX,posY,posZ, charge > 10.0 ? SoundManager.FIREBALL_BIG : SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+			SoundEvent sound;
+			if (charge >= 10.0)
+				sound = SoundManager.FIREBALL_BIG;
+			else if(charge >= 1.0)
+				sound = SoundManager.FIREBALL;
+			else
+				sound = SoundManager.CINDER_STAFF_FAIL;
+			world.playSound(null,posX,posY,posZ, sound, SoundCategory.PLAYERS, 1.0f, 1.0f);
 		}
+		entity.swingArm(entity.getActiveHand());
 		stack.getTagCompound().setInteger("cooldown", COOLDOWN);
 	}
 	
@@ -66,6 +73,8 @@ public class ItemCinderStaff extends ItemBase {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count){
+		if(stack.getTagCompound().getInteger("cooldown") > 0)
+			player.resetActiveHand();
 		double charge = ((Math.min(60, 72000-count))/60.0)*15.0;
 		for (int i = 0; i < 4; i ++){
 			float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
