@@ -19,6 +19,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.SoundManager;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageMetallurgicDustFX;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -91,10 +93,13 @@ public class OreTransmutationUtil {
                 String tag = entry + ":" + orename;
                 if (existingTags.contains(tag))
                     continue;
+                if (!ForgeRegistries.BLOCKS.containsKey(registryName))
+                    return;
+                Block block = ForgeRegistries.BLOCKS.getValue(registryName);
                 if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
-                    registerOre(entry, registryName);
+                    registerOre(entry, block);
                 else
-                    registerOre(entry, registryName, stack.getMetadata());
+                    registerOre(entry, block.getStateFromMeta(stack.getMetadata()));
                 existingTags.add(tag);
             }
         }
@@ -232,7 +237,7 @@ public class OreTransmutationUtil {
             boolean failed = random.nextDouble() < FAIL_CHANCE;
             world.setBlockState(visit, failed ? toFailure : toReplace, 2);
             world.playSound(null,visit, failed ? SoundManager.METALLURGIC_DUST_FAIL : SoundManager.METALLURGIC_DUST, SoundCategory.BLOCKS, 1.0f, random.nextFloat()+0.5f);
-            //TODO: fx packet
+            PacketHandler.INSTANCE.sendToAll(new MessageMetallurgicDustFX(visit.getX(),visit.getY(),visit.getZ()));
             visitedPositions.add(visit);
             for (EnumFacing facing : EnumFacing.VALUES) {
                 BlockPos neighbor = visit.offset(facing);
