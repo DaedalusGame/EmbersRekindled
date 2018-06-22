@@ -36,9 +36,9 @@ public class MessageMetallurgicDustFX implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeDouble(posX);
-		buf.writeDouble(posY);
-		buf.writeDouble(posZ);
+		buf.writeInt(posX);
+		buf.writeInt(posY);
+		buf.writeInt(posZ);
 	}
 
     public static class MessageHolder implements IMessageHandler<MessageMetallurgicDustFX,IMessage>
@@ -49,8 +49,11 @@ public class MessageMetallurgicDustFX implements IMessage {
     		World world = Minecraft.getMinecraft().world;
 			if (world.isRemote){
 				Minecraft.getMinecraft().addScheduledTask(()-> {
-					for (double i = 0; i < 6; i++) {
-						ParticleUtil.spawnParticleSpark(world, message.posX + random.nextFloat(), message.posY + random.nextFloat(), message.posZ + random.nextFloat(), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 3.0f + random.nextFloat(), 3+random.nextInt(10));
+					for (double i = 0; i < 20; i++) {
+						float offsetX = random.nextFloat();
+						float offsetY = random.nextFloat();
+						float offsetZ = random.nextFloat();
+						ParticleUtil.spawnParticleSpark(world, message.posX + offsetX, message.posY + offsetY, message.posZ + offsetZ, 0.1f * (offsetX - 0.5f), 0.1f * (offsetY - 0.5f), 0.1f * (offsetZ - 0.5f), 255, 64, 16, 10.0f + random.nextFloat(), 12+random.nextInt(12));
 					}
 				});
 			}

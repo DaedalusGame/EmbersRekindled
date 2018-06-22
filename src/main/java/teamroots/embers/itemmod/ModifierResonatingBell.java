@@ -87,6 +87,8 @@ public class ModifierResonatingBell extends ModifierBase {
                         PacketHandler.INSTANCE.sendToAll(new MessageResonatingBellFX(p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5)); //TODO: Guess who gets to optimize this. The girl reading this.
                     }
                     world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundManager.RESONATING_BELL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                } else {
+                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundManager.RESONATING_BELL, SoundCategory.PLAYERS, 1.0f, 0.1f);
                 }
                 EmberInventoryUtil.removeEmber(player, EmbersAPI.RESONATING_BELL.cost);
             }

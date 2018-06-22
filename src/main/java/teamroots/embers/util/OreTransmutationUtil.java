@@ -96,6 +96,9 @@ public class OreTransmutationUtil {
                 if (!ForgeRegistries.BLOCKS.containsKey(registryName))
                     return;
                 Block block = ForgeRegistries.BLOCKS.getValue(registryName);
+                IBlockState defaultState = block.getDefaultState();
+                if (!defaultState.isFullCube())
+                    continue;
                 if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
                     registerOre(entry, block);
                 else
@@ -237,7 +240,10 @@ public class OreTransmutationUtil {
             boolean failed = random.nextDouble() < FAIL_CHANCE;
             world.setBlockState(visit, failed ? toFailure : toReplace, 2);
             world.playSound(null,visit, failed ? SoundManager.METALLURGIC_DUST_FAIL : SoundManager.METALLURGIC_DUST, SoundCategory.BLOCKS, 1.0f, random.nextFloat()+0.5f);
-            PacketHandler.INSTANCE.sendToAll(new MessageMetallurgicDustFX(visit.getX(),visit.getY(),visit.getZ()));
+            if(failed)
+                world.playEvent(2001, visit, Block.getStateId(state));
+            else
+                PacketHandler.INSTANCE.sendToAll(new MessageMetallurgicDustFX(visit.getX(),visit.getY(),visit.getZ()));
             visitedPositions.add(visit);
             for (EnumFacing facing : EnumFacing.VALUES) {
                 BlockPos neighbor = visit.offset(facing);
