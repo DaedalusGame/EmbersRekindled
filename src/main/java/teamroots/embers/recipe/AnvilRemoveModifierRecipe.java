@@ -1,5 +1,6 @@
 package teamroots.embers.recipe;
 
+import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import teamroots.embers.api.itemmod.ItemModUtil;
@@ -20,5 +21,10 @@ public class AnvilRemoveModifierRecipe extends DawnstoneAnvilRecipe {
         results.add(result);
         results.addAll(ItemModUtil.removeAllModifiers(result));
         return results;
+    }
+
+    @Override
+    public List<IWrappableRecipe> getWrappers() {
+        return Lists.newArrayList();
     }
 }

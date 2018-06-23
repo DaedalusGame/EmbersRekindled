@@ -66,6 +66,10 @@ public class ItemStampingRecipe {
 		return Lists.newArrayList(input.getMatchingStacks());
 	}
 
+	public List<ItemStack> getStamps() {
+		return Lists.newArrayList(stamp.getMatchingStacks());
+	}
+
 	public List<ItemStack> getOutputs() { return Lists.newArrayList(result); }
 
 	@Deprecated

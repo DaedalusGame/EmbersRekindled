@@ -29,7 +29,6 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 	@Nonnull
 	private final String localizedName;
 	private final AspectRenderUtil helper;
-	private AlchemyRecipe lastRecipe = null;
 	private static final ResourceLocation resourceLocation = new ResourceLocation(Embers.MODID, "textures/gui/jei_alchemy.png");
 
 	public AlchemyRecipeCategory(IGuiHelper helper)
@@ -68,6 +67,7 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 		stacks.init(3, true, 45, 18);
 		stacks.init(4, true, 27, 36);
 		stacks.init(5, false, 81, 18);
+		recipeWrapper.helper = helper;
 		helper.addAspectStacks(recipeWrapper, stacks, 6);
 		stacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {if(slotIndex >= 6) tooltip.clear();});
 
@@ -79,15 +79,6 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 
 		if(ingredients.getOutputs(ItemStack.class).size() > 0) {
 			stacks.set(5, ingredients.getOutputs(ItemStack.class).get(0));
-		}
-
-		lastRecipe = recipeWrapper.recipe;
-	}
-
-	@Override
-	public void drawExtras(Minecraft minecraft) {
-		if(lastRecipe != null) {
-			helper.drawAspectBars(minecraft, lastRecipe);
 		}
 	}
 }

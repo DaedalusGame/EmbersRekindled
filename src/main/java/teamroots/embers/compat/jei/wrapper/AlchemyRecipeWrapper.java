@@ -2,11 +2,13 @@ package teamroots.embers.compat.jei.wrapper;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import teamroots.embers.compat.jei.EmbersJEIPlugin;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.api.alchemy.AspectList;
+import teamroots.embers.util.AspectRenderUtil;
 import teamroots.embers.util.IHasAspects;
 
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ public class AlchemyRecipeWrapper implements IRecipeWrapper, IHasAspects {
 	{
 		this.recipe = recipe;
 	}
+
+	public AspectRenderUtil helper;
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
@@ -35,4 +39,8 @@ public class AlchemyRecipeWrapper implements IRecipeWrapper, IHasAspects {
 		return recipe.getAspects();
 	}
 
+	@Override
+	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+		helper.drawAspectBars(minecraft, this);
+	}
 }
