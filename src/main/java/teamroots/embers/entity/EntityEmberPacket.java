@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSparkleFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -85,7 +86,7 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 		super.onUpdate();
 		if (this.lifetime == 79){
 			if (!getEntityWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
+				PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ,false));
 			}
 		}
 		
@@ -141,10 +142,12 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 		if (tile instanceof IEmberPacketReceiver){
 			if (((IEmberPacketReceiver)tile).onReceive(this)){
 				if (tile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
+					IEmberCapability capability = tile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
+					assert capability != null;
 					if (!getEntityWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ));
+						PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ,capability.getEmber() + value > capability.getEmberCapacity()));
 					}
-					tile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null).addAmount(value, true);
+					capability.addAmount(value, true);
 					tile.markDirty();
 					this.motionX = 0;
 					this.motionY = 0;
