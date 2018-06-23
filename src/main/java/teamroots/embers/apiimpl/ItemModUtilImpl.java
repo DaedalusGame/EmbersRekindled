@@ -8,11 +8,24 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import teamroots.embers.api.itemmod.IItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
+import teamroots.embers.util.ItemModUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class ItemModUtilImpl implements IItemModUtil {
+    @Override
+    public Collection<ModifierBase> getAllModifiers() {
+        return ItemModUtil.modifierRegistry.values();
+    }
+
+    @Override
+    public List<ItemStack> getAllModifierItems() {
+        return ItemModUtil.modifierRegistry.keySet().stream().map(ItemStack::new).collect(Collectors.toList());
+    }
+
     @Override
     public ModifierBase getModifier(String name) {
         return teamroots.embers.util.ItemModUtil.nameToModifier.get(name);
@@ -67,13 +80,15 @@ class ItemModUtilImpl implements IItemModUtil {
         if (tagModifiers.tagCount() > 0){ //TODO: cleanup
             List<ItemStack> results = new ArrayList<>();
             NBTTagList remainingModifiers = new NBTTagList();
+            List<ModifierBase> removedModifiers = new ArrayList<>();
             for (int i = 0; i < tagModifiers.tagCount(); i ++){
                 NBTTagCompound tagModifier = tagModifiers.getCompoundTagAt(i);
                 ItemStack s = new ItemStack(tagModifier.getCompoundTag("item"));
                 ModifierBase modifier = getModifier(s);
                 if (modifier != null){
-                    if(modifier.countTowardsTotalLevel) {
+                    if(modifier.canRemove) {
                         for (int j = 0; j < tagModifier.getInteger("level"); j++) {
+                            removedModifiers.add(modifier);
                             results.add(new ItemStack(tagModifier.getCompoundTag("item")));
                         }
                     } else {
@@ -82,6 +97,9 @@ class ItemModUtilImpl implements IItemModUtil {
                 }
             }
             tagCompound.getCompoundTag(IItemModUtil.HEAT_TAG).setTag("modifiers", remainingModifiers);
+            for (ModifierBase modifier : removedModifiers) {
+                modifier.onRemove(stack);
+            }
             return results;
         }
         return Lists.newArrayList();

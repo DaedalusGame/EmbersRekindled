@@ -6,6 +6,7 @@ import net.minecraft.item.*;
 public class ModifierBase {
 	public enum EnumType {
 		ALL,
+		TOOL_OR_ARMOR,
 		TOOL,
 		ARMOR,
 		HELMET,
@@ -18,6 +19,7 @@ public class ModifierBase {
 	public String name = "";
 	public double cost = 0;
 	public boolean countTowardsTotalLevel = false;
+	public boolean canRemove = true;
 
 	public ModifierBase(EnumType type, String name, double cost, boolean levelCounts){
 		this.type = type;
@@ -31,6 +33,8 @@ public class ModifierBase {
 		switch (type) {
 			case ALL:
 				return true;
+			case TOOL_OR_ARMOR:
+				return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemArmor;
 			case TOOL:
 				return item instanceof ItemSword || item instanceof ItemTool;
 			case ARMOR:

@@ -4,10 +4,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import teamroots.embers.Embers;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IItemModUtil {
     String HEAT_TAG = Embers.MODID+":heat_tag";
+
+    Collection<ModifierBase> getAllModifiers();
+
+    List<ItemStack> getAllModifierItems();
 
     ModifierBase getModifier(String name);
 

@@ -3,11 +3,21 @@ package teamroots.embers.api.itemmod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class ItemModUtil {
     public static IItemModUtil IMPL;
     public static final String HEAT_TAG = IItemModUtil.HEAT_TAG; //I'm gonna be honest with you, I have no idea where to put this.
+
+    public static Collection<ModifierBase> getAllModifiers() {
+        return IMPL.getAllModifiers();
+    }
+
+    public static List<ItemStack> getAllModifierItems() {
+        return IMPL.getAllModifierItems();
+    }
 
     public static ModifierBase getModifier(String name) {
         return IMPL.getModifier(name);

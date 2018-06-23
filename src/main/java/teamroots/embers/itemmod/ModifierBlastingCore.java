@@ -26,7 +26,7 @@ import teamroots.embers.util.Misc;
 public class ModifierBlastingCore extends ModifierBase {
 
 	public ModifierBlastingCore() {
-		super(EnumType.ALL,"blasting_core",2.0,true);
+		super(EnumType.TOOL_OR_ARMOR,"blasting_core",2.0,true);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
