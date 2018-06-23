@@ -58,7 +58,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 	
 	public TileEntityCinderPlinth(){
 		super();
-		capability.setEmberCapacity(24000);
+		capability.setEmberCapacity(4000);
 		capability.setEmber(0);
 	}
 	

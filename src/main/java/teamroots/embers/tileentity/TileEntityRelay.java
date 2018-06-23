@@ -174,10 +174,8 @@ public class TileEntityRelay extends TileEntity implements ITileEntityBase, IEmb
 					}
 				}
 			}
-			else {
-				if (tile instanceof IEmberPacketReceiver){
-					return ((IEmberPacketReceiver)tile).isFull();
-				}
+			else if (tile instanceof IEmberPacketReceiver) {
+				return ((IEmberPacketReceiver) tile).isFull();
 			}
 		}
 		return true;
