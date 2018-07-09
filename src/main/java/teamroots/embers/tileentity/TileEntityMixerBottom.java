@@ -167,7 +167,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
     @Override
     public void update() {
-        if(getWorld().isRemote)
+        if (getWorld().isRemote)
             handleSound();
         World world = getWorld();
         BlockPos pos = getPos();
@@ -176,15 +176,15 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
         if (top != null) {
             List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos.up(), EnumFacing.VALUES);
             UpgradeUtil.verifyUpgrades(this, upgrades);
-            boolean cancel = UpgradeUtil.doWork(this,upgrades);
-            double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+            boolean cancel = UpgradeUtil.doWork(this, upgrades);
+            double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
             if (!cancel && top.capability.getEmber() >= emberCost) {
                 ArrayList<FluidStack> fluids = getFluids();
                 FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
                 if (recipe != null) {
                     IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                     FluidStack output = recipe.getResult(fluids);
-                    output = UpgradeUtil.transformOutput(this,output,upgrades);
+                    output = UpgradeUtil.transformOutput(this, output, upgrades);
                     int amount = tank.fill(output, false);
                     if (amount != 0) {
                         isWorking = true;
@@ -200,14 +200,13 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
     }
 
     public void consumeFluids(FluidMixingRecipe recipe) {
-        for (FluidTank tank : tanks) {
-            FluidStack tankFluid = tank.getFluid();
-            boolean doContinue = true;
-            for (int j = 0; j < recipe.inputs.size() && doContinue; j++) {
-                FluidStack recipeFluid = recipe.inputs.get(j);
+        for (int j = 0; j < recipe.inputs.size(); j++) {
+            FluidStack recipeFluid = recipe.inputs.get(j).copy();
+            for (FluidTank tank : tanks) {
+                FluidStack tankFluid = tank.getFluid();
                 if (recipeFluid != null && tankFluid != null && recipeFluid.getFluid() == tankFluid.getFluid()) {
-                    doContinue = false;
-                    tank.drain(recipeFluid.amount, true);
+                    FluidStack stack = tank.drain(recipeFluid.amount, true);
+                    recipeFluid.amount -= stack != null ? stack.amount : 0;
                 }
             }
         }
@@ -217,7 +216,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
     public void playSound(int id) {
         switch (id) {
             case SOUND_PROCESS:
-                Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.MIXER_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+1.0f,(float)pos.getZ()+0.5f);
+                Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.MIXER_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 1.0f, (float) pos.getZ() + 0.5f);
                 break;
         }
         soundsPlaying.add(id);
