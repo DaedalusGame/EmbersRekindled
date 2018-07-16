@@ -20,28 +20,18 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.block.BlockPump;
-import teamroots.embers.power.DefaultMechCapability;
+import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.FluidUtil;
 
 public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable {
+	public static final double EMBER_COST = 0.5;
+
 	int ticksExisted = 0;
 	int progress = 0;
 	EnumFacing front = EnumFacing.UP;
-	public DefaultMechCapability capability = new DefaultMechCapability(){
-		@Override
-		public double getPower(EnumFacing face){
-			if (face != null){
-				return 0.0;
-			}
-			return super.getPower(face);
-		}
-		
-		@Override
-		public void onContentsChanged(){
-			TileEntityPumpBottom.this.markDirty();
-		}
-	};
+	public IEmberCapability capability = new DefaultEmberCapability();
 	
 	public TileEntityPumpBottom(){
 		super();
@@ -123,7 +113,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	public boolean attemptPump(BlockPos pos){
 		IBlockState state = world.getBlockState(pos);
 		if (state.getBlock() instanceof IFluidBlock && ((IFluidBlock)state.getBlock()).canDrain(world, pos) || state.getBlock() instanceof BlockStaticLiquid){
-			if (capability.getPower(null) > 0 || state.getBlock() == Blocks.WATER){
+			if (capability.getEmber() > 0 || state.getBlock() == Blocks.WATER){
 				FluidStack stack = FluidUtil.getFluid(world, pos, state);
 				if (stack != null){
 					TileEntityPumpTop t = (TileEntityPumpTop)world.getTileEntity(getPos().up());
@@ -156,15 +146,18 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 		if (state.getBlock() instanceof BlockPump){
 			this.front = state.getValue(BlockPump.facing);
 		}
-		this.progress += Math.min(100, Math.max(0, (int)Math.floor(0.5*capability.getPower(null))));
-		if (this.progress > 400){
-			progress -= 400;
-			boolean doContinue = true;
-			for (int r = 0; r < 6 && doContinue; r ++){
-				for (int i = -r; i < r+1 && doContinue; i ++){
-					for (int j = -r; j < 1 && doContinue; j ++){
-						for (int k = -r; k < r+1 && doContinue; k ++){
-							doContinue = attemptPump(getPos().add(i, j-1, k));
+		if (capability.getEmber() >= EMBER_COST) {
+			this.progress += 1;
+			capability.removeAmount(EMBER_COST,false);
+			if (this.progress > 400) {
+				progress -= 400;
+				boolean doContinue = true;
+				for (int r = 0; r < 6 && doContinue; r++) {
+					for (int i = -r; i < r + 1 && doContinue; i++) {
+						for (int j = -r; j < 1 && doContinue; j++) {
+							for (int k = -r; k < r + 1 && doContinue; k++) {
+								doContinue = attemptPump(getPos().add(i, j - 1, k));
+							}
 						}
 					}
 				}

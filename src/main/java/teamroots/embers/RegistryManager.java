@@ -41,10 +41,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.block.*;
+import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.damage.*;
 import teamroots.embers.entity.*;
 import teamroots.embers.fluid.*;
 import teamroots.embers.item.*;
+import teamroots.embers.item.bauble.ItemEmberAmulet;
+import teamroots.embers.item.bauble.ItemEmberBelt;
+import teamroots.embers.item.bauble.ItemEmberRing;
 import teamroots.embers.item.block.*;
 import teamroots.embers.itemmod.*;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -80,7 +84,7 @@ public class RegistryManager {
 	public static Fluid fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
 						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
 	
-	public static Item gear_iron, gear_dawnstone, mantle_bulb, radiant_crown, rocket_booster, ashen_amulet, glimmer_charm, nonbeliever_amulet, dawnstone_mail, explosion_charm, climbers_belt, crystal_lenses, ember_amulet, ember_belt, ember_ring, archaic_circuit, flame_barrier, eldritch_insignia, intelligent_apparatus, caster_orb, resonating_bell, superheater, jet_augment, blasting_core, codex, wildfire_core, ember_cluster, adhesive, tyrfing, isolated_materia, archaic_brick, ancient_motive_core, ashen_cloth, glimmer_shard, glimmer_lamp, inflictor_gem, ashen_cloak_head, ashen_cloak_chest, ashen_cloak_legs, ashen_cloak_boots, aster, shard_aster, alchemic_waste, aspectus_iron, aspectus_copper, aspectus_dawnstone, aspectus_lead, aspectus_silver, golems_eye, dust_ash, grandhammer, pickaxe_clockwork, axe_clockwork, staff_ember, ignition_cannon, ember_jar, ember_cartridge, pickaxe_copper, axe_copper, shovel_copper, hoe_copper, sword_copper, pickaxe_silver, axe_silver, shovel_silver, hoe_silver, sword_silver, pickaxe_lead, axe_lead, shovel_lead, hoe_lead, sword_lead, pickaxe_dawnstone, axe_dawnstone, shovel_dawnstone, hoe_dawnstone, sword_dawnstone, debug, plate_gold, plate_iron, plate_caminite_raw, plate_mithril, stamp_bar_raw, stamp_plate_raw, stamp_flat_raw, nugget_dawnstone, plate_copper, plate_lead, plate_silver, plate_dawnstone, nugget_iron, nugget_mithril, ingot_astralite, ingot_dawnstone, ingot_umber_steel, ingot_mithril, crystal_ember, shard_ember, stamp_bar, stamp_plate, stamp_flat, tinker_hammer, ember_detector, ingot_copper, ingot_silver, ingot_lead, nugget_copper, nugget_silver, nugget_lead, brick_caminite, blend_caminite, plate_caminite;
+	public static Item gear_iron, gear_dawnstone, radiant_crown, rocket_booster, ashen_amulet, glimmer_charm, nonbeliever_amulet, dawnstone_mail, explosion_charm, climbers_belt, crystal_lenses, archaic_circuit, flame_barrier, eldritch_insignia, intelligent_apparatus, caster_orb, resonating_bell, superheater, jet_augment, blasting_core, codex, wildfire_core, ember_cluster, adhesive, tyrfing, isolated_materia, archaic_brick, ancient_motive_core, ashen_cloth, glimmer_shard, glimmer_lamp, inflictor_gem, ashen_cloak_head, ashen_cloak_chest, ashen_cloak_legs, ashen_cloak_boots, aster, shard_aster, alchemic_waste, aspectus_iron, aspectus_copper, aspectus_dawnstone, aspectus_lead, aspectus_silver, golems_eye, dust_ash, grandhammer, pickaxe_clockwork, axe_clockwork, staff_ember, ignition_cannon, ember_jar, ember_cartridge, pickaxe_copper, axe_copper, shovel_copper, hoe_copper, sword_copper, pickaxe_silver, axe_silver, shovel_silver, hoe_silver, sword_silver, pickaxe_lead, axe_lead, shovel_lead, hoe_lead, sword_lead, pickaxe_dawnstone, axe_dawnstone, shovel_dawnstone, hoe_dawnstone, sword_dawnstone, debug, plate_gold, plate_iron, plate_caminite_raw, plate_mithril, stamp_bar_raw, stamp_plate_raw, stamp_flat_raw, nugget_dawnstone, plate_copper, plate_lead, plate_silver, plate_dawnstone, nugget_iron, nugget_mithril, ingot_astralite, ingot_dawnstone, ingot_umber_steel, ingot_mithril, crystal_ember, shard_ember, stamp_bar, stamp_plate, stamp_flat, tinker_hammer, ember_detector, ingot_copper, ingot_silver, ingot_lead, nugget_copper, nugget_silver, nugget_lead, brick_caminite, blend_caminite, plate_caminite;
 	public static Item ingot_nickel, nugget_nickel, plate_nickel, pickaxe_nickel, axe_nickel, shovel_nickel, hoe_nickel, sword_nickel;
 	public static Item ingot_aluminum, nugget_aluminum, plate_aluminum, pickaxe_aluminum, axe_aluminum, shovel_aluminum, hoe_aluminum, sword_aluminum;
 	public static Item ingot_tin, nugget_tin, plate_tin, pickaxe_tin, axe_tin, shovel_tin, hoe_tin, sword_tin;
@@ -219,7 +223,7 @@ public class RegistryManager {
 		blocks.add(creative_ember_source = (new BlockCreativeEmberSource(Material.ROCK,"creative_ember_source",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		//blocks.add(gearbox_frame = (new BlockGearbox(Material.ROCK,"gearbox_frame",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		//blocks.add(steam_engine = (new BlockSteamEngine(Material.ROCK,"steam_engine",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
-		//blocks.add(mechanical_pump = (new BlockPump(Material.ROCK,"mechanical_pump",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(mechanical_pump = (new BlockPump(Material.ROCK,"mechanical_pump",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(catalytic_plug = (new BlockCatalyticPlug(Material.ROCK,"catalytic_plug",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 
 		if (ConfigManager.enableAluminum){
@@ -250,14 +254,14 @@ public class RegistryManager {
 		items.add(ingot_silver = new ItemBase("ingot_silver",true).setCreativeTab(Embers.resource_tab));
 		items.add(ingot_dawnstone = new ItemBase("ingot_dawnstone",true).setCreativeTab(Embers.resource_tab));
 		// Gloomshroud - Add Mithril Ingot
-		items.add(ingot_mithril = new ItemBase("ingot_mithril", true).setCreativeTab(Embers.resource_tab));
+		//items.add(ingot_mithril = new ItemBase("ingot_mithril", true).setCreativeTab(Embers.resource_tab));
 		items.add(nugget_iron = new ItemBase("nugget_iron",true).setCreativeTab(Embers.resource_tab));
 		items.add(nugget_copper = new ItemBase("nugget_copper",true).setCreativeTab(Embers.resource_tab));
 		items.add(nugget_lead = new ItemBase("nugget_lead",true).setCreativeTab(Embers.resource_tab));
 		items.add(nugget_silver = new ItemBase("nugget_silver",true).setCreativeTab(Embers.resource_tab));
 		items.add(nugget_dawnstone = new ItemBase("nugget_dawnstone",true).setCreativeTab(Embers.resource_tab));
 		// Gloomshroud - Add Mithril Nugget
-		items.add(nugget_mithril = new ItemBase("nugget_mithril", true).setCreativeTab(Embers.resource_tab));
+		//items.add(nugget_mithril = new ItemBase("nugget_mithril", true).setCreativeTab(Embers.resource_tab));
 		items.add(plate_copper = new ItemBase("plate_copper",true).setCreativeTab(Embers.resource_tab));
 		items.add(plate_lead = new ItemBase("plate_lead",true).setCreativeTab(Embers.resource_tab));
 		items.add(plate_silver = new ItemBase("plate_silver",true).setCreativeTab(Embers.resource_tab));
@@ -265,7 +269,7 @@ public class RegistryManager {
 		items.add(plate_iron = new ItemBase("plate_iron",true).setCreativeTab(Embers.resource_tab));
 		items.add(plate_gold = new ItemBase("plate_gold",true).setCreativeTab(Embers.resource_tab));
 		// Gloomshroud - Add Mithril Plate
-		items.add(plate_mithril = new ItemBase("plate_mithril", true).setCreativeTab(Embers.resource_tab));
+		//items.add(plate_mithril = new ItemBase("plate_mithril", true).setCreativeTab(Embers.resource_tab));
 		items.add(brick_caminite = new ItemBase("brick_caminite",true));
 		items.add(blend_caminite = new ItemBase("blend_caminite",true));
 		items.add(plate_caminite = new ItemBase("plate_caminite",true));
@@ -343,10 +347,7 @@ public class RegistryManager {
 		items.add(archaic_circuit = new ItemBase("archaic_circuit",true));
 		//items.add(gear_iron = new ItemGear("gear_iron",true).setCreativeTab(Embers.resource_tab));
 		//items.add(gear_dawnstone = new ItemGear("gear_dawnstone",true).setCreativeTab(Embers.resource_tab));
-		//items.add(ember_ring = new ItemEmberRing("ember_ring",true));
-		//items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
-		//items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
-		//items.add(mantle_bulb = new ItemEmberBulb());
+
 		items.add(dust_metallurgic = new ItemMetallurgicDust("dust_metallurgic",true));
 		
 		if (ConfigManager.enableAluminum){
@@ -460,6 +461,9 @@ public class RegistryManager {
 		//BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(biomeCave, 10000));
 
 		MinecraftForge.EVENT_BUS.register(EmbersFuelHandler.class);
+
+		if(ConfigManager.isBaublesIntegrationEnabled())
+			BaublesIntegration.registerAll();
 	}
 
 	private static void registerEntities() {
@@ -647,7 +651,7 @@ public class RegistryManager {
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberJar.ColorHandler(), ember_jar);
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberCartridge.ColorHandler(), ember_cartridge);
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemTyrfing.ColorHandler(), tyrfing);
-		//Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberBulb.ColorHandler(), mantle_bulb);
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberBulb.ColorHandler(), BaublesIntegration.mantle_bulb);
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.util.Misc;
 
 public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberCell, IHeldEmberCell, IEmberItem {
@@ -168,7 +169,7 @@ public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberC
 		@Override
 		public int colorMultiplier(ItemStack stack, int tintIndex) {
 			if (tintIndex == 1){
-				if (stack.hasTagCompound() && stack.getItem() == RegistryManager.mantle_bulb){
+				if (stack.hasTagCompound() && stack.getItem() == BaublesIntegration.mantle_bulb){
 					float coeff = (float)(((IEmberItem)stack.getItem()).getEmber(stack) / ((IEmberItem)stack.getItem()).getEmberCapacity(stack));
 					float timerSine = ((float)Math.sin(8.0*Math.toRadians(EventManager.ticks % 360))+1.0f)/2.0f;
 					int r = (int)255.0f;

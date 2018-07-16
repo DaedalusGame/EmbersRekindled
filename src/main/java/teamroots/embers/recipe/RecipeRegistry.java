@@ -37,6 +37,7 @@ import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.api.misc.IFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.block.BlockSeed;
+import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
@@ -971,27 +972,6 @@ public class RecipeRegistry {
 				'E', RegistryManager.ember_emitter,
 				'I', "ingotIron",
 				'D', "plateDawnstone"}).setRegistryName(getRL("ember_pulser")));
-		/*event.getRegistry().register(new ShapedOreRecipe(getRL("ember_ring"),new ItemStack(RegistryManager.ember_ring,1),true,new Object[]{
-				"CN ",
-				"N N",
-				" N ", 
-				'C', RegistryManager.ember_cluster,
-				'N', "nuggetDawnstone"}).setMirrored(true).setRegistryName(getRL("ember_ring")));
-		event.getRegistry().register(new ShapedOreRecipe(getRL("ember_amulet"),new ItemStack(RegistryManager.ember_amulet,1),true,new Object[]{
-				" L ",
-				"L L",
-				"NCN", 
-				'C', RegistryManager.ember_cluster,
-				'N', "nuggetDawnstone",
-				'L', Items.LEATHER}).setMirrored(true).setRegistryName(getRL("ember_amulet")));
-		event.getRegistry().register(new ShapedOreRecipe(getRL("ember_belt"),new ItemStack(RegistryManager.ember_belt,1),true,new Object[]{
-				"LIL",
-				"L L",
-				"PCP", 
-				'C', RegistryManager.ember_cluster,
-				'I', "ingotDawnstone",
-				'P', "plateDawnstone",
-				'L', Items.LEATHER}).setMirrored(true).setRegistryName(getRL("ember_belt")));*/
 		event.getRegistry().register(new ShapedOreRecipe(getRL("caminite_lever"),new ItemStack(RegistryManager.caminite_lever,4),true,new Object[]{
 				"S",
 				"P", 
@@ -999,6 +979,9 @@ public class RecipeRegistry {
 				'P', new ItemStack(RegistryManager.plate_caminite)}).setRegistryName(getRL("caminite_lever")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
 		event.getRegistry().register(new AshenCloakUnsocketRecipe().setRegistryName(getRL("cloak_unsocketing")));
+
+		if(ConfigManager.isBaublesIntegrationEnabled())
+			BaublesIntegration.registerRecipes(event);
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_copper), new ItemStack(RegistryManager.ingot_copper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_silver), new ItemStack(RegistryManager.ingot_silver), 0.35f);

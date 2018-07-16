@@ -58,14 +58,13 @@ public class TileEntityPumpRenderer extends TileEntitySpecialRenderer<TileEntity
 	@Override
 	public void render(TileEntityPumpBottom t, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (t != null){
-			IBlockState state = t.getWorld().getBlockState(t.getPos());
 			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
             GlStateManager.disableCull();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
             
-            double power = Math.min(100, Math.max(0, (int)Math.floor(0.5* t.capability.getPower(null))));
+            double power = t.capability.getEmber() >= TileEntityPumpBottom.EMBER_COST ? 1 : 0;
             double amountUp = Math.abs(Math.sin((Math.PI * ((double)(t.progress) + power*partialTicks))/400.0));
             
             GlStateManager.pushMatrix();

@@ -2,6 +2,7 @@ package teamroots.embers;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
@@ -28,6 +29,12 @@ public class ConfigManager {
 	public static int nickelVeinSize, nickelMinY, nickelMaxY, nickelVeinsPerChunk,
 					tinVeinSize, tinMinY, tinMaxY, tinVeinsPerChunk,
 					aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
+	public static boolean enableBaublesIntegration;
+
+	public static boolean isBaublesIntegrationEnabled()
+	{
+		return enableBaublesIntegration && Loader.isModLoaded("baubles");
+	}
 
 	public static void init(File configFile)
 	{
@@ -97,7 +104,9 @@ public class ConfigManager {
 		tinMinY = config.getInt("tinMinY", "compat", 0, 0, 255, "Minimum height over which tin ore will spawn.");
 		tinMaxY = config.getInt("tinMaxY", "compat", 48, 0, 255, "Maximum height under which tin ore will spawn.");
 		tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 6, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
-		
+
+		enableBaublesIntegration = config.getBoolean("enableBaubles", "compat", true, "If true, Embers will register items, blocks and recipes providing Baubles integration.");
+
 		if (config.hasChanged())
 		{
 			config.save();
