@@ -605,7 +605,7 @@ public class RecipeRegistry {
 		event.getRegistry().register(new ShapedOreRecipe(getRL("item_dropper"),new ItemStack(RegistryManager.item_dropper,1),true,new Object[]{
 				" P ",
 				"I I",
-				'P', RegistryManager.pipe,
+				'P', RegistryManager.item_pipe,
 				'I', "ingotIron"}).setRegistryName(getRL("item_dropper")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("large_tank"),new ItemStack(RegistryManager.large_tank,1),true,new Object[]{
 				"Y Y",

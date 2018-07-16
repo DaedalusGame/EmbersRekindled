@@ -25,6 +25,7 @@ public class ItemBaubleBase extends ItemBase implements IBauble {
 	public ItemBaubleBase(String name, BaubleType type, boolean addToTab) {
 		super(name, addToTab);
 		this.type = type;
+		this.setMaxStackSize(1);
 	}
 	
 	@Override

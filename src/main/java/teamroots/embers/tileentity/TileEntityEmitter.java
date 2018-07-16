@@ -62,8 +62,8 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 	}
 	
 	public void updateNeighbors(IBlockAccess world){
-		up = getConnection(world,getPos().up(),EnumFacing.DOWN);
-		down = getConnection(world,getPos().down(),EnumFacing.UP);
+		down = getConnection(world,getPos().down(),EnumFacing.DOWN);
+		up = getConnection(world,getPos().up(),EnumFacing.UP);
 		north = getConnection(world,getPos().north(),EnumFacing.NORTH);
 		south = getConnection(world,getPos().south(),EnumFacing.SOUTH);
 		west = getConnection(world,getPos().west(),EnumFacing.WEST);
