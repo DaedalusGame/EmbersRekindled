@@ -106,11 +106,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!heldItem.isEmpty()) {
 			if (stamp.getStackInSlot(0).isEmpty()) {
-				ItemStack newStack = new ItemStack(heldItem.getItem(), 1, heldItem.getMetadata());
-				if (heldItem.hasTagCompound()) {
-					newStack.setTagCompound(heldItem.getTagCompound());
-				}
-				player.setHeldItem(hand, this.stamp.insertItem(0, newStack, false));
+				player.setHeldItem(hand, this.stamp.insertItem(0, heldItem.copy(), false));
 				markDirty();
 				return true;
 			}

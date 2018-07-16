@@ -8,6 +8,7 @@ import thaumcraft.api.aspects.AspectList;
 
 public class ThaumcraftIntegration {
     public static void init() {
+    	registerAspects();
     }
 
     //Special thanks to Mangoose for writing all of this.
@@ -27,13 +28,15 @@ public class ThaumcraftIntegration {
         ThaumcraftApi.registerComplexObjectTag(new ItemStack(RegistryManager.tinker_hammer),
                 new AspectList().add(Aspect.TOOL, 10));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.stamp_bar),
-                new AspectList().add(Aspect.EARTH, 6).add(Aspect.WATER, 3).add(Aspect.FIRE, 1));
+                new AspectList().add(Aspect.EARTH, 6).add(Aspect.WATER, 3).add(Aspect.FIRE, 1).add(Aspect.CRAFT, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.stamp_flat),
-                new AspectList().add(Aspect.EARTH, 12).add(Aspect.WATER, 6).add(Aspect.FIRE, 1));
+                new AspectList().add(Aspect.EARTH, 12).add(Aspect.WATER, 6).add(Aspect.FIRE, 1).add(Aspect.CRAFT, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.stamp_plate),
-                new AspectList().add(Aspect.EARTH, 6).add(Aspect.WATER, 3).add(Aspect.FIRE, 1));
+                new AspectList().add(Aspect.EARTH, 6).add(Aspect.WATER, 3).add(Aspect.FIRE, 1).add(Aspect.CRAFT, 5));
         ThaumcraftApi.registerComplexObjectTag(new ItemStack(RegistryManager.ember_detector),
                 new AspectList().add(Aspect.MECHANISM, 10));
+        ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.dust_ember),
+                new AspectList().add(Aspect.FIRE, 15).add(Aspect.ENERGY, 15).add(Aspect.ENTROPY, 5));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.shard_ember),
                 new AspectList().add(Aspect.FIRE, 3).add(Aspect.ENERGY, 3).add(Aspect.CRYSTAL, 3));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.crystal_ember),
@@ -94,6 +97,8 @@ public class ThaumcraftIntegration {
                 new AspectList().add(Aspect.DARKNESS, 3).add(Aspect.ELDRITCH, 5).add(Aspect.EARTH, 11).add(Aspect.PROTECT, 15).add(Aspect.SOUL, 15).add(Aspect.ALCHEMY, 4));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.intelligent_apparatus),
                 new AspectList().add(Aspect.METAL, 33).add(Aspect.MIND, 10).add(Aspect.EXCHANGE, 15).add(Aspect.ORDER, 4).add(Aspect.DESIRE, 7).add(Aspect.ALCHEMY, 3));
+        ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.dust_metallurgic),
+                new AspectList().add(Aspect.METAL, 15).add(Aspect.ENTROPY, 5).add(Aspect.ALCHEMY, 5));
     }
 
     private static void registerOreAspects() {
@@ -186,5 +191,7 @@ public class ThaumcraftIntegration {
                 new AspectList().add(Aspect.EXCHANGE, 3));
         ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.caminite_lever),
                 new AspectList().add(Aspect.EARTH, 2).add(Aspect.MECHANISM, 3));
+        ThaumcraftApi.registerObjectTag(new ItemStack(RegistryManager.catalytic_plug),
+                new AspectList().add(Aspect.ENERGY, 50).add(Aspect.METAL, 15).add(Aspect.MOTION, 7).add(Aspect.EXCHANGE, 5).add(Aspect.CRYSTAL, 5).add(Aspect.ALCHEMY, 4));
     }
 }
