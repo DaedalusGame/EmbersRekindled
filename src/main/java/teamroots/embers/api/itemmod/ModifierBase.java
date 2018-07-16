@@ -8,11 +8,12 @@ public class ModifierBase {
 		ALL,
 		TOOL_OR_ARMOR,
 		TOOL,
+		PROJECTILE,
 		ARMOR,
 		HELMET,
 		CHESTPLATE,
 		LEGGINGS,
-		BOOTS
+		BOOTS,
 	}
 	
 	public EnumType type = EnumType.ALL;

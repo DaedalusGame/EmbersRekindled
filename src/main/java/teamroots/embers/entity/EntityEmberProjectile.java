@@ -29,11 +29,9 @@ import teamroots.embers.particle.ParticleUtil;
 
 //@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
 public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ {
-    public static final DataParameter<Float> value = EntityDataManager.<Float>createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
-    public static final DataParameter<Boolean> dead = EntityDataManager.<Boolean>createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Integer> lifetime = EntityDataManager.<Integer>createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
-	BlockPos pos = new BlockPos(0,0,0);
-	public BlockPos dest = new BlockPos(0,0,0);
+    public static final DataParameter<Float> value = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
+	public static final DataParameter<Boolean> dead = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Integer> lifetime = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
 	public UUID id = null;
 	
 	public EntityEmberProjectile(World worldIn) {

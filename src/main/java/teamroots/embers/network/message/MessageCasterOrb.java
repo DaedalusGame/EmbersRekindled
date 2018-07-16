@@ -9,13 +9,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.event.EmberProjectileEvent;
+import teamroots.embers.api.event.EmberRemoveEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.api.itemmod.ModifierBase;
@@ -74,10 +78,17 @@ public class MessageCasterOrb implements IMessage {
                         double xVel = (message.lookX / lookDist) * 0.5;
                         double yVel = (message.lookY / lookDist) * 0.5;
                         double zVel = (message.lookZ / lookDist) * 0.5;
-                        EntityEmberProjectile proj = new EntityEmberProjectile(world);
-                        proj.initCustom(player.posX + offX, player.posY + player.getEyeHeight(), player.posZ + offZ, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), uuid);
-                        world.spawnEntity(proj);
-                        world.playSound(null,proj.posX,proj.posY,proj.posZ,SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                        double xOrigin = player.posX + offX;
+                        double yOrigin = player.posY + player.getEyeHeight();
+                        double zOrigin = player.posZ + offZ;
+                        EmberProjectileEvent event = new EmberProjectileEvent(player,heldStack,new Vec3d(xOrigin, yOrigin, zOrigin),new Vec3d(xVel,yVel,zVel));
+                        MinecraftForge.EVENT_BUS.post(event);
+                        if(!event.isCanceled()) {
+                            EntityEmberProjectile proj = new EntityEmberProjectile(world);
+                            proj.initCustom(xOrigin, yOrigin, zOrigin, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), uuid);
+                            world.spawnEntity(proj);
+                        }
+                        world.playSound(null, xOrigin, yOrigin, zOrigin,SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                         ModifierCasterOrb.setCooldown(uuid, 20);
                     }
                 }
