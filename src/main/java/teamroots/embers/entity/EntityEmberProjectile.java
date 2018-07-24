@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.Optional.Interface;
 import net.minecraftforge.fml.common.Optional.Method;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.misc.IProjectileEffect;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSizedBurstFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -33,6 +34,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 	public static final DataParameter<Boolean> dead = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> lifetime = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
 	public UUID id = null;
+	public IProjectileEffect effect = null;
 	
 	public EntityEmberProjectile(World worldIn) {
 		super(worldIn);
@@ -54,6 +56,14 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 		getDataManager().setDirty(EntityEmberProjectile.value);
 		setSize((float)value/10.0f,(float)value/10.0f);
 		this.id = playerId;
+	}
+
+	public void setEffect(IProjectileEffect effect) {
+		this.effect = effect;
+	}
+
+	public EntityPlayer getShooter() {
+		return getEntityWorld().getPlayerEntityByUUID(id);
 	}
 
 	@Override

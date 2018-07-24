@@ -81,13 +81,13 @@ public class MessageCasterOrb implements IMessage {
                         double xOrigin = player.posX + offX;
                         double yOrigin = player.posY + player.getEyeHeight();
                         double zOrigin = player.posZ + offZ;
-                        EmberProjectileEvent event = new EmberProjectileEvent(player,heldStack,new Vec3d(xOrigin, yOrigin, zOrigin),new Vec3d(xVel,yVel,zVel));
-                        MinecraftForge.EVENT_BUS.post(event);
-                        if(!event.isCanceled()) {
+                        //EmberProjectileEvent event = new EmberProjectileEvent(player,heldStack,new Vec3d(xOrigin, yOrigin, zOrigin),new Vec3d(xVel,yVel,zVel));
+                        //MinecraftForge.EVENT_BUS.post(event);
+                        //if(!event.isCanceled()) {
                             EntityEmberProjectile proj = new EntityEmberProjectile(world);
                             proj.initCustom(xOrigin, yOrigin, zOrigin, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), uuid);
                             world.spawnEntity(proj);
-                        }
+                        //}
                         world.playSound(null, xOrigin, yOrigin, zOrigin,SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                         ModifierCasterOrb.setCooldown(uuid, 20);
                     }
