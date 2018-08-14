@@ -145,6 +145,11 @@ public class TileEntityItemTransfer extends TileEntity implements ITileEntityBas
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+		return oldState.getBlock() != newSate.getBlock();
+	}
+
+	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
 		Misc.spawnInventoryInWorld(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
