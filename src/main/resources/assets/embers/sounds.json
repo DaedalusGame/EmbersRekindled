@@ -136,6 +136,32 @@
       "embers:ember_bore/mine_loop"
     ]
   },
+  "block.catalytic_plug.start": {
+    "category": "block",
+    "sounds": [
+      "embers:catalytic_plug/start"
+    ],
+    "subtitle": "subtitles.catalytic_plug.start"
+  },
+  "block.catalytic_plug.stop": {
+    "category": "block",
+    "sounds": [
+      "embers:catalytic_plug/stop"
+    ],
+    "subtitle": "subtitles.catalytic_plug.stop"
+  },
+  "block.catalytic_plug.loop": {
+    "category": "block",
+    "sounds": [
+      "embers:catalytic_plug/run_loop"
+    ]
+  },
+  "block.catalytic_plug.loop_ready": {
+    "category": "block",
+    "sounds": [
+      "embers:catalytic_plug/ready_loop"
+    ]
+  },
   "block.heat_coil.high_loop": {
     "category": "block",
     "sounds": [

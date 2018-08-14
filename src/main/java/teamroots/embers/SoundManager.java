@@ -49,6 +49,15 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:block.bore.loop_mine")
     public static SoundEvent BORE_LOOP_MINE;
 
+    @GameRegistry.ObjectHolder("embers:block.catalytic_plug.start")
+    public static SoundEvent CATALYTIC_PLUG_START;
+    @GameRegistry.ObjectHolder("embers:block.catalytic_plug.stop")
+    public static SoundEvent CATALYTIC_PLUG_STOP;
+    @GameRegistry.ObjectHolder("embers:block.catalytic_plug.loop")
+    public static SoundEvent CATALYTIC_PLUG_LOOP;
+    @GameRegistry.ObjectHolder("embers:block.catalytic_plug.loop_ready")
+    public static SoundEvent CATALYTIC_PLUG_LOOP_READY;
+
     @GameRegistry.ObjectHolder("embers:block.stamper.down")
     public static SoundEvent STAMPER_DOWN;
     @GameRegistry.ObjectHolder("embers:block.stamper.up")
@@ -191,6 +200,11 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.bore.stop"));
         event.getRegistry().register(registerSound("block.bore.loop"));
         event.getRegistry().register(registerSound("block.bore.loop_mine"));
+
+        event.getRegistry().register(registerSound("block.catalytic_plug.start"));
+        event.getRegistry().register(registerSound("block.catalytic_plug.stop"));
+        event.getRegistry().register(registerSound("block.catalytic_plug.loop"));
+        event.getRegistry().register(registerSound("block.catalytic_plug.loop_ready"));
 
         event.getRegistry().register(registerSound("block.heat_coil.high_loop"));
         event.getRegistry().register(registerSound("block.heat_coil.mid_loop"));

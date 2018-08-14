@@ -1,6 +1,7 @@
 package teamroots.embers.entity;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
@@ -65,6 +66,17 @@ public class EntityAncientGolem extends EntityMob {
     			getEntityWorld().spawnEntity(proj);
     		}
     	}
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        if (super.attackEntityAsMob(entityIn))
+        {
+            playSound(SoundManager.ANCIENT_GOLEM_PUNCH,1.0f,1.0f);
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

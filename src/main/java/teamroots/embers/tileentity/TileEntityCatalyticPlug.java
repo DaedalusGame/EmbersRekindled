@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -18,17 +19,25 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockCatalyticPlug;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.upgrade.UpgradeCatalyticPlug;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Random;
 
-public class TileEntityCatalyticPlug extends TileEntity implements ITickable, ITileEntityBase {
+public class TileEntityCatalyticPlug extends TileEntity implements ITickable, ITileEntityBase, ISoundController {
+    public static final int SOUND_OFF = 1;
+    public static final int SOUND_ON = 2;
+    public static final int[] SOUND_IDS = new int[]{SOUND_OFF,SOUND_ON};
+
     public int activeTicks = 0;
     public UpgradeCatalyticPlug upgrade;
     public FluidTank tank = new FluidTank(4000) {
@@ -38,6 +47,8 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
         }
     };
     private Random random = new Random();
+
+    HashSet<Integer> soundsPlaying = new HashSet<>();
 
     public TileEntityCatalyticPlug() {
         upgrade = new UpgradeCatalyticPlug(this);
@@ -107,6 +118,8 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
 
     @Override
     public void update() {
+        if(getWorld().isRemote)
+            handleSound();
         activeTicks--;
         IBlockState state = world.getBlockState(pos);
         if(activeTicks > 0 && world.isRemote && state.getBlock() instanceof BlockCatalyticPlug) {
@@ -135,8 +148,67 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
                 float motionx = planar.getFrontOffsetX() * 0.03f - facing.getFrontOffsetX() * 0.015f - 0.01f + random.nextFloat() * 0.02f;
                 float motiony = planar.getFrontOffsetY() * 0.03f - facing.getFrontOffsetY() * 0.015f - 0.01f + random.nextFloat() * 0.02f;
                 float motionz = planar.getFrontOffsetZ() * 0.03f - facing.getFrontOffsetZ() * 0.015f - 0.01f + random.nextFloat() * 0.02f;
-                ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, motionx, motiony, motionz, 255, 16, 16, 2.0f, 24);
+                ParticleUtil.spawnParticleVapor(getWorld(), x, y, z, motionx, motiony, motionz, 255, 16, 16, 255, 0.4f, 2.0f, 24);
             }
+        }
+    }
+
+    @Override
+    public void playSound(int id) {
+        float soundX = (float) pos.getX() + 0.5f;
+        float soundY = (float) pos.getY() + 0.5f;
+        float soundZ = (float) pos.getZ() + 0.5f;
+        switch (id) {
+            case SOUND_ON:
+                Embers.proxy.playMachineSound(this,SOUND_ON, SoundManager.CATALYTIC_PLUG_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, soundX, soundY, soundZ);
+                world.playSound(soundX,soundY,soundZ,SoundManager.CATALYTIC_PLUG_START,SoundCategory.BLOCKS,1.0f,1.0f,false);
+                break;
+            case SOUND_OFF:
+                Embers.proxy.playMachineSound(this,SOUND_OFF, SoundManager.CATALYTIC_PLUG_LOOP_READY, SoundCategory.BLOCKS, true, 1.0f, 1.0f, soundX, soundY, soundZ);
+                break;
+        }
+        soundsPlaying.add(id);
+    }
+
+    @Override
+    public void stopSound(int id) {
+        if(id == SOUND_ON) {
+            world.playSound((float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f, SoundManager.CATALYTIC_PLUG_STOP, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+        }
+        soundsPlaying.remove(id);
+    }
+
+    @Override
+    public boolean isSoundPlaying(int id) {
+        return soundsPlaying.contains(id);
+    }
+
+    @Override
+    public int[] getSoundIDs() {
+        return SOUND_IDS;
+    }
+
+    @Override
+    public boolean shouldPlaySound(int id) {
+        boolean isWorking = activeTicks > 0;
+
+        switch (id)
+        {
+            case SOUND_OFF: return !isWorking && tank.getFluidAmount() > 0;
+            case SOUND_ON: return isWorking;
+            default: return false;
+        }
+    }
+
+    @Override
+    public float getCurrentVolume(int id, float volume) {
+        boolean isWorking = activeTicks > 0;
+
+        switch (id)
+        {
+            case SOUND_OFF: return !isWorking ? 1.0f : 0.0f;
+            case SOUND_ON: return isWorking ? 1.0f : 0.0f;
+            default: return 0f;
         }
     }
 

@@ -91,4 +91,13 @@ public class ParticleUtil {
 			}
 		}
 	}
+
+	public static void spawnParticleVapor(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scaleMin, float scaleMax, int lifetime){
+		if (Embers.proxy instanceof ClientProxy){
+			counter += random.nextInt(3);
+			if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2*Minecraft.getMinecraft().gameSettings.particleSetting) == 0){
+				ClientProxy.particleRenderer.addParticle(new ParticleVapor(world,x,y,z,vx,vy,vz,r,g,b,a, scaleMin, scaleMax, lifetime));
+			}
+		}
+	}
 }
