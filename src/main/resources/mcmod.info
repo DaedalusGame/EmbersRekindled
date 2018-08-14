@@ -1,13 +1,13 @@
 [
 {
   "modid": "embers",
-  "name": "Embers",
+  "name": "Embers Rekindled",
   "description": "Dwarven-style Magitech Mod",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Elucent","AlexisMachina","ShadowGamerXY","werty1124"],
+  "authorList": ["BordListian","Elucent","AlexisMachina","ShadowGamerXY","werty1124"],
   "credits": "",
   "logoFile": "",
   "screenshots": [],
