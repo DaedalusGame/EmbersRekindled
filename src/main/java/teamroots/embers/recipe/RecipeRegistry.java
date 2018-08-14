@@ -967,6 +967,13 @@ public class RecipeRegistry {
 				'E', RegistryManager.ember_emitter,
 				'I', "ingotIron",
 				'D', "plateDawnstone"}).setRegistryName(getRL("ember_pulser")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("ember_funnel"),new ItemStack(RegistryManager.ember_funnel,1),true,new Object[]{
+				"D D",
+				"CRC",
+				" D ",
+				'R', RegistryManager.ember_receiver,
+				'C', "ingotCopper",
+				'D', "plateDawnstone"}).setRegistryName(getRL("ember_funnel")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("caminite_lever"),new ItemStack(RegistryManager.caminite_lever,4),true,new Object[]{
 				"S",
 				"P", 

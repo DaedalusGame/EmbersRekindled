@@ -98,6 +98,7 @@ tile.steam_engine.name=Steam Engine
 tile.mechanical_pump.name=Mechanical Pump
 tile.caminite_lever.name=Caminite Lever
 tile.catalytic_plug.name=Catalytic Plug
+tile.ember_funnel.name=Ember Funnel
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -432,7 +433,7 @@ embers.research.mechanisms.copper_cell.desc=The Copper Cell fulfills a very simp
 
 embers.research.metallurgy.pulser=Ember Ejector
 embers.research.metallurgy.pulser.title=Full Power Destruction
-embers.research.metallurgy.pulser.desc=By plating a normal Ember Emitter with Dawnstone alloy, you've vastly increased its potential output. Dawnstone is highly conductive to Ember and this device will send 10 times the amount per burst. This doesn't come without downsides however, as Receptors are quickly overwhelmed with this massive quantity and any surplus Ember may be lost in transfer.
+embers.research.metallurgy.pulser.desc=By plating a normal Ember Emitter with Dawnstone alloy, you've vastly increased its potential output. Dawnstone is highly conductive to Ember and this device will send 10 times the amount per burst. Note that Receptors are quickly overwhelmed with this massive quantity and any surplus Ember may be lost in transfer. You've devised the Ember Funnel that catches Ember from multiple sources and rapidly transfers it to the connected machine.
 
 embers.research.metallurgy.splitter=Beam Splitter
 embers.research.metallurgy.splitter.title=Ember Division

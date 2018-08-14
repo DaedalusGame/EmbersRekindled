@@ -78,6 +78,7 @@ public class RegistryManager {
 	public static Block block_bronze;
 	public static Block block_electrum;
 	public static Block catalytic_plug;
+	public static Block ember_funnel;
 	public static Block block_alchemical_redstone;
 	
 	public static Fluid fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
@@ -224,6 +225,7 @@ public class RegistryManager {
 		//blocks.add(steam_engine = (new BlockSteamEngine(Material.ROCK,"steam_engine",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(mechanical_pump = (new BlockPump(Material.ROCK,"mechanical_pump",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(catalytic_plug = (new BlockCatalyticPlug(Material.ROCK,"catalytic_plug",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(ember_funnel = (new BlockEmberFunnel(Material.IRON,"ember_funnel",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 
 		if (ConfigManager.enableAluminum){
 			blocks.add(block_aluminum = (new BlockBase(Material.ROCK,"block_aluminum",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
@@ -532,6 +534,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityPumpBottom.class, Embers.MODID+":tile_entity_pump_bottom");
 		GameRegistry.registerTileEntity(TileEntityPumpTop.class, Embers.MODID+":tile_entity_pump_top");
 		GameRegistry.registerTileEntity(TileEntityCatalyticPlug.class, Embers.MODID+":tile_entity_catalytic_plug");
+		GameRegistry.registerTileEntity(TileEntityEmberFunnel.class, Embers.MODID+":tile_entity_ember_funnel");
 	}
 
 	private static void registerCapabilities() {
