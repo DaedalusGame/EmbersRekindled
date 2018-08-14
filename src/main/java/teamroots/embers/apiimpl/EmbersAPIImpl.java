@@ -15,6 +15,7 @@ import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.tileentity.TileEntityCatalyzer;
 import teamroots.embers.tileentity.TileEntityCombustor;
+import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
@@ -38,6 +39,11 @@ public class EmbersAPIImpl implements IEmbersAPI {
     public void registerModifier(Item item, ModifierBase modifier) {
         teamroots.embers.util.ItemModUtil.modifierRegistry.put(item, modifier);
         teamroots.embers.util.ItemModUtil.nameToModifier.put(modifier.name, modifier);
+    }
+
+    @Override
+    public void registerAlchemyAspect(Ingredient ingredient, String aspect) {
+        AlchemyUtil.registerAspect(aspect,ingredient);
     }
 
     @Override

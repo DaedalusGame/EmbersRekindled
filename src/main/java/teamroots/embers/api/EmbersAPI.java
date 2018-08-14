@@ -27,6 +27,10 @@ public class EmbersAPI {
         IMPL.registerModifier(item, modifier);
     }
 
+    public static void registerAlchemyAspect(Ingredient ingredient, String aspect) {
+        IMPL.registerAlchemyAspect(ingredient,aspect);
+    }
+
     public static void registerEmberFuel(Ingredient ingredient, double ember){
         IMPL.registerEmberFuel(ingredient, ember);
     }

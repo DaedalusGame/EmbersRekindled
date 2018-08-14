@@ -13,6 +13,8 @@ import teamroots.embers.api.misc.IMetalCoefficient;
 public interface IEmbersAPI {
     void registerModifier(Item item, ModifierBase modifier);
 
+    void registerAlchemyAspect(Ingredient ingredient, String aspect);
+
     void registerEmberFuel(Ingredient ingredient, double ember);
 
     void registerEmberFuel(IFuel fuel);
