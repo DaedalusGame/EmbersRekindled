@@ -9,7 +9,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.util.sound.ItemUseSound;
@@ -30,6 +32,8 @@ public class ClientProxy extends CommonProxy{
 	public void init(FMLInitializationEvent event){
 		super.init(event);
 		RegistryManager.registerColorHandlers();
+		if(ConfigManager.isBaublesIntegrationEnabled())
+			BaublesIntegration.registerClientSide();
 	}
 	
 	@Override

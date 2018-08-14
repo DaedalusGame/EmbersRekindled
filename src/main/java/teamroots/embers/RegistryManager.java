@@ -653,7 +653,6 @@ public class RegistryManager {
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberJar.ColorHandler(), ember_jar);
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberCartridge.ColorHandler(), ember_cartridge);
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemTyrfing.ColorHandler(), tyrfing);
-		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberBulb.ColorHandler(), BaublesIntegration.mantle_bulb);
 	}
 	
 	@SideOnly(Side.CLIENT)

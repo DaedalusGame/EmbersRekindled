@@ -2,6 +2,7 @@ package teamroots.embers.compat;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -9,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
@@ -64,6 +67,12 @@ public class BaublesIntegration {
         RegistryManager.items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
         RegistryManager.items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
         RegistryManager.items.add(mantle_bulb = new ItemEmberBulb());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void registerClientSide()
+    {
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemEmberBulb.ColorHandler(), mantle_bulb);
     }
 
     public static double getEmberCapacityTotal(EntityPlayer player){
