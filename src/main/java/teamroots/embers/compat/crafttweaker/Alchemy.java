@@ -12,6 +12,7 @@ import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.value.IntRange;
+import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
@@ -71,7 +72,7 @@ public class Alchemy {
 
         @Override
         public void apply() {
-            AlchemyUtil.registerAspect(name,CTUtil.toIngredient(item));
+            EmbersAPI.registerAlchemyAspect(CTUtil.toIngredient(item),name);
         }
 
         @Override
