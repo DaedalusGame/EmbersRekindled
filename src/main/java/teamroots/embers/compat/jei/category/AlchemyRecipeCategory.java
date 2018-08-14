@@ -7,12 +7,10 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.util.Translator;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import teamroots.embers.Embers;
 import teamroots.embers.compat.jei.wrapper.AlchemyRecipeWrapper;
-import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.util.AspectRenderUtil;
 
 import javax.annotation.Nonnull;

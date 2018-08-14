@@ -8,15 +8,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidTank;
-import teamroots.embers.tileentity.TileEntityAxle;
-import teamroots.embers.tileentity.TileEntityGearbox;
-import teamroots.embers.tileentity.TileEntityItemExtractor;
-import teamroots.embers.tileentity.TileEntityRelay;
 import teamroots.embers.tileentity.TileEntitySteamEngine;
 import teamroots.embers.util.Misc;
 

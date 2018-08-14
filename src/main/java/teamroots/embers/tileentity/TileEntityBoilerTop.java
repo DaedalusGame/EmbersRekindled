@@ -1,10 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.HashSet;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,10 +17,15 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Random;
 
 public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -69,18 +69,11 @@ public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, 
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

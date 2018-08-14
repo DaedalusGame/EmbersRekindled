@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -12,8 +13,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import teamroots.embers.Embers;
-import teamroots.embers.apiimpl.EmbersAPIImpl;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.apiimpl.EmbersAPIImpl;
 import teamroots.embers.compat.thaumcraft.ThaumcraftIntegration;
 import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.network.PacketHandler;
@@ -21,7 +22,6 @@ import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.*;
-import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.OreTransmutationUtil;
 
 public class CommonProxy {
@@ -33,11 +33,12 @@ public class CommonProxy {
 		Fields.init();
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
+		if(Loader.isModLoaded("thaumcraft"))
+			MinecraftForge.EVENT_BUS.register(ThaumcraftIntegration.class);
 	}
 	
 	public void init(FMLInitializationEvent event){
-		if(Loader.isModLoaded("thaumcraft"))
-			ThaumcraftIntegration.init();
+
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){

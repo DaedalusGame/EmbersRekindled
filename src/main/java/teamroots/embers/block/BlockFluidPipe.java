@@ -10,11 +10,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.tileentity.TileEntityItemPipe;
 import teamroots.embers.tileentity.TileEntityFluidPipe;
-import teamroots.embers.tileentity.TileEntityFluidExtractor;
 
 public class BlockFluidPipe extends BlockTEBase {
 	public BlockFluidPipe(Material material, String name, boolean addToTab) {

@@ -41,13 +41,13 @@ public class ModifierBase {
 			case ARMOR:
 				return item instanceof ItemArmor;
 			case HELMET:
-				return item instanceof ItemArmor && ((ItemArmor) item).getEquipmentSlot() == EntityEquipmentSlot.HEAD;
+				return item instanceof ItemArmor && ((ItemArmor) item).armorType == EntityEquipmentSlot.HEAD;
 			case CHESTPLATE:
-				return item instanceof ItemArmor && ((ItemArmor) item).getEquipmentSlot() == EntityEquipmentSlot.CHEST;
+				return item instanceof ItemArmor && ((ItemArmor) item).armorType == EntityEquipmentSlot.CHEST;
 			case LEGGINGS:
-				return item instanceof ItemArmor && ((ItemArmor) item).getEquipmentSlot() == EntityEquipmentSlot.LEGS;
+				return item instanceof ItemArmor && ((ItemArmor) item).armorType == EntityEquipmentSlot.LEGS;
 			case BOOTS:
-				return item instanceof ItemArmor && ((ItemArmor) item).getEquipmentSlot() == EntityEquipmentSlot.FEET;
+				return item instanceof ItemArmor && ((ItemArmor) item).armorType == EntityEquipmentSlot.FEET;
 			default:
 				return false;
 		}

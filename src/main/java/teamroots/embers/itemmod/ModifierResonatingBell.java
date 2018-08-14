@@ -1,10 +1,5 @@
 package teamroots.embers.itemmod;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,6 +17,11 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageResonatingBellFX;
 import teamroots.embers.util.EmberInventoryUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class ModifierResonatingBell extends ModifierBase {
 

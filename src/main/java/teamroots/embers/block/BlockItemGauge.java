@@ -1,8 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -11,7 +8,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -20,10 +16,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdateRequest;
 import teamroots.embers.util.Misc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockItemGauge extends BlockBase implements IDial {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");
@@ -110,7 +108,7 @@ public class BlockItemGauge extends BlockBase implements IDial {
 	public void updateTEData(World world, IBlockState state, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(this.facing)));
 		if (tile != null){
-			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdateRequest(Minecraft.getMinecraft().player.getUniqueID(),pos));
+			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdateRequest(pos));
 		}
 	}
 }

@@ -1,8 +1,5 @@
 package teamroots.embers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -33,34 +30,36 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.block.*;
 import teamroots.embers.compat.BaublesIntegration;
-import teamroots.embers.damage.*;
+import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.entity.*;
 import teamroots.embers.fluid.*;
 import teamroots.embers.item.*;
-import teamroots.embers.item.bauble.ItemEmberAmulet;
-import teamroots.embers.item.bauble.ItemEmberBelt;
-import teamroots.embers.item.bauble.ItemEmberRing;
-import teamroots.embers.item.block.*;
+import teamroots.embers.item.block.ItemBlockSlab;
 import teamroots.embers.itemmod.*;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
-import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.tileentity.*;
 import teamroots.embers.util.DefaultUpgradeProvider;
 import teamroots.embers.util.EmbersFuelHandler;
 import teamroots.embers.util.Misc;
-import teamroots.embers.world.*;
+import teamroots.embers.world.WorldGenOres;
+import teamroots.embers.world.WorldGenSmallRuin;
+import thaumcraft.api.aspects.AspectRegistryEvent;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
@@ -693,7 +692,7 @@ public class RegistryManager {
 		RenderingRegistry.registerEntityRenderingHandler(EntityAncientGolem.class, new RenderAncientGolem.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberLight.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
     public void registerRendering(ModelRegistryEvent event){

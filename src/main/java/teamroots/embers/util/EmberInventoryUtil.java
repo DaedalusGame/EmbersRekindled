@@ -1,7 +1,6 @@
 package teamroots.embers.util;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
 import teamroots.embers.ConfigManager;

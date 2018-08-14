@@ -1,15 +1,7 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -32,7 +24,14 @@ import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
     public static final double EMBER_COST = 2.0;
@@ -242,16 +241,9 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
         return id == SOUND_PROCESS && isWorking;
     }
 
-    public boolean dirty = false;
-
-    @Override
-    public void markForUpdate() {
-        EventManager.markTEForUpdate(getPos(), this);
-    }
-
     @Override
     public void markDirty() {
-        markForUpdate();
         super.markDirty();
+        Misc.syncTE(this);
     }
 }

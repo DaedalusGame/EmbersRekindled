@@ -7,7 +7,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.tileentity.TileEntityDropper;
 import teamroots.embers.tileentity.TileEntityReactor;
 
 public class BlockReactor extends BlockTEBase {

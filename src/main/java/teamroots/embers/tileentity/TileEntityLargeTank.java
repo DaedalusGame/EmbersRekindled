@@ -1,7 +1,5 @@
 package teamroots.embers.tileentity;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBucket;
@@ -15,18 +13,14 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
 
 public class TileEntityLargeTank extends TileFluidHandler implements ITileEntityBase, ITickable, IMultiblockMachine {
 	int ticksExisted = 0;
@@ -131,17 +125,10 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 			updateCapacity();
 		}
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

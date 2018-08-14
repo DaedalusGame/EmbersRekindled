@@ -1,9 +1,5 @@
 package teamroots.embers.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.BlockPurpurSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,11 +11,13 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCannonBeamFX;
 import teamroots.embers.util.EmberInventoryUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemIgnitionCannon extends ItemBase {
 	public static final int COOLDOWN = 10;

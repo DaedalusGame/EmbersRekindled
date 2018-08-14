@@ -1,9 +1,9 @@
 package teamroots.embers.model;
 
+import net.minecraft.client.model.ModelBase;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import net.minecraft.client.model.ModelBase;
 
 public class ModelManager {
 	public static Map<String, ModelBase> models = new HashMap<String, ModelBase>();

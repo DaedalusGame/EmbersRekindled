@@ -5,9 +5,9 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.compat.jei.EmbersJEIPlugin;
 import teamroots.embers.recipe.AlchemyRecipe;
-import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.util.AspectRenderUtil;
 import teamroots.embers.util.IHasAspects;
 

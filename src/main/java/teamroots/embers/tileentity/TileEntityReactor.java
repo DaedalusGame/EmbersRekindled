@@ -1,14 +1,7 @@
 package teamroots.embers.tileentity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -29,16 +22,20 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.api.power.IEmberCapability;
-import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
     public static final float BASE_MULTIPLIER = 1.0f;
@@ -235,16 +232,9 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
         return id == SOUND_HAS_EMBER && capability.getEmber() > 0;
     }
 
-    public boolean dirty = false;
-
-    @Override
-    public void markForUpdate() {
-        EventManager.markTEForUpdate(getPos(), this);
-    }
-
     @Override
     public void markDirty() {
-        markForUpdate();
         super.markDirty();
+        Misc.syncTE(this);
     }
 }

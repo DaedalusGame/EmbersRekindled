@@ -1,13 +1,6 @@
 package teamroots.embers.tileentity;
 
-import java.lang.ref.WeakReference;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.mojang.authlib.GameProfile;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockStructure;
@@ -21,7 +14,6 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -35,6 +27,12 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockBreaker;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
+import java.util.Random;
+import java.util.UUID;
 
 public class TileEntityBreaker extends TileEntity implements ITileEntityBase, ITickable {
 	int ticksExisted = 0;
@@ -191,17 +189,10 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 		}
 		return flag;
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

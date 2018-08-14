@@ -1,28 +1,15 @@
 package teamroots.embers.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.block.BlockAxle;
 import teamroots.embers.block.BlockGearbox;
-import teamroots.embers.util.RenderUtil;
-import teamroots.embers.util.StructBox;
-import teamroots.embers.util.StructUV;
 
 public class TileEntityGearboxRenderer extends TileEntitySpecialRenderer<TileEntityGearbox> {
 	public TileEntityGearboxRenderer(){

@@ -1,34 +1,14 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.entity.EntityAncientGolem;
 import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.tileentity.ITileEntityBase;
-import teamroots.embers.tileentity.TileEntityActivatorBottom;
-import teamroots.embers.tileentity.TileEntityActivatorTop;
+
+import java.util.Random;
 
 public class BlockArchaicLight extends BlockBase {
 	

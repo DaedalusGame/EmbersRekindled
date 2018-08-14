@@ -1,13 +1,9 @@
 package teamroots.embers.item;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -18,6 +14,8 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.util.Misc;
+
+import java.util.List;
 
 public class ItemEmberJar extends ItemBase implements IInventoryEmberCell, IHeldEmberCell, IEmberItem {
 

@@ -1,12 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -25,22 +18,26 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.alchemy.AlchemyResult;
+import teamroots.embers.api.alchemy.AspectList;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.ISparkable;
-import teamroots.embers.api.upgrades.IUpgradeProvider;
-import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.item.ItemAlchemicWaste;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSphereFX;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
-import teamroots.embers.api.alchemy.AlchemyResult;
 import teamroots.embers.util.AlchemyUtil;
-import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable, ISoundController {
 	public static final EnumFacing[] UPGRADE_SIDES = new EnumFacing[]{EnumFacing.DOWN};
@@ -226,17 +223,10 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 		return RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), Lists.newArrayList(north.getStackInSlot(0),east.getStackInSlot(0),south.getStackInSlot(0),west.getStackInSlot(0)));
 	}
 
-	public boolean dirty = false;
-	
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

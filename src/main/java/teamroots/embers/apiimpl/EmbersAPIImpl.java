@@ -13,7 +13,6 @@ import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.api.misc.IFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.upgrades.UpgradeUtil;
-import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.tileentity.TileEntityCatalyzer;
 import teamroots.embers.tileentity.TileEntityCombustor;
 import teamroots.embers.util.EmberInventoryUtil;

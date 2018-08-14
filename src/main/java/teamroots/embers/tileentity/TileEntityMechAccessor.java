@@ -1,13 +1,7 @@
 package teamroots.embers.tileentity;
 
-import java.util.HashSet;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,6 +13,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.block.BlockMechAccessor;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Random;
 
 public class TileEntityMechAccessor extends TileEntity implements ITileEntityBase {
 	static HashSet<Class<? extends TileEntity>> ACCESSIBLE_TILES = new HashSet<>();
@@ -106,17 +105,10 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
 		this.invalidate();
 		world.setTileEntity(pos, null);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

@@ -1,10 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +20,8 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.api.tile.ISparkable;
 import teamroots.embers.api.tile.ITargetable;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -33,8 +30,11 @@ import teamroots.embers.block.BlockBeamCannon;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageBeamCannonFX;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.api.power.IEmberCapability;
-import teamroots.embers.api.power.IEmberPacketReceiver;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase, ITickable, ITargetable {
 	public static final int FIRE_THRESHOLD = 400;
@@ -103,18 +103,11 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		this.invalidate();
 		world.setTileEntity(pos, null);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

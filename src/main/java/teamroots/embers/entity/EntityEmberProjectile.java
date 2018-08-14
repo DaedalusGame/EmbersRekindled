@@ -1,12 +1,5 @@
 package teamroots.embers.entity;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-//import elucent.albedo.lighting.ILightProvider;
-//import elucent.albedo.lighting.Light;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,16 +10,19 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional.Interface;
-import net.minecraftforge.fml.common.Optional.Method;
-import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.misc.IProjectileEffect;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSizedBurstFX;
 import teamroots.embers.particle.ParticleUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+//import elucent.albedo.lighting.ILightProvider;
+//import elucent.albedo.lighting.Light;
 
 //@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
 public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ {

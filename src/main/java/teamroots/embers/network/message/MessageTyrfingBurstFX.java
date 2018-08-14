@@ -1,6 +1,5 @@
 package teamroots.embers.network.message;
 
-import java.util.Random;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
@@ -10,6 +9,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.particle.ParticleUtil;
+
+import java.util.Random;
 
 public class MessageTyrfingBurstFX implements IMessage {
 	public static Random random = new Random();

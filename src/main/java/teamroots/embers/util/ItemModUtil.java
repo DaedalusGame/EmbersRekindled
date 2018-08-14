@@ -1,8 +1,5 @@
 package teamroots.embers.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -10,11 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-import teamroots.embers.Embers;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.api.itemmod.IItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
-import teamroots.embers.itemmod.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 //TODO: Phase out
 @Deprecated

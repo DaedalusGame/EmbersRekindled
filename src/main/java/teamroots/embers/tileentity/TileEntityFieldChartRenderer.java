@@ -1,22 +1,18 @@
 package teamroots.embers.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import teamroots.embers.Embers;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.RenderUtil;
-import teamroots.embers.util.StructBox;
-import teamroots.embers.util.StructUV;
 
 public class TileEntityFieldChartRenderer extends TileEntitySpecialRenderer<TileEntityFieldChart> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/field_square.png");

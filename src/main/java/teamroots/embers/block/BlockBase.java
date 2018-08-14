@@ -10,7 +10,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 
 public class BlockBase extends Block implements IModeledBlock, IBlock {

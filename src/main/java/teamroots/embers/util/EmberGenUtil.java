@@ -1,17 +1,16 @@
 package teamroots.embers.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EmberGenUtil {
 	public static int offX = 0;

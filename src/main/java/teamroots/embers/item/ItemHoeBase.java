@@ -3,7 +3,6 @@ package teamroots.embers.item;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemHoe;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
 
 public class ItemHoeBase extends ItemHoe implements IModeledItem {

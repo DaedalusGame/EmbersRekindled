@@ -1,9 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,8 +14,12 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
-import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.power.DefaultEmberCapability;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityBase {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -88,17 +88,10 @@ public class TileEntityMixerTop extends TileFluidHandler implements ITileEntityB
 		}
 		return super.getCapability(capability, facing);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

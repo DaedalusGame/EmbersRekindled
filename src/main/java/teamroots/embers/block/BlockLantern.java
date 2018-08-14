@@ -1,7 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.Random;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -9,6 +7,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.particle.ParticleUtil;
+
+import java.util.Random;
 
 public class BlockLantern extends BlockBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0.25,0,0.25,0.75,13.0/16.0,0.75);

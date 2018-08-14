@@ -34,11 +34,6 @@ public class TileEntityFieldChart extends TileEntity implements ITileEntityBase,
 	}
 
 	@Override
-	public void markForUpdate() {
-		
-	}
-
-	@Override
 	public void update() {
 		if (getWorld().isRemote)
 			handleSound();

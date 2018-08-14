@@ -13,8 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityAxle;
-import teamroots.embers.tileentity.TileEntityItemExtractor;
-import teamroots.embers.tileentity.TileEntityRelay;
 
 public class BlockAxle extends BlockTEBase {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");

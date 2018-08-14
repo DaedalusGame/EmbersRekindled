@@ -1,31 +1,22 @@
 package teamroots.embers;
 
-import java.util.*;
-import java.util.Map.Entry;
-
 import com.google.common.collect.Sets;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.event.RegistryEvent;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,19 +24,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -57,6 +47,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.block.IDial;
@@ -68,7 +59,6 @@ import teamroots.embers.item.ItemGrandhammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberGenOffset;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.network.message.MessageTyrfingBurstFX;
 import teamroots.embers.proxy.ClientProxy;
 import teamroots.embers.research.ResearchBase;
@@ -77,6 +67,9 @@ import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
 import teamroots.embers.world.EmberWorldData;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class EventManager {
 	double gaugeAngle = 0;
@@ -98,12 +91,12 @@ public class EventManager {
 	public static float prevCooledStrength = 0;
 	public static boolean acceptUpdates = true;
 	
-	public static Map<BlockPos, TileEntity> toUpdate = new HashMap<BlockPos, TileEntity>();
-	public static Map<BlockPos, TileEntity> overflow = new HashMap<BlockPos, TileEntity>();
+	//public static Map<BlockPos, TileEntity> toUpdate = new HashMap<BlockPos, TileEntity>();
+	//public static Map<BlockPos, TileEntity> overflow = new HashMap<BlockPos, TileEntity>();
 	
 	static EntityPlayer clientPlayer = null;
 	
-	public static void markTEForUpdate(BlockPos pos, TileEntity tile){
+	/*public static void markTEForUpdate(BlockPos pos, TileEntity tile){
 		if (!tile.getWorld().isRemote && acceptUpdates){
 			if (!toUpdate.containsKey(pos)){
 				toUpdate.put(pos, tile);
@@ -120,7 +113,7 @@ public class EventManager {
 				overflow.replace(pos, tile);
 			}
 		}
-	}
+	}*/
 
 	private static ThreadLocal<Boolean> captureDrops = ThreadLocal.withInitial(() -> false);
 	private static ThreadLocal<NonNullList<ItemStack>> capturedDrops = ThreadLocal.withInitial(NonNullList::create);
@@ -616,7 +609,7 @@ public class EventManager {
 	
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event){
-		if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
+		/*if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
 			NBTTagList list = new NBTTagList();
 			acceptUpdates = false;
 			TileEntity[] updateArray = toUpdate.values().toArray(new TileEntity[0]);
@@ -635,7 +628,7 @@ public class EventManager {
 				PacketHandler.INSTANCE.sendToAll(new MessageTEUpdate(tag));
 			}
 			toUpdate.clear();
-		}
+		}*/
 	}
 
 	static HashSet<String> removedItems = Sets.newHashSet("embers:advanced_edge","embers:inferno_forge_edge","embers:mech_edge","embers:glow","embers:structure_marker");

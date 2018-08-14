@@ -1,9 +1,5 @@
 package teamroots.embers.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
@@ -13,15 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemSpade;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -32,8 +20,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.block.BlockCaminiteLever;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Misc {
 	public static Random random = new Random();
@@ -160,13 +150,13 @@ public class Misc {
 		int baseCount = 0;
 		if (stack.getItem() instanceof ItemArmor){
 			ItemArmor armor = (ItemArmor) stack.getItem();
-			if (armor.getEquipmentSlot() == EntityEquipmentSlot.HEAD)
+			if (armor.armorType == EntityEquipmentSlot.HEAD)
 				baseCount = 5;
-			if (armor.getEquipmentSlot() == EntityEquipmentSlot.CHEST)
+			if (armor.armorType == EntityEquipmentSlot.CHEST)
 				baseCount = 8;
-			if (armor.getEquipmentSlot() == EntityEquipmentSlot.LEGS)
+			if (armor.armorType == EntityEquipmentSlot.LEGS)
 				baseCount = 7;
-			if (armor.getEquipmentSlot() == EntityEquipmentSlot.FEET)
+			if (armor.armorType == EntityEquipmentSlot.FEET)
 				baseCount = 4;
 		}
 		if (stack.getItem() instanceof ItemSword)
@@ -215,5 +205,10 @@ public class Misc {
 		Block block = state.getBlock();
 		int meta = block.damageDropped(state);
 		return new ItemStack(block, 1, meta);
+	}
+
+	public static void syncTE(TileEntity tile) {
+		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
+		tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3); //Does a good job
 	}
 }

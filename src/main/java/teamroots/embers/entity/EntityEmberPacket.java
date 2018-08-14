@@ -2,8 +2,9 @@ package teamroots.embers.entity;
 
 //import elucent.albedo.lighting.ILightProvider;
 //import elucent.albedo.lighting.Light;
+
 import net.minecraft.block.state.IBlockState;
-		import net.minecraft.entity.Entity;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -13,10 +14,10 @@ import net.minecraft.world.World;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSparkleFX;
 import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.util.Misc;
 
 //@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")

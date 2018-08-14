@@ -1,17 +1,7 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -28,12 +18,13 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.item.ItemTinkerHammer;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.tileentity.TileEntityItemPipe.EnumPipeConnection;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
 
 public class TileEntityItemExtractor extends TileEntity implements ITileEntityBase, ITickable, IPressurizable {
 	public ItemStackHandler inventory = new ItemStackHandler(1){
@@ -440,7 +431,6 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 				tile.markDirty();
 				if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 					tile.markDirty();
-					EventManager.markTEForUpdate(aToUpdate, tile);
 				}
 			}
 		}
@@ -455,17 +445,10 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	public void setPressure(int pressure) {
 		this.pressure = pressure;
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

@@ -1,9 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,9 +17,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TileEntityDropper extends TileEntity implements ITileEntityBase, ITickable {
 	public ItemStackHandler inventory = new ItemStackHandler(1){
@@ -74,18 +71,11 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 		}
 		return super.hasCapability(capability, facing);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 	
 	@Override

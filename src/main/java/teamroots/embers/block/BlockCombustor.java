@@ -1,17 +1,10 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,10 +20,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
-import teamroots.embers.tileentity.TileEntityActivatorBottom;
-import teamroots.embers.tileentity.TileEntityActivatorTop;
 import teamroots.embers.tileentity.TileEntityCombustor;
-import teamroots.embers.tileentity.TileEntityFluidPipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockCombustor extends BlockTEBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,1,1);

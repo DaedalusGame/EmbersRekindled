@@ -1,10 +1,6 @@
 package teamroots.embers.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Sets;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -17,20 +13,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import teamroots.embers.Embers;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberChargedTool {

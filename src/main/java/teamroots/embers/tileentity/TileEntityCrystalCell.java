@@ -1,11 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,14 +23,18 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.api.power.IEmberCapability;
-import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
 	public static final int MAX_CAPACITY = 1440000;
@@ -72,7 +70,11 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
 	HashSet<Integer> soundsPlaying = new HashSet<>();
 
-	public boolean dirty = false;
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		Misc.syncTE(this);
+	}
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -83,17 +85,6 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 		double numLayers = 2+Math.floor(capability.getEmberCapacity()/128000.0);
 		double size = numLayers * layerHeight;
 		return new AxisAlignedBB(xPos-size/2, yPos+0.5, zPos-size/2, xPos+size/2, yPos+0.5+size, zPos+size/2);
-	}
-	
-	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
-		super.markDirty();
 	}
 	
 	public TileEntityCrystalCell(){

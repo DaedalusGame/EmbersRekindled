@@ -1,11 +1,11 @@
 package teamroots.embers.fluid;
 
-import java.awt.Color;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
+
+import java.awt.*;
 
 public class FluidMoltenNickel extends Fluid {
 	public FluidMoltenNickel() {

@@ -1,11 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.HashSet;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,13 +18,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Random;
 
 public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
 	int angle = 0;
@@ -118,18 +114,11 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 		}
 		return super.getCapability(capability, facing);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

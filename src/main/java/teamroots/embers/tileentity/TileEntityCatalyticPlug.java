@@ -23,6 +23,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockCatalyticPlug;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.upgrade.UpgradeCatalyticPlug;
+import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -71,12 +72,6 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
-    }
-
-    @Override
-    public void markDirty(){
-        EventManager.markTEForUpdate(getPos(), this);
-        super.markDirty();
     }
 
     public EnumFacing getFacing()
@@ -154,15 +149,17 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
     }
 
-    @Override
-    public void markForUpdate() {
-    }
-
     public FluidStack getFluidStack() {
         return tank.getFluid();
     }
 
     public int getCapacity() {
         return tank.getCapacity();
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        Misc.syncTE(this);
     }
 }

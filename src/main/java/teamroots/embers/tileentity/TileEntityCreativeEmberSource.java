@@ -1,7 +1,5 @@
 package teamroots.embers.tileentity;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +15,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.power.DefaultEmberCapability;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
 
 public class TileEntityCreativeEmberSource extends TileEntity implements ITileEntityBase, ITickable {
 	int ticksExisted = 0;
@@ -72,18 +73,11 @@ public class TileEntityCreativeEmberSource extends TileEntity implements ITileEn
 		}
 		return super.getCapability(capability, facing);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

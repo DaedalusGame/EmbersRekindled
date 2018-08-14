@@ -1,16 +1,14 @@
 package teamroots.embers.tileentity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class TileEntityCinderPlinthRenderer extends TileEntitySpecialRenderer<TileEntityCinderPlinth> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();

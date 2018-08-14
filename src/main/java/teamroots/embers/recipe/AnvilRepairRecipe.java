@@ -3,7 +3,6 @@ package teamroots.embers.recipe;
 import com.google.common.collect.Lists;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import teamroots.embers.util.Misc;
 

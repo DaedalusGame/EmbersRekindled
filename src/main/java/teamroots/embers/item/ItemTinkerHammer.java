@@ -1,7 +1,5 @@
 package teamroots.embers.item;
 
-import java.util.List;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -21,6 +19,8 @@ import teamroots.embers.api.power.IEmberPacketProducer;
 import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.api.tile.ITargetable;
 import teamroots.embers.util.Misc;
+
+import java.util.List;
 
 public class ItemTinkerHammer extends ItemBase {
 	public ItemTinkerHammer() {

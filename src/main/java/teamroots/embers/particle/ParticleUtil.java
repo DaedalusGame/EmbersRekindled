@@ -1,12 +1,12 @@
 package teamroots.embers.particle;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
 import teamroots.embers.network.message.MessageParticle;
 import teamroots.embers.proxy.ClientProxy;
+
+import java.util.Random;
 
 public class ParticleUtil {
 	public static Random random = new Random();

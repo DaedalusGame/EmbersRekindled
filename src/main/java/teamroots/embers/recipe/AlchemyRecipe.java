@@ -1,10 +1,5 @@
 package teamroots.embers.recipe;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
@@ -13,6 +8,11 @@ import teamroots.embers.api.alchemy.AlchemyResult;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.util.IHasAspects;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 public class AlchemyRecipe implements IHasAspects {
 	//Binary compat

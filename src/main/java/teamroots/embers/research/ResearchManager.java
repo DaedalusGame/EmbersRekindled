@@ -1,15 +1,13 @@
 package teamroots.embers.research;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.item.IEmberItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResearchManager {
 	public static List<ResearchCategory> researches = new ArrayList<ResearchCategory>();

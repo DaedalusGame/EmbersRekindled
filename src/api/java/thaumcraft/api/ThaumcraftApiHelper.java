@@ -390,6 +390,7 @@ public class ThaumcraftApiHelper {
 	
 	public static Ingredient getIngredient(Object obj)
     {
+		if (obj instanceof Ingredient) return (Ingredient) obj;
         if (obj!=null && obj instanceof ItemStack && ((ItemStack)obj).hasTagCompound())
             return new IngredientNBTTC((ItemStack)obj);
         else 
@@ -428,14 +429,14 @@ public class ThaumcraftApiHelper {
 	    }
 	    else if (!prime.isEmpty() && !other.isEmpty())
 	    {
-	        if (prime.getTagCompound() == null && other.getTagCompound() != null)
-	        {
-	            return false;
-	        }
-	        else
-	        {
+//	        if (prime.getTagCompound() == null && other.getTagCompound() != null)
+//	        {
+//	            return false;
+//	        }
+//	        else
+//	        {
 	            return (prime.getTagCompound() == null || compareTagsRelaxed(prime.getTagCompound(),other.getTagCompound()));
-	        }
+//	        }
 	    }
 	    else
 	    {

@@ -11,7 +11,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.tileentity.TileEntityBeamSplitter;
 import teamroots.embers.tileentity.TileEntityDawnstoneAnvil;
 
 public class BlockDawnstoneAnvil extends BlockTEBase {

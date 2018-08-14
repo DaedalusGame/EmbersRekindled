@@ -1,54 +1,29 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import com.jcraft.jorbis.Block;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.GameType;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.tile.IEmberInjectable;
-import teamroots.embers.block.BlockBreaker;
-import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.block.BlockSeed;
-import teamroots.embers.block.BlockVacuum;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Random;
 
 public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable, ISoundController {
 	boolean[] willSpawn = new boolean[12];
@@ -218,7 +193,11 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		return id == SOUND_AMBIENT;
 	}
 
-	public boolean dirty = false;
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		Misc.syncTE(this);
+	}
 
 	public ResourceLocation getTexture() {
 		switch (material) {
@@ -229,16 +208,5 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 			case 4: return TEXTURE_SILVER;
 			default: return TEXTURE_IRON;
 		}
-	}
-	
-	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
-		super.markDirty();
 	}
 }

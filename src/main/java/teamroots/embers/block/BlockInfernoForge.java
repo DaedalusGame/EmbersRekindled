@@ -1,10 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -18,9 +13,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.tileentity.TileEntityEmberBore;
 import teamroots.embers.tileentity.TileEntityInfernoForge;
 import teamroots.embers.tileentity.TileEntityInfernoForgeOpening;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockInfernoForge extends BlockTEBase {
 	public static final AxisAlignedBB AABB_BASE = new AxisAlignedBB(0,0,0,1,0.75,1);

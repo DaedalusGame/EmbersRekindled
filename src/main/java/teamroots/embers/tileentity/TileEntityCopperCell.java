@@ -1,7 +1,5 @@
 package teamroots.embers.tileentity;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,8 +13,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
-import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.power.DefaultEmberCapability;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
 
 public class TileEntityCopperCell extends TileEntity implements ITileEntityBase {
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -61,18 +62,11 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

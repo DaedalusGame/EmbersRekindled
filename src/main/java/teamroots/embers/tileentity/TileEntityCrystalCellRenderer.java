@@ -1,18 +1,17 @@
 package teamroots.embers.tileentity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import teamroots.embers.Embers;
+
+import java.util.Random;
 
 public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer<TileEntityCrystalCell> {
     public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/crystal_material.png");

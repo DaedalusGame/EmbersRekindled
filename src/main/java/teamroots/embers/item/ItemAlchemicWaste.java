@@ -1,7 +1,5 @@
 package teamroots.embers.item;
 
-import java.util.List;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -11,6 +9,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.alchemy.AspectList;
+
+import java.util.List;
 
 public class ItemAlchemicWaste extends ItemBase {
 	public static final String TAG_IRON = "ironInaccuracy";

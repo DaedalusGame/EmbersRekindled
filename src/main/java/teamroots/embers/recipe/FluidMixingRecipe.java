@@ -1,10 +1,10 @@
 package teamroots.embers.recipe;
 
+import net.minecraftforge.fluids.FluidStack;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
-
-import net.minecraftforge.fluids.FluidStack;
 
 public class FluidMixingRecipe {
 	public ArrayList<FluidStack> inputs = new ArrayList<>();

@@ -1,21 +1,15 @@
 package teamroots.embers.util;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.util.stream.Collectors;
-
+import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import teamroots.embers.Embers;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 public class ShaderUtil {
 	

@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import teamroots.embers.Embers;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class FluidMoltenMetal extends Fluid {
 

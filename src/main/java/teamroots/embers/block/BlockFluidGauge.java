@@ -1,8 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -19,10 +16,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import teamroots.embers.EventManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdateRequest;
 import teamroots.embers.util.Misc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockFluidGauge extends BlockBase implements IDial {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");
@@ -106,7 +105,7 @@ public class BlockFluidGauge extends BlockBase implements IDial {
 	public void updateTEData(World world, IBlockState state, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(this.facing)));
 		if (tile != null){
-			PacketHandler.INSTANCE.sendToServer(new MessageTEUpdateRequest(Minecraft.getMinecraft().player.getUniqueID(),pos));
+			PacketHandler.INSTANCE.sendToServer(new MessageTEUpdateRequest(pos));
 		}
 	}
 }

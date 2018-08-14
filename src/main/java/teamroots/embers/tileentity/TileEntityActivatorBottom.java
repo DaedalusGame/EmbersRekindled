@@ -1,10 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,17 +17,17 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
-import teamroots.embers.api.upgrades.IUpgradeUtil;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable {
     public static final int PROCESS_TIME = 40;
@@ -156,16 +151,9 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
         }
     }
 
-    public boolean dirty = false;
-
-    @Override
-    public void markForUpdate() {
-        EventManager.markTEForUpdate(getPos(), this);
-    }
-
     @Override
     public void markDirty() {
-        markForUpdate();
         super.markDirty();
+        Misc.syncTE(this);
     }
 }

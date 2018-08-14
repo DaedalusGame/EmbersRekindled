@@ -1,30 +1,23 @@
 package teamroots.embers.network.message;
 
-import java.util.Random;
-import java.util.UUID;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
-import teamroots.embers.api.event.EmberProjectileEvent;
-import teamroots.embers.api.event.EmberRemoveEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.entity.EntityEmberProjectile;
-import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.itemmod.ModifierCasterOrb;
 import teamroots.embers.util.EmberInventoryUtil;
+
+import java.util.Random;
+import java.util.UUID;
 
 public class MessageCasterOrb implements IMessage {
     public static Random random = new Random();

@@ -1,12 +1,8 @@
 package teamroots.embers.recipe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -18,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -33,16 +28,16 @@ import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
-import teamroots.embers.api.misc.ICoefficientFuel;
-import teamroots.embers.api.misc.IFuel;
-import teamroots.embers.api.misc.IMetalCoefficient;
+import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.block.BlockSeed;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.AlchemyUtil;
-import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.util.IngredientSpecial;
 import teamroots.embers.util.WeightedItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeRegistry {
 	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<>();

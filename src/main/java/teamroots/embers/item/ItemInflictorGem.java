@@ -1,7 +1,5 @@
 package teamroots.embers.item;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -15,6 +13,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+
+import java.util.List;
 
 public class ItemInflictorGem extends ItemBase {
 

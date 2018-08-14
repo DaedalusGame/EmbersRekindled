@@ -1,7 +1,5 @@
 package teamroots.embers.tileentity;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +22,9 @@ import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.block.BlockPump;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.FluidUtil;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
 
 public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable {
 	public static final double EMBER_COST = 0.5;
@@ -84,18 +85,11 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 		}
 		return super.getCapability(capability, facing);
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	@Override

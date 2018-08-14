@@ -1,27 +1,22 @@
 package teamroots.embers.tileentity;
 
-import java.util.Random;
-
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
 import teamroots.embers.util.RenderUtil;
+
+import java.util.Random;
 
 public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<TileEntityAlchemyTablet> implements ITileEntitySpecialRendererLater {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();

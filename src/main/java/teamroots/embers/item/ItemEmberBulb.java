@@ -1,15 +1,11 @@
 package teamroots.embers.item;
 
-import java.util.List;
-
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -18,9 +14,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.util.Misc;
+
+import java.util.List;
 
 public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberCell, IHeldEmberCell, IEmberItem {
 

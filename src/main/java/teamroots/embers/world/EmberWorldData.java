@@ -1,19 +1,10 @@
 package teamroots.embers.world;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.common.util.Constants;
 import teamroots.embers.Embers;
 import teamroots.embers.util.EmberGenUtil;
-import teamroots.embers.util.NoiseGenUtil;
 
 public class EmberWorldData extends WorldSavedData {
 	public EmberWorldData(String name) {

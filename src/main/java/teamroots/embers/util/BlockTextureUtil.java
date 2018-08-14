@@ -1,12 +1,11 @@
 package teamroots.embers.util;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
-
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Map;
 
 public class BlockTextureUtil {
 	public static Map<ResourceLocation, TextureAtlasSprite> textures = Maps.newHashMap();

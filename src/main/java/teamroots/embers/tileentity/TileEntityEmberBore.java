@@ -1,12 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,20 +17,21 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.recipe.BoreOutput;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.WeightedItemStack;
 import teamroots.embers.util.sound.ISoundController;
-import teamroots.embers.world.EmberWorldData;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
 	public static final int MAX_LEVEL = 7;
@@ -207,18 +201,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 			}
 		}
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 	
 	@Override
@@ -325,7 +312,9 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 		@Override
 		public ItemStack extractItem(int slot, int amount, boolean simulate){
-			if (slot == SLOT_FUEL){
+			ItemStack currentFuel = super.extractItem(slot,amount,true);
+			int burntime = TileEntityFurnace.getItemBurnTime(currentFuel);
+			if (slot == SLOT_FUEL && burntime != 0){
 				return ItemStack.EMPTY;
 			}
 			return super.extractItem(slot, amount, simulate);

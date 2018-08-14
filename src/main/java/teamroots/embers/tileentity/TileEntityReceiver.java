@@ -1,9 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,11 +14,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.block.BlockEmberEmitter;
 import teamroots.embers.entity.EntityEmberPacket;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.api.power.IEmberCapability;
-import teamroots.embers.api.power.IEmberPacketReceiver;
+import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TileEntityReceiver extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketReceiver {
 	public static final int TRANSFER_RATE = 10;
@@ -128,17 +128,10 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 	public boolean onReceive(EntityEmberPacket packet) {
 		return true;
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

@@ -1,11 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,10 +19,12 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.tileentity.TileEntityItemExtractor.EnumPipeConnection;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
 
 public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, ITickable, IPressurizable {
 	int ticksExisted = 0;
@@ -388,7 +384,6 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					tile.markDirty();
 					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 						tile.markDirty();
-						EventManager.markTEForUpdate(aToUpdate, tile);
 					}
 				}
 				if (toUpdate.size() > 0){
@@ -440,7 +435,6 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 					tile.markDirty();
 					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 						tile.markDirty();
-						EventManager.markTEForUpdate(aToUpdate, tile);
 					}
 				}
 			}
@@ -456,17 +450,10 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 	public void setPressure(int pressure) {
 		this.pressure = pressure;
 	}
-	
-	public boolean dirty = false;
-	
+
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

@@ -10,7 +10,6 @@ import teamroots.embers.util.IHasSize;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class IngredientCraftTweaker extends Ingredient implements IHasSize {
     IIngredient predicate;

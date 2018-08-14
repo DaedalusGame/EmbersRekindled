@@ -1,14 +1,8 @@
 package teamroots.embers.tileentity;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,28 +16,22 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
-import net.minecraftforge.fluids.FluidEvent.FluidSpilledEvent;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEntityBase, ITickable {
     public static final float BASE_MULTIPLIER = 1.5f;
@@ -192,16 +180,9 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
         }
     }
 
-    public boolean dirty = false;
-
-    @Override
-    public void markForUpdate() {
-        EventManager.markTEForUpdate(getPos(), this);
-    }
-
     @Override
     public void markDirty() {
-        markForUpdate();
         super.markDirty();
+        Misc.syncTE(this);
     }
 }

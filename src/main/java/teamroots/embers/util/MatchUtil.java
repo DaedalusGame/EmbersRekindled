@@ -1,12 +1,12 @@
 package teamroots.embers.util;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class MatchUtil {
 	public static class StateComparator implements Comparator<IBlockState> {

@@ -1,8 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -21,6 +18,9 @@ import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityMixerBottom;
 import teamroots.embers.tileentity.TileEntityMixerTop;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockMixer extends BlockTEBase {
 	public static final PropertyBool isTop = PropertyBool.create("top");

@@ -1,10 +1,5 @@
 package teamroots.embers.itemmod;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.itemmod.ItemModUtil;
@@ -21,6 +15,10 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessagePlayerJetFX;
 import teamroots.embers.util.EmberInventoryUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class ModifierCinderJet extends ModifierBase {
 

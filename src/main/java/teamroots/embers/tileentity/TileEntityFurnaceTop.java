@@ -1,9 +1,5 @@
 package teamroots.embers.tileentity;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,14 +20,11 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.EventManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
-import teamroots.embers.recipe.ItemMeltingOreRecipe;
-import teamroots.embers.recipe.ItemMeltingRecipe;
-import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntityBase, ITickable {
 	public static int capacity = Fluid.BUCKET_VOLUME*4;
@@ -113,17 +106,10 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 		return false;
 	}
 
-	public boolean dirty = false;
-	
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 
 	public int getCapacity(){

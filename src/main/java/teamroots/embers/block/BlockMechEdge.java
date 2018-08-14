@@ -1,7 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
+
+import java.util.ArrayList;
 
 public class BlockMechEdge extends BlockBase {
 	public static final PropertyInteger state = PropertyInteger.create("state", 0, 8);

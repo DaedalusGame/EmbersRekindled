@@ -7,10 +7,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.item.ItemAshenCloak;
-import teamroots.embers.item.ItemInflictorGem;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import teamroots.embers.RegistryManager;
+import teamroots.embers.item.ItemInflictorGem;
 
 public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 

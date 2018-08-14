@@ -1,8 +1,5 @@
 package teamroots.embers.block;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -21,6 +18,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityAlchemyPedestal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockAlchemyPedestal extends BlockTEBase {
 	public static AxisAlignedBB AABB_FULL = new AxisAlignedBB(0,0,0,1,1,1);

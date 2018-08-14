@@ -1,8 +1,8 @@
 package teamroots.embers.research;
 
-import java.util.ArrayList;
-
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
 
 public class ResearchCategory {
 	public String name = "";

@@ -1,15 +1,14 @@
 package teamroots.embers.world;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.util.Misc;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StructureBase {
 	public boolean replaceWithAir = false;

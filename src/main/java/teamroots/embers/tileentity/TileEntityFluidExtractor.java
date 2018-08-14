@@ -1,17 +1,7 @@
 package teamroots.embers.tileentity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
@@ -29,15 +19,16 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityFluidPipe.EnumPipeConnection;
 import teamroots.embers.util.Misc;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityFluidExtractor extends TileFluidHandler implements ITileEntityBase, ITickable {
 	Random random = new Random();
@@ -385,7 +376,6 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 			tile.markDirty();
 			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 				tile.markDirty();
-				EventManager.markTEForUpdate(aToUpdate, tile);
 			}
 		}
 		markDirty();
@@ -450,16 +440,9 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
         }
 	}
 
-	public boolean dirty = false;
-	
 	@Override
-	public void markForUpdate(){
-		EventManager.markTEForUpdate(getPos(), this);
-	}
-	
-	@Override
-	public void markDirty(){
-		markForUpdate();
+	public void markDirty() {
 		super.markDirty();
+		Misc.syncTE(this);
 	}
 }

@@ -1,7 +1,5 @@
 package teamroots.embers.itemmod;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -11,7 +9,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.itemmod.ItemModUtil;
@@ -19,6 +16,8 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageSuperheatFX;
 import teamroots.embers.util.EmberInventoryUtil;
+
+import java.util.List;
 
 public class ModifierSuperheater extends ModifierBase {
 

@@ -1,21 +1,20 @@
 package teamroots.embers.world;
 
-import java.util.Random;
-
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.entity.EntityAncientGolem;
 import teamroots.embers.util.Misc;
+
+import java.util.Random;
 
 public class WorldGenSmallRuin extends StructureBase implements IWorldGenerator {
 	double l = Math.sin(1);

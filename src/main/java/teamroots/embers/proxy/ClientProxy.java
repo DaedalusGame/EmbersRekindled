@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
-import teamroots.embers.util.ShaderUtil;
 import teamroots.embers.util.sound.ItemUseSound;
 import teamroots.embers.util.sound.MachineSound;
 

@@ -1,10 +1,10 @@
 package teamroots.embers.api.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Event;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmberRemoveEvent extends Event {
 	private EntityPlayer player;

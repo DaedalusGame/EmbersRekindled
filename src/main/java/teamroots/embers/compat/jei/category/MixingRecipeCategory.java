@@ -5,16 +5,12 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.Embers;
 import teamroots.embers.compat.jei.wrapper.MixingRecipeWrapper;
-
-import java.util.List;
 
 public class MixingRecipeCategory implements IRecipeCategory<MixingRecipeWrapper> {
     private final IDrawable background;

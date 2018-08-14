@@ -1,6 +1,5 @@
 package teamroots.embers.network.message;
 
-import java.util.Random;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundCategory;
@@ -12,6 +11,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.SoundManager;
 import teamroots.embers.particle.ParticleUtil;
+
+import java.util.Random;
 
 public class MessageEmberSizedBurstFX implements IMessage {
 	public static Random random = new Random();

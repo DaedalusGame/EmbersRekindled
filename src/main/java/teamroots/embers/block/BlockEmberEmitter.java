@@ -12,10 +12,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdate;
 import teamroots.embers.tileentity.TileEntityEmitter;
-import teamroots.embers.tileentity.TileEntityItemPipe;
 
 public class BlockEmberEmitter extends BlockTEBase {
 	public static final PropertyDirection facing = PropertyDirection.create("facing");
