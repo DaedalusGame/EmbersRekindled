@@ -35,7 +35,7 @@ public class ItemCinderStaff extends ItemBase {
 			double posX = entity.posX + entity.getLookVec().x * spawnDistance;
 			double posY = entity.posY + entity.getEyeHeight() + entity.getLookVec().y * spawnDistance;
 			double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
-			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, Math.max(charge,0.5), entity.getUniqueID());
+			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, Math.max(charge,0.5), entity);
 			if(charge < 1.0)
 				proj.getDataManager().set(proj.lifetime,5);
 			world.spawnEntity(proj);

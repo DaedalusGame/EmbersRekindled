@@ -1,5 +1,7 @@
 package teamroots.embers.entity;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,14 +11,20 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.misc.IProjectileEffect;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSizedBurstFX;
 import teamroots.embers.particle.ParticleUtil;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,145 +34,185 @@ import java.util.UUID;
 
 //@Interface(iface = "elucent.albedo.lighting.ILightProvider", modid = "albedo")
 public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ {
+    private static final Predicate<Entity> VALID_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
+        public boolean apply(@Nullable Entity entity) {
+            return entity.canBeCollidedWith();
+        }
+    });
+
     public static final DataParameter<Float> value = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
-	public static final DataParameter<Boolean> dead = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Boolean> dead = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> lifetime = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
-	public UUID id = null;
-	public IProjectileEffect effect = null;
-	
-	public EntityEmberProjectile(World worldIn) {
-		super(worldIn);
-		this.setInvisible(true);
-		this.getDataManager().register(value, 0f);
-		this.getDataManager().register(dead, false);
-		this.getDataManager().register(lifetime, 160);
-	}
-	
-	public void initCustom(double x, double y, double z, double vx, double vy, double vz, double value, UUID playerId){
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
-		this.motionX = vx;
-		this.motionY = vy;
-		this.motionZ = vz;
-		setSize((float)value/10.0f,(float)value/10.0f);
-		getDataManager().set(EntityEmberProjectile.value, (float)value);
-		getDataManager().setDirty(EntityEmberProjectile.value);
-		setSize((float)value/10.0f,(float)value/10.0f);
-		this.id = playerId;
-	}
+    //public UUID id = null;
+    public Entity shootingEntity;
+    public IProjectileEffect effect = null;
 
-	public void setEffect(IProjectileEffect effect) {
-		this.effect = effect;
-	}
+    public EntityEmberProjectile(World worldIn) {
+        super(worldIn);
+        this.setInvisible(true);
+        this.getDataManager().register(value, 0f);
+        this.getDataManager().register(dead, false);
+        this.getDataManager().register(lifetime, 160);
+    }
 
-	public EntityPlayer getShooter() {
-		return getEntityWorld().getPlayerEntityByUUID(id);
-	}
+    public void initCustom(double x, double y, double z, double vx, double vy, double vz, double value, Entity shootingEntity) {
+        this.posX = x;
+        this.posY = y;
+        this.posZ = z;
+        this.motionX = vx;
+        this.motionY = vy;
+        this.motionZ = vz;
+        setSize((float) value / 10.0f, (float) value / 10.0f);
+        getDataManager().set(EntityEmberProjectile.value, (float) value);
+        getDataManager().setDirty(EntityEmberProjectile.value);
+        setSize((float) value / 10.0f, (float) value / 10.0f);
+        this.shootingEntity = shootingEntity;
+    }
 
-	@Override
-	protected void entityInit() {
-	}
+    public void setEffect(IProjectileEffect effect) {
+        this.effect = effect;
+    }
 
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
-		getDataManager().set(EntityEmberProjectile.value, compound.getFloat("value"));
-		getDataManager().setDirty(EntityEmberProjectile.value);
-		if (compound.hasKey("UUIDmost")){
+    public Entity getShooter() {
+        return shootingEntity;
+    }
+
+    @Override
+    protected void entityInit() {
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        getDataManager().set(EntityEmberProjectile.value, compound.getFloat("value"));
+        getDataManager().setDirty(EntityEmberProjectile.value);
+        /*if (compound.hasKey("UUIDmost")){
 			id = new UUID(compound.getLong("UUIDmost"),compound.getLong("UUIDleast"));
-		}
-	}
+		}*/
+    }
 
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
-		compound.setFloat("value", getDataManager().get(value));
-		if (id != null){
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        compound.setFloat("value", getDataManager().get(value));
+		/*if (id != null){
 			compound.setLong("UUIDmost", id.getMostSignificantBits());
 			compound.setLong("UUIDleast", id.getLeastSignificantBits());
-		}
-	}
-	
-	@Override
-	public void onUpdate(){
-		super.onUpdate();
-		//if (!getEntityWorld().isRemote && getDataManager().get(lifetime) > 18 && getDataManager().get(dead)){
-			//PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
-		//}
-		getDataManager().set(lifetime, getDataManager().get(lifetime)-1);
-		getDataManager().setDirty(lifetime);
-		if (getDataManager().get(lifetime) <= 0){
-			getEntityWorld().removeEntity(this);
-			this.setDead();
-		}
-		if (!getDataManager().get(dead)){
-			getDataManager().set(value, getDataManager().get(value)-0.025f);
-			if (getDataManager().get(value) <= 0){
-				getEntityWorld().removeEntity(this);
-			}
-			
-			posX += motionX;
-			posY += motionY;
-			posZ += motionZ;
-			IBlockState state = getEntityWorld().getBlockState(getPosition());
-			if (state.isFullCube() && state.isOpaqueCube()){
-				if (!getEntityWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(prevPosX, prevPosY, prevPosZ,getDataManager().get(value)/1.75f));
-					getDataManager().set(lifetime, 20);
-					getDataManager().setDirty(lifetime);
-					this.getDataManager().set(dead, true);
-					getDataManager().setDirty(dead);
-				}
-			}
-			if (getEntityWorld().isRemote){
-				double deltaX = posX - prevPosX;
-				double deltaY = posY - prevPosY;
-				double deltaZ = posZ - prevPosZ;
-				double dist = Math.ceil(Math.sqrt(deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ) * 10);
-				for (double i = 0; i < dist; i ++){
-					double coeff = i/dist;
-					ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, getDataManager().get(value)/1.75f, 24);
-				}
-			}
-			List<EntityLivingBase> rawEntities = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-getDataManager().get(value)*0.125,posY-getDataManager().get(value)*0.125,posZ-getDataManager().get(value)*0.125,posX+getDataManager().get(value)*0.125,posY+getDataManager().get(value)*0.125,posZ+getDataManager().get(value)*0.125));
-			ArrayList<EntityLivingBase> entities = new ArrayList<EntityLivingBase>();
-			for (int j = 0; j < rawEntities.size(); j ++){
-				if (id != null){
-					if (rawEntities.get(j).getUniqueID().compareTo(id) != 0){
-						entities.add(rawEntities.get(j));
-					}
-				}
-			}
-			if (entities.size() > 0){
-				for (EntityLivingBase target : entities){
-					DamageSource source = RegistryManager.damage_ember;
-					if (getEntityWorld().getPlayerEntityByUUID(id) != null){
-						EntityPlayer player = getEntityWorld().getPlayerEntityByUUID(id);
-						source = DamageSource.causePlayerDamage(player);
-						target.setFire(1);
-						target.attackEntityFrom(source, getDataManager().get(value));
-						target.setLastAttackedEntity(player);
-						target.setRevengeTarget(player);
-						target.knockBack(this, 0.5f, -motionX, -motionZ);
-					}
-					else {
-						target.attackEntityFrom(source, getDataManager().get(value));
-					}
-					if (!getEntityWorld().isRemote){
-						PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
-						getDataManager().set(lifetime, 20);
-						getDataManager().setDirty(lifetime);
-						this.getDataManager().set(dead, true);
-						getDataManager().setDirty(dead);
-					}
-				}
-			}
-		}
-		else {
-			motionX = 0;
-			motionY = 0;
-			motionZ = 0;
-		}
-	}
+		}*/
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        //if (!getEntityWorld().isRemote && getDataManager().get(lifetime) > 18 && getDataManager().get(dead)){
+        //PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
+        //}
+        getDataManager().set(lifetime, getDataManager().get(lifetime) - 1);
+        getDataManager().setDirty(lifetime);
+        World world = getEntityWorld();
+        if (getDataManager().get(lifetime) <= 0) {
+            world.removeEntity(this);
+            this.setDead();
+        }
+        if (!getDataManager().get(dead)) {
+            getDataManager().set(value, getDataManager().get(value) - 0.025f);
+            if (getDataManager().get(value) <= 0) {
+                world.removeEntity(this);
+            }
+
+            Vec3d currPosVec = new Vec3d(this.posX, this.posY, this.posZ);
+            Vec3d newPosVector = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+            RayTraceResult raytraceresult = this.world.rayTraceBlocks(currPosVec, newPosVector, false, true, false);
+
+            if (raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS)
+                newPosVector = raytraceresult.hitVec;
+
+            RayTraceResult hitEntity = findEntityOnPath(currPosVec, newPosVector);
+
+            if (hitEntity != null) {
+                newPosVector = hitEntity.hitVec;
+                raytraceresult = hitEntity;
+            }
+
+            posX = newPosVector.x;
+            posY = newPosVector.y;
+            posZ = newPosVector.z;
+
+            if (!world.isRemote && raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+                onHit(raytraceresult);
+            }
+
+            if (world.isRemote) {
+                double deltaX = posX - prevPosX;
+                double deltaY = posY - prevPosY;
+                double deltaZ = posZ - prevPosZ;
+                double dist = Math.ceil(Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 10);
+                for (double i = 0; i < dist; i++) {
+                    double coeff = i / dist;
+                    ParticleUtil.spawnParticleGlow(world, (float) (prevPosX + (posX - prevPosX) * coeff), (float) (prevPosY + (posY - prevPosY) * coeff), (float) (prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 255, 64, 16, getDataManager().get(value) / 1.75f, 24);
+                }
+            }
+
+            this.setPosition(this.posX, this.posY, this.posZ);
+        } else {
+            motionX = 0;
+            motionY = 0;
+            motionZ = 0;
+        }
+    }
+
+    private void onHit(RayTraceResult raytraceresult) {
+        PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ, getDataManager().get(value) / 1.75f));
+        getDataManager().set(lifetime, 20);
+        getDataManager().setDirty(lifetime);
+        this.getDataManager().set(dead, true);
+        getDataManager().setDirty(dead);
+
+        double aoeRadius = getDataManager().get(value) * 0.125; //TODO
+
+        if (raytraceresult.entityHit != null) {
+            Entity target = raytraceresult.entityHit;
+            DamageSource source = new EntityDamageSourceIndirect("ember", this, shootingEntity).setMagicDamage();
+            if (target.attackEntityFrom(source, getDataManager().get(value))) {
+                if (shootingEntity instanceof EntityPlayer) {
+                    target.setFire(1);
+                    if (target instanceof EntityLivingBase) {
+                        EntityLivingBase livingTarget = (EntityLivingBase) target;
+                        livingTarget.setLastAttackedEntity(shootingEntity);
+                        livingTarget.setRevengeTarget((EntityLivingBase) shootingEntity);
+                        livingTarget.knockBack(this, 0.5f, -motionX, -motionZ);
+                    }
+                }
+            }
+        }
+    }
+
+    @Nullable
+    protected RayTraceResult findEntityOnPath(Vec3d start, Vec3d end) {
+        RayTraceResult pickedEntity = null;
+        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), VALID_TARGETS);
+        double pickedDistance = 0.0D;
+
+        for (int i = 0; i < list.size(); ++i) {
+            Entity entity = list.get(i);
+
+            if (entity != this.shootingEntity) {
+                AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(0.3);
+                RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
+
+                if (raytraceresult != null) {
+                    double distance = start.squareDistanceTo(raytraceresult.hitVec);
+
+                    if (distance < pickedDistance || pickedDistance == 0.0D) {
+                        raytraceresult.typeOfHit = RayTraceResult.Type.ENTITY;
+                        raytraceresult.entityHit = entity;
+                        pickedEntity = raytraceresult;
+                        pickedDistance = distance;
+                    }
+                }
+            }
+        }
+
+        return pickedEntity;
+    }
 
 	/*@Method(modid = "albedo")
 	@Override

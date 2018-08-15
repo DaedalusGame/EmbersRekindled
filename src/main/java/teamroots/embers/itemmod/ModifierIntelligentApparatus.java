@@ -27,7 +27,7 @@ public class ModifierIntelligentApparatus extends ModifierBase {
 					int level = ItemModUtil.getArmorModifierLevel(player, EmbersAPI.INTELLIGENT_APPARATUS);
 					if (level > 0 && EmberInventoryUtil.getEmberTotal(player) >= cost){
 						EmberInventoryUtil.removeEmber(player, cost);
-						event.setDroppedExperience(event.getDroppedExperience()*level);
+						event.setDroppedExperience(event.getDroppedExperience()*(level+1));
 					}
 				}
 			}

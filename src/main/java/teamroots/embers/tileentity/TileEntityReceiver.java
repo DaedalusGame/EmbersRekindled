@@ -85,8 +85,8 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 		EnumFacing facing = state.getValue(BlockEmberEmitter.facing);
 		TileEntity attachedTile = getWorld().getTileEntity(pos.offset(facing.getOpposite()));
 		if (ticksExisted % 2 == 0 && attachedTile != null){
-			if (attachedTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
-				IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
+			if (attachedTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, facing)){
+				IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing);
 				if (cap != null){
 					if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
 						double added = cap.addAmount(Math.min(TRANSFER_RATE,capability.getEmber()), true);

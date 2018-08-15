@@ -46,6 +46,6 @@ public class ProjectileEffectFireball implements IProjectileEffect {
     @Override
     public void shoot(World world, Vec3d pos, Vec3d velocity, EntityLivingBase shooter, ItemStack weapon) {
         EntityEmberProjectile proj = new EntityEmberProjectile(world);
-        proj.initCustom(pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z, size, shooter.getUniqueID());
+        proj.initCustom(pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z, size, shooter);
     }
 }

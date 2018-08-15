@@ -79,8 +79,8 @@ public class TileEntityEmberFunnel extends TileEntity implements ITileEntityBase
         BlockPos attachPos = pos.offset(facing.getOpposite());
         TileEntity attachTile = world.getTileEntity(attachPos);
         if (ticksExisted % 2 == 0 && attachTile != null){
-            if (attachTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
-                IEmberCapability cap = attachTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
+            if (attachTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, facing)){
+                IEmberCapability cap = attachTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing);
                 if (cap != null){
                     if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
                         double added = cap.addAmount(Math.min(TRANSFER_SPEED,capability.getEmber()), true);

@@ -62,7 +62,7 @@ public class EntityAncientGolem extends EntityMob {
     		if (!getEntityWorld().isRemote){
                 playSound(SoundManager.FIREBALL,1.0f,1.0f);
     			EntityEmberProjectile proj = new EntityEmberProjectile(getEntityWorld());
-    			proj.initCustom(posX, posY+1.6, posZ, getLookVec().x*0.5, getLookVec().y*0.5, getLookVec().z*0.5, 4.0f, this.getUniqueID());
+    			proj.initCustom(posX, posY+1.6, posZ, getLookVec().x*0.5, getLookVec().y*0.5, getLookVec().z*0.5, 4.0f, this);
     			getEntityWorld().spawnEntity(proj);
     		}
     	}

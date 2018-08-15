@@ -1,5 +1,7 @@
 package teamroots.embers.tileentity;
 
+import mysticalmechanics.api.DefaultMechCapability;
+import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,18 +21,14 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.EventManager;
-import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.particle.ParticleUtil;
-import teamroots.embers.power.DefaultMechCapability;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 
 public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable {
 	int ticksExisted = 0;
-	BlockPos receivedFrom = null;
 	int progress = 0;
 	EnumFacing front = EnumFacing.UP;
 	public FluidTank tank = new FluidTank(8000);
@@ -63,7 +61,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		capability.writeToNBT(tag);
+		tag.setDouble("mech_power",capability.power);
 		tag.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		tag.setInteger("progress", progress);
 		tag.setInteger("front", front.getIndex());
@@ -74,7 +72,8 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		capability.readFromNBT(tag);
+		if(tag.hasKey("mech_power"))
+			capability.power = tag.getDouble("mech_power");
 		tank.readFromNBT(tag.getCompoundTag("tank"));
 		if (tag.hasKey("progress")){
 			progress = tag.getInteger("progress");
@@ -101,7 +100,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmbersCapabilities.MECH_CAPABILITY){
+		if (capability == MysticalMechanicsAPI.MECH_CAPABILITY){
 			return facing == front;
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
@@ -115,7 +114,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmbersCapabilities.MECH_CAPABILITY){
+		if (capability == MysticalMechanicsAPI.MECH_CAPABILITY){
 			return (T)this.capability;
 		}
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
@@ -152,8 +151,8 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 		for (EnumFacing f : EnumFacing.values()){
 			TileEntity t = world.getTileEntity(getPos().offset(f));
 			if (t != null && f == front){
-				if (t.hasCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(f))){
-					t.getCapability(EmbersCapabilities.MECH_CAPABILITY, Misc.getOppositeFace(f)).setPower(capability.getPower(Misc.getOppositeFace(f)),Misc.getOppositeFace(f));
+				if (t.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY, Misc.getOppositeFace(f))){
+					t.getCapability(MysticalMechanicsAPI.MECH_CAPABILITY, Misc.getOppositeFace(f)).setPower(capability.getPower(Misc.getOppositeFace(f)),Misc.getOppositeFace(f));
 					t.markDirty();
 				}
 			}

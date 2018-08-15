@@ -526,10 +526,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityPulser.class, Embers.MODID+":tile_entity_pulser");
 		GameRegistry.registerTileEntity(TileEntityInfernoForge.class, Embers.MODID+":tile_entity_inferno_forge");
 		GameRegistry.registerTileEntity(TileEntityInfernoForgeOpening.class, Embers.MODID+":tile_entity_inferno_forge_opening");
-		GameRegistry.registerTileEntity(TileEntityAxle.class, Embers.MODID+":tile_entity_axle");
-		GameRegistry.registerTileEntity(TileEntityCreativeMechSource.class, Embers.MODID+":tile_entity_creative_mech_source");
 		GameRegistry.registerTileEntity(TileEntityCreativeEmberSource.class, Embers.MODID+":tile_entity_creative_ember_source");
-		GameRegistry.registerTileEntity(TileEntityGearbox.class, Embers.MODID+":tile_entity_gearbox");
 		GameRegistry.registerTileEntity(TileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
 		GameRegistry.registerTileEntity(TileEntityPumpBottom.class, Embers.MODID+":tile_entity_pump_bottom");
 		GameRegistry.registerTileEntity(TileEntityPumpTop.class, Embers.MODID+":tile_entity_pump_top");
@@ -685,8 +682,6 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFieldChart.class, new TileEntityFieldChartRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPulser.class, new TileEntityPulserRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfernoForgeOpening.class, new TileEntityInfernoForgeOpeningRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAxle.class, new TileEntityAxleRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGearbox.class, new TileEntityGearboxRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPumpBottom.class, new TileEntityPumpRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));

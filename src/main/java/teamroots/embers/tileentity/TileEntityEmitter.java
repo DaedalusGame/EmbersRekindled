@@ -147,8 +147,8 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 		EnumFacing facing = state.getValue(BlockEmberPulser.facing);
 		TileEntity attachedTile = getWorld().getTileEntity(getPos().offset(facing.getOpposite()));
 		if (ticksExisted % 5 == 0 && attachedTile != null){
-			if (attachedTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)){
-				IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
+			if (attachedTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, facing)){
+				IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing);
 				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
 					double removed = cap.removeAmount(PULL_RATE, true);
 					capability.addAmount(removed, true);

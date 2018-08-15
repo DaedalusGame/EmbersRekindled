@@ -78,7 +78,7 @@ public class MessageCasterOrb implements IMessage {
                         //MinecraftForge.EVENT_BUS.post(event);
                         //if(!event.isCanceled()) {
                             EntityEmberProjectile proj = new EntityEmberProjectile(world);
-                            proj.initCustom(xOrigin, yOrigin, zOrigin, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), uuid);
+                            proj.initCustom(xOrigin, yOrigin, zOrigin, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), player);
                             world.spawnEntity(proj);
                         //}
                         world.playSound(null, xOrigin, yOrigin, zOrigin,SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);

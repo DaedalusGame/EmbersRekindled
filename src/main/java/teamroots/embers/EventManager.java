@@ -363,7 +363,7 @@ public class EventManager {
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityDamaged(LivingHurtEvent event){
-		if (event.getSource().damageType == RegistryManager.damage_ember.damageType){
+		if (event.getSource().damageType.equals(RegistryManager.damage_ember.damageType)){
 			if (event.getEntityLiving().isPotionActive(Potion.getPotionFromResourceLocation("fire_resistance"))){
 				event.setAmount(event.getAmount()*0.5f);
 			}

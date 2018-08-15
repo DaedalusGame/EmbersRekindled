@@ -72,7 +72,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == EmbersCapabilities.MECH_CAPABILITY){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY && facing != null){
 			return facing.getAxis() == front.getAxis();
 		}
 		return super.hasCapability(capability, facing);
@@ -80,7 +80,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmbersCapabilities.MECH_CAPABILITY){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY && facing != null){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);
