@@ -69,6 +69,10 @@ public class BaublesIntegration {
         RegistryManager.items.add(mantle_bulb = new ItemEmberBulb());
     }
 
+    public static void init() {
+
+    }
+
     @SideOnly(Side.CLIENT)
     public static void registerClientSide()
     {

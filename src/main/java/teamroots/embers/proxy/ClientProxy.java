@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.BaublesIntegration;
+import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.util.sound.ItemUseSound;
@@ -34,6 +35,8 @@ public class ClientProxy extends CommonProxy{
 		RegistryManager.registerColorHandlers();
 		if(ConfigManager.isBaublesIntegrationEnabled())
 			BaublesIntegration.registerClientSide();
+		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+			MysticalMechanicsIntegration.registerClientSide();
 	}
 	
 	@Override

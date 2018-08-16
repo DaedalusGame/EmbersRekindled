@@ -2,7 +2,6 @@ package teamroots.embers.entity;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,16 +17,15 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.api.misc.IProjectileEffect;
+import teamroots.embers.api.projectile.IProjectileEffect;
+import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSizedBurstFX;
 import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 //import elucent.albedo.lighting.ILightProvider;
 //import elucent.albedo.lighting.Light;
@@ -46,6 +44,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     //public UUID id = null;
     public Entity shootingEntity;
     public IProjectileEffect effect = null;
+    private IProjectilePreset preset = null;
 
     public EntityEmberProjectile(World worldIn) {
         super(worldIn);
@@ -69,8 +68,16 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
         this.shootingEntity = shootingEntity;
     }
 
+    public void setPreset(IProjectilePreset preset) {
+        this.preset = preset;
+    }
+
     public void setEffect(IProjectileEffect effect) {
         this.effect = effect;
+    }
+
+    public void setLifetime(int lifetime) {
+        getDataManager().set(EntityEmberProjectile.lifetime,lifetime);
     }
 
     public Entity getShooter() {
@@ -125,7 +132,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
             if (raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS)
                 newPosVector = raytraceresult.hitVec;
 
-            RayTraceResult hitEntity = findEntityOnPath(currPosVec, newPosVector);
+            RayTraceResult hitEntity = Misc.findEntityOnPath(world,this,shootingEntity,getEntityBoundingBox(),currPosVec,newPosVector,VALID_TARGETS);
 
             if (hitEntity != null) {
                 newPosVector = hitEntity.hitVec;
@@ -168,7 +175,9 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
 
         double aoeRadius = getDataManager().get(value) * 0.125; //TODO
 
-        if (raytraceresult.entityHit != null) {
+        if(effect != null)
+            effect.onHit(world,raytraceresult,preset);
+       /* if (raytraceresult.entityHit != null) {
             Entity target = raytraceresult.entityHit;
             DamageSource source = new EntityDamageSourceIndirect("ember", this, shootingEntity).setMagicDamage();
             if (target.attackEntityFrom(source, getDataManager().get(value))) {
@@ -182,37 +191,12 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
                     }
                 }
             }
-        }
+        } else {
+
+        }*/
     }
 
-    @Nullable
-    protected RayTraceResult findEntityOnPath(Vec3d start, Vec3d end) {
-        RayTraceResult pickedEntity = null;
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), VALID_TARGETS);
-        double pickedDistance = 0.0D;
 
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity = list.get(i);
-
-            if (entity != this.shootingEntity) {
-                AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(0.3);
-                RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
-
-                if (raytraceresult != null) {
-                    double distance = start.squareDistanceTo(raytraceresult.hitVec);
-
-                    if (distance < pickedDistance || pickedDistance == 0.0D) {
-                        raytraceresult.typeOfHit = RayTraceResult.Type.ENTITY;
-                        raytraceresult.entityHit = entity;
-                        pickedEntity = raytraceresult;
-                        pickedDistance = distance;
-                    }
-                }
-            }
-        }
-
-        return pickedEntity;
-    }
 
 	/*@Method(modid = "albedo")
 	@Override

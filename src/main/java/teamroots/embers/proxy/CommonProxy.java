@@ -12,9 +12,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.apiimpl.EmbersAPIImpl;
+import teamroots.embers.compat.BaublesIntegration;
+import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.compat.thaumcraft.ThaumcraftIntegration;
 import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.network.PacketHandler;
@@ -34,11 +37,14 @@ public class CommonProxy {
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
 		if(Loader.isModLoaded("thaumcraft"))
-			MinecraftForge.EVENT_BUS.register(ThaumcraftIntegration.class);
+			MinecraftForge.EVENT_BUS.register(new ThaumcraftIntegration());
 	}
 	
 	public void init(FMLInitializationEvent event){
-
+		if(ConfigManager.isBaublesIntegrationEnabled())
+			BaublesIntegration.init();
+		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+			MysticalMechanicsIntegration.init();
 	}
 	
 	public void postInit(FMLPostInitializationEvent event){

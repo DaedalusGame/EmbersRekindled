@@ -30,10 +30,15 @@ public class ConfigManager {
 					tinVeinSize, tinMinY, tinMaxY, tinVeinsPerChunk,
 					aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
 	public static boolean enableBaublesIntegration;
+	public static boolean enableMysticalMechanicsIntegration;
 
 	public static boolean isBaublesIntegrationEnabled()
 	{
 		return enableBaublesIntegration && Loader.isModLoaded("baubles");
+	}
+
+	public static boolean isMysticalMechanicsIntegrationEnabled() {
+		return enableMysticalMechanicsIntegration && Loader.isModLoaded("mysticalmechanics");
 	}
 
 	public static void init(File configFile)
@@ -106,6 +111,7 @@ public class ConfigManager {
 		tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 6, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
 
 		enableBaublesIntegration = config.getBoolean("enableBaubles", "compat", true, "If true, Embers will register items, blocks and recipes providing Baubles integration.");
+		enableMysticalMechanicsIntegration = config.getBoolean("enableMysticalMechanics", "compat", true, "If true, Embers will register items, blocks and recipes providing Mystical Mechanics integration.");
 
 		if (config.hasChanged())
 		{

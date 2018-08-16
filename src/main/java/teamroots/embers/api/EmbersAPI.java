@@ -22,6 +22,8 @@ public class EmbersAPI {
     public static ModifierBase FLAME_BARRIER;
     public static ModifierBase ELDRITCH_INSIGNIA;
     public static ModifierBase INTELLIGENT_APPARATUS;
+    public static ModifierBase DIFFRACTION;
+    public static ModifierBase FOCAL_LENS;
 
     public static void registerModifier(Item item, ModifierBase modifier) {
         IMPL.registerModifier(item, modifier);

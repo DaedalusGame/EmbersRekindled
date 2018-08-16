@@ -1,41 +1,43 @@
 package teamroots.embers.api.event;
 
+import com.google.common.collect.Lists;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import teamroots.embers.api.misc.IProjectileEffect;
+import teamroots.embers.api.projectile.IProjectileEffect;
+import teamroots.embers.api.projectile.IProjectilePreset;
 
 import java.util.List;
 
 public class EmberProjectileEvent extends Event {
-    private EntityPlayer shooter;
+    private EntityLivingBase shooter;
     private ItemStack stack;
-    private Vec3d origin;
-    private Vec3d velocity;
-    private List<IProjectileEffect> projectiles;
+    private List<IProjectilePreset> projectiles;
 
-    public EmberProjectileEvent(EntityPlayer shooter, ItemStack stack, Vec3d origin, Vec3d velocity) {
+    public EmberProjectileEvent(EntityLivingBase shooter, ItemStack stack, List<IProjectilePreset> projectiles) {
         this.shooter = shooter;
         this.stack = stack;
-        this.origin = origin;
-        this.velocity = velocity;
+        this.projectiles = projectiles;
+    }
+
+    public EmberProjectileEvent(EntityLivingBase shooter, ItemStack stack, IProjectilePreset... projectiles) {
+        this.shooter = shooter;
+        this.stack = stack;
+        this.projectiles = Lists.newArrayList(projectiles);
     }
 
     public ItemStack getStack() {
         return stack;
     }
 
-    public EntityPlayer getShooter() {
+    public EntityLivingBase getShooter() {
         return shooter;
     }
 
-    public Vec3d getOrigin() {
-        return origin;
-    }
-
-    public Vec3d getVelocity() {
-        return velocity;
+    public List<IProjectilePreset> getProjectiles() {
+        return projectiles;
     }
 
     @Override

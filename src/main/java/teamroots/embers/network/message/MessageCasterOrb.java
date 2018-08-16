@@ -5,13 +5,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.projectile.EffectArea;
+import teamroots.embers.api.projectile.EffectDamage;
+import teamroots.embers.api.projectile.IProjectilePreset;
+import teamroots.embers.api.projectile.ProjectileFireball;
+import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.itemmod.ModifierCasterOrb;
 import teamroots.embers.util.EmberInventoryUtil;
@@ -74,14 +82,19 @@ public class MessageCasterOrb implements IMessage {
                         double xOrigin = player.posX + offX;
                         double yOrigin = player.posY + player.getEyeHeight();
                         double zOrigin = player.posZ + offZ;
-                        //EmberProjectileEvent event = new EmberProjectileEvent(player,heldStack,new Vec3d(xOrigin, yOrigin, zOrigin),new Vec3d(xVel,yVel,zVel));
-                        //MinecraftForge.EVENT_BUS.post(event);
-                        //if(!event.isCanceled()) {
-                            EntityEmberProjectile proj = new EntityEmberProjectile(world);
-                            proj.initCustom(xOrigin, yOrigin, zOrigin, xVel, yVel, zVel, 8.0 * (Math.atan(0.6 * (level)) / (1.25)), player);
-                            world.spawnEntity(proj);
-                        //}
-                        world.playSound(null, xOrigin, yOrigin, zOrigin,SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
+
+
+                        double value = 8.0 * (Math.atan(0.6 * (level)) / (1.25));
+                        EffectDamage effect = new EffectDamage((float) value, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0);
+                        ProjectileFireball fireball = new ProjectileFireball(player, new Vec3d(xOrigin, yOrigin, zOrigin), new Vec3d(xVel, yVel, zVel), value, 160, effect);
+                        EmberProjectileEvent event = new EmberProjectileEvent(player, heldStack, fireball);
+                        MinecraftForge.EVENT_BUS.post(event);
+                        if (!event.isCanceled()) {
+                            for (IProjectilePreset projectile : event.getProjectiles()) {
+                                projectile.shoot(world);
+                            }
+                        }
+                        world.playSound(null, xOrigin, yOrigin, zOrigin, SoundManager.FIREBALL, SoundCategory.PLAYERS, 1.0f, 1.0f);
                         ModifierCasterOrb.setCooldown(uuid, 20);
                     }
                 }

@@ -64,7 +64,8 @@ public class TileEntityBreakerRenderer extends TileEntitySpecialRenderer<TileEnt
             GlStateManager.translate(0.5f, 0.5f, 0.5f);
             GlStateManager.rotate(angle, 0, 1, 0);
             GlStateManager.rotate(pitch, 1, 0, 0);
-            GlStateManager.rotate(9.0f*(ticks+partialTicks), 0, 1, 0);
+            if(tile.isActive())
+                GlStateManager.rotate(9.0f*(ticks+partialTicks), 0, 1, 0);
            
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             RenderUtil.addBox(buffer, blade.x1, blade.y1, blade.z1, blade.x2, blade.y2, blade.z2, blade.textures, new int[]{1,1,1,1,1,1});

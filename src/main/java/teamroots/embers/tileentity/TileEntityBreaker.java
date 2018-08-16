@@ -104,10 +104,14 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 	public void update() {
 		ticksExisted ++;
 		IBlockState state = world.getBlockState(pos);
-		if (ticksExisted % 20 == 0 && world.isBlockIndirectlyGettingPowered(getPos()) == 0 && state.getBlock() instanceof BlockBreaker && !world.isRemote){
+		if (ticksExisted % 20 == 0 && isActive() && state.getBlock() instanceof BlockBreaker && !world.isRemote){
 			EnumFacing facing = getFacing();
 			mineBlock(pos.offset(facing));
 		}
+	}
+
+	public boolean isActive() {
+		return world.isBlockIndirectlyGettingPowered(getPos()) == 0;
 	}
 
 	protected void mineBlock(BlockPos breakPos) {

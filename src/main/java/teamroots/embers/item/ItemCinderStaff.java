@@ -7,12 +7,19 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
-import teamroots.embers.entity.EntityEmberProjectile;
+import teamroots.embers.api.event.EmberProjectileEvent;
+import teamroots.embers.api.projectile.EffectArea;
+import teamroots.embers.api.projectile.EffectDamage;
+import teamroots.embers.api.projectile.IProjectilePreset;
+import teamroots.embers.api.projectile.ProjectileFireball;
+import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
 
@@ -31,14 +38,21 @@ public class ItemCinderStaff extends ItemBase {
 		if (!world.isRemote){
 			double charge = ((Math.min(60, 72000-timeLeft))/60.0)*17.0;
 			float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
-			EntityEmberProjectile proj = new EntityEmberProjectile(world);
 			double posX = entity.posX + entity.getLookVec().x * spawnDistance;
 			double posY = entity.posY + entity.getEyeHeight() + entity.getLookVec().y * spawnDistance;
 			double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
-			proj.initCustom(posX, posY, posZ,entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85, Math.max(charge,0.5), entity);
-			if(charge < 1.0)
-				proj.getDataManager().set(proj.lifetime,5);
-			world.spawnEntity(proj);
+			double value = Math.max(charge, 0.5);
+			float aoeSize = (float)value * 0.125f;
+			int lifetime = charge >= 1.0 ? 160 : 5;
+			EffectArea effect = new EffectArea(new EffectDamage((float)value, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0), aoeSize, false);
+			ProjectileFireball fireball = new ProjectileFireball(entity,new Vec3d(posX,posY,posZ),new Vec3d(entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85), value, lifetime, effect);
+			EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, fireball);
+			MinecraftForge.EVENT_BUS.post(event);
+			if (!event.isCanceled()) {
+				for (IProjectilePreset projectile : event.getProjectiles()) {
+					projectile.shoot(world);
+				}
+			}
 			SoundEvent sound;
 			if (charge >= 10.0)
 				sound = SoundManager.FIREBALL_BIG;

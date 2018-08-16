@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.projectile.EffectDamage;
+import teamroots.embers.damage.DamageEmber;
 
 public class EntityAncientGolem extends EntityMob {
 
@@ -61,8 +63,11 @@ public class EntityAncientGolem extends EntityMob {
     	if (this.ticksExisted % 100 == 0 && this.getAttackTarget() != null){
     		if (!getEntityWorld().isRemote){
                 playSound(SoundManager.FIREBALL,1.0f,1.0f);
+                EffectDamage effect = new EffectDamage(4.0f, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0f);
     			EntityEmberProjectile proj = new EntityEmberProjectile(getEntityWorld());
     			proj.initCustom(posX, posY+1.6, posZ, getLookVec().x*0.5, getLookVec().y*0.5, getLookVec().z*0.5, 4.0f, this);
+                proj.setEffect(effect);
+
     			getEntityWorld().spawnEntity(proj);
     		}
     	}

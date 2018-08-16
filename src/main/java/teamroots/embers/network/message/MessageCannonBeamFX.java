@@ -62,14 +62,16 @@ public class MessageCannonBeamFX implements IMessage {
         public IMessage onMessage(final MessageCannonBeamFX message, final MessageContext ctx) {
     		World world = Minecraft.getMinecraft().world;
 			Minecraft.getMinecraft().addScheduledTask(()-> {
-				for (double i = 0; i < 384.0; i++) {
+				double distance = Math.sqrt(message.dX * message.dX + message.dY * message.dY + message.dZ * message.dZ);
+				double segments = distance * 4;
+				for (double i = 0; i < segments; i++) {
 					for (int j = 0; j < 5; j++) {
-						message.posX += 0.2 * message.dX / 384.0;
-						message.posY += 0.2 * message.dY / 384.0;
-						message.posZ += 0.2 * message.dZ / 384.0;
+						message.posX += 0.2 * message.dX / segments;
+						message.posY += 0.2 * message.dY / segments;
+						message.posZ += 0.2 * message.dZ / segments;
 						ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 					}
-					if(i > message.hitDistance) {
+					if(i > message.hitDistance * 4) {
 						for (int k = 0; k < 80; k++) {
 							ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 24);
 						}

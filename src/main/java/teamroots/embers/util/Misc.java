@@ -5,6 +5,7 @@ import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -14,6 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -21,9 +24,12 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class Misc {
 	public static Random random = new Random();
@@ -211,4 +217,62 @@ public class Misc {
 		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
 		tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3); //Does a good job
 	}
+
+	@Nullable
+	public static RayTraceResult findEntityOnPath(World world, @Nullable Entity projectile, Entity shooter, AxisAlignedBB projectileAABB, Vec3d start, Vec3d end, com.google.common.base.Predicate<Entity> matcher) {
+		RayTraceResult pickedEntity = null;
+		double motionX = end.x - start.x;
+		double motionY = end.y - start.y;
+		double motionZ = end.z - start.z;
+		List<Entity> list = world.getEntitiesInAABBexcluding(projectile, projectileAABB.expand(motionX, motionY, motionZ).grow(1.0D), matcher);
+		double pickedDistance = 0.0D;
+
+		for (Entity entity : list) {
+			if (entity != shooter) {
+				AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(0.3);
+				RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
+
+				if (raytraceresult != null) {
+					double distance = start.squareDistanceTo(raytraceresult.hitVec);
+
+					if (distance < pickedDistance || pickedDistance == 0.0D) {
+						raytraceresult.typeOfHit = RayTraceResult.Type.ENTITY;
+						raytraceresult.entityHit = entity;
+						pickedEntity = raytraceresult;
+						pickedDistance = distance;
+					}
+				}
+			}
+		}
+
+		return pickedEntity;
+	}
+
+	@Nullable
+	public static List<RayTraceResult> findEntitiesOnPath(World world, @Nullable Entity projectile, Entity shooter, AxisAlignedBB projectileAABB, Vec3d start, Vec3d end, com.google.common.base.Predicate<Entity> matcher) {
+		List<RayTraceResult> entities = new ArrayList<>();
+		double motionX = end.x - start.x;
+		double motionY = end.y - start.y;
+		double motionZ = end.z - start.z;
+		List<Entity> list = world.getEntitiesInAABBexcluding(projectile, projectileAABB.expand(motionX, motionY, motionZ).grow(1.0D), matcher);
+
+		for (Entity entity : list) {
+			if (entity != shooter) {
+				AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(0.3);
+				RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
+
+				if (raytraceresult != null) {
+					raytraceresult.typeOfHit = RayTraceResult.Type.ENTITY;
+					raytraceresult.entityHit = entity;
+
+					entities.add(raytraceresult);
+				}
+			}
+		}
+
+		entities.sort((o1, o2) -> Double.compare(start.squareDistanceTo(o1.hitVec),start.squareDistanceTo(o2.hitVec)));
+
+		return entities;
+	}
+
 }
