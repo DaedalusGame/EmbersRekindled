@@ -211,6 +211,8 @@ item.ember_bulb.name=Mantle Bulb
 item.gear_iron.name=Iron Gear
 item.gear_dawnstone.name=Dawnstone Gear
 item.dust_metallurgic.name=Metallurgic Dust
+item.diffraction_barrel.name=Diffraction Barrel
+item.focal_lens.name=Focal Lens
 
 tile.block_aluminum.name=Aluminium Block
 tile.ore_aluminum.name=Aluminium Ore
@@ -298,6 +300,8 @@ embers.tooltip.modifier.caster_orb=Ember Casting
 embers.tooltip.modifier.flame_barrier=Flame Barrier
 embers.tooltip.modifier.eldritch_insignia=Eerie
 embers.tooltip.modifier.intelligent_apparatus=Intelligent
+embers.tooltip.modifier.diffraction=Diffractive
+embers.tooltip.modifier.focal_lens=Focused
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II

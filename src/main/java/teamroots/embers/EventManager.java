@@ -37,6 +37,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent;
@@ -48,6 +49,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.block.IDial;
@@ -90,12 +92,12 @@ public class EventManager {
 	public static int ticks = 0;
 	public static float prevCooledStrength = 0;
 	public static boolean acceptUpdates = true;
-	
+
 	//public static Map<BlockPos, TileEntity> toUpdate = new HashMap<BlockPos, TileEntity>();
 	//public static Map<BlockPos, TileEntity> overflow = new HashMap<BlockPos, TileEntity>();
-	
+
 	static EntityPlayer clientPlayer = null;
-	
+
 	/*public static void markTEForUpdate(BlockPos pos, TileEntity tile){
 		if (!tile.getWorld().isRemote && acceptUpdates){
 			if (!toUpdate.containsKey(pos)){
@@ -159,7 +161,7 @@ public class EventManager {
 		ResourceLocation particleSmoke = new ResourceLocation("embers:entity/particle_smoke");
 		event.getMap().registerSprite(particleSmoke);
 	}
-	
+
 	@SubscribeEvent
 	public void onServerTick(WorldTickEvent event){
 		if (event.world.provider.getDimensionType() == DimensionType.OVERWORLD){
@@ -174,7 +176,7 @@ public class EventManager {
 			PacketHandler.INSTANCE.sendToAll(new MessageEmberGenOffset(EmberGenUtil.offX,EmberGenUtil.offZ));
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onLivingDamage(LivingHurtEvent event){
 		if (event.getEntity() instanceof EntityPlayer){
@@ -251,7 +253,7 @@ public class EventManager {
 
 		int w = e.getResolution().getScaledWidth();
 		int h = e.getResolution().getScaledHeight();
-		
+
 		int x = w/2;
 		int y = h/2;
 		if (!player.getHeldItemMainhand().isEmpty()){
@@ -264,7 +266,7 @@ public class EventManager {
 				showBar = true;
 			}
 		}
-		
+
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder b = tess.getBuffer();
 		if (showBar){
@@ -275,13 +277,13 @@ public class EventManager {
 				GlStateManager.pushMatrix();
 				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/ember_meter_overlay.png"));
 				GlStateManager.color(1f, 1f, 1f, 1f);
-				
+
 				int offsetX = 0;
-				
+
 				b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				RenderUtil.drawQuadGui(b, 0, x-16, y-4, x+16, y-4, x+16, y-36, x-16, y-36, 0, 0, 1, 1);
 				tess.draw();
-				
+
 				double angle = 195.0;
 				EmberWorldData data = EmberWorldData.get(world);
 				if (player != null){
@@ -297,14 +299,14 @@ public class EventManager {
 						//}
 					//}
 				}
-				
+
 				Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/ember_meter_pointer.png"));
 				GlStateManager.translate(x, y-20, 0);
 				GlStateManager.rotate((float)gaugeAngle, 0, 0, 1);
 				b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				RenderUtil.drawQuadGui(b, 0.0, -2.5f, 13.5f, 13.5f, 13.5f, 13.5f, -2.5f, -2.5f, -2.5f, 0, 0, 1, 1);
 				tess.draw();
-				
+
 				GlStateManager.popMatrix();
 				GlStateManager.enableCull();
 				GlStateManager.enableDepth();
@@ -312,7 +314,7 @@ public class EventManager {
 		}
 		World world = player.getEntityWorld();
 		RayTraceResult result = player.rayTrace(6.0, e.getPartialTicks());
-		
+
 		if (result != null){
 			if (result.typeOfHit == RayTraceResult.Type.BLOCK){
 				IBlockState state = world.getBlockState(result.getBlockPos());
@@ -327,14 +329,14 @@ public class EventManager {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("minecraft:textures/gui/icons.png"));
 		GlStateManager.enableDepth();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onTick(TickEvent.ClientTickEvent event){
 		if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.START){
 			ticks ++;
 			ClientProxy.particleRenderer.updateParticles();
-			
+
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			if (player != null){
 				World world = player.getEntityWorld();
@@ -350,7 +352,7 @@ public class EventManager {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onPlayerRender(RenderPlayerEvent.Pre event){
@@ -360,7 +362,7 @@ public class EventManager {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onEntityDamaged(LivingHurtEvent event){
 		if (event.getSource().damageType.equals(RegistryManager.damage_ember.damageType)){
@@ -394,7 +396,7 @@ public class EventManager {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event){
 		EntityPlayer player = event.getPlayer();
@@ -414,7 +416,25 @@ public class EventManager {
 			}
 		}
 	}
-	
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void onProjectileFired(EmberProjectileEvent event){
+		EntityLivingBase shooter = event.getShooter();
+		ItemStack weapon = event.getStack();
+		if (!weapon.isEmpty()){
+			addHeat(shooter, weapon, event.getProjectiles().size());
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void onArrowLoose(ArrowLooseEvent event) {
+		EntityLivingBase shooter = event.getEntityLiving();
+		ItemStack weapon = event.getBow();
+		if (!weapon.isEmpty()){
+			addHeat(shooter, weapon, 1.0f);
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTooltip(ItemTooltipEvent event){
@@ -437,7 +457,7 @@ public class EventManager {
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTooltipRender(RenderTooltipEvent.PostText event){
@@ -508,9 +528,9 @@ public class EventManager {
 							double coeff2 = (j+1.0)/10.0;
 							for (double k = 0; k < 4; k += 0.5){
 								float thick = (float)(k/4.0) * (heat >= maxHeat ? (float)Math.sin(ticks*0.5)*2+3 : 1);
-								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
-										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
-										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
+								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k,
+										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))),
+										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))),
 										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+(8.0-k)))),
 										1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+(8.0-k)))));
 							}
@@ -518,12 +538,12 @@ public class EventManager {
 						x1 = baseX + x + 4;
 						x2 = baseX + w - 3;
 						double point = x1 + (x2 - x1)*(heat / maxHeat);
-						
+
 						for (double k = 0; k < 4; k += 0.5){
 							float thick = (float)(k/4.0);
-							RenderUtil.drawColorRectBatched(b, point, baseY+k, 0, Math.min((x2-point),((x2-x1)/10.0)), 8.0-2.0*k, 
-									1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+k))), 
-									0.25f, 0.0625f, 0.015625f, 0.0f, 
+							RenderUtil.drawColorRectBatched(b, point, baseY+k, 0, Math.min((x2-point),((x2-x1)/10.0)), 8.0-2.0*k,
+									1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+k))),
+									0.25f, 0.0625f, 0.015625f, 0.0f,
 									0.25f, 0.0625f, 0.015625f, 0.0f,
 									1.0f, 0.25f, 0.0625f, 1.0f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(point)), 4*(int)(baseY+(8.0-k)))));
 						}
@@ -537,9 +557,9 @@ public class EventManager {
 							double coeff2 = (j+1.0)/10.0;
 							for (double k = 0; k < 4; k += 0.5){
 								float thick = (float)(k/4.0);
-								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k, 
-										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))), 
-										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))), 
+								RenderUtil.drawColorRectBatched(b, x1*(1.0-coeff) + x2*(coeff), baseY+k, 0, ((x2-x1)/10.0), 8.0-2.0*k,
+										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+k))),
+										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+k))),
 										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff2) + x2*(coeff2))), 4*(int)(baseY+(8.0-k)))),
 										0.25f, 0.0625f, 0.015625f, 0.75f*Math.min(1.0f, thick*0.25f+thick*EmberGenUtil.getEmberDensity(6, (int)(ticks*12+4*(x1*(1.0-coeff) + x2*(coeff))), 4*(int)(baseY+(8.0-k)))));
 							}
@@ -563,7 +583,7 @@ public class EventManager {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onRenderAfterWorld(RenderWorldLastEvent event){
@@ -586,12 +606,12 @@ public class EventManager {
 		}
 		GlStateManager.popMatrix();
 	}
-	
+
 	@SubscribeEvent
 	public void onBlockBreak(BreakSpeed event){
 		event.getOriginalSpeed();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
     public static void drawScaledCustomSizeModalRect(double x, double y, float u, float v, float uWidth, float vHeight, double width, double height, float tileWidth, float tileHeight)
     {
@@ -606,7 +626,7 @@ public class EventManager {
         BufferBuilder.pos((double)x, (double)y, 0.0D).tex((double)(u * f), (double)(v * f1)).endVertex();
         tessellator.draw();
     }
-	
+
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event){
 		/*if (!event.world.isRemote && event.phase == TickEvent.Phase.END){
