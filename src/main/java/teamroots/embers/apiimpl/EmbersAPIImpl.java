@@ -129,7 +129,7 @@ public class EmbersAPIImpl implements IEmbersAPI {
 
     @Override
     public void registerCombustionFuel(ICoefficientFuel fuel) {
-        catalysisFuels.add(fuel);
+        combustionFuels.add(fuel);
     }
 
     @Override
