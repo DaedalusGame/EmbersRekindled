@@ -1,6 +1,7 @@
 package teamroots.embers.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -52,5 +53,10 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void playMachineSound(TileEntity tile, int id, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch, float xIn, float yIn, float zIn) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(new MachineSound(tile,id,soundIn,categoryIn,repeat,volume,pitch,xIn,yIn,zIn));
+	}
+
+	@Override
+	public String formatLocalize(String translationKey, Object... parameters) {
+		return I18n.format(translationKey,parameters);
 	}
 }

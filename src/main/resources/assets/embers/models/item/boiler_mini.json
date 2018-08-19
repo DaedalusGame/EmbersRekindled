@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "blocks/boiler_bottom",
-		"2": "blocks/boiler_side",
-		"particle": "blocks/boiler_bottom"
+		"0": "embers:blocks/boiler_bottom",
+		"2": "embers:blocks/boiler_side",
+		"particle": "embers:blocks/boiler_bottom"
 	},
 	"elements": [
 		{

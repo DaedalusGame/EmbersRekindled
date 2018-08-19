@@ -131,6 +131,8 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 			handleSound();
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 		ticksExisted ++;
 		if (progress > 0){
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
@@ -239,8 +241,6 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	}
 
 	public void updateProgress(){
-
-
 		if (progress == 0){
 			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY()+0.25,getPos().getZ(),getPos().getX()+1,getPos().getY()+1,getPos().getZ()+1));
 			ItemStack pickedItem = ItemStack.EMPTY;

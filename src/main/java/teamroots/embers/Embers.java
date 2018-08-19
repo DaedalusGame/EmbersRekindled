@@ -14,11 +14,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.proxy.CommonProxy;
 import teamroots.embers.recipe.RecipeRegistry;
 
-@Mod(modid = Embers.MODID, name = Embers.MODNAME, version = Embers.VERSION, dependencies = Embers.DEPENDENCIES)
+@Mod(modid = Embers.MODID, name = Embers.MODNAME, dependencies = Embers.DEPENDENCIES)
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String VERSION = "0.221";
 	public static final String DEPENDENCIES = "";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")

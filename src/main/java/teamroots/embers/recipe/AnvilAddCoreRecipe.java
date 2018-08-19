@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class AnvilAddCoreRecipe extends DawnstoneAnvilRecipe {
     public AnvilAddCoreRecipe() {
-        super(new IngredientSpecial(stack -> EmbersAPI.CORE.canApplyTo(stack)), Ingredient.fromItem(RegistryManager.ancient_motive_core), new ItemStack[0]);
+        super(new IngredientSpecial(teamroots.embers.util.ItemModUtil::canAnyModifierApply), Ingredient.fromItem(RegistryManager.ancient_motive_core), new ItemStack[0]);
     }
 
     @Override

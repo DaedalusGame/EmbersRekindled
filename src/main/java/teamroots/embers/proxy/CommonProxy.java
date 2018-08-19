@@ -64,6 +64,10 @@ public class CommonProxy {
 		OreTransmutationUtil.init(); //oof
 	}
 
+	public String formatLocalize(String translationKey, Object... parameters) {
+		return null;
+	}
+
 	public void playItemSound(EntityLivingBase entity, Item item, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch) {
 		//NOOP
 	}

@@ -108,4 +108,9 @@ public class BlockFluidGauge extends BlockBase implements IDial {
 			PacketHandler.INSTANCE.sendToServer(new MessageTEUpdateRequest(pos));
 		}
 	}
+
+	@Override
+	public String getDialType() {
+		return "fluid";
+	}
 }

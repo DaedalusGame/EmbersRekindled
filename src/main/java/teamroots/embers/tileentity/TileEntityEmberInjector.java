@@ -116,10 +116,12 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 	
 	@Override
 	public void update(){
-		if(getWorld().isRemote)
-			handleSound();
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.VALUES);
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
+		if(getWorld().isRemote)
+			handleSound();
 		IBlockState state = world.getBlockState(getPos());
 		TileEntity tile = world.getTileEntity(pos.offset(state.getValue(BlockEmberInjector.facing)));
 		isWorking = false;

@@ -158,6 +158,8 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 		turnRate = 1;
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.VALUES);
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 		if(getWorld().isRemote)
 			handleSound();
 

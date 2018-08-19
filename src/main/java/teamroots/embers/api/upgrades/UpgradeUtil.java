@@ -6,6 +6,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.api.event.UpgradeEvent;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class UpgradeUtil {
         return IMPL.getUpgrades(world, pos, facings);
     }
 
+    @Deprecated
     public static List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings) {
         return IMPL.getUpgradesForMultiblock(world, pos, facings);
     }
@@ -35,6 +37,11 @@ public class UpgradeUtil {
     //DO NOT CALL FROM AN UPGRADE'S doWork METHOD!!
     public static boolean doWork(TileEntity tile, List<IUpgradeProvider> list) {
         return IMPL.doWork(tile, list);
+    }
+
+    //DO NOT CALL FROM AN UPGRADE'S doTick METHOD!!
+    public static boolean doTick(TileEntity tile, List<IUpgradeProvider> list) {
+        return IMPL.doTick(tile, list);
     }
 
     public static double getTotalEmberConsumption(TileEntity tile, double ember, List<IUpgradeProvider> list) {
@@ -71,5 +78,9 @@ public class UpgradeUtil {
 
     public static <T> T getOtherParameter(TileEntity tile, String type, T initial, List<IUpgradeProvider> list) {
         return IMPL.getOtherParameter(tile, type, initial, list);
+    }
+
+    public static void throwEvent(TileEntity tile, UpgradeEvent event, List<IUpgradeProvider> list) {
+        IMPL.throwEvent(tile,event,list);
     }
 }

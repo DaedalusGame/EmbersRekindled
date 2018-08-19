@@ -19,6 +19,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAnvilSparksFX;

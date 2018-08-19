@@ -118,11 +118,14 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
     public void update() {
         List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, upgrades);
-        boolean cancel = UpgradeUtil.doWork(this,upgrades);
-        if (!cancel && !inventory.getStackInSlot(0).isEmpty()) {
-            TileEntity tile = getWorld().getTileEntity(getPos().up());
+        if(UpgradeUtil.doTick(this,upgrades))
+            return;
 
-            if (tile instanceof TileEntityActivatorTop) {
+        if (!inventory.getStackInSlot(0).isEmpty()) {
+            TileEntity tile = getWorld().getTileEntity(getPos().up());
+            boolean cancel = UpgradeUtil.doWork(this,upgrades);
+
+            if (!cancel && tile instanceof TileEntityActivatorTop) {
                 TileEntityActivatorTop top = (TileEntityActivatorTop) tile;
                 progress++;
                 if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {

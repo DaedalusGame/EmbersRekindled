@@ -19,14 +19,18 @@ import net.minecraftforge.fluids.IFluidBlock;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IMechanicallyPowered;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockPump;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.FluidUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered {
 	public static final double EMBER_COST = 0.5;
 
 	int ticksExisted = 0;
@@ -118,14 +122,6 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 						}
 						t.markDirty();
 						world.setBlockToAir(pos);
-						world.notifyBlockUpdate(pos, state, Blocks.AIR.getDefaultState(), 8);
-						world.notifyNeighborsOfStateChange(pos.north(), Blocks.AIR, true);
-						world.notifyNeighborsOfStateChange(pos.south(), Blocks.AIR, true);
-						world.notifyNeighborsOfStateChange(pos.east(), Blocks.AIR, true);
-						world.notifyNeighborsOfStateChange(pos.west(), Blocks.AIR, true);
-						world.notifyNeighborsOfStateChange(pos.up(), Blocks.AIR, true);
-						world.notifyNeighborsOfStateChange(pos.down(), Blocks.AIR, true);
-						world.notifyNeighborsOfStateChange(pos, Blocks.AIR, true);
 						return false;
 					}
 				}
@@ -137,26 +133,50 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	@Override
 	public void update() {
 		IBlockState state = world.getBlockState(getPos());
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 		if (state.getBlock() instanceof BlockPump){
 			this.front = state.getValue(BlockPump.facing);
 		}
-		if (capability.getEmber() >= EMBER_COST) {
-			this.progress += 1;
-			capability.removeAmount(EMBER_COST,false);
-			if (this.progress > 400) {
-				progress -= 400;
-				boolean doContinue = true;
-				for (int r = 0; r < 6 && doContinue; r++) {
-					for (int i = -r; i < r + 1 && doContinue; i++) {
-						for (int j = -r; j < 1 && doContinue; j++) {
-							for (int k = -r; k < r + 1 && doContinue; k++) {
-								doContinue = attemptPump(getPos().add(i, j - 1, k));
+		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+		if (capability.getEmber() >= emberCost) {
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			if(!cancel) {
+				this.progress += (int)UpgradeUtil.getTotalSpeedModifier(this,upgrades);
+				capability.removeAmount(emberCost, false);
+				if (this.progress > 400) {
+					progress -= 400;
+					boolean doContinue = true;
+					for (int r = 0; r < 6 && doContinue; r++) {
+						for (int i = -r; i < r + 1 && doContinue; i++) {
+							for (int j = -r; j < 1 && doContinue; j++) {
+								for (int k = -r; k < r + 1 && doContinue; k++) {
+									doContinue = attemptPump(getPos().add(i, j - 1, k));
+								}
 							}
 						}
 					}
 				}
+				this.markDirty();
 			}
 		}
 		markDirty();
+	}
+
+	@Override
+	public double getMechanicalSpeed(double power) {
+		return Math.min(power/2,100);
+	}
+
+	@Override
+	public double getMinimumPower() {
+		return 2;
+	}
+
+	@Override
+	public double getNominalSpeed() {
+		return 10;
 	}
 }

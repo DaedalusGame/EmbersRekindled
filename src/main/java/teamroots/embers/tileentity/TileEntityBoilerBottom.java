@@ -149,16 +149,19 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
     public void update() {
         List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, upgrades);
+        if (UpgradeUtil.doTick(this, upgrades))
+            return;
+
         TileEntity tile = getWorld().getTileEntity(getPos().up());
-        boolean cancel = UpgradeUtil.doWork(this,upgrades);
-        if (!cancel && tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= FLUID_CONSUMED && tile instanceof TileEntityBoilerTop) {
-            TileEntityBoilerTop top = (TileEntityBoilerTop) tile;
-            progress++;
-            if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
-                progress = 0;
-                int i = random.nextInt(inventory.getSlots());
-                if (!inventory.getStackInSlot(i).isEmpty()) {
-                    ItemStack emberStack = inventory.getStackInSlot(i);
+        int i = random.nextInt(inventory.getSlots());
+        ItemStack emberStack = inventory.getStackInSlot(i);
+        if (tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= FLUID_CONSUMED && !emberStack.isEmpty()) {
+            boolean cancel = UpgradeUtil.doWork(this, upgrades);
+            if (!cancel && tile instanceof TileEntityBoilerTop) {
+                TileEntityBoilerTop top = (TileEntityBoilerTop) tile;
+                progress++;
+                if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
+                    progress = 0;
                     double emberValue = EmbersAPI.getEmberValue(emberStack);
                     if (emberValue > 0) {
                         double ember = UpgradeUtil.getTotalEmberProduction(this, emberValue * getMultiplier(), upgrades);
@@ -175,8 +178,8 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
                         }
                     }
                 }
+                markDirty();
             }
-            markDirty();
         }
     }
 

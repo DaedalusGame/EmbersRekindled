@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.UpgradeEvent;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.IUpgradeUtil;
 import teamroots.embers.tileentity.TileEntityMechCore;
@@ -73,6 +74,16 @@ public class UpgradeUtilImpl implements IUpgradeUtil {
         }
 
         return total;
+    }
+
+    @Override
+    public boolean doTick(TileEntity tile, List<IUpgradeProvider> list) {
+        for (IUpgradeProvider upgrade: list) {
+            if(upgrade.doTick(tile,list))
+                return true;
+        }
+
+        return false;
     }
 
     //DO NOT CALL FROM AN UPGRADE'S doWork METHOD!!
@@ -163,5 +174,12 @@ public class UpgradeUtilImpl implements IUpgradeUtil {
         }
 
         return initial;
+    }
+
+    @Override
+    public void throwEvent(TileEntity tile, UpgradeEvent event, List<IUpgradeProvider> list) {
+        for (IUpgradeProvider upgrade : list) {
+            upgrade.throwEvent(tile,event);
+        }
     }
 }

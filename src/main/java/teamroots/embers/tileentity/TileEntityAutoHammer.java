@@ -10,10 +10,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -28,6 +30,7 @@ import java.util.Random;
 
 public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase, ITickable {
 	public static final double EMBER_COST = 40.0;
+	public static final int PROCESS_TIME = 20;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int ticksExisted = 0;
 	int progress = -1;
@@ -99,32 +102,32 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 	}
 	
 	@Override
-	public void update(){
+	public void update() {
 		IBlockState state = world.getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockAutoHammer.facing);
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{facing.getOpposite()});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
-		ticksExisted ++;
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
+		ticksExisted++;
 		double ember_cost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
-		if(!cancel) {
-			if (ticksExisted % 20 == 0) {
-				TileEntity tile = world.getTileEntity(getPos().down().offset(facing));
-				if (tile instanceof IHammerable && progress == -1 && capability.getEmber() >= ember_cost && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0) {
-					if (((IHammerable) tile).isValid()) {
-						progress = 10;
-						markDirty();
-					}
+		TileEntity tile = world.getTileEntity(getPos().down().offset(facing));
+		if (tile instanceof IHammerable) {
+			IHammerable hammerable = (IHammerable) tile;
+			boolean redstoneEnabled = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+			if (hammerable.isValid() && redstoneEnabled && capability.getEmber() >= ember_cost) {
+				boolean cancel = UpgradeUtil.doWork(this, upgrades);
+				if (!cancel && progress == -1 && ticksExisted % UpgradeUtil.getWorkTime(this,PROCESS_TIME,upgrades) == 0) {
+					progress = 10;
+					markDirty();
 				}
 			}
 			if (progress > 0) {
 				progress--;
 				if (progress == 5) {
-					TileEntity tile = world.getTileEntity(getPos().down().offset(facing));
-					if (tile instanceof IHammerable && capability.getEmber() >= ember_cost) {
+					if (capability.getEmber() >= ember_cost) {
 						capability.removeAmount(ember_cost, true);
-						((IHammerable) tile).onHit(this);
-						markDirty();
+						hammerable.onHit(this);
 					}
 				}
 				markDirty();

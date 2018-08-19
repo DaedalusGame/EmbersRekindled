@@ -111,4 +111,9 @@ public class BlockItemGauge extends BlockBase implements IDial {
 			PacketHandler.INSTANCE.sendToAll(new MessageTEUpdateRequest(pos));
 		}
 	}
+
+	@Override
+	public String getDialType() {
+		return "item";
+	}
 }

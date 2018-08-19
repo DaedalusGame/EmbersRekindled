@@ -127,39 +127,44 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 		TileEntityFurnaceTop top = (TileEntityFurnaceTop) world.getTileEntity(getPos().up());
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 		if(top != null && !top.inventory.getStackInSlot(0).isEmpty()) {
 				double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
 				if (capability.getEmber() >= emberCost) {
-                    capability.removeAmount(emberCost, true);
-                    if (world.isRemote) {
-                        if (random.nextInt(20) == 0) {
-                            ParticleUtil.spawnParticleSpark(world, getPos().getX() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.25f, getPos().getZ() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
-                        }
-                        if (random.nextInt(10) == 0) {
-                            for (int i = 0; i < 12; i++) {
-                                ParticleUtil.spawnParticleSmoke(world, getPos().getX() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.25f, getPos().getZ() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), 0, 0.03125f + 0.03125f * random.nextFloat(), 0, 64, 64, 64, 0.125f, 5.0f + 3.0f * random.nextFloat(), 80);
-                            }
-                        }
-                    }
-                    isWorking = true;
-                    progress++;
-                    markDirty();
-                    if (progress >= UpgradeUtil.getWorkTime(this,PROCESS_TIME,upgrades)) {
-                        ItemStack recipeStack = top.inventory.getStackInSlot(0);
-                        ItemMeltingRecipe recipe = RecipeRegistry.getMeltingRecipe(recipeStack);
-                        if (recipe != null && !world.isRemote) {
-                            FluidStack output = recipe.getResult(this, recipeStack);
-                            FluidTank tank = top.getTank();
-							output = UpgradeUtil.transformOutput(this,output,upgrades);
-                            if (output != null && tank.fill(output, false) >= output.amount) {
-                                tank.fill(output, true);
-                                top.markDirty();
-                                top.inventory.extractItem(0, recipe.getInputConsumed(), false);
-								progress = 0;
-                                markDirty();
-                            }
-                        }
-                    }
+					boolean cancel = UpgradeUtil.doWork(this, upgrades);
+					if(!cancel) {
+						capability.removeAmount(emberCost, true);
+						if (world.isRemote) {
+							if (random.nextInt(20) == 0) {
+								ParticleUtil.spawnParticleSpark(world, getPos().getX() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.25f, getPos().getZ() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
+							}
+							if (random.nextInt(10) == 0) {
+								for (int i = 0; i < 12; i++) {
+									ParticleUtil.spawnParticleSmoke(world, getPos().getX() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.25f, getPos().getZ() + 0.5f + 0.125f * (random.nextFloat() - 0.5f), 0, 0.03125f + 0.03125f * random.nextFloat(), 0, 64, 64, 64, 0.125f, 5.0f + 3.0f * random.nextFloat(), 80);
+								}
+							}
+						}
+						isWorking = true;
+						progress++;
+						markDirty();
+						if (progress >= UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
+							ItemStack recipeStack = top.inventory.getStackInSlot(0);
+							ItemMeltingRecipe recipe = RecipeRegistry.getMeltingRecipe(recipeStack);
+							if (recipe != null && !world.isRemote) {
+								FluidStack output = recipe.getResult(this, recipeStack);
+								FluidTank tank = top.getTank();
+								output = UpgradeUtil.transformOutput(this, output, upgrades);
+								if (output != null && tank.fill(output, false) >= output.amount) {
+									tank.fill(output, true);
+									top.markDirty();
+									top.inventory.extractItem(0, recipe.getInputConsumed(), false);
+									progress = 0;
+									markDirty();
+								}
+							}
+						}
+					}
                 }
 		} else {
 			isWorking = false;

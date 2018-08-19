@@ -3,6 +3,7 @@ package teamroots.embers.api.upgrades;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.api.event.UpgradeEvent;
 
 import java.util.List;
 
@@ -23,6 +24,12 @@ public interface IUpgradeProvider {
     //The speed modifier that this upgrade provides
     default double getSpeed(TileEntity tile, double speed) {
         return speed;
+    }
+
+    //Called on machine update
+    //If this returns true, this call replaces the entire update call.
+    default boolean doTick(TileEntity tile, List<IUpgradeProvider> upgrades) {
+        return false;
     }
 
     //Called if machine is working
@@ -59,4 +66,6 @@ public interface IUpgradeProvider {
     default String getOtherParameter(TileEntity tile, String type, String value) { return value; }
 
     default <T> T getOtherParameter(TileEntity tile, String type, T value) { return value; }
+
+    default void throwEvent(TileEntity tile, UpgradeEvent event) {}
 }

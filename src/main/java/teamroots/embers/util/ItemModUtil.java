@@ -2,15 +2,17 @@ package teamroots.embers.util;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import teamroots.embers.api.itemmod.IItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
+import teamroots.embers.itemmod.ModifierCore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //TODO: Phase out
@@ -23,8 +25,55 @@ public class ItemModUtil {
 	public static Map<Item, ModifierBase> modifierRegistry = new HashMap<>();
 	public static Map<String, ModifierBase> nameToModifier = new HashMap<>();
 
+	public static ArrayList<ModifierBase> weaponModifiers = new ArrayList<>();
+	public static ArrayList<ModifierBase> armorModifiers = new ArrayList<>();
+	public static ArrayList<ModifierBase> otherModifiers = new ArrayList<>();
+
 	@Deprecated
 	public static void init(){
+	}
+
+	public static void registerModifier(Item item, ModifierBase modifier) {
+		modifierRegistry.put(item, modifier);
+		nameToModifier.put(modifier.name, modifier);
+
+		if (!(modifier instanceof ModifierCore))
+		switch (modifier.type) { //Create smaller classes for faster lookup
+			case ALL:
+			case PROJECTILE:
+				otherModifiers.add(modifier);
+				break;
+			case TOOL_OR_ARMOR:
+				weaponModifiers.add(modifier);
+				armorModifiers.add(modifier);
+				break;
+			case TOOL:
+				weaponModifiers.add(modifier);
+				break;
+			case ARMOR:
+			case HELMET:
+			case CHESTPLATE:
+			case LEGGINGS:
+			case BOOTS:
+				armorModifiers.add(modifier);
+				break;
+		}
+	}
+
+	public static boolean canAnyModifierApply(ItemStack stack) {
+		Item item = stack.getItem();
+		List<ModifierBase> testList = otherModifiers;
+		if(item instanceof ItemTool || item instanceof ItemSword)
+			testList = weaponModifiers;
+		else if(item instanceof ItemArmor)
+			testList = armorModifiers;
+
+		for(ModifierBase modifier : testList) {
+			if(modifier.canApplyTo(stack))
+				return true;
+		}
+
+		return false;
 	}
 	
 	public static void checkForTag(ItemStack stack){

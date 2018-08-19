@@ -127,7 +127,7 @@ public class RecipeRegistry {
 	public void initOreDict(){
 		OreDictionary.registerOre("dustAsh", RegistryManager.dust_ash);
 		OreDictionary.registerOre("dustAshes", RegistryManager.dust_ash);
-		OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
+		//OreDictionary.registerOre("nuggetIron", RegistryManager.nugget_iron);
 		OreDictionary.registerOre("ingotCopper", RegistryManager.ingot_copper);
 		OreDictionary.registerOre("ingotLead", RegistryManager.ingot_lead);
 		OreDictionary.registerOre("ingotSilver", RegistryManager.ingot_silver);
@@ -256,8 +256,7 @@ public class RecipeRegistry {
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("shard_ember"),new ItemStack(RegistryManager.shard_ember,6),new Object[]{
 				RegistryManager.crystal_ember}).setRegistryName(getRL("shard_ember")));
 
-		event.getRegistry().register(new ShapelessOreRecipe(getRL("iron_nugget"),new ItemStack(RegistryManager.nugget_iron,9),new Object[]{
-				"ingotIron"}).setRegistryName(getRL("iron_nugget")));
+		//event.getRegistry().register(new ShapelessOreRecipe(getRL("iron_nugget"),new ItemStack(RegistryManager.nugget_iron,9),new Object[]{"ingotIron"}).setRegistryName(getRL("iron_nugget")));
 		
 
 		event.getRegistry().register(new ShapelessOreRecipe(getRL("plate_gold"),new ItemStack(RegistryManager.plate_gold,1),new Object[]{

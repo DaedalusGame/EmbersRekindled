@@ -18,6 +18,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.recipe.BoreOutput;
@@ -33,10 +34,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
+public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered {
 	public static final int MAX_LEVEL = 7;
 	public static final int BORE_TIME = 200;
 	public static final int SLOT_FUEL = 8;
+	public static final double FUEL_CONSUMPTION = 3;
 
 	public static final int SOUND_ON = 1;
 	public static final int SOUND_ON_DRILL = 2;
@@ -45,7 +47,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	Random random = new Random();
 	public long ticksExisted = 0;
 	public float angle = 0;
-	public int ticksFueled = 0;
+	public double ticksFueled = 0;
 	public float lastAngle;
 	boolean isRunning;
 
@@ -66,7 +68,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
 		tag.setTag("inventory", inventory.serializeNBT());
-		tag.setInteger("fueled", ticksFueled);
+		tag.setDouble("fueled", ticksFueled);
+		tag.setBoolean("isRunning",isRunning);
 		return tag;
 	}
 	
@@ -76,7 +79,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 		NBTTagCompound inventoryTag = tag.getCompoundTag("inventory");
 		inventoryTag.removeTag("Size"); //Migrating old Ember Bores
 		this.inventory.deserializeNBT(inventoryTag);
-		ticksFueled = tag.getInteger("fueled");
+		ticksFueled = tag.getDouble("fueled");
+		isRunning = tag.getBoolean("isRunning");
 	}
 
 	@Override
@@ -148,55 +152,63 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public void update() {
-		if(getWorld().isRemote)
-			handleSound();
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.UP});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
+		if(getWorld().isRemote)
+			handleSound();
 		double speedMod = UpgradeUtil.getTotalSpeedModifier(this,upgrades);
-		if (ticksFueled > 0){
+		if (isRunning){
 			lastAngle = angle;
 			angle += 12.0f * speedMod;
 		}
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
-		if (!cancel && !getWorld().isRemote){
-			ticksExisted ++;
-			if (ticksFueled > 0){
-				ticksFueled --;
-			}
+		boolean previousRunning = isRunning;
+		if (!getWorld().isRemote){
+			isRunning = false;
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			if(!cancel) {
+				ticksExisted++;
 
-			if (ticksFueled == 0){
-				ItemStack fuel = inventory.getStackInSlot(SLOT_FUEL);
-				if (!fuel.isEmpty()){
-					ItemStack fuelCopy = fuel.copy();
-					ticksFueled = TileEntityFurnace.getItemBurnTime(fuelCopy);
-					fuel.shrink(1);
-					if (fuel.isEmpty()){
-						inventory.setStackInSlot(SLOT_FUEL, fuelCopy.getItem().getContainerItem(fuelCopy));
-					}
-					markDirty();
+				double fuelConsumption = UpgradeUtil.getOtherParameter(this,"fuel_consumption",FUEL_CONSUMPTION,upgrades);
+				if (ticksFueled >= fuelConsumption) {
+					isRunning = true;
+					ticksFueled -= fuelConsumption;
 				}
-			} else if(canMine()) {
-				int boreTime = (int)Math.ceil(BORE_TIME * (1 / speedMod));
-				if (ticksExisted % boreTime == 0){
-					if (random.nextFloat() < EmberGenUtil.getEmberDensity(world.getSeed(), getPos().getX(), getPos().getZ())){
-						BoreOutput output = RecipeRegistry.getBoreOutput(world,getPos());
-						if(output != null) {
-							ArrayList<ItemStack> returns = new ArrayList<>();
-							if(!output.stacks.isEmpty()) {
-								WeightedItemStack picked = WeightedRandom.getRandomItem(random, output.stacks);
-								returns.add(picked.getStack().copy());
-							}
-							UpgradeUtil.transformOutput(this,returns,upgrades);
-							if(canInsert(returns)) {
-								insert(returns);
+
+				if (ticksFueled < fuelConsumption) {
+					ItemStack fuel = inventory.getStackInSlot(SLOT_FUEL);
+					if (!fuel.isEmpty()) {
+						ItemStack fuelCopy = fuel.copy();
+						ticksFueled = TileEntityFurnace.getItemBurnTime(fuelCopy);
+						fuel.shrink(1);
+						if (fuel.isEmpty()) {
+							inventory.setStackInSlot(SLOT_FUEL, fuelCopy.getItem().getContainerItem(fuelCopy));
+						}
+						markDirty();
+					}
+				} else if (canMine()) {
+					int boreTime = (int) Math.ceil(BORE_TIME * (1 / speedMod));
+					if (ticksExisted % boreTime == 0) {
+						if (random.nextFloat() < EmberGenUtil.getEmberDensity(world.getSeed(), getPos().getX(), getPos().getZ())) {
+							BoreOutput output = RecipeRegistry.getBoreOutput(world, getPos());
+							if (output != null) {
+								ArrayList<ItemStack> returns = new ArrayList<>();
+								if (!output.stacks.isEmpty()) {
+									WeightedItemStack picked = WeightedRandom.getRandomItem(random, output.stacks);
+									returns.add(picked.getStack().copy());
+								}
+								UpgradeUtil.transformOutput(this, returns, upgrades);
+								if (canInsert(returns)) {
+									insert(returns);
+								}
 							}
 						}
 					}
 				}
 			}
 
-			if (isRunning != ticksFueled > 0) {
-				isRunning = ticksFueled > 0;
+			if (isRunning != previousRunning) {
 				markDirty();
 			}
 		}
@@ -263,7 +275,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 			return isRunning && id == SOUND_ON_DRILL || id == SOUND_ON && !isRunning;
 		}*/
 
-		return ticksFueled > 0;
+		return isRunning;
 	}
 
 	@Override
@@ -276,6 +288,21 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 			case SOUND_ON_DRILL: return isMining ? 1.0f : 0.0f;
 			default: return 0f;
 		}
+	}
+
+	@Override
+	public double getMechanicalSpeed(double power) {
+		return Math.log10(power / 15)*3;
+	}
+
+	@Override
+	public double getMinimumPower() {
+		return 15;
+	}
+
+	@Override
+	public double getNominalSpeed() {
+		return 1;
 	}
 
 	public class EmberBoreInventory extends ItemStackHandler {

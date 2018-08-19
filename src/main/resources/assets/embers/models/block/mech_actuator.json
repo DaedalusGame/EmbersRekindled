@@ -2,13 +2,12 @@
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"parent": "block/block",
 	"textures": {
-		"0": "blocks/block_caminite_brick",
-		"1": "blocks/machine_accessor_top",
-		"2": "blocks/plates",
-		"3": "embers:blocks/block_caminite_brick",
-		"6": "blocks/gearbox_center",
-		"7": "blocks/gearbox_frame",
-		"particle": "embers:blocks/block_caminite_brick"
+		"0": "embers:blocks/block_caminite_brick",
+		"1": "embers:blocks/machine_accessor_top",
+		"2": "embers:blocks/plates",
+		"6": "embers:blocks/gearbox_center",
+		"7": "embers:blocks/gearbox_frame",
+		"particle": "embers:embers:blocks/plates"
 	},
 	"elements": [
 		{
@@ -49,7 +48,7 @@
 				"south": {"uv": [0, 0, 3, 11], "texture": "#0"},
 				"west": {"uv": [0, 3, 3, 14], "texture": "#0"},
 				"up": {"uv": [0, 13, 3, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 3], "texture": "#3"}
+				"down": {"uv": [0, 0, 3, 3], "texture": "#0"}
 			}
 		},
 		{
@@ -63,7 +62,7 @@
 				"south": {"uv": [13, 3, 16, 14], "texture": "#0"},
 				"west": {"uv": [0, 3, 3, 14], "texture": "#0"},
 				"up": {"uv": [13, 13, 16, 16], "texture": "#0"},
-				"down": {"uv": [13, 0, 16, 3], "texture": "#3"}
+				"down": {"uv": [13, 0, 16, 3], "texture": "#0"}
 			}
 		},
 		{
@@ -77,7 +76,7 @@
 				"south": {"uv": [13, 3, 16, 14], "texture": "#0"},
 				"west": {"uv": [13, 3, 16, 14], "texture": "#0"},
 				"up": {"uv": [13, 0, 16, 3], "texture": "#0"},
-				"down": {"uv": [13, 13, 16, 16], "texture": "#3"}
+				"down": {"uv": [13, 13, 16, 16], "texture": "#0"}
 			}
 		},
 		{

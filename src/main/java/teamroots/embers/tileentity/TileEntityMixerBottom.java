@@ -175,23 +175,27 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
         if (top != null) {
             List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos.up(), EnumFacing.VALUES);
             UpgradeUtil.verifyUpgrades(this, upgrades);
-            boolean cancel = UpgradeUtil.doWork(this, upgrades);
+            if (UpgradeUtil.doTick(this, upgrades))
+                return;
             double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
-            if (!cancel && top.capability.getEmber() >= emberCost) {
+            if (top.capability.getEmber() >= emberCost) {
                 ArrayList<FluidStack> fluids = getFluids();
                 FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
                 if (recipe != null) {
-                    IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-                    FluidStack output = recipe.getResult(fluids);
-                    output = UpgradeUtil.transformOutput(this, output, upgrades);
-                    int amount = tank.fill(output, false);
-                    if (amount != 0) {
-                        isWorking = true;
-                        tank.fill(output, true);
-                        consumeFluids(recipe);
-                        top.capability.removeAmount(emberCost, true);
-                        markDirty();
-                        top.markDirty();
+                    boolean cancel = UpgradeUtil.doWork(this, upgrades);
+                    if(!cancel) {
+                        IFluidHandler tank = top.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                        FluidStack output = recipe.getResult(fluids);
+                        output = UpgradeUtil.transformOutput(this, output, upgrades);
+                        int amount = tank.fill(output, false);
+                        if (amount != 0) {
+                            isWorking = true;
+                            tank.fill(output, true);
+                            consumeFluids(recipe);
+                            top.capability.removeAmount(emberCost, true);
+                            markDirty();
+                            top.markDirty();
+                        }
                     }
                 }
             }

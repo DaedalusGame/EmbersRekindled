@@ -6,6 +6,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import teamroots.embers.api.event.UpgradeEvent;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface IUpgradeUtil {
     int getWorkTime(TileEntity tile, int time, List<IUpgradeProvider> list);
 
     double getTotalSpeedModifier(TileEntity tile, List<IUpgradeProvider> list);
+
+    boolean doTick(TileEntity tile, List<IUpgradeProvider> list);
 
     boolean doWork(TileEntity tile, List<IUpgradeProvider> list);
 
@@ -39,4 +42,6 @@ public interface IUpgradeUtil {
     String getOtherParameter(TileEntity tile, String type, String initial, List<IUpgradeProvider> list);
 
     <T> T getOtherParameter(TileEntity tile, String type, T initial, List<IUpgradeProvider> list);
+
+    void throwEvent(TileEntity tile, UpgradeEvent event, List<IUpgradeProvider> list);
 }

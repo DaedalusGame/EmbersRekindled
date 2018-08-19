@@ -161,6 +161,8 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 
 		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
 		if (capability.getEmber() >= emberCost){

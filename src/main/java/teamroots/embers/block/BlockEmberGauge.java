@@ -103,4 +103,9 @@ public class BlockEmberGauge extends BlockBase implements IDial {
 			PacketHandler.INSTANCE.sendToServer(new MessageTEUpdateRequest(pos));
 		}
 	}
+
+	@Override
+	public String getDialType() {
+		return "ember";
+	}
 }

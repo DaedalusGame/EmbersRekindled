@@ -151,6 +151,8 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	public void update() {
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 		if(getWorld().isRemote)
 			handleSound();
 		ticksExisted ++;
@@ -159,33 +161,34 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 			renderCapacity += Math.min(10000,this.capability.getEmberCapacity() - renderCapacity);
 		else
 			renderCapacity -= Math.min(10000,renderCapacity - this.capability.getEmberCapacity());
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
-		if (!cancel && !inventory.getStackInSlot(0).isEmpty() && ticksExisted % 4 == 0){
-			ItemStack stack = inventory.extractItem(0, 1, true);
-
-			if (!getWorld().isRemote && !stack.isEmpty()){
-				inventory.extractItem(0, 1, false);
-				int maxCapacity = UpgradeUtil.getOtherParameter(this,"max_capacity",MAX_CAPACITY,upgrades);
-				if (EmbersAPI.getEmberValue(stack) > 0 && this.capability.getEmberCapacity() < maxCapacity){
-					this.capability.setEmberCapacity(Math.min(maxCapacity, this.capability.getEmberCapacity()+EmbersAPI.getEmberValue(stack)*10));
-					markDirty();
+		if (!inventory.getStackInSlot(0).isEmpty() && ticksExisted % 4 == 0){
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			if(!cancel) {
+				ItemStack stack = inventory.extractItem(0, 1, true);
+				if (!getWorld().isRemote && !stack.isEmpty()) {
+					inventory.extractItem(0, 1, false);
+					int maxCapacity = UpgradeUtil.getOtherParameter(this, "max_capacity", MAX_CAPACITY, upgrades);
+					if (EmbersAPI.getEmberValue(stack) > 0 && this.capability.getEmberCapacity() < maxCapacity) {
+						this.capability.setEmberCapacity(Math.min(maxCapacity, this.capability.getEmberCapacity() + EmbersAPI.getEmberValue(stack) * 10));
+						markDirty();
+					}
 				}
-			}
-			double angle = random.nextDouble()*2.0*Math.PI;
-			double x = getPos().getX()+0.5+0.5*Math.sin(angle);
-			double z = getPos().getZ()+0.5+0.5*Math.cos(angle);
-			if (getWorld().isRemote && !stack.isEmpty()){
-				double x2 = getPos().getX()+0.5;
-				double z2 = getPos().getZ()+0.5;
-				float layerHeight = 0.25f;
-				float numLayers = 2+(float) Math.floor(capability.getEmberCapacity()/128000.0f);
-				float height = layerHeight*numLayers;
-				for (float i = 0; i < 72; i ++){
-					float coeff = i/72.0f;
-					ParticleUtil.spawnParticleGlow(getWorld(), (float)x*(1.0f-coeff)+(float)x2*coeff, getPos().getY()+(1.0f-coeff)+(height/2.0f+1.5f)*coeff, (float)z*(1.0f-coeff)+(float)z2*coeff, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+				double angle = random.nextDouble() * 2.0 * Math.PI;
+				double x = getPos().getX() + 0.5 + 0.5 * Math.sin(angle);
+				double z = getPos().getZ() + 0.5 + 0.5 * Math.cos(angle);
+				if (getWorld().isRemote && !stack.isEmpty()) {
+					double x2 = getPos().getX() + 0.5;
+					double z2 = getPos().getZ() + 0.5;
+					float layerHeight = 0.25f;
+					float numLayers = 2 + (float) Math.floor(capability.getEmberCapacity() / 128000.0f);
+					float height = layerHeight * numLayers;
+					for (float i = 0; i < 72; i++) {
+						float coeff = i / 72.0f;
+						ParticleUtil.spawnParticleGlow(getWorld(), (float) x * (1.0f - coeff) + (float) x2 * coeff, getPos().getY() + (1.0f - coeff) + (height / 2.0f + 1.5f) * coeff, (float) z * (1.0f - coeff) + (float) z2 * coeff, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+					}
 				}
+				world.playSound(null, x, pos.getY() + 0.5, z, SoundManager.CRYSTAL_CELL_GROW, SoundCategory.BLOCKS, 1.0f, 1.0f + random.nextFloat());
 			}
-			world.playSound(null,x,pos.getY()+0.5,z, SoundManager.CRYSTAL_CELL_GROW, SoundCategory.BLOCKS, 1.0f, 1.0f+random.nextFloat());
 		}
 		float numLayers = 2+(float) Math.floor(capability.getEmberCapacity()/128000.0f);
 		for (int i = 0; i < numLayers/2; i ++){

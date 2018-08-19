@@ -37,8 +37,7 @@ public class EmbersAPIImpl implements IEmbersAPI {
 
     @Override
     public void registerModifier(Item item, ModifierBase modifier) {
-        teamroots.embers.util.ItemModUtil.modifierRegistry.put(item, modifier);
-        teamroots.embers.util.ItemModUtil.nameToModifier.put(modifier.name, modifier);
+        teamroots.embers.util.ItemModUtil.registerModifier(item, modifier);
     }
 
     @Override

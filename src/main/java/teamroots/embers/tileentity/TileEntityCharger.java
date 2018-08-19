@@ -147,21 +147,26 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 		turnRate = 1;
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.VALUES);
 		UpgradeUtil.verifyUpgrades(this, upgrades);
+		if (UpgradeUtil.doTick(this, upgrades))
+			return;
 		if(getWorld().isRemote)
 			handleSound();
 		ItemStack stack = inventory.getStackInSlot(0);
 		isWorking = false;
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
-		if (!cancel && !stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
-			double transferRate = UpgradeUtil.getTotalSpeedModifier(this,upgrades) * MAX_TRANSFER;
-			double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(transferRate, capability.getEmber()), true);
-			capability.removeAmount(emberAdded, true);
-			if(emberAdded > 0)
-				isWorking = true;
-			markDirty();
-			if (getWorld().isRemote && this.capability.getEmber() > 0 && getWorld().isRemote) {
-				for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
-					ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+
+		if (!stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
+			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			if(!cancel) {
+				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER;
+				double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(transferRate, capability.getEmber()), true);
+				capability.removeAmount(emberAdded, true);
+				if (emberAdded > 0)
+					isWorking = true;
+				markDirty();
+				if (getWorld().isRemote && this.capability.getEmber() > 0 && getWorld().isRemote) {
+					for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
+						ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+					}
 				}
 			}
 		}
