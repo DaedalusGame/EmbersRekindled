@@ -1,4 +1,4 @@
-package teamroots.embers.block;
+package teamroots.embers.api.block;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
