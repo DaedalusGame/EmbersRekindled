@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,8 +24,10 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -37,7 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
+public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
     public static final float BASE_MULTIPLIER = 1.0f;
     public static final int PROCESS_TIME = 20;
     public IEmberCapability capability = new DefaultEmberCapability();
@@ -234,5 +237,13 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
     public void markDirty() {
         super.markDirty();
         Misc.syncTE(this);
+    }
+
+    @Override
+    public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+        if(BlockEmberGauge.DIAL_TYPE.equals(dialType) && Math.max(combustorMult, catalyzerMult) < 2.0f * Math.min(combustorMult, catalyzerMult)) {
+            double multiplier = BASE_MULTIPLIER + combustorMult + catalyzerMult;
+            information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplier));
+        }
     }
 }

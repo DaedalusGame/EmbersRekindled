@@ -12,6 +12,7 @@ import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.UpgradeEvent;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.tileentity.TileEntityCatalyticPlug;
 import teamroots.embers.util.DefaultUpgradeProvider;
 
@@ -63,10 +64,12 @@ public class UpgradeActuator extends DefaultUpgradeProvider {
     public void throwEvent(TileEntity tile, UpgradeEvent event) {
         IMechanicallyPowered mechTile = (IMechanicallyPowered) tile;
         if(event instanceof DialInformationEvent) {
-            double power = getPower();
-            double speedModifier = mechTile.getMechanicalSpeed(power) / mechTile.getNominalSpeed();
             DialInformationEvent dialEvent = (DialInformationEvent) event;
-            dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.actuator",speedModifier)); //Proxy this because it runs in shared code
+            if(BlockEmberGauge.DIAL_TYPE.equals(dialEvent.getDialType())) {
+                double power = getPower();
+                double speedModifier = mechTile.getMechanicalSpeed(power) / mechTile.getNominalSpeed();
+                dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.actuator", speedModifier)); //Proxy this because it runs in shared code
+            }
         }
     }
 

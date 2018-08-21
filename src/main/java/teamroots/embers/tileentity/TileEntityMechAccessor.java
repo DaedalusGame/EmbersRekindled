@@ -12,14 +12,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.block.BlockMechAccessor;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
-public class TileEntityMechAccessor extends TileEntity implements ITileEntityBase {
+public class TileEntityMechAccessor extends TileEntity implements ITileEntityBase, IExtraDialInformation {
 	static HashSet<Class<? extends TileEntity>> ACCESSIBLE_TILES = new HashSet<>();
 
 	public static void registerAccessibleTile(Class<? extends TileEntity> type)
@@ -110,5 +112,16 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() instanceof BlockMechAccessor) {
+			EnumFacing accessFace = state.getValue(BlockMechAccessor.facing);
+			TileEntity tile = world.getTileEntity(pos.offset(accessFace.getOpposite()));
+			if(tile instanceof IExtraDialInformation && canAccess(tile))
+				((IExtraDialInformation) tile).addDialInformation(accessFace,information,dialType);
+		}
 	}
 }

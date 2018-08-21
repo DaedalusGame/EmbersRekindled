@@ -21,8 +21,11 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.block.BlockEmberGauge;
+import teamroots.embers.block.BlockItemGauge;
 import teamroots.embers.item.IEmberItem;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -34,7 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
+public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
 	public static final double MAX_TRANSFER = 10.0;
 
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -125,7 +128,7 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			markDirty();
 			return true;
 		}
-		else if (!stack.isEmpty()) {
+		else if (!stack.isEmpty() && heldItem.isEmpty()) {
 			if (!getWorld().isRemote) {
 				player.setHeldItem(hand, inventory.extractItem(0, stack.getCount(), false));
 				markDirty();
@@ -207,5 +210,17 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		if(BlockEmberGauge.DIAL_TYPE.equals(dialType)) {
+			ItemStack stack = inventory.getStackInSlot(0);
+			if (stack.getItem() instanceof IEmberItem) {
+				IEmberItem emberItem = (IEmberItem) stack.getItem();
+				information.add(BlockItemGauge.formatItemStack(stack));
+				information.add(BlockEmberGauge.formatEmber(emberItem.getEmber(stack),emberItem.getEmberCapacity(stack)));
+			}
+		}
 	}
 }

@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
-import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.power.IEmberCapability;
@@ -37,7 +36,8 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	public static final double EMBER_COST = 0.5;
 
 	int ticksExisted = 0;
-	int progress, lastProgress;
+	int progress;
+	int totalProgress, lastProgress;
 	EnumFacing front = EnumFacing.UP;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	private List<IUpgradeProvider> upgrades = new ArrayList<>();
@@ -145,12 +145,14 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 		if (state.getBlock() instanceof BlockPump){
 			this.front = state.getValue(BlockPump.facing);
 		}
-		lastProgress = progress;
+		lastProgress = totalProgress;
 		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST, upgrades);
 		if (capability.getEmber() >= emberCost) {
 			boolean cancel = UpgradeUtil.doWork(this, upgrades);
 			if(!cancel) {
-				this.progress += (int)UpgradeUtil.getTotalSpeedModifier(this, upgrades);
+				int speed = (int) UpgradeUtil.getTotalSpeedModifier(this, upgrades);
+				this.progress += speed;
+				this.totalProgress += speed;
 				capability.removeAmount(emberCost, false);
 				if (this.progress > 400) {
 					progress -= 400;

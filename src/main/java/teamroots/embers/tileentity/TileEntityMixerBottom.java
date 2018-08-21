@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,6 +12,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,8 +22,10 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.block.BlockFluidGauge;
 import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.Misc;
@@ -33,7 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
+public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
     public static final double EMBER_COST = 2.0;
 
     public FluidTank north = new FluidTank(8000);
@@ -249,5 +253,16 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
     public void markDirty() {
         super.markDirty();
         Misc.syncTE(this);
+    }
+
+    @Override
+    public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+        if(BlockFluidGauge.DIAL_TYPE.equals(dialType)) {
+            information.clear();
+            information.add(TextFormatting.BOLD.toString()+I18n.format("embers.tooltip.side.north")+TextFormatting.RESET.toString()+" "+BlockFluidGauge.formatFluidStack(north.getFluid(),north.getCapacity()));
+            information.add(TextFormatting.BOLD.toString()+I18n.format("embers.tooltip.side.east")+TextFormatting.RESET.toString()+" "+BlockFluidGauge.formatFluidStack(east.getFluid(),east.getCapacity()));
+            information.add(TextFormatting.BOLD.toString()+I18n.format("embers.tooltip.side.south")+TextFormatting.RESET.toString()+" "+BlockFluidGauge.formatFluidStack(south.getFluid(),south.getCapacity()));
+            information.add(TextFormatting.BOLD.toString()+I18n.format("embers.tooltip.side.west")+TextFormatting.RESET.toString()+" "+BlockFluidGauge.formatFluidStack(west.getFluid(),south.getCapacity()));
+        }
     }
 }

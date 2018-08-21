@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,8 +26,10 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageCookItemFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -42,7 +45,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
+public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IExtraDialInformation {
 	public static final double EMBER_COST = 1.0;
 	public static final double HEATING_SPEED = 1.0;
 	public static final double COOLING_SPEED = 1.0;
@@ -65,7 +68,8 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 
 	HashSet<Integer> soundsPlaying = new HashSet<>();
 	boolean isWorking;
-	
+	private List<IUpgradeProvider> upgrades;
+
 	public TileEntityHeatCoil(){
 		super();
 		capability.setEmberCapacity(8000);
@@ -159,29 +163,29 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 		if(getWorld().isRemote)
 			handleSound();
 
-		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
+		upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
 
-		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST, upgrades);
 		if (capability.getEmber() >= emberCost){
 			capability.removeAmount(emberCost, true);
 			if (ticksExisted % 20 == 0){
-				heat += UpgradeUtil.getOtherParameter(this,"heating_speed",HEATING_SPEED,upgrades);
+				heat += UpgradeUtil.getOtherParameter(this,"heating_speed",HEATING_SPEED, upgrades);
 			}
 		}
 		else {
 			if (ticksExisted % 20 == 0){
-				heat -= UpgradeUtil.getOtherParameter(this,"cooling_speed",COOLING_SPEED,upgrades);
+				heat -= UpgradeUtil.getOtherParameter(this,"cooling_speed",COOLING_SPEED, upgrades);
 			}
 		}
-		double maxHeat = UpgradeUtil.getOtherParameter(this,"max_heat",MAX_HEAT,upgrades);
+		double maxHeat = UpgradeUtil.getOtherParameter(this,"max_heat",MAX_HEAT, upgrades);
 		heat = MathHelper.clamp(heat,0, maxHeat);
 		isWorking = false;
 
-		boolean cancel = UpgradeUtil.doWork(this,upgrades);
-		int cookTime = UpgradeUtil.getWorkTime(this,(int)Math.ceil(MathHelper.clampedLerp(MIN_COOK_TIME,MAX_COOK_TIME,1.0-(heat / maxHeat))),upgrades);
+		boolean cancel = UpgradeUtil.doWork(this, upgrades);
+		int cookTime = UpgradeUtil.getWorkTime(this,(int)Math.ceil(MathHelper.clampedLerp(MIN_COOK_TIME,MAX_COOK_TIME,1.0-(heat / maxHeat))), upgrades);
 		if (!cancel && heat > 0 && ticksExisted % cookTime == 0 && !getWorld().isRemote){
 			List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX()-1,getPos().getY(),getPos().getZ()-1,getPos().getX()+2,getPos().getY()+2,getPos().getZ()+2));
 			for (EntityItem item : items) {
@@ -197,7 +201,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 					int inputCount = recipe.getInputConsumed();
 					depleteItem(entityItem, inputCount);
 					boolean dirty = false;
-					UpgradeUtil.transformOutput(this,returns,upgrades);
+					UpgradeUtil.transformOutput(this,returns, upgrades);
 					for(ItemStack stack : returns) {
 						ItemStack remainder = inventory.insertItem(0, stack, false);
 						dirty = true;
@@ -296,5 +300,14 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		if(BlockEmberGauge.DIAL_TYPE.equals(dialType)) {
+			double maxHeat = UpgradeUtil.getOtherParameter(this,"max_heat",MAX_HEAT, upgrades);
+			double heat = MathHelper.clamp(this.heat,0, maxHeat);
+			information.add(I18n.format("embers.tooltip.dial.heat",heat,maxHeat));
+		}
 	}
 }

@@ -18,6 +18,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.Misc;
@@ -25,9 +26,10 @@ import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
-public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
+public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
@@ -148,5 +150,12 @@ public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, 
 	@Override
 	public boolean shouldPlaySound(int id) {
 		return id == SOUND_HAS_EMBER && capability.getEmber() > 0;
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		TileEntity bottom = world.getTileEntity(pos.down());
+		if(bottom instanceof TileEntityBoilerBottom)
+			((TileEntityBoilerBottom) bottom).addDialInformation(facing,information,dialType);
 	}
 }

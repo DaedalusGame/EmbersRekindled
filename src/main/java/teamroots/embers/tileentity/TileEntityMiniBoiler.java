@@ -220,7 +220,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
-		if(facing.getAxis() != EnumFacing.Axis.Y) {
+		if(BlockFluidGauge.DIAL_TYPE.equals(dialType) && facing.getAxis() != EnumFacing.Axis.Y) {
 			String gasFormat = "";
 			if(getGasAmount() > getCapacity() * 0.8)
 				gasFormat = TextFormatting.RED.toString()+" ";

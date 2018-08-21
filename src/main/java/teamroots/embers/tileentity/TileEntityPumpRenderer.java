@@ -56,7 +56,7 @@ public class TileEntityPumpRenderer extends TileEntitySpecialRenderer<TileEntity
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
 
-			double progress = t.progress * partialTicks + t.lastProgress * (1-partialTicks);
+			double progress = t.totalProgress * partialTicks + t.lastProgress * (1-partialTicks);
 			double amountUp = Math.abs(Math.sin((Math.PI * progress)/400.0));
             
             GlStateManager.pushMatrix();

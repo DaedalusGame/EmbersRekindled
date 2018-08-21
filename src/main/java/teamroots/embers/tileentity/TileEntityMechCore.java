@@ -12,13 +12,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class TileEntityMechCore extends TileEntity implements ITileEntityBase {
+public class TileEntityMechCore extends TileEntity implements ITileEntityBase, IExtraDialInformation {
 	Random random = new Random();
 	
 	public TileEntityMechCore(){
@@ -50,57 +52,42 @@ public class TileEntityMechCore extends TileEntity implements ITileEntityBase {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		
+
+	public TileEntity getAttachedMultiblock() {
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN)) instanceof IMultiblockMachine){
-			return getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN)).hasCapability(capability, facing);
+			return getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN));
 		}
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.UP)) instanceof IMultiblockMachine){
-			return getWorld().getTileEntity(getPos().offset(EnumFacing.UP)).hasCapability(capability, facing);
+			return getWorld().getTileEntity(getPos().offset(EnumFacing.UP));
 		}
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.WEST)) instanceof IMultiblockMachine){
-			return getWorld().getTileEntity(getPos().offset(EnumFacing.WEST)).hasCapability(capability, facing);
+			return getWorld().getTileEntity(getPos().offset(EnumFacing.WEST));
 		}
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.EAST)) instanceof IMultiblockMachine){
-			return getWorld().getTileEntity(getPos().offset(EnumFacing.EAST)).hasCapability(capability, facing);
+			return getWorld().getTileEntity(getPos().offset(EnumFacing.EAST));
 		}
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.NORTH)) instanceof IMultiblockMachine){
-			return getWorld().getTileEntity(getPos().offset(EnumFacing.NORTH)).hasCapability(capability, facing);
+			return getWorld().getTileEntity(getPos().offset(EnumFacing.NORTH));
 		}
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH)) instanceof IMultiblockMachine){
-			return getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH)).hasCapability(capability, facing);
+			return getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH));
 		}
+		return null;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+		TileEntity multiblock = getAttachedMultiblock();
+		if(multiblock != null)
+			return multiblock.hasCapability(capability, facing);
 		return super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		ArrayList<EnumFacing> faces = new ArrayList<EnumFacing>();
-		
-		if (getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN)) instanceof IMultiblockMachine){
-			faces.add(EnumFacing.DOWN);
-		}
-		if (getWorld().getTileEntity(getPos().offset(EnumFacing.UP)) instanceof IMultiblockMachine){
-			faces.add(EnumFacing.UP);
-		}
-		if (getWorld().getTileEntity(getPos().offset(EnumFacing.WEST)) instanceof IMultiblockMachine){
-			faces.add(EnumFacing.WEST);
-		}
-		if (getWorld().getTileEntity(getPos().offset(EnumFacing.EAST)) instanceof IMultiblockMachine){
-			faces.add(EnumFacing.EAST);
-		}
-		if (getWorld().getTileEntity(getPos().offset(EnumFacing.NORTH)) instanceof IMultiblockMachine){
-			faces.add(EnumFacing.NORTH);
-		}
-		if (getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH)) instanceof IMultiblockMachine){
-			faces.add(EnumFacing.SOUTH);
-		}
-		
-		if (faces.size() > 0){
-			return getWorld().getTileEntity(getPos().offset(faces.get(random.nextInt(faces.size())))).getCapability(capability, facing);
-		}
+		TileEntity multiblock = getAttachedMultiblock();
+		if(multiblock != null)
+			return multiblock.getCapability(capability, facing);
 		return super.getCapability(capability, facing);
 	}
 
@@ -120,5 +107,12 @@ public class TileEntityMechCore extends TileEntity implements ITileEntityBase {
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		TileEntity multiblock = getAttachedMultiblock();
+		if(multiblock instanceof IExtraDialInformation)
+			((IExtraDialInformation) multiblock).addDialInformation(facing,information,dialType);
 	}
 }

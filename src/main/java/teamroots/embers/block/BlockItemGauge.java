@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockItemGauge extends BlockBaseGauge {
+	public static final String DIAL_TYPE = "item";
+
 	public BlockItemGauge(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
@@ -38,18 +40,22 @@ public class BlockItemGauge extends BlockBaseGauge {
 				for (int i = 0; i < handler.getSlots(); i++){
 					ItemStack stack = handler.getStackInSlot(i);
 					String item;
-					if (!stack.isEmpty())
-						item = I18n.format("embers.tooltip.itemdial.item", stack.getCount(), stack.getDisplayName());
-					else
-						item = I18n.format("embers.tooltip.itemdial.noitem");
+					item = formatItemStack(stack);
 					text.add(I18n.format("embers.tooltip.itemdial.slot",i,item));
 				}
 			}
 		}
 	}
 
+	public static String formatItemStack(ItemStack stack) {
+		if (!stack.isEmpty())
+            return I18n.format("embers.tooltip.itemdial.item", stack.getCount(), stack.getDisplayName());
+        else
+            return I18n.format("embers.tooltip.itemdial.noitem");
+	}
+
 	@Override
 	public String getDialType() {
-		return "item";
+		return DIAL_TYPE;
 	}
 }

@@ -17,7 +17,6 @@ public class UpgradeUtil {
         return IMPL.getUpgrades(world, pos, facings);
     }
 
-    @Deprecated
     public static List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings) {
         return IMPL.getUpgradesForMultiblock(world, pos, facings);
     }

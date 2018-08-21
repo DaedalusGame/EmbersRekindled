@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBucket;
@@ -23,8 +24,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.util.Misc;
@@ -33,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEntityBase, ITickable {
+public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEntityBase, ITickable, IExtraDialInformation {
     public static final float BASE_MULTIPLIER = 1.5f;
     public static final int FLUID_CONSUMED = 25;
     public static final float PER_BLOCK_MULTIPLIER = 0.375f;
@@ -185,5 +188,13 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
     public void markDirty() {
         super.markDirty();
         Misc.syncTE(this);
+    }
+
+    @Override
+    public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+        if(BlockEmberGauge.DIAL_TYPE.equals(dialType)) {
+            double multiplier = getMultiplier();
+            information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplier));
+        }
     }
 }

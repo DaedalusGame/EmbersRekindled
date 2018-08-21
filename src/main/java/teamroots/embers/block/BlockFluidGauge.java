@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockFluidGauge extends BlockBaseGauge {
+
+	public static final String DIAL_TYPE = "fluid";
+
 	public BlockFluidGauge(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
@@ -54,6 +57,6 @@ public class BlockFluidGauge extends BlockBaseGauge {
 
 	@Override
 	public String getDialType() {
-		return "fluid";
+		return DIAL_TYPE;
 	}
 }

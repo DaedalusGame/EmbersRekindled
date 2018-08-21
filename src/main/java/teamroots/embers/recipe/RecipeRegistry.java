@@ -995,6 +995,14 @@ public class RecipeRegistry {
 				'X', Blocks.IRON_BARS,
 				'P', "plateIron",
 				'I', RegistryManager.superheater}).setRegistryName(getRL("diffraction_barrel")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("mechanical_pump"),new ItemStack(RegistryManager.mechanical_pump,1),true,new Object[]{
+				"EPE",
+				"PPP",
+				"BIB",
+				'E', RegistryManager.pipe,
+				'I', RegistryManager.pump,
+				'P', "plateIron",
+				'B', RegistryManager.brick_caminite}).setRegistryName(getRL("mechanical_pump")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
 		event.getRegistry().register(new AshenCloakUnsocketRecipe().setRegistryName(getRL("cloak_unsocketing")));
 
