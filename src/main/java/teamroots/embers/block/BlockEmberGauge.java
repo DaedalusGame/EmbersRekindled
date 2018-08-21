@@ -31,8 +31,8 @@ public class BlockEmberGauge extends BlockBaseGauge {
 
 	@Override
 	protected void getTEData(EnumFacing facing, ArrayList<String> text, TileEntity tileEntity) {
-		if (tileEntity.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, facing.getOpposite())){
-			IEmberCapability handler = tileEntity.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing.getOpposite());
+		if (tileEntity.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, facing)){
+			IEmberCapability handler = tileEntity.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing);
 			if (handler != null){
 				text.add(I18n.format("embers.tooltip.emberdial.ember",handler.getEmber(),handler.getEmberCapacity()));
 			}

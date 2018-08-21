@@ -33,8 +33,8 @@ public class BlockFluidGauge extends BlockBaseGauge {
 
 	@Override
 	protected void getTEData(EnumFacing facing, ArrayList<String> text, TileEntity tileEntity) {
-		if (tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite())){
-			IFluidHandler handler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite());
+		if (tileEntity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)){
+			IFluidHandler handler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
 			if (handler != null){
 				for (IFluidTankProperties property : handler.getTankProperties()) {
 					FluidStack contents = property.getContents();
