@@ -290,6 +290,7 @@ embers.tooltip.itemdial.item=%dx %s
 embers.tooltip.itemdial.noitem=NONE
 embers.tooltip.emberdial.ember=Ember: %d/%d
 embers.tooltip.fluiddial.fluid=%s: %d/%d
+embers.tooltip.fluiddial.nofluid=NONE: 0/%d
 embers.tooltip.accuracy=%s Inaccuracy: %d
 embers.tooltip.inflictor=Attuned Damage: 
 embers.tooltip.tyrfing=Deals damage based on the target's armor.

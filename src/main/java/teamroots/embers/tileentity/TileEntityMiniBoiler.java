@@ -10,6 +10,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,9 +22,13 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.projectile.EffectDamage;
+import teamroots.embers.api.tile.IExtraDialInformation;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockBreaker;
+import teamroots.embers.block.BlockFluidGauge;
 import teamroots.embers.block.BlockMiniBoiler;
 import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.entity.EntityEmberProjectile;
@@ -32,9 +37,10 @@ import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
-public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase {
+public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase, IExtraDialInformation {
 	public static int FLUID_CAPACITY = Fluid.BUCKET_VOLUME*16;
 	public static int FLUID_PROCESS_AMOUNT = 1;
 	public static double STEAM_MULTIPLIER = 5;
@@ -188,7 +194,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase 
 		double posX = pos.getX() + 0.5;
 		double posY = pos.getY() + 0.5;
 		double posZ = pos.getZ() + 0.5;
-		Explosion explosion = world.newExplosion(null, posX, posY, posZ, 2f, true, false);
+		Explosion explosion = world.newExplosion(null, posX, posY, posZ, 3f, true, false);
 		world.setBlockToAir(pos);
 		EffectDamage effect = new EffectDamage(4.0f, preset -> DamageSource.causeExplosionDamage(explosion), 10, 0.0f);
 		for(int i = 0; i < 12; i++) {
@@ -210,5 +216,18 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase 
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		if(facing.getAxis() != EnumFacing.Axis.Y) {
+			String gasFormat = "";
+			if(getGasAmount() > getCapacity() * 0.8)
+				gasFormat = TextFormatting.RED.toString()+" ";
+			else if(getGasAmount() > getCapacity() * 0.5)
+				gasFormat = TextFormatting.YELLOW.toString()+" ";
+			information.add(gasFormat+BlockFluidGauge.formatFluidStack(getGasStack(),getCapacity()));
+			information.add(BlockFluidGauge.formatFluidStack(getFluidStack(),getCapacity()));
+		}
 	}
 }

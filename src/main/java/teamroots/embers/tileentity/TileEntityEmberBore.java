@@ -18,6 +18,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.event.DialInformationEvent;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -34,7 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered {
+public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered, IExtraDialInformation {
 	public static final int MAX_LEVEL = 7;
 	public static final int BORE_TIME = 200;
 	public static final int SLOT_FUEL = 8;
@@ -52,6 +54,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	boolean isRunning;
 
 	HashSet<Integer> soundsPlaying = new HashSet<>();
+	private List<IUpgradeProvider> upgrades = new ArrayList<>();
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -152,13 +155,13 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
 	@Override
 	public void update() {
-		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.UP});
+		upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.UP});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
 		if(getWorld().isRemote)
 			handleSound();
-		double speedMod = UpgradeUtil.getTotalSpeedModifier(this,upgrades);
+		double speedMod = UpgradeUtil.getTotalSpeedModifier(this, upgrades);
 		lastAngle = angle;
 		if (isRunning){
 			angle += 12.0f * speedMod;
@@ -166,11 +169,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 		boolean previousRunning = isRunning;
 		if (!getWorld().isRemote){
 			isRunning = false;
-			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			boolean cancel = UpgradeUtil.doWork(this, upgrades);
 			if(!cancel) {
 				ticksExisted++;
 
-				double fuelConsumption = UpgradeUtil.getOtherParameter(this,"fuel_consumption",FUEL_CONSUMPTION,upgrades);
+				double fuelConsumption = UpgradeUtil.getOtherParameter(this,"fuel_consumption",FUEL_CONSUMPTION, upgrades);
 				if (ticksFueled >= fuelConsumption) {
 					isRunning = true;
 					ticksFueled -= fuelConsumption;
@@ -308,6 +311,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 	@Override
 	public double getNominalSpeed() {
 		return 1;
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information,dialType),upgrades);
 	}
 
 	public class EmberBoreInventory extends ItemStackHandler {

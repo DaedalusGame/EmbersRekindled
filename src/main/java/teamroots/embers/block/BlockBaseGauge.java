@@ -90,7 +90,7 @@ public abstract class BlockBaseGauge extends BlockBase implements teamroots.embe
         if (tileEntity != null){
             getTEData(facing, text, tileEntity);
             if(tileEntity instanceof IExtraDialInformation)
-                ((IExtraDialInformation) tileEntity).addDialInformation(world,pos,state,text,getDialType());
+                ((IExtraDialInformation) tileEntity).addDialInformation(facing,text,getDialType());
         }
         return text;
     }

@@ -30,6 +30,7 @@ import teamroots.embers.util.FluidUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation {
@@ -39,7 +40,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	int progress, lastProgress;
 	EnumFacing front = EnumFacing.UP;
 	public IEmberCapability capability = new DefaultEmberCapability();
-	private List<IUpgradeProvider> upgrades;
+	private List<IUpgradeProvider> upgrades = new ArrayList<>();
 
 	public TileEntityPumpBottom(){
 		super();
@@ -186,7 +187,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	}
 
 	@Override
-	public void addDialInformation(World world, BlockPos pos, IBlockState state, List<String> information, String dialType) {
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
 		UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information,dialType),upgrades);
 	}
 }

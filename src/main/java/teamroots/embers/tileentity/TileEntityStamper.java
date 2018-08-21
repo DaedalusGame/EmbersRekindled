@@ -24,7 +24,9 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -37,10 +39,11 @@ import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityStamper extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered {
+public class TileEntityStamper extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation {
     public static final double EMBER_COST = 80.0;
     public static final int STAMP_TIME = 70;
     public static final int RETRACT_TIME = 10;
@@ -61,6 +64,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
             return 1;
         }
     };
+    private List<IUpgradeProvider> upgrades = new ArrayList<>();
 
     public TileEntityStamper() {
         super();
@@ -134,7 +138,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
         prevPowered = powered;
         EnumFacing face = getWorld().getBlockState(getPos()).getValue(BlockStamper.facing);
         if (getWorld().getBlockState(getPos().offset(face, 2)).getBlock() == RegistryManager.stamp_base) {
-            List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+            upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
             UpgradeUtil.verifyUpgrades(this, upgrades);
             if (UpgradeUtil.doTick(this, upgrades))
                 return;
@@ -243,5 +247,10 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
     @Override
     public double getMinimumPower() {
         return 10;
+    }
+
+    @Override
+    public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+        UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information,dialType),upgrades);
     }
 }

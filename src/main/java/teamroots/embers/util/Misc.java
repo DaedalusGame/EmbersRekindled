@@ -214,7 +214,7 @@ public class Misc {
 
 	public static void syncTE(TileEntity tile) {
 		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-		tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3); //Does a good job
+		tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 10); //Does a good job I hope
 	}
 
 	@Nullable

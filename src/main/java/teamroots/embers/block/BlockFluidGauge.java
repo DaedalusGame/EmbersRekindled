@@ -38,12 +38,18 @@ public class BlockFluidGauge extends BlockBaseGauge {
 			if (handler != null){
 				for (IFluidTankProperties property : handler.getTankProperties()) {
 					FluidStack contents = property.getContents();
-					if (contents != null) {
-						text.add(I18n.format("embers.tooltip.fluiddial.fluid",contents.getFluid().getLocalizedName(contents),contents.amount,property.getCapacity()));
-					}
+					int capacity = property.getCapacity();
+					text.add(formatFluidStack(contents, capacity));
 				}
 			}
 		}
+	}
+
+	public static String formatFluidStack(FluidStack contents, int capacity) {
+		if (contents != null)
+            return I18n.format("embers.tooltip.fluiddial.fluid",contents.getFluid().getLocalizedName(contents),contents.amount, capacity);
+        else
+            return I18n.format("embers.tooltip.fluiddial.nofluid", capacity);
 	}
 
 	@Override
