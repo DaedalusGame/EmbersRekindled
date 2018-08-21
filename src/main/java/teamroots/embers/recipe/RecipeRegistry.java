@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,6 +32,7 @@ import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.block.BlockSeed;
 import teamroots.embers.compat.BaublesIntegration;
+import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.util.IngredientSpecial;
@@ -245,6 +247,10 @@ public class RecipeRegistry {
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("dustRedstone"),2.0);
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("gunpowder"),3.0);
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("dustGlowstone"),4.0);
+
+		EmbersAPI.registerBoilerFluid(FluidRegistry.WATER,FluidRegistry.getFluid("steam"),5.0);
+
+		EmbersAPI.registerSteamEngineFuel(FluidRegistry.getFluid("steam"),2.0);
 	}
 
 	@SubscribeEvent
@@ -978,11 +984,24 @@ public class RecipeRegistry {
 				"P", 
 				'S', "stickWood",
 				'P', new ItemStack(RegistryManager.plate_caminite)}).setRegistryName(getRL("caminite_lever")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("mini_boiler"),new ItemStack(RegistryManager.mini_boiler,1),true,new Object[]{
+				"PPP",
+				"E P",
+				"PPP",
+				'E', "ingotCopper",
+				'P', "plateIron"}).setRegistryName(getRL("mini_boiler")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("diffraction_barrel"),new ItemStack(RegistryManager.diffraction_barrel,1),true,new Object[]{
+				"XPI",
+				'X', Blocks.IRON_BARS,
+				'P', "plateIron",
+				'I', RegistryManager.superheater}).setRegistryName(getRL("diffraction_barrel")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
 		event.getRegistry().register(new AshenCloakUnsocketRecipe().setRegistryName(getRL("cloak_unsocketing")));
 
 		if(ConfigManager.isBaublesIntegrationEnabled())
 			BaublesIntegration.registerRecipes(event);
+		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+			MysticalMechanicsIntegration.registerRecipes(event);
 		
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_copper), new ItemStack(RegistryManager.ingot_copper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_silver), new ItemStack(RegistryManager.ingot_silver), 0.35f);

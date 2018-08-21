@@ -18,7 +18,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -30,16 +32,18 @@ import teamroots.embers.util.Misc;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered {
+public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation {
 	public static final double EMBER_COST = 0.5;
 
 	int ticksExisted = 0;
-	int progress = 0;
+	int progress, lastProgress;
 	EnumFacing front = EnumFacing.UP;
 	public IEmberCapability capability = new DefaultEmberCapability();
-	
+	private List<IUpgradeProvider> upgrades;
+
 	public TileEntityPumpBottom(){
 		super();
+		capability.setEmberCapacity(1000);
 	}
 	
 	@Override
@@ -84,7 +88,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == EmbersCapabilities.EMBER_CAPABILITY && facing != null){
+		if (capability == EmbersCapabilities.EMBER_CAPABILITY && facing != null && facing.getAxis() == front.getAxis()){
 			return (T)this.capability;
 		}
 		return super.getCapability(capability, facing);
@@ -133,18 +137,19 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	@Override
 	public void update() {
 		IBlockState state = world.getBlockState(getPos());
-		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+		upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
 		if (state.getBlock() instanceof BlockPump){
 			this.front = state.getValue(BlockPump.facing);
 		}
-		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+		lastProgress = progress;
+		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST, upgrades);
 		if (capability.getEmber() >= emberCost) {
-			boolean cancel = UpgradeUtil.doWork(this,upgrades);
+			boolean cancel = UpgradeUtil.doWork(this, upgrades);
 			if(!cancel) {
-				this.progress += (int)UpgradeUtil.getTotalSpeedModifier(this,upgrades);
+				this.progress += (int)UpgradeUtil.getTotalSpeedModifier(this, upgrades);
 				capability.removeAmount(emberCost, false);
 				if (this.progress > 400) {
 					progress -= 400;
@@ -178,5 +183,10 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 	@Override
 	public double getNominalSpeed() {
 		return 10;
+	}
+
+	@Override
+	public void addDialInformation(World world, BlockPos pos, IBlockState state, List<String> information, String dialType) {
+		UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information),upgrades);
 	}
 }

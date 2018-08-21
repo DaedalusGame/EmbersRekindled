@@ -5,10 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fluids.*;
 
 public class FluidUtil {
 	public static FluidStack getFluid(World world, BlockPos pos, IBlockState state){
@@ -27,5 +24,9 @@ public class FluidUtil {
 		}
 		
 		return null;
+	}
+
+	public static boolean areFluidsEqual(Fluid a, Fluid b) {
+		return a != null && b != null && a.getName().equals(b.getName());
 	}
 }

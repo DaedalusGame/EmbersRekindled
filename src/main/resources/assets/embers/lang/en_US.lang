@@ -99,6 +99,8 @@ tile.mechanical_pump.name=Mechanical Pump
 tile.caminite_lever.name=Caminite Lever
 tile.catalytic_plug.name=Catalytic Plug
 tile.ember_funnel.name=Ember Funnel
+tile.mini_boiler.name=Mini Boiler
+tile.mech_actuator.name=Mechanical Actuator
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -107,8 +109,9 @@ fluid.lead=Molten Lead
 fluid.silver=Molten Silver
 fluid.astralite=Molten Astralite
 fluid.dawnstone=Molten Dawnstone
-fluid.umberSteel=Molten Umber Steel
+fluid.umber_steel=Molten Umber Steel
 fluid.alchemical_redstone=Alchemical Slurry
+fluid.steam=Steam
 
 item.ingot_copper.name=Copper Ingot
 item.ingot_silver.name=Silver Ingot
@@ -282,15 +285,18 @@ embers.aspect.silver=Silver
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
-embers.tooltip.itemdial.slot=Slot {0}
+embers.tooltip.itemdial.slot=Slot %d: %s
+embers.tooltip.itemdial.item=%dx %s
 embers.tooltip.itemdial.noitem=NONE
-embers.tooltip.emberdial.ember=Ember: 
+embers.tooltip.emberdial.ember=Ember: %d/%d
+embers.tooltip.fluiddial.fluid=%s: %d/%d
 embers.tooltip.accuracy=%s Inaccuracy: %d
 embers.tooltip.inflictor=Attuned Damage: 
 embers.tooltip.tyrfing=Deals damage based on the target's armor.
 embers.tooltip.heat_amount=Heat:
 embers.tooltip.heat_level=Level:
 embers.tooltip.modifiers=Modifiers:
+embers.tooltip.upgrade.actuator=Mechanical Speed: %dx
 
 embers.tooltip.modifier.superheater=Superheating
 embers.tooltip.modifier.jet_augment=Cinder Jet

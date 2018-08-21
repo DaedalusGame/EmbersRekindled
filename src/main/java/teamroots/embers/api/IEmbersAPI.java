@@ -5,9 +5,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.api.misc.IFuel;
+import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.projectile.IProjectilePreset;
 
@@ -41,6 +44,18 @@ public interface IEmbersAPI {
     void registerMetalCoefficient(IMetalCoefficient coefficient);
 
     double getMetalCoefficient(IBlockState state);
+
+    void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier);
+
+    void registerBoilerFluid(ILiquidFuel fuel);
+
+    ILiquidFuel getBoilerFluid(FluidStack fluidstack);
+
+    void registerSteamEngineFuel(Fluid fluid, double power);
+
+    void registerSteamEngineFuel(ILiquidFuel fuel);
+
+    ILiquidFuel getSteamEngineFuel(FluidStack fluidstack);
 
     double getEmberTotal(EntityPlayer player);
 

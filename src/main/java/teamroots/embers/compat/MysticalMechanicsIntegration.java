@@ -1,12 +1,10 @@
 package teamroots.embers.compat;
 
-import baubles.api.BaublesApi;
-import baubles.api.cap.IBaublesItemHandler;
 import mysticalmechanics.api.IGearBehavior;
+import mysticalmechanics.api.IMechCapability;
 import mysticalmechanics.api.MysticalMechanicsAPI;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -14,6 +12,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -21,18 +21,32 @@ import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.item.IEmberItem;
-import teamroots.embers.item.IInventoryEmberCell;
+import teamroots.embers.block.BlockMechActuator;
+import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.item.ItemBase;
-import teamroots.embers.item.ItemEmberBulb;
-import teamroots.embers.item.bauble.ItemEmberAmulet;
-import teamroots.embers.item.bauble.ItemEmberBelt;
-import teamroots.embers.item.bauble.ItemEmberRing;
+import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.tileentity.TileEntityMechActuator;
+import teamroots.embers.tileentity.TileEntityMechActuatorRenderer;
+import teamroots.embers.tileentity.TileEntitySteamEngine;
+import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class MysticalMechanicsIntegration {
+    public static final ResourceLocation IRON_GEAR_BEHAVIOR = new ResourceLocation("mysticalmechanics", "gear_iron");
+    public static final ResourceLocation DAWNSTONE_GEAR_BEHAVIOR = new ResourceLocation(Embers.MODID, "gear_dawnstone");
+    public static final int IRON_GEAR_MAX_POWER = 80;
+
     public static Item gear_dawnstone;
+
+    public static Block steam_engine;
+    public static Block mech_actuator;
+
+    @GameRegistry.ObjectHolder("mysticalmechanics:axle_iron")
+    public static Block axle_iron;
+
+    static Random random = new Random();
 
     public static ResourceLocation getRL(String s){
         return new ResourceLocation(Embers.MODID,s);
@@ -45,17 +59,41 @@ public class MysticalMechanicsIntegration {
                 " N ",
                 'C', "nuggetDawnstone",
                 'N', "ingotDawnstone"}).setRegistryName(getRL("gear_dawnstone")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("mech_actuator"),new ItemStack(mech_actuator,1),true,new Object[]{
+                "SPI",
+                'P', "gearIron",
+                'S', RegistryManager.mech_accessor,
+                'I', axle_iron}).setRegistryName(getRL("mech_actuator")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("steam_engine"),new ItemStack(steam_engine,1),true,new Object[]{
+                " II",
+                "APC",
+                "FFC",
+                'C', "plateCopper", //This recipe crashes on load
+                'P', "gearIron",    //And basically you're fucking stupid
+                'A', axle_iron,
+                'I', RegistryManager.pipe,
+                'F', "plateIron"}).setRegistryName(getRL("steam_engine")));
     }
 
     public static void registerAll() //éw parté déux
     {
+        RegistryManager.blocks.add(steam_engine = (new BlockSteamEngine(Material.ROCK,"steam_engine",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+        RegistryManager.blocks.add(mech_actuator = (new BlockMechActuator(Material.ROCK,"mech_actuator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+
         RegistryManager.items.add(gear_dawnstone = new ItemBase("gear_dawnstone",true));
+
+        GameRegistry.registerTileEntity(TileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
+        GameRegistry.registerTileEntity(TileEntityMechActuator.class, Embers.MODID+":tile_entity_mech_actuator");
     }
 
     public static void init()
     {
         OreDictionary.registerOre("gearDawnstone",gear_dawnstone);
-        MysticalMechanicsAPI.IMPL.registerGear(new ResourceLocation(Embers.MODID, "gear_dawnstone"), new OreIngredient("gearDawnstone"), new IGearBehavior() {
+
+        IGearBehavior ironGear = MysticalMechanicsAPI.IMPL.getGearBehavior(IRON_GEAR_BEHAVIOR);
+        MysticalMechanicsAPI.IMPL.unregisterGear(IRON_GEAR_BEHAVIOR);
+
+        MysticalMechanicsAPI.IMPL.registerGear(DAWNSTONE_GEAR_BEHAVIOR, new OreIngredient("gearDawnstone"), new IGearBehavior() {
             @Override
             public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, double power) {
                 return power;
@@ -63,7 +101,38 @@ public class MysticalMechanicsIntegration {
 
             @Override
             public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear) {
-                //NOOP
+                if(facing != null && tile.getWorld().isRemote && tile.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY,facing)) {
+                    IMechCapability capability = tile.getCapability(MysticalMechanicsAPI.MECH_CAPABILITY,facing);
+                    double power = capability.getPower(facing);
+                    int particles = Math.min((int)Math.ceil(power / 40),5);
+                    if(power >= IRON_GEAR_MAX_POWER)
+                    for(int i = 0; i < particles; i++) {
+                        float xOff = 0.1f+random.nextFloat()*0.8f;
+                        float yOff = 0.1f+random.nextFloat()*0.8f;
+                        float zOff = 0.1f+random.nextFloat()*0.8f;
+                        switch (facing.getAxis()) {
+                            case X:
+                                xOff = 0.5f + facing.getFrontOffsetX() / 2.0f; break;
+                            case Y:
+                                yOff = 0.5f + facing.getFrontOffsetY() / 2.0f; break;
+                            case Z:
+                                zOff = 0.5f + facing.getFrontOffsetZ() / 2.0f; break;
+                        }
+                        ParticleUtil.spawnParticleGlow(tile.getWorld(), tile.getPos().getX() + xOff, tile.getPos().getY() + yOff, tile.getPos().getZ() + zOff, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+                    }
+                }
+            }
+        });
+        MysticalMechanicsAPI.IMPL.registerGear(IRON_GEAR_BEHAVIOR, new OreIngredient("gearIron"), new IGearBehavior() {
+            @Override
+            public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, double power) {
+                power = ironGear.transformPower(tile, facing, gear, power);
+                return Misc.getDiminishedPower(power,IRON_GEAR_MAX_POWER,1); //Diminishing returns
+            }
+
+            @Override
+            public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear) {
+                ironGear.visualUpdate(tile,facing,gear);
             }
         });
     }
@@ -71,6 +140,6 @@ public class MysticalMechanicsIntegration {
     @SideOnly(Side.CLIENT)
     public static void registerClientSide()
     {
-
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechActuator.class, new TileEntityMechActuatorRenderer());
     }
 }

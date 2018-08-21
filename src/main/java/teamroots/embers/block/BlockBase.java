@@ -25,6 +25,10 @@ public class BlockBase extends Block implements IModeledBlock, IBlock {
 		}
 		itemBlock = (new ItemBlock(this).setRegistryName(this.getRegistryName()));
     }
+
+	public BlockBase(Material material){
+		super(material);
+	}
 	
 	public BlockBase setIsOpaqueCube(boolean b){
 		isOpaqueCube = b;

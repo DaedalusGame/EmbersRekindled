@@ -167,17 +167,15 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
                     if (inventory != null) {
                         ItemStack emberStack = inventory.getStackInSlot(i);
                         double emberValue = EmbersAPI.getEmberValue(emberStack);
-                        if (emberValue > 0) {
+                        if (emberValue > 0 && capability.getEmber() <= capability.getEmberCapacity()) {
                             double ember = UpgradeUtil.getTotalEmberProduction(this, multiplier * emberValue, upgrades);
-                            if (capability.getEmber() <= capability.getEmberCapacity() - ember) {
-                                if (!world.isRemote) {
-                                    world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, SoundManager.IGNEM_REACTOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                                    PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 0.5f, getPos().getZ() + 0.5f));
-                                }
-                                capability.addAmount(ember, true);
-                                inventory.extractItem(i, 1, false);
-                                markDirty();
+                            if (!world.isRemote) {
+                                world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, SoundManager.IGNEM_REACTOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                                PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 0.5f, getPos().getZ() + 0.5f));
                             }
+                            capability.addAmount(ember, true);
+                            inventory.extractItem(i, 1, false);
+                            markDirty();
                         }
                     }
                 }

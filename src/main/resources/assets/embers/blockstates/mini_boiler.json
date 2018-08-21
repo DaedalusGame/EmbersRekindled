@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "embers:mini_boiler",
+        "transform": "forge:default-block"
+    },
+    "variants":{
+        "inventory": [{ "model": "embers:mini_boiler_item" }],
+        "facing":{
+            "north": { "y": 270 },
+            "south": { "y": 90 },
+            "west":  { "y": 180 },
+            "east":  { "y": 0 }
+        }
+    }
+}

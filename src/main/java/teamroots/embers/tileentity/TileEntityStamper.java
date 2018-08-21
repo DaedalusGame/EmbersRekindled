@@ -145,11 +145,11 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
             if (handler != null)
                 fluid = handler.drain(stamp.getCapacity(), false);
             ItemStampingRecipe recipe = getRecipe(stamp.inputs.getStackInSlot(0), fluid, this.stamp.getStackInSlot(0));
-            if (!getWorld().isRemote && recipe != null) {
+            if (!getWorld().isRemote && (recipe != null || powered)) {
                 boolean cancel = UpgradeUtil.doWork(this, upgrades);
                 int stampTime = UpgradeUtil.getWorkTime(this, STAMP_TIME, upgrades);
                 int retractTime = UpgradeUtil.getWorkTime(this, RETRACT_TIME, upgrades);
-                if (!cancel && !powered && this.ticksExisted >= stampTime) {
+                if (!cancel && !powered && this.ticksExisted >= stampTime && recipe != null) {
                     double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
                     if (this.capability.getEmber() >= emberCost) {
                         this.capability.removeAmount(emberCost, true);

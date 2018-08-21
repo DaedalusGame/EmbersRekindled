@@ -18,7 +18,7 @@ import teamroots.embers.recipe.RecipeRegistry;
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
-	public static final String DEPENDENCIES = "";
+	public static final String DEPENDENCIES = "after:mysticalmechanics";
 	
     @SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")
     public static CommonProxy proxy;

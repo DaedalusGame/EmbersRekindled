@@ -26,12 +26,11 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 
 public class Misc {
+	public static final double LOG_E = Math.log10(Math.exp(1));
 	public static Random random = new Random();
 
 	public static boolean isValidLever(IBlockAccess world, BlockPos pos, EnumFacing side)
@@ -275,4 +274,10 @@ public class Misc {
 		return entities;
 	}
 
+	public static double getDiminishedPower(double power, double softcap, double slope) {
+        if(power > softcap)
+            return softcap*slope + Math.log10(power - softcap + LOG_E/slope) - Math.log10(LOG_E/slope);
+        else
+            return power*slope;
+    }
 }

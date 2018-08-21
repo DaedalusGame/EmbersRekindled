@@ -55,9 +55,9 @@ public class TileEntityPumpRenderer extends TileEntitySpecialRenderer<TileEntity
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
-            
-            double power = t.capability.getEmber() >= TileEntityPumpBottom.EMBER_COST ? 1 : 0;
-            double amountUp = Math.abs(Math.sin((Math.PI * ((double)(t.progress) + power*partialTicks))/400.0));
+
+			double progress = t.progress * partialTicks + t.lastProgress * (1-partialTicks);
+			double amountUp = Math.abs(Math.sin((Math.PI * progress)/400.0));
             
             GlStateManager.pushMatrix();
             GlStateManager.translate(x+0.5, y+1, z+0.5);

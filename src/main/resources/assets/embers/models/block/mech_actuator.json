@@ -7,7 +7,7 @@
 		"2": "embers:blocks/plates",
 		"6": "embers:blocks/gearbox_center",
 		"7": "embers:blocks/gearbox_frame",
-		"particle": "embers:embers:blocks/plates"
+		"particle": "embers:blocks/plates"
 	},
 	"elements": [
 		{

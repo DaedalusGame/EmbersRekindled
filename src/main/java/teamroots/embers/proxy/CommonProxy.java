@@ -37,7 +37,7 @@ public class CommonProxy {
 		PacketHandler.registerMessages();
 		RegistryManager.registerAll();
 		if(Loader.isModLoaded("thaumcraft"))
-			MinecraftForge.EVENT_BUS.register(new ThaumcraftIntegration());
+			MinecraftForge.EVENT_BUS.register(ThaumcraftIntegration.class);
 	}
 	
 	public void init(FMLInitializationEvent event){

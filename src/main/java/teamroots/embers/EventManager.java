@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -19,15 +20,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
@@ -42,6 +40,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -52,7 +51,7 @@ import org.lwjgl.opengl.GL11;
 import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
-import teamroots.embers.block.IDial;
+import teamroots.embers.api.block.IDial;
 import teamroots.embers.gui.GuiCodex;
 import teamroots.embers.item.IEmberChargedTool;
 import teamroots.embers.item.ItemAshenCloak;
@@ -71,7 +70,6 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.world.EmberWorldData;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 public class EventManager {
 	double gaugeAngle = 0;
@@ -160,6 +158,26 @@ public class EventManager {
 		event.getMap().registerSprite(particleSparkle);
 		ResourceLocation particleSmoke = new ResourceLocation("embers:entity/particle_smoke");
 		event.getMap().registerSprite(particleSmoke);
+
+		stitchFluid(event.getMap(),RegistryManager.fluid_alchemical_redstone);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_lead);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_tin);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_aluminum);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_bronze);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_copper);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_dawnstone);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_electrum);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_gold);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_iron);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_nickel);
+		stitchFluid(event.getMap(),RegistryManager.fluid_molten_silver);
+		stitchFluid(event.getMap(),RegistryManager.fluid_steam);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void stitchFluid(TextureMap map, Fluid fluid) {
+		map.registerSprite(fluid.getStill());
+		map.registerSprite(fluid.getFlowing());
 	}
 
 	@SubscribeEvent

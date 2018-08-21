@@ -69,7 +69,7 @@ public class RegistryManager {
 	public static ToolMaterial tool_mat_aluminum, tool_mat_bronze, tool_mat_tin, tool_mat_electrum, tool_mat_nickel;
 	public static ArmorMaterial armor_mat_ashen_cloak;
 	
-	public static Block mechanical_pump, steam_engine, gearbox_frame, creative_ember_source, creative_mech_source, axle_iron, caminite_lever, inferno_forge, inferno_forge_edge, ember_pulser, field_chart, catalyzer, combustor, reactor, archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, seed, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, block_mithril, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
+	public static Block mechanical_pump, gearbox_frame, creative_ember_source, creative_mech_source, axle_iron, caminite_lever, inferno_forge, inferno_forge_edge, ember_pulser, field_chart, catalyzer, combustor, reactor, archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, seed, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, block_mithril, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
 	public static Block block_molten_dawnstone, block_molten_gold, block_molten_copper, block_molten_lead, block_molten_silver, block_molten_iron,
 						block_molten_aluminum, block_molten_tin, block_molten_bronze, block_molten_electrum, block_molten_nickel;
 	public static Block ore_nickel, block_nickel;
@@ -80,9 +80,9 @@ public class RegistryManager {
 	public static Block catalytic_plug;
 	public static Block ember_funnel;
 	public static Block block_alchemical_redstone;
-	public static Block mech_actuator;
+	public static Block mini_boiler;
 	
-	public static Fluid fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
+	public static Fluid fluid_steam, fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
 						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
 	
 	public static Item radiant_crown, rocket_booster, ashen_amulet, glimmer_charm, nonbeliever_amulet, dawnstone_mail, explosion_charm, climbers_belt, crystal_lenses, archaic_circuit, flame_barrier, eldritch_insignia, intelligent_apparatus, caster_orb, resonating_bell, superheater, jet_augment, blasting_core, codex, wildfire_core, ember_cluster, adhesive, tyrfing, isolated_materia, archaic_brick, ancient_motive_core, ashen_cloth, glimmer_shard, glimmer_lamp, inflictor_gem, ashen_cloak_head, ashen_cloak_chest, ashen_cloak_legs, ashen_cloak_boots, aster, shard_aster, alchemic_waste, aspectus_iron, aspectus_copper, aspectus_dawnstone, aspectus_lead, aspectus_silver, golems_eye, dust_ash, grandhammer, pickaxe_clockwork, axe_clockwork, staff_ember, ignition_cannon, ember_jar, ember_cartridge, pickaxe_copper, axe_copper, shovel_copper, hoe_copper, sword_copper, pickaxe_silver, axe_silver, shovel_silver, hoe_silver, sword_silver, pickaxe_lead, axe_lead, shovel_lead, hoe_lead, sword_lead, pickaxe_dawnstone, axe_dawnstone, shovel_dawnstone, hoe_dawnstone, sword_dawnstone, debug, plate_gold, plate_iron, plate_caminite_raw, plate_mithril, stamp_bar_raw, stamp_plate_raw, stamp_flat_raw, nugget_dawnstone, plate_copper, plate_lead, plate_silver, plate_dawnstone, nugget_mithril, ingot_astralite, ingot_dawnstone, ingot_umber_steel, ingot_mithril, crystal_ember, shard_ember, stamp_bar, stamp_plate, stamp_flat, tinker_hammer, ember_detector, ingot_copper, ingot_silver, ingot_lead, nugget_copper, nugget_silver, nugget_lead, brick_caminite, blend_caminite, plate_caminite;
@@ -225,11 +225,10 @@ public class RegistryManager {
 		//blocks.add(creative_mech_source = (new BlockCreativeMechSource(Material.ROCK,"creative_mech_source",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(creative_ember_source = (new BlockCreativeEmberSource(Material.ROCK,"creative_ember_source",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		//blocks.add(gearbox_frame = (new BlockGearbox(Material.ROCK,"gearbox_frame",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
-		//blocks.add(steam_engine = (new BlockSteamEngine(Material.ROCK,"steam_engine",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(mechanical_pump = (new BlockPump(Material.ROCK,"mechanical_pump",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(catalytic_plug = (new BlockCatalyticPlug(Material.ROCK,"catalytic_plug",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ember_funnel = (new BlockEmberFunnel(Material.IRON,"ember_funnel",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
-		blocks.add(mech_actuator = (new BlockMechActuator(Material.ROCK,"mech_actuator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(mini_boiler = (new BlockMiniBoiler(Material.IRON,"mini_boiler",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 
 		if (ConfigManager.enableAluminum){
 			blocks.add(block_aluminum = (new BlockBase(Material.ROCK,"block_aluminum",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
@@ -536,12 +535,11 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityInfernoForge.class, Embers.MODID+":tile_entity_inferno_forge");
 		GameRegistry.registerTileEntity(TileEntityInfernoForgeOpening.class, Embers.MODID+":tile_entity_inferno_forge_opening");
 		GameRegistry.registerTileEntity(TileEntityCreativeEmberSource.class, Embers.MODID+":tile_entity_creative_ember_source");
-		GameRegistry.registerTileEntity(TileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
 		GameRegistry.registerTileEntity(TileEntityPumpBottom.class, Embers.MODID+":tile_entity_pump_bottom");
 		GameRegistry.registerTileEntity(TileEntityPumpTop.class, Embers.MODID+":tile_entity_pump_top");
 		GameRegistry.registerTileEntity(TileEntityCatalyticPlug.class, Embers.MODID+":tile_entity_catalytic_plug");
 		GameRegistry.registerTileEntity(TileEntityEmberFunnel.class, Embers.MODID+":tile_entity_ember_funnel");
-		GameRegistry.registerTileEntity(TileEntityMechActuator.class, Embers.MODID+":tile_entity_mech_actuator");
+		GameRegistry.registerTileEntity(TileEntityMiniBoiler.class, Embers.MODID+":tile_entity_mini_boiler");
 	}
 
 	private static void registerCapabilities() {
@@ -609,6 +607,8 @@ public class RegistryManager {
 	}
 	
 	public static void registerFluids(){
+		FluidRegistry.registerFluid(fluid_steam = new FluidSteam());
+
 		FluidRegistry.registerFluid(fluid_molten_iron = new FluidMoltenIron());
 		blocks.add(block_molten_iron = (new BlockMolten(fluid_molten_iron)));
 		FluidRegistry.addBucketForFluid(fluid_molten_iron);
@@ -696,7 +696,6 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPulser.class, new TileEntityPulserRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfernoForgeOpening.class, new TileEntityInfernoForgeOpeningRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPumpBottom.class, new TileEntityPumpRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechActuator.class, new TileEntityMechActuatorRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));

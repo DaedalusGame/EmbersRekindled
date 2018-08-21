@@ -159,8 +159,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 		if(getWorld().isRemote)
 			handleSound();
 		double speedMod = UpgradeUtil.getTotalSpeedModifier(this,upgrades);
+		lastAngle = angle;
 		if (isRunning){
-			lastAngle = angle;
 			angle += 12.0f * speedMod;
 		}
 		boolean previousRunning = isRunning;
@@ -289,6 +289,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 			default: return 0f;
 		}
 	}
+
+	/*@Override //TODO: pitch up or down dependent on speed
+	public float getCurrentPitch(int id, float pitch) {
+		return 0;
+	}*/
 
 	@Override
 	public double getMechanicalSpeed(double power) {
