@@ -187,6 +187,6 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public void addDialInformation(World world, BlockPos pos, IBlockState state, List<String> information, String dialType) {
-		UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information),upgrades);
+		UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information,dialType),upgrades);
 	}
 }
