@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,9 +44,6 @@ public class MysticalMechanicsIntegration {
     public static Block steam_engine;
     public static Block mech_actuator;
 
-    @GameRegistry.ObjectHolder("mysticalmechanics:axle_iron")
-    public static Block axle_iron;
-
     static Random random = new Random();
 
     public static ResourceLocation getRL(String s){
@@ -53,6 +51,7 @@ public class MysticalMechanicsIntegration {
     }
 
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+        Block axle_iron = Block.getBlockFromName("mysticalmechanics:axle_iron");
         event.getRegistry().register(new ShapedOreRecipe(getRL("gear_dawnstone"),new ItemStack(gear_dawnstone,1),true,new Object[]{
                 " N ",
                 "NCN",
