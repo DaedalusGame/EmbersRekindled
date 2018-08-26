@@ -278,14 +278,14 @@ embers.tooltip.heat_amount=Нагрев:
 embers.tooltip.heat_level=Уровень:
 embers.tooltip.modifiers=Модификаторы:
 
-embers.tooltip.modifier.superheater=Перегрев
-embers.tooltip.modifier.jet_augment=Шлаковоз
-embers.tooltip.modifier.blasting_core=Взрыв
-embers.tooltip.modifier.resonating_bell=Резонирование
-embers.tooltip.modifier.caster_orb=Эмбер-литьё
-embers.tooltip.modifier.flame_barrier=Пламенный барьер
-embers.tooltip.modifier.eldritch_insignia=Eerie
-embers.tooltip.modifier.intelligent_apparatus=Интеллект
+embers.tooltip.modifier.superheater=Перегрев %s
+embers.tooltip.modifier.jet_augment=Шлаковоз %s
+embers.tooltip.modifier.blasting_core=Взрыв %s
+embers.tooltip.modifier.resonating_bell=Резонирование %s
+embers.tooltip.modifier.caster_orb=Эмбер-литьё %s
+embers.tooltip.modifier.flame_barrier=Пламенный барьер %s
+embers.tooltip.modifier.eldritch_insignia=Eerie %s
+embers.tooltip.modifier.intelligent_apparatus=Интеллект %s
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II

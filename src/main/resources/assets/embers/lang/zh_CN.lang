@@ -275,14 +275,14 @@ embers.tooltip.heat_amount=热量：
 embers.tooltip.heat_level=等级：
 embers.tooltip.modifiers=附加强化：
 
-embers.tooltip.modifier.superheater=过热
-embers.tooltip.modifier.jet_augment=煤渣喷气机
-embers.tooltip.modifier.blasting_core=爆破
-embers.tooltip.modifier.resonating_bell=共振
-embers.tooltip.modifier.caster_orb=能量发射
-embers.tooltip.modifier.flame_barrier=烈焰屏障
-embers.tooltip.modifier.eldritch_insignia=怪诞
-embers.tooltip.modifier.intelligent_apparatus=智能
+embers.tooltip.modifier.superheater=过热 %s
+embers.tooltip.modifier.jet_augment=煤渣喷气机 %s
+embers.tooltip.modifier.blasting_core=爆破 %s
+embers.tooltip.modifier.resonating_bell=共振 %s
+embers.tooltip.modifier.caster_orb=能量发射 %s
+embers.tooltip.modifier.flame_barrier=烈焰屏障 %s
+embers.tooltip.modifier.eldritch_insignia=怪诞 %s
+embers.tooltip.modifier.intelligent_apparatus=智能 %s
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II
