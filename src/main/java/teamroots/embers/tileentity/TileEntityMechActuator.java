@@ -72,6 +72,7 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
 
     public TileEntityMechActuator() {
         upgrade = new UpgradeActuator(this);
+        capability.setAdditive(true); //Possible balance mistake but we shall see
     }
 
     public void updateNeighbors() {

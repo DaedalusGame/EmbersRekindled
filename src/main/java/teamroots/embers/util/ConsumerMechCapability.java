@@ -7,16 +7,20 @@ public class ConsumerMechCapability implements IMechCapability {
     public double[] power = new double[6];
     double maxPower;
     boolean dirty = true;
+    boolean additive = false; //Whether power input will be added together or the largest will be chosen
 
-    public void markDirty()
-    {
+    public void setAdditive(boolean additive) {
+        this.additive = additive;
+    }
+
+    public void markDirty() {
         dirty = true;
     }
 
     @Override
     public double getPower(EnumFacing enumFacing) {
-        if(enumFacing == null) {
-            if(dirty) {
+        if (enumFacing == null) {
+            if (dirty) {
                 recalculateMax();
                 dirty = false;
             }
@@ -29,14 +33,16 @@ public class ConsumerMechCapability implements IMechCapability {
         maxPower = 0;
         for (EnumFacing facing : EnumFacing.VALUES) {
             double power = getPower(facing);
-            if (power > maxPower)
-                maxPower = power;
+            if (additive)
+                maxPower += power;
+            else
+                maxPower = Math.max(power, maxPower);
         }
     }
 
     @Override
     public void setPower(double value, EnumFacing enumFacing) {
-        if(enumFacing == null)
+        if (enumFacing == null)
             for (int i = 0; i < 6; i++)
                 power[i] = value;
         else {
