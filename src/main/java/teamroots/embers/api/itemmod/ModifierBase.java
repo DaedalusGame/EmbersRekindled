@@ -21,6 +21,7 @@ public class ModifierBase {
 	public double cost = 0;
 	public boolean countTowardsTotalLevel = false;
 	public boolean canRemove = true;
+	public boolean shouldRenderTooltip = true;
 
 	public ModifierBase(EnumType type, String name, double cost, boolean levelCounts){
 		this.type = type;

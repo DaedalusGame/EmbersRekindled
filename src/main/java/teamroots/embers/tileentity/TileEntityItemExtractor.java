@@ -349,7 +349,6 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 			if (west == EnumPipeConnection.BLOCK){
 				blockConnections.add(EnumFacing.WEST);
 			}
-			//for (int k = 0; k < 1; k ++){
 				boolean takenItems = false;
 				for (int i = 0; i < blockConnections.size() && !takenItems; i ++){
 					EnumFacing face = blockConnections.get(i);
@@ -429,9 +428,6 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 			for (BlockPos aToUpdate : toUpdate) {
 				TileEntity tile = getWorld().getTileEntity(aToUpdate);
 				tile.markDirty();
-				if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
-					tile.markDirty();
-				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package teamroots.embers.recipe;
 
+import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
@@ -46,7 +47,7 @@ public class AlchemyRecipe implements IHasAspects {
 				AspectList.createStandard(ironMax,dawnstoneMax,copperMax,silverMax,leadMax)
 		);
 		this.centerIngredient = Ingredient.fromStacks(center);
-		this.outsideIngredients = new ArrayList<>();
+		this.outsideIngredients = Lists.newArrayList(Ingredient.fromStacks(east),Ingredient.fromStacks(north),Ingredient.fromStacks(west),Ingredient.fromStacks(south));
 		this.result = result;
 	}
 

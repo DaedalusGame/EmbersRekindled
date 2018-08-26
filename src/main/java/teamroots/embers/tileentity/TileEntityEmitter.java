@@ -152,7 +152,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
 					double removed = cap.removeAmount(PULL_RATE, true);
 					capability.addAmount(removed, true);
-					markDirty();
+					//markDirty();
 					attachedTile.markDirty();
 				}
 			}
@@ -167,7 +167,7 @@ public class TileEntityEmitter extends TileEntity implements ITileEntityBase, IT
 					this.capability.removeAmount(Math.min(TRANSFER_RATE,capability.getEmber()), true);
 					getWorld().spawnEntity(packet);
 					getWorld().playSound(null, pos, SoundManager.EMBER_EMIT, SoundCategory.BLOCKS, 1.0f, 1.0f);
-					markDirty();
+					//markDirty();
 				}
 			}
 		}

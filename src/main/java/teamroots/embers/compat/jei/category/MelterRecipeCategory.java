@@ -23,7 +23,7 @@ public class MelterRecipeCategory implements IRecipeCategory<MeltingRecipeWrappe
 
     public MelterRecipeCategory(IGuiHelper helper){
     	
-        this.background = helper.createDrawable(texture, 0, 0, 108, 128);
+        this.background = helper.createDrawable(texture, 0, 0, 108, 56);
         this.name = I18n.format("embers.jei.recipe.melter");
     }
 

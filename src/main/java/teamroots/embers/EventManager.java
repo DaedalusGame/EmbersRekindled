@@ -70,6 +70,7 @@ import teamroots.embers.util.RenderUtil;
 import teamroots.embers.world.EmberWorldData;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EventManager {
 	double gaugeAngle = 0;
@@ -465,10 +466,11 @@ public class EventManager {
 			}
 			event.getToolTip().add("                        ");
 			if (ItemModUtil.hasHeat(event.getItemStack())){
-				if (event.getItemStack().getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount() > 1){
+				List<ModifierBase> modifiers = ItemModUtil.getModifiers(event.getItemStack());
+				long count = modifiers.stream().filter(x -> x.shouldRenderTooltip).count();
+				if (count > 1){
 					event.getToolTip().add(TextFormatting.GRAY+I18n.format("embers.tooltip.modifiers"));
-					int c = event.getItemStack().getTagCompound().getCompoundTag(ItemModUtil.HEAT_TAG).getTagList("modifiers", Constants.NBT.TAG_COMPOUND).tagCount();
-					for (int i = 0; i < c-1; i ++){
+					for (int i = 0; i < count; i ++){
 						event.getToolTip().add("");
 					}
 				}
@@ -479,14 +481,15 @@ public class EventManager {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTooltipRender(RenderTooltipEvent.PostText event){
-		if (event.getStack() != null){
-			if (ItemModUtil.hasHeat(event.getStack())){
+		ItemStack stack = event.getStack();
+		if (stack != null){
+			if (ItemModUtil.hasHeat(stack)){
 				for (int i = 0; i < event.getLines().size(); i ++){
 					if (event.getLines().get(i).compareTo(TextFormatting.GRAY+""+TextFormatting.GRAY+I18n.format("embers.tooltip.modifiers")) == 0){
-						List<ModifierBase> modifiers = ItemModUtil.getModifiers(event.getStack());
+						List<ModifierBase> modifiers = ItemModUtil.getModifiers(stack).stream().filter(x -> x.shouldRenderTooltip).collect(Collectors.toList());
 						GlStateManager.disableDepth();
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-						if (ItemModUtil.getLevel(event.getStack()) > 0){
+						if (ItemModUtil.getLevel(stack) > 0){
 							GlStateManager.enableBlend();
 							GlStateManager.enableAlpha();
 							int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
@@ -494,20 +497,20 @@ public class EventManager {
 							GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
 							int j = 0;
 							for (ModifierBase modifier : modifiers) {
-								if (modifier.countTowardsTotalLevel) {
-									GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier." + modifier.name) + " " + I18n.format("embers.tooltip.num" + ItemModUtil.getModifierLevel(event.getStack(), modifier)), event.getX(), event.getY() + (event.getFontRenderer().FONT_HEIGHT + 1) * (i + j + 1) + 2);
-									j++;
-								}
+								int level = ItemModUtil.getModifierLevel(stack, modifier);
+								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier." + modifier.name,I18n.format("embers.tooltip.num" + level)), event.getX(), event.getY() + (event.getFontRenderer().FONT_HEIGHT + 1) * (i + j + 1) + 2);
+								j++;
 							}
 							GlStateManager.alphaFunc(func, ref);
 							GlStateManager.disableAlpha();
 							GlStateManager.disableBlend();
 						}
+						GlStateManager.enableDepth();
 					}
 					if (event.getLines().get(i).compareTo(TextFormatting.GRAY+"                        ") == 0){
 						GlStateManager.disableDepth();
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-						if (ItemModUtil.getLevel(event.getStack()) > 0){
+						if (ItemModUtil.getLevel(stack) > 0){
 							event.getFontRenderer().drawStringWithShadow(TextFormatting.GRAY+I18n.format("embers.tooltip.heat_level"), event.getX(), event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i-1)+2, 0xFFFFFFFF);
 							int level_x = (int)event.getFontRenderer().getStringWidth(I18n.format("embers.tooltip.heat_level"))+2;
 							GlStateManager.enableBlend();
@@ -515,7 +518,7 @@ public class EventManager {
 							int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
 							float ref = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
 							GlStateManager.alphaFunc(GL11.GL_ALWAYS, 0);
-							GuiCodex.drawTextGlowingAura(event.getFontRenderer(), ""+ItemModUtil.getLevel(event.getStack()), event.getX()+level_x, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i-1)+2);
+							GuiCodex.drawTextGlowingAura(event.getFontRenderer(), ""+ItemModUtil.getLevel(stack), event.getX()+level_x, event.getY()+(event.getFontRenderer().FONT_HEIGHT+1)*(i-1)+2);
 							GlStateManager.alphaFunc(func, ref);
 							GlStateManager.disableAlpha();
 							GlStateManager.disableBlend();
@@ -538,8 +541,8 @@ public class EventManager {
 						b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 						double x1 = baseX + x + 4;
 						double x2 = baseX + w - 3;
-						float heat = ItemModUtil.getHeat(event.getStack());
-						float maxHeat = ItemModUtil.getMaxHeat(event.getStack());
+						float heat = ItemModUtil.getHeat(stack);
+						float maxHeat = ItemModUtil.getMaxHeat(stack);
 						x2 = x1 + (x2 - x1)*(heat / maxHeat);
 						for (double j = 0; j < 10; j ++){
 							double coeff = j/10.0;

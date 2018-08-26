@@ -23,7 +23,7 @@ public class StampRecipeCategory implements IRecipeCategory<StampingRecipeWrappe
 
     public StampRecipeCategory(IGuiHelper helper){
     	
-        this.background = helper.createDrawable(texture, 0, 0, 108, 128);
+        this.background = helper.createDrawable(texture, 0, 0, 108, 83);
         this.name = I18n.format("embers.jei.recipe.stamp");
     }
 
