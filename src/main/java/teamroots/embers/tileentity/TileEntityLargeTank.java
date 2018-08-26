@@ -37,6 +37,13 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 			public void onContentsChanged(){
 				TileEntityLargeTank.this.markDirty();
 			}
+
+			@Override
+			public int fill(FluidStack resource, boolean doFill) {
+				if(resource != null && resource.getFluid().isGaseous())
+					return resource.amount;
+				return super.fill(resource, doFill);
+			}
 		};
 		tank.setTileEntity(this);
 		tank.setCanFill(true);

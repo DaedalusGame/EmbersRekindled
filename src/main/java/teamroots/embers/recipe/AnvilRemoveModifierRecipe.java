@@ -11,7 +11,7 @@ import java.util.List;
 public class AnvilRemoveModifierRecipe extends DawnstoneAnvilRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
-        return ItemModUtil.hasHeat(input1) && ItemModUtil.getTotalModifierLevel(input1) > 1 && input2.isEmpty();
+        return ItemModUtil.hasHeat(input1) && ItemModUtil.getModifiers(input1).stream().filter(x -> x.canRemove).count() > 0 && input2.isEmpty();
     }
 
     @Override

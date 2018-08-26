@@ -27,7 +27,19 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 	
 	public TileEntityTank(){
 		super();
-		tank = new FluidTank(capacity);
+		tank = new FluidTank(capacity) {
+			@Override
+			public void onContentsChanged(){
+				TileEntityTank.this.markDirty();
+			}
+
+			@Override
+			public int fill(FluidStack resource, boolean doFill) {
+				if(resource != null && resource.getFluid().isGaseous())
+					return resource.amount;
+				return super.fill(resource, doFill);
+			}
+		};
 		tank.setTileEntity(this);
 		tank.setCanFill(true);
 		tank.setCanDrain(true);
