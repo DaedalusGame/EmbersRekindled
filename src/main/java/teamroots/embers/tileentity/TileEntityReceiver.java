@@ -91,9 +91,7 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 					if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
 						double added = cap.addAmount(Math.min(TRANSFER_RATE,capability.getEmber()), true);
 						capability.removeAmount(added, true);
-						markDirty();
-
-						attachedTile.markDirty();
+						//markDirty();
 						if (!getWorld().isRemote){
 							attachedTile.markDirty();
 						}

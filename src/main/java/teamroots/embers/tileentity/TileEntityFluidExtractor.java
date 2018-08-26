@@ -373,10 +373,10 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 					}
 				}
 			}
-			for (BlockPos aToUpdate : toUpdate) {
+			/*for (BlockPos aToUpdate : toUpdate) {
 				TileEntity tile = getWorld().getTileEntity(aToUpdate);
 				tile.markDirty();
-			}
+			}*/
 		}
 	}
 

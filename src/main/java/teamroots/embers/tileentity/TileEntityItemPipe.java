@@ -379,13 +379,13 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
-				for (BlockPos aToUpdate : toUpdate) {
+				/*for (BlockPos aToUpdate : toUpdate) {
 					TileEntity tile = getWorld().getTileEntity(aToUpdate);
 					tile.markDirty();
 					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 						tile.markDirty();
 					}
-				}
+				}*/
 				if (toUpdate.size() > 0){
 					return;
 				}
@@ -430,13 +430,13 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
-				for (BlockPos aToUpdate : toUpdate) {
+				/*for (BlockPos aToUpdate : toUpdate) {
 					TileEntity tile = getWorld().getTileEntity(aToUpdate);
 					tile.markDirty();
 					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 						tile.markDirty();
 					}
-				}
+				}*/
 			}
 		}
 	}

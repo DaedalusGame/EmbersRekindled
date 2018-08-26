@@ -85,10 +85,9 @@ public class TileEntityEmberFunnel extends TileEntity implements ITileEntityBase
                     if (cap.getEmber() < cap.getEmberCapacity() && capability.getEmber() > 0){
                         double added = cap.addAmount(Math.min(TRANSFER_SPEED,capability.getEmber()), true);
                         double removed = capability.removeAmount(added, true);
-                        markDirty();
-                        attachTile.markDirty();
-                        if (!(attachTile instanceof ITileEntityBase) && !world.isRemote){
-                            attachTile.markDirty(); //Idk why this is duplicated but the github source has it, so I carried it over.
+                        //markDirty();
+                        if (!world.isRemote){
+                            attachTile.markDirty();
                         }
                     }
                 }

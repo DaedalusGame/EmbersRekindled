@@ -342,13 +342,10 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 					}
 				}
 			}
-			for (int i = 0; i < toUpdate.size(); i ++){
+			/*for (int i = 0; i < toUpdate.size(); i ++){
 				TileEntity tile = getWorld().getTileEntity(toUpdate.get(i));
 				tile.markDirty();
-				if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)){
-					tile.markDirty();
-				}
-			}
+			}*/
 		}
 		from.clear();
 	}

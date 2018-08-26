@@ -195,13 +195,13 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
 				}
 			}
 		}
-		for (BlockPos aToUpdate : toUpdate) {
+		/*for (BlockPos aToUpdate : toUpdate) {
 			TileEntity tile = getWorld().getTileEntity(aToUpdate);
 			tile.markDirty();
 			if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
 				tile.markDirty();
 			}
-		}
+		}*/
 	}
 
 	@Override

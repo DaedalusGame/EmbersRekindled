@@ -108,7 +108,7 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 			item.motionY = -0.1;
 			item.motionZ = 0;
 			getWorld().spawnEntity(item);
-			markDirty();
+			//markDirty();
 		}
 	}
 }

@@ -425,10 +425,10 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 					//}
 				}
 			//}
-			for (BlockPos aToUpdate : toUpdate) {
+			/*for (BlockPos aToUpdate : toUpdate) {
 				TileEntity tile = getWorld().getTileEntity(aToUpdate);
 				tile.markDirty();
-			}
+			}*/
 		}
 	}
 
