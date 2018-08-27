@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.particle.ParticleUtil;
 
+import java.awt.*;
 import java.util.Random;
 
 public class MessageCannonBeamFX implements IMessage {
@@ -17,12 +18,13 @@ public class MessageCannonBeamFX implements IMessage {
 	double posX = 0, posY = 0, posZ = 0;
 	double dX = 0, dY = 0, dZ = 0;
 	double hitDistance = Double.POSITIVE_INFINITY;
+	int packedColor;
 	
 	public MessageCannonBeamFX(){
 		super();
 	}
 	
-	public MessageCannonBeamFX(double x, double y, double z, double dX, double dY, double dZ, double hitDistance){
+	public MessageCannonBeamFX(double x, double y, double z, double dX, double dY, double dZ, double hitDistance, int packedColor){
 		super();
 		this.posX = x;
 		this.posY = y;
@@ -31,6 +33,7 @@ public class MessageCannonBeamFX implements IMessage {
 		this.dY = dY;
 		this.dZ = dZ;
 		this.hitDistance = hitDistance;
+		this.packedColor = packedColor;
 	}
 	
 	@Override
@@ -42,6 +45,7 @@ public class MessageCannonBeamFX implements IMessage {
 		dY = buf.readDouble();
 		dZ = buf.readDouble();
 		hitDistance = buf.readDouble();
+		packedColor = buf.readInt();
 	}
 
 	@Override
@@ -53,6 +57,7 @@ public class MessageCannonBeamFX implements IMessage {
 		buf.writeDouble(dY);
 		buf.writeDouble(dZ);
 		buf.writeDouble(hitDistance);
+		buf.writeInt(packedColor);
 	}
 
     public static class MessageHolder implements IMessageHandler<MessageCannonBeamFX,IMessage>
@@ -64,16 +69,20 @@ public class MessageCannonBeamFX implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(()-> {
 				double distance = Math.sqrt(message.dX * message.dX + message.dY * message.dY + message.dZ * message.dZ);
 				double segments = distance * 4;
+				Color color = new Color(message.packedColor,true);
+				int r = color.getRed();
+				int g = color.getGreen();
+				int b = color.getBlue();
 				for (double i = 0; i < segments; i++) {
 					for (int j = 0; j < 5; j++) {
 						message.posX += 0.2 * message.dX / segments;
 						message.posY += 0.2 * message.dY / segments;
 						message.posZ += 0.2 * message.dZ / segments;
-						ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+						ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0, 0, 0, r, g, b, 2.0f, 24);
 					}
 					if(i > message.hitDistance * 4) {
 						for (int k = 0; k < 80; k++) {
-							ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 24);
+							ParticleUtil.spawnParticleGlow(world, (float) message.posX, (float) message.posY, (float) message.posZ, 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), r, g, b, 2.0f, 24);
 						}
 						break;
 					}

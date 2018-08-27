@@ -13,6 +13,7 @@ import teamroots.embers.network.message.MessageCannonBeamFX;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 public class ProjectileRay implements IProjectilePreset {
     private static final Predicate<Entity> VALID_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
@@ -26,6 +27,7 @@ public class ProjectileRay implements IProjectilePreset {
     IProjectileEffect effect;
     Entity shooter;
     boolean pierceEntities;
+    Color color;
 
     public ProjectileRay(Entity shooter, Vec3d start, Vec3d end, boolean pierceEntities, IProjectileEffect effect) {
         this.pos = start;
@@ -53,6 +55,16 @@ public class ProjectileRay implements IProjectilePreset {
     @Override
     public void setVelocity(Vec3d velocity) {
         this.velocity = velocity;
+    }
+
+    @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
@@ -118,7 +130,7 @@ public class ProjectileRay implements IProjectilePreset {
         }
 
         if (!world.isRemote){
-            PacketHandler.INSTANCE.sendToAll(new MessageCannonBeamFX(startX,startY,startZ,dX,dY,dZ,impactDist));
+            PacketHandler.INSTANCE.sendToAll(new MessageCannonBeamFX(startX,startY,startZ,dX,dY,dZ,impactDist,color.getRGB()));
         }
     }
 }

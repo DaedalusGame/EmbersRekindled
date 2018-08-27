@@ -4,7 +4,6 @@ import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -108,7 +107,7 @@ public class WorldGenSmallRuin extends StructureBase implements IWorldGenerator 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
-		if (world.provider.getDimension() == DimensionType.OVERWORLD.getId() && !world.isRemote){
+		if (ConfigManager.isSmallRuinEnabled(world.provider.getDimension()) && !world.isRemote){
 			int xx = chunkX*16 + 13 + Misc.random.nextInt(2);
 			int zz = chunkZ*16 + 13 + Misc.random.nextInt(2);
 			if (ConfigManager.smallRuinChance == 0){
@@ -137,4 +136,5 @@ public class WorldGenSmallRuin extends StructureBase implements IWorldGenerator 
 			}
 		}
 	}
+
 }

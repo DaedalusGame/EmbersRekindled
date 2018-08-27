@@ -10,10 +10,7 @@ import teamroots.embers.recipe.ItemStampingRecipe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StampingRecipeWrapper implements IRecipeWrapper {
-
-	public ItemStampingRecipe recipe = null;
-	
+public class StampingRecipeWrapper extends BaseRecipeWrapper<ItemStampingRecipe> {
 	public StampingRecipeWrapper(ItemStampingRecipe recipe){
 		this.recipe = recipe;
 	}

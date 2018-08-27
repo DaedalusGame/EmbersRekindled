@@ -12,11 +12,10 @@ import teamroots.embers.RegistryManager;
 import java.util.Random;
 
 public class WorldGenOres implements IWorldGenerator {
-	double l = Math.sin(1);
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
-		if (!ConfigManager.orespawnBlacklist.contains(world.provider.getDimension())){
+		if (ConfigManager.isOreSpawnEnabled(world.provider.getDimension()) && !world.isRemote){
 			WorldGenMinable ore_copper = new WorldGenMinable(RegistryManager.ore_copper.getDefaultState(), ConfigManager.copperVeinSize);
 			for (int i = 0; i < ConfigManager.copperVeinsPerChunk; i ++){
 				int x = chunkX*16+random.nextInt(16);

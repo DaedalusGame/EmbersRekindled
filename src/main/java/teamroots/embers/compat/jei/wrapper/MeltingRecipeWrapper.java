@@ -7,10 +7,7 @@ import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.compat.jei.EmbersJEIPlugin;
 import teamroots.embers.recipe.ItemMeltingRecipe;
 
-public class MeltingRecipeWrapper implements IRecipeWrapper {
-
-	public ItemMeltingRecipe recipe = null;
-
+public class MeltingRecipeWrapper extends BaseRecipeWrapper<ItemMeltingRecipe> {
 	public MeltingRecipeWrapper(ItemMeltingRecipe recipe){
 		this.recipe = recipe;
 	}

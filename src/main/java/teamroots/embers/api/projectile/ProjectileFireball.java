@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import teamroots.embers.entity.EntityEmberProjectile;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 public class ProjectileFireball implements IProjectilePreset {
     Vec3d pos;
@@ -15,6 +16,7 @@ public class ProjectileFireball implements IProjectilePreset {
     int lifetime;
     Entity shooter;
     EntityEmberProjectile entity;
+    Color color;
 
     public ProjectileFireball(Entity shooter, Vec3d pos, Vec3d velocity, double size, int lifetime, IProjectileEffect effect) {
         this.pos = pos;
@@ -62,6 +64,16 @@ public class ProjectileFireball implements IProjectilePreset {
     }
 
     @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
     public IProjectileEffect getEffect() {
         return effect;
     }
@@ -90,6 +102,7 @@ public class ProjectileFireball implements IProjectilePreset {
         entity.setEffect(effect);
         entity.setPreset(this);
         entity.setLifetime(lifetime);
+        entity.setColor(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
         world.spawnEntity(entity);
     }
 }

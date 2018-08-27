@@ -6,6 +6,7 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -39,16 +40,19 @@ public class MelterRecipeCategory implements IRecipeCategory<MeltingRecipeWrappe
     }
 
     @Override
-    public void setRecipe(IRecipeLayout layout, MeltingRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup stacks = layout.getItemStacks();
+    public void setRecipe(IRecipeLayout recipeLayout, MeltingRecipeWrapper recipeWrapper, IIngredients ingredients) {
+        IGuiItemStackGroup stacks = recipeLayout.getItemStacks();
 
         stacks.init(0, true, 7, 27);
 
+        IFocus focus = recipeLayout.getFocus();
+        boolean isFocused = recipeWrapper.isFocusRecipe() && focus != null && focus.getValue() instanceof ItemStack;
+
         if (ingredients.getInputs(ItemStack.class).size() > 0){
-            stacks.set(0, ingredients.getInputs(ItemStack.class).get(0));
+            stacks.set(0, isFocused ? recipeWrapper.getFocusRecipe().getInputs(focus,0) : ingredients.getInputs(ItemStack.class).get(0));
         }
 
-        IGuiFluidStackGroup fluid = layout.getFluidStacks();
+        IGuiFluidStackGroup fluid = recipeLayout.getFluidStacks();
         fluid.init(1, true, 84, 20, 16, 32, 1500, true, null);
         fluid.set(1, ingredients.getOutputs(FluidStack.class).get(0));
     }

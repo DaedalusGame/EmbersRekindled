@@ -13,9 +13,7 @@ import teamroots.embers.util.IHasAspects;
 
 import java.util.ArrayList;
 
-public class AlchemyRecipeWrapper implements IRecipeWrapper, IHasAspects {
-
-	public AlchemyRecipe recipe;
+public class AlchemyRecipeWrapper extends BaseRecipeWrapper<AlchemyRecipe> implements IHasAspects {
 
 	public AlchemyRecipeWrapper(AlchemyRecipe recipe)
 	{

@@ -5,6 +5,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.util.Translator;
 import net.minecraft.item.ItemStack;
@@ -65,18 +66,22 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 		stacks.init(3, true, 45, 18);
 		stacks.init(4, true, 27, 36);
 		stacks.init(5, false, 81, 18);
+
+		IFocus focus = recipeLayout.getFocus();
+		boolean isFocused = recipeWrapper.isFocusRecipe() && focus != null && focus.getValue() instanceof ItemStack;
+
 		recipeWrapper.helper = helper;
 		helper.addAspectStacks(recipeWrapper, stacks, 6);
 		stacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {if(slotIndex >= 6) tooltip.clear();});
-
+		stacks.setOverrideDisplayFocus(null);
 		for(int i = 0; i < 5; i++) {
 			if(ingredients.getInputs(ItemStack.class).size() > i && ingredients.getInputs(ItemStack.class).get(i) != null) {
-				stacks.set(i, ingredients.getInputs(ItemStack.class).get(i));
+				stacks.set(i, isFocused ? recipeWrapper.getFocusRecipe().getInputs(focus,i) : ingredients.getInputs(ItemStack.class).get(i));
 			}
 		}
 
 		if(ingredients.getOutputs(ItemStack.class).size() > 0) {
-			stacks.set(5, ingredients.getOutputs(ItemStack.class).get(0));
+			stacks.set(5,  isFocused ? recipeWrapper.getFocusRecipe().getOutputs(focus,5) : ingredients.getOutputs(ItemStack.class).get(0));
 		}
 	}
 }

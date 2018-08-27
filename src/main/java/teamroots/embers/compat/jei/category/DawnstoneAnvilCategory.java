@@ -5,6 +5,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -61,9 +62,13 @@ public class DawnstoneAnvilCategory implements IRecipeCategory<DawnstoneAnvilWra
         guiItemStacks.init(2,false, 76, 27);
         guiItemStacks.init(3,false, 21, 0); //The hammer
 
-        guiItemStacks.set(0,ingredients.getInputs(ItemStack.class).get(0));
-        guiItemStacks.set(1,ingredients.getInputs(ItemStack.class).get(1));
-        guiItemStacks.set(2,ingredients.getOutputs(ItemStack.class).get(0));
+        IFocus focus = recipeLayout.getFocus();
+        boolean isFocused = recipeWrapper.isFocusRecipe() && focus != null && focus.getValue() instanceof ItemStack;
+
+        guiItemStacks.setOverrideDisplayFocus(null);
+        guiItemStacks.set(0,isFocused ? recipeWrapper.getFocusRecipe().getInputs(focus,0) : ingredients.getInputs(ItemStack.class).get(0));
+        guiItemStacks.set(1,isFocused ? recipeWrapper.getFocusRecipe().getInputs(focus,1) : ingredients.getInputs(ItemStack.class).get(1));
+        guiItemStacks.set(2,isFocused ? recipeWrapper.getFocusRecipe().getOutputs(focus,2) : ingredients.getOutputs(ItemStack.class).get(0));
         guiItemStacks.set(3, Arrays.asList(new ItemStack(RegistryManager.tinker_hammer),new ItemStack(RegistryManager.auto_hammer)));
     }
 }

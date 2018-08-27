@@ -25,6 +25,7 @@ import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 
 //import elucent.albedo.lighting.ILightProvider;
@@ -43,8 +44,11 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     public static final DataParameter<Integer> lifetime = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
     //public UUID id = null;
     public Entity shootingEntity;
-    public IProjectileEffect effect = null;
-    private IProjectilePreset preset = null;
+    public IProjectileEffect effect;
+    private IProjectilePreset preset;
+    int red = 255;
+    int green = 64;
+    int blue = 16;
 
     public EntityEmberProjectile(World worldIn) {
         super(worldIn);
@@ -66,6 +70,12 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
         getDataManager().setDirty(EntityEmberProjectile.value);
         setSize((float) value / 10.0f, (float) value / 10.0f);
         this.shootingEntity = shootingEntity;
+    }
+
+    public void setColor(int red, int green, int blue, int alpha) {
+        this.red = (red * alpha) / 255;
+        this.green = (green * alpha) / 255;
+        this.blue = (blue * alpha) / 255;
     }
 
     public void setPreset(IProjectilePreset preset) {
@@ -154,7 +164,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
                 double dist = Math.ceil(Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 10);
                 for (double i = 0; i < dist; i++) {
                     double coeff = i / dist;
-                    ParticleUtil.spawnParticleGlow(world, (float) (prevPosX + (posX - prevPosX) * coeff), (float) (prevPosY + (posY - prevPosY) * coeff), (float) (prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 255, 64, 16, getDataManager().get(value) / 1.75f, 24);
+                    ParticleUtil.spawnParticleGlow(world, (float) (prevPosX + (posX - prevPosX) * coeff), (float) (prevPosY + (posY - prevPosY) * coeff), (float) (prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), red, green, blue, getDataManager().get(value) / 1.75f, 24);
                 }
             }
 
@@ -167,7 +177,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     }
 
     private void onHit(RayTraceResult raytraceresult) {
-        PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ, getDataManager().get(value) / 1.75f));
+        PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ, getDataManager().get(value) / 1.75f, new Color(red,green,blue).getRGB()));
         getDataManager().set(lifetime, 20);
         getDataManager().setDirty(lifetime);
         this.getDataManager().set(dead, true);

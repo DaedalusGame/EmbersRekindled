@@ -12,23 +12,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.SoundManager;
 import teamroots.embers.particle.ParticleUtil;
 
+import java.awt.*;
 import java.util.Random;
 
 public class MessageEmberSizedBurstFX implements IMessage {
 	public static Random random = new Random();
 	public double posX = 0, posY = 0, posZ = 0;
 	public double value = 0;
+	public int packedColor;
 	
 	public MessageEmberSizedBurstFX(){
 		super();
 	}
 	
-	public MessageEmberSizedBurstFX(double x, double y, double z, double value){
+	public MessageEmberSizedBurstFX(double x, double y, double z, double value, int packedColor){
 		super();
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;
 		this.value = value;
+		this.packedColor = packedColor;
 	}
 	
 	@Override
@@ -37,6 +40,7 @@ public class MessageEmberSizedBurstFX implements IMessage {
 		posY = buf.readDouble();
 		posZ = buf.readDouble();
 		value = buf.readDouble();
+		packedColor = buf.readInt();
 	}
 
 	@Override
@@ -45,6 +49,7 @@ public class MessageEmberSizedBurstFX implements IMessage {
 		buf.writeDouble(posY);
 		buf.writeDouble(posZ);
 		buf.writeDouble(value);
+		buf.writeInt(packedColor);
 	}
 
     public static class MessageHolder implements IMessageHandler<MessageEmberSizedBurstFX,IMessage>
@@ -54,10 +59,11 @@ public class MessageEmberSizedBurstFX implements IMessage {
         public IMessage onMessage(final MessageEmberSizedBurstFX message, final MessageContext ctx) {
     		if (ctx.side == Side.CLIENT){
 	    		Minecraft.getMinecraft().addScheduledTask(()-> {
+					Color color = new Color(message.packedColor);
 	    			World world = Minecraft.getMinecraft().world;
 					world.playSound(message.posX, message.posY, message.posZ, message.value > 7.0 ? SoundManager.FIREBALL_BIG_HIT : SoundManager.FIREBALL_HIT, SoundCategory.NEUTRAL, 1.0f, 1.0f, false);
 					for (int k = 0; k < 80; k ++){
-						ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), 255, 64, 16, 1.0f, (float)message.value, 24);
+						ParticleUtil.spawnParticleGlow(world, (float)message.posX, (float)message.posY, (float)message.posZ, ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), ((float)message.value/3.5f)*0.125f*(random.nextFloat()-0.5f), color.getRed(), color.getGreen(), color.getBlue(), 1.0f, (float)message.value, 24);
 					}
 	    		});
     		}

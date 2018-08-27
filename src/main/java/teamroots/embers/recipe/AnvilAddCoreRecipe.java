@@ -1,6 +1,7 @@
 package teamroots.embers.recipe;
 
 import com.google.common.collect.Lists;
+import mezz.jei.api.recipe.IFocus;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
@@ -9,11 +10,12 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.util.IngredientSpecial;
+import teamroots.embers.util.Misc;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AnvilAddCoreRecipe extends DawnstoneAnvilRecipe {
+public class AnvilAddCoreRecipe extends DawnstoneAnvilRecipe implements IFocusRecipe {
     public AnvilAddCoreRecipe() {
         super(new IngredientSpecial(teamroots.embers.util.ItemModUtil::canAnyModifierApply), Ingredient.fromItem(RegistryManager.ancient_motive_core), new ItemStack[0]);
     }
@@ -38,5 +40,22 @@ public class AnvilAddCoreRecipe extends DawnstoneAnvilRecipe {
         ItemStack result = input1.copy();
         ItemModUtil.addModifier(result, input2);
         return Lists.newArrayList(result);
+    }
+
+    @Override
+    public List<ItemStack> getOutputs(IFocus<ItemStack> focus, int slot) {
+        if(slot == 2) {
+            ItemStack output = focus.getValue().copy();
+            ItemModUtil.addModifier(output, new ItemStack(RegistryManager.ancient_motive_core));
+            return Lists.newArrayList(output);
+        }
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public List<ItemStack> getInputs(IFocus<ItemStack> focus, int slot) {
+        if(slot == 0) return Lists.newArrayList(focus.getValue());
+        if(slot == 1) return Lists.newArrayList(new ItemStack(RegistryManager.ancient_motive_core));
+        return Lists.newArrayList();
     }
 }

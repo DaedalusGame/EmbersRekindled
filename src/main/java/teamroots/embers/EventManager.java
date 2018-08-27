@@ -468,7 +468,7 @@ public class EventManager {
 			if (ItemModUtil.hasHeat(event.getItemStack())){
 				List<ModifierBase> modifiers = ItemModUtil.getModifiers(event.getItemStack());
 				long count = modifiers.stream().filter(x -> x.shouldRenderTooltip).count();
-				if (count > 1){
+				if (count > 0){
 					event.getToolTip().add(TextFormatting.GRAY+I18n.format("embers.tooltip.modifiers"));
 					for (int i = 0; i < count; i ++){
 						event.getToolTip().add("");

@@ -5,10 +5,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.recipe.FluidMixingRecipe;
 
-public class MixingRecipeWrapper implements IRecipeWrapper {
-
-	public FluidMixingRecipe recipe = null;
-	
+public class MixingRecipeWrapper extends BaseRecipeWrapper<FluidMixingRecipe> {
 	public MixingRecipeWrapper(FluidMixingRecipe recipe){
 		this.recipe = recipe;
 	}

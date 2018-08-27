@@ -4,12 +4,11 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import teamroots.embers.recipe.DawnstoneAnvilRecipe;
+import teamroots.embers.recipe.IFocusRecipe;
 
 import java.util.Arrays;
 
-public class DawnstoneAnvilWrapper implements IRecipeWrapper {
-    DawnstoneAnvilRecipe recipe;
-
+public class DawnstoneAnvilWrapper extends BaseRecipeWrapper<DawnstoneAnvilRecipe> {
     public DawnstoneAnvilWrapper(DawnstoneAnvilRecipe recipe)
     {
         this.recipe = recipe;
