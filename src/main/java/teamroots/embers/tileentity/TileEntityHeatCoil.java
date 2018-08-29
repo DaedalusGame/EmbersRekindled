@@ -25,6 +25,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.HeatCoilVisualEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -40,6 +41,7 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +54,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	public static final double MAX_HEAT = 280;
 	public static final int MIN_COOK_TIME = 20;
 	public static final int MAX_COOK_TIME = 300;
+	public static final Color DEFAULT_COLOR = new Color(255, 64, 16);
 
 	public IEmberCapability capability = new DefaultEmberCapability();
 	public ItemStackHandler inventory = new ItemStackHandler(1);
@@ -214,9 +217,12 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			}
 		}
 		if (getWorld().isRemote && heat > 0){
-			float particleCount = (1+random.nextInt(2))*(1+(float)Math.sqrt(heat));
-			for (int i = 0; i < particleCount; i ++){
-				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+			int particleCount = (int)((1+random.nextInt(2))*(1+(float)Math.sqrt(heat)));
+			HeatCoilVisualEvent event = new HeatCoilVisualEvent(this, DEFAULT_COLOR, particleCount, 0);
+			UpgradeUtil.throwEvent(this,event,upgrades);
+			Color color = event.getColor();
+			for (int i = 0; i < event.getParticles(); i ++){
+				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, random.nextFloat() * event.getVerticalSpeed(), 0, color.getRed(), color.getGreen(), color.getBlue(), 2.0f, 24);
 			}
 		}
 	}

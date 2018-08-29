@@ -46,7 +46,7 @@ public class ItemCinderStaff extends ItemBase {
 			int lifetime = charge >= 1.0 ? 160 : 5;
 			EffectArea effect = new EffectArea(new EffectDamage((float)value, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0), aoeSize, false);
 			ProjectileFireball fireball = new ProjectileFireball(entity,new Vec3d(posX,posY,posZ),new Vec3d(entity.getLookVec().x*0.85, entity.getLookVec().y*0.85, entity.getLookVec().z*0.85), value, lifetime, effect);
-			EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, fireball);
+			EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, charge, fireball);
 			MinecraftForge.EVENT_BUS.post(event);
 			if (!event.isCanceled()) {
 				for (IProjectilePreset projectile : event.getProjectiles()) {

@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
+import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
@@ -32,25 +33,6 @@ import java.util.Random;
 public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntityBase, ITickable {
 	Random random = new Random();
 	List<EnumFacing> from = new ArrayList<>();
-	public enum EnumPipeConnection{
-		NONE, PIPE, BLOCK, LEVER, FORCENONE
-	}
-	
-	public static EnumPipeConnection connectionFromInt(int value){
-		switch (value){
-		case 0:
-			return EnumPipeConnection.NONE;
-		case 1:
-			return EnumPipeConnection.PIPE;
-		case 2:
-			return EnumPipeConnection.BLOCK;
-		case 3:
-			return EnumPipeConnection.LEVER;
-		case 4:
-			return EnumPipeConnection.FORCENONE;
-		}
-		return EnumPipeConnection.NONE;
-	}
 	
 	public EnumPipeConnection up = EnumPipeConnection.NONE, down = EnumPipeConnection.NONE, north = EnumPipeConnection.NONE, south = EnumPipeConnection.NONE, east = EnumPipeConnection.NONE, west = EnumPipeConnection.NONE;
 	
@@ -71,12 +53,12 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		tag.setInteger("up", up.ordinal());
-		tag.setInteger("down", down.ordinal());
-		tag.setInteger("north", north.ordinal());
-		tag.setInteger("south", south.ordinal());
-		tag.setInteger("west", west.ordinal());
-		tag.setInteger("east", east.ordinal());
+		tag.setInteger("up", up.getIndex());
+		tag.setInteger("down", down.getIndex());
+		tag.setInteger("north", north.getIndex());
+		tag.setInteger("south", south.getIndex());
+		tag.setInteger("west", west.getIndex());
+		tag.setInteger("east", east.getIndex());
 		NBTTagList l = new NBTTagList();
 		for (EnumFacing f : from){
 			l.appendTag(new NBTTagInt(f.getIndex()));
@@ -94,12 +76,12 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		up = connectionFromInt(tag.getInteger("up"));
-		down = connectionFromInt(tag.getInteger("down"));
-		north = connectionFromInt(tag.getInteger("north"));
-		south = connectionFromInt(tag.getInteger("south"));
-		west = connectionFromInt(tag.getInteger("west"));
-		east = connectionFromInt(tag.getInteger("east"));
+		up = EnumPipeConnection.fromIndex(tag.getInteger("up"));
+		down = EnumPipeConnection.fromIndex(tag.getInteger("down"));
+		north = EnumPipeConnection.fromIndex(tag.getInteger("north"));
+		south = EnumPipeConnection.fromIndex(tag.getInteger("south"));
+		west = EnumPipeConnection.fromIndex(tag.getInteger("west"));
+		east = EnumPipeConnection.fromIndex(tag.getInteger("east"));
 		NBTTagList l = tag.getTagList("from", Constants.NBT.TAG_INT);
 		for (int i = 0; i < l.tagCount(); i ++){
 			from.add(EnumFacing.getFront(l.getIntAt(i)));
@@ -166,14 +148,18 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 	}
 	
 	public EnumPipeConnection getConnection(IBlockAccess world, BlockPos pos, EnumFacing side){
+		TileEntity tile = world.getTileEntity(pos);
 		if (getConnection(side) == EnumPipeConnection.FORCENONE){
 			return EnumPipeConnection.FORCENONE;
 		}
-		if (world.getTileEntity(pos) instanceof TileEntityFluidPipe && !(world.getTileEntity(pos) instanceof TileEntityFluidExtractor)){
+		else if (tile instanceof IFluidPipeConnectable){
+			return ((IFluidPipeConnectable) tile).getConnection(side);
+		}
+		else if (tile instanceof TileEntityFluidPipe){
 			return EnumPipeConnection.PIPE;
 		}
-		else if (world.getTileEntity(pos) != null){
-			if (world.getTileEntity(pos).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(side))){
+		else if (tile != null){
+			if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(side))){
 				return EnumPipeConnection.BLOCK;
 			}
 		}
@@ -304,12 +290,12 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 			
 			int count = 0;
 			if (connectedFaces.size() >= 1){
-				for (int i = 0; i < connectedFaces.size(); i ++){
-					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
-					if (t != null && tank.getFluid() != null){
-						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, Misc.getOppositeFace(connectedFaces.get(i)))){
-							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-							if (handler != null && handler.fill(tank.getFluid(),false) > 0){
+				for (EnumFacing connectedFace : connectedFaces) {
+					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFace));
+					if (t != null && tank.getFluid() != null) {
+						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite())) {
+							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite());
+							if (handler != null && handler.fill(tank.getFluid(), false) > 0) {
 								count++;
 							}
 						}
@@ -318,23 +304,23 @@ public class TileEntityFluidPipe extends TileFluidHandler implements ITileEntity
 			}
 			if (count >= 1 && !world.isRemote){
 				int toEach = Math.max(1, distAmount / count);
-				for (int i = 0; i < connectedFaces.size(); i ++){
-					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFaces.get(i)));
-					if (t != null && toEach > 0 && tank.getFluid() != null){
-						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite())){
-							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFaces.get(i).getOpposite());
-							if (handler != null){
-								if (t instanceof TileEntityFluidPipe){
-									((TileEntityFluidPipe) t).from.add(Misc.getOppositeFace(connectedFaces.get(i)));
+				for (EnumFacing connectedFace : connectedFaces) {
+					TileEntity t = getWorld().getTileEntity(getPos().offset(connectedFace));
+					if (t != null && toEach > 0 && tank.getFluid() != null) {
+						if (t.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite())) {
+							IFluidHandler handler = t.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, connectedFace.getOpposite());
+							if (handler != null) {
+								if (t instanceof TileEntityFluidPipe) {
+									((TileEntityFluidPipe) t).from.add(Misc.getOppositeFace(connectedFace));
 								}
 								FluidStack toAdd = tank.getFluid().copy();
 								toAdd.amount = toEach;
 								int filled = handler.fill(toAdd, true);
 								tank.drainInternal(filled, true);
-								if (!toUpdate.contains(getPos().offset(connectedFaces.get(i)))){
-									toUpdate.add(getPos().offset(connectedFaces.get(i)));
+								if (!toUpdate.contains(getPos().offset(connectedFace))) {
+									toUpdate.add(getPos().offset(connectedFace));
 								}
-								if (!toUpdate.contains(getPos())){
+								if (!toUpdate.contains(getPos())) {
 									toUpdate.add(getPos());
 								}
 							}

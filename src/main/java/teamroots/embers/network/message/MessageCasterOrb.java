@@ -87,7 +87,7 @@ public class MessageCasterOrb implements IMessage {
                         double value = 8.0 * (Math.atan(0.6 * (level)) / (1.25));
                         EffectDamage effect = new EffectDamage((float) value, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0);
                         ProjectileFireball fireball = new ProjectileFireball(player, new Vec3d(xOrigin, yOrigin, zOrigin), new Vec3d(xVel, yVel, zVel), value, 160, effect);
-                        EmberProjectileEvent event = new EmberProjectileEvent(player, heldStack, fireball);
+                        EmberProjectileEvent event = new EmberProjectileEvent(player, heldStack, 0.0, fireball);
                         MinecraftForge.EVENT_BUS.post(event);
                         if (!event.isCanceled()) {
                             for (IProjectilePreset projectile : event.getProjectiles()) {

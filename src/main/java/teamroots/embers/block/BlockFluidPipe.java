@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityFluidPipe;
+import teamroots.embers.util.EnumPipeConnection;
 
 public class BlockFluidPipe extends BlockTEBase {
 	public BlockFluidPipe(Material material, String name, boolean addToTab) {
@@ -53,22 +54,22 @@ public class BlockFluidPipe extends BlockTEBase {
 		
 		if (source.getTileEntity(pos) instanceof TileEntityFluidPipe){
 			TileEntityFluidPipe pipe = ((TileEntityFluidPipe)source.getTileEntity(pos));
-			if (pipe.up != TileEntityFluidPipe.EnumPipeConnection.NONE){
+			if (pipe.up != EnumPipeConnection.NONE){
 				y2 = 1;
 			}
-			if (pipe.down != TileEntityFluidPipe.EnumPipeConnection.NONE){
+			if (pipe.down != EnumPipeConnection.NONE){
 				y1 = 0;
 			}
-			if (pipe.north != TileEntityFluidPipe.EnumPipeConnection.NONE){
+			if (pipe.north != EnumPipeConnection.NONE){
 				z1 = 0;
 			}
-			if (pipe.south != TileEntityFluidPipe.EnumPipeConnection.NONE){
+			if (pipe.south != EnumPipeConnection.NONE){
 				z2 = 1;
 			}
-			if (pipe.west != TileEntityFluidPipe.EnumPipeConnection.NONE){
+			if (pipe.west != EnumPipeConnection.NONE){
 				x1 = 0;
 			}
-			if (pipe.east != TileEntityFluidPipe.EnumPipeConnection.NONE){
+			if (pipe.east != EnumPipeConnection.NONE){
 				x2 = 1;
 			}
 		}

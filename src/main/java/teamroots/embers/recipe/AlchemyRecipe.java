@@ -85,11 +85,6 @@ public class AlchemyRecipe implements IHasAspects {
 		return AlchemyResult.create(list, aspectRange, world);
 	}
 
-	public ItemStack getResult(TileEntity tile, AspectList aspects) {
-		World world = tile.getWorld();
-		return getResultInternal(world, aspects);
-	}
-
 	public boolean matches(ItemStack center, List<ItemStack> test) {
 		if (!centerIngredient.apply(center))
 			return false;
@@ -109,17 +104,30 @@ public class AlchemyRecipe implements IHasAspects {
 		return true;
 	}
 
+	public boolean isFailure(AlchemyResult result) {
+		return result.getAccuracy() == 1.0;
+	}
+
+	public ItemStack getResult(TileEntity tile) {
+		return this.result.copy();
+	}
+
+	public final ItemStack getResult(TileEntity tile, AspectList aspects) {
+		World world = tile.getWorld();
+		return getResultInternal(world, tile, aspects);
+	}
+
 	@Deprecated
-	public ItemStack getResult(World world, int iron, int dawnstone, int copper, int silver, int lead){
+	public final ItemStack getResult(World world, int iron, int dawnstone, int copper, int silver, int lead){
 		AspectList inputAspects = AspectList.createStandard(iron, dawnstone, copper, silver, lead);
-		return getResultInternal(world, inputAspects);
+		return getResultInternal(world, null, inputAspects);
 	}
 
 	//Inline after removal of the old getResult method.
-	private ItemStack getResultInternal(World world, AspectList inputAspects) {
+	private ItemStack getResultInternal(World world, TileEntity tile, AspectList inputAspects) {
 		AlchemyResult result = matchAshes(inputAspects, world);
-		if (result.getAccuracy() == 1.0)
-			return this.result.copy();
+		if (isFailure(result))
+			return getResult(tile);
 		else
 			return result.createFailure();
 	}

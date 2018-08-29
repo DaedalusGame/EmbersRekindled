@@ -1233,6 +1233,10 @@ public class RecipeRegistry {
 				emberCrystal,
 				Lists.newArrayList(plateDawnstone, plateDawnstone, plateDawnstone, ingotSilver),
 				new ItemStack(RegistryManager.flame_barrier,1)));
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, 16).setRange("silver", 32, 64),
+				emberCrystal,
+				Lists.newArrayList(plateDawnstone, plateSilver, plateDawnstone, plateSilver),
+				new ItemStack(RegistryManager.focal_lens,1)));
 
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 20, 30).setRange("silver", 32, 64),
 				ingotSilver,

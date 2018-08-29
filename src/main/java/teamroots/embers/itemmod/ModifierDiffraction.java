@@ -64,10 +64,9 @@ public class ModifierDiffraction extends ModifierProjectileBase {
         if (effect instanceof EffectArea) {
             EffectArea areaEffect = (EffectArea) effect;
             adjustEffect(areaEffect.getEffect(), multiplier);
-            //areaEffect.setRadius(areaEffect.getRadius() * multiplier);
         } else if (effect instanceof EffectMulti) {
             for (IProjectileEffect subEffect : ((EffectMulti) effect).getEffects()) {
-                adjustEffect(effect,multiplier);
+                adjustEffect(subEffect,multiplier);
             }
         } else if (effect instanceof EffectDamage) {
             EffectDamage damageEffect = (EffectDamage) effect;

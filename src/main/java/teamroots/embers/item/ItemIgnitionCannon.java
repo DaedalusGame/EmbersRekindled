@@ -55,7 +55,7 @@ public class ItemIgnitionCannon extends ItemBase {
 			EffectDamage effect = new EffectDamage(DAMAGE, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0f);
 			ProjectileRay ray = new ProjectileRay(entity, new Vec3d(posX, posY, posZ), new Vec3d(targX, targY, targZ), false, effect);
 
-			EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, ray);
+			EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, charge, ray);
 			MinecraftForge.EVENT_BUS.post(event);
 			if (!event.isCanceled()) {
 				for (IProjectilePreset projectile : event.getProjectiles()) {

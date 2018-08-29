@@ -15,17 +15,17 @@ public class EmberProjectileEvent extends Event {
     private EntityLivingBase shooter;
     private ItemStack stack;
     private List<IProjectilePreset> projectiles;
+    private double charge;
 
-    public EmberProjectileEvent(EntityLivingBase shooter, ItemStack stack, List<IProjectilePreset> projectiles) {
+    public EmberProjectileEvent(EntityLivingBase shooter, ItemStack stack, double charge, List<IProjectilePreset> projectiles) {
         this.shooter = shooter;
         this.stack = stack;
         this.projectiles = projectiles;
+        this.charge = charge;
     }
 
-    public EmberProjectileEvent(EntityLivingBase shooter, ItemStack stack, IProjectilePreset... projectiles) {
-        this.shooter = shooter;
-        this.stack = stack;
-        this.projectiles = Lists.newArrayList(projectiles);
+    public EmberProjectileEvent(EntityLivingBase shooter, ItemStack stack, double charge, IProjectilePreset... projectiles) {
+        this(shooter, stack, charge, Lists.newArrayList(projectiles));
     }
 
     public ItemStack getStack() {
@@ -38,6 +38,10 @@ public class EmberProjectileEvent extends Event {
 
     public List<IProjectilePreset> getProjectiles() {
         return projectiles;
+    }
+
+    public double getCharge() {
+        return charge;
     }
 
     @Override

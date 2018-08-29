@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityItemExtractor;
 import teamroots.embers.tileentity.TileEntityItemPipe;
+import teamroots.embers.util.EnumPipeConnection;
 
 public class BlockItemExtractor extends BlockTEBase {
 	public BlockItemExtractor(Material material, String name, boolean addToTab) {
@@ -64,22 +65,22 @@ public class BlockItemExtractor extends BlockTEBase {
 		
 		if (source.getTileEntity(pos) instanceof TileEntityItemExtractor){
 			TileEntityItemExtractor pipe = ((TileEntityItemExtractor)source.getTileEntity(pos));
-			if (pipe.up != TileEntityItemExtractor.EnumPipeConnection.NONE){
+			if (pipe.up != EnumPipeConnection.NONE){
 				y2 = 1;
 			}
-			if (pipe.down != TileEntityItemExtractor.EnumPipeConnection.NONE){
+			if (pipe.down != EnumPipeConnection.NONE){
 				y1 = 0;
 			}
-			if (pipe.north != TileEntityItemExtractor.EnumPipeConnection.NONE){
+			if (pipe.north != EnumPipeConnection.NONE){
 				z1 = 0;
 			}
-			if (pipe.south != TileEntityItemExtractor.EnumPipeConnection.NONE){
+			if (pipe.south != EnumPipeConnection.NONE){
 				z2 = 1;
 			}
-			if (pipe.west != TileEntityItemExtractor.EnumPipeConnection.NONE){
+			if (pipe.west != EnumPipeConnection.NONE){
 				x1 = 0;
 			}
-			if (pipe.east != TileEntityItemExtractor.EnumPipeConnection.NONE){
+			if (pipe.east != EnumPipeConnection.NONE){
 				x2 = 1;
 			}
 		}

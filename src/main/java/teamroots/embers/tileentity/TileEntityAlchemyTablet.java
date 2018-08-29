@@ -16,12 +16,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.alchemy.AlchemyResult;
 import teamroots.embers.api.alchemy.AspectList;
+import teamroots.embers.api.event.AlchemyResultEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.ISparkable;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.item.ItemAlchemicWaste;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberSphereFX;
@@ -287,8 +289,8 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	@Override
 	public void update() {
 		angle += 1.0f;
-		//List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, UPGRADE_SIDES); //Defer to when events are added to the upgrade system
-		//UpgradeUtil.verifyUpgrades(this, upgrades);
+		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.DOWN}); //Defer to when events are added to the upgrade system
+		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if(getWorld().isRemote)
 			handleSound();
 		if (progress == 1){
@@ -335,19 +337,27 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 				else {
 					AlchemyRecipe recipe = getRecipe();
 					if (recipe != null && !getWorld().isRemote){
-						ItemStack stack = recipe.getResult(this, aspects);
-						if (!getWorld().isRemote){
-							SoundEvent finishSound = stack.getItem() instanceof ItemAlchemicWaste ? SoundManager.ALCHEMY_FAIL : SoundManager.ALCHEMY_SUCCESS;
-							world.playSound(null,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5, finishSound, SoundCategory.BLOCKS, 1.0f, 1.0f);
-							getWorld().spawnEntity(new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0f,getPos().getZ()+0.5,stack));
-							PacketHandler.INSTANCE.sendToAll(new MessageEmberSphereFX(getPos().getX()+0.5,getPos().getY()+0.875,getPos().getZ()+0.5));
-						}
+						AlchemyResult result = recipe.matchAshes(aspects,world);
+						ItemStack failure = recipe.isFailure(result) ? result.createFailure() : ItemStack.EMPTY;
+
+						AlchemyResultEvent event = new AlchemyResultEvent(this,result,true,recipe.isFailure(result),failure);
+						UpgradeUtil.throwEvent(this,event,upgrades);
+
+						ItemStack stack = event.isFailure() ? event.getFailureStack() : recipe.getResult(this);
+						SoundEvent finishSound = event.isFailure() ? SoundManager.ALCHEMY_FAIL : SoundManager.ALCHEMY_SUCCESS;
+						world.playSound(null,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5, finishSound, SoundCategory.BLOCKS, 1.0f, 1.0f);
+						getWorld().spawnEntity(new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0f,getPos().getZ()+0.5,stack));
+						PacketHandler.INSTANCE.sendToAll(new MessageEmberSphereFX(getPos().getX()+0.5,getPos().getY()+0.875,getPos().getZ()+0.5));
+
 						this.progress = 0;
-						this.center.setStackInSlot(0, decrStack(this.center.getStackInSlot(0)));
-						this.north.setStackInSlot(0, decrStack(this.north.getStackInSlot(0)));
-						this.south.setStackInSlot(0, decrStack(this.south.getStackInSlot(0)));
-						this.east.setStackInSlot(0, decrStack(this.east.getStackInSlot(0)));
-						this.west.setStackInSlot(0, decrStack(this.west.getStackInSlot(0)));
+						if(event.shouldConsumeIngredients()) {
+							this.center.setStackInSlot(0, decrStack(this.center.getStackInSlot(0)));
+							this.north.setStackInSlot(0, decrStack(this.north.getStackInSlot(0)));
+							this.south.setStackInSlot(0, decrStack(this.south.getStackInSlot(0)));
+							this.east.setStackInSlot(0, decrStack(this.east.getStackInSlot(0)));
+							this.west.setStackInSlot(0, decrStack(this.west.getStackInSlot(0)));
+						}
+
 						markDirty();
 					}
 				}

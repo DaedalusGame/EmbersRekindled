@@ -26,6 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
@@ -441,7 +442,7 @@ public class EventManager {
 		EntityLivingBase shooter = event.getShooter();
 		ItemStack weapon = event.getStack();
 		if (!weapon.isEmpty()){
-			addHeat(shooter, weapon, event.getProjectiles().size());
+			addHeat(shooter, weapon, event.getProjectiles().size() * (float)MathHelper.clampedLerp(0.5,3.0,event.getCharge()));
 		}
 	}
 
@@ -489,7 +490,7 @@ public class EventManager {
 						List<ModifierBase> modifiers = ItemModUtil.getModifiers(stack).stream().filter(x -> x.shouldRenderTooltip).collect(Collectors.toList());
 						GlStateManager.disableDepth();
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-						if (ItemModUtil.getLevel(stack) > 0){
+						if (modifiers.size() > 0){
 							GlStateManager.enableBlend();
 							GlStateManager.enableAlpha();
 							int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);

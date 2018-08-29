@@ -3,14 +3,10 @@ package teamroots.embers.entity;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -49,6 +45,13 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     int red = 255;
     int green = 64;
     int blue = 16;
+    double gravity;
+
+    int homingTime;
+    double homingRange;
+    int homingIndex, homingModulo; //For spread homing
+    Entity homingTarget;
+    Predicate<Entity> homingPredicate;
 
     public EntityEmberProjectile(World worldIn) {
         super(worldIn);
@@ -72,10 +75,22 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
         this.shootingEntity = shootingEntity;
     }
 
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
     public void setColor(int red, int green, int blue, int alpha) {
         this.red = (red * alpha) / 255;
         this.green = (green * alpha) / 255;
         this.blue = (blue * alpha) / 255;
+    }
+
+    public void setHoming(int time, double range, int index, int modulo, Predicate<Entity> predicate) {
+        homingTime = time;
+        homingRange = range;
+        homingIndex = index;
+        homingModulo = modulo;
+        homingPredicate = predicate;
     }
 
     public void setPreset(IProjectilePreset preset) {
@@ -102,6 +117,8 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     protected void readEntityFromNBT(NBTTagCompound compound) {
         getDataManager().set(EntityEmberProjectile.value, compound.getFloat("value"));
         getDataManager().setDirty(EntityEmberProjectile.value);
+        Color color = new Color(compound.getInteger("color"));
+        setColor(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
         /*if (compound.hasKey("UUIDmost")){
 			id = new UUID(compound.getLong("UUIDmost"),compound.getLong("UUIDleast"));
 		}*/
@@ -110,6 +127,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         compound.setFloat("value", getDataManager().get(value));
+        compound.setInteger("color",new Color(red,green,blue).getRGB());
 		/*if (id != null){
 			compound.setLong("UUIDmost", id.getMostSignificantBits());
 			compound.setLong("UUIDleast", id.getLeastSignificantBits());
@@ -122,10 +140,11 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
         //if (!getEntityWorld().isRemote && getDataManager().get(lifetime) > 18 && getDataManager().get(dead)){
         //PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ,getDataManager().get(value)/1.75f));
         //}
-        getDataManager().set(lifetime, getDataManager().get(lifetime) - 1);
-        getDataManager().setDirty(lifetime);
+        int lifetime = getDataManager().get(EntityEmberProjectile.lifetime);
+        getDataManager().set(EntityEmberProjectile.lifetime, lifetime - 1);
+        getDataManager().setDirty(EntityEmberProjectile.lifetime);
         World world = getEntityWorld();
-        if (getDataManager().get(lifetime) <= 0) {
+        if (lifetime <= 0) {
             world.removeEntity(this);
             this.setDead();
         }
@@ -153,9 +172,13 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
             posY = newPosVector.y;
             posZ = newPosVector.z;
 
+            motionY += gravity;
+
             if (!world.isRemote && raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 onHit(raytraceresult);
             }
+
+            handleHoming(lifetime, world);
 
             if (world.isRemote) {
                 double deltaX = posX - prevPosX;
@@ -174,6 +197,45 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
             motionY = 0;
             motionZ = 0;
         }
+    }
+
+    private void handleHoming(int lifetime, World world) {
+        if (homingTime > 0) {
+            if (!isTargetInvalid(homingTarget)) {
+                double targetX = homingTarget.posX;
+                double targetY = homingTarget.posY+homingTarget.height/2;
+                double targetZ = homingTarget.posZ;
+                Vec3d targetVector = new Vec3d(targetX-posX,targetY-posY,targetZ-posZ);
+                double length = targetVector.lengthVector();
+                targetVector = targetVector.scale(0.3/length);
+                double weight  = 0;
+                if (length <= homingRange){
+                    weight = 0.9*((homingRange-length)/homingRange);
+                }
+                motionX = (0.9-weight)*motionX+(0.1+weight)*targetVector.x;
+                motionY = (0.9-weight)*motionY+(0.1+weight)*targetVector.y;
+                motionZ = (0.9-weight)*motionZ+(0.1+weight)*targetVector.z;
+                homingTime--;
+            }
+            else if (lifetime % 5 == 0) {
+                AxisAlignedBB homingAABB = new AxisAlignedBB(posX - homingRange, posY - homingRange, posZ - homingRange, posX + homingRange, posY + homingRange, posZ + homingRange);
+                List<Entity> entities = world.getEntitiesInAABBexcluding(this, homingAABB, homingPredicate);
+                Entity badTarget = null;
+                for (Entity entity : entities) {
+                    long leastSignificantBits = entity.getUniqueID().getLeastSignificantBits() & 0xFFFF;
+                    if (leastSignificantBits % homingModulo == homingIndex % homingModulo) {
+                        homingTarget = entity;
+                    }
+                    badTarget = entity;
+                }
+                if(homingTarget == null)
+                    homingTarget = badTarget;
+            }
+        }
+    }
+
+    private boolean isTargetInvalid(Entity entity) {
+        return entity == null || entity.isDead;
     }
 
     private void onHit(RayTraceResult raytraceresult) {

@@ -14,6 +14,8 @@ import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.awt.List;
+import java.util.*;
 
 public class ProjectileRay implements IProjectilePreset {
     private static final Predicate<Entity> VALID_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
@@ -27,7 +29,7 @@ public class ProjectileRay implements IProjectilePreset {
     IProjectileEffect effect;
     Entity shooter;
     boolean pierceEntities;
-    Color color;
+    Color color = new Color(255,64,16);
 
     public ProjectileRay(Entity shooter, Vec3d start, Vec3d end, boolean pierceEntities, IProjectileEffect effect) {
         this.pos = start;
@@ -77,6 +79,14 @@ public class ProjectileRay implements IProjectilePreset {
         this.effect = effect;
     }
 
+    public boolean canPierceEntities() {
+        return pierceEntities;
+    }
+
+    public void setPierceEntities(boolean pierceEntities) {
+        this.pierceEntities = pierceEntities;
+    }
+
     @Nullable
     @Override
     public Entity getEntity() {
@@ -104,15 +114,17 @@ public class ProjectileRay implements IProjectilePreset {
         Vec3d currPosVec = getPos();
         Vec3d newPosVector = getPos().add(getVelocity());
         RayTraceResult blockTrace = world.rayTraceBlocks(currPosVec, newPosVector, false, true, false);
-        RayTraceResult entityTraceFirst = Misc.findEntityOnPath(world,null,shooter,new AxisAlignedBB(startX-0.3,startY-0.3,startZ-0.3,startX+0.3,startY+0.3,startZ+0.3),currPosVec,newPosVector,VALID_TARGETS);
+        java.util.List<RayTraceResult> entityTraces = Misc.findEntitiesOnPath(world,null,shooter,new AxisAlignedBB(startX-0.3,startY-0.3,startZ-0.3,startX+0.3,startY+0.3,startZ+0.3),currPosVec,newPosVector,VALID_TARGETS);
 
         double distBlock = blockTrace != null ? getPos().squareDistanceTo(blockTrace.hitVec) : Double.POSITIVE_INFINITY;
 
-        if(entityTraceFirst != null && getPos().squareDistanceTo(entityTraceFirst.hitVec) < distBlock) {
-            effect.onHit(world,entityTraceFirst,this);
-            if(!pierceEntities) {
-                impactDist = getPos().distanceTo(entityTraceFirst.hitVec);
-                doContinue = false;
+        for(RayTraceResult entityTraceFirst : entityTraces) {
+            if (doContinue && entityTraceFirst != null && getPos().squareDistanceTo(entityTraceFirst.hitVec) < distBlock) {
+                effect.onHit(world, entityTraceFirst, this);
+                if (!pierceEntities) {
+                    impactDist = getPos().distanceTo(entityTraceFirst.hitVec);
+                    doContinue = false;
+                }
             }
         }
 

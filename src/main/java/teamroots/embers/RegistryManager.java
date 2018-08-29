@@ -583,6 +583,7 @@ public class RegistryManager {
 		EmbersAPI.registerModifier(eldritch_insignia, EmbersAPI.ELDRITCH_INSIGNIA);
 		EmbersAPI.registerModifier(intelligent_apparatus, EmbersAPI.INTELLIGENT_APPARATUS);
 		EmbersAPI.registerModifier(diffraction_barrel, EmbersAPI.DIFFRACTION);
+		EmbersAPI.registerModifier(focal_lens, EmbersAPI.FOCAL_LENS);
 	}
 
 	@SubscribeEvent

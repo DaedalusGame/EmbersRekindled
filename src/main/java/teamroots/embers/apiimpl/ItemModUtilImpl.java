@@ -51,6 +51,7 @@ class ItemModUtilImpl implements IItemModUtil {
                     NBTTagCompound tagModifier = tagModifiers.getCompoundTagAt(i);
                     String name = tagModifier.getString("name");
                     ModifierBase modifier = getModifier(name);
+                    if(modifier != null)
                     results.add(modifier);
                 }
                 return results;

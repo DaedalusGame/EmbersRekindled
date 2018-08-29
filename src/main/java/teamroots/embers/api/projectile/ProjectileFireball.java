@@ -1,5 +1,6 @@
 package teamroots.embers.api.projectile;
 
+import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -16,7 +17,13 @@ public class ProjectileFireball implements IProjectilePreset {
     int lifetime;
     Entity shooter;
     EntityEmberProjectile entity;
-    Color color;
+    Color color = new Color(255,64,16);
+    double gravity;
+
+    int homingTime;
+    double homingRange;
+    int homingIndex, homingModulo;
+    Predicate<Entity> homingPredicate;
 
     public ProjectileFireball(Entity shooter, Vec3d pos, Vec3d velocity, double size, int lifetime, IProjectileEffect effect) {
         this.pos = pos;
@@ -73,6 +80,14 @@ public class ProjectileFireball implements IProjectilePreset {
         this.color = color;
     }
 
+    public double getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
     @Override
     public IProjectileEffect getEffect() {
         return effect;
@@ -95,14 +110,24 @@ public class ProjectileFireball implements IProjectilePreset {
         this.effect = effect;
     }
 
+    public void setHoming(int time, double range, int index, int modulo, Predicate<Entity> predicate) {
+        homingTime = time;
+        homingRange = range;
+        homingIndex = index;
+        homingModulo = modulo;
+        homingPredicate = predicate;
+    }
+
     @Override
     public void shoot(World world) {
         entity = new EntityEmberProjectile(world);
         entity.initCustom(pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z, size, shooter);
+        entity.setGravity(gravity);
         entity.setEffect(effect);
         entity.setPreset(this);
         entity.setLifetime(lifetime);
         entity.setColor(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+        entity.setHoming(homingTime,homingRange,homingIndex,homingModulo,homingPredicate);
         world.spawnEntity(entity);
     }
 }

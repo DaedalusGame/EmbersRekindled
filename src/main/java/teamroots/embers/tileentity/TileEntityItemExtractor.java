@@ -19,6 +19,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.item.ItemTinkerHammer;
+import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
@@ -36,26 +37,7 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	public BlockPos lastReceived = new BlockPos(0,0,0);
 	public int pressure = 16;
 	Random random = new Random();
-	public static enum EnumPipeConnection{
-		NONE, PIPE, BLOCK, LEVER, FORCENONE, NEIGHBORNONE
-	}
-	
-	public static EnumPipeConnection connectionFromInt(int value){
-		switch (value){
-		case 0:
-			return EnumPipeConnection.NONE;
-		case 1:
-			return EnumPipeConnection.PIPE;
-		case 2:
-			return EnumPipeConnection.BLOCK;
-		case 3:
-			return EnumPipeConnection.LEVER;
-		case 4:
-			return EnumPipeConnection.FORCENONE;
-		}
-		return EnumPipeConnection.NONE;
-	}
-	
+
 	public EnumPipeConnection up = EnumPipeConnection.NONE, down = EnumPipeConnection.NONE, north = EnumPipeConnection.NONE, south = EnumPipeConnection.NONE, east = EnumPipeConnection.NONE, west = EnumPipeConnection.NONE;
 	
 	public TileEntityItemExtractor(){
@@ -74,12 +56,12 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
-		tag.setInteger("up", up.ordinal());
-		tag.setInteger("down", down.ordinal());
-		tag.setInteger("north", north.ordinal());
-		tag.setInteger("south", south.ordinal());
-		tag.setInteger("west", west.ordinal());
-		tag.setInteger("east", east.ordinal());
+		tag.setInteger("up", up.getIndex());
+		tag.setInteger("down", down.getIndex());
+		tag.setInteger("north", north.getIndex());
+		tag.setInteger("south", south.getIndex());
+		tag.setInteger("west", west.getIndex());
+		tag.setInteger("east", east.getIndex());
 		tag.setTag("inventory", inventory.serializeNBT());
 		tag.setInteger("lastX", this.lastReceived.getX());
 		tag.setInteger("lastY", this.lastReceived.getY());
@@ -91,12 +73,12 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	@Override
 	public void readFromNBT(NBTTagCompound tag){
 		super.readFromNBT(tag);
-		up = connectionFromInt(tag.getInteger("up"));
-		down = connectionFromInt(tag.getInteger("down"));
-		north = connectionFromInt(tag.getInteger("north"));
-		south = connectionFromInt(tag.getInteger("south"));
-		west = connectionFromInt(tag.getInteger("west"));
-		east = connectionFromInt(tag.getInteger("east"));
+		up = EnumPipeConnection.fromIndex(tag.getInteger("up"));
+		down = EnumPipeConnection.fromIndex(tag.getInteger("down"));
+		north = EnumPipeConnection.fromIndex(tag.getInteger("north"));
+		south = EnumPipeConnection.fromIndex(tag.getInteger("south"));
+		west = EnumPipeConnection.fromIndex(tag.getInteger("west"));
+		east = EnumPipeConnection.fromIndex(tag.getInteger("east"));
 		lastReceived = new BlockPos(tag.getInteger("lastX"),tag.getInteger("lastY"),tag.getInteger("lastZ"));
 		pressure = tag.getInteger("pressure");
 		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
@@ -181,6 +163,9 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 		TileEntity tile = world.getTileEntity(pos);
 		if (getConnection(side) == EnumPipeConnection.FORCENONE){
 			return EnumPipeConnection.FORCENONE;
+		}
+		else if (tile instanceof IItemPipeConnectable){
+			return ((IItemPipeConnectable) tile).getConnection(side);
 		}
 		else if (tile instanceof TileEntityItemPipe){
 			return EnumPipeConnection.PIPE;
@@ -288,8 +273,8 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	public boolean isConnected(EnumFacing face){
 		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
 		if (tile instanceof TileEntityItemPipe){
-			if (((TileEntityItemPipe)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemPipe.EnumPipeConnection.FORCENONE
-					&& ((TileEntityItemPipe)tile).getConnection(Misc.getOppositeFace(face)) != TileEntityItemPipe.EnumPipeConnection.NONE){
+			if (((TileEntityItemPipe)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.FORCENONE
+					&& ((TileEntityItemPipe)tile).getConnection(Misc.getOppositeFace(face)) != EnumPipeConnection.NONE){
 				return true;
 			}
 		}
@@ -353,29 +338,27 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 				for (int i = 0; i < blockConnections.size() && !takenItems; i ++){
 					EnumFacing face = blockConnections.get(i);
 					TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-					if (tile != null){
-						if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())){
-							IItemHandler handler = getWorld().getTileEntity(getPos().offset(face)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
-							if (handler != null){
-								int slot = -1;
-								for (int j = 0; j < handler.getSlots() && slot == -1; j ++){
-									if (!handler.extractItem(j,1,true).isEmpty()){
-										slot = j;
-									}
+					if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite())) {
+						IItemHandler handler = getWorld().getTileEntity(getPos().offset(face)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
+						if (handler != null) {
+							int slot = -1;
+							for (int j = 0; j < handler.getSlots() && slot == -1; j++) {
+								if (!handler.extractItem(j, 1, true).isEmpty()) {
+									slot = j;
 								}
-								if (slot != -1){
-									if (this.inventory.getStackInSlot(0).isEmpty()){
-										ItemStack extracted = handler.extractItem(slot, 1, false);
-										this.inventory.insertItem(0, extracted, false);
-										lastReceived = getPos().offset(face);
-										if (!toUpdate.contains(getPos().offset(face))){
-											toUpdate.add(getPos().offset(face));
-										}
-										if (!toUpdate.contains(getPos())){
-											toUpdate.add(getPos());
-										}
-										takenItems = true;
+							}
+							if (slot != -1) {
+								if (this.inventory.getStackInSlot(0).isEmpty()) {
+									ItemStack extracted = handler.extractItem(slot, 1, false);
+									this.inventory.insertItem(0, extracted, false);
+									lastReceived = getPos().offset(face);
+									if (!toUpdate.contains(getPos().offset(face))) {
+										toUpdate.add(getPos().offset(face));
 									}
+									if (!toUpdate.contains(getPos())) {
+										toUpdate.add(getPos());
+									}
+									takenItems = true;
 								}
 							}
 						}
@@ -425,10 +408,6 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 					//}
 				}
 			//}
-			/*for (BlockPos aToUpdate : toUpdate) {
-				TileEntity tile = getWorld().getTileEntity(aToUpdate);
-				tile.markDirty();
-			}*/
 		}
 	}
 

@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityFluidExtractor;
 import teamroots.embers.tileentity.TileEntityFluidPipe;
-import teamroots.embers.tileentity.TileEntityFluidPipe.EnumPipeConnection;
+import teamroots.embers.util.EnumPipeConnection;
 
 public class BlockFluidExtractor extends BlockTEBase {
 	public BlockFluidExtractor(Material material, String name, boolean addToTab) {
