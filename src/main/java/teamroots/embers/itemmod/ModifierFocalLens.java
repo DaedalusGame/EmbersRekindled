@@ -14,6 +14,7 @@ import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.api.projectile.ProjectileFireball;
 import teamroots.embers.api.projectile.ProjectileRay;
 
+import java.awt.*;
 import java.util.ListIterator;
 
 public class ModifierFocalLens extends ModifierProjectileBase {

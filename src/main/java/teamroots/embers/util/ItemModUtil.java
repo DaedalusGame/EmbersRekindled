@@ -63,7 +63,7 @@ public class ItemModUtil {
 	public static boolean canAnyModifierApply(ItemStack stack) {
 		Item item = stack.getItem();
 		List<ModifierBase> testList = otherModifiers;
-		if(item instanceof ItemTool || item instanceof ItemSword)
+		if(item instanceof ItemTool || item instanceof ItemSword || item instanceof ItemHoe)
 			testList = weaponModifiers;
 		else if(item instanceof ItemArmor)
 			testList = armorModifiers;

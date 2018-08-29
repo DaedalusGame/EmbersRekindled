@@ -16,6 +16,10 @@ public class BlockTEBase extends BlockBase implements ITileEntityProvider {
 		super(material, name, addToTab);
 	}
 
+	public BlockTEBase(Material material) {
+		super(material);
+	}
+
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return null;

@@ -540,6 +540,8 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityCatalyticPlug.class, Embers.MODID+":tile_entity_catalytic_plug");
 		GameRegistry.registerTileEntity(TileEntityEmberFunnel.class, Embers.MODID+":tile_entity_ember_funnel");
 		GameRegistry.registerTileEntity(TileEntityMiniBoiler.class, Embers.MODID+":tile_entity_mini_boiler");
+		GameRegistry.registerTileEntity(TileEntityEmberGauge.class, Embers.MODID+":tile_entity_ember_gauge");
+		GameRegistry.registerTileEntity(TileEntityFluidGauge.class, Embers.MODID+":tile_entity_fluid_gauge");
 	}
 
 	private static void registerCapabilities() {

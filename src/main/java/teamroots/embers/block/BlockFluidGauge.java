@@ -21,8 +21,11 @@ import teamroots.embers.api.block.IDial;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdateRequest;
+import teamroots.embers.tileentity.TileEntityEmberGauge;
+import teamroots.embers.tileentity.TileEntityFluidGauge;
 import teamroots.embers.util.Misc;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +61,11 @@ public class BlockFluidGauge extends BlockBaseGauge {
 	@Override
 	public String getDialType() {
 		return DIAL_TYPE;
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityFluidGauge();
 	}
 }

@@ -36,9 +36,9 @@ public class ModifierBase {
 			case ALL:
 				return true;
 			case TOOL_OR_ARMOR:
-				return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemArmor;
+				return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemHoe || item instanceof ItemArmor;
 			case TOOL:
-				return item instanceof ItemSword || item instanceof ItemTool;
+				return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemHoe;
 			case ARMOR:
 				return item instanceof ItemArmor;
 			case HELMET:

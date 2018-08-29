@@ -38,13 +38,11 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     public static final DataParameter<Float> value = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.FLOAT);
     public static final DataParameter<Boolean> dead = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> lifetime = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> color = EntityDataManager.createKey(EntityEmberProjectile.class, DataSerializers.VARINT);
     //public UUID id = null;
     public Entity shootingEntity;
     public IProjectileEffect effect;
     private IProjectilePreset preset;
-    int red = 255;
-    int green = 64;
-    int blue = 16;
     double gravity;
 
     int homingTime;
@@ -59,6 +57,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
         this.getDataManager().register(value, 0f);
         this.getDataManager().register(dead, false);
         this.getDataManager().register(lifetime, 160);
+        this.getDataManager().register(color, new Color(255,64,16).getRGB());
     }
 
     public void initCustom(double x, double y, double z, double vx, double vy, double vz, double value, Entity shootingEntity) {
@@ -80,9 +79,8 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     }
 
     public void setColor(int red, int green, int blue, int alpha) {
-        this.red = (red * alpha) / 255;
-        this.green = (green * alpha) / 255;
-        this.blue = (blue * alpha) / 255;
+        getDataManager().set(EntityEmberProjectile.color, new Color((red * alpha) / 255,(green * alpha) / 255,(blue * alpha) / 255).getRGB());
+        getDataManager().setDirty(EntityEmberProjectile.color);
     }
 
     public void setHoming(int time, double range, int index, int modulo, Predicate<Entity> predicate) {
@@ -117,8 +115,8 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     protected void readEntityFromNBT(NBTTagCompound compound) {
         getDataManager().set(EntityEmberProjectile.value, compound.getFloat("value"));
         getDataManager().setDirty(EntityEmberProjectile.value);
-        Color color = new Color(compound.getInteger("color"));
-        setColor(color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
+        getDataManager().set(EntityEmberProjectile.color, compound.getInteger("color"));
+        getDataManager().setDirty(EntityEmberProjectile.color);
         /*if (compound.hasKey("UUIDmost")){
 			id = new UUID(compound.getLong("UUIDmost"),compound.getLong("UUIDleast"));
 		}*/
@@ -127,7 +125,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         compound.setFloat("value", getDataManager().get(value));
-        compound.setInteger("color",new Color(red,green,blue).getRGB());
+        compound.setInteger("color",getDataManager().get(color));
 		/*if (id != null){
 			compound.setLong("UUIDmost", id.getMostSignificantBits());
 			compound.setLong("UUIDleast", id.getLeastSignificantBits());
@@ -181,13 +179,14 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
             handleHoming(lifetime, world);
 
             if (world.isRemote) {
+                Color particleColor = new Color(getDataManager().get(color),true);
                 double deltaX = posX - prevPosX;
                 double deltaY = posY - prevPosY;
                 double deltaZ = posZ - prevPosZ;
                 double dist = Math.ceil(Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ) * 10);
                 for (double i = 0; i < dist; i++) {
                     double coeff = i / dist;
-                    ParticleUtil.spawnParticleGlow(world, (float) (prevPosX + (posX - prevPosX) * coeff), (float) (prevPosY + (posY - prevPosY) * coeff), (float) (prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), red, green, blue, getDataManager().get(value) / 1.75f, 24);
+                    ParticleUtil.spawnParticleGlow(world, (float) (prevPosX + (posX - prevPosX) * coeff), (float) (prevPosY + (posY - prevPosY) * coeff), (float) (prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), particleColor.getRed(), particleColor.getGreen(), particleColor.getBlue(), getDataManager().get(value) / 1.75f, 24);
                 }
             }
 
@@ -239,7 +238,7 @@ public class EntityEmberProjectile extends Entity/* implements ILightProvider*/ 
     }
 
     private void onHit(RayTraceResult raytraceresult) {
-        PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ, getDataManager().get(value) / 1.75f, new Color(red,green,blue).getRGB()));
+        PacketHandler.INSTANCE.sendToAll(new MessageEmberSizedBurstFX(posX, posY, posZ, getDataManager().get(value) / 1.75f, getDataManager().get(color)));
         getDataManager().set(lifetime, 20);
         getDataManager().setDirty(lifetime);
         this.getDataManager().set(dead, true);

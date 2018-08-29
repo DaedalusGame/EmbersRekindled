@@ -15,11 +15,12 @@ import net.minecraft.world.World;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdateRequest;
+import teamroots.embers.tileentity.TileEntityBaseGauge;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BlockBaseGauge extends BlockBase implements teamroots.embers.api.block.IDial {
+public abstract class BlockBaseGauge extends BlockTEBase implements teamroots.embers.api.block.IDial {
     public static final PropertyDirection facing = PropertyDirection.create("facing");
 
     public BlockBaseGauge(Material material, String name, boolean addToTab) {
@@ -104,5 +105,18 @@ public abstract class BlockBaseGauge extends BlockBase implements teamroots.embe
         if (tile != null){
             PacketHandler.INSTANCE.sendToServer(new MessageTEUpdateRequest(tilePos));
         }
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if(tile instanceof TileEntityBaseGauge)
+            return ((TileEntityBaseGauge) tile).getComparatorValue();
+        return 0;
     }
 }
