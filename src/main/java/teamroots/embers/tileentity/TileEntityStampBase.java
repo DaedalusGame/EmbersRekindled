@@ -26,7 +26,7 @@ import teamroots.embers.util.Misc;
 import javax.annotation.Nullable;
 
 public class TileEntityStampBase extends TileFluidHandler implements ITileEntityBase {
-	public static int capacity = Fluid.BUCKET_VOLUME*1;
+	public static int capacity = (Fluid.BUCKET_VOLUME*3) / 2; //1500
 	public ItemStackHandler inputs = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
