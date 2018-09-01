@@ -4,14 +4,14 @@
     "sounds": [
       "embers:alchemy_tablet/fail"
     ],
-    "subtitle": "subtitles.alchemy.fail"
+    "subtitle": "subtitles.block.alchemy.fail"
   },
   "block.alchemy.success": {
     "category": "block",
     "sounds": [
       "embers:alchemy_tablet/success"
     ],
-    "subtitle": "subtitles.alchemy.success"
+    "subtitle": "subtitles.block.alchemy.success"
   },
   "block.alchemy.loop": {
     "category": "block",
@@ -24,14 +24,14 @@
     "sounds": [
       "embers:alchemy_tablet/start"
     ],
-    "subtitle": "subtitles.alchemy.start"
+    "subtitle": "subtitles.block.alchemy.start"
   },
   "block.beam_cannon.fire": {
     "category": "block",
     "sounds": [
       "embers:beam_cannon/fire"
     ],
-    "subtitle": "subtitles.beam_cannon.fire"
+    "subtitle": "subtitles.block.beam_cannon.fire"
   },
   "block.beam_cannon.hit": {
     "category": "block",
@@ -39,7 +39,7 @@
       "embers:beam_cannon/hit1",
       "embers:beam_cannon/hit2"
     ],
-    "subtitle": "subtitles.beam_cannon.hit"
+    "subtitle": "subtitles.block.beam_cannon.hit"
   },
   "block.crystal_cell.loop": {
     "category": "block",
@@ -54,7 +54,7 @@
       "embers:crystal_cell/zap3",
       "embers:crystal_cell/zap4"
     ],
-    "subtitle": "subtitles.crystal_cell.grow"
+    "subtitle": "subtitles.block.crystal_cell.grow"
   },
   "block.pedestal.loop": {
     "category": "block",
@@ -74,7 +74,7 @@
       "embers:activator/plume1",
       "embers:activator/plume2"
     ],
-    "subtitle": "subtitles.activator.plume"
+    "subtitle": "subtitles.block.activator.plume"
   },
   "block.boiler.plume": {
     "category": "block",
@@ -82,7 +82,7 @@
       "embers:boiler/plume1",
       "embers:boiler/plume2"
     ],
-    "subtitle": "subtitles.boiler.plume"
+    "subtitle": "subtitles.block.boiler.plume"
   },
   "block.ignem_reactor.plume": {
     "category": "block",
@@ -90,7 +90,7 @@
       "embers:ignem_reactor/plume1",
       "embers:ignem_reactor/plume2"
     ],
-    "subtitle": "subtitles.ignem_reactor.plume"
+    "subtitle": "subtitles.block.ignem_reactor.plume"
   },
   "block.stamper.down": {
     "category": "block",
@@ -99,7 +99,7 @@
       "embers:stamper/down2",
       "embers:stamper/down3"
     ],
-    "subtitle": "subtitles.stamp.down"
+    "subtitle": "subtitles.block.stamp.down"
   },
   "block.stamper.up": {
     "category": "block",
@@ -108,21 +108,21 @@
       "embers:stamper/up2",
       "embers:stamper/up3"
     ],
-    "subtitle": "subtitles.stamp.up"
+    "subtitle": "subtitles.block.stamp.up"
   },
   "block.bore.start": {
     "category": "block",
     "sounds": [
       "embers:ember_bore/start"
     ],
-    "subtitle": "subtitles.bore.start"
+    "subtitle": "subtitles.block.bore.start"
   },
   "block.bore.stop": {
     "category": "block",
     "sounds": [
       "embers:ember_bore/stop"
     ],
-    "subtitle": "subtitles.bore.stop"
+    "subtitle": "subtitles.block.bore.stop"
   },
   "block.bore.loop": {
     "category": "block",
@@ -141,14 +141,14 @@
     "sounds": [
       "embers:catalytic_plug/start"
     ],
-    "subtitle": "subtitles.catalytic_plug.start"
+    "subtitle": "subtitles.block.catalytic_plug.start"
   },
   "block.catalytic_plug.stop": {
     "category": "block",
     "sounds": [
       "embers:catalytic_plug/stop"
     ],
-    "subtitle": "subtitles.catalytic_plug.stop"
+    "subtitle": "subtitles.block.catalytic_plug.stop"
   },
   "block.catalytic_plug.loop": {
     "category": "block",
@@ -196,15 +196,13 @@
     "category": "block",
     "sounds": [
       "embers:mixer_loop"
-    ],
-    "subtitle": "subtitles.mixer.loop"
+    ]
   },
   "block.copper_charger.loop": {
     "category": "block",
     "sounds": [
       "embers:copper_charger_loop"
-    ],
-    "subtitle": "subtitles.copper_charger.loop"
+    ]
   },
   "block.plinth.loop": {
     "category": "block",
@@ -230,21 +228,21 @@
       "embers:metal_seed/ping2",
       "embers:metal_seed/ping3"
     ],
-    "subtitle": "subtitles.metal_seed.ping"
+    "subtitle": "subtitles.block.metal_seed.ping"
   },
   "block.inferno_forge.fail": {
     "category": "block",
     "sounds": [
       "embers:inferno_forge/fail"
     ],
-    "subtitle": "subtitles.inferno_forge.fail"
+    "subtitle": "subtitles.block.inferno_forge.fail"
   },
   "block.inferno_forge.success": {
     "category": "block",
     "sounds": [
       "embers:inferno_forge/success"
     ],
-    "subtitle": "subtitles.inferno_forge.success"
+    "subtitle": "subtitles.block.inferno_forge.success"
   },
   "block.inferno_forge.loop": {
     "category": "block",
@@ -257,21 +255,21 @@
     "sounds": [
       "embers:inferno_forge/start"
     ],
-    "subtitle": "subtitles.inferno_forge.start"
+    "subtitle": "subtitles.block.inferno_forge.start"
   },
   "block.inferno_forge.open": {
     "category": "block",
     "sounds": [
       "embers:inferno_forge/open"
     ],
-    "subtitle": "subtitles.inferno_forge.open"
+    "subtitle": "subtitles.block.inferno_forge.open"
   },
   "block.inferno_forge.close": {
     "category": "block",
     "sounds": [
       "embers:inferno_forge/close"
     ],
-    "subtitle": "subtitles.inferno_forge.close"
+    "subtitle": "subtitles.block.inferno_forge.close"
   },
   "block.field_chart.loop": {
     "category": "block",
@@ -283,13 +281,15 @@
     "category": "block",
     "sounds": [
       "embers:steam_engine/start_steam"
-    ]
+    ],
+    "subtitle": "subtitles.block.steam_engine.start_steam"
   },
   "block.steam_engine.start_burn": {
     "category": "block",
     "sounds": [
       "embers:steam_engine/start_burn"
-    ]
+    ],
+    "subtitle": "subtitles.block.steam_engine.start_burn"
   },
   "block.steam_engine.steam_loop": {
     "category": "block",
@@ -307,13 +307,15 @@
     "category": "block",
     "sounds": [
       "embers:steam_engine/stop"
-    ]
+    ],
+    "subtitle": "subtitles.block.steam_engine.stop"
   },
   "block.mini_boiler.rupture": {
     "category": "block",
     "sounds": [
       "embers:mini_boiler/rupture"
-    ]
+    ],
+    "subtitle": "subtitles.block.mini_boiler.rupture"
   },
   "block.mini_boiler.loop_slow": {
     "category": "block",
@@ -355,7 +357,8 @@
     "category": "block",
     "sounds": [
       "embers:pump/slow"
-    ]
+    ],
+    "subtitle": "subtitles.block.pump.slow"
   },
   "block.pump.mid": {
     "category": "block",
@@ -363,7 +366,8 @@
       "embers:pump/mid1",
       "embers:pump/mid2",
       "embers:pump/mid3"
-    ]
+    ],
+    "subtitle": "subtitles.block.pump.mid"
   },
   "block.pump.fast": {
     "category": "block",
@@ -371,7 +375,8 @@
       "embers:pump/fast1",
       "embers:pump/fast2",
       "embers:pump/fast3"
-    ]
+    ],
+    "subtitle": "subtitles.block.pump.fast"
   },
   "block.ember_transfer.emit.small": {
     "category": "block",
@@ -380,7 +385,8 @@
       "embers:ember_transmission/emit2",
       "embers:ember_transmission/emit3",
       "embers:ember_transmission/emit4"
-    ]
+    ],
+    "subtitle": "subtitles.ember_transfer.emit.small"
   },
   "block.ember_transfer.emit.big": {
     "category": "block",
@@ -389,7 +395,8 @@
       "embers:ember_transmission/emit_big2",
       "embers:ember_transmission/emit_big3",
       "embers:ember_transmission/emit_big4"
-    ]
+    ],
+    "subtitle": "subtitles.ember_transfer.emit.big"
   },
   "block.ember_transfer.receive.small": {
     "category": "block",
@@ -398,7 +405,8 @@
       "embers:ember_transmission/recep2",
       "embers:ember_transmission/recep3",
       "embers:ember_transmission/recep4"
-    ]
+    ],
+    "subtitle": "subtitles.ember_transfer.receive.small"
   },
   "block.ember_transfer.receive.big": {
     "category": "block",
@@ -407,7 +415,8 @@
       "embers:ember_transmission/recep_big2",
       "embers:ember_transmission/recep_big3",
       "embers:ember_transmission/recep_big4"
-    ]
+    ],
+    "subtitle": "subtitles.ember_transfer.receive.big"
   },
   "block.ember_transfer.relay": {
     "category": "block",
@@ -416,7 +425,8 @@
       "embers:ember_transmission/relay2",
       "embers:ember_transmission/relay3",
       "embers:ember_transmission/relay4"
-    ]
+    ],
+    "subtitle": "subtitles.ember_transfer.relay"
   },
   "fireball.small.fire": {
     "sounds": [

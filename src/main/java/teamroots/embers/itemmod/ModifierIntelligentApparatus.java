@@ -12,25 +12,20 @@ import teamroots.embers.util.EmberInventoryUtil;
 
 public class ModifierIntelligentApparatus extends ModifierBase {
 
-	public ModifierIntelligentApparatus() {
-		super(EnumType.ARMOR,"intelligent_apparatus",4.0,true);
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-	
-	@SubscribeEvent
-	public void onXPDrop(LivingExperienceDropEvent event){
-		if (event.getAttackingPlayer() != null){
-			EntityPlayer player = event.getAttackingPlayer();
-			ItemStack s = player.getHeldItemMainhand();
-			if (!s.isEmpty()){
-				if (ItemModUtil.hasHeat(s)){
-					int level = ItemModUtil.getArmorModifierLevel(player, EmbersAPI.INTELLIGENT_APPARATUS);
-					if (level > 0 && EmberInventoryUtil.getEmberTotal(player) >= cost){
-						EmberInventoryUtil.removeEmber(player, cost);
-						event.setDroppedExperience(event.getDroppedExperience()*(level+1));
-					}
-				}
-			}
-		}
-	}
+    public ModifierIntelligentApparatus() {
+        super(EnumType.ARMOR, "intelligent_apparatus", 4.0, true);
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public void onXPDrop(LivingExperienceDropEvent event) {
+        if (event.getAttackingPlayer() != null) {
+            EntityPlayer player = event.getAttackingPlayer();
+            int level = ItemModUtil.getArmorModifierLevel(player, EmbersAPI.INTELLIGENT_APPARATUS);
+            if (level > 0 && EmberInventoryUtil.getEmberTotal(player) >= cost) {
+                EmberInventoryUtil.removeEmber(player, cost);
+                event.setDroppedExperience(event.getDroppedExperience() * (level + 1));
+            }
+        }
+    }
 }
