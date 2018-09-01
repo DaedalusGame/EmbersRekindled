@@ -34,7 +34,7 @@ public class TileEntityItemPipeRenderer extends TileEntitySpecialRenderer<TileEn
 	public TileEntityItemPipeRenderer(){
 		super();
 	}
-	
+
 	@Override
 	public void render(TileEntityItemPipe tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile != null){

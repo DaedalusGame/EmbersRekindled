@@ -23,7 +23,9 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.block.BlockCatalyticPlug;
+import teamroots.embers.block.BlockFluidGauge;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.upgrade.UpgradeCatalyticPlug;
 import teamroots.embers.util.Misc;
@@ -31,9 +33,10 @@ import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
-public class TileEntityCatalyticPlug extends TileEntity implements ITickable, ITileEntityBase, ISoundController {
+public class TileEntityCatalyticPlug extends TileEntity implements ITickable, ITileEntityBase, ISoundController, IExtraDialInformation {
     public static final int SOUND_OFF = 1;
     public static final int SOUND_ON = 2;
     public static final int[] SOUND_IDS = new int[]{SOUND_OFF,SOUND_ON};
@@ -60,6 +63,7 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
         NBTTagCompound tankTag = new NBTTagCompound();
         tank.writeToNBT(tankTag);
         tag.setTag("tank", tankTag);
+        tag.setInteger("active",activeTicks);
         return tag;
     }
 
@@ -67,6 +71,7 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
     public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
         tank.readFromNBT(tag.getCompoundTag("tank"));
+        activeTicks = tag.getInteger("active");
     }
 
     @Override
@@ -95,6 +100,7 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
 
     public void setActive(int ticks) {
         activeTicks = Math.max(ticks,activeTicks);
+        markDirty();
     }
 
     @Override
@@ -233,5 +239,13 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
     public void markDirty() {
         super.markDirty();
         Misc.syncTE(this);
+    }
+
+    @Override
+    public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+        if(BlockFluidGauge.DIAL_TYPE.equals(dialType)) {
+            information.clear();
+            information.add(BlockFluidGauge.formatFluidStack(getFluidStack(),getCapacity()));
+        }
     }
 }

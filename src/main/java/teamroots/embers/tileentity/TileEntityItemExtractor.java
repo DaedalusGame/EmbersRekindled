@@ -37,6 +37,7 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 	public BlockPos lastReceived = new BlockPos(0,0,0);
 	public int pressure = 16;
 	Random random = new Random();
+	boolean clogged;
 
 	public EnumPipeConnection up = EnumPipeConnection.NONE, down = EnumPipeConnection.NONE, north = EnumPipeConnection.NONE, south = EnumPipeConnection.NONE, east = EnumPipeConnection.NONE, west = EnumPipeConnection.NONE;
 	
@@ -67,6 +68,7 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 		tag.setInteger("lastY", this.lastReceived.getY());
 		tag.setInteger("lastZ", this.lastReceived.getZ());
 		tag.setInteger("pressure", pressure);
+		tag.setBoolean("clogged", clogged);
 		return tag;
 	}
 	
@@ -81,6 +83,7 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 		east = EnumPipeConnection.fromIndex(tag.getInteger("east"));
 		lastReceived = new BlockPos(tag.getInteger("lastX"),tag.getInteger("lastY"),tag.getInteger("lastZ"));
 		pressure = tag.getInteger("pressure");
+		clogged = tag.getBoolean("clogged");
 		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
 	}
 
@@ -292,8 +295,10 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 
 	@Override
 	public void update() {
+		if (world.isRemote && clogged)
+			Misc.spawnClogParticles(world,pos,1, 0.25f);
 		if (getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && !world.isRemote){
-			HashSet<BlockPos> toUpdate = new HashSet<>();
+			boolean itemsMoved = false;
 			ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.FORCENONE && up != EnumPipeConnection.LEVER && isConnected(EnumFacing.UP)){
 				connections.add(EnumFacing.UP);
@@ -352,12 +357,7 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 									ItemStack extracted = handler.extractItem(slot, 1, false);
 									this.inventory.insertItem(0, extracted, false);
 									lastReceived = getPos().offset(face);
-									if (!toUpdate.contains(getPos().offset(face))) {
-										toUpdate.add(getPos().offset(face));
-									}
-									if (!toUpdate.contains(getPos())) {
-										toUpdate.add(getPos());
-									}
+									itemsMoved = true;
 									takenItems = true;
 								}
 							}
@@ -374,8 +374,6 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 								IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face.getOpposite());
 								if (((TileEntityItemPipe)tile).pressure != Math.max(0, pressure-1)){
 									((TileEntityItemPipe)tile).pressure = Math.max(0, pressure-1);
-									IBlockState state = getWorld().getBlockState(getPos().offset(face));
-									toUpdate.add(pos.offset(face));
 								}
 								if (handler != null){
 									ItemStack passStack = this.inventory.extractItem(0, 1, true);
@@ -393,12 +391,7 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 												if (tile instanceof TileEntityItemPipe){
 													((TileEntityItemPipe)tile).lastReceived = getPos();
 												}
-												if (!toUpdate.contains(getPos().offset(face))){
-													toUpdate.add(getPos().offset(face));
-												}
-												if (!toUpdate.contains(getPos())){
-													toUpdate.add(getPos());
-												}
+												itemsMoved = true;
 											}
 										}
 									}
@@ -408,6 +401,12 @@ public class TileEntityItemExtractor extends TileEntity implements ITileEntityBa
 					//}
 				}
 			//}
+			if(inventory.getStackInSlot(0).isEmpty())
+				itemsMoved = true;
+			if(clogged == itemsMoved) {
+				clogged = !itemsMoved;
+				markDirty();
+			}
 		}
 	}
 

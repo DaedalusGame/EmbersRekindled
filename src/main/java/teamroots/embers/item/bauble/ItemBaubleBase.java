@@ -4,13 +4,16 @@ import baubles.api.BaubleType;
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
+import teamroots.embers.SoundManager;
 import teamroots.embers.item.ItemBase;
 
 public class ItemBaubleBase extends ItemBase implements IBauble {
@@ -25,6 +28,16 @@ public class ItemBaubleBase extends ItemBase implements IBauble {
 	@Override
 	public BaubleType getBaubleType(ItemStack arg0) {
 		return type;
+	}
+
+	@Override
+	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
+		player.world.playSound(null,player.posX,player.posY,player.posZ,SoundManager.BAUBLE_EQUIP, SoundCategory.PLAYERS,1.0f,1.0f);
+	}
+
+	@Override
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
+		player.world.playSound(null,player.posX,player.posY,player.posZ, SoundManager.BAUBLE_UNEQUIP, SoundCategory.PLAYERS,1.0f,1.0f);
 	}
 
 	/**

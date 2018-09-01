@@ -32,7 +32,8 @@ import java.util.Random;
 
 public class TileEntityFluidExtractor extends TileFluidHandler implements ITileEntityBase, ITickable {
 	Random random = new Random();
-	List<EnumFacing> from = new ArrayList<EnumFacing>();
+	List<EnumFacing> from = new ArrayList<>();
+	boolean clogged;
 	
 	public EnumPipeConnection up = EnumPipeConnection.NONE, down = EnumPipeConnection.NONE, north = EnumPipeConnection.NONE, south = EnumPipeConnection.NONE, east = EnumPipeConnection.NONE, west = EnumPipeConnection.NONE;
 	
@@ -64,6 +65,7 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 			l.appendTag(new NBTTagInt(f.getIndex()));
 		}
 		tag.setTag("from", l);
+		tag.setBoolean("clogged", clogged);
 		return tag;
 	}
 	
@@ -80,6 +82,7 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 		for (int i = 0; i < l.tagCount(); i ++){
 			from.add(EnumFacing.getFront(l.getIntAt(i)));
 		}
+		clogged = tag.getBoolean("clogged");
 	}
 
 	@Override
@@ -272,12 +275,13 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 
 	@Override
 	public void update() {
-		from.clear();
 		boolean on = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+		if (world.isRemote && clogged)
+			Misc.spawnClogParticles(world,pos,1, 0.25f);
 		if(on && !world.isRemote) {
-			HashSet<BlockPos> toUpdate = new HashSet<BlockPos>();
+			boolean itemsMoved = false;
 			if (tank.getFluidAmount() < tank.getCapacity() && on) {
-				tryDrain(toUpdate);
+				tryDrain();
 			}
 			if (tank.getFluid() != null) {
 				int distAmount = Math.min(tank.getFluidAmount(), 120);
@@ -345,12 +349,7 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 											toAdd.amount = toEach;
 											int filled = handler.fill(toAdd, true);
 											tank.drainInternal(filled, true);
-											if (!toUpdate.contains(getPos().offset(connectedFace))) {
-												toUpdate.add(getPos().offset(connectedFace));
-											}
-											if (!toUpdate.contains(getPos())) {
-												toUpdate.add(getPos());
-											}
+											itemsMoved = true;
 										}
 									}
 								}
@@ -359,14 +358,17 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 					}
 				}
 			}
-			/*for (BlockPos aToUpdate : toUpdate) {
-				TileEntity tile = getWorld().getTileEntity(aToUpdate);
-				tile.markDirty();
-			}*/
+			if (tank.getFluid() == null)
+				itemsMoved = true;
+			if (clogged == itemsMoved) {
+				clogged = !itemsMoved;
+				markDirty();
+			}
+			from.clear();
 		}
 	}
 
-	private void tryDrain(HashSet<BlockPos> toUpdate) {
+	private void tryDrain() {
 		ArrayList<EnumFacing> connectedFaces = new ArrayList<>();
 		if (up == EnumPipeConnection.BLOCK){
             if (isConnected(EnumFacing.UP)){
@@ -411,12 +413,6 @@ public class TileEntityFluidExtractor extends TileFluidHandler implements ITileE
 							taken.amount = toFill;
 							if (toFill > 0) {
 								handler.drain(toFill, true);
-								if (!toUpdate.contains(getPos().offset(connectedFace))) {
-									toUpdate.add(getPos().offset(connectedFace));
-								}
-								if (!toUpdate.contains(getPos())) {
-									toUpdate.add(getPos());
-								}
 							}
 						}
                     }

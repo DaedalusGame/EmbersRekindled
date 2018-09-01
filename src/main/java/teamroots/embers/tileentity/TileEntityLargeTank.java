@@ -118,11 +118,14 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 		for (int i = 1; getWorld().getBlockState(getPos().add(0, i, 0)) == RegistryManager.stone_edge.getStateFromMeta(8); i ++){
 			capacity += 40000;
 		}
-		this.tank.setCapacity(capacity);
-		if (tank.getFluid() != null){
-			this.tank.setFluid(new FluidStack(tank.getFluid().getFluid(),Math.min(tank.getFluidAmount(), tank.getCapacity())));
+		if(tank.getCapacity() != capacity) {
+			this.tank.setCapacity(capacity);
+			int amount = tank.getFluidAmount();
+			if (amount > capacity) {
+				tank.drain(amount - capacity,true);
+			}
+			markDirty();
 		}
-		markDirty();
 	}
 
 	@Override

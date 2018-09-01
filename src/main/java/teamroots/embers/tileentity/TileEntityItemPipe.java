@@ -38,7 +38,8 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
         }
 	};
 	public BlockPos lastReceived = new BlockPos(0,0,0);
-	public int pressure = 0;
+	public int pressure;
+	public boolean clogged;
 	Random random = new Random();
 	
 	public EnumPipeConnection up = EnumPipeConnection.NONE, down = EnumPipeConnection.NONE, north = EnumPipeConnection.NONE, south = EnumPipeConnection.NONE, east = EnumPipeConnection.NONE, west = EnumPipeConnection.NONE;
@@ -70,6 +71,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 		tag.setInteger("lastY", this.lastReceived.getY());
 		tag.setInteger("lastZ", this.lastReceived.getZ());
 		tag.setInteger("pressure", pressure);
+		tag.setBoolean("clogged", clogged);
 		return tag;
 	}
 	
@@ -84,6 +86,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 		east = EnumPipeConnection.fromIndex(tag.getInteger("east"));
 		lastReceived = new BlockPos(tag.getInteger("lastX"),tag.getInteger("lastY"),tag.getInteger("lastZ"));
 		pressure = tag.getInteger("pressure");
+		clogged = tag.getBoolean("clogged");
 		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
 	}
 
@@ -174,7 +177,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 			return EnumPipeConnection.PIPE;
 		}
 		else if (tile instanceof TileEntityItemExtractor){
-			return EnumPipeConnection.BLOCK;
+			return EnumPipeConnection.PIPE;
 		}
 		else if (tile != null){
 			if (world.getTileEntity(pos).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Misc.getOppositeFace(side))){
@@ -296,7 +299,10 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void update() {
 		ticksExisted ++;
+		if (world.isRemote && clogged)
+			Misc.spawnClogParticles(world,pos,1, 0.25f);
 		if (ticksExisted % 1 == 0 && !world.isRemote){
+			boolean itemsMoved = false;
 			HashSet<BlockPos> toUpdate = new HashSet<>();
 			ArrayList<EnumFacing> connections = new ArrayList<EnumFacing>();
 			if (up != EnumPipeConnection.NONE && up != EnumPipeConnection.FORCENONE && up != EnumPipeConnection.LEVER && isConnected(EnumFacing.UP)){
@@ -344,6 +350,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 										if (slot != -1){
 											ItemStack added = handler.insertItem(slot, passStack, false);
 											if (added.isEmpty()){
+												itemsMoved = true;
 												ItemStack extracted = this.inventory.extractItem(0, 1, false);
 												if (!extracted.isEmpty()){
 													if (tile instanceof TileEntityItemPipe){
@@ -364,13 +371,6 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
-				/*for (BlockPos aToUpdate : toUpdate) {
-					TileEntity tile = getWorld().getTileEntity(aToUpdate);
-					tile.markDirty();
-					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
-						tile.markDirty();
-					}
-				}*/
 				if (toUpdate.size() > 0){
 					return;
 				}
@@ -396,6 +396,7 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 											ItemStack added = handler.insertItem(slot, passStack, false);
 											if (added.isEmpty()){
 												ItemStack extracted = this.inventory.extractItem(0, 1, false);
+												itemsMoved = true;
 												if (!extracted.isEmpty()){
 													if (tile instanceof TileEntityItemPipe){
 														((TileEntityItemPipe)tile).lastReceived = getPos();
@@ -415,13 +416,12 @@ public class TileEntityItemPipe extends TileEntity implements ITileEntityBase, I
 						}
 					}
 				}
-				/*for (BlockPos aToUpdate : toUpdate) {
-					TileEntity tile = getWorld().getTileEntity(aToUpdate);
-					tile.markDirty();
-					if (!getWorld().isRemote && !(tile instanceof ITileEntityBase)) {
-						tile.markDirty();
-					}
-				}*/
+			}
+			if(inventory.getStackInSlot(0).isEmpty())
+				itemsMoved = true;
+			if(clogged == itemsMoved) {
+				clogged = !itemsMoved;
+				markDirty();
 			}
 		}
 	}

@@ -115,6 +115,39 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:block.ember_transfer.relay")
     public static SoundEvent EMBER_RELAY;
 
+    @GameRegistry.ObjectHolder("embers:block.steam_engine.start_steam")
+    public static SoundEvent STEAM_ENGINE_START_STEAM;
+    @GameRegistry.ObjectHolder("embers:block.steam_engine.start_burn")
+    public static SoundEvent STEAM_ENGINE_START_BURN;
+    @GameRegistry.ObjectHolder("embers:block.steam_engine.steam_loop")
+    public static SoundEvent STEAM_ENGINE_LOOP_STEAM;
+    @GameRegistry.ObjectHolder("embers:block.steam_engine.burn_loop")
+    public static SoundEvent STEAM_ENGINE_LOOP_BURN;
+    @GameRegistry.ObjectHolder("embers:block.steam_engine.stop")
+    public static SoundEvent STEAM_ENGINE_STOP;
+
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.rupture")
+    public static SoundEvent MINI_BOILER_RUPTURE;
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.loop_slow")
+    public static SoundEvent MINI_BOILER_LOOP_SLOW;
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.loop_mid")
+    public static SoundEvent MINI_BOILER_LOOP_MID;
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.loop_fast")
+    public static SoundEvent MINI_BOILER_LOOP_FAST;
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.pressure_loop_low")
+    public static SoundEvent MINI_BOILER_PRESSURE_LOW;
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.pressure_loop_mid")
+    public static SoundEvent MINI_BOILER_PRESSURE_MID;
+    @GameRegistry.ObjectHolder("embers:block.mini_boiler.pressure_loop_high")
+    public static SoundEvent MINI_BOILER_PRESSURE_HIGH;
+
+    @GameRegistry.ObjectHolder("embers:block.pump.slow")
+    public static SoundEvent PUMP_SLOW;
+    @GameRegistry.ObjectHolder("embers:block.pump.mid")
+    public static SoundEvent PUMP_MID;
+    @GameRegistry.ObjectHolder("embers:block.pump.fast")
+    public static SoundEvent PUMP_FAST;
+
     @GameRegistry.ObjectHolder("embers:fireball.big.fire")
     public static SoundEvent FIREBALL_BIG;
     @GameRegistry.ObjectHolder("embers:fireball.big.hit")
@@ -166,6 +199,11 @@ public class SoundManager {
     public static SoundEvent CODEX_PAGE_OPEN;
     @GameRegistry.ObjectHolder("embers:item.codex.page.close")
     public static SoundEvent CODEX_PAGE_CLOSE;
+
+    @GameRegistry.ObjectHolder("embers:item.bauble.equip")
+    public static SoundEvent BAUBLE_EQUIP;
+    @GameRegistry.ObjectHolder("embers:item.bauble.unequip")
+    public static SoundEvent BAUBLE_UNEQUIP;
 
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.step")
     public static SoundEvent ANCIENT_GOLEM_STEP;
@@ -238,6 +276,24 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.ember_transfer.receive.big"));
         event.getRegistry().register(registerSound("block.ember_transfer.relay"));
 
+        event.getRegistry().register(registerSound("block.steam_engine.start_steam"));
+        event.getRegistry().register(registerSound("block.steam_engine.start_burn"));
+        event.getRegistry().register(registerSound("block.steam_engine.steam_loop"));
+        event.getRegistry().register(registerSound("block.steam_engine.burn_loop"));
+        event.getRegistry().register(registerSound("block.steam_engine.stop"));
+
+        event.getRegistry().register(registerSound("block.mini_boiler.rupture"));
+        event.getRegistry().register(registerSound("block.mini_boiler.loop_slow"));
+        event.getRegistry().register(registerSound("block.mini_boiler.loop_mid"));
+        event.getRegistry().register(registerSound("block.mini_boiler.loop_fast"));
+        event.getRegistry().register(registerSound("block.mini_boiler.pressure_loop_low"));
+        event.getRegistry().register(registerSound("block.mini_boiler.pressure_loop_mid"));
+        event.getRegistry().register(registerSound("block.mini_boiler.pressure_loop_high"));
+
+        event.getRegistry().register(registerSound("block.pump.slow"));
+        event.getRegistry().register(registerSound("block.pump.mid"));
+        event.getRegistry().register(registerSound("block.pump.fast"));
+
         event.getRegistry().register(registerSound("fireball.small.fire"));
         event.getRegistry().register(registerSound("fireball.small.hit"));
         event.getRegistry().register(registerSound("fireball.big.fire"));
@@ -266,6 +322,9 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.codex.category.unselect"));
         event.getRegistry().register(registerSound("item.codex.page.open"));
         event.getRegistry().register(registerSound("item.codex.page.close"));
+
+        event.getRegistry().register(registerSound("item.bauble.equip"));
+        event.getRegistry().register(registerSound("item.bauble.unequip"));
 
         event.getRegistry().register(registerSound("entity.ancient_golem.death"));
         event.getRegistry().register(registerSound("entity.ancient_golem.hurt"));

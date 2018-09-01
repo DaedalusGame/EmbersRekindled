@@ -20,6 +20,12 @@ archivesBaseName = "EmbersRekindled"
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+jar {
+    manifest {
+        attributes 'FMLAT': 'embers_at.cfg'
+    }
+}
+
 compileJava {
     sourceCompatibility = targetCompatibility = "1.8"
 }

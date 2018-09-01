@@ -2,11 +2,13 @@ package teamroots.embers.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.Locale;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -19,10 +21,18 @@ import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.util.sound.ItemUseSound;
 import teamroots.embers.util.sound.MachineSound;
 
+import java.util.regex.Pattern;
+
 public class ClientProxy extends CommonProxy{
 
 	public static ParticleRenderer particleRenderer = new ParticleRenderer();
-	
+
+	@Override
+	public void constructing(FMLConstructionEvent event) {
+		super.constructing(event);
+		Locale.PATTERN = Pattern.compile("%\\$1s"); //No mercy
+	}
+
 	@Override
 	public void preInit(FMLPreInitializationEvent event){
 		super.preInit(event);

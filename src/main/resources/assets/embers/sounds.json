@@ -279,6 +279,100 @@
       "embers:field_chart_loop"
     ]
   },
+  "block.steam_engine.start_steam": {
+    "category": "block",
+    "sounds": [
+      "embers:steam_engine/start_steam"
+    ]
+  },
+  "block.steam_engine.start_burn": {
+    "category": "block",
+    "sounds": [
+      "embers:steam_engine/start_burn"
+    ]
+  },
+  "block.steam_engine.steam_loop": {
+    "category": "block",
+    "sounds": [
+      "embers:steam_engine/steam_loop"
+    ]
+  },
+  "block.steam_engine.burn_loop": {
+    "category": "block",
+    "sounds": [
+      "embers:steam_engine/burn_loop"
+    ]
+  },
+  "block.steam_engine.stop": {
+    "category": "block",
+    "sounds": [
+      "embers:steam_engine/stop"
+    ]
+  },
+  "block.mini_boiler.rupture": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/rupture"
+    ]
+  },
+  "block.mini_boiler.loop_slow": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/slow_loop"
+    ]
+  },
+  "block.mini_boiler.loop_mid": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/mid_loop"
+    ]
+  },
+  "block.mini_boiler.loop_fast": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/fast_loop"
+    ]
+  },
+  "block.mini_boiler.pressure_loop_low": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/pressure_loop1"
+    ]
+  },
+  "block.mini_boiler.pressure_loop_mid": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/pressure_loop2"
+    ]
+  },
+  "block.mini_boiler.pressure_loop_high": {
+    "category": "block",
+    "sounds": [
+      "embers:mini_boiler/pressure_loop3"
+    ]
+  },
+  "block.pump.slow": {
+    "category": "block",
+    "sounds": [
+      "embers:pump/slow"
+    ]
+  },
+  "block.pump.mid": {
+    "category": "block",
+    "sounds": [
+      "embers:pump/mid1",
+      "embers:pump/mid2",
+      "embers:pump/mid3"
+    ]
+  },
+  "block.pump.fast": {
+    "category": "block",
+    "sounds": [
+      "embers:pump/fast1",
+      "embers:pump/fast2",
+      "embers:pump/fast3"
+    ]
+  },
   "block.ember_transfer.emit.small": {
     "category": "block",
     "sounds": [
@@ -464,6 +558,16 @@
       "embers:ancient_codex/category_scrape_down1",
       "embers:ancient_codex/category_scrape_down2",
       "embers:ancient_codex/category_scrape_down3"
+    ]
+  },
+  "item.bauble.equip": {
+    "sounds": [
+      "embers:bauble_equip"
+    ]
+  },
+  "item.bauble.unequip": {
+    "sounds": [
+      "embers:bauble_unequip"
     ]
   },
   "entity.ancient_golem.death": {

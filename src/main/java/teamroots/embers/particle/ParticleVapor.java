@@ -37,6 +37,7 @@ public class ParticleVapor extends Particle implements IEmberParticle{
 		this.motionX = vx*2.0f;
 		this.motionY = vy*2.0f;
 		this.motionZ = vz*2.0f;
+		this.canCollide = false;
 		this.initAlpha = a;
 		this.particleAngle = rand.nextFloat()*2.0f*(float)Math.PI;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());

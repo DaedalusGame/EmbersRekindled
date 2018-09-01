@@ -8,14 +8,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.power.IEmberCapability;
@@ -166,11 +165,28 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 							}
 						}
 					}
+					playSound(speed);
 				}
 				this.markDirty();
 			}
 		}
 		markDirty();
+	}
+
+	private void playSound(int speed) {
+		float pitch;
+		SoundEvent sound;
+		if(speed >= 20) {
+            sound = SoundManager.PUMP_FAST;
+            pitch = speed / 20f;
+        } else if(speed >= 10) {
+            sound = SoundManager.PUMP_MID;
+            pitch = speed / 10f;
+        } else {
+            sound = SoundManager.PUMP_SLOW;
+            pitch = speed;
+        }
+		world.playSound(null,pos.up(),sound, SoundCategory.BLOCKS,1.0f,pitch);
 	}
 
 	@Override

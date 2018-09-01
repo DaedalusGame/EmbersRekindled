@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,23 +22,32 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
+import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 
-public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
     public static int NORMAL_FLUID_THRESHOLD = 10;
     public static int NORMAL_FLUID_CONSUMPTION = 4;
-    public static int GAS_THRESHOLD = 40;
     public static int GAS_CONSUMPTION = 20;
     public static double MAX_POWER = 50;
 
+    public static final int SOUND_BURN = 1;
+    public static final int SOUND_STEAM = 2;
+    public static final int[] SOUND_IDS = new int[]{SOUND_BURN, SOUND_STEAM};
+
     int ticksExisted = 0;
-    int progress = 0;
+    int burnProgress = 0;
+    int steamProgress = 0;
+    HashSet<Integer> soundsPlaying = new HashSet<>();
     EnumFacing front = EnumFacing.UP;
     public FluidTank tank = new FluidTank(8000);
     public DefaultMechCapability capability = new DefaultMechCapability() {
@@ -77,7 +87,8 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         super.writeToNBT(tag);
         tag.setDouble("mech_power", capability.power);
         tag.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
-        tag.setInteger("progress", progress);
+        tag.setInteger("burnProgress", burnProgress);
+        tag.setInteger("steamProgress", steamProgress);
         tag.setInteger("front", front.getIndex());
         tag.setTag("inventory", inventory.serializeNBT());
         return tag;
@@ -86,12 +97,10 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if (tag.hasKey("mech_power"))
-            capability.power = tag.getDouble("mech_power");
+        capability.power = tag.getDouble("mech_power");
         tank.readFromNBT(tag.getCompoundTag("tank"));
-        if (tag.hasKey("progress")) {
-            progress = tag.getInteger("progress");
-        }
+        burnProgress = tag.getInteger("burnProgress");
+        steamProgress = tag.getInteger("steamProgress");
         inventory.deserializeNBT(tag.getCompoundTag("inventory"));
         front = EnumFacing.getFront(tag.getInteger("front"));
     }
@@ -189,41 +198,48 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         FluidStack fluid = tank.getFluid();
         ILiquidFuel fuelHandler = EmbersAPI.getSteamEngineFuel(fluid);
         double powerGenerated = 0;
+        if(world.isRemote) {
+            spawnParticles();
+            handleSound();
+        }
         if (fluid != null && fuelHandler != null) { //Overclocked steam power
             fluid = tank.drain(Math.min(GAS_CONSUMPTION, Math.max(fluid.amount-1,1)), false);
-            if (world.isRemote) {
-                spawnParticles(true);
-            } else {
+            if (!world.isRemote) {
+                steamProgress++;
                 powerGenerated = Misc.getDiminishedPower(fuelHandler.getPower(fluid), MAX_POWER, 1);
                 tank.drain(fluid, true);
                 markDirty();
             }
-        } else if (progress == 0) { //Otherwise try normal power generation from water and coal
-            if (!world.isRemote && !inventory.getStackInSlot(0).isEmpty() && fluid != null && fluid.getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= NORMAL_FLUID_THRESHOLD) {
-                ItemStack stack = inventory.getStackInSlot(0).copy();
-                stack.setCount(1);
-                int fuel = TileEntityFurnace.getItemBurnTime(stack);
-                if (fuel > 0) {
-                    progress = fuel;
-                    inventory.getStackInSlot(0).shrink(1);
-                    if (inventory.getStackInSlot(0).isEmpty()) {
-                        inventory.setStackInSlot(0, ItemStack.EMPTY);
-                    }
-                    markDirty();
-                }
-            }
         } else {
-            progress--;
-            if (tank.getFluidAmount() >= NORMAL_FLUID_CONSUMPTION) {
-                if (world.isRemote) {
-                    spawnParticles(false);
-                } else {
-                    tank.drain(NORMAL_FLUID_CONSUMPTION, true);
-                    powerGenerated = 20;
-                    markDirty();
+            if(steamProgress > 0) {
+                steamProgress = 0;
+                markDirty();
+            }
+            if (burnProgress == 0) { //Otherwise try normal power generation from water and coal
+                if (!world.isRemote && !inventory.getStackInSlot(0).isEmpty() && fluid != null && fluid.getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= NORMAL_FLUID_THRESHOLD) {
+                    ItemStack stack = inventory.getStackInSlot(0).copy();
+                    stack.setCount(1);
+                    int fuel = TileEntityFurnace.getItemBurnTime(stack);
+                    if (fuel > 0) {
+                        burnProgress = fuel;
+                        inventory.getStackInSlot(0).shrink(1);
+                        if (inventory.getStackInSlot(0).isEmpty()) {
+                            inventory.setStackInSlot(0, ItemStack.EMPTY);
+                        }
+                        markDirty();
+                    }
                 }
             } else {
-                progress = 0; //Waste the rest of the fuel
+                burnProgress--;
+                if (tank.getFluidAmount() >= NORMAL_FLUID_CONSUMPTION) {
+                    if (!world.isRemote) {
+                        tank.drain(NORMAL_FLUID_CONSUMPTION, true);
+                        powerGenerated = 20;
+                        markDirty();
+                    }
+                } else {
+                    burnProgress = 0; //Waste the rest of the fuel
+                }
             }
         }
 
@@ -233,7 +249,10 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         }
     }
 
-    private void spawnParticles(boolean vapor) {
+    private void spawnParticles() {
+        if(steamProgress == 0 && burnProgress == 0)
+            return;
+        boolean vapor = steamProgress > 0;
         for (int i = 0; i < 4; i++) {
             float offX = 0.09375f + 0.8125f * (float) Misc.random.nextInt(2);
             float offZ = 0.28125f + 0.4375f * (float) Misc.random.nextInt(2);
@@ -254,5 +273,48 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                         0.025f * (Misc.random.nextFloat() - 0.5f), 0.125f * (Misc.random.nextFloat()), 0.025f * (Misc.random.nextFloat() - 0.5f),
                         72, 72, 72, 0.5f, 2.0f + Misc.random.nextFloat(), 24);
         }
+    }
+
+    @Override
+    public void playSound(int id) {
+        float soundX = (float) pos.getX() + 0.5f;
+        float soundY = (float) pos.getY() + 0.5f;
+        float soundZ = (float) pos.getZ() + 0.5f;
+        switch (id) {
+            case SOUND_BURN:
+                Embers.proxy.playMachineSound(this, SOUND_BURN, SoundManager.STEAM_ENGINE_LOOP_BURN, SoundCategory.BLOCKS, true, 1.0f, 1.0f, soundX, soundY, soundZ);
+                world.playSound(soundX, soundY, soundZ, SoundManager.STEAM_ENGINE_START_BURN, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+                break;
+            case SOUND_STEAM:
+                Embers.proxy.playMachineSound(this, SOUND_STEAM, SoundManager.STEAM_ENGINE_LOOP_STEAM, SoundCategory.BLOCKS, true, 1.0f, 1.0f, soundX, soundY, soundZ);
+                world.playSound(soundX, soundY, soundZ, SoundManager.STEAM_ENGINE_START_STEAM, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+                break;
+        }
+        soundsPlaying.add(id);
+    }
+
+    @Override
+    public void stopSound(int id) {
+        world.playSound((float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f, SoundManager.STEAM_ENGINE_STOP, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+        soundsPlaying.remove(id);
+    }
+
+    @Override
+    public boolean isSoundPlaying(int id) {
+        return soundsPlaying.contains(id);
+    }
+
+    @Override
+    public int[] getSoundIDs() {
+        return SOUND_IDS;
+    }
+
+    @Override
+    public boolean shouldPlaySound(int id) {
+        switch (id) {
+            case SOUND_BURN: return burnProgress > 0;
+            case SOUND_STEAM: return steamProgress > 0;
+        }
+        return false;
     }
 }
