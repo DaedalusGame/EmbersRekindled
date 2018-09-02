@@ -107,7 +107,7 @@ fluid.gold=熔融金
 fluid.copper=熔融铜
 fluid.lead=熔融铅
 fluid.silver=熔融银
-fluid.astralite=熔融Astralite
+fluid.astralite=熔融硝酸甘油
 fluid.dawnstone=熔融黎明石
 fluid.umber_steel=熔融棕钢
 fluid.alchemical_redstone=炼金红石浆液
@@ -315,7 +315,7 @@ embers.tooltip.modifier.caster_orb=能量发射 %s
 embers.tooltip.modifier.flame_barrier=烈焰屏障 %s
 embers.tooltip.modifier.eldritch_insignia=怪诞 %s
 embers.tooltip.modifier.intelligent_apparatus=智能 %s
-embers.tooltip.modifier.diffraction=衍射  %s
+embers.tooltip.modifier.diffraction=衍射 %s
 embers.tooltip.modifier.focal_lens=聚焦 %s
 
 embers.tooltip.num1=I
