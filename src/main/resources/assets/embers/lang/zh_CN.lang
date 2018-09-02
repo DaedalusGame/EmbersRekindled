@@ -307,15 +307,15 @@ embers.tooltip.upgrade.actuator=运行速率： %.2fx
 embers.tooltip.dial.ember_multiplier=产能倍数：%.2fx
 embers.tooltip.dial.heat=热量：%.2f/%.2f
 
-embers.tooltip.modifier.superheater=过热
-embers.tooltip.modifier.jet_augment=煤渣喷气机
-embers.tooltip.modifier.blasting_core=爆破
-embers.tooltip.modifier.resonating_bell=共振
-embers.tooltip.modifier.caster_orb=能量发射
-embers.tooltip.modifier.flame_barrier=烈焰屏障
-embers.tooltip.modifier.eldritch_insignia=怪诞
-embers.tooltip.modifier.intelligent_apparatus=智能
-embers.tooltip.modifier.diffraction=衍射 %s
+embers.tooltip.modifier.superheater=过热 %s
+embers.tooltip.modifier.jet_augment=煤渣喷气机 %s
+embers.tooltip.modifier.blasting_core=爆破 %s
+embers.tooltip.modifier.resonating_bell=共振 %s
+embers.tooltip.modifier.caster_orb=能量发射 %s
+embers.tooltip.modifier.flame_barrier=烈焰屏障 %s
+embers.tooltip.modifier.eldritch_insignia=怪诞 %s
+embers.tooltip.modifier.intelligent_apparatus=智能 %s
+embers.tooltip.modifier.diffraction=衍射  %s
 embers.tooltip.modifier.focal_lens=聚焦 %s
 
 embers.tooltip.num1=I
