@@ -9,9 +9,9 @@ tile.block_mithril.name=秘银块
 tile.ore_copper.name=铜矿石
 tile.ore_lead.name=铅矿石
 tile.ore_silver.name=银矿石
-tile.block_tank.name=液体容器
+tile.block_tank.name=流体容器
 tile.block_caminite_brick.name=方镁矾砖块
-tile.pipe.name=铁管道
+tile.pipe.name=流体管道
 tile.pump.name=机械流体泵管道
 tile.block_furnace.name=熔炼炉
 tile.ember_receiver.name=灰烬能量接收器
@@ -90,16 +90,28 @@ tile.reactor.name=高温催化反应器
 tile.field_chart.name=能量波峰地形显示器
 tile.ember_pulser.name=灰烬能量喷发器
 tile.inferno_forge.name=炼狱锻造炉
+tile.axle_iron.name=铁质轴
+tile.creative_mech_source.name=创造模式机械能发生器
+tile.creative_ember_source.name=创造模式无限灰烬能量源
+tile.gearbox_frame.name=变速箱外壳
+tile.steam_engine.name=蒸汽机
+tile.mechanical_pump.name=机械泵
+tile.caminite_lever.name=方镁矾拉杆
+tile.catalytic_plug.name=催化剂插头
+tile.ember_funnel.name=灰烬能量漏斗
+tile.mini_boiler.name=微型锅炉
+tile.mech_actuator.name=机械驱动器
 
 fluid.iron=熔融铁
 fluid.gold=熔融金
 fluid.copper=熔融铜
 fluid.lead=熔融铅
 fluid.silver=熔融银
-fluid.astralite=熔融奥司脱拉特
+fluid.astralite=熔融Astralite
 fluid.dawnstone=熔融黎明石
-fluid.umberSteel=熔融棕钢
-fluid.alchemical_redstone=炼金红石
+fluid.umber_steel=熔融棕钢
+fluid.alchemical_redstone=炼金红石浆液
+fluid.steam=蒸汽
 
 item.ingot_copper.name=铜锭
 item.ingot_silver.name=银锭
@@ -128,6 +140,7 @@ item.stamp_plate.name=板模具
 item.stamp_bar_raw.name=未烧制的锭模具
 item.stamp_flat_raw.name=未烧制的平模具
 item.stamp_plate_raw.name=未烧制的板模具
+item.dust_ember.name=灰烬沙砾
 item.shard_ember.name=灰烬晶体碎片
 item.crystal_ember.name=灰烬晶体
 item.ingot_dawnstone.name=黎明石锭
@@ -198,6 +211,11 @@ item.ember_ring.name=灰烬之戒
 item.ember_belt.name=灰烬腰带
 item.ember_amulet.name=灰烬护身符
 item.ember_bulb.name=地幔灯泡
+item.gear_iron.name=铁齿轮
+item.gear_dawnstone.name=黎明石齿轮
+item.dust_metallurgic.name=冶金粉尘
+item.diffraction_barrel.name=散射枪管
+item.focal_lens.name=聚焦镜片
 
 tile.block_aluminum.name=铝块
 tile.ore_aluminum.name=铝矿石
@@ -259,30 +277,46 @@ item.shovel_tin.name=锡铲
 item.sword_tin.name=锡剑
 fluid.tin=熔融锡
 
+embers.aspect.iron=铁
+embers.aspect.copper=铜
+embers.aspect.dawnstone=黎明石
+embers.aspect.lead=铅
+embers.aspect.silver=银
+
 embers.tooltip.atmosEmber=大气灰烬：
 embers.tooltip.targetingBlock=指向定位：
 embers.tooltip.itemdial.slot=存储槽{0}
+embers.tooltip.itemdial.item=%dx %s
 embers.tooltip.itemdial.noitem=无
-embers.tooltip.emberdial.ember=灰烬能量：
-embers.tooltip.iron_accuracy=铁之误差：
-embers.tooltip.copper_accuracy=铜之误差：
-embers.tooltip.lead_accuracy=铅之误差：
-embers.tooltip.silver_accuracy=银之误差：
-embers.tooltip.dawnstone_accuracy=黎明石之误差：
+embers.tooltip.emberdial.ember=灰烬能量：%d/%d
+embers.tooltip.fluiddial.fluid=%s: %d/%d
+embers.tooltip.fluiddial.nofluid=0/%d
+embers.tooltip.side.north=北
+embers.tooltip.side.east=东
+embers.tooltip.side.south=南
+embers.tooltip.side.west=西
+embers.tooltip.side.up=顶端
+embers.tooltip.side.down=底部
+embers.tooltip.accuracy=%s之误差：%s
 embers.tooltip.inflictor=协调伤害
 embers.tooltip.tyrfing=基于目标的护甲造成伤害，护甲越高，伤害越大。
 embers.tooltip.heat_amount=热量：
 embers.tooltip.heat_level=等级：
 embers.tooltip.modifiers=附加强化：
+embers.tooltip.upgrade.actuator=运行速率： %.2fx
+embers.tooltip.dial.ember_multiplier=产能倍数：%.2fx
+embers.tooltip.dial.heat=热量：%.2f/%.2f
 
-embers.tooltip.modifier.superheater=过热 %s
-embers.tooltip.modifier.jet_augment=煤渣喷气机 %s
-embers.tooltip.modifier.blasting_core=爆破 %s
-embers.tooltip.modifier.resonating_bell=共振 %s
-embers.tooltip.modifier.caster_orb=能量发射 %s
-embers.tooltip.modifier.flame_barrier=烈焰屏障 %s
-embers.tooltip.modifier.eldritch_insignia=怪诞 %s
-embers.tooltip.modifier.intelligent_apparatus=智能 %s
+embers.tooltip.modifier.superheater=过热
+embers.tooltip.modifier.jet_augment=煤渣喷气机
+embers.tooltip.modifier.blasting_core=爆破
+embers.tooltip.modifier.resonating_bell=共振
+embers.tooltip.modifier.caster_orb=能量发射
+embers.tooltip.modifier.flame_barrier=烈焰屏障
+embers.tooltip.modifier.eldritch_insignia=怪诞
+embers.tooltip.modifier.intelligent_apparatus=智能
+embers.tooltip.modifier.diffraction=衍射 %s
+embers.tooltip.modifier.focal_lens=聚焦 %s
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II
@@ -294,7 +328,7 @@ embers.jei.recipe.stamp=冲压配方
 embers.jei.recipe.melter=熔炼配方
 embers.jei.recipe.mixer=合金配方
 embers.jei.recipe.alchemy=炼金配方
-embers.jei.recipe.dawnstone_anvil=黎明石砧合成
+embers.jei.recipe.dawnstone_anvil=黎明石砧配方
 
 entity.ancient_golem.name=太古魔像
 
@@ -365,7 +399,7 @@ embers.research.world.dials.desc=计量表是从机器中获取信息的一种�
 
 embers.research.mechanisms.melter=熔炼炉
 embers.research.mechanisms.melter.title=熔炼那些事
-embers.research.mechanisms.melter.desc=使用激活的灰烬能量，你设计了一种 可以熔炼金属的设备。熔炉会视其下 半部分的灰烬能量功率来熔炉熔炉中 的矿石或者物品。当供能后，如果物 品是可以被熔炼的，那么熔炉将会将 其熔炼为相应的液体形式，液体能被 泵出。在熔炉中放入物品的方法是： 在熔炉上方投掷物品、使用漏斗或其 他物品传输管道、或者将物品直接拿 在手中右键熔炉上方。
+embers.research.mechanisms.melter.desc=使用激活的灰烬能量，你设计了一种 可以熔炼金属的设备。熔炉会视其下 半部分的灰烬能量功率来熔炼熔炉中 的矿石或者物品。当供能后，如果物 品是可以被熔炼的，那么熔炉将会将 其熔炼为相应的液体形式，液体能被 泵出。在熔炉中放入物品的方法是： 在熔炉上方投掷物品、使用漏斗或其 他物品传输管道、或者将物品直接拿 在手中右键熔炉上方。
 
 embers.research.mechanisms.stamper=压印
 embers.research.mechanisms.stamper.title=敲平它
@@ -416,6 +450,9 @@ embers.research.mechanisms.copper_cell.title=电容器
 embers.research.mechanisms.copper_cell.desc=铁框架内放置着缠绕着的铜线圈。铜 质灰烬能量单元作为最基础的灰烬电 容，可以存储少量的灰烬能量。能量 可以使用发射器提取。在被破坏会后 它不会保存内部存储的灰烬能量，能 量会在在打破或者更换时消散。
 
 
+embers.research.metallurgy.pulser=灰烬能量喷发器
+embers.research.metallurgy.pulser.title=全功率破坏
+embers.research.metallurgy.pulser.desc=通过使用黎明石合金电镀普通的灰烬能量发射器，你可以大大的增加其传输速率。黎明石拥有对灰烬能量很强的传导性。该装置每次发射的能量是普通发射器的10倍。请注意，如果使用普通的接收器很容易就会传输饱和，溢出的灰烬能量将会浪费掉。为了解决这个问题，你已经设计出了灰烬能量漏斗，这个漏斗可以从多个来源获取灰烬能量并非常快速的将其传输进连接的设备中。
 
 embers.research.metallurgy.splitter=灰烬能量分束器
 embers.research.metallurgy.splitter.title=灰烬能量分裂法
@@ -473,6 +510,11 @@ embers.research.metallurgy.ejector=灰烬能量喷发器
 embers.research.metallurgy.ejector.title=输出增强
 embers.research.metallurgy.ejector.desc=普通的灰烬能量发射器是十分便利的 ，但是，有时你迫切需要更多的能量 吞吐。这时候，你就需要灰烬能量喷 发器。它的使用方法与灰烬能量发射 器完全相同，但是在同样的时间里， 吞吐的能量是普通的发射器的十倍。
 
+embers.research.metallurgy.catalytic_plug=催化剂插头
+embers.research.metallurgy.catalytic_plug.title=过载注入
+embers.research.metallurgy.catalytic_plug.desc=如果你等的不耐烦的话，催化器插头是一个神奇的装置。当连接到机器后，插头会使机器的运行速度提升到原来的两倍。当然，你必须从后部供入炼金红石浆液，插头才能消耗浆液运行。插头最多可以在一个机器上放置两个，使其速度提高四倍。
+
+
 
 embers.research.alchemy.waste=实验法
 embers.research.alchemy.waste.title=化学反应
@@ -501,6 +543,10 @@ embers.research.alchemy.inflictor.desc=如同黑夜般漆黑的宝石。当持�
 embers.research.alchemy.cluster=灰烬水晶簇
 embers.research.alchemy.cluster.title=纯化结晶
 embers.research.alchemy.cluster.desc=虽然你过去使用的较小的灰烬晶体非 常方便，但你很快相信你需要更多的 力量。通过将几块灰烬晶体和灰烬晶 体碎片融合在一起，你制做了灰烬水 晶簇，一种更强大的结晶。你相信这 种晶体会在未来帮你大忙。
+
+embers.research.alchemy.field_chart=能量波峰地形显示器
+embers.research.alchemy.field_chart.title=战术概貌
+embers.research.alchemy.field_chart.desc=当您唯一的测量设备是大气测量器时，找到高灰烬能量浓度的地点可能是一件很繁琐的事情。不过，似乎灰烬能量与它自身产生共鸣，通过灰烬水晶簇和合适的制造方法，你已经设计了能量波峰地形显示器，这是一个能直观显示灰烬能量高低的大型地图，其显示的面积比徒步能测量的范围大很多。
 
 embers.research.alchemy.wildfire=野火核心
 embers.research.alchemy.wildfire.title=掌控烈焰
@@ -540,7 +586,6 @@ embers.research.smithing.inferno_forge=炼狱锻造炉
 embers.research.smithing.inferno_forge.title=等级再提升！
 embers.research.smithing.inferno_forge.desc=当物品的热量条达到满值后，如果你 想要增加强化槽。就必须控温。该设 备必须在下方中央部位提供灰烬能量 才能工作。打开上方的舱口，将你热 量条满了的物品和一些灰烬晶体一起 扔入仓内，灰烬晶体越多，成功率越 大（通常低级只需要一个）。它工作 时，周围的四个孔会冒出黑烟。一旦 成功，它的舱口会出现粒子效果并自 动打开。然后，工具会弹出并获得一 个升级强化槽。有了等级的工具，升 级物品可以在黎明石砧中嵌入，直到 这个物品的等级的上限。
 
-
 embers.research.smithing.superheater=热炙器
 embers.research.smithing.superheater.title=热力上升！
 embers.research.smithing.superheater.desc=热炙器是一个简单的升级，可以应用 于积累了热量的物品。嵌入这个升级 后，所有被拥有这个升级的工具挖掘 /杀死的方块/生物的掉落都会自动 烧炼并产生相应的物品损耗。升级的 等级越高，燃烧的伤害越高。需要携 带式灰烬能量才能运作。
@@ -567,7 +612,7 @@ embers.research.smithing.eldritch_insignia.desc=当怪异标记嵌入到你的�
 
 embers.research.smithing.intelligent_apparatus=智械机关
 embers.research.smithing.intelligent_apparatus.title=堕落的智慧
-embers.research.smithing.intelligent_apparatus.desc=智械机关是一种简单的工具和武器的嵌 入升级。它可以提升使用工具和武器 而获得的经验的数量。增加的经验数 量随升级的等级增加而增加。
+embers.research.smithing.intelligent_apparatus.desc=智械机关是一种简单的防具的嵌入升级。穿着这个升级的防具可以提升获得的经验的数量。增加的经验数 量随升级的等级增加而增加。
 
 embers.research.smithing.resonating_bell=共鸣之铃
 embers.research.smithing.resonating_bell.title=共振
