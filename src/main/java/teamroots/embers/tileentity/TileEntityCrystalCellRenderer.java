@@ -26,7 +26,7 @@ public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer<Til
     public void render(TileEntityCrystalCell tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha) {
         if (tile != null) {
             random.setSeed(tile.seed);
-            float capacityFactor = 128000.0f;
+            float capacityFactor = 120000.0f;
             double emberCapacity = tile.renderCapacity;
             double lerpCapacity = emberCapacity * partialTicks + tile.renderCapacityLast * (1-partialTicks);
             int numLayers = 2 + (int) Math.floor(lerpCapacity / capacityFactor) + 1;

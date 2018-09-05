@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,7 +76,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant){
-		return enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER;
+		return enchant != Enchantments.FORTUNE && enchant != Enchantments.SILK_TOUCH && (enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER);
 	}
 	
 	@Override

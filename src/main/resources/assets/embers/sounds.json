@@ -546,6 +546,12 @@
       "embers:ancient_codex/category_close"
     ]
   },
+  "item.codex.category.switch": {
+    "sounds": [
+      "embers:ancient_codex/flip1",
+      "embers:ancient_codex/flip2"
+    ]
+  },
   "item.codex.page.open": {
     "sounds": [
       "embers:ancient_codex/page_open"
@@ -554,6 +560,12 @@
   "item.codex.page.close": {
     "sounds": [
       "embers:ancient_codex/page_close"
+    ]
+  },
+  "item.codex.page.switch": {
+    "sounds": [
+      "embers:ancient_codex/flip1",
+      "embers:ancient_codex/flip2"
     ]
   },
   "item.codex.category.select": {

@@ -43,7 +43,12 @@ import java.util.Random;
 public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
     public static final float BASE_MULTIPLIER = 1.0f;
     public static final int PROCESS_TIME = 20;
-    public IEmberCapability capability = new DefaultEmberCapability();
+    public IEmberCapability capability = new DefaultEmberCapability() {
+        @Override
+        public void onContentsChanged() {
+            TileEntityReactor.this.markDirty();
+        }
+    };
     Random random = new Random();
     int progress = -1;
 
@@ -56,7 +61,6 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
         @Override
         protected void onContentsChanged(int slot) {
             TileEntityReactor.this.markDirty();
-            capability.setEmberCapacity(64000);
         }
 
         @Override
@@ -72,6 +76,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 
     public TileEntityReactor() {
         super();
+        capability.setEmberCapacity(64000);
     }
 
     @Override

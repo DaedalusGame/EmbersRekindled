@@ -3,6 +3,7 @@ package teamroots.embers.compat;
 import mysticalmechanics.api.IGearBehavior;
 import mysticalmechanics.api.IMechCapability;
 import mysticalmechanics.api.MysticalMechanicsAPI;
+import mysticalmechanics.handler.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -26,6 +27,10 @@ import teamroots.embers.block.BlockMechActuator;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.item.ItemBase;
 import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.research.ResearchBase;
+import teamroots.embers.research.ResearchManager;
+import teamroots.embers.research.subtypes.ResearchFakePage;
+import teamroots.embers.research.subtypes.ResearchShowItem;
 import teamroots.embers.tileentity.TileEntityMechActuator;
 import teamroots.embers.tileentity.TileEntityMechActuatorRenderer;
 import teamroots.embers.tileentity.TileEntitySteamEngine;
@@ -140,5 +145,28 @@ public class MysticalMechanicsIntegration {
     public static void registerClientSide()
     {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMechActuator.class, new TileEntityMechActuatorRenderer());
+    }
+
+    public static void initMysticalMechanicsCategory() {
+        ResearchManager.gearbox = new ResearchBase("gearbox", new ItemStack(RegistryHandler.GEARBOX_FRAME), 2, 4);
+        ResearchManager.axle_iron = new ResearchBase("axle_iron", new ItemStack(RegistryHandler.IRON_AXLE), 2, 0).addAncestor(ResearchManager.gearbox);
+        ResearchManager.gear_iron = new ResearchShowItem("gear_iron", new ItemStack(RegistryHandler.IRON_GEAR), 4, 1).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryHandler.IRON_GEAR))).addAncestor(ResearchManager.gearbox)
+                .addPage(new ResearchShowItem("gear_dawnstone",new ItemStack(gear_dawnstone),0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(gear_dawnstone))));
+        ResearchManager.actuator = new ResearchBase("actuator", new ItemStack(mech_actuator), 9, 5).addAncestor(ResearchManager.gearbox)
+                .addPage(new ResearchShowItem("actuator_bore",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.ember_bore))))
+                .addPage(new ResearchShowItem("actuator_pump",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.mechanical_pump))))
+                .addPage(new ResearchShowItem("actuator_stamper",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.stamper))));
+        ResearchFakePage mechanical_mini_boiler = new ResearchFakePage(ResearchManager.mini_boiler, 12, 0);
+        ResearchManager.steam_engine = new ResearchBase("steam_engine", new ItemStack(steam_engine), 9, 2).addAncestor(ResearchManager.gearbox).addAncestor(mechanical_mini_boiler)
+                .addPage(new ResearchBase("steam_engine_overclock",ItemStack.EMPTY,0,0));
+
+
+        ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.gearbox);
+        ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.axle_iron);
+        ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.gear_iron);
+        ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.actuator);
+        ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.steam_engine);
+
+        ResearchManager.subCategoryMechanicalPower.addResearch(mechanical_mini_boiler);
     }
 }

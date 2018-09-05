@@ -195,10 +195,14 @@ public class SoundManager {
     public static SoundEvent CODEX_CATEGORY_SELECT;
     @GameRegistry.ObjectHolder("embers:item.codex.category.unselect")
     public static SoundEvent CODEX_CATEGORY_UNSELECT;
+    @GameRegistry.ObjectHolder("embers:item.codex.category.switch")
+    public static SoundEvent CODEX_CATEGORY_SWITCH;
     @GameRegistry.ObjectHolder("embers:item.codex.page.open")
     public static SoundEvent CODEX_PAGE_OPEN;
     @GameRegistry.ObjectHolder("embers:item.codex.page.close")
     public static SoundEvent CODEX_PAGE_CLOSE;
+    @GameRegistry.ObjectHolder("embers:item.codex.page.switch")
+    public static SoundEvent CODEX_PAGE_SWITCH;
 
     @GameRegistry.ObjectHolder("embers:item.bauble.equip")
     public static SoundEvent BAUBLE_EQUIP;
@@ -320,8 +324,10 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.codex.category.close"));
         event.getRegistry().register(registerSound("item.codex.category.select"));
         event.getRegistry().register(registerSound("item.codex.category.unselect"));
+        event.getRegistry().register(registerSound("item.codex.category.switch"));
         event.getRegistry().register(registerSound("item.codex.page.open"));
         event.getRegistry().register(registerSound("item.codex.page.close"));
+        event.getRegistry().register(registerSound("item.codex.page.switch"));
 
         event.getRegistry().register(registerSound("item.bauble.equip"));
         event.getRegistry().register(registerSound("item.bauble.unequip"));

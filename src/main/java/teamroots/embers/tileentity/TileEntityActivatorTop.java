@@ -28,7 +28,12 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class TileEntityActivatorTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public void onContentsChanged() {
+			TileEntityActivatorTop.this.markDirty();
+		}
+	};
 	Random random = new Random();
 	int progress = -1;
 

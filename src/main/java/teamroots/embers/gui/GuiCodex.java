@@ -26,7 +26,7 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 public class GuiCodex extends GuiScreen {
 	public double mouseX = 0;
@@ -35,8 +35,8 @@ public class GuiCodex extends GuiScreen {
 	public double smoothMouseY = 0; 
 	public int selectedIndex = -1;
 	public int selectedPageIndex = -1;
-	public int categoryIndex = -1;
-	public int researchPage = -1;
+	public ResearchCategory researchCategory;
+	public ResearchBase researchPage;
 	
 	public float ticks = 1.0f;
 	
@@ -49,6 +49,9 @@ public class GuiCodex extends GuiScreen {
 	public float[] raise = null;
 	public float[] raiseTargets = null;
 	public String[] sentences = null;
+	LinkedList<ResearchCategory> lastCategories = new LinkedList<>();
+	public boolean nextPageSelected;
+	public boolean previousPageSelected;
 	
 	public GuiCodex(){
 	}
@@ -66,6 +69,31 @@ public class GuiCodex extends GuiScreen {
 			renderTooltip = false;
 		}
 	}
+
+	public void pushLastCategory(ResearchCategory category) {
+		ListIterator<ResearchCategory> iterator = lastCategories.listIterator();
+		boolean clear = false;
+		while(iterator.hasNext()) {
+			ResearchCategory lastCategory = iterator.next();
+			if(lastCategory == category)
+				clear = true;
+			if(clear)
+				iterator.remove();
+		}
+		lastCategories.add(category);
+	}
+
+	public ResearchCategory popLastCategory() {
+		if(lastCategories.isEmpty())
+			return null;
+		return lastCategories.removeLast();
+	}
+
+	public ResearchCategory peekLastCategory() {
+		if(lastCategories.isEmpty())
+			return null;
+		return lastCategories.getLast();
+	}
 	
 	public void renderItemStackAt(ItemStack stack, int x, int y, int mouseX, int mouseY){
 		if (!stack.isEmpty()){
@@ -81,7 +109,7 @@ public class GuiCodex extends GuiScreen {
 		GlStateManager.disableLighting();
 	}
 	
-	public void renderItemStackMinusTooltipAt(ItemStack stack, int x, int y, int mouseX, int mouseY){
+	public void renderItemStackMinusTooltipAt(ItemStack stack, int x, int y){
 		if (!stack.isEmpty()){
 			RenderHelper.disableStandardItemLighting();
 			RenderHelper.enableGUIStandardItemLighting();
@@ -95,21 +123,41 @@ public class GuiCodex extends GuiScreen {
 	@Override
 	public void keyTyped(char typedChar, int keyCode) throws IOException{
 		if (keyCode == Keyboard.KEY_ESCAPE){
-			if (categoryIndex != -1){
-				if (researchPage != -1){
-					researchPage = -1;
+			if (researchCategory != null){
+				if (researchPage != null){
+					researchPage = null;
 					playSound(SoundManager.CODEX_PAGE_CLOSE);
 					return;
 				}
-				categoryIndex = -1;
-				playSound(SoundManager.CODEX_CATEGORY_CLOSE);
+				researchCategory = popLastCategory();
+				playSound(researchCategory == null ? SoundManager.CODEX_CATEGORY_CLOSE : SoundManager.CODEX_CATEGORY_SWITCH);
+				return;
+			}
+		}
+		if(researchPage != null && researchPage.hasMultiplePages()) {
+			if (keyCode == Keyboard.KEY_A) {
+				switchPreviousPage();
+				return;
+			}
+			if (keyCode == Keyboard.KEY_D) {
+				switchNextPage();
 				return;
 			}
 		}
 		super.keyTyped(typedChar, keyCode);
 	}
 
-	private void playSound(SoundEvent sound) {
+	private void switchNextPage() {
+		researchPage = researchPage.getNextPage();
+		playSound(SoundManager.CODEX_PAGE_SWITCH);
+	}
+
+	private void switchPreviousPage() {
+		researchPage = researchPage.getPreviousPage();
+		playSound(SoundManager.CODEX_PAGE_SWITCH);
+	}
+
+	public void playSound(SoundEvent sound) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound,1.0f));
 	}
 
@@ -120,13 +168,24 @@ public class GuiCodex extends GuiScreen {
 	
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton){
-		if (selectedIndex != -1 && this.categoryIndex == -1){
-			this.categoryIndex = selectedIndex;
+		if (selectedIndex != -1 && this.researchCategory == null){
+			this.researchCategory = ResearchManager.researches.get(selectedIndex);
 			playSound(SoundManager.CODEX_CATEGORY_OPEN);
 		}
-		if (selectedPageIndex != -1 && this.researchPage == -1){
-			this.researchPage = selectedPageIndex;
-			playSound(SoundManager.CODEX_PAGE_OPEN);
+		if (selectedPageIndex != -1 && this.researchPage == null){
+			ResearchBase selectedResearchPage = researchCategory.researches.get(selectedPageIndex);
+			if(selectedResearchPage.onOpen(this)) {
+				this.researchPage = selectedResearchPage;
+				playSound(SoundManager.CODEX_PAGE_OPEN);
+			}
+		}
+		if(researchPage != null && researchPage.hasMultiplePages()) {
+			if (nextPageSelected) {
+				switchNextPage();
+			}
+			else if (previousPageSelected) {
+				switchPreviousPage();
+			}
 		}
 	}
 	
@@ -148,35 +207,57 @@ public class GuiCodex extends GuiScreen {
 	
 	public static void drawTextGlowing(FontRenderer font, String s, int x, int y){
 		float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
-		RenderUtil.drawTextRGBA(font, s, x-1, y, 0, 0, 0, 64);
-		RenderUtil.drawTextRGBA(font, s, x+1, y, 0, 0, 0, 64);
-		RenderUtil.drawTextRGBA(font, s, x, y-1, 0, 0, 0, 64);
-		RenderUtil.drawTextRGBA(font, s, x, y+1, 0, 0, 0, 64);
-		RenderUtil.drawTextRGBA(font, s, x-2, y, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x+2, y, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x, y-2, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x, y+2, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x-1, y+1, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x+1, y-1, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x-1, y-1, 0, 0, 0, 40);
-		RenderUtil.drawTextRGBA(font, s, x+1, y+1, 0, 0, 0, 40);
+		String stringColorStripped = s.replaceAll(RenderUtil.COLOR_CODE_MATCHER.pattern(),"");
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-1, y, 0, 0, 0, 64);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+1, y, 0, 0, 0, 64);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y-1, 0, 0, 0, 64);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y+1, 0, 0, 0, 64);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-2, y, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+2, y, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y-2, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y+2, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-1, y+1, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+1, y-1, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-1, y-1, 0, 0, 0, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+1, y+1, 0, 0, 0, 40);
 		font.drawString(s, x, y, Misc.intColor(255, 64+(int)(64*sine), 16));
+	}
+
+	public void drawModalRectGlowing(int x, int y, int textureX, int textureY, int width, int height){
+		float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
+		GlStateManager.color(0,0,0,64f/255);
+		drawTexturedModalRect(x-1, y,textureX,textureY,width,height);
+		drawTexturedModalRect(x+1, y,textureX,textureY,width,height);
+		drawTexturedModalRect(x, y-1,textureX,textureY,width,height);
+		drawTexturedModalRect(x, y+1,textureX,textureY,width,height);
+		GlStateManager.color(0,0,0,40f/255);
+		drawTexturedModalRect(x-2, y,textureX,textureY,width,height);
+		drawTexturedModalRect( x+2, y,textureX,textureY,width,height);
+		drawTexturedModalRect( x, y-2,textureX,textureY,width,height);
+		drawTexturedModalRect(x, y+2,textureX,textureY,width,height);
+		drawTexturedModalRect( x-1, y+1,textureX,textureY,width,height);
+		drawTexturedModalRect(x+1, y-1,textureX,textureY,width,height);
+		drawTexturedModalRect( x-1, y-1,textureX,textureY,width,height);
+		drawTexturedModalRect(x+1, y+1,textureX,textureY,width,height);
+		GlStateManager.color(255f/255,(64f+64*sine)/255,16f/255,1.0f);
+		drawTexturedModalRect(x, y,textureX,textureY,width,height);
 	}
 	
 	public static void drawTextGlowingAura(FontRenderer font, String s, int x, int y){
 		float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
-		RenderUtil.drawTextRGBA(font, s, x-1, y, 255, 64+(int)(64*sine), 16, 40);
-		RenderUtil.drawTextRGBA(font, s, x+1, y, 255, 64+(int)(64*sine), 16, 40);
-		RenderUtil.drawTextRGBA(font, s, x, y-1, 255, 64+(int)(64*sine), 16, 40);
-		RenderUtil.drawTextRGBA(font, s, x, y+1, 255, 64+(int)(64*sine), 16, 40);
-		RenderUtil.drawTextRGBA(font, s, x-2, y, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x+2, y, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x, y-2, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x, y+2, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x-1, y+1, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x+1, y-1, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x-1, y-1, 255, 64+(int)(64*sine), 16, 20);
-		RenderUtil.drawTextRGBA(font, s, x+1, y+1, 255, 64+(int)(64*sine), 16, 20);
+		String stringColorStripped = s;
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-1, y, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+1, y, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y-1, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y+1, 255, 64+(int)(64*sine), 16, 40);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-2, y, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+2, y, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y-2, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x, y+2, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-1, y+1, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+1, y-1, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x-1, y-1, 255, 64+(int)(64*sine), 16, 20);
+		RenderUtil.drawTextRGBA(font, stringColorStripped, x+1, y+1, 255, 64+(int)(64*sine), 16, 20);
 		font.drawString(s, x, y, Misc.intColor(255, 64+(int)(64*sine), 16));
 	}
 	
@@ -281,7 +362,7 @@ public class GuiCodex extends GuiScreen {
 		int lastSelectedIndex = this.selectedIndex;
 		this.selectedIndex = -1;
 		this.selectedPageIndex = -1;
-		if (this.categoryIndex == -1){
+		if (this.researchCategory == null){
 			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_index.png"));
 			GlStateManager.color(1, 1, 1, 1);
 			
@@ -348,7 +429,7 @@ public class GuiCodex extends GuiScreen {
 			drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
 		}
 		else {
-			if (this.researchPage == -1){
+			if (this.researchPage == null){
 				
 				GlStateManager.enableBlend();
 				GlStateManager.disableLighting();
@@ -357,13 +438,14 @@ public class GuiCodex extends GuiScreen {
 				basePosY = (int)((float)height/2.0f)-136;
 				int basePosY2 = Math.min(height-33, basePosY+272);
 				GlStateManager.color(1, 1, 1, 1);
-				
-				ResearchCategory category = ResearchManager.researches.get(categoryIndex);
-				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getBackgroundTexture());
+
+				Minecraft.getMinecraft().getTextureManager().bindTexture(researchCategory.getBackgroundTexture());
 				
 				RenderUtil.drawTexturedModalRect(basePosX, basePosY, zLevel, 0f/256f, 0f/256f, 192f/256f, 272f/512f, 384, 272);
-				for (int i = 0; i < category.researches.size(); i ++){
-					ResearchBase r = category.researches.get(i);
+				for (int i = 0; i < researchCategory.researches.size(); i ++){
+					ResearchBase r = researchCategory.researches.get(i);
+					if (r.isHidden())
+						continue;
 					if (mouseX >= basePosX+r.x-24 && mouseY >= basePosY+r.y-24 && mouseX <= basePosX+r.x+24 && mouseY <= basePosY+r.y+24){
 						this.selectedPageIndex = i;
 						if (r.selectedAmount < 1.0f && doUpdateSynced){
@@ -420,19 +502,21 @@ public class GuiCodex extends GuiScreen {
 						}
 					}
 				}
-				for (int i = 0; i < category.researches.size(); i ++){
-					ResearchBase r = category.researches.get(i);
+				for (int i = 0; i < researchCategory.researches.size(); i ++){
+					ResearchBase r = researchCategory.researches.get(i);
+					if (r.isHidden())
+						continue;
 					Minecraft.getMinecraft().getTextureManager().bindTexture(r.getIconBackground());
 					double u = r.getIconBackgroundU();
 					double v = r.getIconBackgroundV();
 					RenderUtil.drawTexturedModalRect(basePosX+r.x-24, basePosY+r.y-24, zLevel, u, v, u + 24f/256f, v + 24f/256f, 48, 48);
-					this.renderItemStackMinusTooltipAt(r.icon, basePosX+r.x-8, basePosY+r.y-8, mouseX, mouseY);
+					this.renderItemStackMinusTooltipAt(r.getIcon(), basePosX+r.x-8, basePosY+r.y-8);
 				}
-				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getBackgroundTexture());
+				Minecraft.getMinecraft().getTextureManager().bindTexture(researchCategory.getBackgroundTexture());
 				RenderUtil.drawTexturedModalRect(basePosX, basePosY2, zLevel, 0f/256f, 272f/512f, 192f/256f,305f/512f, 384, 33);
-				for (int i = 0; i < category.researches.size(); i ++){
+				for (int i = 0; i < researchCategory.researches.size(); i ++){
 					if (i == this.selectedPageIndex){
-						drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+category.name+"."+category.researches.get(i).name), basePosX+192, basePosY2+13);
+						drawCenteredTextGlowing(this.fontRenderer, researchCategory.researches.get(i).getName(), basePosX+192, basePosY2+13);
 						GlStateManager.color(1f, 1f, 1f, 1f);
 					}
 				}
@@ -441,21 +525,32 @@ public class GuiCodex extends GuiScreen {
 				GlStateManager.enableAlpha();
 			}
 			else {
-				ResearchCategory c = ResearchManager.researches.get(this.categoryIndex);
-				ResearchBase r = c.researches.get(this.researchPage);
-
-				Minecraft.getMinecraft().getTextureManager().bindTexture(r.getBackground());
+				Minecraft.getMinecraft().getTextureManager().bindTexture(researchPage.getBackground());
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.enableBlend();
 				GlStateManager.disableLighting();
 				GlStateManager.enableAlpha();
 				this.drawTexturedModalRect(basePosX, basePosY, 0, 0, 192, 256);
 
-				drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+c.name+"."+r.name+".title"), basePosX+96, basePosY+19);
+				drawCenteredTextGlowing(this.fontRenderer, researchPage.getTitle(), basePosX+96, basePosY+19);
 				GlStateManager.color(1f, 1f, 1f, 1f);
-				List<String> strings = r.getLines(I18n.format("embers.research."+c.name+"."+r.name+".desc"), 152);
-				for (int i = 0; i < strings.size(); i ++){
-					drawTextGlowing(this.fontRenderer, strings.get(i), basePosX+20, basePosY+43+i*12);
+				researchPage.renderPageContent(this, basePosX, basePosY, fontRenderer);
+
+				if(researchPage.hasMultiplePages()) {
+					Minecraft.getMinecraft().getTextureManager().bindTexture(researchPage.getBackground());
+					nextPageSelected = false;
+					previousPageSelected = false;
+					int arrowY = basePosY + 256 - 13;
+					if(researchPage.getNextPage() != researchPage) {
+						int rightArrowX = basePosX + 192 - 9 - 8;
+						drawModalRectGlowing(rightArrowX, arrowY, 192, 24, 18, 13);
+						nextPageSelected = mouseX >= rightArrowX-3 && mouseY >= arrowY-3 && mouseX <= rightArrowX+3 + 18 && mouseY <= arrowY+3 + 13;
+					}
+					if(researchPage.getPreviousPage() != researchPage) {
+						int leftArrowX = basePosX - 9 + 8;
+						drawModalRectGlowing(leftArrowX, arrowY, 192, 24 + 13, 18, 13);
+						previousPageSelected = mouseX >= leftArrowX-3 && mouseY >= arrowY-3 && mouseX <= leftArrowX+3 + 18 && mouseY <= arrowY+3 + 13;
+					}
 				}
 			}
 		}
@@ -473,7 +568,7 @@ public class GuiCodex extends GuiScreen {
 		GlStateManager.disableAlpha();
 		GlStateManager.alphaFunc(func, ref);
 	}
-	
+
 	public void renderAura(float x, float y){
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder b = tess.getBuffer();
