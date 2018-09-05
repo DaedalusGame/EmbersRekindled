@@ -42,6 +42,7 @@ import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -311,9 +312,10 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 	@Override
 	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
 		if(BlockEmberGauge.DIAL_TYPE.equals(dialType)) {
+			DecimalFormat heatFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.heat");
 			double maxHeat = UpgradeUtil.getOtherParameter(this,"max_heat",MAX_HEAT, upgrades);
 			double heat = MathHelper.clamp(this.heat,0, maxHeat);
-			information.add(I18n.format("embers.tooltip.dial.heat",heat,maxHeat));
+			information.add(I18n.format("embers.tooltip.dial.heat",heatFormat.format(heat),heatFormat.format(maxHeat)));
 		}
 	}
 }

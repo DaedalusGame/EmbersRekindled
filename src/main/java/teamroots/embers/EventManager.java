@@ -499,7 +499,7 @@ public class EventManager {
 							int j = 0;
 							for (ModifierBase modifier : modifiers) {
 								int level = ItemModUtil.getModifierLevel(stack, modifier);
-								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier." + modifier.name,I18n.format("embers.tooltip.num" + level)), event.getX(), event.getY() + (event.getFontRenderer().FONT_HEIGHT + 1) * (i + j + 1) + 2);
+								GuiCodex.drawTextGlowingAura(event.getFontRenderer(), I18n.format("embers.tooltip.modifier." + modifier.name, getFormattedModifierLevel(level)), event.getX(), event.getY() + (event.getFontRenderer().FONT_HEIGHT + 1) * (i + j + 1) + 2);
 								j++;
 							}
 							GlStateManager.alphaFunc(func, ref);
@@ -604,6 +604,14 @@ public class EventManager {
 				}
 			}
 		}
+	}
+
+	private String getFormattedModifierLevel(int level) {
+		String key = "embers.tooltip.num" + level;
+		if(I18n.hasKey(key))
+			return I18n.format(key);
+		else
+			return I18n.format("embers.tooltip.numstop");
 	}
 
 	@SubscribeEvent

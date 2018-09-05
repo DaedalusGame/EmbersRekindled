@@ -27,6 +27,8 @@ import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.*;
 import teamroots.embers.util.OreTransmutationUtil;
 
+import java.text.DecimalFormat;
+
 public class CommonProxy {
 	public void constructing(FMLConstructionEvent event){
 		EmbersAPIImpl.init();
@@ -63,6 +65,8 @@ public class CommonProxy {
 
 		OreTransmutationUtil.init(); //oof
 	}
+
+	public DecimalFormat getDecimalFormat(String key) { return null; };
 
 	public String formatLocalize(String translationKey, Object... parameters) {
 		return null;

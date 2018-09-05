@@ -16,12 +16,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.api.block.IDial;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageTEUpdateRequest;
 import teamroots.embers.util.Misc;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +50,9 @@ public class BlockItemGauge extends BlockBaseGauge {
 	}
 
 	public static String formatItemStack(ItemStack stack) {
+		DecimalFormat stackFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.item_amount");
 		if (!stack.isEmpty())
-            return I18n.format("embers.tooltip.itemdial.item", stack.getCount(), stack.getDisplayName());
+            return I18n.format("embers.tooltip.itemdial.item", stackFormat.format(stack.getCount()), stack.getDisplayName());
         else
             return I18n.format("embers.tooltip.itemdial.noitem");
 	}

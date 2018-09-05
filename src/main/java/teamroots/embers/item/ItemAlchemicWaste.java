@@ -7,9 +7,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.alchemy.AspectList;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class ItemAlchemicWaste extends ItemBase {
@@ -45,9 +47,10 @@ public class ItemAlchemicWaste extends ItemBase {
 						(int)tagCompound.getDouble(TAG_LEAD)
 				);
 			}
+			DecimalFormat inaccuracyFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.inaccuracy");
 			//For the sake of all that is holy do not replace with collect call
 			for (String aspect : inaccuracies.getAspects()) {
-				tooltip.add(I18n.format("embers.tooltip.accuracy",I18n.format("embers.aspect."+aspect),inaccuracies.getAspect(aspect)));
+				tooltip.add(I18n.format("embers.tooltip.accuracy",I18n.format("embers.aspect."+aspect),inaccuracyFormat.format(inaccuracies.getAspect(aspect))));
 			}
 		}
 	}

@@ -6,11 +6,14 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import teamroots.embers.Embers;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.tileentity.TileEntityEmberGauge;
+import teamroots.embers.util.DecimalFormats;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BlockEmberGauge extends BlockBaseGauge {
@@ -31,7 +34,8 @@ public class BlockEmberGauge extends BlockBaseGauge {
 	}
 
 	public static String formatEmber(double ember, double emberCapacity) {
-		return I18n.format("embers.tooltip.emberdial.ember", ember, emberCapacity);
+		DecimalFormat emberFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.ember");
+		return I18n.format("embers.tooltip.emberdial.ember", emberFormat.format(ember), emberFormat.format(emberCapacity));
 	}
 
 	@Override

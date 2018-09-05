@@ -2,6 +2,7 @@ package teamroots.embers.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -18,20 +19,16 @@ import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
+import teamroots.embers.util.DecimalFormats;
 import teamroots.embers.util.sound.ItemUseSound;
 import teamroots.embers.util.sound.MachineSound;
 
+import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 public class ClientProxy extends CommonProxy{
 
 	public static ParticleRenderer particleRenderer = new ParticleRenderer();
-
-	@Override
-	public void constructing(FMLConstructionEvent event) {
-		super.constructing(event);
-		Locale.PATTERN = Pattern.compile("%\\$1s"); //No mercy
-	}
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event){
@@ -48,6 +45,8 @@ public class ClientProxy extends CommonProxy{
 			BaublesIntegration.registerClientSide();
 		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
 			MysticalMechanicsIntegration.registerClientSide();
+
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new DecimalFormats());
 	}
 	
 	@Override
@@ -63,6 +62,11 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void playMachineSound(TileEntity tile, int id, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch, float xIn, float yIn, float zIn) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(new MachineSound(tile,id,soundIn,categoryIn,repeat,volume,pitch,xIn,yIn,zIn));
+	}
+
+	@Override
+	public DecimalFormat getDecimalFormat(String key) {
+		return DecimalFormats.getDecimalFormat(key);
 	}
 
 	@Override
