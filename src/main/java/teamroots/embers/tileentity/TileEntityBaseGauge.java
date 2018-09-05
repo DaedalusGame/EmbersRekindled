@@ -45,4 +45,6 @@ public abstract class TileEntityBaseGauge extends TileEntity implements ITileEnt
     }
 
     public abstract int calculateComparatorValue(TileEntity tileEntity, EnumFacing facing);
+
+    public abstract String getDialType();
 }

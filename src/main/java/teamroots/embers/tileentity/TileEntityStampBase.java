@@ -36,7 +36,12 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	
 	public TileEntityStampBase(){
 		super();
-		tank = new FluidTank(capacity);
+		tank = new FluidTank(capacity) {
+			@Override
+			protected void onContentsChanged() {
+				TileEntityStampBase.this.markDirty();
+			}
+		};
 		tank.setTileEntity(this);
 		tank.setCanFill(true);
 		tank.setCanDrain(true);

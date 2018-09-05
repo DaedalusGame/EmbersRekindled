@@ -1,8 +1,11 @@
 package teamroots.embers.research;
 
 import net.minecraft.util.ResourceLocation;
+import teamroots.embers.util.Vec2i;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class ResearchCategory {
 	public String name = "";
@@ -10,7 +13,8 @@ public class ResearchCategory {
 	public double v = 0;
 	public ResourceLocation texture = new ResourceLocation("embers:textures/gui/codex_index.png");
 	public ResourceLocation background = new ResourceLocation("embers:textures/gui/codex_category.png");
-	public ArrayList<ResearchBase> researches = new ArrayList<ResearchBase>();
+	public ArrayList<ResearchBase> researches = new ArrayList<>();
+	public LinkedList<Vec2i> goodLocations = new LinkedList<>();
 	
 	public ResearchCategory(String name, double v){
 		this.name = name;
@@ -26,6 +30,17 @@ public class ResearchCategory {
 	public ResearchCategory addResearch(ResearchBase base){
 		researches.add(base);
 		return this;
+	}
+
+	public ResearchCategory pushGoodLocations(Vec2i... locations){
+		Collections.addAll(goodLocations, locations);
+		return this;
+	}
+
+	public Vec2i popGoodLocation(){
+		if(goodLocations.isEmpty())
+			return null;
+		return goodLocations.removeFirst();
 	}
 
 	public double getIconU() {

@@ -39,6 +39,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     public static int NORMAL_FLUID_CONSUMPTION = 4;
     public static int GAS_CONSUMPTION = 20;
     public static double MAX_POWER = 50;
+    public static int FUEL_MULTIPLIER = 2;
 
     public static final int SOUND_BURN = 1;
     public static final int SOUND_STEAM = 2;
@@ -221,7 +222,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                     stack.setCount(1);
                     int fuel = TileEntityFurnace.getItemBurnTime(stack);
                     if (fuel > 0) {
-                        burnProgress = fuel;
+                        burnProgress = fuel * FUEL_MULTIPLIER;
                         inventory.getStackInSlot(0).shrink(1);
                         if (inventory.getStackInSlot(0).isEmpty()) {
                             inventory.setStackInSlot(0, ItemStack.EMPTY);

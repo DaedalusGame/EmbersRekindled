@@ -1,6 +1,7 @@
 package teamroots.embers.power;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import teamroots.embers.Embers;
 
 public class DefaultEmberCapability implements IEmberCapability {
@@ -28,30 +29,24 @@ public class DefaultEmberCapability implements IEmberCapability {
 
 	@Override
 	public double addAmount(double value, boolean doAdd) {
-		if (ember+value > capacity){
-			double added = capacity-ember;
-			if (doAdd){
-				ember = capacity;
-			}
-			return added;
-		}
+		double added = Math.min(capacity - ember,value);
+		double newEmber = ember + added;
 		if (doAdd){
-			ember += value;
+			if(newEmber != ember)
+				onContentsChanged();
+			ember += added;
 		}
 		return value;
 	}
 
 	@Override
 	public double removeAmount(double value, boolean doRemove) {
-		if (ember-value < 0){
-			double removed = ember;
-			if (doRemove){
-				ember = 0;
-			}
-			return removed;
-		}
+		double removed = Math.min(ember,value);
+		double newEmber = ember - removed;
 		if (doRemove){
-			ember -= value;
+			if(newEmber != ember)
+				onContentsChanged();
+			ember -= removed;
 		}
 		return value;
 	}
@@ -70,5 +65,10 @@ public class DefaultEmberCapability implements IEmberCapability {
 		if (tag.hasKey(Embers.MODID+":emberCapacity")){
 			capacity = tag.getDouble(Embers.MODID+":emberCapacity");
 		}
+	}
+
+	@Override
+	public void onContentsChanged() {
+
 	}
 }

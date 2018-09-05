@@ -30,7 +30,12 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public void onContentsChanged() {
+			TileEntityBoilerTop.this.markDirty();
+		}
+	};
 	Random random = new Random();
 	int progress = -1;
 

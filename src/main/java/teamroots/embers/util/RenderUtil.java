@@ -14,10 +14,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL20;
 import teamroots.embers.EventManager;
 
+import java.util.regex.Pattern;
+
 public class RenderUtil {
 	public static int lightx = 0xF000F0;
 	public static int lighty = 0xF000F0;
     public static final float root2over2 = (float)Math.sqrt(2.0f)/2.0f;
+	public static final Pattern COLOR_CODE_MATCHER = Pattern.compile("§[0-9a-f]");
     
     public static void renderWavyEmberLine(BufferBuilder b, double x1, double y1, double x2, double y2, double thickness){
     	double angleRads = Math.atan2(y2-y1, x2-x1);

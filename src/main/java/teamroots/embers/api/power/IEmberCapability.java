@@ -11,4 +11,5 @@ public interface IEmberCapability {
 	double removeAmount(double value, boolean doRemove);
 	void writeToNBT(NBTTagCompound tag);
 	void readFromNBT(NBTTagCompound tag);
+	void onContentsChanged();
 }

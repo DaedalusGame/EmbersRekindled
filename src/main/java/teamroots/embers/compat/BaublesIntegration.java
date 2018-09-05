@@ -21,6 +21,9 @@ import teamroots.embers.item.ItemEmberBulb;
 import teamroots.embers.item.bauble.ItemEmberAmulet;
 import teamroots.embers.item.bauble.ItemEmberBelt;
 import teamroots.embers.item.bauble.ItemEmberRing;
+import teamroots.embers.research.ResearchBase;
+import teamroots.embers.research.ResearchManager;
+import teamroots.embers.research.subtypes.ResearchShowItem;
 
 public class BaublesIntegration {
     public static Item ember_amulet, ember_belt, ember_ring, mantle_bulb;
@@ -112,5 +115,15 @@ public class BaublesIntegration {
             }
         }
         return amount;
+    }
+
+    public static void initBaublesCategory() {
+        ItemStack fullBulb = ResearchManager.makeFullEmberItem(new ItemStack(mantle_bulb));
+
+        ResearchManager.cost_reduction = new ResearchShowItem("cost_reduction", new ItemStack(ember_amulet), 5, 5).addItem(new ResearchShowItem.DisplayItem(new ItemStack(ember_amulet),new ItemStack(ember_belt),new ItemStack(ember_ring)));
+        ResearchManager.mantle_bulb = new ResearchBase("mantle_bulb", fullBulb, 7, 3);
+
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.cost_reduction);
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.mantle_bulb);
     }
 }

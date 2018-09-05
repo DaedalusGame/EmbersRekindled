@@ -180,7 +180,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 					double x2 = getPos().getX() + 0.5;
 					double z2 = getPos().getZ() + 0.5;
 					float layerHeight = 0.25f;
-					float numLayers = 2 + (float) Math.floor(capability.getEmberCapacity() / 128000.0f);
+					float numLayers = 2 + (float) Math.floor(capability.getEmberCapacity() / 120000.0f);
 					float height = layerHeight * numLayers;
 					for (float i = 0; i < 72; i++) {
 						float coeff = i / 72.0f;
@@ -190,7 +190,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 				world.playSound(null, x, pos.getY() + 0.5, z, SoundManager.CRYSTAL_CELL_GROW, SoundCategory.BLOCKS, 1.0f, 1.0f + random.nextFloat());
 			}
 		}
-		float numLayers = 2+(float) Math.floor(capability.getEmberCapacity()/128000.0f);
+		float numLayers = 2+(float) Math.floor(capability.getEmberCapacity()/120000.0f);
 		for (int i = 0; i < numLayers/2; i ++){
 			float layerHeight = 0.25f;
 			float height = layerHeight*numLayers;
