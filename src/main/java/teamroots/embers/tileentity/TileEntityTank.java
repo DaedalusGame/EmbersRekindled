@@ -35,7 +35,7 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 
 			@Override
 			public int fill(FluidStack resource, boolean doFill) {
-				if(resource != null && resource.getFluid().isGaseous())
+				if(resource != null && resource.getFluid().getDensity() <= 0)
 					return resource.amount;
 				return super.fill(resource, doFill);
 			}
