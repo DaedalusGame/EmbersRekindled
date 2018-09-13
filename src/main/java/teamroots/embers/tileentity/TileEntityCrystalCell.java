@@ -44,7 +44,12 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 	public long seed = 0;
 	public double renderCapacity;
 	public double renderCapacityLast;
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public void onContentsChanged() {
+			markDirty();
+		}
+	};
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
