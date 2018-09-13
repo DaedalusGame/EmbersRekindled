@@ -30,6 +30,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageCookItemFX.MessageHolder.class,MessageCookItemFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageResonatingBellFX.MessageHolder.class,MessageResonatingBellFX.class,id ++,Side.CLIENT);
         INSTANCE.registerMessage(MessageMetallurgicDustFX.MessageHolder.class,MessageMetallurgicDustFX.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageExplosionCharmFX.MessageHolder.class,MessageExplosionCharmFX.class,id ++,Side.CLIENT);
 
         INSTANCE.registerMessage(MessageCasterOrb.MessageHolder.class,MessageCasterOrb.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);

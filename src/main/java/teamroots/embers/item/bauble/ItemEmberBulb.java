@@ -1,7 +1,6 @@
-package teamroots.embers.item;
+package teamroots.embers.item.bauble;
 
 import baubles.api.BaubleType;
-import baubles.api.IBauble;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,14 +14,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.compat.BaublesIntegration;
+import teamroots.embers.api.item.IEmberItem;
+import teamroots.embers.api.item.IHeldEmberCell;
+import teamroots.embers.api.item.IInventoryEmberCell;
 import teamroots.embers.util.Misc;
 
 import java.util.List;
 
-public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberCell, IHeldEmberCell, IEmberItem {
+public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell, IHeldEmberCell, IEmberItem {
 
 	public ItemEmberBulb() {
-		super("ember_bulb", true);
+		super("ember_bulb", BaubleType.TRINKET, true);
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 	}
@@ -177,10 +179,5 @@ public class ItemEmberBulb extends ItemBase implements IBauble, IInventoryEmberC
 			}
 			return Misc.intColor(255, 255, 255);
 		}		
-	}
-
-	@Override
-	public BaubleType getBaubleType(ItemStack arg0) {
-		return BaubleType.TRINKET;
 	}
 }

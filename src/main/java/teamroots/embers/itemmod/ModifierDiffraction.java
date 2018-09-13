@@ -3,12 +3,12 @@ package teamroots.embers.itemmod;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.itemmod.ModifierProjectileBase;
 import teamroots.embers.api.projectile.*;
 
 import java.util.ListIterator;

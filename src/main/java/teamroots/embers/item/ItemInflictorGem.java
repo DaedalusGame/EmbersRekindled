@@ -5,19 +5,20 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import teamroots.embers.SoundManager;
+import teamroots.embers.api.item.IInflictorGem;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemInflictorGem extends ItemBase {
-
+public class ItemInflictorGem extends ItemBase implements IInflictorGem {
 	public ItemInflictorGem() {
 		super("inflictor_gem",true);
 		this.setMaxStackSize(1);
@@ -30,9 +31,9 @@ public class ItemInflictorGem extends ItemBase {
 			stack.setItemDamage(0);
 			stack.getTagCompound().removeTag("type");
 			player.setHealth(player.getHealth()-10.0f);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
+		return new ActionResult<>(EnumActionResult.FAIL, stack);
 	}
 	
 	@Override
@@ -58,5 +59,30 @@ public class ItemInflictorGem extends ItemBase {
 				new ModelResourceLocation(getRegistryName().toString()+"Full"));
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().toString()+"_empty"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName().toString()+"_full"));
+	}
+
+	@Override
+	public void attuneSource(ItemStack stack, @Nullable EntityLivingBase entity, DamageSource source) {
+		String damageType = source.damageType;
+		if (damageType.compareTo("mob") != 0 && damageType.compareTo("generic") != 0 && damageType.compareTo("player") != 0 && damageType.compareTo("arrow") != 0) {
+			if(stack.hasTagCompound()) {
+				stack.setItemDamage(1);
+				stack.getTagCompound().setString("type", damageType);
+				if (entity != null)
+					entity.getEntityWorld().playSound(null, entity.posX, entity.posY, entity.posZ, SoundManager.INFLICTOR_GEM, SoundCategory.PLAYERS, 1.0f, 1.0f);
+			}
+		}
+	}
+
+	@Override
+	public String getAttunedSource(ItemStack stack) {
+		if(!stack.isEmpty() && stack.hasTagCompound() &&  stack.getTagCompound().hasKey("type"))
+			return stack.getTagCompound().getString("type");
+		return null;
+	}
+
+	@Override
+	public float getDamageResistance(ItemStack stack, float modifier) {
+		return 0.35f;
 	}
 }

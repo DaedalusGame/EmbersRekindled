@@ -216,6 +216,11 @@ item.gear_dawnstone.name=Dawnstone Gear
 item.dust_metallurgic.name=Metallurgic Dust
 item.diffraction_barrel.name=Diffraction Barrel
 item.focal_lens.name=Focal Lens
+item.explosion_charm.name=Explosion Charm
+item.nonbeliever_amulet.name=Amulet of the Heretic
+item.ashen_amulet.name=Ashen Amulet
+item.dawnstone_mail.name=Dawnstone Mail
+
 
 tile.block_aluminum.name=Aluminium Block
 tile.ore_aluminum.name=Aluminium Ore
@@ -283,10 +288,10 @@ embers.aspect.dawnstone=Dawnstone
 embers.aspect.lead=Lead
 embers.aspect.silver=Silver
 
-embers.decimal_format.ember=0.##
+embers.decimal_format.ember=0.0
 embers.decimal_format.mechanical_multiplier=0.##x
 embers.decimal_format.inaccuracy=0
-embers.decimal_format.heat=0.##
+embers.decimal_format.heat=0.00
 embers.decimal_format.item_amount=0x
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
@@ -648,6 +653,8 @@ embers.research.page.materia=Isolated Materia
 embers.research.page.materia.title=Universal Repair
 embers.research.page.materia.desc=The Isolated Materia is a peculiar material. It has the property of being able to transform into the materials of other items in certain circumstances. For your purposes at the moment, it will enable you to repair items at the Dawnstone Anvil, replacing their repair material with the Materia. You can foresee it having uses in the future as well...
 
+
+
 embers.research.page.cost_reduction=Ember Jewelry
 embers.research.page.cost_reduction.title=Cost Reduction
 embers.research.page.cost_reduction.desc=Using clockwork tools or Ember-powered weaponry can be quite cumbersome, as Mantle Jars or Cartridges need to be refilled periodically. These pieces of jewelry counteract this by reducing the amount of Ember consumed by a factor. The ring, amulet and belt all have different reduction rates, but they all stack together additively.
@@ -655,6 +662,22 @@ embers.research.page.cost_reduction.desc=Using clockwork tools or Ember-powered 
 embers.research.page.mantle_bulb=Mantle Bulb
 embers.research.page.mantle_bulb.title=Tucked Away
 embers.research.page.mantle_bulb.desc=If holding a Mantle Cartridge in your offhand or even just holding a Mantle Jar in your pack is too unwieldy for you, this bauble can help. Instead of holding it in your inventory, this Ember container can be worn in any bauble slot. This comes, however, at a vastly reduced capacity.
+
+embers.research.page.explosion_charm=Explosion Charm
+embers.research.page.explosion_charm.title=Manufacted Nethicite
+embers.research.page.explosion_charm.desc=
+
+embers.research.page.nonbeliever_amulet=Amulet of the Heretic
+embers.research.page.nonbeliever_amulet.title=And it goes away
+embers.research.page.nonbeliever_amulet.desc=
+
+embers.research.page.ashen_amulet=Ashen Amulet
+embers.research.page.ashen_amulet.title=Ashes to Ashes
+embers.research.page.ashen_amulet.desc=
+
+embers.research.page.dawnstone_mail=Dawnstone Mail
+embers.research.page.dawnstone_mail.title=Defense Position
+embers.research.page.dawnstone_mail.desc=
 
 
 

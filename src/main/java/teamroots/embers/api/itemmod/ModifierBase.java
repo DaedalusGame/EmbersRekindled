@@ -36,9 +36,9 @@ public class ModifierBase {
 			case ALL:
 				return true;
 			case TOOL_OR_ARMOR:
-				return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemHoe || item instanceof ItemArmor;
+				return isTool(item) || item instanceof ItemArmor;
 			case TOOL:
-				return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemHoe;
+				return isTool(item);
 			case ARMOR:
 				return item instanceof ItemArmor;
 			case HELMET:
@@ -52,6 +52,10 @@ public class ModifierBase {
 			default:
 				return false;
 		}
+	}
+
+	private boolean isTool(Item item) {
+		return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemHoe;
 	}
 
 	public void onApply(ItemStack stack) {

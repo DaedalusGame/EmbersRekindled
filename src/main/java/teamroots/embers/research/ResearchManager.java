@@ -10,7 +10,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
-import teamroots.embers.item.IEmberItem;
+import teamroots.embers.api.item.IEmberItem;
 import teamroots.embers.research.subtypes.ResearchShowItem;
 import teamroots.embers.research.subtypes.ResearchSwitchCategory;
 import teamroots.embers.research.subtypes.ResearchFakePage;
@@ -38,7 +38,7 @@ public class ResearchManager {
     public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core; //WEAPON AUGMENTS
     public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier; //ARMOR_AUGMENTS
     public static ResearchBase diffraction_barrel, focal_lens; //PROJECTILE_AUGMENTS
-    public static ResearchBase cost_reduction, mantle_bulb; //BAUBLE
+    public static ResearchBase cost_reduction, mantle_bulb, explosion_charm, nonbeliever_amulet, ashen_amulet, dawnstone_mail; //BAUBLE
     public static ResearchBase gearbox, axle_iron, gear_iron, actuator, steam_engine; //MECHANICAL POWER
 
     public static ResearchCategory categoryWorld;

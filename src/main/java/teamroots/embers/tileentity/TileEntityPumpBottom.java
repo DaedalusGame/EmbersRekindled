@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -152,7 +153,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 				int speed = (int) UpgradeUtil.getTotalSpeedModifier(this, upgrades);
 				this.progress += speed;
 				this.totalProgress += speed;
-				capability.removeAmount(emberCost, false);
+				capability.removeAmount(emberCost, true);
 				if (this.progress > 400) {
 					progress -= 400;
 					boolean doContinue = true;
@@ -165,6 +166,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 							}
 						}
 					}
+					if(world.isRemote)
 					playSound(speed);
 				}
 				this.markDirty();
@@ -186,7 +188,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
             sound = SoundManager.PUMP_SLOW;
             pitch = speed;
         }
-		world.playSound(null,pos.up(),sound, SoundCategory.BLOCKS,1.0f,pitch);
+		world.playSound(Minecraft.getMinecraft().player,pos.up(),sound, SoundCategory.BLOCKS,1.0f,pitch);
 	}
 
 	@Override

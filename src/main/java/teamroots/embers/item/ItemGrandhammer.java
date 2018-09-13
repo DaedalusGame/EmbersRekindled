@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
 import teamroots.embers.Embers;
+import teamroots.embers.api.item.IEmberChargedTool;
 import teamroots.embers.util.EmberInventoryUtil;
 
 public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberChargedTool {

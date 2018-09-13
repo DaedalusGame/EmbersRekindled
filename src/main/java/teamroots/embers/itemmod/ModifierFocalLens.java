@@ -10,11 +10,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.itemmod.ModifierProjectileBase;
 import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.api.projectile.ProjectileFireball;
 import teamroots.embers.api.projectile.ProjectileRay;
 
-import java.awt.*;
 import java.util.ListIterator;
 
 public class ModifierFocalLens extends ModifierProjectileBase {

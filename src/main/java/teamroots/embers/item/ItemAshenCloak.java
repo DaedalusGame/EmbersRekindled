@@ -4,13 +4,18 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.api.item.IInflictorGem;
+import teamroots.embers.api.item.IInflictorGemHolder;
 import teamroots.embers.model.ModelAshenCloak;
 
-public class ItemAshenCloak extends ItemArmorBase {
+import java.util.Objects;
+
+public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder {
 
 	public ItemAshenCloak(ArmorMaterial material, int reduction, EntityEquipmentSlot slot) {
 		super(material, reduction, slot, "ashen_cloak", true);
@@ -27,17 +32,50 @@ public class ItemAshenCloak extends ItemArmorBase {
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped _default){
 		return new ModelAshenCloak(slot);
 	}
-	
-	public static float getDamageMultiplier(DamageSource source, ItemStack stack){
-		float mult = 0.0f;
-		for (int i = 1; i < 8; i ++){
-			if (stack.hasTagCompound()){
-				ItemStack gem = new ItemStack(stack.getTagCompound().getCompoundTag("gem"+i));
-				if (!gem.isEmpty() && gem.hasTagCompound() && gem.getTagCompound().hasKey("type") && gem.getTagCompound().getString("type").compareTo(source.getDamageType()) == 0) {
-					mult += 0.35f;
+
+	@Override
+	public boolean canAttachGem(ItemStack holder, ItemStack gem) {
+		return holder.getItem() instanceof IInflictorGem;
+	}
+
+	@Override
+	public void attachGem(ItemStack holder, ItemStack gem) {
+
+	}
+
+	@Override
+	public void clearGems(ItemStack holder) {
+
+	}
+
+	@Override
+	public ItemStack[] getAttachedGems(ItemStack holder) {
+		ItemStack[] stacks = new ItemStack[7];
+		for(int i = 1; i <= 7; i++) {
+			if(holder.hasTagCompound())
+				stacks[i-1] = new ItemStack(holder.getTagCompound().getCompoundTag("gem"+i));
+			else
+				stacks[i-1] = ItemStack.EMPTY;
+		}
+		return stacks;
+	}
+
+	@Override
+	public float getTotalDamageResistance(EntityLivingBase entity, DamageSource source, ItemStack holder) {
+		float reduction = 0;
+
+		if (entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemAshenCloak &&
+				entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemAshenCloak &&
+				entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemAshenCloak &&
+				entity.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemAshenCloak) {
+			for (ItemStack stack : getAttachedGems(holder)) {
+				Item item = stack.getItem();
+				if(item instanceof IInflictorGem && Objects.equals(((IInflictorGem) item).getAttunedSource(stack),source.getDamageType())) {
+					reduction += ((IInflictorGem) item).getDamageResistance(stack,reduction);
 				}
 			}
 		}
-		return Math.min(1.0f, mult);
+
+		return reduction;
 	}
 }

@@ -111,14 +111,22 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
                 for (EntityItem item : nearestItems) {
                     if (item.isDead)
                         continue;
-                    ItemStack stack = inventory.insertItem(0, item.getItem(), true);
-                    if (stack.getCount() < item.getItem().getCount() || !stack.isItemEqual(item.getItem())) {
-                        item.setItem(inventory.insertItem(0, item.getItem(), false));
-                        if (item.getItem().isEmpty()) {
-                            item.setDead();
+                    int slot = -1;
+                    for (int j = 0; j < inventory.getSlots() && slot == -1; j ++){
+                        if (inventory.insertItem(j,item.getItem(),true).isEmpty()){
+                            slot = j;
                         }
-                        if (tile instanceof TileEntityItemPipe) {
-                            ((TileEntityItemPipe) tile).lastReceived = getPos();
+                    }
+                    if (slot != -1){
+                        ItemStack added = inventory.insertItem(slot, item.getItem(), false);
+                        if (added.getCount() < item.getItem().getCount() || !added.isItemEqual(item.getItem())){
+                            item.setItem(inventory.insertItem(0, item.getItem(), false));
+                            if (item.getItem().isEmpty()) {
+                                item.setDead();
+                            }
+                            if (tile instanceof TileEntityItemPipe) {
+                                ((TileEntityItemPipe) tile).lastReceived = getPos();
+                            }
                         }
                     }
                 }

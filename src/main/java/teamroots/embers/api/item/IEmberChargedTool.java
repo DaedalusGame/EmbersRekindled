@@ -1,7 +1,7 @@
-package teamroots.embers.item;
+package teamroots.embers.api.item;
 
 import net.minecraft.item.ItemStack;
 
 public interface IEmberChargedTool {
-	public boolean hasEmber(ItemStack stack);
+	boolean hasEmber(ItemStack stack);
 }

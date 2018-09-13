@@ -15,18 +15,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.item.IEmberItem;
-import teamroots.embers.item.IInventoryEmberCell;
-import teamroots.embers.item.ItemEmberBulb;
-import teamroots.embers.item.bauble.ItemEmberAmulet;
-import teamroots.embers.item.bauble.ItemEmberBelt;
-import teamroots.embers.item.bauble.ItemEmberRing;
+import teamroots.embers.api.item.IEmberItem;
+import teamroots.embers.api.item.IInventoryEmberCell;
+import teamroots.embers.item.bauble.ItemEmberBulb;
+import teamroots.embers.item.bauble.*;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.research.subtypes.ResearchShowItem;
 
 public class BaublesIntegration {
     public static Item ember_amulet, ember_belt, ember_ring, mantle_bulb;
+    public static Item radiant_crown, rocket_booster, ashen_amulet, glimmer_charm, nonbeliever_amulet, dawnstone_mail, explosion_charm, climbers_belt, crystal_lenses;
 
     public static ResourceLocation getRL(String s){
         return new ResourceLocation(Embers.MODID,s);
@@ -70,6 +69,10 @@ public class BaublesIntegration {
         RegistryManager.items.add(ember_belt = new ItemEmberBelt("ember_belt",true));
         RegistryManager.items.add(ember_amulet = new ItemEmberAmulet("ember_amulet",true));
         RegistryManager.items.add(mantle_bulb = new ItemEmberBulb());
+        RegistryManager.items.add(dawnstone_mail = new ItemDawnstoneMail("dawnstone_mail",true));
+        RegistryManager.items.add(ashen_amulet = new ItemAshenAmulet("ashen_amulet",true));
+        RegistryManager.items.add(nonbeliever_amulet = new ItemNonbelieverAmulet("nonbeliever_amulet",true));
+        RegistryManager.items.add(explosion_charm = new ItemExplosionCharm("explosion_charm",true));
     }
 
     public static void init() {
@@ -122,8 +125,16 @@ public class BaublesIntegration {
 
         ResearchManager.cost_reduction = new ResearchShowItem("cost_reduction", new ItemStack(ember_amulet), 5, 5).addItem(new ResearchShowItem.DisplayItem(new ItemStack(ember_amulet),new ItemStack(ember_belt),new ItemStack(ember_ring)));
         ResearchManager.mantle_bulb = new ResearchBase("mantle_bulb", fullBulb, 7, 3);
+        ResearchManager.explosion_charm = new ResearchBase("explosion_charm", new ItemStack(explosion_charm), 9, 2);
+        ResearchManager.nonbeliever_amulet = new ResearchBase("nonbeliever_amulet", new ItemStack(nonbeliever_amulet), 1, 3);
+        ResearchManager.ashen_amulet = new ResearchBase("ashen_amulet", new ItemStack(ashen_amulet), 4, 3);
+        ResearchManager.dawnstone_mail = new ResearchBase("dawnstone_mail", new ItemStack(dawnstone_mail), 3, 7);
 
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.cost_reduction);
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.mantle_bulb);
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.explosion_charm);
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.nonbeliever_amulet);
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.ashen_amulet);
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.dawnstone_mail);
     }
 }

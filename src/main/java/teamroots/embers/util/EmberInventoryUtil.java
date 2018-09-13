@@ -6,9 +6,9 @@ import net.minecraftforge.common.MinecraftForge;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.api.event.EmberRemoveEvent;
 import teamroots.embers.compat.BaublesIntegration;
-import teamroots.embers.item.IEmberItem;
-import teamroots.embers.item.IHeldEmberCell;
-import teamroots.embers.item.IInventoryEmberCell;
+import teamroots.embers.api.item.IEmberItem;
+import teamroots.embers.api.item.IHeldEmberCell;
+import teamroots.embers.api.item.IInventoryEmberCell;
 
 public class EmberInventoryUtil {
 	public static double getEmberCapacityTotal(EntityPlayer player){

@@ -67,6 +67,10 @@ public class ParticleSmoke extends Particle implements IEmberParticle{
 		float lifeCoeff = (float)this.particleAge/(float)this.particleMaxAge;
 		this.particleScale = initScale-initScale*lifeCoeff;
 		this.particleAlpha = (1.0f-lifeCoeff) * initAlpha;
+		this.motionX *= 0.96D;
+		this.motionY *= 0.96D;
+		this.motionZ *= 0.96D;
+		this.motionY += 0.004D;
 	}
 
 	@Override
