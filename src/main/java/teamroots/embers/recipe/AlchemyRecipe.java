@@ -105,7 +105,7 @@ public class AlchemyRecipe implements IHasAspects {
 	}
 
 	public boolean isFailure(AlchemyResult result) {
-		return result.getAccuracy() == 1.0;
+		return result.getAccuracy() != 1.0;
 	}
 
 	public ItemStack getResult(TileEntity tile) {
