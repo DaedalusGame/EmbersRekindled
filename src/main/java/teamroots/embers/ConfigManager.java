@@ -20,13 +20,18 @@ public class ConfigManager {
 					silverVeinSize, silverMinY, silverMaxY, silverVeinsPerChunk,
 					quartzVeinSize, quartzMinY, quartzMaxY, quartzVeinsPerChunk,
 					ancientGolemSpawnWeight;
-	public static HashSet<Integer> orespawnBlacklist = new HashSet<>();
+	public static HashSet<Integer> orespawnGraylist = new HashSet<>();
 	public static boolean orespawnIsWhiteList;
 	
 	//STRUCTURES
 	public static int smallRuinChance;
-	public static HashSet<Integer> smallRuinBlacklist = new HashSet<>();
+	public static HashSet<Integer> smallRuinGraylist = new HashSet<>();
 	public static boolean smallRuinIsWhiteList;
+
+	@Deprecated
+	public static List<Integer> orespawnBlacklist = new ArrayList<>();
+	@Deprecated
+	public static List<Integer> smallRuinBlacklist = new ArrayList<>();
 	
 	//COMPAT
 	public static boolean enableNickel, enableTin, enableAluminum, enableBronze, enableElectrum;
@@ -36,8 +41,7 @@ public class ConfigManager {
 	public static boolean enableBaublesIntegration;
 	public static boolean enableMysticalMechanicsIntegration;
 
-	public static boolean isBaublesIntegrationEnabled()
-	{
+	public static boolean isBaublesIntegrationEnabled() {
 		return enableBaublesIntegration && Loader.isModLoaded("baubles");
 	}
 
@@ -59,7 +63,7 @@ public class ConfigManager {
 		config.addCustomCategoryComment("ores", "Settings related to ore generation.");
 
 		for (String s : config.getStringList("oreBlacklist", "ores", new String[]{"-1","1"}, "A list of all dimension IDs in which Embers orespawn is prohibited. Embers ores will spawn in any dimension not on this list, but only in vanilla stone.")){
-			orespawnBlacklist.add(Integer.valueOf(s));
+			orespawnGraylist.add(Integer.valueOf(s));
 		}
 		orespawnIsWhiteList = config.getBoolean("oreBlacklistIsWhitelist","ores",false,"Whether the orespawn blacklist is a whitelist.");
 		
@@ -92,7 +96,7 @@ public class ConfigManager {
 		smallRuinChance = config.getInt("smallRuinChance", "structures", 5, 0, 32767, "Spawning frequency of the small ruin structure. A value of 0 will prevent spawning altogether.");
 
 		for (String s : config.getStringList("smallRuinBlacklist", "structures", new String[]{"0"}, "A list of all dimension IDs in which Embers small ruin generation is prohibited.")){
-			smallRuinBlacklist.add(Integer.valueOf(s));
+			smallRuinGraylist.add(Integer.valueOf(s));
 		}
 		smallRuinIsWhiteList = config.getBoolean("smallRuinBlacklistIsWhitelist","structures",true,"Whether the small ruin generation blacklist is a whitelist.");
 
@@ -129,11 +133,11 @@ public class ConfigManager {
 	}
 
 	public static boolean isSmallRuinEnabled(int dimension) {
-		return smallRuinBlacklist.contains(dimension) == smallRuinIsWhiteList;
+		return !(smallRuinGraylist.contains(dimension) != smallRuinIsWhiteList || smallRuinBlacklist.contains(dimension));
 	}
 
 	public static boolean isOreSpawnEnabled(int dimension) {
-		return orespawnBlacklist.contains(dimension) == orespawnIsWhiteList;
+		return !(orespawnGraylist.contains(dimension) != orespawnIsWhiteList || orespawnBlacklist.contains(dimension));
 	}
 
 	@SubscribeEvent
