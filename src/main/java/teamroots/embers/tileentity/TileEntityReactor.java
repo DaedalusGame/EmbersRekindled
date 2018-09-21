@@ -36,6 +36,7 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -247,8 +248,9 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
     @Override
     public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
         if(BlockEmberGauge.DIAL_TYPE.equals(dialType) && Math.max(combustorMult, catalyzerMult) < 2.0f * Math.min(combustorMult, catalyzerMult)) {
+            DecimalFormat multiplierFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.ember_multiplier");
             double multiplier = BASE_MULTIPLIER + combustorMult + catalyzerMult;
-            information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplier));
+            information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplierFormat.format(multiplier)));
         }
     }
 }

@@ -1,6 +1,7 @@
 package teamroots.embers.item;
 
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -8,12 +9,14 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public abstract class ItemEmberStorage extends ItemBase {
@@ -69,8 +72,13 @@ public abstract class ItemEmberStorage extends ItemBase {
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
 		if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)){
 			IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
-			tooltip.add(""+capability.getEmber()+" / "+capability.getEmberCapacity());
+			tooltip.add(formatEmber(capability.getEmber(),capability.getEmberCapacity()));
 		}
+	}
+
+	public static String formatEmber(double ember, double emberCapacity) {
+		DecimalFormat emberFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.ember");
+		return I18n.format("embers.tooltip.item.ember", emberFormat.format(ember), emberFormat.format(emberCapacity));
 	}
 
 	@SideOnly(Side.CLIENT)

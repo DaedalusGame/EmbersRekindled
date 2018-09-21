@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
@@ -33,6 +34,7 @@ import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -193,8 +195,9 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
     @Override
     public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
         if(BlockEmberGauge.DIAL_TYPE.equals(dialType)) {
+            DecimalFormat multiplierFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.ember_multiplier");
             double multiplier = getMultiplier();
-            information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplier));
+            information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplierFormat.format(multiplier)));
         }
     }
 }

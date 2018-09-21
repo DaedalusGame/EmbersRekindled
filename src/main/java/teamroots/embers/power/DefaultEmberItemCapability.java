@@ -16,10 +16,11 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
 
     public DefaultEmberItemCapability(@Nonnull ItemStack stack, double capacity) {
         this.stack = stack;
-        if(!stack.hasTagCompound())
+        if(!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
-        setEmber(0);
-        setEmberCapacity(capacity);
+            setEmber(0);
+            setEmberCapacity(capacity);
+        }
     }
 
     @Override
@@ -70,7 +71,7 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
                 onContentsChanged();
             setEmber(ember + added);
         }
-        return value;
+        return added;
     }
 
     @Override
@@ -83,7 +84,7 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
                 onContentsChanged();
             setEmber(ember - removed);
         }
-        return value;
+        return removed;
     }
 
     @Override

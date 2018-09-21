@@ -12,6 +12,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.item.IHeldEmberCell;
 import teamroots.embers.api.item.IInventoryEmberCell;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.item.ItemEmberStorage;
 import teamroots.embers.power.DefaultEmberItemCapability;
 
 import javax.annotation.Nonnull;
@@ -77,7 +78,7 @@ public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
 		if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)){
 			IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
-			tooltip.add(""+capability.getEmber()+" / "+capability.getEmberCapacity());
+			tooltip.add(ItemEmberStorage.formatEmber(capability.getEmber(),capability.getEmberCapacity()));
 		}
 	}
 
