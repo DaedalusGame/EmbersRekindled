@@ -88,7 +88,7 @@ public class TileEntityItemPipeRenderer extends TileEntitySpecialRenderer<TileEn
 
 	private boolean shouldRenderLip(TileEntityItemPipeBase pipe, EnumFacing facing) {
 		EnumPipeConnection connection = pipe.getInternalConnection(facing);
-		return connection == EnumPipeConnection.BLOCK;
+		return connection == EnumPipeConnection.BLOCK || connection == EnumPipeConnection.LEVER;
 	}
 
 	private boolean shouldRenderPipe(TileEntityItemPipeBase pipe, EnumFacing facing) {

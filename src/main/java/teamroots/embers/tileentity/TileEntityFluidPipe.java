@@ -184,6 +184,8 @@ public class TileEntityFluidPipe extends TileEntityFluidPipeBase {
 			return ((IFluidPipeConnectable) tile).getConnection(side.getOpposite());
 		} else if (tile != null && tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())) {
 			return EnumPipeConnection.BLOCK;
+		} else if (Misc.isValidPipeConnector(world,pos,side)) {
+			return EnumPipeConnection.LEVER;
 		}
 		return EnumPipeConnection.NONE;
 	}

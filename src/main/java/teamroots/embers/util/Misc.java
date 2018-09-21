@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -53,6 +54,13 @@ public class Misc {
             EnumFacing face = state.getValue(BlockRedstoneTorch.FACING);
             return face == side;
         }
+        return false;
+    }
+
+    public static boolean isValidPipeConnector(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        IBlockState state = world.getBlockState(pos);
+        if(state.getBlockFaceShape(world,pos,side.getOpposite()) == BlockFaceShape.CENTER_BIG)
+            return true;
         return false;
     }
 

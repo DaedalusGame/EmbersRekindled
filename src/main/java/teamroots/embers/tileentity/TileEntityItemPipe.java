@@ -188,6 +188,8 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
             return ((IItemPipeConnectable) tile).getConnection(side.getOpposite());
         } else if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite())) {
             return EnumPipeConnection.BLOCK;
+        } else if (Misc.isValidPipeConnector(world,pos,side)) {
+            return EnumPipeConnection.LEVER;
         }
         return EnumPipeConnection.NONE;
     }
