@@ -79,4 +79,23 @@ processResources {
     }
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            if (project.hasProperty("local_maven") || project.hasProperty("maven_pass")) {
+                if (project.hasProperty("maven_pass")) {
+                    println "Uploading to remote maven."
+                    repository(url: "http://maven_upload.covers1624.net/") {
+                        authentication(userName: "bordlistian", password: project.getProperty("maven_pass"))
+                    }
+                }
+                pom {
+                    groupId = project.group
+                    artifactId = project.archivesBaseName
+                }
+            }
+        }
+    }
+}
+
 idea { module { inheritOutputDirs = true } }

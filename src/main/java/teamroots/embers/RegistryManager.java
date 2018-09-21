@@ -81,6 +81,7 @@ public class RegistryManager {
 	public static Block ember_funnel;
 	public static Block block_alchemical_redstone;
 	public static Block mini_boiler;
+	public static Block fluid_transfer;
 	
 	public static Fluid fluid_steam, fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
 						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
@@ -229,6 +230,7 @@ public class RegistryManager {
 		blocks.add(catalytic_plug = (new BlockCatalyticPlug(Material.ROCK,"catalytic_plug",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ember_funnel = (new BlockEmberFunnel(Material.IRON,"ember_funnel",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(mini_boiler = (new BlockMiniBoiler(Material.IRON,"mini_boiler",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(fluid_transfer = (new BlockFluidTransfer(Material.ROCK, "fluid_transfer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 
 		if (ConfigManager.enableAluminum){
 			blocks.add(block_aluminum = (new BlockBase(Material.ROCK,"block_aluminum",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
@@ -542,6 +544,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityMiniBoiler.class, Embers.MODID+":tile_entity_mini_boiler");
 		GameRegistry.registerTileEntity(TileEntityEmberGauge.class, Embers.MODID+":tile_entity_ember_gauge");
 		GameRegistry.registerTileEntity(TileEntityFluidGauge.class, Embers.MODID+":tile_entity_fluid_gauge");
+		GameRegistry.registerTileEntity(TileEntityFluidTransfer.class, Embers.MODID+":tile_entity_fluid_transfer");
 	}
 
 	private static void registerCapabilities() {
@@ -699,6 +702,7 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPulser.class, new TileEntityPulserRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfernoForgeOpening.class, new TileEntityInfernoForgeOpeningRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPumpBottom.class, new TileEntityPumpRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFluidTransfer.class, new TileEntityFluidTransferRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));

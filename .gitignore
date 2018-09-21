@@ -21,3 +21,4 @@ build
 eclipse
 run
 classes
+/gradle/gradle.properties

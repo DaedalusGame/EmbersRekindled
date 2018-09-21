@@ -4,64 +4,55 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.EventManager;
-import teamroots.embers.block.BlockItemTransfer;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import teamroots.embers.block.BlockFluidTransfer;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
-public class TileEntityItemTransfer extends TileEntityItemPipeBase {
+public class TileEntityFluidTransfer extends TileEntityFluidPipeBase {
     public static final int PRIORITY_TRANSFER = -10;
-    double angle = 0;
-    double turnRate = 1;
-    public ItemStack filterItem = ItemStack.EMPTY;
+    public FluidStack filterFluid = null;
     Random random = new Random();
     boolean syncFilter;
-    IItemHandler outputSide;
+    IFluidHandler outputSide;
 
-    public TileEntityItemTransfer() {
+    public TileEntityFluidTransfer() {
         super();
     }
 
     @Override
-    protected void initInventory() {
-        inventory = new ItemStackHandler(1) {
+    protected void initFluidTank() {
+        tank = new FluidTank(getCapacity()) {
             @Override
-            protected void onContentsChanged(int slot) {
+            protected void onContentsChanged() {
                 markDirty();
             }
 
             @Override
-            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                if (!filterItem.isEmpty()) {
-                    if (!stack.isEmpty()) {
-                        if (filterItem.getItem() == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage()) {
-                            return super.insertItem(slot, stack, simulate);
+            public int fill(FluidStack resource, boolean doFill) {
+                if(filterFluid != null) {
+                    if(resource != null) {
+                        if (filterFluid.tag != null ? resource.isFluidEqual(filterFluid) : resource.getFluid() == filterFluid.getFluid()) {
+                            return super.fill(resource, doFill);
                         }
                     }
-                    return stack;
+                    return 0;
                 }
-                return super.insertItem(slot, stack, simulate);
+                return super.fill(resource, doFill);
             }
         };
-        outputSide = Misc.makeRestrictedItemHandler(inventory,false,true);
+        outputSide = Misc.makeRestrictedFluidHandler(tank,false,true);
     }
 
     @Override
@@ -72,8 +63,8 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
     }
 
     private void writeFilter(NBTTagCompound tag) {
-        if (!filterItem.isEmpty()) {
-            tag.setTag("filter", filterItem.writeToNBT(new NBTTagCompound()));
+        if (filterFluid != null) {
+            tag.setTag("filter", filterFluid.writeToNBT(new NBTTagCompound()));
         } else {
             tag.setString("filter", "empty");
         }
@@ -83,7 +74,7 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         if (tag.hasKey("filter")) {
-            filterItem = new ItemStack(tag.getCompoundTag("filter"));
+            filterFluid = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("filter"));
         }
     }
 
@@ -108,12 +99,12 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
 
     @Override
     int getCapacity() {
-        return 4;
+        return 240;
     }
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             if (facing == null || facing.getAxis() == getFacing().getAxis())
                 return true;
             else
@@ -124,12 +115,12 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             EnumFacing transferFacing = getFacing();
             if (facing == transferFacing)
                 return (T) this.outputSide;
             else if (facing == null || facing.getAxis() == transferFacing.getAxis())
-                return (T) this.inventory;
+                return (T) this.tank;
             else
                 return null;
         }
@@ -138,7 +129,7 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
 
     private EnumFacing getFacing() {
         IBlockState state = getWorld().getBlockState(getPos());
-        return state.getValue(BlockItemTransfer.facing);
+        return state.getValue(BlockFluidTransfer.facing);
     }
 
     @Override
@@ -146,12 +137,12 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
                             EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = player.getHeldItem(hand);
         if (!world.isRemote) {
-            if (heldItem != ItemStack.EMPTY) {
-                this.filterItem = heldItem.copy();
-                world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, true), 10);
+            if (FluidUtil.getFluidHandler(heldItem) != null) {
+                this.filterFluid = FluidUtil.getFluidContained(heldItem);
+                world.setBlockState(pos, state.withProperty(BlockFluidTransfer.filter, true), 10);
             } else {
-                this.filterItem = ItemStack.EMPTY;
-                world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, false), 10);
+                this.filterFluid = null;
+                world.setBlockState(pos, state.withProperty(BlockFluidTransfer.filter, false), 10);
             }
             syncFilter = true;
             markDirty();
@@ -168,7 +159,6 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         this.invalidate();
-        Misc.spawnInventoryInWorld(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, inventory);
         world.setTileEntity(pos, null);
     }
 
@@ -176,7 +166,6 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
     public void update() {
         if (world.isRemote && clogged)
             Misc.spawnClogParticles(world,pos,2, 0.7f);
-        angle += turnRate;
         super.update();
     }
 

@@ -5,8 +5,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -16,27 +14,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.EventManager;
-import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.block.BlockVacuum;
 import teamroots.embers.util.EnumPipeConnection;
-import teamroots.embers.util.Misc;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase, ITickable, IPressurizable, IItemPipePriority, IItemPipeConnectable {
-    double angle = 0;
-    double turnRate = 1;
-    public BlockPos lastReceived = new BlockPos(0, 0, 0);
-    public int pressure = 15;
+public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase, ITickable, IItemPipeConnectable {
     Random random = new Random();
 
     public TileEntityItemVacuum() {
@@ -46,34 +32,12 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setInteger("lastX", this.lastReceived.getX());
-        tag.setInteger("lastY", this.lastReceived.getY());
-        tag.setInteger("lastZ", this.lastReceived.getZ());
-        tag.setInteger("pressure", pressure);
         return tag;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        lastReceived = new BlockPos(tag.getInteger("lastX"), tag.getInteger("lastY"), tag.getInteger("lastZ"));
-        pressure = tag.getInteger("pressure");
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return writeToNBT(new NBTTagCompound());
-    }
-
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.getNbtCompound());
     }
 
     @Override
@@ -113,19 +77,17 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
                         continue;
                     int slot = -1;
                     for (int j = 0; j < inventory.getSlots() && slot == -1; j ++){
-                        if (inventory.insertItem(j,item.getItem(),true).isEmpty()){
+                        ItemStack added = inventory.insertItem(j, item.getItem(), true);
+                        if (added.getCount() < item.getItem().getCount() || !added.isItemEqual(item.getItem())){
                             slot = j;
                         }
                     }
                     if (slot != -1){
-                        ItemStack added = inventory.insertItem(slot, item.getItem(), false);
+                        ItemStack added = inventory.insertItem(slot, item.getItem(), true);
                         if (added.getCount() < item.getItem().getCount() || !added.isItemEqual(item.getItem())){
-                            item.setItem(inventory.insertItem(0, item.getItem(), false));
+                            item.setItem(inventory.insertItem(slot, item.getItem(), false));
                             if (item.getItem().isEmpty()) {
                                 item.setDead();
-                            }
-                            if (tile instanceof TileEntityItemPipe) {
-                                ((TileEntityItemPipe) tile).lastReceived = getPos();
                             }
                         }
                     }
@@ -135,30 +97,14 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
     }
 
     @Override
-    public int getPriority() {
-        return 1;
-    }
-
-    @Override
-    public int getPressure() {
-        return 15;
-    }
-
-    @Override
-    public void setPressure(int pressure) {
-        //
-    }
-
-    @Override
     public void markDirty() {
         super.markDirty();
-        Misc.syncTE(this);
     }
 
     @Override
     public EnumPipeConnection getConnection(EnumFacing facing) {
         IBlockState state = getWorld().getBlockState(getPos());
         EnumFacing face = state.getValue(BlockVacuum.facing);
-        return face == facing ? EnumPipeConnection.PIPE : EnumPipeConnection.NONE;
+        return face.getOpposite() == facing ? EnumPipeConnection.PIPE : EnumPipeConnection.NONE;
     }
 }

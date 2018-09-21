@@ -32,7 +32,7 @@ public class BlockActivator extends BlockTEBase {
 	public static AxisAlignedBB AABB_SIDE_NORTH = new AxisAlignedBB(0,0,0,1.0,1.0,0.25);
 	public static AxisAlignedBB AABB_SIDE_SOUTH = new AxisAlignedBB(0,0,0.75,1.0,1.0,1.0);
 	public static final PropertyBool isTop = PropertyBool.create("top");
-	
+
 	public BlockActivator(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}

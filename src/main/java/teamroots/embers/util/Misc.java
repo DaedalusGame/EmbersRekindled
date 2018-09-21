@@ -1,5 +1,6 @@
 package teamroots.embers.util;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockLever;
@@ -21,14 +22,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import teamroots.embers.particle.ParticleUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Misc {
     public static final double LOG_E = Math.log10(Math.exp(1));
@@ -294,5 +300,102 @@ public class Misc {
             float vz = zOffset * speed + random.nextFloat() * speed * 0.3f;
             ParticleUtil.spawnParticleVapor(world, pos.getX() + 0.5f + xOffset * radius, pos.getY() + 0.5f + yOffset * radius, pos.getZ() + 0.5f + zOffset * radius, vx, vy, vz, 64, 64, 64, 64, 0.2f, 3.0f, 40);
         }
+    }
+
+    public static IItemHandler makeRestrictedItemHandler(IItemHandler handler, boolean input, boolean output) {
+        return new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return handler.getSlots();
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return handler.getStackInSlot(slot);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                if(!input)
+                    return stack;
+                return handler.insertItem(slot,stack,simulate);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if(!output)
+                    return ItemStack.EMPTY;
+                return handler.extractItem(slot,amount,simulate);
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return handler.getSlotLimit(slot);
+            }
+        };
+    }
+
+    public static IFluidHandler makeRestrictedFluidHandler(IFluidHandler handler, boolean input, boolean output) {
+        return new IFluidHandler() {
+            @Override
+            public IFluidTankProperties[] getTankProperties() {
+                return handler.getTankProperties();
+            }
+
+            @Override
+            public int fill(FluidStack resource, boolean doFill) {
+                if(!input)
+                    return 0;
+                return handler.fill(resource,doFill);
+            }
+
+            @Nullable
+            @Override
+            public FluidStack drain(FluidStack resource, boolean doDrain) {
+                if(!output)
+                    return null;
+                return handler.drain(resource,doDrain);
+            }
+
+            @Nullable
+            @Override
+            public FluidStack drain(int maxDrain, boolean doDrain) {
+                if(!output)
+                    return null;
+                return handler.drain(maxDrain,doDrain);
+            }
+        };
+    }
+
+    public static RayTraceResult raytraceMultiAABB(List<AxisAlignedBB> aabbs, BlockPos pos, Vec3d start, Vec3d end) {
+        List<RayTraceResult> list = Lists.newArrayList();
+
+        list.addAll(aabbs.stream().map(axisalignedbb -> rayTrace2(pos, start, end, axisalignedbb)).collect(Collectors.toList()));
+
+        RayTraceResult raytraceresult1 = null;
+        double d1 = 0.0D;
+
+        for(RayTraceResult raytraceresult : list) {
+            if(raytraceresult != null) {
+                double d0 = raytraceresult.hitVec.squareDistanceTo(end);
+
+                if(d0 > d1) {
+                    raytraceresult1 = raytraceresult;
+                    d1 = d0;
+                }
+            }
+        }
+
+        return raytraceresult1;
+    }
+
+    private static RayTraceResult rayTrace2(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+        Vec3d vec3d = start.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
+        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
     }
 }

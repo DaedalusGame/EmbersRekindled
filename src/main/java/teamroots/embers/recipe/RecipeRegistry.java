@@ -123,7 +123,7 @@ public class RecipeRegistry {
 				'C', ingotKey,
 				'S', "stickWood"}).setMirrored(true).setRegistryName(getRL(ingotKey+"_hoe")));
 		event.getRegistry().register(new ShapelessOreRecipe(getRL(ingotKey+"_plate"),new ItemStack(plate,1),new Object[]{
-				ingotKey, ingotKey, ingotKey, ingotKey, RegistryManager.tinker_hammer}).setRegistryName(getRL(ingotKey+"_plate")));
+				ingotKey, ingotKey, RegistryManager.tinker_hammer}).setRegistryName(getRL(ingotKey+"_plate")));
 	}
 	
 	public void initOreDict(){
@@ -764,13 +764,20 @@ public class RecipeRegistry {
 				'B', RegistryManager.block_caminite_brick,
 				'S', RegistryManager.stairs_caminite_brick,
 				'X', "plateCopper"}).setRegistryName(getRL("alchemy_tablet")));
-		event.getRegistry().register(new ShapedOreRecipe(getRL("item_transfer"),new ItemStack(RegistryManager.item_transfer,2),true,new Object[]{
+		event.getRegistry().register(new ShapedOreRecipe(getRL("item_transfer"),new ItemStack(RegistryManager.item_transfer,4),true,new Object[]{
 				"PLP",
 				"ILI",
 				"I I",
 				'P', "plateLead",
 				'I', "ingotLead",
 				'L', RegistryManager.item_pipe}).setRegistryName(getRL("item_transfer")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("fluid_transfer"),new ItemStack(RegistryManager.fluid_transfer,4),true,new Object[]{
+				"PLP",
+				"ILI",
+				"I I",
+				'P', "plateIron",
+				'I', "ingotIron",
+				'L', RegistryManager.pipe}).setRegistryName(getRL("fluid_transfer")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("beam_cannon"),new ItemStack(RegistryManager.beam_cannon,1),true,new Object[]{
 				"PSP",
 				"PSP",

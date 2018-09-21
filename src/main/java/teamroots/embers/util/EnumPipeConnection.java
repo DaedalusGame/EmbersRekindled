@@ -1,17 +1,19 @@
 package teamroots.embers.util;
 
 public enum EnumPipeConnection {
-    NONE(0),
-    PIPE(1),
-    BLOCK(2),
-    LEVER(3),
-    FORCENONE(4),
-    NEIGHBORNONE(5);
+    NONE(0,false),
+    PIPE(1,true),
+    BLOCK(2,true),
+    LEVER(3,false),
+    FORCENONE(4,false),
+    NEIGHBORNONE(5,false);
 
     int index;
+    boolean canTransfer;
 
-    EnumPipeConnection(int index) {
+    EnumPipeConnection(int index, boolean canTransfer) {
         this.index = index;
+        this.canTransfer = canTransfer;
     }
 
     public static EnumPipeConnection[] VALUES = new EnumPipeConnection[]{NONE,PIPE,BLOCK,LEVER,FORCENONE,NEIGHBORNONE};
@@ -22,5 +24,9 @@ public enum EnumPipeConnection {
 
     public int getIndex() {
         return index;
+    }
+
+    public boolean canTransfer() {
+        return canTransfer;
     }
 }

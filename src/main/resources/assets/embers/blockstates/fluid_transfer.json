@@ -1,0 +1,31 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "embers:item_transfer",
+        "textures": {
+            "top": "embers:blocks/fluid_transfer_top",
+            "side": "embers:blocks/fluid_transfer_side",
+            "bottom": "embers:blocks/fluid_transfer_bottom",
+            "particle": "embers:blocks/fluid_transfer_side"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants":{
+        "inventory":[{}],
+        "facing":{
+            "up":    { "x": 180 },
+            "down":  { },
+            "south": { "x": 90 },
+            "north": { "x": 90, "y": 180 },
+            "east":  { "x": 90, "y": 270 },
+            "west":  { "x": 90, "y": 90 }
+        },
+        "filter":{
+            "true": {
+                "model": "embers:item_transfer_filtered",
+                "textures": { "side": "embers:blocks/fluid_transfer_side_filter" }
+            },
+            "false":{}
+        }
+    }
+}

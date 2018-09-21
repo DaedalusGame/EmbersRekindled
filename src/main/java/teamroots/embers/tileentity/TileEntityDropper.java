@@ -17,12 +17,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class TileEntityDropper extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityDropper extends TileEntity implements ITileEntityBase, ITickable, IItemPipeConnectable, IItemPipePriority {
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -110,5 +111,17 @@ public class TileEntityDropper extends TileEntity implements ITileEntityBase, IT
 			getWorld().spawnEntity(item);
 			//markDirty();
 		}
+	}
+
+	@Override
+	public EnumPipeConnection getConnection(EnumFacing facing) {
+		if(facing == EnumFacing.UP)
+			return EnumPipeConnection.PIPE;
+		return EnumPipeConnection.NONE;
+	}
+
+	@Override
+	public int getPriority(EnumFacing facing) {
+		return 50;
 	}
 }
