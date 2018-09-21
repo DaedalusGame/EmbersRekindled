@@ -11,9 +11,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.PipePriorityMap;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class TileEntityFluidPipeBase extends TileEntity implements ITileEntityBase, ITickable, IFluidPipeConnectable, IFluidPipePriority {
@@ -96,7 +99,7 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             boolean fluidMoved = false;
             FluidStack passStack = this.tank.drain(MAX_PUSH, false);
             if (passStack != null) {
-                TreeMultimap<Integer, EnumFacing> possibleDirections = TreeMultimap.create();
+                PipePriorityMap<Integer, EnumFacing> possibleDirections = new PipePriorityMap<>();
                 IFluidHandler[] fluidHandlers = new IFluidHandler[EnumFacing.VALUES.length];
 
                 for (EnumFacing facing : EnumFacing.VALUES) {
@@ -118,11 +121,19 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                     }
                 }
 
-                for (EnumFacing facing : possibleDirections.values()) {
-                    IFluidHandler handler = fluidHandlers[facing.getIndex()];
-                    fluidMoved = pushStack(passStack, facing, handler);
-                    if(fluidMoved)
+                for (int key : possibleDirections.keySet()) {
+                    ArrayList<EnumFacing> list = possibleDirections.get(key);
+                    for(int i = 0; i < list.size(); i++) {
+                        EnumFacing facing = list.get((i+ticksExisted) % list.size());
+                        IFluidHandler handler = fluidHandlers[facing.getIndex()];
+                        fluidMoved = pushStack(passStack, facing, handler);
+                        if(fluidMoved) {
+                            break;
+                        }
+                    }
+                    if(fluidMoved) {
                         break;
+                    }
                 }
             }
 

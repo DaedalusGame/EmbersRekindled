@@ -12,8 +12,12 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.PipePriorityMap;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NavigableSet;
 import java.util.Random;
 
 public abstract class TileEntityItemPipeBase extends TileEntity implements ITileEntityBase, ITickable, IItemPipeConnectable, IItemPipePriority {
@@ -100,7 +104,7 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
             boolean itemsMoved = false;
             ItemStack passStack = this.inventory.extractItem(0, 1, true);
             if (!passStack.isEmpty()) {
-                TreeMultimap<Integer, EnumFacing> possibleDirections = TreeMultimap.create();
+                PipePriorityMap<Integer, EnumFacing> possibleDirections = new PipePriorityMap<>();
                 IItemHandler[] itemHandlers = new IItemHandler[EnumFacing.VALUES.length];
 
                 for (EnumFacing facing : EnumFacing.VALUES) {
@@ -114,7 +118,6 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
                         int priority = PRIORITY_BLOCK;
                         if (tile instanceof IItemPipePriority)
                             priority = ((IItemPipePriority) tile).getPriority(facing.getOpposite());
-                        priority += random.nextInt(6);
                         //if (facing == EnumFacing.UP)
                         //    priority += 3; //aka go up last
                         //if (facing == EnumFacing.DOWN)
@@ -130,11 +133,19 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
                     }
                 }
 
-                for (EnumFacing facing : possibleDirections.values()) {
-                    IItemHandler handler = itemHandlers[facing.getIndex()];
-                    itemsMoved = pushStack(passStack, facing, handler);
-                    if(itemsMoved)
+                for (int key : possibleDirections.keySet()) {
+                    ArrayList<EnumFacing> list = possibleDirections.get(key);
+                    for(int i = 0; i < list.size(); i++) {
+                        EnumFacing facing = list.get((i+ticksExisted) % list.size());
+                        IItemHandler handler = itemHandlers[facing.getIndex()];
+                        itemsMoved = pushStack(passStack, facing, handler);
+                        if(itemsMoved) {
+                            break;
+                        }
+                    }
+                    if(itemsMoved) {
                         break;
+                    }
                 }
             }
 
