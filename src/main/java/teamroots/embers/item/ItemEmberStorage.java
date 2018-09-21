@@ -1,34 +1,24 @@
-package teamroots.embers.item.bauble;
+package teamroots.embers.item;
 
-import baubles.api.BaubleType;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
-import teamroots.embers.api.item.IHeldEmberCell;
-import teamroots.embers.api.item.IInventoryEmberCell;
 import teamroots.embers.api.power.IEmberCapability;
-import teamroots.embers.power.DefaultEmberItemCapability;
+import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell, IHeldEmberCell {
-	public static final double CAPACITY = 1000.0;
-
-	public ItemEmberBulb() {
-		super("ember_bulb", BaubleType.TRINKET, true);
-		this.setMaxStackSize(1);
-		this.setHasSubtypes(true);
-	}
-
-	public double getCapacity() {
-		return CAPACITY;
+public abstract class ItemEmberStorage extends ItemBase {
+	public ItemEmberStorage(String name, boolean addToTab) {
+		super(name, addToTab);
 	}
 
 	public ItemStack withFill(double ember) {
@@ -47,6 +37,8 @@ public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell
 			subItems.add(withFill(getCapacity()));
 		}
 	}
+
+	public abstract double getCapacity();
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack){
@@ -81,15 +73,22 @@ public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell
 		}
 	}
 
-	@Nullable
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-		return new EmberJarCapability(stack, getCapacity());
-	}
-
-	public static class EmberJarCapability extends DefaultEmberItemCapability implements IInventoryEmberCell, IHeldEmberCell {
-		public EmberJarCapability(@Nonnull ItemStack stack, double capacity) {
-			super(stack, capacity);
+	@SideOnly(Side.CLIENT)
+	public static class ColorHandler implements IItemColor {
+		@Override
+		public int colorMultiplier(@Nonnull ItemStack stack, int tintIndex) {
+			if (tintIndex == 1){
+				if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)){
+					IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
+					float coeff = (float)(capability.getEmber() / capability.getEmberCapacity());
+					float timerSine = ((float)Math.sin(8.0*Math.toRadians(EventManager.ticks % 360))+1.0f)/2.0f;
+					int r = (int)255.0f;
+					int g = (int)(255.0f*(1.0f-coeff) + (64.0f*timerSine+64.0f)*coeff);
+					int b = (int)(255.0f*(1.0f-coeff) + 16.0f*coeff);
+					return (r << 16) + (g << 8) + b;
+				}
+			}
+			return Misc.intColor(255, 255, 255);
 		}
 	}
 }

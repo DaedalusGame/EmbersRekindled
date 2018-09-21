@@ -2,6 +2,7 @@ package teamroots.embers.api.item;
 
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public interface IEmberItem {
 	double getEmber(ItemStack stack);
 	double getEmberCapacity(ItemStack stack);

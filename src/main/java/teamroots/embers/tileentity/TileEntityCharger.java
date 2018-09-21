@@ -25,7 +25,6 @@ import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.block.BlockItemGauge;
-import teamroots.embers.api.item.IEmberItem;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.Misc;
@@ -122,7 +121,7 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		ItemStack stack = inventory.getStackInSlot(0);
-		if (!heldItem.isEmpty() && heldItem.getItem() instanceof IEmberItem){
+		if (heldItem.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)){
 			player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 			markDirty();
 			return true;
@@ -156,16 +155,17 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 		ItemStack stack = inventory.getStackInSlot(0);
 		isWorking = false;
 
-		if (!stack.isEmpty() && capability.getEmber() > 0 && stack.getItem() instanceof IEmberItem) {
+		if (capability.getEmber() > 0 && stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
 			if(!cancel) {
+				IEmberCapability itemCapability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
 				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER;
-				double emberAdded = ((IEmberItem) stack.getItem()).addAmount(stack, Math.min(transferRate, capability.getEmber()), true);
+				double emberAdded = itemCapability.addAmount(Math.min(transferRate, capability.getEmber()), true);
 				capability.removeAmount(emberAdded, true);
 				if (emberAdded > 0)
 					isWorking = true;
 				markDirty();
-				if (getWorld().isRemote && this.capability.getEmber() > 0 && getWorld().isRemote) {
+				if (getWorld().isRemote && isWorking && this.capability.getEmber() > 0 && getWorld().isRemote) {
 					for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
 						ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 					}
@@ -215,10 +215,10 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
 		if(BlockEmberGauge.DIAL_TYPE.equals(dialType)) {
 			ItemStack stack = inventory.getStackInSlot(0);
-			if (stack.getItem() instanceof IEmberItem) {
-				IEmberItem emberItem = (IEmberItem) stack.getItem();
+			if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
+				IEmberCapability itemCapability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
 				information.add(BlockItemGauge.formatItemStack(stack));
-				information.add(BlockEmberGauge.formatEmber(emberItem.getEmber(stack),emberItem.getEmberCapacity(stack)));
+				information.add(BlockEmberGauge.formatEmber(itemCapability.getEmber(),itemCapability.getEmberCapacity()));
 			}
 		}
 	}

@@ -3,14 +3,13 @@ package teamroots.embers.research;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
-import teamroots.embers.api.item.IEmberItem;
+import teamroots.embers.item.ItemEmberStorage;
 import teamroots.embers.research.subtypes.ResearchShowItem;
 import teamroots.embers.research.subtypes.ResearchSwitchCategory;
 import teamroots.embers.research.subtypes.ResearchFakePage;
@@ -114,7 +113,7 @@ public class ResearchManager {
         pulser = new ResearchShowItem("pulser", new ItemStack(RegistryManager.ember_pulser), 0, 3.5).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_pulser))).addAncestor(crystal_cell)
                 .addPage(new ResearchShowItem("ember_funnel",new ItemStack(RegistryManager.ember_funnel),0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_funnel))));
         charger = new ResearchBase("charger", new ItemStack(RegistryManager.charger), 3, 0);
-        ItemStack fullJar = makeFullEmberItem(new ItemStack(RegistryManager.ember_jar));
+        ItemStack fullJar = ((ItemEmberStorage)RegistryManager.ember_jar).withFill(((ItemEmberStorage)RegistryManager.ember_jar).getCapacity());
         jars = new ResearchBase("jars", fullJar, 6, 1).addAncestor(charger);
         clockwork_tools = new ResearchBase("clockwork_tools", new ItemStack(RegistryManager.axe_clockwork), 2, 2).addAncestor(jars)
                 .addPage(new ResearchShowItem("clockwork_pickaxe",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.pickaxe_clockwork))))
@@ -326,14 +325,6 @@ public class ResearchManager {
         researches.add(categorySmithing);
         //researches.add(new ResearchCategory("materia", 80));
         //researches.add(new ResearchCategory("core", 96));
-    }
-
-    public static ItemStack makeFullEmberItem(ItemStack stack) {
-        stack.setTagCompound(new NBTTagCompound());
-        IEmberItem emberItem = (IEmberItem) stack.getItem();
-        emberItem.setEmberCapacity(stack, 1000.0);
-        emberItem.setEmber(stack, emberItem.getEmberCapacity(stack));
-        return stack;
     }
 
     private static ResearchBase makeCategorySwitch(ResearchCategory targetCategory, int x, int y, ItemStack icon, int u, int v) {

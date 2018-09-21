@@ -10,10 +10,11 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
+apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 
-
-version = "1.8"
+version = "1.8test"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "EmbersRekindled"
 
@@ -42,7 +43,7 @@ repositories {
     maven { url 'http://dvs1.progwml6.com/files/maven' }
     maven { url "https://maven.blamejared.com/" }
     maven { url "http://www.ryanliptak.com/maven/" }
-    maven { url "https://maven.thiakil.com/"}
+    maven { url "https://maven.thiakil.com/" }
 }
 
 dependencies {
@@ -70,7 +71,7 @@ processResources {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
 
     // copy everything else except the mcmod.info
@@ -82,17 +83,15 @@ processResources {
 uploadArchives {
     repositories {
         mavenDeployer {
-            if (project.hasProperty("local_maven") || project.hasProperty("maven_pass")) {
-                if (project.hasProperty("maven_pass")) {
-                    println "Uploading to remote maven."
-                    repository(url: "http://maven_upload.covers1624.net/") {
-                        authentication(userName: "bordlistian", password: project.getProperty("maven_pass"))
-                    }
+            if (project.hasProperty("maven_pass")) {
+                println "Uploading to remote maven."
+                repository(url: "http://maven_upload.covers1624.net/") {
+                    authentication(userName: "bordlistian", password: project.getProperty("maven_pass"))
                 }
-                pom {
-                    groupId = project.group
-                    artifactId = project.archivesBaseName
-                }
+            }
+            pom {
+                groupId = project.group
+                artifactId = project.archivesBaseName
             }
         }
     }
