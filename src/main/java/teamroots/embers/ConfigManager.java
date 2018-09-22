@@ -40,6 +40,7 @@ public class ConfigManager {
 					aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
 	public static boolean enableBaublesIntegration;
 	public static boolean enableMysticalMechanicsIntegration;
+	public static boolean pvpEverybodyIsEnemy;
 
 	public static boolean isBaublesIntegrationEnabled() {
 		return enableBaublesIntegration && Loader.isModLoaded("baubles");
@@ -125,6 +126,8 @@ public class ConfigManager {
 
 		enableBaublesIntegration = config.getBoolean("enableBaubles", "compat", true, "If true, Embers will register items, blocks and recipes providing Baubles integration.");
 		enableMysticalMechanicsIntegration = config.getBoolean("enableMysticalMechanics", "compat", true, "If true, Embers will register items, blocks and recipes providing Mystical Mechanics integration.");
+
+		pvpEverybodyIsEnemy = config.getBoolean("everybodyIsAnEnemy", "misc", false, "If true, Embers homing projectiles will go for neutral players.");
 
 		if (config.hasChanged())
 		{
