@@ -24,7 +24,12 @@ import javax.annotation.Nullable;
 
 public class TileEntityEmberFunnel extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketReceiver {
     public static final int TRANSFER_SPEED = 100; //It has 2000 capacity c'mon it needs to push super fast
-    public IEmberCapability capability = new DefaultEmberCapability();
+    public IEmberCapability capability = new DefaultEmberCapability(){
+        @Override
+        public void onContentsChanged() {
+            markDirty();
+        }
+    };
     long ticksExisted = 0L;
 
     public TileEntityEmberFunnel()

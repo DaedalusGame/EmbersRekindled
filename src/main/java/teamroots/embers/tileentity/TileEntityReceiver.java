@@ -27,7 +27,12 @@ import java.util.Random;
 public class TileEntityReceiver extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketReceiver {
 	public static final int TRANSFER_RATE = 10;
 
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability(){
+		@Override
+		public void onContentsChanged() {
+			markDirty();
+		}
+	};
 	Random random = new Random();
 	long ticksExisted = 0;
 

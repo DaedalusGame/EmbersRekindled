@@ -33,7 +33,12 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 	public static final double PULL_RATE = 100.0;
 	public static final double TRANSFER_RATE = 400.0;
 
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public void onContentsChanged() {
+			markDirty();
+		}
+	};
 	public BlockPos target = null;
 	public long ticksExisted = 0;
 	Random random = new Random();
@@ -153,7 +158,7 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 					double removed = cap.removeAmount(PULL_RATE, true);
 					capability.addAmount(removed, true);
 					//markDirty();
-					attachedTile.markDirty();
+					//attachedTile.markDirty();
 				}
 			}
 		}
