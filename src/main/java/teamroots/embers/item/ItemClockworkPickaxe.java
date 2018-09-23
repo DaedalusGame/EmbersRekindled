@@ -38,6 +38,11 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 		this.attackDamage = 6.0f;
 		this.attackSpeed = -3.0f;
 	}
+
+	@Override
+	public boolean isDamageable() {
+		return false;
+	}
 	
 	@Override
 	public boolean showDurabilityBar(ItemStack stack){

@@ -37,9 +37,14 @@ public class ItemClockworkAxe extends ItemTool implements IModeledItem, IEmberCh
 		this.attackDamage = 8.0f;
 		this.attackSpeed = -3.0f;
 	}
-	
+
 	public float getProperEfficiency(){
 		return this.efficiency;
+	}
+
+	@Override
+	public boolean isDamageable() {
+		return false;
 	}
 	
 	@Override
