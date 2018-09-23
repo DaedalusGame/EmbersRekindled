@@ -28,7 +28,7 @@ public class AnvilRepairRecipe extends DawnstoneAnvilRecipe {
         for(Item item : Item.REGISTRY) {
             ItemStack stack = item.getDefaultInstance();
             ItemStack repairStack = Misc.getRepairItem(stack);
-            if(item.getIsRepairable(stack,repairStack) && !RecipeRegistry.isBlacklistedFromRepair(stack)) {
+            if(!repairStack.isEmpty() && item.getIsRepairable(stack,repairStack) && !RecipeRegistry.isBlacklistedFromRepair(stack)) {
                 recipes.add(new AnvilRepairFakeRecipe(stack));
             }
         }
