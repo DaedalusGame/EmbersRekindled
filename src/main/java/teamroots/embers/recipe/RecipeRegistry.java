@@ -619,15 +619,15 @@ public class RecipeRegistry {
 				"P",
 				"C",
 				'P', Items.PAPER,
-				'B', Items.COMPASS,
-				'C', "ingotCopper"}).setRegistryName(getRL("ember_gauge")));
+				'B', "dustRedstone",
+				'C', "plateCopper"}).setRegistryName(getRL("ember_gauge")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("fluid_gauge"),new ItemStack(RegistryManager.fluid_gauge,1),true,new Object[]{
 				"B",
 				"P",
 				"I",
 				'P', Items.PAPER,
-				'I', "ingotIron",
-				'B', Items.COMPASS}).setRegistryName(getRL("fluid_gauge")));
+				'I', "plateIron",
+				'B', "dustRedstone"}).setRegistryName(getRL("fluid_gauge")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("block_lantern"),new ItemStack(RegistryManager.block_lantern,4),true,new Object[]{
 				"P",
 				"E",
