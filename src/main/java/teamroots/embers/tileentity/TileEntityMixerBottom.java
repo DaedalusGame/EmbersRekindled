@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -196,6 +197,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
                             isWorking = true;
                             tank.fill(output, true);
                             consumeFluids(recipe);
+                            UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
                             top.capability.removeAmount(emberCost, true);
                             markDirty();
                             top.markDirty();

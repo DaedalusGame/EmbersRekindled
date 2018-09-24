@@ -20,6 +20,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -134,6 +135,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 				if (capability.getEmber() >= emberCost) {
 					boolean cancel = UpgradeUtil.doWork(this, upgrades);
 					if(!cancel) {
+						UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
 						capability.removeAmount(emberCost, true);
 						if (world.isRemote) {
 							if (random.nextInt(20) == 0) {

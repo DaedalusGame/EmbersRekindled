@@ -23,6 +23,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -171,6 +172,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 					ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() + 0.5f, (float) getPos().getY() + 0.875f, (float) getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + random.nextFloat(), 48);
 				}
 				double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
+				UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
 				capability.removeAmount(emberCost, true);
 				if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
 					progress = 0;

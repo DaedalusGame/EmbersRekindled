@@ -20,6 +20,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.power.IEmberPacketReceiver;
 import teamroots.embers.api.tile.ISparkable;
@@ -194,6 +195,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 				}
 			}
 			PacketHandler.INSTANCE.sendToAll(new MessageBeamCannonFX(startX,startY,startZ,ray.x,ray.y,ray.z,impactDist));
+			UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, this.capability.getEmber()), upgrades);
 			this.capability.setEmber(0);
 			markDirty();
 

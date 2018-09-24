@@ -25,6 +25,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
@@ -156,6 +157,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
                 if (!cancel && !powered && this.ticksExisted >= stampTime && recipe != null) {
                     double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
                     if (this.capability.getEmber() >= emberCost) {
+                        UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
                         this.capability.removeAmount(emberCost, true);
                         if (!world.isRemote) {
                             PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().offset(face, 2).getX() + 0.5f, getPos().offset(face, 2).getY() + 1.0f, getPos().offset(face, 2).getZ() + 0.5f));

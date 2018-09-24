@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
@@ -153,6 +154,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 				int speed = (int) UpgradeUtil.getTotalSpeedModifier(this, upgrades);
 				this.progress += speed;
 				this.totalProgress += speed;
+				UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
 				capability.removeAmount(emberCost, true);
 				if (this.progress > 400) {
 					progress -= 400;

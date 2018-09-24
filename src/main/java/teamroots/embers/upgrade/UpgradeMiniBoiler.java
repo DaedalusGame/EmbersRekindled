@@ -4,6 +4,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.event.UpgradeEvent;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -28,15 +30,10 @@ public class UpgradeMiniBoiler extends DefaultUpgradeProvider {
     }
 
     @Override
-    public double transformEmberConsumption(TileEntity tile, double ember) {
-        setHeat(ember);
-        return ember;
-    }
-
-    @Override
-    public double transformEmberProduction(TileEntity tile, double ember) {
-        setHeat(ember);
-        return ember;
+    public void throwEvent(TileEntity tile, UpgradeEvent event) {
+        if(event instanceof EmberEvent) {
+            setHeat(((EmberEvent) event).getAmount());
+        }
     }
 
     public void setHeat(double heat) {

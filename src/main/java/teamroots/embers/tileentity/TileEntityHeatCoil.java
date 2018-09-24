@@ -25,6 +25,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.event.HeatCoilVisualEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraDialInformation;
@@ -174,6 +175,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 
 		double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST, upgrades);
 		if (capability.getEmber() >= emberCost){
+			UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
 			capability.removeAmount(emberCost, true);
 			if (ticksExisted % 20 == 0){
 				heat += UpgradeUtil.getOtherParameter(this,"heating_speed",HEATING_SPEED, upgrades);

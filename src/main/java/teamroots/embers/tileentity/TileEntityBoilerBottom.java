@@ -25,6 +25,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -168,13 +169,14 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
                 if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
                     progress = 0;
                     double emberValue = EmbersAPI.getEmberValue(emberStack);
-                    if (emberValue > 0 && top.capability.getEmber() < top.capability.getEmberCapacity()) {
-                        double ember = UpgradeUtil.getTotalEmberProduction(this, emberValue * getMultiplier(), upgrades);
+                    double ember = UpgradeUtil.getTotalEmberProduction(this, emberValue * getMultiplier(), upgrades);
+                    if (ember > 0 && top.capability.getEmber() + ember <= top.capability.getEmberCapacity()) {
                         tank.drain(FLUID_CONSUMED, true);
                         if (!world.isRemote) {
                             world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, SoundManager.PRESSURE_REFINERY, SoundCategory.BLOCKS, 1.0f, 1.0f);
                             PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 1.5f, getPos().getZ() + 0.5f));
                         }
+                        UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.PRODUCE, ember), upgrades);
                         top.capability.addAmount(ember, true);
                         inventory.extractItem(i, 1, false);
                         markDirty();

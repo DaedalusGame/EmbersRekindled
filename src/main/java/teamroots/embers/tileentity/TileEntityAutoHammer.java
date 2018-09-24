@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IHammerable;
@@ -126,6 +127,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 				progress--;
 				if (progress == 5) {
 					if (capability.getEmber() >= ember_cost) {
+						UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, ember_cost), upgrades);
 						capability.removeAmount(ember_cost, true);
 						hammerable.onHit(this);
 					}

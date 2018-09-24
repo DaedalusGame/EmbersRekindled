@@ -22,6 +22,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -138,6 +139,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
 			double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
 			if (!cancel && capability.getEmber() >= emberCost){
+				UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
 				capability.removeAmount(emberCost, true);
 				progress --;
 				if (getWorld().isRemote){

@@ -17,6 +17,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IEmberInjectable;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -130,6 +131,7 @@ public class TileEntityEmberInjector extends TileEntity implements ITileEntityBa
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
 			if(!cancel) {
 				((IEmberInjectable) tile).inject(this, emberCost);
+				UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
 				this.capability.removeAmount(emberCost, true);
 				isWorking = true;
 				markDirty();

@@ -23,6 +23,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -176,12 +177,13 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
                     if (inventory != null) {
                         ItemStack emberStack = inventory.getStackInSlot(i);
                         double emberValue = EmbersAPI.getEmberValue(emberStack);
-                        if (emberValue > 0 && capability.getEmber() < capability.getEmberCapacity()) {
-                            double ember = UpgradeUtil.getTotalEmberProduction(this, multiplier * emberValue, upgrades);
+                        double ember = UpgradeUtil.getTotalEmberProduction(this, multiplier * emberValue, upgrades);
+                        if (ember > 0 && capability.getEmber() + ember <= capability.getEmberCapacity()) {
                             if (!world.isRemote) {
                                 world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, SoundManager.IGNEM_REACTOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
                                 PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 0.5f, getPos().getZ() + 0.5f));
                             }
+                            UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.PRODUCE, ember), upgrades);
                             capability.addAmount(ember, true);
                             inventory.extractItem(i, 1, false);
                             markDirty();
