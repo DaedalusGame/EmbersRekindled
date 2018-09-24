@@ -46,7 +46,7 @@ public class ModifierFocalLens extends ModifierProjectileBase {
 					else if(projectile instanceof ProjectileFireball) {
 						((ProjectileFireball) projectile).setHoming(level * 10,4.0 + level * 1.0,index,modulo, Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, entity -> {
 							Entity shooter = projectile.getShooter();
-							if(entity.isOnSameTeam(shooter))
+							if(shooter != null && entity.isOnSameTeam(shooter))
 								return false;
 							if(entity instanceof EntityPlayer && shooter instanceof EntityPlayer && !isPVPEnabled(entity.getEntityWorld()))
 								return false;
