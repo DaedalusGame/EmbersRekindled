@@ -7,15 +7,19 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer<TileEntityFurnaceTop> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -32,15 +36,28 @@ public class TileEntityFurnaceTopRenderer extends TileEntitySpecialRenderer<Tile
 			FluidStack fluidStack = tile.getFluidStack();
 			int capacity = tile.getCapacity();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			Random random = new Random();
 			for (int i = 0; i < tile.inventory.getSlots(); i ++){
 				ItemStack stack = tile.inventory.getStackInSlot(i);
+				random.setSeed((long)(stack.isEmpty() ? 187 : Item.getIdFromItem(stack.getItem()) + stack.getMetadata()));
+
 				if (!stack.isEmpty()){
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(x+0.5,y,z+0.5);
 					GlStateManager.rotate(1.0f*((float) tile.angle+partialTicks),0,1,0);
-					EntityItem item = new EntityItem(tile.getWorld(),0,0,0,stack);
-					item.hoverStart = 0;
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
+					for(int j = 0; j < Math.min(stack.getCount(),6); j++) {
+						GlStateManager.pushMatrix();
+						float f7 = (random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+						float f9 = (random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+						float f6 = (random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+						if(stack.getCount() > 1)
+							GlStateManager.translate(f7, f9, f6);
+						Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+						GlStateManager.popMatrix();
+					}
+					//EntityItem item = new EntityItem(tile.getWorld(),0,0,0,stack);
+					//item.hoverStart = 0;
+					//Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
 					GlStateManager.popMatrix();
 				}
 			}

@@ -13,6 +13,9 @@ import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.*;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.server.management.PlayerChunkMap;
+import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,6 +24,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fluids.FluidStack;
@@ -225,8 +229,21 @@ public class Misc {
     }
 
     public static void syncTE(TileEntity tile) {
-        IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-        tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 10); //Does a good job I hope
+        //IBlockState state = tile.getWorld().getBlockState(tile.getPos());
+        //tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 0); //Does a good job I hope
+
+        World world = tile.getWorld();
+        if(world instanceof WorldServer) {
+            SPacketUpdateTileEntity packet = tile.getUpdatePacket();
+            if (packet != null) {
+                PlayerChunkMap chunkMap = ((WorldServer) world).getPlayerChunkMap();
+                int i = tile.getPos().getX() >> 4;
+                int j = tile.getPos().getZ() >> 4;
+                PlayerChunkMapEntry entry = chunkMap.getEntry(i, j);
+                if(entry != null)
+                    entry.sendPacket(packet);
+            }
+        }
     }
 
     @Nullable
