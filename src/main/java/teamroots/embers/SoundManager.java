@@ -148,6 +148,11 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:block.pump.fast")
     public static SoundEvent PUMP_FAST;
 
+    @GameRegistry.ObjectHolder("embers:block.pipe.connect")
+    public static SoundEvent PIPE_CONNECT;
+    @GameRegistry.ObjectHolder("embers:block.pipe.disconnect")
+    public static SoundEvent PIPE_DISCONNECT;
+
     @GameRegistry.ObjectHolder("embers:fireball.big.fire")
     public static SoundEvent FIREBALL_BIG;
     @GameRegistry.ObjectHolder("embers:fireball.big.hit")
@@ -168,6 +173,14 @@ public class SoundManager {
     public static SoundEvent CINDER_STAFF_FAIL;
     @GameRegistry.ObjectHolder("embers:item.cinder_staff.loop")
     public static SoundEvent CINDER_STAFF_LOOP;
+
+    @GameRegistry.ObjectHolder("embers:item.explosion_charm.absorb")
+    public static SoundEvent EXPLOSION_CHARM_ABSORB;
+    @GameRegistry.ObjectHolder("embers:item.explosion_charm.recharge")
+    public static SoundEvent EXPLOSION_CHARM_RECHARGE;
+
+    @GameRegistry.ObjectHolder("embers:item.ash_amulet.burn")
+    public static SoundEvent ASHEN_AMULET_BURN;
 
     @GameRegistry.ObjectHolder("embers:item.heated.level_up")
     public static SoundEvent HEATED_ITEM_LEVELUP;

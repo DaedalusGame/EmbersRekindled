@@ -1,5 +1,6 @@
 package teamroots.embers.particle;
 
+import com.google.common.collect.Queues;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -18,12 +19,23 @@ public class ParticleRenderer {
     ArrayDeque<Particle> additiveParticles = new ArrayDeque<>();
     ArrayDeque<Particle> throughParticles = new ArrayDeque<>();
     ArrayDeque<Particle> additiveThroughParticles = new ArrayDeque<>();
+    Queue<Particle> queue = Queues.<Particle>newArrayDeque();
 
     public void updateParticles() {
         updateParticles(normalParticles);
         updateParticles(additiveParticles);
         updateParticles(throughParticles);
         updateParticles(additiveThroughParticles);
+
+        if (!this.queue.isEmpty()) {
+            for (Particle particle = this.queue.poll(); particle != null; particle = this.queue.poll()) {
+                IEmberParticle emberParticle = (IEmberParticle) particle;
+                boolean additive = emberParticle.isAdditive();
+                boolean rendersThrough = emberParticle.renderThroughBlocks();
+
+                getParticleCollection(additive, rendersThrough).add(particle);
+            }
+        }
     }
 
     public void updateParticles(ArrayDeque<Particle> particles) {
@@ -101,11 +113,7 @@ public class ParticleRenderer {
 
     public void addParticle(Particle particle) {
         if (particle instanceof IEmberParticle) {
-            IEmberParticle emberParticle = (IEmberParticle) particle;
-            boolean additive = emberParticle.isAdditive();
-            boolean rendersThrough = emberParticle.renderThroughBlocks();
-
-            getParticleCollection(additive, rendersThrough).add(particle);
+            queue.add(particle);
         }
     }
 

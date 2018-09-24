@@ -378,6 +378,20 @@
     ],
     "subtitle": "subtitles.block.pump.fast"
   },
+  "block.pipe.connect": {
+    "sounds": [
+      "embers:pipe_connect1",
+      "embers:pipe_connect2"
+    ],
+    "subtitle": "subtitles.block.pipe.connect"
+  },
+  "block.pipe.disconnect": {
+    "sounds": [
+      "embers:pipe_disconnect1",
+      "embers:pipe_disconnect2"
+    ],
+    "subtitle": "subtitles.block.pipe.disconnect"
+  },
   "block.ember_transfer.emit.small": {
     "category": "block",
     "sounds": [
@@ -490,6 +504,25 @@
   "item.cinder_staff.loop": {
     "sounds": [
       "embers:cinder_staff/loop"
+    ]
+  },
+  "item.ash_amulet.burn": {
+    "sounds": [
+      "embers:ash_amulet/burn1",
+      "embers:ash_amulet/burn2"
+    ],
+    "subtitle": "subtitles.ash_amulet.burn"
+  },
+  "item.explosion_charm.absorb": {
+    "sounds": [
+      "embers:explosion_charm/absorb1",
+      "embers:explosion_charm/absorb2"
+    ],
+    "subtitle": "subtitles.explosion_charm.absorb"
+  },
+  "item.explosion_charm.recharge": {
+    "sounds": [
+      "embers:explosion_charm/recharge"
     ]
   },
   "item.cinder_jet.boost": {
