@@ -41,11 +41,6 @@ public class ItemClockworkAxe extends ItemTool implements IModeledItem, IEmberCh
 	public float getProperEfficiency(){
 		return this.efficiency;
 	}
-
-	@Override
-	public boolean isDamageable() {
-		return false;
-	}
 	
 	@Override
 	public float getDestroySpeed(ItemStack stack, IBlockState state){

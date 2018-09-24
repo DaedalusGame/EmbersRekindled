@@ -40,11 +40,6 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	}
 
 	@Override
-	public boolean isDamageable() {
-		return false;
-	}
-	
-	@Override
 	public boolean showDurabilityBar(ItemStack stack){
 		if (stack.hasTagCompound()){
 			if (stack.getTagCompound().getInteger("cooldown") > 0){
