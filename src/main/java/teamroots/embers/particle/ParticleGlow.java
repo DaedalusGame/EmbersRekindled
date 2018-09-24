@@ -2,7 +2,9 @@ package teamroots.embers.particle;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import teamroots.embers.util.Misc;
@@ -40,14 +42,7 @@ public class ParticleGlow extends Particle implements IEmberParticle{
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
 	    this.setParticleTexture(sprite);
 	}
-	/*
-	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entity, float partialTicks, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ){
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-		super.renderParticle(buffer, entity, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
-	}*/
-	
+
 	@Override
 	public int getBrightnessForRender(float pTicks){
 		return 255;

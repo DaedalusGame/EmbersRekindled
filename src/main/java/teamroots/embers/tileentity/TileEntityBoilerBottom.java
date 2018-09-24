@@ -168,7 +168,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
                 if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
                     progress = 0;
                     double emberValue = EmbersAPI.getEmberValue(emberStack);
-                    if (emberValue > 0 && top.capability.getEmber() <= top.capability.getEmberCapacity()) {
+                    if (emberValue > 0 && top.capability.getEmber() < top.capability.getEmberCapacity()) {
                         double ember = UpgradeUtil.getTotalEmberProduction(this, emberValue * getMultiplier(), upgrades);
                         tank.drain(FLUID_CONSUMED, true);
                         if (!world.isRemote) {

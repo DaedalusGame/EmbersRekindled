@@ -134,7 +134,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
                     if (inventory != null) {
                         ItemStack emberStack = inventory.getStackInSlot(i);
                         double emberValue = EmbersAPI.getEmberValue(emberStack);
-                        if (emberValue > 0 && top.capability.getEmber() <= top.capability.getEmberCapacity()) {
+                        if (emberValue > 0 && top.capability.getEmber() < top.capability.getEmberCapacity()) {
                             double ember = UpgradeUtil.getTotalEmberProduction(this, emberValue, upgrades);
                             if (!world.isRemote) {
                                 world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, SoundManager.ACTIVATOR, SoundCategory.BLOCKS, 1.0f, 1.0f);
