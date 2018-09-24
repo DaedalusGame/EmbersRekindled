@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -26,13 +27,13 @@ public class TileEntityItemTransferRenderer extends TileEntitySpecialRenderer<Ti
 				GlStateManager.pushAttrib();
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 				GL11.glPushMatrix();
-				EntityItem item = new EntityItem(Minecraft.getMinecraft().world, x, y, z, new ItemStack(tile.filterItem.getItem(), 1, tile.filterItem.getMetadata()));
-				item.hoverStart = 0;
-				item.onGround = false;
-				GL11.glTranslated(x + 0.5, y + 0.15, z + 0.5);
+				//EntityItem item = new EntityItem(Minecraft.getMinecraft().world, x, y, z, new ItemStack(tile.filterItem.getItem(), 1, tile.filterItem.getMetadata()));
+				//item.hoverStart = 0;
+				//item.onGround = false;
+				GL11.glTranslated(x + 0.5, y + 0.15+0.25, z + 0.5);
 				GL11.glScaled(0.75, 0.75, 0.75);
 				GL11.glRotated(tile.angle + ((tile.turnRate)) * partialTicks, 0, 1.0, 0);
-				Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, false);
+				Minecraft.getMinecraft().getRenderItem().renderItem(tile.filterItem, ItemCameraTransforms.TransformType.GROUND);
 				GL11.glPopMatrix();
 				GlStateManager.popAttrib();
 			}

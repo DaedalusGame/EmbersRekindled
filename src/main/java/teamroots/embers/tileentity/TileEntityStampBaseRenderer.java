@@ -6,17 +6,21 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 import teamroots.embers.block.BlockStampBase;
+
+import java.util.Random;
 
 public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileEntityStampBase> {
 	int blue, green, red, alpha;
@@ -108,10 +112,10 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileE
 				}
 				if (!tile.inputs.getStackInSlot(0).isEmpty()){
 					GL11.glPushMatrix();
-					EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(tile.inputs.getStackInSlot(0).getItem(),1, tile.inputs.getStackInSlot(0).getMetadata()));
-					item.hoverStart = 0;
+					//EntityItem item = new EntityItem(Minecraft.getMinecraft().world,x,y,z,new ItemStack(tile.inputs.getStackInSlot(0).getItem(),1, tile.inputs.getStackInSlot(0).getMetadata()));
+					//item.hoverStart = 0;
 					GL11.glTranslated(x, y, z);
-					GL11.glTranslated(0.5, 0.5, 0.5);
+					GL11.glTranslated(0.5, 0.5+0.25, 0.5);
 					
 					if (face == EnumFacing.UP){
 						GL11.glRotated(180, 1, 0, 0);
@@ -135,9 +139,22 @@ public class TileEntityStampBaseRenderer extends TileEntitySpecialRenderer<TileE
 						GL11.glRotated(270, 0, 1, 0);
 						GL11.glRotated(90, 1, 0, 0);
 					}
-					
+
+					Random random = new Random();
+					ItemStack stack = tile.inputs.getStackInSlot(0);
+					random.setSeed((long)(stack.isEmpty() ? 187 : Item.getIdFromItem(stack.getItem()) + stack.getMetadata()));
 					GL11.glScaled(1.0, 1.0, 1.0);
-					Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
+					for(int j = 0; j < Math.min(stack.getCount(),6); j++) {
+						GlStateManager.pushMatrix();
+						float f7 = (random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+						float f9 = (random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+						float f6 = (random.nextFloat() * 2.0F - 1.0F) * 0.15F;
+						if(stack.getCount() > 1)
+							GlStateManager.translate(f7, f9, f6);
+						Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+						GlStateManager.popMatrix();
+					}
+					//Minecraft.getMinecraft().getRenderManager().renderEntity(item, 0, 0, 0, 0, 0, true);
 					GL11.glPopMatrix();
 				}
 			}

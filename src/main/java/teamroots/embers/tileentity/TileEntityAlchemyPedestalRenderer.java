@@ -36,7 +36,7 @@ public class TileEntityAlchemyPedestalRenderer extends TileEntitySpecialRenderer
 					GL11.glPushMatrix();
 					GL11.glTranslated(x+0.5, y+0.75, z+0.5);
 					GL11.glRotated(tile.angle+((tile.turnRate))*partialTicks, 0, 1.0, 0);
-					Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(tile.inventory.getStackInSlot(1).getItem(),1, tile.inventory.getStackInSlot(1).getMetadata()), TransformType.GROUND);
+					Minecraft.getMinecraft().getRenderItem().renderItem(tile.inventory.getStackInSlot(1), TransformType.GROUND);
 					GL11.glPopMatrix();
 				}
 			}
