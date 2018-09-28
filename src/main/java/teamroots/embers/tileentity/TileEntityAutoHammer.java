@@ -15,10 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IHammerable;
+import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockAutoHammer;
@@ -26,17 +29,19 @@ import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation {
 	public static final double EMBER_COST = 40.0;
 	public static final int PROCESS_TIME = 20;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int ticksExisted = 0;
 	int progress = -1;
 	Random random = new Random();
-	
+	private List<IUpgradeProvider> upgrades = new ArrayList<>();
+
 	public TileEntityAutoHammer(){
 		super();
 		capability.setEmberCapacity(12000);
@@ -106,7 +111,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 	public void update() {
 		IBlockState state = world.getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockAutoHammer.facing);
-		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{facing.getOpposite()});
+		upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{facing.getOpposite()});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
@@ -118,7 +123,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 			boolean redstoneEnabled = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
 			if (hammerable.isValid() && redstoneEnabled && capability.getEmber() >= ember_cost) {
 				boolean cancel = UpgradeUtil.doWork(this, upgrades);
-				if (!cancel && progress == -1 && ticksExisted % UpgradeUtil.getWorkTime(this,PROCESS_TIME,upgrades) == 0) {
+				if (!cancel && progress == -1 && ticksExisted % UpgradeUtil.getWorkTime(this,PROCESS_TIME, upgrades) == 0) {
 					progress = 10;
 					markDirty();
 				}
@@ -145,5 +150,25 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public double getMechanicalSpeed(double power) {
+		return Math.min(1.5,power);
+	}
+
+	@Override
+	public double getNominalSpeed() {
+		return 1;
+	}
+
+	@Override
+	public double getMinimumPower() {
+		return 10;
+	}
+
+	@Override
+	public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+		UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information,dialType),upgrades);
 	}
 }
