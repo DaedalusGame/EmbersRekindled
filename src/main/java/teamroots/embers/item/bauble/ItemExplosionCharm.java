@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -18,6 +19,7 @@ import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import teamroots.embers.SoundManager;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageExplosionCharmFX;
 import teamroots.embers.network.message.MessageFlameShieldFX;
@@ -90,9 +92,11 @@ public class ItemExplosionCharm extends ItemBaubleBase {
                 ItemStack stack = stacks.get(0);
                 if (stack.getItem() == this) {
                     if (!hasCooldown(entity) || hasMercy(entity)) {
+                        event.getWorld().playSound(null, explosionPos.x, explosionPos.y, explosionPos.z, SoundManager.EXPLOSION_CHARM_ABSORB, SoundCategory.PLAYERS, 1.0f, 1.0f);
                         PacketHandler.INSTANCE.sendToAll(new MessageExplosionCharmFX(explosionPos.x, explosionPos.y, explosionPos.z, entity.posX, entity.posY + entity.height / 2.0, entity.posZ));
                         event.setCanceled(true);
                         if (!hasCooldown(entity)) {
+                            event.getWorld().playSound(null, entity.posX, entity.posY, entity.posZ, SoundManager.EXPLOSION_CHARM_RECHARGE, SoundCategory.PLAYERS, 1.0f, 1.0f);
                             setCooldown(entity, COOLDOWN);
                             setMercy(entity, MERCY_TIME);
                         }

@@ -331,6 +331,10 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.metallurgic_dust.convert"));
         event.getRegistry().register(registerSound("item.metallurgic_dust.fail"));
 
+        event.getRegistry().register(registerSound("item.explosion_charm.absorb"));
+        event.getRegistry().register(registerSound("item.explosion_charm.recharge"));
+        event.getRegistry().register(registerSound("item.ash_amulet.burn"));
+
         event.getRegistry().register(registerSound("item.codex.open"));
         event.getRegistry().register(registerSound("item.codex.close"));
         event.getRegistry().register(registerSound("item.codex.category.open"));

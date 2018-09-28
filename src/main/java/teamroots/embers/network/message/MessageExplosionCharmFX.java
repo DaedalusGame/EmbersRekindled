@@ -71,7 +71,7 @@ public class MessageExplosionCharmFX implements IMessage {
                     double vz = (message.absorbZ - z) / lifetime;
                     ParticleUtil.spawnParticleGlow(world, (float) x, (float) y, (float) z, (float) vx, (float) vy, (float) vz, 255, 64, 16, 2.0f + random.nextFloat() * 2.0f, lifetime);
                     float smokeSpeed = 0.15f;
-                    ParticleUtil.spawnParticleSmoke(world, (float)(message.posX + xOffset * dist), (float)(message.posY + yOffset * dist), (float)(message.posZ + zOffset * dist), xOffset * smokeSpeed, yOffset * smokeSpeed, zOffset * smokeSpeed, 80, 80, 80, 160, 4.0f + random.nextFloat() * 20.0f, 20+random.nextInt(20));
+                    ParticleUtil.spawnParticleSmoke(world, (float)(message.posX + xOffset * dist), (float)(message.posY + yOffset * dist), (float)(message.posZ + zOffset * dist), xOffset * smokeSpeed, yOffset * smokeSpeed, zOffset * smokeSpeed, 30/255f, 30/255f, 30/255f, 160/255f, 4.0f + random.nextFloat() * 20.0f, 20+random.nextInt(20));
                 }
             });
             return null;
