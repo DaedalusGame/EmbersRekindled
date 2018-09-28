@@ -1,9 +1,12 @@
 package teamroots.embers;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import teamroots.embers.tileentity.TileEntityStampBase;
+import teamroots.embers.tileentity.TileEntityTank;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +43,16 @@ public class ConfigManager {
 					aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
 	public static boolean enableBaublesIntegration;
 	public static boolean enableMysticalMechanicsIntegration;
+
+	//MISC
 	public static boolean pvpEverybodyIsEnemy;
+
+	//PARAMETERS
+	public static int melterOreAmount;
+	public static int stampPlateAmount;
+	public static int stampAspectusAmount;
+	public static int stampGearAmount;
+	public static int reservoirCapacity;
 
 	public static boolean isBaublesIntegrationEnabled() {
 		return enableBaublesIntegration && Loader.isModLoaded("baubles");
@@ -128,6 +140,15 @@ public class ConfigManager {
 		enableMysticalMechanicsIntegration = config.getBoolean("enableMysticalMechanics", "compat", true, "If true, Embers will register items, blocks and recipes providing Mystical Mechanics integration.");
 
 		pvpEverybodyIsEnemy = config.getBoolean("everybodyIsAnEnemy", "misc", false, "If true, Embers homing projectiles will go for neutral players.");
+
+		melterOreAmount = config.getInt("melterOreAmount", "parameters", 144, 0, Integer.MAX_VALUE, "How many mb of fluid are obtained per ore output in the melter. This is multiplied by the amount of output a melter would produce, so by default 144mb * 2 ingots.");
+		stampPlateAmount = config.getInt("stampPlateAmount", "parameters", 1, 1, Integer.MAX_VALUE, "How many ingots are required to make one plate in the stamper.");
+		stampAspectusAmount = config.getInt("stampAspectusAmount", "parameters", 1, 1, Integer.MAX_VALUE, "How many ingots are required to make one aspectus in the stamper.");
+		stampGearAmount = config.getInt("stampGearAmount", "parameters", 2, 1, Integer.MAX_VALUE, "How many ingots are required to make one gear in the stamper.");
+		TileEntityStampBase.capacity = config.getInt("stampBaseCapacity", "parameters", (Fluid.BUCKET_VOLUME*3) / 2, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into the Stamp Base.");
+		TileEntityTank.capacity = config.getInt("tankCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into the Fluid Vessel.");
+		reservoirCapacity = config.getInt("reservoirCapacity", "parameters", Fluid.BUCKET_VOLUME * 40, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
+
 
 		if (config.hasChanged())
 		{

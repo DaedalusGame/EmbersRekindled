@@ -9,10 +9,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -21,12 +23,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockMechActuator;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.item.ItemBase;
 import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.recipe.ItemStampingRecipe;
+import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.research.subtypes.ResearchFakePage;
@@ -72,11 +77,16 @@ public class MysticalMechanicsIntegration {
                 " II",
                 "APC",
                 "FFC",
-                'C', "plateCopper", //This recipe crashes on load
-                'P', "gearIron",    //And basically you're fucking stupid
+                'C', "plateCopper",
+                'P', "gearIron",
                 'A', axle_iron,
                 'I', RegistryManager.pipe,
                 'F', "plateIron"}).setRegistryName(getRL("steam_engine")));
+
+        Ingredient stampGear = Ingredient.fromItem(RegistryManager.stamp_gear);
+        int gearAmount = ConfigManager.stampGearAmount * RecipeRegistry.INGOT_AMOUNT;
+        RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_iron, gearAmount), stampGear, new ItemStack(RegistryHandler.IRON_GEAR,1)));
+        RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_dawnstone, gearAmount), stampGear, new ItemStack(MysticalMechanicsIntegration.gear_dawnstone,1)));
     }
 
     public static void registerAll() //éw parté déux

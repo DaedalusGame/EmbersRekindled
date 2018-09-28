@@ -96,6 +96,7 @@ public class RegistryManager {
 	public static Item dust_metallurgic;
 	public static Item diffraction_barrel;
 	public static Item focal_lens;
+	public static Item stamp_gear, stamp_gear_raw;
 	
 	public static DamageSource damage_ember;
 	
@@ -284,9 +285,11 @@ public class RegistryManager {
 		items.add(stamp_bar = new ItemBase("stamp_bar",true));
 		items.add(stamp_flat = new ItemBase("stamp_flat",true));
 		items.add(stamp_plate = new ItemBase("stamp_plate",true));
+		items.add(stamp_gear = new ItemBase("stamp_gear",true));
 		items.add(stamp_bar_raw = new ItemBase("stamp_bar_raw",true));
 		items.add(stamp_flat_raw = new ItemBase("stamp_flat_raw",true));
 		items.add(stamp_plate_raw = new ItemBase("stamp_plate_raw",true));
+		items.add(stamp_gear_raw = new ItemBase("stamp_gear_raw",true));
 		items.add(ember_detector = new ItemEmberGauge());
 		items.add(dust_ember = new ItemBase("dust_ember",true));
 		items.add(shard_ember = new ItemBase("shard_ember",true));
