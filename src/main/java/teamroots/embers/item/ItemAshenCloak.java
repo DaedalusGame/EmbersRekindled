@@ -3,6 +3,7 @@ package teamroots.embers.item;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,11 +12,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.item.IInflictorGem;
 import teamroots.embers.api.item.IInflictorGemHolder;
+import teamroots.embers.api.item.IInfoGoggles;
 import teamroots.embers.model.ModelAshenCloak;
 
 import java.util.Objects;
 
-public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder {
+public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder, IInfoGoggles {
 
 	public ItemAshenCloak(ArmorMaterial material, int reduction, EntityEquipmentSlot slot) {
 		super(material, reduction, slot, "ashen_cloak", true);
@@ -77,5 +79,10 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 		}
 
 		return reduction;
+	}
+
+	@Override
+	public boolean shouldDisplayInfo(EntityPlayer player, ItemStack stack) {
+		return true;
 	}
 }

@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBucket;
@@ -20,12 +21,14 @@ import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockStampBase;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class TileEntityStampBase extends TileFluidHandler implements ITileEntityBase {
+public class TileEntityStampBase extends TileFluidHandler implements ITileEntityBase, IExtraCapabilityInformation {
 	public static int capacity = (Fluid.BUCKET_VOLUME*3) / 2; //1500
 	public ItemStackHandler inputs = new ItemStackHandler(1){
         @Override
@@ -157,5 +160,16 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 	public void markDirty() {
 		super.markDirty();
 		Misc.syncTE(this);
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid", I18n.format("embers.tooltip.goggles.fluid.metal")));
 	}
 }

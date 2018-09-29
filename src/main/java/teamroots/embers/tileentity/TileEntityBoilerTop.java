@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -18,6 +19,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -29,7 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
+public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
 	public IEmberCapability capability = new DefaultEmberCapability() {
 		@Override
 		public void onContentsChanged() {
@@ -162,5 +164,16 @@ public class TileEntityBoilerTop extends TileEntity implements ITileEntityBase, 
 		TileEntity bottom = world.getTileEntity(pos.down());
 		if(bottom instanceof TileEntityBoilerBottom)
 			((TileEntityBoilerBottom) bottom).addDialInformation(facing,information,dialType);
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return true;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == EmbersCapabilities.EMBER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.ember",null));
 	}
 }

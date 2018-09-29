@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -19,10 +20,12 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.block.BlockCatalyticPlug;
 import teamroots.embers.block.BlockFluidGauge;
@@ -36,7 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityCatalyticPlug extends TileEntity implements ITickable, ITileEntityBase, ISoundController, IExtraDialInformation {
+public class TileEntityCatalyticPlug extends TileEntity implements ITickable, ITileEntityBase, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
     public static final int SOUND_OFF = 1;
     public static final int SOUND_ON = 2;
     public static final int[] SOUND_IDS = new int[]{SOUND_OFF,SOUND_ON};
@@ -247,5 +250,16 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
             information.clear();
             information.add(BlockFluidGauge.formatFluidStack(getFluidStack(),getCapacity()));
         }
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.redstone")));
     }
 }

@@ -12,7 +12,10 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
+import teamroots.embers.Embers;
+import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.Misc;
 import teamroots.embers.util.PipePriorityMap;
 
 import javax.annotation.Nullable;
@@ -28,8 +31,10 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
     boolean[] from = new boolean[EnumFacing.VALUES.length];
     boolean clogged = false;
     public FluidTank tank;
+    EnumFacing lastTransfer;
     boolean syncTank;
     boolean syncCloggedFlag;
+    boolean syncTransfer;
     int ticksExisted = 0;
 
     protected TileEntityFluidPipeBase() {
@@ -113,7 +118,6 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                         int priority = PRIORITY_BLOCK;
                         if (tile instanceof IItemPipePriority)
                             priority = ((IItemPipePriority) tile).getPriority(facing.getOpposite());
-                        priority += random.nextInt(6);
                         if (isFrom(facing.getOpposite()))
                             priority -= 5; //aka always try opposite first
                         possibleDirections.put(priority, facing);
@@ -127,25 +131,52 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                         EnumFacing facing = list.get((i+ticksExisted) % list.size());
                         IFluidHandler handler = fluidHandlers[facing.getIndex()];
                         fluidMoved = pushStack(passStack, facing, handler);
-                        if(fluidMoved) {
-                            break;
+                        if(lastTransfer != facing) {
+                            syncTransfer = true;
+                            lastTransfer = facing;
+                            markDirty();
                         }
+                        if(fluidMoved)
+                            break;
                     }
-                    if(fluidMoved) {
+                    if(fluidMoved)
                         break;
-                    }
                 }
             }
 
-            if (fluidMoved)
-                resetFrom();
+            //if (fluidMoved)
+            //    resetFrom();
             if (tank.getFluidAmount() <= 0) {
+                if(lastTransfer != null && !fluidMoved) {
+                    syncTransfer = true;
+                    lastTransfer = null;
+                    markDirty();
+                }
                 fluidMoved = true;
+                resetFrom();
             }
             if (clogged == fluidMoved) {
                 clogged = !fluidMoved;
                 syncCloggedFlag = true;
                 markDirty();
+            }
+        } else if(Embers.proxy.isPlayerWearingGoggles()) {
+            if(lastTransfer != null) {
+                for(int i = 0; i < 3; i++) {
+                    float dist = random.nextFloat() * 0.5f;
+                    int lifetime = random.nextInt(20) + 5;
+                    float vx = lastTransfer.getFrontOffsetX() / (float) (lifetime / (1-dist));
+                    float vy = lastTransfer.getFrontOffsetY() / (float) (lifetime / (1-dist));
+                    float vz = lastTransfer.getFrontOffsetZ() / (float) (lifetime / (1-dist));
+                    float x = pos.getX() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetX() * dist;
+                    float y = pos.getY() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetY() * dist;
+                    float z = pos.getZ() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetZ() * dist;
+                    float r = clogged ? 255f : 16f;
+                    float g = clogged ? 16f : 255f;
+                    float b = 16f;
+                    float size = random.nextFloat() * 4 + 2;
+                    ParticleUtil.spawnParticlePipeFlow(world, x, y, z, vx, vy, vz, r, g, b, 0.5f, size, lifetime);
+                }
             }
         }
     }
@@ -168,10 +199,11 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
     protected void resetSync() {
         syncTank = false;
         syncCloggedFlag = false;
+        syncTransfer = false;
     }
 
     protected boolean requiresSync() {
-        return syncTank || syncCloggedFlag;
+        return syncTank || syncCloggedFlag || syncTransfer;
     }
 
     @Override
@@ -185,6 +217,8 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             writeTank(compound);
         if (syncCloggedFlag)
             writeCloggedFlag(compound);
+        if (syncTransfer)
+            writeLastTransfer(compound);
         return compound;
     }
 
@@ -193,11 +227,16 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
         super.writeToNBT(tag);
         writeTank(tag);
         writeCloggedFlag(tag);
+        writeLastTransfer(tag);
         return tag;
     }
 
     private void writeCloggedFlag(NBTTagCompound tag) {
         tag.setBoolean("clogged", clogged);
+    }
+
+    private void writeLastTransfer(NBTTagCompound tag) {
+        tag.setInteger("lastTransfer", Misc.writeNullableFacing(lastTransfer));
     }
 
     private void writeTank(NBTTagCompound tag) {
@@ -211,5 +250,7 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             clogged = tag.getBoolean("clogged");
         if (tag.hasKey("tank"))
             tank.readFromNBT(tag.getCompoundTag("tank"));
+        if (tag.hasKey("lastTransfer"))
+            lastTransfer = Misc.readNullableFacing(tag.getInteger("lastTransfer"));
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,6 +27,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -39,7 +41,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEntityBase, ITickable, IExtraDialInformation {
+public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEntityBase, ITickable, IExtraDialInformation, IExtraCapabilityInformation {
     public static final float BASE_MULTIPLIER = 1.5f;
     public static final int FLUID_CONSUMED = 25;
     public static final float PER_BLOCK_MULTIPLIER = 0.375f;
@@ -201,5 +203,18 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
             double multiplier = getMultiplier();
             information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplierFormat.format(multiplier)));
         }
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.ember")));
+        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.water")));
     }
 }

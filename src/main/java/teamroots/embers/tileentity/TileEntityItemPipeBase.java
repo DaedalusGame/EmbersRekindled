@@ -1,6 +1,5 @@
 package teamroots.embers.tileentity;
 
-import com.google.common.collect.TreeMultimap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,13 +10,14 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.Embers;
+import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.Misc;
 import teamroots.embers.util.PipePriorityMap;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NavigableSet;
 import java.util.Random;
 
 public abstract class TileEntityItemPipeBase extends TileEntity implements ITileEntityBase, ITickable, IItemPipeConnectable, IItemPipePriority {
@@ -28,8 +28,10 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
     boolean[] from = new boolean[EnumFacing.VALUES.length];
     boolean clogged = false;
     public ItemStackHandler inventory;
+    EnumFacing lastTransfer;
     boolean syncInventory;
     boolean syncCloggedFlag;
+    boolean syncTransfer;
     int ticksExisted = 0;
 
     protected TileEntityItemPipeBase() {
@@ -118,16 +120,8 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
                         int priority = PRIORITY_BLOCK;
                         if (tile instanceof IItemPipePriority)
                             priority = ((IItemPipePriority) tile).getPriority(facing.getOpposite());
-                        //if (facing == EnumFacing.UP)
-                        //    priority += 3; //aka go up last
-                        //if (facing == EnumFacing.DOWN)
-                        //    priority -= 3; //aka always go down first
                         if (isFrom(facing.getOpposite()))
                             priority -= 5; //aka always try opposite first
-                        //if (facing.getAxis().isHorizontal() && isFrom(facing.rotateY()))
-                        //    priority -= 1; //aka always turn right (probably)
-                        //if (isFrom(facing))
-                        //    priority += 50; //aka don't get stuck
                         possibleDirections.put(priority, facing);
                         itemHandlers[facing.getIndex()] = handler;
                     }
@@ -139,25 +133,52 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
                         EnumFacing facing = list.get((i+ticksExisted) % list.size());
                         IItemHandler handler = itemHandlers[facing.getIndex()];
                         itemsMoved = pushStack(passStack, facing, handler);
-                        if(itemsMoved) {
-                            break;
+                        if(lastTransfer != facing) {
+                            syncTransfer = true;
+                            lastTransfer = facing;
+                            markDirty();
                         }
+                        if(itemsMoved)
+                            break;
                     }
-                    if(itemsMoved) {
+                    if(itemsMoved)
                         break;
-                    }
                 }
             }
 
-            if (itemsMoved)
-                resetFrom();
+            //if (itemsMoved)
+            //    resetFrom();
             if (inventory.getStackInSlot(0).isEmpty()) {
+                if(lastTransfer != null && !itemsMoved) {
+                    syncTransfer = true;
+                    lastTransfer = null;
+                    markDirty();
+                }
                 itemsMoved = true;
+                resetFrom();
             }
             if (clogged == itemsMoved) {
                 clogged = !itemsMoved;
                 syncCloggedFlag = true;
                 markDirty();
+            }
+        } else if(Embers.proxy.isPlayerWearingGoggles()) {
+            if(lastTransfer != null) {
+                for(int i = 0; i < 3; i++) {
+                    float dist = random.nextFloat() * 0.5f;
+                    int lifetime = random.nextInt(20) + 5;
+                    float vx = lastTransfer.getFrontOffsetX() / (float) (lifetime / (1-dist));
+                    float vy = lastTransfer.getFrontOffsetY() / (float) (lifetime / (1-dist));
+                    float vz = lastTransfer.getFrontOffsetZ() / (float) (lifetime / (1-dist));
+                    float x = pos.getX() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetX() * dist;
+                    float y = pos.getY() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetY() * dist;
+                    float z = pos.getZ() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetZ() * dist;
+                    float r = clogged ? 255f : 16f;
+                    float g = clogged ? 16f : 255f;
+                    float b = 16f;
+                    float size = random.nextFloat() * 4 + 2;
+                    ParticleUtil.spawnParticlePipeFlow(world, x, y, z, vx, vy, vz, r, g, b, 0.5f, size, lifetime);
+                }
             }
         }
     }
@@ -186,10 +207,11 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
     protected void resetSync() {
         syncInventory = false;
         syncCloggedFlag = false;
+        syncTransfer = false;
     }
 
     protected boolean requiresSync() {
-        return syncInventory || syncCloggedFlag;
+        return syncInventory || syncCloggedFlag || syncTransfer;
     }
 
     @Override
@@ -203,6 +225,8 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
             writeInventory(compound);
         if (syncCloggedFlag)
             writeCloggedFlag(compound);
+        if (syncTransfer)
+            writeLastTransfer(compound);
         return compound;
     }
 
@@ -211,11 +235,16 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
         super.writeToNBT(tag);
         writeInventory(tag);
         writeCloggedFlag(tag);
+        writeLastTransfer(tag);
         return tag;
     }
 
     private void writeCloggedFlag(NBTTagCompound tag) {
         tag.setBoolean("clogged", clogged);
+    }
+
+    private void writeLastTransfer(NBTTagCompound tag) {
+        tag.setInteger("lastTransfer", Misc.writeNullableFacing(lastTransfer));
     }
 
     private void writeInventory(NBTTagCompound tag) {
@@ -229,5 +258,8 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
             clogged = tag.getBoolean("clogged");
         if (tag.hasKey("inventory"))
             inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+        if (tag.hasKey("lastTransfer"))
+            lastTransfer = Misc.readNullableFacing(tag.getInteger("lastTransfer"));
     }
+
 }

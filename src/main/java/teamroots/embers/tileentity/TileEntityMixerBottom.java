@@ -23,6 +23,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -38,7 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
+public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
     public static final double EMBER_COST = 2.0;
 
     public FluidTank north = new FluidTank(8000);
@@ -266,5 +267,15 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
             information.add(TextFormatting.BOLD.toString()+I18n.format("embers.tooltip.side.south")+TextFormatting.RESET.toString()+" "+BlockFluidGauge.formatFluidStack(south.getFluid(),south.getCapacity()));
             information.add(TextFormatting.BOLD.toString()+I18n.format("embers.tooltip.side.west")+TextFormatting.RESET.toString()+" "+BlockFluidGauge.formatFluidStack(west.getFluid(),south.getCapacity()));
         }
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.metal")));
     }
 }

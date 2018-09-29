@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityStamper extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation {
+public class TileEntityStamper extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation, IExtraCapabilityInformation {
     public static final double EMBER_COST = 80.0;
     public static final int STAMP_TIME = 70;
     public static final int RETRACT_TIME = 10;
@@ -254,5 +256,16 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
     @Override
     public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
         UpgradeUtil.throwEvent(this,new DialInformationEvent(this,information,dialType),upgrades);
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.BOTH,"embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.stamp")));
     }
 }

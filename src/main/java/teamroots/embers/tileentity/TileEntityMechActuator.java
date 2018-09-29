@@ -5,6 +5,7 @@ import mysticalmechanics.api.IGearbox;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.block.BlockGearbox;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockMechActuator;
 import teamroots.embers.upgrade.UpgradeActuator;
 import teamroots.embers.util.ConsumerMechCapability;
@@ -30,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMechActuator extends TileEntity implements ITickable, ITileEntityBase, IGearbox {
+public class TileEntityMechActuator extends TileEntity implements ITickable, ITileEntityBase, IGearbox, IExtraCapabilityInformation {
     public UpgradeActuator upgrade;
     public ItemStack[] gears = new ItemStack[]{
             ItemStack.EMPTY,
@@ -242,5 +244,16 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
     @Override
     public int getConnections() {
         return 1;
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return capability == MysticalMechanicsAPI.MECH_CAPABILITY;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == MysticalMechanicsAPI.MECH_CAPABILITY && getFacing().getAxis() != facing.getAxis())
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.mechanical",null));
     }
 }

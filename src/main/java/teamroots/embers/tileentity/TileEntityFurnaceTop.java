@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBucket;
@@ -21,12 +22,13 @@ import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntityBase, ITickable {
+public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntityBase, ITickable, IExtraCapabilityInformation {
 	public static int capacity = Fluid.BUCKET_VOLUME*4;
 	public double angle = 0;
 	int ticksExisted = 0;
@@ -189,5 +191,18 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item", null));
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.fluid", I18n.format("embers.tooltip.goggles.fluid.metal")));
 	}
 }

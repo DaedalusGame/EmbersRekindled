@@ -3,6 +3,7 @@ package teamroots.embers.tileentity;
 import mysticalmechanics.api.DefaultMechCapability;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.misc.ILiquidFuel;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
@@ -33,8 +35,9 @@ import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 
-public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
+public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
     public static int NORMAL_FLUID_THRESHOLD = 10;
     public static int NORMAL_FLUID_CONSUMPTION = 4;
     public static int GAS_CONSUMPTION = 20;
@@ -317,5 +320,20 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
             case SOUND_STEAM: return steamProgress > 0;
         }
         return false;
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return true;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.fuel")));
+        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid", I18n.format("embers.tooltip.goggles.fluid.water_or_steam")));
+        if(capability == MysticalMechanicsAPI.MECH_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.mechanical",null));
     }
 }

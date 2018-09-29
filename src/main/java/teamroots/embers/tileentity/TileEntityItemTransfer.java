@@ -44,6 +44,11 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
     protected void initInventory() {
         inventory = new ItemStackHandler(1) {
             @Override
+            public int getSlotLimit(int slot) {
+                return getCapacity();
+            }
+
+            @Override
             protected void onContentsChanged(int slot) {
                 markDirty();
             }

@@ -66,6 +66,10 @@ public class CommonProxy {
 		OreTransmutationUtil.init(); //oof
 	}
 
+	public boolean isPlayerWearingGoggles() {
+		return false;
+	}
+
 	public DecimalFormat getDecimalFormat(String key) { return null; };
 
 	public String formatLocalize(String translationKey, Object... parameters) {

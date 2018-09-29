@@ -423,4 +423,12 @@ public class Misc {
         RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
         return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
     }
+
+    public static EnumFacing readNullableFacing(int index) {
+        return index > 0 ? EnumFacing.getFront(index) : null;
+    }
+
+    public static int writeNullableFacing(EnumFacing facing) {
+        return facing != null ? facing.getIndex() : -1;
+    }
 }

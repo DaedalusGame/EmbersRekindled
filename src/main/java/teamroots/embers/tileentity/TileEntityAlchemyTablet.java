@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,6 +22,7 @@ import teamroots.embers.api.alchemy.AlchemyResult;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.event.AlchemyResultEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.ISparkable;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -41,7 +43,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable, ISoundController {
+public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBase, ITickable, ISparkable, ISoundController, IExtraCapabilityInformation {
 	public static final EnumFacing[] UPGRADE_SIDES = new EnumFacing[]{EnumFacing.DOWN};
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
@@ -408,5 +410,31 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 	@Override
 	public boolean shouldPlaySound(int id) {
 		return id == SOUND_PROCESS && progress > 0;
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			String filter = null;
+			switch (facing) {
+				case NORTH:
+					filter = "embers.tooltip.side.north"; break;
+				case SOUTH:
+					filter = "embers.tooltip.side.south"; break;
+				case EAST:
+					filter = "embers.tooltip.side.east"; break;
+				case WEST:
+					filter = "embers.tooltip.side.west"; break;
+				case DOWN:
+				case UP:
+					filter = "embers.tooltip.side.center"; break;
+			}
+			strings.add(IExtraCapabilityInformation.formatCapability(IExtraCapabilityInformation.EnumIOType.BOTH, "embers.tooltip.goggles.item", I18n.format(filter)));
+		}
 	}
 }

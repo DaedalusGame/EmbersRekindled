@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -35,7 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
+public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
 	public static final double MAX_TRANSFER = 10.0;
 
 	public IEmberCapability capability = new DefaultEmberCapability();
@@ -221,5 +223,16 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 				information.add(BlockEmberGauge.formatEmber(itemCapability.getEmber(),itemCapability.getEmberCapacity()));
 			}
 		}
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.BOTH,"embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.ember_storage")));
 	}
 }

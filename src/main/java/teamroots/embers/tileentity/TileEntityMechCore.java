@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,7 +12,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.util.Misc;
 
@@ -20,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMechCore extends TileEntity implements ITileEntityBase, IExtraDialInformation {
+public class TileEntityMechCore extends TileEntity implements ITileEntityBase, IExtraDialInformation, IExtraCapabilityInformation {
 	Random random = new Random();
 	
 	public TileEntityMechCore(){
@@ -114,5 +117,27 @@ public class TileEntityMechCore extends TileEntity implements ITileEntityBase, I
 		TileEntity multiblock = getAttachedMultiblock();
 		if(multiblock instanceof IExtraDialInformation)
 			((IExtraDialInformation) multiblock).addDialInformation(facing,information,dialType);
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		TileEntity multiblock = getAttachedMultiblock();
+		if(multiblock instanceof IExtraCapabilityInformation)
+			return ((IExtraCapabilityInformation) multiblock).hasCapabilityDescription(capability);
+		return false;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		TileEntity multiblock = getAttachedMultiblock();
+		if(multiblock instanceof IExtraCapabilityInformation)
+			((IExtraCapabilityInformation) multiblock).addCapabilityDescription(strings,capability,facing);
+	}
+
+	@Override
+	public void addOtherDescription(List<String> strings, EnumFacing facing) {
+		TileEntity multiblock = getAttachedMultiblock();
+		if(multiblock instanceof IExtraCapabilityInformation)
+			((IExtraCapabilityInformation) multiblock).addOtherDescription(strings,facing);
 	}
 }

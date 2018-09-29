@@ -13,6 +13,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -25,7 +26,11 @@ import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
+import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockMechActuator;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.item.ItemBase;
@@ -42,6 +47,7 @@ import teamroots.embers.tileentity.TileEntitySteamEngine;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class MysticalMechanicsIntegration {
@@ -178,5 +184,21 @@ public class MysticalMechanicsIntegration {
         ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.steam_engine);
 
         ResearchManager.subCategoryMechanicalPower.addResearch(mechanical_mini_boiler);
+    }
+
+    public static void addCapabilityInformation(List<String> text, TileEntity tileEntity, EnumFacing facing) {
+        addCapabilityMechanicalDescription(text,tileEntity,facing);
+    }
+
+    public static void addCapabilityMechanicalDescription(List<String> text, TileEntity tile, EnumFacing facing) {
+        Capability<IMechCapability> capability = MysticalMechanicsAPI.MECH_CAPABILITY;
+        if(tile.hasCapability(capability,facing)) {
+            IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
+            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            } else {
+                text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.mechanical", null));
+            }
+        }
     }
 }

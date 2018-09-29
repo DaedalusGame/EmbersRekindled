@@ -1,5 +1,6 @@
 package teamroots.embers;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -30,6 +31,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -38,13 +40,19 @@ import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import org.lwjgl.opengl.GL11;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.item.IEmberChargedTool;
 import teamroots.embers.api.item.IInflictorGem;
@@ -52,6 +60,10 @@ import teamroots.embers.api.item.IInflictorGemHolder;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.api.block.IDial;
+import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
+import teamroots.embers.api.tile.IMechanicallyPowered;
+import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.gui.GuiCodex;
 import teamroots.embers.item.*;
 import teamroots.embers.network.PacketHandler;
@@ -61,6 +73,7 @@ import teamroots.embers.network.message.MessageTyrfingBurstFX;
 import teamroots.embers.proxy.ClientProxy;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
+import teamroots.embers.tileentity.TileEntityMechAccessor;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
@@ -217,7 +230,7 @@ public class EventManager {
 
     private void attuneInflictorGem(EntityLivingBase entityLiving, DamageSource source, ItemStack stack) {
         if (stack.getItem() instanceof IInflictorGem) {
-            ((IInflictorGem) stack.getItem()).attuneSource(stack,entityLiving,source);
+            ((IInflictorGem) stack.getItem()).attuneSource(stack, entityLiving, source);
         }
     }
 
@@ -322,16 +335,91 @@ public class EventManager {
         if (result != null) {
             if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
                 IBlockState state = world.getBlockState(result.getBlockPos());
+                EnumFacing facing = result.sideHit;
+                List<String> text = Lists.newArrayList();
                 if (state.getBlock() instanceof IDial) {
-                    List<String> text = ((IDial) state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state);
-                    for (int i = 0; i < text.size(); i++) {
-                        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text.get(i), x - Minecraft.getMinecraft().fontRenderer.getStringWidth(text.get(i)) / 2, y + 40 + 11 * i, 0xFFFFFF);
+                    text.addAll(((IDial) state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state));
+                }
+                if (Embers.proxy.isPlayerWearingGoggles()) {
+                    TileEntity tileEntity = world.getTileEntity(result.getBlockPos());
+                    if (tileEntity != null) {
+                        addCapabilityInformation(text, tileEntity, facing);
                     }
+                }
+
+                for (int i = 0; i < text.size(); i++) {
+                    Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text.get(i), x - Minecraft.getMinecraft().fontRenderer.getStringWidth(text.get(i)) / 2, y + 40 + 11 * i, 0xFFFFFF);
                 }
             }
         }
         Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("minecraft:textures/gui/icons.png"));
         GlStateManager.enableDepth();
+    }
+
+    private void addCapabilityInformation(List<String> text, TileEntity tile, EnumFacing facing) {
+        addCapabilityItemDescription(text, tile, facing);
+        addCapabilityFluidDescription(text, tile, facing);
+        addCapabilityEmberDescription(text, tile, facing);
+        if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+            MysticalMechanicsIntegration.addCapabilityInformation(text,tile,facing);
+        if (tile.hasCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY,facing))
+            text.add(I18n.format("embers.tooltip.goggles.upgrade"));
+        if (TileEntityMechAccessor.canAccess(tile))
+            text.add(I18n.format("embers.tooltip.goggles.accessor_slot"));
+        if (tile instanceof IMechanicallyPowered)
+            text.add(I18n.format("embers.tooltip.goggles.actuator_slot"));
+        if (tile instanceof IExtraCapabilityInformation)
+            ((IExtraCapabilityInformation) tile).addOtherDescription(text, facing);
+    }
+
+    public static void addCapabilityItemDescription(List<String> text, TileEntity tile, EnumFacing facing) {
+        Capability<IItemHandler> capability = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+        if(tile.hasCapability(capability,facing)) {
+            IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
+            String filter = null;
+            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            } else {
+                text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.item", filter));
+            }
+        }
+    }
+
+    public static void addCapabilityFluidDescription(List<String> text, TileEntity tile, EnumFacing facing) {
+        Capability<IFluidHandler> capability = CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+        if(tile.hasCapability(capability,facing)) {
+            IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
+            String filter = null;
+            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            } else {
+                IFluidHandler handler = tile.getCapability(capability, facing);
+                for(IFluidTankProperties properties : handler.getTankProperties()) {
+                    boolean input = properties.canFill();
+                    boolean output = properties.canDrain();
+                    if(!input && !output)
+                        ioType = IExtraCapabilityInformation.EnumIOType.NONE;
+                    else if(input && !output)
+                        ioType = IExtraCapabilityInformation.EnumIOType.INPUT;
+                    else if(output && !input)
+                        ioType = IExtraCapabilityInformation.EnumIOType.OUTPUT;
+                }
+                text.add(IExtraCapabilityInformation.formatCapability(ioType,"embers.tooltip.goggles.fluid",filter));
+            }
+
+        }
+    }
+
+    public static void addCapabilityEmberDescription(List<String> text, TileEntity tile, EnumFacing facing) {
+        Capability<IEmberCapability> capability = EmbersCapabilities.EMBER_CAPABILITY;
+        if(tile.hasCapability(capability,facing)) {
+            IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
+            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            } else {
+                text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.ember", null));
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -409,7 +497,7 @@ public class EventManager {
                 if (!s.isEmpty() && event.getState().getBlockHardness(event.getWorld(), event.getPos()) > 0) {
                     addHeat(player, s, 1.0f);
                 }
-				/*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
+                /*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
 					PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 				}*/
                 if (player.getHeldItemMainhand().getItem() instanceof ItemGrandhammer) {

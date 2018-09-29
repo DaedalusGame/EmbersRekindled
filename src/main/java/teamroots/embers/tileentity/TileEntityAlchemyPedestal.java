@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +20,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
@@ -26,9 +28,10 @@ import teamroots.embers.util.sound.ISoundController;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
-public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
+public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
 	int angle = 0;
 	int turnRate = 0;
 	int progress = 0;
@@ -199,5 +202,16 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	@Override
 	public boolean shouldPlaySound(int id) {
 		return id == SOUND_PROCESS && active > 0;
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.BOTH,"embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.ash")));
 	}
 }

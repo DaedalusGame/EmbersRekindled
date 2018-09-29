@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -25,6 +26,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.projectile.EffectDamage;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockBreaker;
@@ -42,7 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase, IExtraDialInformation, ISoundController, ITickable {
+public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase, ISoundController, ITickable, IExtraDialInformation, IExtraCapabilityInformation {
 	public static int FLUID_CAPACITY = Fluid.BUCKET_VOLUME*16;
 	public static int FLUID_PROCESS_AMOUNT = 1;
 
@@ -340,5 +342,18 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 		}
 
 		return speedId == id || pressureId == id;
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(facing == EnumFacing.DOWN)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.water")));
+		if(facing == EnumFacing.UP)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.steam")));
 	}
 }

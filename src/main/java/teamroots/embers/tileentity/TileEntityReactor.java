@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
@@ -25,6 +26,7 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -42,7 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation {
+public class TileEntityReactor extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
     public static final float BASE_MULTIPLIER = 1.0f;
     public static final int PROCESS_TIME = 20;
     public IEmberCapability capability = new DefaultEmberCapability() {
@@ -254,5 +256,18 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
             double multiplier = BASE_MULTIPLIER + combustorMult + catalyzerMult;
             information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplierFormat.format(multiplier)));
         }
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return true;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.ember")));
+        if(capability == EmbersCapabilities.EMBER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.ember",null));
     }
 }

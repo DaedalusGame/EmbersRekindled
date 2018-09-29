@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
@@ -30,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable, IExtraCapabilityInformation {
     public static final int PROCESS_TIME = 40;
     Random random = new Random();
     int progress = -1;
@@ -158,5 +160,16 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
     public void markDirty() {
         super.markDirty();
         Misc.syncTE(this);
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.ember")));
     }
 }

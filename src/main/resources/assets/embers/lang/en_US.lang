@@ -295,6 +295,36 @@ embers.decimal_format.inaccuracy=0
 embers.decimal_format.heat=0.00
 embers.decimal_format.item_amount=0x
 
+embers.tooltip.goggles.input=§9⬊§r %s
+embers.tooltip.goggles.output=§6⬉§r %s
+embers.tooltip.goggles.storage=• %s
+
+embers.tooltip.goggles.item=Items
+embers.tooltip.goggles.fluid=Fluids
+embers.tooltip.goggles.ember=Ember
+embers.tooltip.goggles.mechanical=Mechanical Power
+embers.tooltip.goggles.filter=%s (%s)
+
+embers.tooltip.goggles.item.any=Any
+embers.tooltip.goggles.item.fuel=Fuel
+embers.tooltip.goggles.item.ember=Ember
+embers.tooltip.goggles.item.stamp=Stamp
+embers.tooltip.goggles.item.ember_storage=Ember Storage
+embers.tooltip.goggles.item.combustion=Combustibles
+embers.tooltip.goggles.item.catalysis=Catalysts
+embers.tooltip.goggles.item.ash=Ash
+embers.tooltip.goggles.fluid.any=Any
+embers.tooltip.goggles.fluid.metal=Molten Metals
+embers.tooltip.goggles.fluid.water=Water
+embers.tooltip.goggles.fluid.steam=Steam
+embers.tooltip.goggles.fluid.water_or_steam=Water or Steam
+embers.tooltip.goggles.fluid.redstone=Alchemical Slurry
+
+embers.tooltip.goggles.upgrade_slot=• Machine Upgrade Slot
+embers.tooltip.goggles.upgrade=• Machine Upgrade
+embers.tooltip.goggles.accessor_slot=• Machine Accessor Slot
+embers.tooltip.goggles.actuator_slot=• Actuator Slot
+
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
 embers.tooltip.itemdial.slot=Slot %s: %s
@@ -303,6 +333,7 @@ embers.tooltip.itemdial.noitem=NONE
 embers.tooltip.emberdial.ember=Ember: %s/%s
 embers.tooltip.fluiddial.fluid=%s: %s/%s
 embers.tooltip.fluiddial.nofluid=0/%s
+embers.tooltip.side.center=Center
 embers.tooltip.side.north=North
 embers.tooltip.side.east=East
 embers.tooltip.side.south=South

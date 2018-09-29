@@ -1,6 +1,8 @@
 package teamroots.embers.tileentity;
 
+import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,12 +15,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.DialInformationEvent;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -36,7 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered, IExtraDialInformation {
+public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered, IExtraDialInformation, IExtraCapabilityInformation {
     public static final int MAX_LEVEL = 7;
     public static final int BORE_TIME = 200;
     public static final int SLOT_FUEL = 8;
@@ -319,6 +323,19 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     @Override
     public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
         UpgradeUtil.throwEvent(this, new DialInformationEvent(this, information, dialType), upgrades);
+    }
+
+    @Override
+    public boolean hasCapabilityDescription(Capability<?> capability) {
+        return true;
+    }
+
+    @Override
+    public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.fuel")));
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.ember")));
+        }
     }
 
     public class EmberBoreInventory extends ItemStackHandler {

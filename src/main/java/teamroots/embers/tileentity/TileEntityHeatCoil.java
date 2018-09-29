@@ -28,6 +28,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.event.HeatCoilVisualEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -49,7 +50,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IExtraDialInformation {
+public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
 	public static final double EMBER_COST = 1.0;
 	public static final double HEATING_SPEED = 1.0;
 	public static final double COOLING_SPEED = 1.0;
@@ -319,5 +320,16 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			double heat = MathHelper.clamp(this.heat,0, maxHeat);
 			information.add(I18n.format("embers.tooltip.dial.heat",heatFormat.format(heat),heatFormat.format(maxHeat)));
 		}
+	}
+
+	@Override
+	public boolean hasCapabilityDescription(Capability<?> capability) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.item", null));
 	}
 }
