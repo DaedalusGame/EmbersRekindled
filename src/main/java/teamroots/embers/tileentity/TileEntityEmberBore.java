@@ -188,12 +188,14 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
                     ItemStack fuel = inventory.getStackInSlot(SLOT_FUEL);
                     if (!fuel.isEmpty()) {
                         ItemStack fuelCopy = fuel.copy();
-                        ticksFueled = TileEntityFurnace.getItemBurnTime(fuelCopy);
-                        fuel.shrink(1);
-                        if (fuel.isEmpty()) {
-                            inventory.setStackInSlot(SLOT_FUEL, fuelCopy.getItem().getContainerItem(fuelCopy));
+                        int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
+                        if(burnTime > 0) {
+                            ticksFueled = burnTime;
+                            fuel.shrink(1);
+                            if (fuel.isEmpty())
+                                inventory.setStackInSlot(SLOT_FUEL, fuelCopy.getItem().getContainerItem(fuelCopy));
+                            markDirty();
                         }
-                        markDirty();
                     }
                 } else if (canMine()) {
                     int boreTime = (int) Math.ceil(BORE_TIME * (1 / speedMod));

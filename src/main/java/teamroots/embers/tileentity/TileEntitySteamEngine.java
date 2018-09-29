@@ -57,7 +57,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     public DefaultMechCapability capability = new DefaultMechCapability() {
         @Override
         public void setPower(double value, EnumFacing from) {
-            if(from == null)
+            if (from == null)
                 super.setPower(value, null);
         }
     };
@@ -77,7 +77,12 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
+            ItemStack currentFuel = super.extractItem(slot, amount, true);
+            int burntime = TileEntityFurnace.getItemBurnTime(currentFuel);
+            if (burntime != 0) {
+                return ItemStack.EMPTY;
+            }
+            return super.extractItem(slot, amount, simulate);
         }
 
     };
@@ -202,12 +207,12 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         FluidStack fluid = tank.getFluid();
         ILiquidFuel fuelHandler = EmbersAPI.getSteamEngineFuel(fluid);
         double powerGenerated = 0;
-        if(world.isRemote) {
+        if (world.isRemote) {
             spawnParticles();
             handleSound();
         }
         if (fluid != null && fuelHandler != null) { //Overclocked steam power
-            fluid = tank.drain(Math.min(GAS_CONSUMPTION, Math.max(fluid.amount-1,1)), false);
+            fluid = tank.drain(Math.min(GAS_CONSUMPTION, Math.max(fluid.amount - 1, 1)), false);
             if (!world.isRemote) {
                 steamProgress++;
                 powerGenerated = Misc.getDiminishedPower(fuelHandler.getPower(fluid), MAX_POWER, 1);
@@ -215,22 +220,23 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                 markDirty();
             }
         } else {
-            if(steamProgress > 0) {
+            if (steamProgress > 0) {
                 steamProgress = 0;
                 markDirty();
             }
             if (burnProgress == 0) { //Otherwise try normal power generation from water and coal
                 if (!world.isRemote && !inventory.getStackInSlot(0).isEmpty() && fluid != null && fluid.getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= NORMAL_FLUID_THRESHOLD) {
-                    ItemStack stack = inventory.getStackInSlot(0).copy();
-                    stack.setCount(1);
-                    int fuel = TileEntityFurnace.getItemBurnTime(stack);
-                    if (fuel > 0) {
-                        burnProgress = fuel * FUEL_MULTIPLIER;
-                        inventory.getStackInSlot(0).shrink(1);
-                        if (inventory.getStackInSlot(0).isEmpty()) {
-                            inventory.setStackInSlot(0, ItemStack.EMPTY);
+                    ItemStack fuel = inventory.getStackInSlot(0);
+                    if (!fuel.isEmpty()) {
+                        ItemStack fuelCopy = fuel.copy();
+                        int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
+                        if (burnTime > 0) {
+                            burnProgress = burnTime * FUEL_MULTIPLIER;
+                            fuel.shrink(1);
+                            if (fuel.isEmpty())
+                                inventory.setStackInSlot(0, fuelCopy.getItem().getContainerItem(fuelCopy));
+                            markDirty();
                         }
-                        markDirty();
                     }
                 }
             } else {
@@ -254,7 +260,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     }
 
     private void spawnParticles() {
-        if(steamProgress == 0 && burnProgress == 0)
+        if (steamProgress == 0 && burnProgress == 0)
             return;
         boolean vapor = steamProgress > 0;
         for (int i = 0; i < 4; i++) {
@@ -316,8 +322,10 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     @Override
     public boolean shouldPlaySound(int id) {
         switch (id) {
-            case SOUND_BURN: return burnProgress > 0;
-            case SOUND_STEAM: return steamProgress > 0;
+            case SOUND_BURN:
+                return burnProgress > 0;
+            case SOUND_STEAM:
+                return steamProgress > 0;
         }
         return false;
     }
@@ -329,11 +337,11 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 
     @Override
     public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.fuel")));
-        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid", I18n.format("embers.tooltip.goggles.fluid.water_or_steam")));
-        if(capability == MysticalMechanicsAPI.MECH_CAPABILITY)
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.mechanical",null));
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT, "embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.fuel")));
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT, "embers.tooltip.goggles.fluid", I18n.format("embers.tooltip.goggles.fluid.water_or_steam")));
+        if (capability == MysticalMechanicsAPI.MECH_CAPABILITY)
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT, "embers.tooltip.goggles.mechanical", null));
     }
 }
