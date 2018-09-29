@@ -285,9 +285,10 @@ public class TileEntityFluidExtractor extends TileEntityFluidPipeBase {
                         IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite());
                         if (handler.drain(MAX_DRAIN, false) != null) {
                             FluidStack extracted = handler.drain(MAX_DRAIN, false);
-                            if (this.tank.fill(extracted, false) > 0) {
-                                handler.drain(MAX_DRAIN, true);
+                            int filled = this.tank.fill(extracted, false);
+                            if (filled > 0) {
                                 this.tank.fill(extracted, true);
+                                handler.drain(filled, true);
                             }
                         }
                         setFrom(facing, true);

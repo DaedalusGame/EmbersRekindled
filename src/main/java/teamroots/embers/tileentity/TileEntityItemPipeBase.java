@@ -32,7 +32,8 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
     boolean syncInventory;
     boolean syncCloggedFlag;
     boolean syncTransfer;
-    int ticksExisted = 0;
+    int ticksExisted;
+    int lastRobin;
 
     protected TileEntityItemPipeBase() {
         initInventory();
@@ -130,7 +131,7 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
                 for (int key : possibleDirections.keySet()) {
                     ArrayList<EnumFacing> list = possibleDirections.get(key);
                     for(int i = 0; i < list.size(); i++) {
-                        EnumFacing facing = list.get((i+ticksExisted) % list.size());
+                        EnumFacing facing = list.get((i+lastRobin) % list.size());
                         IItemHandler handler = itemHandlers[facing.getIndex()];
                         itemsMoved = pushStack(passStack, facing, handler);
                         if(lastTransfer != facing) {
@@ -138,8 +139,10 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
                             lastTransfer = facing;
                             markDirty();
                         }
-                        if(itemsMoved)
+                        if(itemsMoved) {
+                            lastRobin++;
                             break;
+                        }
                     }
                     if(itemsMoved)
                         break;
@@ -238,6 +241,7 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
         writeLastTransfer(tag);
         for(EnumFacing facing : EnumFacing.VALUES)
             tag.setBoolean("from"+facing.getIndex(),from[facing.getIndex()]);
+        tag.setInteger("lastRobin",lastRobin);
         return tag;
     }
 
@@ -265,6 +269,8 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
         for(EnumFacing facing : EnumFacing.VALUES)
             if(tag.hasKey("from"+facing.getIndex()))
                 from[facing.getIndex()] = tag.getBoolean("from"+facing.getIndex());
+        if (tag.hasKey("lastRobin"))
+            lastRobin = tag.getInteger("lastRobin");
     }
 
 }

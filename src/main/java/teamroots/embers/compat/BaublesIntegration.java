@@ -2,12 +2,14 @@ package teamroots.embers.compat;
 
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,10 +17,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.alchemy.AspectList;
+import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.item.ItemEmberStorage;
 import teamroots.embers.item.bauble.*;
+import teamroots.embers.recipe.AlchemyRecipe;
+import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.research.subtypes.ResearchShowItem;
@@ -61,6 +67,40 @@ public class BaublesIntegration {
                 'S', RegistryManager.ember_cluster,
                 'C', "plateDawnstone",
                 'G', "blockGlass"}).setMirrored(true).setRegistryName(getRL("ember_bulb")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("ashen_amulet"), new ItemStack(ashen_amulet, 1), true, new Object[]{
+                " L ",
+                "L L",
+                "NCN",
+                'C', "dustAsh",
+                'N', RegistryManager.archaic_brick,
+                'L', Items.LEATHER}).setRegistryName(getRL("ashen_amulet")));
+        /*event.getRegistry().register(new ShapedOreRecipe(getRL("explosion_charm"), new ItemStack(explosion_charm, 1), true, new Object[]{
+                "LB ",
+                "BCB",
+                " B ",
+                'L', Items.LEATHER,
+                'C', RegistryManager.ember_cluster,
+                'B', RegistryManager.archaic_brick}).setMirrored(true).setRegistryName(getRL("explosion_charm")));*/
+        event.getRegistry().register(new ShapedOreRecipe(getRL("dawnstone_mail"), new ItemStack(dawnstone_mail, 1), true, new Object[]{
+                "P P",
+                "PPP",
+                "PPP",
+                'P', "plateDawnstone"}).setMirrored(true).setRegistryName(getRL("dawnstone_mail")));
+        /*event.getRegistry().register(new ShapedOreRecipe(getRL("nonbeliever_amulet"), new ItemStack(nonbeliever_amulet, 1), true, new Object[]{
+                " L ",
+                "L L",
+                "NCN",
+                'C', RegistryManager.eldritch_insignia,
+                'N', RegistryManager.archaic_circuit,
+                'L', Items.LEATHER}).setRegistryName(getRL("nonbeliever_amulet")));*/
+
+        Ingredient leather = Ingredient.fromItem(Items.LEATHER);
+        Ingredient archaicBrick = Ingredient.fromItem(RegistryManager.archaic_brick);
+        Ingredient eldritchInsignia = Ingredient.fromItem(RegistryManager.eldritch_insignia);
+        Ingredient archaicCircuit = Ingredient.fromItem(RegistryManager.archaic_circuit);
+
+        RecipeRegistry.alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 8, 32).setRange("copper", 8, 32), Ingredient.fromItem(RegistryManager.ember_cluster), Lists.newArrayList(archaicBrick, leather, archaicBrick, archaicBrick), new ItemStack(explosion_charm, 1)));
+        RecipeRegistry.alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 32, 64).setRange("silver", 32, 64), Ingredient.fromItem(ashen_amulet), Lists.newArrayList(archaicCircuit, archaicBrick, archaicCircuit, eldritchInsignia), new ItemStack(nonbeliever_amulet, 1)));
     }
 
     public static void registerAll() //éw

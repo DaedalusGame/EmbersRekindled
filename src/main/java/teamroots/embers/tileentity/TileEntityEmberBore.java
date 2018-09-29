@@ -174,22 +174,23 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
         boolean previousRunning = isRunning;
         if (!getWorld().isRemote) {
             isRunning = false;
-            boolean cancel = UpgradeUtil.doWork(this, upgrades);
+            ticksExisted++;
+
+            double fuelConsumption = UpgradeUtil.getOtherParameter(this, "fuel_consumption", FUEL_CONSUMPTION, upgrades);
+            boolean cancel = false;
+            if (ticksFueled >= fuelConsumption) {
+                isRunning = true;
+                ticksFueled -= fuelConsumption;
+                cancel = UpgradeUtil.doWork(this, upgrades);
+            }
+
             if (!cancel) {
-                ticksExisted++;
-
-                double fuelConsumption = UpgradeUtil.getOtherParameter(this, "fuel_consumption", FUEL_CONSUMPTION, upgrades);
-                if (ticksFueled >= fuelConsumption) {
-                    isRunning = true;
-                    ticksFueled -= fuelConsumption;
-                }
-
                 if (ticksFueled < fuelConsumption) {
                     ItemStack fuel = inventory.getStackInSlot(SLOT_FUEL);
                     if (!fuel.isEmpty()) {
                         ItemStack fuelCopy = fuel.copy();
                         int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
-                        if(burnTime > 0) {
+                        if (burnTime > 0) {
                             ticksFueled = burnTime;
                             fuel.shrink(1);
                             if (fuel.isEmpty())
@@ -282,7 +283,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     @Override
     public boolean shouldPlaySound(int id) {
         /*if(ticksFueled > 0) {
-			return isRunning && id == SOUND_ON_DRILL || id == SOUND_ON && !isRunning;
+            return isRunning && id == SOUND_ON_DRILL || id == SOUND_ON && !isRunning;
 		}*/
 
         return isRunning;
@@ -334,9 +335,9 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
     @Override
     public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.fuel")));
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.ember")));
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT, "embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.fuel")));
+            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT, "embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.ember")));
         }
     }
 

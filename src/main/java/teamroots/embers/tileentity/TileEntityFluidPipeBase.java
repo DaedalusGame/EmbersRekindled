@@ -35,7 +35,8 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
     boolean syncTank;
     boolean syncCloggedFlag;
     boolean syncTransfer;
-    int ticksExisted = 0;
+    int ticksExisted;
+    int lastRobin;
 
     protected TileEntityFluidPipeBase() {
         initFluidTank();
@@ -127,19 +128,21 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
 
                 for (int key : possibleDirections.keySet()) {
                     ArrayList<EnumFacing> list = possibleDirections.get(key);
-                    for(int i = 0; i < list.size(); i++) {
-                        EnumFacing facing = list.get((i+ticksExisted) % list.size());
+                    for (int i = 0; i < list.size(); i++) {
+                        EnumFacing facing = list.get((i + lastRobin) % list.size());
                         IFluidHandler handler = fluidHandlers[facing.getIndex()];
                         fluidMoved = pushStack(passStack, facing, handler);
-                        if(lastTransfer != facing) {
+                        if (lastTransfer != facing) {
                             syncTransfer = true;
                             lastTransfer = facing;
                             markDirty();
                         }
-                        if(fluidMoved)
+                        if (fluidMoved) {
+                            lastRobin++;
                             break;
+                        }
                     }
-                    if(fluidMoved)
+                    if (fluidMoved)
                         break;
                 }
             }
@@ -147,7 +150,7 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             //if (fluidMoved)
             //    resetFrom();
             if (tank.getFluidAmount() <= 0) {
-                if(lastTransfer != null && !fluidMoved) {
+                if (lastTransfer != null && !fluidMoved) {
                     syncTransfer = true;
                     lastTransfer = null;
                     markDirty();
@@ -160,14 +163,14 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                 syncCloggedFlag = true;
                 markDirty();
             }
-        } else if(Embers.proxy.isPlayerWearingGoggles()) {
-            if(lastTransfer != null) {
-                for(int i = 0; i < 3; i++) {
+        } else if (Embers.proxy.isPlayerWearingGoggles()) {
+            if (lastTransfer != null) {
+                for (int i = 0; i < 3; i++) {
                     float dist = random.nextFloat() * 0.5f;
                     int lifetime = random.nextInt(20) + 5;
-                    float vx = lastTransfer.getFrontOffsetX() / (float) (lifetime / (1-dist));
-                    float vy = lastTransfer.getFrontOffsetY() / (float) (lifetime / (1-dist));
-                    float vz = lastTransfer.getFrontOffsetZ() / (float) (lifetime / (1-dist));
+                    float vx = lastTransfer.getFrontOffsetX() / (float) (lifetime / (1 - dist));
+                    float vy = lastTransfer.getFrontOffsetY() / (float) (lifetime / (1 - dist));
+                    float vz = lastTransfer.getFrontOffsetZ() / (float) (lifetime / (1 - dist));
                     float x = pos.getX() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetX() * dist;
                     float y = pos.getY() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetY() * dist;
                     float z = pos.getZ() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetZ() * dist;
@@ -182,17 +185,16 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
     }
 
     private boolean pushStack(FluidStack passStack, EnumFacing facing, IFluidHandler handler) {
-        if (handler.fill(passStack, false) > 0) {
-            int added = handler.fill(passStack, true);
-            if (added > 0) {
-                this.tank.drain(added, true);
-                passStack.amount -= added;
-                return true;
-            }
+        int added = handler.fill(passStack, false);
+        if (added > 0) {
+            handler.fill(passStack, true);
+            this.tank.drain(added, true);
+            passStack.amount -= added;
+            return true;
         }
 
-        if(isFrom(facing))
-            setFrom(facing,false);
+        if (isFrom(facing))
+            setFrom(facing, false);
         return false;
     }
 
@@ -228,8 +230,9 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
         writeTank(tag);
         writeCloggedFlag(tag);
         writeLastTransfer(tag);
-        for(EnumFacing facing : EnumFacing.VALUES)
-            tag.setBoolean("from"+facing.getIndex(),from[facing.getIndex()]);
+        for (EnumFacing facing : EnumFacing.VALUES)
+            tag.setBoolean("from" + facing.getIndex(), from[facing.getIndex()]);
+        tag.setInteger("lastRobin",lastRobin);
         return tag;
     }
 
@@ -254,8 +257,10 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             tank.readFromNBT(tag.getCompoundTag("tank"));
         if (tag.hasKey("lastTransfer"))
             lastTransfer = Misc.readNullableFacing(tag.getInteger("lastTransfer"));
-        for(EnumFacing facing : EnumFacing.VALUES)
-            if(tag.hasKey("from"+facing.getIndex()))
-                from[facing.getIndex()] = tag.getBoolean("from"+facing.getIndex());
+        for (EnumFacing facing : EnumFacing.VALUES)
+            if (tag.hasKey("from" + facing.getIndex()))
+                from[facing.getIndex()] = tag.getBoolean("from" + facing.getIndex());
+        if (tag.hasKey("lastRobin"))
+            lastRobin = tag.getInteger("lastRobin");
     }
 }

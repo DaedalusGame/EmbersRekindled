@@ -1019,6 +1019,20 @@ public class RecipeRegistry {
 				'I', RegistryManager.pump,
 				'P', "plateIron",
 				'B', RegistryManager.brick_caminite}).setRegistryName(getRL("mechanical_pump")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("tinker_lens"),new ItemStack(RegistryManager.tinker_lens,1),true,new Object[]{
+				"BE ",
+				"IPE",
+				"BE ",
+				'E', "nuggetLead",
+				'I', "plateLead",
+				'P', "paneGlass",
+				'B', "ingotIron"}).setRegistryName(getRL("tinker_lens")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("anti_tinker_lens"),new ItemStack(RegistryManager.anti_tinker_lens,1),true,new Object[]{
+				" A ",
+				"APA",
+				" A ",
+				'P', RegistryManager.tinker_lens,
+				'A', "dustAsh"}).setRegistryName(getRL("anti_tinker_lens")));
 
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
@@ -1180,6 +1194,12 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemWasteStampingRecipe());
 
 		Ingredient emberShard = Ingredient.fromItem(RegistryManager.shard_ember);
+		Ingredient emberCrystal = Ingredient.fromItem(RegistryManager.crystal_ember);
+		Ingredient stampFlat = Ingredient.fromItem(RegistryManager.stamp_flat);
+
+		//stampingRecipes.add(new ItemStampingRecipe(emberShard,null,stampFlat,new ItemStack(RegistryManager.dust_ember,1))); //Maybe one day
+		stampingRecipes.add(new ItemStampingRecipe(emberCrystal,null,stampFlat,new ItemStack(RegistryManager.shard_ember,6)));
+
 		int aspectusAmount = ConfigManager.stampAspectusAmount * INGOT_AMOUNT;
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_iron, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_iron,1)));
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_lead, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_lead,1)));
@@ -1215,7 +1235,6 @@ public class RecipeRegistry {
 			Item item = stack.getItem();
 			return item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().toLowerCase().contains("lead");
 		}); //Any lead sword.
-		Ingredient emberCrystal = Ingredient.fromItem(RegistryManager.crystal_ember);
 		Ingredient emberCluster = Ingredient.fromItem(RegistryManager.ember_cluster);
 		Ingredient archaicBrick = Ingredient.fromItem(RegistryManager.archaic_brick);
 		Ingredient archaicCircuit = Ingredient.fromItem(RegistryManager.archaic_circuit);
@@ -1233,19 +1252,19 @@ public class RecipeRegistry {
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 64, 80), quartz,  Lists.newArrayList(gunpowder, gunpowder, emberShard, emberShard), new ItemStack(RegistryManager.glimmer_shard,1)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 24, 36), ingotIron, Lists.newArrayList(quartz, clay, lapis), new ItemStack(RegistryManager.isolated_materia,4)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 12, 18), clay, Lists.newArrayList(bonemeal, bonemeal), new ItemStack(RegistryManager.adhesive,6)));
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, NUGGET_AMOUNT), redstone, Lists.newArrayList(ash, ash, cobblestone, cobblestone), new ItemStack(Blocks.NETHERRACK,2)));
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, NUGGET_AMOUNT), ash, Lists.newArrayList(sand, sand, sand, sand), new ItemStack(Blocks.SOUL_SAND,4)));
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, 16), redstone, Lists.newArrayList(ash, ash, cobblestone, cobblestone), new ItemStack(Blocks.NETHERRACK,2)));
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, 16), ash, Lists.newArrayList(sand, sand, sand, sand), new ItemStack(Blocks.SOUL_SAND,4)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("silver", 64, 96).setRange("lead", 64, 96), leadSword, Lists.newArrayList(blockCoal, obsidian, ingotLead, ingotLead), new ItemStack(RegistryManager.tyrfing,1)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 24, 48).setRange("copper", 24, 48), emberCrystal, Lists.newArrayList(gunpowder, emberShard, emberShard, emberShard), new ItemStack(RegistryManager.ember_cluster,1)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 32, 48).setRange("silver", 24, 32), Ingredient.fromItem(RegistryManager.ancient_motive_core), Lists.newArrayList(ingotDawnstone, emberCluster, ingotDawnstone, plateCopper), new ItemStack(RegistryManager.wildfire_core,1)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 4, 8), archaicBrick,Lists.newArrayList(soulsand, soulsand, clay, clay), new ItemStack(RegistryManager.archaic_brick,5)));
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 24, 32), emberShard, Lists.newArrayList(archaicBrick, archaicBrick, archaicBrick, archaicBrick), new ItemStack(RegistryManager.ancient_motive_core,1)));
 
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper", NUGGET_AMOUNT, 24),
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper", 16, 24),
 				gunpowder,
 				Lists.newArrayList(plateIron, plateIron, plateIron, ingotCopper),
 				new ItemStack(RegistryManager.blasting_core,1)));
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", NUGGET_AMOUNT, 32).setRange("lead", 48, 72),
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 16, 32).setRange("lead", 48, 72),
 				archaicCircuit,
 				Lists.newArrayList(archaicBrick, coal, archaicBrick, coal),
 				new ItemStack(RegistryManager.eldritch_insignia,1)));
@@ -1253,11 +1272,11 @@ public class RecipeRegistry {
 				plateCopper,
 				Lists.newArrayList(archaicCircuit, ingotCopper, archaicCircuit, ingotCopper),
 				new ItemStack(RegistryManager.intelligent_apparatus,1)));
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", NUGGET_AMOUNT, 32).setRange("silver", NUGGET_AMOUNT, 32),
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 16, 32).setRange("silver", 16, 32),
 				emberCrystal,
 				Lists.newArrayList(plateDawnstone, plateDawnstone, plateDawnstone, ingotSilver),
 				new ItemStack(RegistryManager.flame_barrier,1)));
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, NUGGET_AMOUNT).setRange("silver", 32, 64),
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  8, 16).setRange("silver", 32, 64),
 				emberCrystal,
 				Lists.newArrayList(plateDawnstone, plateSilver, plateDawnstone, plateSilver),
 				new ItemStack(RegistryManager.focal_lens,1)));
@@ -1269,7 +1288,7 @@ public class RecipeRegistry {
 
 		Ingredient anyMetalSeed = new IngredientSpecial(stack -> Block.getBlockFromItem(stack.getItem()) instanceof BlockSeed);
 
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList(AspectList.createStandard(0, 0, 0, 0, 0), AspectList.createStandard(NUGGET_AMOUNT, NUGGET_AMOUNT, NUGGET_AMOUNT, NUGGET_AMOUNT, NUGGET_AMOUNT)),
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList(AspectList.createStandard(0, 0, 0, 0, 0), AspectList.createStandard(16, 16, 16, 16, 16)),
 				anyMetalSeed,
 				Lists.newArrayList(Ingredient.fromItem(RegistryManager.dust_ember), new OreIngredient("dustRedstone")),
 				new ItemStack(RegistryManager.dust_metallurgic,3)));
