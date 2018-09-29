@@ -3,6 +3,7 @@ package teamroots.embers.network.message;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -19,24 +20,28 @@ import java.util.UUID;
 
 public class MessageAshenAmuletFX implements IMessage {
     public static Random random = new Random();
-    BlockPos pos;
     Integer entityID;
+    AxisAlignedBB aabb;
 
     public MessageAshenAmuletFX() {
-    }
-
-    public MessageAshenAmuletFX(BlockPos pos) {
-        this.pos = pos;
     }
 
     public MessageAshenAmuletFX(Entity entity) {
         this.entityID = entity.getEntityId();
     }
 
+    public MessageAshenAmuletFX(BlockPos pos) {
+        this.aabb = new AxisAlignedBB(pos);
+    }
+
+    public MessageAshenAmuletFX(AxisAlignedBB aabb) {
+        this.aabb = aabb;
+    }
+
     private int getType() {
-        if ((pos != null) == (entityID != null))
+        if ((aabb != null) == (entityID != null))
             return 0;
-        else if (pos != null)
+        else if (aabb != null)
             return 1;
         else
             return 2;
@@ -47,10 +52,13 @@ public class MessageAshenAmuletFX implements IMessage {
         int type = buf.readInt();
         switch (type) {
             case 1:
-                int posX = buf.readInt();
-                int posY = buf.readInt();
-                int posZ = buf.readInt();
-                pos = new BlockPos(posX, posY, posZ);
+                double minX = buf.readDouble();
+                double minY = buf.readDouble();
+                double minZ = buf.readDouble();
+                double maxX = buf.readDouble();
+                double maxY = buf.readDouble();
+                double maxZ = buf.readDouble();
+                aabb = new AxisAlignedBB(minX,minY,minZ,maxX,maxY,maxZ);
                 return;
             case 2:
                 entityID = buf.readInt();
@@ -64,9 +72,12 @@ public class MessageAshenAmuletFX implements IMessage {
         buf.writeInt(type);
         switch (type) {
             case 1:
-                buf.writeInt(pos.getX());
-                buf.writeInt(pos.getY());
-                buf.writeInt(pos.getZ());
+                buf.writeDouble(aabb.minX);
+                buf.writeDouble(aabb.minY);
+                buf.writeDouble(aabb.minZ);
+                buf.writeDouble(aabb.maxX);
+                buf.writeDouble(aabb.maxY);
+                buf.writeDouble(aabb.maxZ);
                 return;
             case 2:
                 buf.writeInt(entityID);
@@ -82,7 +93,7 @@ public class MessageAshenAmuletFX implements IMessage {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 switch (message.getType()) {
                     case 1:
-                        ParticleUtil.spawnParticleAsh(world,message.pos,20);
+                        ParticleUtil.spawnParticleAsh(world,message.aabb,20);
                         return;
                     case 2:
                         Entity entity = world.getEntityByID(message.entityID);

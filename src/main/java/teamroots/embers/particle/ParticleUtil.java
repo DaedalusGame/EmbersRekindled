@@ -114,15 +114,11 @@ public class ParticleUtil {
     }
 
     public static void spawnParticleAsh(World world, Entity entity, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            AxisAlignedBB aabb = entity.getEntityBoundingBox();
-            ClientProxy.particleRenderer.addParticle(new ParticleAsh(world, aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, lifetime));
-        }
+        spawnParticleAsh(world,entity.getEntityBoundingBox(),lifetime);
     }
 
-    public static void spawnParticleAsh(World world, BlockPos pos, int lifetime) {
+    public static void spawnParticleAsh(World world, AxisAlignedBB aabb, int lifetime) {
         if (Embers.proxy instanceof ClientProxy) {
-            AxisAlignedBB aabb = new AxisAlignedBB(pos);
             ClientProxy.particleRenderer.addParticle(new ParticleAsh(world, aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, lifetime));
         }
     }

@@ -12,12 +12,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.event.InfoGogglesEvent;
 import teamroots.embers.api.item.IInfoGoggles;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
@@ -62,12 +64,16 @@ public class ClientProxy extends CommonProxy{
 	public boolean isPlayerWearingGoggles() {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 
-		ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-		Item helmetItem = helmet.getItem();
-		if(helmetItem instanceof IInfoGoggles && ((IInfoGoggles) helmetItem).shouldDisplayInfo(player,helmet))
-			return true;
-		//TODO: modifier
-		return false;
+		boolean shouldDisplay = isGoggles(player, EntityEquipmentSlot.HEAD) || isGoggles(player, EntityEquipmentSlot.MAINHAND) || isGoggles(player, EntityEquipmentSlot.OFFHAND);
+		InfoGogglesEvent event = new InfoGogglesEvent(player,shouldDisplay);
+		MinecraftForge.EVENT_BUS.post(event);
+		return event.shouldDisplay();
+	}
+
+	private boolean isGoggles(EntityPlayer player, EntityEquipmentSlot slot) {
+		ItemStack stack = player.getItemStackFromSlot(slot);
+		Item item = stack.getItem();
+		return item instanceof IInfoGoggles && ((IInfoGoggles) item).shouldDisplayInfo(player, stack, slot);
 	}
 
 	@Override

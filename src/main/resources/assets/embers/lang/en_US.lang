@@ -137,9 +137,11 @@ item.tinker_hammer.name=Tinker's Hammer
 item.stamp_bar.name=Bar Stamp
 item.stamp_flat.name=Flat Stamp
 item.stamp_plate.name=Plate Stamp
+item.stamp_gear.name=Gear Stamp
 item.stamp_bar_raw.name=Raw Bar Stamp
 item.stamp_flat_raw.name=Raw Flat Stamp
 item.stamp_plate_raw.name=Raw Plate Stamp
+item.stamp_gear_raw.name=Raw Gear Stamp
 item.dust_ember.name=Ember Grit
 item.shard_ember.name=Ember Shard
 item.crystal_ember.name=Ember Crystal
@@ -220,7 +222,8 @@ item.explosion_charm.name=Explosion Charm
 item.nonbeliever_amulet.name=Amulet of the Heretic
 item.ashen_amulet.name=Ashen Amulet
 item.dawnstone_mail.name=Dawnstone Mail
-
+item.tinker_lens.name=Tinker Lens
+item.anti_tinker_lens.name=Smoky Tinker Lens
 
 tile.block_aluminum.name=Aluminium Block
 tile.ore_aluminum.name=Aluminium Ore
@@ -361,6 +364,8 @@ embers.tooltip.modifier.eldritch_insignia=Eerie %s
 embers.tooltip.modifier.intelligent_apparatus=Intelligent %s
 embers.tooltip.modifier.diffraction=Diffractive %s
 embers.tooltip.modifier.focal_lens=Focused %s
+embers.tooltip.modifier.tinker_lens=Tinker Sight
+embers.tooltip.modifier.anti_tinker_lens=Tinker Blindness
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II

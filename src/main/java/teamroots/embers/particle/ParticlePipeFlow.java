@@ -34,7 +34,7 @@ public class ParticlePipeFlow extends Particle implements IEmberParticle{
 		this.motionY = vy*2.0f;
 		this.motionZ = vz*2.0f;
 		this.canCollide = false;
-		this.initAlpha = a;
+		this.initAlpha = 0;
 		this.particleAngle = rand.nextFloat()*2.0f*(float)Math.PI;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
 	    this.setParticleTexture(sprite);
@@ -58,11 +58,11 @@ public class ParticlePipeFlow extends Particle implements IEmberParticle{
 	@Override
 	public void onUpdate(){
 		super.onUpdate();
-		if (Misc.random.nextInt(6) == 0){
+		/*if (Misc.random.nextInt(6) == 0){
 			this.particleAge ++;
-		}
+		}*/
 		float lifeCoeff = (float)this.particleAge/(float)this.particleMaxAge;
-		this.particleAlpha = initAlpha*(float)Math.sin((1.0-lifeCoeff)*Math.PI);
+		this.particleAlpha = 1*(float)Math.sin((1.0-lifeCoeff)*Math.PI);
 		this.prevParticleAngle = particleAngle;
 		if(particleAge >= particleMaxAge)
 			setRBGColorF(0,0,0);

@@ -82,7 +82,7 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 	}
 
 	@Override
-	public boolean shouldDisplayInfo(EntityPlayer player, ItemStack stack) {
-		return true;
+	public boolean shouldDisplayInfo(EntityPlayer player, ItemStack stack, EntityEquipmentSlot slot) {
+		return slot == EntityEquipmentSlot.HEAD;
 	}
 }

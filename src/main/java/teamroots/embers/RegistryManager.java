@@ -97,6 +97,7 @@ public class RegistryManager {
 	public static Item diffraction_barrel;
 	public static Item focal_lens;
 	public static Item stamp_gear, stamp_gear_raw;
+	public static Item tinker_lens, anti_tinker_lens;
 	
 	public static DamageSource damage_ember;
 	
@@ -358,6 +359,8 @@ public class RegistryManager {
 		items.add(dust_metallurgic = new ItemMetallurgicDust("dust_metallurgic",true));
 		items.add(diffraction_barrel = new ItemBase("diffraction_barrel",true));
 		items.add(focal_lens = new ItemBase("focal_lens",true));
+		items.add(tinker_lens = new ItemTinkerLens("tinker_lens",true));
+		items.add(anti_tinker_lens = new ItemBase("anti_tinker_lens",true));
 
 		
 		if (ConfigManager.enableAluminum){
@@ -580,6 +583,8 @@ public class RegistryManager {
 		EmbersAPI.INTELLIGENT_APPARATUS = new ModifierIntelligentApparatus();
 		EmbersAPI.DIFFRACTION = new ModifierDiffraction();
 		EmbersAPI.FOCAL_LENS = new ModifierFocalLens();
+		EmbersAPI.TINKER_LENS = new ModifierTinkerLens("tinker_lens",false);
+		EmbersAPI.ANTI_TINKER_LENS = new ModifierTinkerLens("anti_tinker_lens",true);
 
 		EmbersAPI.registerModifier(ancient_motive_core, EmbersAPI.CORE);
 		EmbersAPI.registerModifier(superheater, EmbersAPI.SUPERHEATER);
@@ -592,6 +597,8 @@ public class RegistryManager {
 		EmbersAPI.registerModifier(intelligent_apparatus, EmbersAPI.INTELLIGENT_APPARATUS);
 		EmbersAPI.registerModifier(diffraction_barrel, EmbersAPI.DIFFRACTION);
 		EmbersAPI.registerModifier(focal_lens, EmbersAPI.FOCAL_LENS);
+		EmbersAPI.registerModifier(tinker_lens, EmbersAPI.TINKER_LENS);
+		EmbersAPI.registerModifier(anti_tinker_lens, EmbersAPI.ANTI_TINKER_LENS);
 	}
 
 	@SubscribeEvent

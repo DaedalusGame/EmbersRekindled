@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -29,6 +30,8 @@ import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageAshenAmuletFX;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.Misc;
@@ -170,7 +173,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
             if (!cancel) {
                 progress++;
                 if (getWorld().isRemote) {
-                    ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() + 0.5f, (float) getPos().getY() + 0.875f, (float) getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + random.nextFloat(), 48);
+                    ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() + 0.5f, (float) getPos().getY() + 0.875f, (float) getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.025f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 72, 72, 72, 0.6f, 3.0f + random.nextFloat(), 48);
                 }
                 double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
                 UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
@@ -188,6 +191,16 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
                         if (!remainder.isEmpty() && !getWorld().isRemote) {
                             getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, remainder));
                         }
+                    }
+                    if(!getWorld().isRemote) {
+                        AxisAlignedBB aabb = new AxisAlignedBB(
+                                pos.getX() + 0.3,
+                                pos.getY() + 0.9,
+                                pos.getZ() + 0.3,
+                                pos.getX() + 0.7,
+                                pos.getY() + 1.3,
+                                pos.getZ() + 0.7);
+                        PacketHandler.INSTANCE.sendToAll(new MessageAshenAmuletFX(aabb));
                     }
                 }
                 markDirty();

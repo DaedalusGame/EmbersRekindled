@@ -228,6 +228,8 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
         writeTank(tag);
         writeCloggedFlag(tag);
         writeLastTransfer(tag);
+        for(EnumFacing facing : EnumFacing.VALUES)
+            tag.setBoolean("from"+facing.getIndex(),from[facing.getIndex()]);
         return tag;
     }
 
@@ -252,5 +254,8 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             tank.readFromNBT(tag.getCompoundTag("tank"));
         if (tag.hasKey("lastTransfer"))
             lastTransfer = Misc.readNullableFacing(tag.getInteger("lastTransfer"));
+        for(EnumFacing facing : EnumFacing.VALUES)
+            if(tag.hasKey("from"+facing.getIndex()))
+                from[facing.getIndex()] = tag.getBoolean("from"+facing.getIndex());
     }
 }

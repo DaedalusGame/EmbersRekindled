@@ -163,7 +163,7 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
 
     @Override
     public EnumPipeConnection getInternalConnection(EnumFacing facing) {
-        return connections[facing.getIndex()];
+        return connections[facing.getIndex()] != null ? connections[facing.getIndex()] : EnumPipeConnection.NONE;
     }
 
     @Override
