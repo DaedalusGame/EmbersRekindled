@@ -166,8 +166,8 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
         } else if (Embers.proxy.isPlayerWearingGoggles()) {
             if (lastTransfer != null) {
                 for (int i = 0; i < 3; i++) {
-                    float dist = random.nextFloat() * 0.5f;
-                    int lifetime = random.nextInt(20) + 5;
+                    float dist = random.nextFloat() * 0.0f;
+                    int lifetime = 10;
                     float vx = lastTransfer.getFrontOffsetX() / (float) (lifetime / (1 - dist));
                     float vy = lastTransfer.getFrontOffsetY() / (float) (lifetime / (1 - dist));
                     float vz = lastTransfer.getFrontOffsetZ() / (float) (lifetime / (1 - dist));
@@ -177,7 +177,7 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                     float r = clogged ? 255f : 16f;
                     float g = clogged ? 16f : 255f;
                     float b = 16f;
-                    float size = random.nextFloat() * 4 + 2;
+                    float size = random.nextFloat() * 2 + 2;
                     ParticleUtil.spawnParticlePipeFlow(world, x, y, z, vx, vy, vz, r, g, b, 0.5f, size, lifetime);
                 }
             }
