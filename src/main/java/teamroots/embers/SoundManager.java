@@ -311,6 +311,9 @@ public class SoundManager {
         event.getRegistry().register(registerSound("block.pump.mid"));
         event.getRegistry().register(registerSound("block.pump.fast"));
 
+        event.getRegistry().register(registerSound("block.pipe.connect"));
+        event.getRegistry().register(registerSound("block.pipe.disconnect"));
+
         event.getRegistry().register(registerSound("fireball.small.fire"));
         event.getRegistry().register(registerSound("fireball.small.hit"));
         event.getRegistry().register(registerSound("fireball.big.fire"));

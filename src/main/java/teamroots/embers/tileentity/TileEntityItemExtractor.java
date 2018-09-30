@@ -7,12 +7,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import teamroots.embers.SoundManager;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
@@ -202,12 +204,18 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
     }
 
     public void reverseConnection(EnumFacing face) {
-        setInternalConnection(face, reverseForce(getInternalConnection(face)));
+        EnumPipeConnection connection = getInternalConnection(face);
+        setInternalConnection(face, reverseForce(connection));
         TileEntity tile = world.getTileEntity(pos.offset(face));
         if (tile instanceof TileEntityItemPipe)
             ((TileEntityItemPipe) tile).updateNeighbors(world);
         if (tile instanceof TileEntityItemExtractor)
             ((TileEntityItemExtractor) tile).updateNeighbors(world);
+        if (connection == EnumPipeConnection.FORCENONE) {
+            world.playSound(null, pos, SoundManager.PIPE_CONNECT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        } else if (connection != EnumPipeConnection.NONE && connection != EnumPipeConnection.LEVER) {
+            world.playSound(null, pos, SoundManager.PIPE_DISCONNECT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        }
     }
 
     @Override

@@ -8,12 +8,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import teamroots.embers.SoundManager;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.ItemUtil;
@@ -51,15 +53,15 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
                 @Nonnull
                 @Override
                 public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                    if(!simulate)
+                    if (!simulate)
                         setFrom(facing, true);
-                    return inventory.insertItem(slot,stack,simulate);
+                    return inventory.insertItem(slot, stack, simulate);
                 }
 
                 @Nonnull
                 @Override
                 public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                    return inventory.extractItem(slot,amount,simulate);
+                    return inventory.extractItem(slot, amount, simulate);
                 }
 
                 @Override
@@ -139,7 +141,7 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if(facing == null || getInternalConnection(facing).canTransfer())
+            if (facing == null || getInternalConnection(facing).canTransfer())
                 return true;
         }
         return super.hasCapability(capability, facing);
@@ -148,9 +150,9 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if(facing == null)
+            if (facing == null)
                 return (T) this.inventory;
-            else if(getInternalConnection(facing).canTransfer())
+            else if (getInternalConnection(facing).canTransfer())
                 return (T) this.sideHandlers[facing.getIndex()];
         }
         return super.getCapability(capability, facing);
@@ -190,26 +192,31 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
             return ((IItemPipeConnectable) tile).getConnection(side.getOpposite());
         } else if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite())) {
             return EnumPipeConnection.BLOCK;
-        } else if (Misc.isValidPipeConnector(world,pos,side)) {
+        } else if (Misc.isValidPipeConnector(world, pos, side)) {
             return EnumPipeConnection.LEVER;
         }
         return EnumPipeConnection.NONE;
     }
 
     public void reverseConnection(EnumFacing face) {
-        setInternalConnection(face, reverseForce(getInternalConnection(face)));
+        EnumPipeConnection connection = getInternalConnection(face);
+        setInternalConnection(face, reverseForce(connection));
         TileEntity tile = world.getTileEntity(pos.offset(face));
-        if(tile instanceof TileEntityItemPipe)
+        if (tile instanceof TileEntityItemPipe)
             ((TileEntityItemPipe) tile).updateNeighbors(world);
-        if(tile instanceof TileEntityItemExtractor)
+        if (tile instanceof TileEntityItemExtractor)
             ((TileEntityItemExtractor) tile).updateNeighbors(world);
+        if (connection == EnumPipeConnection.FORCENONE) {
+            world.playSound(null, pos, SoundManager.PIPE_CONNECT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        } else if (connection != EnumPipeConnection.NONE && connection != EnumPipeConnection.LEVER) {
+            world.playSound(null, pos, SoundManager.PIPE_DISCONNECT, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        }
     }
 
     public static EnumPipeConnection reverseForce(EnumPipeConnection connect) {
         if (connect == EnumPipeConnection.FORCENONE) {
             return EnumPipeConnection.NONE;
-        }
-        else if (connect != EnumPipeConnection.NONE && connect != EnumPipeConnection.LEVER) {
+        } else if (connect != EnumPipeConnection.NONE && connect != EnumPipeConnection.LEVER) {
             return EnumPipeConnection.FORCENONE;
         }
         return EnumPipeConnection.NONE;
@@ -267,9 +274,9 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
             }
             updateNeighbors(world);
             return true;
-        } else if(clogged && !heldItem.isEmpty() && ItemUtil.matchesOreDict(heldItem,"stickWood")) {
-            if (!inventory.getStackInSlot(0).isEmpty() && !world.isRemote){
-                world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
+        } else if (clogged && !heldItem.isEmpty() && ItemUtil.matchesOreDict(heldItem, "stickWood")) {
+            if (!inventory.getStackInSlot(0).isEmpty() && !world.isRemote) {
+                world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, inventory.getStackInSlot(0)));
                 inventory.setStackInSlot(0, ItemStack.EMPTY);
                 markDirty();
             }
