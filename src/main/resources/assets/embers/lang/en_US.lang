@@ -64,6 +64,7 @@ tile.knowledge_table.name=Research Table
 tile.alchemy_pedestal.name=Alchemy Pedestal
 tile.alchemy_tablet.name=Exchange Tablet
 tile.item_transfer.name=Item Transfer
+tile.fluid_transfer.name=Fluid Transfer
 tile.core_stone.name=Core Stone
 tile.beam_cannon.name=Beam Cannon
 tile.archaic_bricks.name=Archaic Bricks
@@ -222,8 +223,8 @@ item.explosion_charm.name=Explosion Charm
 item.nonbeliever_amulet.name=Amulet of the Heretic
 item.ashen_amulet.name=Ashen Amulet
 item.dawnstone_mail.name=Dawnstone Mail
-item.tinker_lens.name=Tinker Lens
-item.anti_tinker_lens.name=Smoky Tinker Lens
+item.tinker_lens.name=Tinker's Lens
+item.anti_tinker_lens.name=Smoky Tinker's Lens
 
 tile.block_aluminum.name=Aluminium Block
 tile.ore_aluminum.name=Aluminium Ore
@@ -364,8 +365,8 @@ embers.tooltip.modifier.eldritch_insignia=Eerie %s
 embers.tooltip.modifier.intelligent_apparatus=Intelligent %s
 embers.tooltip.modifier.diffraction=Diffractive %s
 embers.tooltip.modifier.focal_lens=Focused %s
-embers.tooltip.modifier.tinker_lens=Tinker Sight
-embers.tooltip.modifier.anti_tinker_lens=Tinker Blindness
+embers.tooltip.modifier.tinker_lens=Tinker's Sight
+embers.tooltip.modifier.anti_tinker_lens=Tinker's Blindness
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II
@@ -435,6 +436,9 @@ embers.research.page.bore.desc=While bedrock may halt your downward advances, it
 embers.research.page.pipes=Pipes
 embers.research.page.pipes.title=Transportation
 embers.research.page.pipes.desc=One of the simplest mechanisms necessary for your ambitions is the pipe, a simple means of moving materials. You have developed both iron and lead pipes: Iron Pipes can be used to transport fluids, while Lead Pipes can be used to transport items. Pipes can only insert to tanks or inventories, however: to extract, you must craft a corresponding Pump, place it adjacent to the container, and power it with redstone.
+embers.research.page.routing.desc=Items and Fluids in pipes follow simple rules to determine where they will go. They will always go forward, and will never bounce back or, heavens forbid, pop out of the pipe. At an intersection, they will always prioritize the opposite exit, so long as the other exits are weighed equally. When a tie must be broken, items and fluids will round-robin.
+embers.research.page.valves.desc=Extractors have a number of special properties, listed here: They never connect to other Extractors. When turned off, they can receive items instead of only extracting from containers. When turned on by a redstone signal, they will never accept items from pipes. This makes Extractors useful as valves in pipe systems, for flow control.
+embers.research.page.pipe_tools.desc=Pipes will automatically connect to other adjacent pipes. When this is not wanted, your Tinker's Hammer can be used to disconnect them. (Note that both sides can be disconnected individually) Sometimes, routing in a pipe network can go awry. When this happens, pipes will expel smoke to show that they are clogged. To unclog a pipe, simply right-click it with a stick.
 
 embers.research.page.tank=Fluid Vessel
 embers.research.page.tank.title=Liquid Container
@@ -455,6 +459,10 @@ embers.research.page.mini_boiler.desc=Ember is a highly energetic substance, tha
 embers.research.page.dials=Dials
 embers.research.page.dials.title=Careful Measurements
 embers.research.page.dials.desc=Dials are a simple way to get information from a machine. Two exist: the Ember and Fluid Dials. Attached to their respective containers, each dial will graphically display the contents of that container when looked at.
+
+embers.research.page.tinker_lens=Tinker's Lens
+embers.research.page.tinker_lens.title=What's What?
+embers.research.page.tinker_lens.desc=Despite you creating all this machinery yourself, some of its functionality can be a bit obtuse at times. Fortunately you've devised an eyepiece you can use to examine machines more closely. When held in either hand, you will always be able to tell which purpose a face on a machine has. Note that this tool is not a periscope, so you might have some trouble with Mechanical Cores...
 
 
 
@@ -485,6 +493,7 @@ embers.research.page.reservoir.desc=The Reservoir is a simple means of storing l
 embers.research.page.transfer=Item Transfer
 embers.research.page.transfer.title=Filtering
 embers.research.page.transfer.desc=Item Pipes may be a simple way to get items from place to place, but only with the development of the Item Transfer have you created a way to filter items out. The Item Transfer functions much like a normal pipe, with a few rules. It can only connect to pipes on its front and on its back, and it will take priority over all other pipes when items are being sent. It can also be given an item filter by right-clicking it.
+embers.research.page.fluid_transfer.desc=Fluid Transfers are the fluid equivalent to Item Transfers. They function equivalent in almost all aspects. Only to set the filter on a Fluid Transfer, a bucket or other container holding some fluid is needed instead. The fluid inside the container is not consumed when setting a filter.
 
 embers.research.page.breaker=Automatic Breaker
 embers.research.page.breaker.title=Breaking Blocks
@@ -703,19 +712,19 @@ embers.research.page.mantle_bulb.desc=If holding a Mantle Cartridge in your offh
 
 embers.research.page.explosion_charm=Explosion Charm
 embers.research.page.explosion_charm.title=Manufacted Nethicite
-embers.research.page.explosion_charm.desc=
+embers.research.page.explosion_charm.desc=While wearing this charm, explosions that go off near you will be dissipated, their destructive force absorbed into the charm, but unfortunately, for no other special effect.
 
 embers.research.page.nonbeliever_amulet=Amulet of the Heretic
 embers.research.page.nonbeliever_amulet.title=And it goes away
-embers.research.page.nonbeliever_amulet.desc=
+embers.research.page.nonbeliever_amulet.desc=Damn witches and their resistance to the otherworldly... This amulet will be the gateway to becoming like them. When you are hit by any magical attack while wearing the amulet, 90% of the damage will be nullified. Note however, that you will always take at least half a heart of damage from magical attacks.
 
 embers.research.page.ashen_amulet=Ashen Amulet
 embers.research.page.ashen_amulet.title=Ashes to Ashes
-embers.research.page.ashen_amulet.desc=
+embers.research.page.ashen_amulet.desc=Turning things to ash is... certainly a display of power. Not very well thought-out power, but power that rests in this amulet regardless. When a creature is slain or a block is broken while wearing this amulet, it will instantly be turned to ash, and drop nothing but ash.
 
 embers.research.page.dawnstone_mail=Dawnstone Mail
 embers.research.page.dawnstone_mail.title=Defense Position
-embers.research.page.dawnstone_mail.desc=
+embers.research.page.dawnstone_mail.desc=Dawnstone is a material with many properties that make it suitable for vestments and armor. This Dawnstone Mail will protect the wearer from all knockback. Just don't question why mail is made from plates.
 
 
 
@@ -767,6 +776,14 @@ embers.research.page.intelligent_apparatus.desc=The Intelligent Apparatus is a s
 embers.research.page.resonating_bell=Resonating Bell
 embers.research.page.resonating_bell.title=Vibrations
 embers.research.page.resonating_bell.desc=The Resonating Bell allows a tool or weapon to ring through blocks and find particular objects. By right-clicking on a block, nearby blocks of that type will illuminate with glowing light, unless the block was already a very significant part of nearby material. The area the resonation effects increases with modifier level.
+
+embers.research.page.tinker_lens_augment=Tinker's Lens
+embers.research.page.tinker_lens_augment.title=What's What
+embers.research.page.tinker_lens_augment.desc=Holding this thing in your hand all the time is inconvenient. Fortunately, you can apply this to a helmet to receive the benefit of holding it all the time while wearing the helmet. This augment doesn't take up any slots, but it does need a Motive Core applied first.
+
+embers.research.page.anti_tinker_lens=Smoky Tinker's Lens
+embers.research.page.anti_tinker_lens.title=Blind to the Truth
+embers.research.page.anti_tinker_lens.desc=Sometimes, too much information can be a curse. Some helmets, like the Ashen Goggles can provide information about blocks like a Tinker's Lens, but this is not always desirable. This augment, when put on such a helmet, will turn this information off. This augment doesn't take up any slots, but it does need a Motive Core applied first.
 
 embers.research.page.mystical_mechanics=Mystical Mechanics
 embers.research.page.mystical_mechanics.title=Not the mod you're looking for

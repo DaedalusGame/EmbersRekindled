@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,6 +18,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
@@ -260,6 +262,13 @@ public class TileEntityFluidPipe extends TileEntityFluidPipeBase {
 				}
 			}
 			updateNeighbors(world);
+			return true;
+		} else if(clogged && !heldItem.isEmpty() && ItemUtil.matchesOreDict(heldItem,"stickWood")) {
+			if (tank.getFluidAmount() > 0 && !world.isRemote){
+				tank.setFluid(null);
+				markDirty();
+
+			}
 			return true;
 		}
 		return false;

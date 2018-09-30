@@ -1,6 +1,7 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.ItemUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
@@ -217,7 +219,7 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
     public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
                             EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = player.getHeldItem(hand);
-        if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemTinkerHammer) {
+        if (heldItem.getItem() instanceof ItemTinkerHammer) {
             if (side == EnumFacing.UP || side == EnumFacing.DOWN) {
                 if (Math.abs(hitX - 0.5) > Math.abs(hitZ - 0.5)) {
                     if (hitX < 0.5) {
@@ -264,6 +266,13 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
                 }
             }
             updateNeighbors(world);
+            return true;
+        } else if(clogged && !heldItem.isEmpty() && ItemUtil.matchesOreDict(heldItem,"stickWood")) {
+            if (!inventory.getStackInSlot(0).isEmpty() && !world.isRemote){
+                world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(0)));
+                inventory.setStackInSlot(0, ItemStack.EMPTY);
+                markDirty();
+            }
             return true;
         }
         return false;

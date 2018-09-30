@@ -25,7 +25,7 @@ public class ResearchManager {
     public static final double PAGE_ICON_SIZE = 0.09375;
     public static List<ResearchCategory> researches = new ArrayList<ResearchCategory>();
 
-    public static ResearchBase dials, boiler, mini_boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator,//WORLD
+    public static ResearchBase dials, boiler, mini_boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, tinker_lens,//WORLD
             copper_cell, emitters, dawnstone, melter, stamper, mixer, breaker, hearth_coil, access, pump, //MECHANISMS
             beam_cannon, pulser, splitter, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, catalytic_plug, //METALLURGY
             tyrfing, waste, cluster, ashen_cloak, inflictor, materia, field_chart, glimmer, metallurgic_dust, //ALCHEMY
@@ -35,7 +35,7 @@ public class ResearchManager {
     public static ResearchBase adhesive, hellish_synthesis, archaic_brick, motive_core; //SIMPLE ALCHEMY
     public static ResearchBase wildfire, combustor, catalyzer, reactor, injector; //WILDFIRE
     public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core; //WEAPON AUGMENTS
-    public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier; //ARMOR_AUGMENTS
+    public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier, tinker_lens_augment, anti_tinker_lens; //ARMOR_AUGMENTS
     public static ResearchBase diffraction_barrel, focal_lens; //PROJECTILE_AUGMENTS
     public static ResearchBase cost_reduction, mantle_bulb, explosion_charm, nonbeliever_amulet, ashen_amulet, dawnstone_mail; //BAUBLE
     public static ResearchBase gearbox, axle_iron, gear_iron, actuator, steam_engine; //MECHANICAL POWER
@@ -85,9 +85,14 @@ public class ResearchManager {
         boiler = new ResearchBase("boiler", new ItemStack(RegistryManager.boiler), 9, 7).addAncestor(activator);
         mini_boiler = new ResearchBase("mini_boiler", new ItemStack(RegistryManager.mini_boiler), 11, 7).addAncestor(activator);
         dials = new ResearchBase("dials", new ItemStack(RegistryManager.ember_gauge), 5, 5).addAncestor(ores);
+        tinker_lens = new ResearchBase("tinker_lens", new ItemStack(RegistryManager.tinker_lens),4,7).addAncestor(ores);
 
         pipes = new ResearchBase("pipes", new ItemStack(RegistryManager.pump), 2, 4);
+        pipes.addPage(new ResearchShowItem("routing",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_pipe),new ItemStack(RegistryManager.pipe))));
+        pipes.addPage(new ResearchShowItem("valves",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_pump),new ItemStack(RegistryManager.pump))));
+        pipes.addPage(new ResearchShowItem("pipe_tools",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.tinker_hammer),new ItemStack(Items.STICK))));
         transfer = new ResearchBase("transfer", new ItemStack(RegistryManager.item_transfer), 5, 5).addAncestor(pipes);
+        transfer.addPage(new ResearchShowItem("fluid_transfer",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.fluid_transfer))));
         vacuum = new ResearchBase("vacuum", new ItemStack(RegistryManager.vacuum), 8, 4).addPage(new ResearchBase("vacuum_transfer",ItemStack.EMPTY,0,0)).addAncestor(pipes);
         dropper = new ResearchBase("dropper", new ItemStack(RegistryManager.item_dropper), 8, 6).addAncestor(pipes);
         bin = new ResearchBase("bin", new ItemStack(RegistryManager.bin), 4, 3).addAncestor(pipes);
@@ -178,9 +183,13 @@ public class ResearchManager {
         intelligent_apparatus = new ResearchBase("intelligent_apparatus", new ItemStack(RegistryManager.intelligent_apparatus), subCategoryArmorAugments.popGoodLocation());
         flame_barrier = new ResearchBase("flame_barrier", new ItemStack(RegistryManager.flame_barrier), subCategoryArmorAugments.popGoodLocation());
         cinder_jet = new ResearchBase("cinder_jet", new ItemStack(RegistryManager.jet_augment), subCategoryArmorAugments.popGoodLocation());
+        tinker_lens_augment = new ResearchBase("tinker_lens_augment", new ItemStack(RegistryManager.tinker_lens), subCategoryArmorAugments.popGoodLocation());
+        anti_tinker_lens = new ResearchBase("anti_tinker_lens", new ItemStack(RegistryManager.anti_tinker_lens), subCategoryArmorAugments.popGoodLocation()).addAncestor(tinker_lens_augment);
 
         diffraction_barrel = new ResearchBase("diffraction_barrel", new ItemStack(RegistryManager.diffraction_barrel), subCategoryProjectileAugments.popGoodLocation());
         focal_lens = new ResearchBase("focal_lens", new ItemStack(RegistryManager.focal_lens), subCategoryProjectileAugments.popGoodLocation());
+
+        tinker_lens.addPage(tinker_lens_augment);
 
         ResearchBase infernoForgeWeapon = new ResearchFakePage(inferno_forge, 6, 4);
         subCategoryWeaponAugments.addResearch(infernoForgeWeapon);
@@ -196,6 +205,8 @@ public class ResearchManager {
         subCategoryArmorAugments.addResearch(intelligent_apparatus.addAncestor(infernoForgeArmor));
         subCategoryArmorAugments.addResearch(flame_barrier.addAncestor(infernoForgeArmor));
         subCategoryArmorAugments.addResearch(new ResearchFakePage(blasting_core,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
+        subCategoryArmorAugments.addResearch(tinker_lens_augment.addAncestor(infernoForgeArmor));
+        subCategoryArmorAugments.addResearch(anti_tinker_lens.addAncestor(infernoForgeArmor));
 
         ResearchBase infernoForgeProjectile = new ResearchFakePage(inferno_forge, 6, 4);
         subCategoryProjectileAugments.addResearch(infernoForgeProjectile);
@@ -259,6 +270,7 @@ public class ResearchManager {
                 .addResearch(hammer)
                 .addResearch(ancient_golem)
                 .addResearch(gauge)
+                .addResearch(tinker_lens)
                 .addResearch(caminite)
                 .addResearch(bore)
                 .addResearch(pipeSwitch)
