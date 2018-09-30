@@ -25,7 +25,7 @@ public abstract class ItemEmberStorage extends ItemBase {
 	}
 
 	public ItemStack withFill(double ember) {
-		ItemStack stack = getDefaultInstance();
+		ItemStack stack = new ItemStack(this);
 		if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
 			IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
 			capability.setEmber(ember);
@@ -36,7 +36,7 @@ public abstract class ItemEmberStorage extends ItemBase {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems){
 		if (isInCreativeTab(tab)){
-			subItems.add(getDefaultInstance());
+			subItems.add(new ItemStack(this));
 			subItems.add(withFill(getCapacity()));
 		}
 	}

@@ -33,7 +33,7 @@ public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell
 	}
 
 	public ItemStack withFill(double ember) {
-		ItemStack stack = getDefaultInstance();
+		ItemStack stack = new ItemStack(this);
 		if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
 			IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
 			capability.setEmber(ember);
@@ -44,7 +44,7 @@ public class ItemEmberBulb extends ItemBaubleBase implements IInventoryEmberCell
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems){
 		if (isInCreativeTab(tab)){
-			subItems.add(getDefaultInstance());
+			subItems.add(new ItemStack(this));
 			subItems.add(withFill(getCapacity()));
 		}
 	}
