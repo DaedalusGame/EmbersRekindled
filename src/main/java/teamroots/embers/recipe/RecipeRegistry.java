@@ -1033,6 +1033,13 @@ public class RecipeRegistry {
 				" A ",
 				'P', RegistryManager.tinker_lens,
 				'A', "dustAsh"}).setRegistryName(getRL("anti_tinker_lens")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("glimmer_lamp"),new ItemStack(RegistryManager.glimmer_lamp,1),true,new Object[]{
+				" P ",
+				"XGX",
+				" P ",
+				'G', RegistryManager.glimmer_shard,
+				'X', Blocks.IRON_BARS,
+				'P', "plateIron"}).setRegistryName(getRL("glimmer_lamp")));
 
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));

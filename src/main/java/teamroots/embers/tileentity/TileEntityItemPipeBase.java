@@ -223,7 +223,7 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
     }
 
     protected NBTTagCompound getSyncTag() {
-        NBTTagCompound compound = super.getUpdateTag();
+        NBTTagCompound compound = new NBTTagCompound();
         if (syncInventory)
             writeInventory(compound);
         if (syncCloggedFlag)

@@ -11,6 +11,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageEmberSparkleFX;
+
+import java.awt.*;
 
 public class ItemGlimmerShard extends ItemBase {
 	public ItemGlimmerShard() {
@@ -38,10 +42,12 @@ public class ItemGlimmerShard extends ItemBase {
 		ItemStack stack = player.getHeldItem(hand);
 		if (stack.hasTagCompound()){
 			if (stack.getTagCompound().getInteger("light") >= 10){
-				if (world.isAirBlock(pos.offset(face))){
+				BlockPos lightPos = pos.offset(face);
+				if (world.isAirBlock(lightPos)){
 					stack.getTagCompound().setInteger("light",stack.getTagCompound().getInteger("light")-10);
-					world.setBlockState(pos.offset(face), RegistryManager.glow.getDefaultState());
-					world.notifyBlockUpdate(pos.offset(face), Blocks.AIR.getDefaultState(), RegistryManager.glow.getDefaultState(), 8);
+					world.setBlockState(lightPos, RegistryManager.glow.getDefaultState());
+					//world.notifyBlockUpdate(lightPos, Blocks.AIR.getDefaultState(), RegistryManager.glow.getDefaultState(), 8);
+					PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(lightPos.getX()+0.5,lightPos.getY()+0.5,lightPos.getZ()+0.5,false));
 					return EnumActionResult.SUCCESS;
 				}
 			}
@@ -58,7 +64,12 @@ public class ItemGlimmerShard extends ItemBase {
 		}
 		return false;
 	}
-	
+
+	@Override
+	public int getRGBDurabilityForDisplay(ItemStack stack) {
+		return Color.WHITE.getRGB();
+	}
+
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged){
 		return slotChanged || oldStack.getItem() != newStack.getItem();

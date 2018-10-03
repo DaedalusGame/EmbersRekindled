@@ -1,6 +1,7 @@
 package teamroots.embers.proxy;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -64,6 +65,10 @@ public class CommonProxy {
 		RecipeRegistry.mergeOreRecipes();
 
 		OreTransmutationUtil.init(); //oof
+	}
+
+	public EntityPlayer getClientPlayer() {
+		return null;
 	}
 
 	public boolean isPlayerWearingGoggles() {

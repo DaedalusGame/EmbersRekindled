@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.EmberProjectileEvent;
+import teamroots.embers.api.item.IProjectileWeapon;
 import teamroots.embers.api.projectile.EffectArea;
 import teamroots.embers.api.projectile.EffectDamage;
 import teamroots.embers.api.projectile.IProjectilePreset;
@@ -23,7 +24,7 @@ import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
 
-public class ItemCinderStaff extends ItemBase {
+public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
 
     public static final double EMBER_COST = 25.0;
     public static final int COOLDOWN = 10;

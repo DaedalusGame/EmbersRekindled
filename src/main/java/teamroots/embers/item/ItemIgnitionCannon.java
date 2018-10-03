@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.EmberProjectileEvent;
+import teamroots.embers.api.item.IProjectileWeapon;
 import teamroots.embers.api.projectile.EffectDamage;
 import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.api.projectile.ProjectileRay;
@@ -26,7 +27,7 @@ import teamroots.embers.util.EmberInventoryUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemIgnitionCannon extends ItemBase {
+public class ItemIgnitionCannon extends ItemBase implements IProjectileWeapon {
 	public static final int COOLDOWN = 10;
 	public static final float DAMAGE = 7.0f;
 	public static final double MAX_SPREAD = 30.0;

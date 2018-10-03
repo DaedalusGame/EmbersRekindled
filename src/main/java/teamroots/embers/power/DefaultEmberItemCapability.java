@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import teamroots.embers.Embers;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 
 import javax.annotation.Nonnull;
@@ -16,10 +17,12 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
 
     public DefaultEmberItemCapability(@Nonnull ItemStack stack, double capacity) {
         this.stack = stack;
-        if(!stack.hasTagCompound()) {
+        if (!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
             setEmber(0);
             setEmberCapacity(capacity);
+        } else {
+            migrateLegacy();
         }
     }
 
@@ -31,7 +34,7 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == EmbersCapabilities.EMBER_CAPABILITY)
+        if (capability == EmbersCapabilities.EMBER_CAPABILITY)
             return EmbersCapabilities.EMBER_CAPABILITY.cast(this);
         return null;
     }
@@ -48,15 +51,15 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
 
     @Override
     public void setEmber(double value) {
-        if(stack.hasTagCompound()) {
-            stack.getTagCompound().setDouble("ember",value);
+        if (stack.hasTagCompound()) {
+            stack.getTagCompound().setDouble("ember", value);
         }
     }
 
     @Override
     public void setEmberCapacity(double value) {
-        if(stack.hasTagCompound()) {
-            stack.getTagCompound().setDouble("emberCapacity",value);
+        if (stack.hasTagCompound()) {
+            stack.getTagCompound().setDouble("emberCapacity", value);
         }
     }
 
@@ -64,10 +67,10 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
     public double addAmount(double value, boolean doAdd) {
         double ember = getEmber();
         double capacity = getEmberCapacity();
-        double added = Math.min(capacity - ember,value);
+        double added = Math.min(capacity - ember, value);
         double newEmber = ember + added;
-        if (doAdd){
-            if(newEmber != ember)
+        if (doAdd) {
+            if (newEmber != ember)
                 onContentsChanged();
             setEmber(ember + added);
         }
@@ -77,10 +80,10 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
     @Override
     public double removeAmount(double value, boolean doRemove) {
         double ember = getEmber();
-        double removed = Math.min(ember,value);
+        double removed = Math.min(ember, value);
         double newEmber = ember - removed;
-        if (doRemove){
-            if(newEmber != ember)
+        if (doRemove) {
+            if (newEmber != ember)
                 onContentsChanged();
             setEmber(ember - removed);
         }
@@ -100,5 +103,19 @@ public class DefaultEmberItemCapability implements ICapabilityProvider, teamroot
     @Override
     public void onContentsChanged() {
 
+    }
+
+    public void migrateLegacy() {
+        if (stack.hasTagCompound()) {
+            NBTTagCompound compound = stack.getTagCompound();
+            if (compound.hasKey(Embers.MODID + ":ember")) {
+                compound.setDouble("ember", compound.getDouble(Embers.MODID + ":ember"));
+                compound.removeTag(Embers.MODID + ":ember");
+            }
+            if (compound.hasKey(Embers.MODID + ":emberCapacity")) {
+                compound.setDouble("emberCapacity", compound.getDouble(Embers.MODID + ":emberCapacity"));
+                compound.removeTag(Embers.MODID + ":emberCapacity");
+            }
+        }
     }
 }

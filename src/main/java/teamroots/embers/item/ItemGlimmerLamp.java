@@ -7,8 +7,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 import teamroots.embers.entity.EntityEmberLight;
+
+import java.awt.*;
 
 public class ItemGlimmerLamp extends ItemBase {
 	public ItemGlimmerLamp() {
@@ -39,13 +42,18 @@ public class ItemGlimmerLamp extends ItemBase {
 				stack.getTagCompound().setInteger("light",stack.getTagCompound().getInteger("light")-10);
 				if (!world.isRemote){
 					EntityEmberLight light = (new EntityEmberLight(world));
-					light.initCustom(player.posX,player.posY+player.getEyeHeight(),player.posZ,player.getLookVec().x,player.getLookVec().y,player.getLookVec().z);
+					double handmod = player.getActiveHand() == EnumHand.MAIN_HAND ? 1.0 : -1.0;
+					handmod *= player.getPrimaryHand() == EnumHandSide.RIGHT ? 1.0 : -1.0;
+					double posX = player.posX + player.getLookVec().x + handmod * (player.width / 2.0) * Math.sin(Math.toRadians(-player.rotationYaw - 90));
+					double posY = player.posY + player.getEyeHeight() - 0.2 + player.getLookVec().y;
+					double posZ = player.posZ + player.getLookVec().z + handmod * (player.width / 2.0) * Math.cos(Math.toRadians(-player.rotationYaw - 90));
+					light.initCustom(posX,posY,posZ,player.getLookVec().x,player.getLookVec().y,player.getLookVec().z);
 					world.spawnEntity(light);
 				}
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
+				return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL,stack);
+		return new ActionResult<>(EnumActionResult.FAIL, stack);
 	}
 	
 	@Override
@@ -56,6 +64,11 @@ public class ItemGlimmerLamp extends ItemBase {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int getRGBDurabilityForDisplay(ItemStack stack) {
+		return Color.WHITE.getRGB();
 	}
 	
 	@Override

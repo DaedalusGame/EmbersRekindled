@@ -1,6 +1,7 @@
 package teamroots.embers.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.Locale;
@@ -68,6 +69,11 @@ public class ClientProxy extends CommonProxy{
 		InfoGogglesEvent event = new InfoGogglesEvent(player,shouldDisplay);
 		MinecraftForge.EVENT_BUS.post(event);
 		return event.shouldDisplay();
+	}
+
+	@Override
+	public EntityPlayer getClientPlayer() {
+		return Minecraft.getMinecraft().player;
 	}
 
 	private boolean isGoggles(EntityPlayer player, EntityEquipmentSlot slot) {

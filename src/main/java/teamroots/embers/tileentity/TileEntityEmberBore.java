@@ -217,6 +217,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
                         }
                     }
                 }
+            } else {
+                isRunning = false;
             }
 
             if (isRunning != previousRunning) {

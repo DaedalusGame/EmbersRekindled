@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
+import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
@@ -169,7 +170,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 						}
 					}
 					if(world.isRemote)
-					playSound(speed);
+						playSound(speed);
 				}
 				this.markDirty();
 			}
@@ -190,7 +191,7 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
             sound = SoundManager.PUMP_SLOW;
             pitch = speed;
         }
-		world.playSound(Minecraft.getMinecraft().player,pos.up(),sound, SoundCategory.BLOCKS,1.0f,pitch);
+		world.playSound(Embers.proxy.getClientPlayer(),pos.up(),sound, SoundCategory.BLOCKS,1.0f,pitch);
 	}
 
 	@Override

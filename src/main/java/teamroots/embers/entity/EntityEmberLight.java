@@ -6,9 +6,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageEmberSizedBurstFX;
+import teamroots.embers.network.message.MessageEmberSparkleFX;
 import teamroots.embers.particle.ParticleUtil;
+
+import java.awt.*;
 
 public class EntityEmberLight extends Entity {
     BlockPos pos = new BlockPos(0,0,0);
@@ -41,12 +49,34 @@ public class EntityEmberLight extends Entity {
 			getEntityWorld().removeEntity(this);
 			this.setDead();
 		}
-		this.motionY -= 0.05f;
-		
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-		IBlockState state = getEntityWorld().getBlockState(getPosition());
+
+		Vec3d currPosVec = new Vec3d(this.posX, this.posY, this.posZ);
+		Vec3d newPosVector = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+		RayTraceResult raytraceresult = this.world.rayTraceBlocks(currPosVec, newPosVector, false, true, false);
+
+		if (raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS)
+			newPosVector = raytraceresult.hitVec;
+
+		posX = newPosVector.x;
+		posY = newPosVector.y;
+		posZ = newPosVector.z;
+
+		motionY += -0.05f;
+
+		if (!world.isRemote && raytraceresult != null && raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+			EnumFacing side = raytraceresult.sideHit;
+			BlockPos hitPos = raytraceresult.getBlockPos().offset(side);
+			boolean hitGlimmer = false;
+			if (getEntityWorld().isAirBlock(hitPos) || getEntityWorld().getBlockState(hitPos).getBlock().isReplaceable(getEntityWorld(), hitPos)){
+				getEntityWorld().setBlockState(hitPos, RegistryManager.glow.getDefaultState());
+				PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(hitPos.getX()+0.5,hitPos.getY()+0.5,hitPos.getZ()+0.5,false));
+				hitGlimmer = true;
+			}
+			PacketHandler.INSTANCE.sendToAll(new MessageEmberSparkleFX(posX,posY,posZ,!hitGlimmer));
+			this.setDead();
+		}
+
+		/*IBlockState state = getEntityWorld().getBlockState(getPosition());
 		if (state.isFullCube() && state.isOpaqueCube() && !getEntityWorld().isRemote){
 			EnumFacing face = EnumFacing.UP;
 			boolean didHit = false;
@@ -122,11 +152,11 @@ public class EntityEmberLight extends Entity {
 				}
 			}
 			this.setDead();
-		}
+		}*/
 		if (getEntityWorld().isRemote){
 			for (double i = 0; i < 9; i ++){
 				double coeff = i/9.0;
-				ParticleUtil.spawnParticleGlow(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 0.0125f*(rand.nextFloat()-0.5f), 255, 64, 16, 3.0f, 24);
+				ParticleUtil.spawnParticleSpark(getEntityWorld(), (float)(prevPosX+(posX-prevPosX)*coeff), (float)(prevPosY+(posY-prevPosY)*coeff), (float)(prevPosZ+(posZ-prevPosZ)*coeff), 0.1f*(rand.nextFloat()-0.5f), 0.1f*(rand.nextFloat()-0.5f), 0.1f*(rand.nextFloat()-0.5f), 255, 128, 16, 3.0f, 12);
 			}
 		}
 	}
