@@ -1,5 +1,5 @@
-itemGroup.embers=Embers
-itemGroup.embers_resources=Embers: Металлы
+itemGroup.embers=Эмберс
+itemGroup.embers_resources=Эмберс: Металлы
 
 tile.block_copper.name=Медный блок
 tile.block_lead.name=Свинцовый блок
@@ -64,7 +64,7 @@ tile.knowledge_table.name=Исследовательский стол
 tile.alchemy_pedestal.name=Алхимический пьедестал
 tile.alchemy_tablet.name=Обменный стол
 tile.item_transfer.name=Предметный передатчик
-tile.fluid_transfer.name=Fluid Transfer
+tile.fluid_transfer.name=Жидкостный передатчик
 tile.core_stone.name=Каменное Ядро
 tile.beam_cannon.name=Лучевая пушка
 tile.archaic_bricks.name=Архаические кирпичи
@@ -91,17 +91,17 @@ tile.reactor.name=Пламенный Реактор
 tile.field_chart.name=Диаграмма поля
 tile.ember_pulser.name=Эмбер-эжектор
 tile.inferno_forge.name=Адская кузница
-tile.axle_iron.name=Iron Axle
-tile.creative_mech_source.name=Creative Mechanical Power Source
-tile.creative_ember_source.name=Creative Ember Source
-tile.gearbox_frame.name=Gearbox Frame
-tile.steam_engine.name=Steam Engine
-tile.mechanical_pump.name=Mechanical Pump
-tile.caminite_lever.name=Caminite Lever
+tile.axle_iron.name=Железная ось
+tile.creative_mech_source.name=Креативный Источник Механической Силы
+tile.creative_ember_source.name=Креативный Источник Эмбера
+tile.gearbox_frame.name=Корпус Коробки Передач
+tile.steam_engine.name=Паровой Двигатель
+tile.mechanical_pump.name=Механическая помпа
+tile.caminite_lever.name=Каминитовый рычаг
 tile.catalytic_plug.name=Каталитический затвор
-tile.ember_funnel.name=Ember Funnel
-tile.mini_boiler.name=Mini Boiler
-tile.mech_actuator.name=Mechanical Actuator
+tile.ember_funnel.name=Эмбер-воронка
+tile.mini_boiler.name=Мини-Бойлер
+tile.mech_actuator.name=Механический привод
 
 fluid.iron=Расплавленное железо
 fluid.gold=Расплавленное золото
@@ -112,7 +112,7 @@ fluid.astralite=Расплавленный астралит
 fluid.dawnstone=Расплавленный золотит
 fluid.umberSteel=Расплавленная жженая сталь
 fluid.alchemical_redstone=Разжиженный красный камень
-fluid.steam=Steam
+fluid.steam=Пар
 
 item.ingot_copper.name=Медный слиток
 item.ingot_silver.name=Серебряный слиток
@@ -138,11 +138,11 @@ item.tinker_hammer.name=Молот лудильщика
 item.stamp_bar.name=Штамп слитка
 item.stamp_flat.name=Плоский штамп
 item.stamp_plate.name=Штамп пластины
-item.stamp_gear.name=Gear Stamp
+item.stamp_gear.name=Штамп шестерни
 item.stamp_bar_raw.name=Сырой штамп слитка
 item.stamp_flat_raw.name=Сырой плоский штамп
 item.stamp_plate_raw.name=Сырой штамп пластины
-item.stamp_gear_raw.name=Raw Gear Stamp
+item.stamp_gear_raw.name=Сырой штамп шестерни
 item.dust_ember.name=Пыль эмбера
 item.shard_ember.name=Эмбер-осколок
 item.crystal_ember.name=Эмбер-кристалл
@@ -213,18 +213,18 @@ item.archaic_circuit.name=Архаическая схема
 item.ember_ring.name=Эмбер-кольцо
 item.ember_belt.name=Эмбер-пояс
 item.ember_amulet.name=Эмбер-амулет
-item.ember_bulb.name=Мэнтл-колба
-item.gear_iron.name=Iron Gear
-item.gear_dawnstone.name=Dawnstone Gear
+item.ember_bulb.name=Мантийная Колба
+item.gear_iron.name=Железная шестерня
+item.gear_dawnstone.name=Золотитовая шестерня
 item.dust_metallurgic.name=Металлургическая пыль
-item.diffraction_barrel.name=Diffraction Barrel
-item.focal_lens.name=Focal Lens
-item.explosion_charm.name=Explosion Charm
-item.nonbeliever_amulet.name=Amulet of the Heretic
-item.ashen_amulet.name=Ashen Amulet
-item.dawnstone_mail.name=Dawnstone Mail
-item.tinker_lens.name=Tinker's Lens
-item.anti_tinker_lens.name=Smoky Tinker's Lens
+item.diffraction_barrel.name=Дифракционный барабан
+item.focal_lens.name=Фокусная линза
+item.explosion_charm.name=Чарм взрыва
+item.nonbeliever_amulet.name=Амулет еретика
+item.ashen_amulet.name=Пепельный амулет
+item.dawnstone_mail.name=Золотитовая кольчуга
+item.tinker_lens.name=Линза Лудильщика
+item.anti_tinker_lens.name=Закоптившаяся Линза Лудильшика
 
 tile.block_aluminum.name=Алюминиевый блок
 tile.ore_aluminum.name=Алюминиевая руда
@@ -286,11 +286,11 @@ item.shovel_tin.name=Оловянная лопата
 item.sword_tin.name=Оловянный меч
 fluid.tin=Расплавленное олово
 
-embers.aspect.iron=Iron
-embers.aspect.copper=Copper
-embers.aspect.dawnstone=Dawnstone
-embers.aspect.lead=Lead
-embers.aspect.silver=Silver
+embers.aspect.iron=Железо
+embers.aspect.copper=Медь
+embers.aspect.dawnstone=Золотит
+embers.aspect.lead=Свинец
+embers.aspect.silver=Серебро
 
 embers.decimal_format.ember=0.0
 embers.decimal_format.mechanical_multiplier=0.##x
@@ -303,31 +303,31 @@ embers.tooltip.goggles.input=§9⬊§r %s
 embers.tooltip.goggles.output=§6⬉§r %s
 embers.tooltip.goggles.storage=• %s
 
-embers.tooltip.goggles.item=Items
-embers.tooltip.goggles.fluid=Fluids
-embers.tooltip.goggles.ember=Ember
-embers.tooltip.goggles.mechanical=Mechanical Power
+embers.tooltip.goggles.item=Вещи
+embers.tooltip.goggles.fluid=Жидкости
+embers.tooltip.goggles.ember=Эмбер
+embers.tooltip.goggles.mechanical=Механическая сила
 embers.tooltip.goggles.filter=%s (%s)
 
-embers.tooltip.goggles.item.any=Any
-embers.tooltip.goggles.item.fuel=Fuel
-embers.tooltip.goggles.item.ember=Ember
-embers.tooltip.goggles.item.stamp=Stamp
-embers.tooltip.goggles.item.ember_storage=Ember Storage
-embers.tooltip.goggles.item.combustion=Combustibles
-embers.tooltip.goggles.item.catalysis=Catalysts
-embers.tooltip.goggles.item.ash=Ash
-embers.tooltip.goggles.fluid.any=Any
-embers.tooltip.goggles.fluid.metal=Molten Metals
-embers.tooltip.goggles.fluid.water=Water
-embers.tooltip.goggles.fluid.steam=Steam
-embers.tooltip.goggles.fluid.water_or_steam=Water or Steam
-embers.tooltip.goggles.fluid.redstone=Alchemical Slurry
+embers.tooltip.goggles.item.any=Любая
+embers.tooltip.goggles.item.fuel=Топливо
+embers.tooltip.goggles.item.ember=Эмбер
+embers.tooltip.goggles.item.stamp=Штамп
+embers.tooltip.goggles.item.ember_storage=Хранилице Эмбера
+embers.tooltip.goggles.item.combustion=Сжигаемое
+embers.tooltip.goggles.item.catalysis=Катализаторы
+embers.tooltip.goggles.item.ash=Пепел
+embers.tooltip.goggles.fluid.any=Любая
+embers.tooltip.goggles.fluid.metal=Расплавленные Металлы
+embers.tooltip.goggles.fluid.water=Вода
+embers.tooltip.goggles.fluid.steam=Пар
+embers.tooltip.goggles.fluid.water_or_steam=Вода или Пар
+embers.tooltip.goggles.fluid.redstone=Алхимическая Жидкая Глина
 
-embers.tooltip.goggles.upgrade_slot=• Machine Upgrade Slot
-embers.tooltip.goggles.upgrade=• Machine Upgrade
-embers.tooltip.goggles.accessor_slot=• Machine Accessor Slot
-embers.tooltip.goggles.actuator_slot=• Actuator Slot
+embers.tooltip.goggles.upgrade_slot=• Слот Улучшения Машины
+embers.tooltip.goggles.upgrade=• Улучшение Машины
+embers.tooltip.goggles.accessor_slot=• Слот для Аксессора Машины
+embers.tooltip.goggles.actuator_slot=• Выключатель Привода
 
 embers.tooltip.atmosEmber=Атмосферный эмбер:
 embers.tooltip.targetingBlock=Цель:
@@ -337,23 +337,23 @@ embers.tooltip.itemdial.noitem=ПУСТО
 embers.tooltip.emberdial.ember=Эмбер: 
 embers.tooltip.fluiddial.fluid=%s: %s/%s
 embers.tooltip.fluiddial.nofluid=0/%s
-embers.tooltip.side.center=Center
-embers.tooltip.side.north=North
-embers.tooltip.side.east=East
-embers.tooltip.side.south=South
-embers.tooltip.side.west=West
-embers.tooltip.side.up=Top
-embers.tooltip.side.down=Bottom
-embers.tooltip.accuracy=%s Inaccuracy: %s
-embers.tooltip.inflictor=Attuned Damage: 
-embers.tooltip.tyrfing=Deals damage based on the target's armor.
-embers.tooltip.heat_amount=Heat:
-embers.tooltip.heat_level=Level:
-embers.tooltip.modifiers=Modifiers:
-embers.tooltip.upgrade.actuator=Mechanical Speed: %s
-embers.tooltip.dial.ember_multiplier=Production Multiplier: %s
-embers.tooltip.dial.heat=Heat: %s/%s
-embers.tooltip.item.ember=Ember: %s/%s
+embers.tooltip.side.center=Центр
+embers.tooltip.side.north=Север
+embers.tooltip.side.east=Восток
+embers.tooltip.side.south=Юг
+embers.tooltip.side.west=Запад
+embers.tooltip.side.up=Верх
+embers.tooltip.side.down=Низ
+embers.tooltip.accuracy=%s Неточность: %s
+embers.tooltip.inflictor=Поглощенный урон: 
+embers.tooltip.tyrfing=Наносит урон,зависящий от бронирования цели.
+embers.tooltip.heat_amount=Нагрев:
+embers.tooltip.heat_level=Уровень:
+embers.tooltip.modifiers=Модификаторы:
+embers.tooltip.upgrade.actuator=Механическая скорость: %s
+embers.tooltip.dial.ember_multiplier=Коэффициент продукции: %s
+embers.tooltip.dial.heat=Нагрев: %s/%s
+embers.tooltip.item.ember=Эмбер: %s/%s
 
 embers.tooltip.modifier.superheater=Перегрев
 embers.tooltip.modifier.jet_augment=Шлаковоз
@@ -361,12 +361,12 @@ embers.tooltip.modifier.blasting_core=Взрыв
 embers.tooltip.modifier.resonating_bell=Резонирование
 embers.tooltip.modifier.caster_orb=Эмбер-литьё
 embers.tooltip.modifier.flame_barrier=Пламенный барьер
-embers.tooltip.modifier.eldritch_insignia=Eerie
+embers.tooltip.modifier.eldritch_insignia=Ири
 embers.tooltip.modifier.intelligent_apparatus=Интеллект
-embers.tooltip.modifier.diffraction=Diffractive %s
-embers.tooltip.modifier.focal_lens=Focused %s
-embers.tooltip.modifier.tinker_lens=Tinker's Sight
-embers.tooltip.modifier.anti_tinker_lens=Tinker's Blindness
+embers.tooltip.modifier.diffraction=Дифракционная %s
+embers.tooltip.modifier.focal_lens=Сфокусированный %s
+embers.tooltip.modifier.tinker_lens=Взгляд Лудильщика
+embers.tooltip.modifier.anti_tinker_lens=Слепота Лудильщика
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II
@@ -375,7 +375,7 @@ embers.tooltip.num4=IV
 embers.tooltip.num5=V
 embers.tooltip.num6=VI
 embers.tooltip.num7=VII
-embers.tooltip.numstop=Stop That
+embers.tooltip.numstop=Остановите это
 
 embers.jei.recipe.stamp=Штамповка
 embers.jei.recipe.melter=Плавление
@@ -395,7 +395,7 @@ embers.research.page=Металлургические конструкции
 embers.research.page=Трансмутация
 embers.research.materia=Мистическая материя
 embers.research.core=Свечение сердечника
-embers.research.page=Augment Smithing
+embers.research.page=Аугментальная Ковка
 
 embers.research.multipage=%s (%s/%s)
 
@@ -406,7 +406,7 @@ embers.research.page.ores.title=Полезные ископаемые
 embers.research.page.ores.desc=Глубоко,под землей шахтер может найти достаточно полезные ископаемые,а именно: медь,свинец,серебро и кварц.Медь имеет много применений в качестве проводника,Свинец в качестве ковкого металла,Серебро проявляет магические свойства,а Кварц является хорошим источником кристаллической материи
 
 embers.research.page.hammer=Молот лудильщика
-embers.research.page.hammer.title=Разбивать
+embers.research.page.hammer.title=Расплескать!
 embers.research.page.hammer.desc=С плотным наконечником из свинца и железа молот лудильщика является хорошим инструментом. Им можно ковать пластины из слитков,а так же кооперировать между собой различные машины
 
 embers.research.page.ancient_golem=Древние постройки
@@ -436,9 +436,9 @@ embers.research.page.bore.desc=Коренная порода может оста
 embers.research.page.pipes=Трубы
 embers.research.page.pipes.title=Транспортировка
 embers.research.page.pipes.desc=Самый простой механизм,по вашему мнению - это труба,с помощью которой вы можете транспортировать материалы.Вы изобрели железные и свинцовые трубы.Железные трубы используются для перемещения жидкостей,а свинцовые - предметов.Транспортировка осуществляется в резервуары либо в инвентари.Для того,что бы выкачать предметы или жидкости,вам необходимо создать соответствующе помпу,а затем прикрепить ее к нужному контейнеру и запитать при помощи красного камня
-embers.research.page.routing.desc=Items and Fluids in pipes follow simple rules to determine where they will go. They will always go forward, and will never bounce back or, heavens forbid, pop out of the pipe. At an intersection, they will always prioritize the opposite exit, so long as the other exits are weighed equally. When a tie must be broken, items and fluids will round-robin.
-embers.research.page.valves.desc=Extractors have a number of special properties, listed here: They never connect to other Extractors. When turned off, they can receive items instead of only extracting from containers. When turned on by a redstone signal, they will never accept items from pipes. This makes Extractors useful as valves in pipe systems, for flow control.
-embers.research.page.pipe_tools.desc=Pipes will automatically connect to other adjacent pipes. When this is not wanted, your Tinker's Hammer can be used to disconnect them. (Note that both sides can be disconnected individually) Sometimes, routing in a pipe network can go awry. When this happens, pipes will expel smoke to show that they are clogged. To unclog a pipe, simply right-click it with a stick.
+embers.research.page.routing.desc=Предметы и жидкости руководствутся простыми правилами,по которым и определятеся,куда направится их содержимое. Они всегда будут двигаться вперед,но никогда не будут двигаться назад или,прости господи,вылетать из трубы.Вообще,их приоритетной целью является инвентарь перед ними,до тех пор,пока он не заполнится. Когда инвентарь будет разрушен,предметы или жидкости будут двигаться по кругу
+embers.research.page.valves.desc=Экстракторы имеют несколько свойств:Они никогда не подключаются к другим экстракторам. Когда они активированы сигналом красного камня - Экстракторы не будут пропускать предметы. Это делает их полезными для управления большим количеством труб,в качестве клапанов
+embers.research.page.pipe_tools.desc=Трубы будут автоматически присоеденяться к примыкающим трубам или инвентарям. Если вы этого не хотите,используйте Молот Лудильщика,дабы отсоеденить их(обратите внимание на то,что две стороны могут быть отсоеденены индивидуально).Иногда в сети ваших труб что-то может пойти не так.Когда это происходит - трубы начинают дымиться,сигнализируя то,что они забиты.Что бы прочистить трубу нажмите ПКМ по ней с палкой в руке.
 
 embers.research.page.tank=Жидкостный резервуар
 embers.research.page.tank.title=Контейней для жидкосией
@@ -452,17 +452,17 @@ embers.research.page.boiler=Очистительный завод
 embers.research.page.boiler.title=Паровая камера
 embers.research.page.boiler.desc=Пока активатор может переработать кристаллизорованный эмбер - он перерабатывает его в небольших количествах.Чем больше кристаллов - тем больше будет множитель. Он требует подачи воды и эмбера,в конечном итоге стандартный множитель будет равен 1.5,однако если поместить блок лавы на металлическую составляющую множитель увеличится до 3.0. с каждым последущим блоком лавы он будет увеличиваться
 
-embers.research.page.mini_boiler=Mini Boiler
-embers.research.page.mini_boiler.title=Piggy-backing for explosions
-embers.research.page.mini_boiler.desc=Ember is a highly energetic substance, that produces heat both, when consumed and when produced. It would be a shame to let that heat go to waste. By attaching this pressure vessel to the side of an Ember-consuming or -producing machine, you can boil water into steam for other purposes. But beware that at high pressures, the boiler can easily rupture...
+embers.research.page.mini_boiler=Мини-Бойлер
+embers.research.page.mini_boiler.title=Ожидаем взрывов
+embers.research.page.mini_boiler.desc=Эмбер - субстанция,содержащая множество энергии,которая при потреблении и производстве вырабатывает тепло.Не использовать его - было бы полнейшим расточительством.Присоеденив котел к одной из сторон потребляющийх,или производящих Эмбер,вы смогли кипятить воду,превращая ее пар,для дальнейшего использования.Но из-за сильного давления бойлер вполне легко может взорваться...
 
 embers.research.page.dials=Измерители
 embers.research.page.dials.title=Тщательные Измерения
 embers.research.page.dials.desc=Циферблат - простой способ получить информацию с машины. Существуют два типа: Эмбер и Жидкостный циферблаты.Прикрепленные к соответствующим контейнерам они будут отображать их содержимое и его количество.
 
-embers.research.page.tinker_lens=Tinker's Lens
-embers.research.page.tinker_lens.title=What's What?
-embers.research.page.tinker_lens.desc=Despite you creating all this machinery yourself, some of its functionality can be a bit obtuse at times. Fortunately you've devised an eyepiece you can use to examine machines more closely. When held in either hand, you will always be able to tell which purpose a face on a machine has. Note that this tool is not a periscope, so you might have some trouble with Mechanical Cores...
+embers.research.page.tinker_lens=Линза Лудильщика
+embers.research.page.tinker_lens.title=Что к чему?
+embers.research.page.tinker_lens.desc=Несмотря на то,что вы создаете механизмы самостоятельно,время от времени их функционал оставляет желать лучшего.К счастью,вы изобрели линзу,которую можно использовать для более тщательного изучения машин. Когда вы держите ее в руке,то всегда способны узнать предназначение,взлянув на лицо машины.Отметтьте,что это не перископ,так что у вас могут быть проблемы с Механическими Ядрами...
 
 
 
@@ -493,20 +493,20 @@ embers.research.page.reservoir.desc=Резервуар обычно предпо
 embers.research.page.transfer=Предметный передатчик
 embers.research.page.transfer.title=Фильтрация
 embers.research.page.transfer.desc=Предметные трубы - простой способ перемещения вещей из одного места в другое,но с изобретением Предметного переместителя вы придумали способ фильтровать предметы.Функции Переместителя схожи с функциями обычных труб с некоторыми различиями.Он может быть присоеденен к трубам только спереди или сзади,при отправке предметов переместитель будет в приоритете. На него так же можно поставить предметный фильтр,щелчком правой клавиши.
-embers.research.page.fluid_transfer.desc=Fluid Transfers are the fluid equivalent to Item Transfers. They function equivalent in almost all aspects. Only to set the filter on a Fluid Transfer, a bucket or other container holding some fluid is needed instead. The fluid inside the container is not consumed when setting a filter.
+embers.research.page.fluid_transfer.desc=Жидкостный передатчик - эквивалент Предметного,его функционал практически одентичен за исключением одного.Для установки фильтра необходимо ведро с нужным вам типом жидкости,при этом жидкость не расходуется.
 
 embers.research.page.breaker=Автоматический разрушитель
 embers.research.page.breaker.title=Ломаем блоки
 embers.research.page.breaker.desc=Автоматический разрушитель - достаточно простая штуковина. Разместите его лицом в нужном направлении и его лезвия будут ломать блок перед ним. По умолчанию он будет выбрасывать предметы в мир,но если за ним разместить ящик он будет складывать предметы в него.
 
-embers.research.page.pump=Mechanical Pump
-embers.research.page.pump.title=Pump It Up
-embers.research.page.pump.desc=Since the Pressure Refinery consumes water to boost its Ember production, you need a way to collect it automatically. A mechanical pump should do fine, but Ember converts poorly to mechanical energy. Running this pump solely using Ember will be very slow and it would likely be good to build multiple of them.
+embers.research.page.pump=Механическая помпа.
+embers.research.page.pump.title=Выкачай это!
+embers.research.page.pump.desc=Так как Котлы для бойлеров потребляют много воды для ускорения производства Эмбера,вам необходим способ подавать ее автоматически.Механическая помпа вполне подойдет,но Эмбер будет достаточно плохо преобразовываться в механическую энергию.Использование этой помпы в единственном экземпляре используя Эмбер будет достаточно долгим,так что было бы неплохо создать структуру из нескольких помп.
 
 embers.research.page.vacuum=Предметный вакуум
 embers.research.page.vacuum.title=Автоматизированный сбор
 embers.research.page.vacuum.desc=Предметный вакуум предполагает сбор предметов из мира.Просто запитайте его энергией красного камня и он начнет сбор предметов в достаточно большом радиусе напротив него.Он будет автоматически проталкивать вещи по трубам,которые размещаются сзади.
-embers.research.page.vacuum_transfer.desc=Item Vacuums don't have an internal inventory, they will directly push items into a connected pipe or container. Using this property, you can filter which items will be sucked up by attaching an Item Transfer to its back face.
+embers.research.page.vacuum_transfer.desc=Предметный вакуум не имеет собственного инвентаря,он просто выталкивает вещи в подключенную к нему трубу или инвентарь. Используя данную особенность вы сможете сортировать предметы,которые будут проталкиваться,путем размещения Предметного Передатчика позади Предметного Вакуума
 
 embers.research.page.dropper=Предметный выбрасыватель
 embers.research.page.dropper.title=Выбрасываем!
@@ -519,8 +519,8 @@ embers.research.page.dawnstone.desc=Золотит - крепкий сплав,�
 embers.research.page.emitters=Передача эмбера
 embers.research.page.emitters.title=Отправка и получение
 embers.research.page.emitters.desc=Все манипуляции с эмбером,полученным из Активатора проводятся благодаря двум основным блокам: Эмбер Эмиттеру и Эмбер Рецептору. Просто разместите Эмиттер на Источник Эмбера,а Рецептор разместите на другое хранилище. Shift + ПКМ по Рецептору и ПКМ по Эмиттеру молотом лудильщика,что бы связать их. Запитайте Эмиттер редстоуном и лучи Эмбера начнут перемещение.
-embers.research.page.receivers.desc=Receptors function as the receiving end. When they receive an Ember burst from an Emitter, they will push the Ember into the attached machine, no redstone required. Note that if Ember is received, but the receptor can't take all of it, some of it will be lost, signified by a plume of smoke and sparks.
-embers.research.page.linking.desc=To link Emitters and Receptors together, simply shift-right-click the Receptor with your Tinker Hammer, and right-click the Emitter with the hammer. There is no distance limit to linking, but after an Ember Burst has been in transit for a while, it can fade away, losing all of the Ember it carried.
+embers.research.page.receivers.desc=Рецепторы работают в качестве принимающей части. Когда они принимают Эмбер из Эмиттера они передают его машине к которой подклчены,при этом не требуя сигнала красного камня.Обратите внимание,что если Рецептор не может принять весь обьем получаемого Эмбера,то остальная его часть будет потеряна,при этом Рецептор будет дымиться и искриться.
+embers.research.page.linking.desc=Что бы связать Рецептор и Эмиттер,просто нажмите Shift + ПКМ по Рецептору и ПКМ по Эмиттеру при помощи Молота Лудильшика. Дистанция для связывание неограничена,но после того,как луч Эмбера вылетел из Эмиттера,он может испариться,потеряв весь заряд.
 
 embers.research.page.copper_cell=Медная ячейка
 embers.research.page.copper_cell.title=Конденсатор
@@ -528,36 +528,36 @@ embers.research.page.copper_cell.desc=Медная ячейка - простой
 
 
 
-embers.research.page.gearbox=Gearboxes
-embers.research.page.gearbox.title=Mechanical Junction
-embers.research.page.gearbox.desc=Gearbox Frames are the heart-piece of mechanical transfer. One gear can be attached on each side, but only sides with axles or other machines attached will need one. There is an input side marked by a strip, and all other sides are outputs. The input power will be divided between each used output, so if two axles were attached, each would receive half power.
+embers.research.page.gearbox=Коробка передач
+embers.research.page.gearbox.title=Механическое соединение
+embers.research.page.gearbox.desc=Корпус Коробки Передач - ядро механического переноса.Одна шестеренка может быть присоеденена с каждой стороны,но только стороны с осями,или присоедененными механизма их требуют.Есть сторона со входом,помеченная полоской,остальные стороны - выходы.Входящая сила будет распределена между всеми ЗАДЕЙСТВОВАННЫМИ выходами.
 
-embers.research.page.axle_iron=Iron Axle
-embers.research.page.axle_iron.title=Axial Rotation
-embers.research.page.axle_iron.desc=Axles are used to transfer mechanical power between generators, gearboxes and machines that use it. Axles don't lose power over distance, so their transfer range is virtually unlimited.
+embers.research.page.axle_iron=Железная Ось
+embers.research.page.axle_iron.title=Осевое Вращение
+embers.research.page.axle_iron.desc=Оси использутся для передачи механической Энергии генераторам,коробкам передач и машинам,которым она нужна.Оси не теряют мощность с дистанцией,так что расстояние,на которые их можно можно размещать - фактически бесконечно.
 
-embers.research.page.gear_iron=Iron Gear
-embers.research.page.gear_iron.title=Cogs of the Machine
-embers.research.page.gear_iron.desc=Gears are used as interfaces for connecting axles to gearboxes or machines. Iron Gears are cheap and robust, but they have a power limit. Power past the limit is mostly lost.
-embers.research.page.gear_dawnstone.desc=Dawnstone Gears are more suitable for high speed rotations, they don't have the same limit Iron Gears have. At high rotational speeds, the gear will visually glow a fiery orange. This side effect is mostly harmless however.
+embers.research.page.gear_iron=Железная Шестеренка
+embers.research.page.gear_iron.title=Зубки Машины
+embers.research.page.gear_iron.desc=Шестеренки используются в качестве интерфейсов для присоеденения осей к генераторам и коробкам передач.Железные шестерни дешевые и практичные,но у них есть свой лимит.Можность после превышения лимита теряется.
+embers.research.page.gear_dawnstone.desc=Золотитовые Шестеренки более продвинуты за счет высокой скорости вращение,кроме того они не имеют лимита,в отличие от железных.При высокой скорости вращения Шестеренка будет светиться ярко-оранжевым,этот эффект по большей части безвреден и служит лишь в декоративных целях.
 
-embers.research.page.actuator=Mechanical Actuator
-embers.research.page.actuator.title=Alternate Energy
-embers.research.page.actuator.desc=Some machines that are powered using Ember could potentially be powered by mechanical energy instead. This machine attachment has 4 input sides for mechanical energy. Similar to a gearbox, a gear needs to be attached to a side in order to attach an axle to it. The power from each side is combined together internally, but most machines have diminishing returns for the amount of power provided, so more power may not always be better.
-embers.research.page.actuator_bore.desc=The Ember Bore is almost purely mechanical and lends itself well to being powered by mechanical energy. Powering it this way is more coal efficient, but initially a bit slower.
-embers.research.page.actuator_pump.desc=The Pump is a machine that really suffers from being powered by Ember. Even small amounts of mechanical power speed it up significantly, and it can be pushed to become quite fast.
-embers.research.page.actuator_stamper.desc=The Stamper is another machine with moving parts, but the fact that Ember is so energetic and the motion of the Stamper is so simple mean that directly applying mechanical power will only speed it up a little bit. It is quite a bit more efficient in terms of Ember cost however.
+embers.research.page.actuator=Механический привод
+embers.research.page.actuator.title=Альтернативная Энергия
+embers.research.page.actuator.desc=Некоторые машины,которые запитываются Эмбером,так же могут быть запитаны Механической Энергией.Эти машины имеют аж 4 входа для энергии.Подобно коробке передач, шестерню необходимо прикрепить к боковой части, чтобы прикрепить к ней ось.Мощность с каждой стороны учитывается и в конечном итоге суммируется,но большинство машин имеют уменьшающуюся отдачу от количества предоставленной мощности,так что много энергии - не всегда хорошо.
+embers.research.page.actuator_bore.desc=Эмбер-скважина практически полностью механическая машина,так что она отлично поддается механическому воздействию.Запитывание данной машины более эффективно в плане потребления угля,но это занимает больше времени.
+embers.research.page.actuator_pump.desc=Помпа - эта машина,которая действительно страдает от запитывания Эмбером.Даже небольшие количества механической энергии могут значительно ускорить данную машину.
+embers.research.page.actuator_stamper.desc=Штампер - другая машина с двигающимися частями,но фактически Эмбер содержит довольно много энергии,а Штампер совершает достаточно простые движения,что применение к нему механической силы лишь немного ускорит его,в то время,как Эмбер может быть немного эффективнее.
 
-embers.research.page.steam_engine=Steam Engine
-embers.research.page.steam_engine.title=Industrial Revolution
-embers.research.page.steam_engine.desc=The Steam Engine is the easiest way to produce mechanical power. All it needs is a bit of burnable material like coal and some water, and it will produce a meager amount of rotation on its output face. While Steam Engines are more fuel efficient than powering an Ember Bore with the same amount of fuel, they can also be wasteful if improperly handled: If the engine runs out of water as its burning a piece of fuel, the rest of that piece will simply be lost.
-embers.research.page.steam_engine_overclock.desc=Since you've already dabbled with producing steam from Ember-powered machinery, you could put this steam to use for powering your engines. Directly pumping in steam from the outside significantly increases the effectiveness of the engine, and it will output a lot more power, but the steam will be consumed very quickly, possibly requiring several boilers per engine or attaching them to machines that use a lot of Ember.
+embers.research.page.steam_engine=Паровой двигатель
+embers.research.page.steam_engine.title=Индустриальная революция!
+embers.research.page.steam_engine.desc=Паровой двигатель - простейший способ вырабатывать механическую энергию.Все,что он требует - топливо,такое как уголь и немного воды.Как итог - небольшое количество механической энергии.Использовать Паровые Двигатели может быть эффективнее чем просто запитывать Эмбер-скважину топливом,но так же их использование может приносить больше потерь,если во время горения топлива вода закончится.В таком случае часть топлива попросту сгорит.
+embers.research.page.steam_engine_overclock.desc=Раньше вы уже занимались производством пара из машин,запитываемых Эмбером,так что вы можете использовать данный пар,для запитывания ваших Двигателей.Выкачивание пара может повысить эффективность Двигателей,что приведет к большему выходу механической энергии,но пар все так же будет расходоваться быстро,так что вам может понадобиться несколько Бойлеров на один Двигатель,либо присоеденить котел к машине,потребляющей огромные количества Эмбера.
 
 
-embers.research.page.pulser=Ember Ejector
-embers.research.page.pulser.title=Full Power Destruction
-embers.research.page.pulser.desc=Simple Ember Emitters are useful and all, but sometimes you may want a bit more raw throughput. The Ember Ejector is a sturdier Emitter -- functionally identical to its predecessor, but capable of draining and emitting ten times as much Ember in a given time. Note that Receptors are quickly overwhelmed with this massive quantity and any surplus Ember may be lost in transfer.
-embers.research.page.ember_funnel.desc=Since losing Ember in transfer isn't good, you've devised the Ember Funnel that catches Ember from multiple sources and rapidly transfers it to the connected machine.
+embers.research.page.pulser=Эмбер-эжектор
+embers.research.page.pulser.title=Вся сила разрушения
+embers.research.page.pulser.desc=Обычные Эмиттеры достаточно полезные,но это и все.Но иногда вы хотите больше мощности,так что Эмбер-эжектор - это улучшенная версия Эмиттера,его функционал соответствует предшественнику,за исключением того,что количество передаваемого Эмбера увеличено в десять раз.Обратите внимание,что такие количества Эмбера могут запросто перегрузить Эмбер Рецептор и значительная часть Эмбера просто пропадет.
+embers.research.page.ember_funnel.desc=Вам абсолюютно не нравилась потеря Эмбера и поэтому вы изобрели Эмбер-воронку,которая улавливает Эмбер и быстро переносит его в машины.
 
 embers.research.page.splitter=Разделитель луча
 embers.research.page.splitter.title=Разделение Эмбера
@@ -585,10 +585,10 @@ embers.research.page.jars.desc=Наполнять предметы в обычн
 
 embers.research.page.clockwork_tools=Механические инструменты
 embers.research.page.clockwork_tools.title=Мощные инструменты
-embers.research.page.clockwork_tools.desc=При использовании недавно изобретенных портативных зарядников вы создаете инструменты из Золотита.Заводной Топор,Заводная Кирка которая работает одновременно как кирка и лопата и Большой Молот который разбивает блоки буквально в прах,а так же может использоваться в качестве оружия. Все три инструмента требуют Эмбер для их работы.
-embers.research.page.clockwork_pickaxe.desc=The Clockwork Pickaxe functions as a powerful pickaxe and shovel at the same time. Like the other tools, it requires Ember to break blocks or attack enemies. As it doubles as a weapon, it can receive both, weapon and tool enchantments.
-embers.research.page.clockwork_hammer.desc=The Grandhammer is a powerful melee weapon. Like the other tools it requires Ember to break blocks or attack enemies. If it is used to break a block, it will obliterate it completely, leaving no drops. Like the pickaxe, it can receive weapon and tool enchantments, but due to its nature it cannot be enchanted with Fortune or Silk Touch.
-embers.research.page.clockwork_axe.desc=The Clockwork Axe functions as a powerful axe. Like the other tools it requires Ember to break blocks or attack enemies. It can receive weapon and tool enchantments, like the other tools.
+embers.research.page.clockwork_tools.desc=При использовании недавно изобретенных портативных зарядников вы создаете инструменты из Золотита.
+embers.research.page.clockwork_pickaxe.desc=Механическая Кирка - мощный инструмент который работает одновременно как кирка и лопата.Требует Эмбер для использования.Из-за того,что данная кирка позиционируется так же в качестве оружия,на нее могут быть наложены соответствующие зачарования.
+embers.research.page.clockwork_hammer.desc=Большой Молот разбивает блоки буквально в прах,а так же может использоваться в качестве оружия.Требует Эмбер для использования.Из-за того,что данный молот позиционируется как инструмент и оружие одновременно,на него могут быть наложены соответствующие зачарования.Но из-за того,что при разрушении блоков предметы не выпадают,на него не могут быть наложены зачарования Удачи и Шёлкового Касания.
+embers.research.page.clockwork_axe.desc=Механическая Топор - мощный инструмент,требующий Эмбера для функционирования.так же может совмещать в себе зачарования оружия и инструмента.
 
 embers.research.page.cinder_staff=Испепеляющий посох
 embers.research.page.cinder_staff.title=Магические ракеты.
@@ -624,17 +624,17 @@ embers.research.page.waste=Экспериментирование
 embers.research.page.waste.title=Алхимический процесс
 embers.research.page.waste.desc=Вы быстро поняли,что трансмутации не всегда проходят успешно,в результате чего образуется Алхимический Мусор.Мусор может быть помещен в Штампер,для получения части затраченного пепла обратно,а так же может быть проанализирован,что бы определить,как далеко вы от желаемого результата.Таким образом,путем проб и ошибок вы наконец сможете вычислить нужное вам количество пепла для алхимического пьедестала.
 
-embers.research.page.hellish_synthesis=Assorted Syntheses
-embers.research.page.hellish_synthesis.title=Strange Materials
-embers.research.page.hellish_synthesis.desc=Through alchemical processes, you have discovered a way to create several new substances. These include strange red rock and sand, which you have read in ancient documents make up the land of a strange faraway realm.
+embers.research.page.hellish_synthesis=Смешанный Синтез
+embers.research.page.hellish_synthesis.title=Странные Материалы
+embers.research.page.hellish_synthesis.desc=Во время алхимических процессов вы придумали,как получать новые субстанции.Это вкючает в себя странные красные камни и песок,о которых вы только читали в древних документах,созданных после путешествия в далекие неизведаные земли.
 
-embers.research.page.archaic_brick=Archaic Bricks
-embers.research.page.archaic_brick.title=Ancient Building Material
-embers.research.page.archaic_brick.desc=The ancient sentinels that roam the land often break apart into what appears to be bricks. Through peculiar alchemy you've discovered that you can replicate them, so long you have one to begin with. These should go well with your caminite buildings.
+embers.research.page.archaic_brick=Архаические Кирпичи
+embers.research.page.archaic_brick.title=Древние Строительные Материалы
+embers.research.page.archaic_brick.desc=Древние стражи довольно части при убийстве распадаются на составляющие,часть из которых очень сильно напоминает кирпичи...Путем экспериментов вы смогли синтезировать эти кирпичи,которые неплохо бы смотрелись с вашими постройками из каминита.
 
-embers.research.page.motive_core=Motive Cores
-embers.research.page.motive_core.title=Precursor Technology
-embers.research.page.motive_core.desc=Alchemy doesn't just allow you to replicate bricks. Motive Cores appear to be the lifeblood and spark of Ancient Golems, and through alchemy, this power now rests at your fingertips.
+embers.research.page.motive_core=Древние Ядра
+embers.research.page.motive_core.title=Технологии Предшественников
+embers.research.page.motive_core.desc=Алхимия не только позволяет вам синтезировать всякие кирпичи.Древние Ядра,кажется,являются источниками жизненной энергии для Големов и путем алхимии теперь эта энергия у вас в руках.
 
 embers.research.page.adhesive=Клейкое вещество
 embers.research.page.adhesive.title=Липкое решение
@@ -652,21 +652,21 @@ embers.research.page.inflictor=Гемы Улучшения
 embers.research.page.inflictor.title=Поглощение Боли
 embers.research.page.inflictor.desc=Гемы улучшения - оприоре достаточно странные кристаллы.Когда вы держите его в руке и получаете урон,гем поглощает тип урона и запоминает его.Если пришить Гем к Плащу при помощи нити в верстаке,вы будете получать меньше урона того типа,который "запомнил" Гем.Одновременно в плаще может находиться 7 Гемов.Их можно убрать,поместив Плащ в верстак.
 
-embers.research.page.glimmer=Glimmer Crystal
-embers.research.page.glimmer.title=Light on, Light off
-embers.research.page.glimmer.desc=By infusing quartz with heat and ember, you have devised a luminescent material that appears to be eager to part with its own luminosity. This allows you to place light sources at will, although it will deplete the crystal. However, while you are exposed to light, the crystal will slowly regenerate itself.
+embers.research.page.glimmer=Мигаюющий Кристалл
+embers.research.page.glimmer.title=Включить/Выключить
+embers.research.page.glimmer.desc=При наполнении кварца Эмбером и Пламенем,вы открыли люменисцентный материал который,похоже,стремится расстаться со своим свойством.Это позволяет вам размещать источники света по желанию,истощая кристалл.Однако,когда вы находитесь вблизи источника света,кристалл будет постепенно восстанавливаться.
 
-embers.research.page.metallurgic_dust=Metallurgic Dust
-embers.research.page.metallurgic_dust.title=This for that
-embers.research.page.metallurgic_dust.desc=Sometimes what you find in the bowels of the earth isn't what you were looking for. And indeed, what we've learnt about alchemy can easily solve that. By combining the transmutative properties of metal seeds with redstone and ember grit, a fine white powder is created. When it comes into contact with ore, it will quickly transmute the entire vein into a different type. Some of the ore may be transmuted into worthless stone however...
+embers.research.page.metallurgic_dust=Металлургическая пыль
+embers.research.page.metallurgic_dust.title=Это для этого
+embers.research.page.metallurgic_dust.desc=Иногда в недрах земли вы находите не то,что искали.Но алхимия может с легкостью это исправить!Комбинируя трансмутационные свойства Металлических Семян с зернами зернистым углем и Эмбером вы создали белый порошок,который при контакте с рудой изменит ее на другую. Часть руды может быть превращена в камень,тут уж ничего не поделаешь...
 
 embers.research.page.cluster=Эмбер-кластер
 embers.research.page.cluster.title=Очищенные кристаллы
 embers.research.page.cluster.desc=Маленькие кристаллый Эмбера,которые вы использовали в прошлом уже не кажутся вам настолько хороши,как раньше,но вы верите,что вскоре сможете получить намного больше мощи.При алхимическом слиянии вы совместили несколько осколков и кристалл Эмбера в Кластер,который,как вам кажется поможет в будущем.
 
-embers.research.page.field_chart=Field Chart
-embers.research.page.field_chart.title=Tactical Overview
-embers.research.page.field_chart.desc=Finding spots with High Ember concentration can be tedious when your only measurement device is an Atmospheric Gauge. However, it seems that Ember resonates with itself, and by suitable manufacture you've devised the Field Chart, a map of Ember concentrations for a larger area than can be covered on foot.
+embers.research.page.field_chart=Диаграмма Поля
+embers.research.page.field_chart.title=Тактический Обзор
+embers.research.page.field_chart.desc=Поиск областей с высокой концентрацией Эмбера,когда единственным измерительным прибором,является Атмосферный Циферблат.Однако,кажется,Эмбер резонирует сам с собой.Благодаря этому открытию вы создали Диаграмму Поля - карту с концентрациями Эмбера,охватывающую большие территории.
 
 embers.research.page.wildfire=Вайлдфаер ядро
 embers.research.page.wildfire.title=Контроль Пламени
@@ -680,17 +680,17 @@ embers.research.page.combustor=Камера сгорания
 embers.research.page.combustor.title=Жертвоприношение
 embers.research.page.combustor.desc=Камера сгорания - простая машина,которая мало что будет делать сама по себе,юез использования топлива,каждое из которых имеет свой уровень:у угля второй уровень,у адских кирпичей третий,а у огненного порошка четвертый
 
-embers.research.image.combustor_coal=Coefficient: 2x
-embers.research.image.combustor_nether_brick=Coefficient: 3x
-embers.research.image.combustor_blaze_powder=Coefficient: 4x
+embers.research.image.combustor_coal=Коэффициент: 2x
+embers.research.image.combustor_nether_brick=Коэффициент: 3x
+embers.research.image.combustor_blaze_powder=Коэффициент: 4x
 
 embers.research.page.catalyzer=Камера катализации
 embers.research.page.catalyzer.title=Химическая сила!
 embers.research.page.catalyzer.desc=Камера катализации - простая машина,которая мало что будет делать сама по себе,без использования катализаторов,каждый из которых имеет свой уровень:у красного камня второй уровень,у пороха третий,а у светящейся пыли четвертый
 
-embers.research.image.catalyzer_redstone=Coefficient: 2x
-embers.research.image.catalyzer_gunpowder=Coefficient: 3x
-embers.research.image.catalyzer_glowstone=Coefficient: 4x
+embers.research.image.catalyzer_redstone=Коэффициент: 2x
+embers.research.image.catalyzer_gunpowder=Коэффициент: 3x
+embers.research.image.catalyzer_glowstone=Коэффициент: 4x
 
 embers.research.page.reactor=Реактор Пламени
 embers.research.page.reactor.title=Химия Эмбера
@@ -702,29 +702,29 @@ embers.research.page.materia.desc=Изолированная материя - с
 
 
 
-embers.research.page.cost_reduction=Ember Jewelry
-embers.research.page.cost_reduction.title=Cost Reduction
-embers.research.page.cost_reduction.desc=Using clockwork tools or Ember-powered weaponry can be quite cumbersome, as Mantle Jars or Cartridges need to be refilled periodically. These pieces of jewelry counteract this by reducing the amount of Ember consumed by a factor. The ring, amulet and belt all have different reduction rates, but they all stack together additively.
+embers.research.page.cost_reduction=Эмбер-аксессуары
+embers.research.page.cost_reduction.title=Снижение Цены
+embers.research.page.cost_reduction.desc=Использовать Заводные Инструменты,или оружия,работающие на Эмбере - это конечно круто,если у вас есть Мантл-резервуары или картриджы,которые нужно постоянно переодически заряжать.Данные Аксессуары исправят это путем вырабатывания Эмбера,благодаря определенному фактору. Кольцо,амулет и ремень имеют разные темпы выработки Эмбера,но они могут суммироваться.
 
-embers.research.page.mantle_bulb=Mantle Bulb
-embers.research.page.mantle_bulb.title=Tucked Away
-embers.research.page.mantle_bulb.desc=If holding a Mantle Cartridge in your offhand or even just holding a Mantle Jar in your pack is too unwieldy for you, this bauble can help. Instead of holding it in your inventory, this Ember container can be worn in any bauble slot. This comes, however, at a vastly reduced capacity.
+embers.research.page.mantle_bulb=Мантийная Колба
+embers.research.page.mantle_bulb.title=Спрятана
+embers.research.page.mantle_bulb.desc=Если вы носите Мантл-картридж в руке,или инвентаре - это занимает место. Исправить это поможет данный Аксессуар. Он позволит вам переносить Мантл-картридж в одном из Baubles слотов,используя при этом немного заряда.
 
-embers.research.page.explosion_charm=Explosion Charm
-embers.research.page.explosion_charm.title=Manufacted Nethicite
-embers.research.page.explosion_charm.desc=While wearing this charm, explosions that go off near you will be dissipated, their destructive force absorbed into the charm, but unfortunately, for no other special effect.
+embers.research.page.explosion_charm=Чарм Взрыва
+embers.research.page.explosion_charm.title=Изготовленный Нефиситом
+embers.research.page.explosion_charm.desc=Когда вы носите данный Аксессуар,взрывы,происходяшие поблизости от вас,будут рассеяны и поглощены Чармом,к сожалению без какого-либо эффекта.
 
-embers.research.page.nonbeliever_amulet=Amulet of the Heretic
-embers.research.page.nonbeliever_amulet.title=And it goes away
-embers.research.page.nonbeliever_amulet.desc=Damn witches and their resistance to the otherworldly... This amulet will be the gateway to becoming like them. When you are hit by any magical attack while wearing the amulet, 90% of the damage will be nullified. Note however, that you will always take at least half a heart of damage from magical attacks.
+embers.research.page.nonbeliever_amulet=Амулет Еретика
+embers.research.page.nonbeliever_amulet.title=И он уходит...
+embers.research.page.nonbeliever_amulet.desc=Чертовы ведьмы и их зелья...Этот амулет позволит вам стать похожим на них.Когда данный аксессуар будет находиться на вас,во время магической атаки 90% урона будет поглощено.Обратите внимание,что вы в любом случает будете получать по пол сердца урона от магических атак.
 
-embers.research.page.ashen_amulet=Ashen Amulet
-embers.research.page.ashen_amulet.title=Ashes to Ashes
-embers.research.page.ashen_amulet.desc=Turning things to ash is... certainly a display of power. Not very well thought-out power, but power that rests in this amulet regardless. When a creature is slain or a block is broken while wearing this amulet, it will instantly be turned to ash, and drop nothing but ash.
+embers.research.page.ashen_amulet=Пепельный Амулет
+embers.research.page.ashen_amulet.title=Пепел к пеплу
+embers.research.page.ashen_amulet.desc=Превращать вещи в пепел это... конечно показатель силы.Не самая лучшая сила,но сила,которая покоится в этом Аксессуаре.При разрушении блоков или убийстве существ носитилем они превратятся в пепел.
 
-embers.research.page.dawnstone_mail=Dawnstone Mail
-embers.research.page.dawnstone_mail.title=Defense Position
-embers.research.page.dawnstone_mail.desc=Dawnstone is a material with many properties that make it suitable for vestments and armor. This Dawnstone Mail will protect the wearer from all knockback. Just don't question why mail is made from plates.
+embers.research.page.dawnstone_mail=Золотитовая кольчуга
+embers.research.page.dawnstone_mail.title=Обороняющая позиция
+embers.research.page.dawnstone_mail.desc=Золотит - материал со множеством свойств,которые делают его пригодным для облачений и брони.Золотитовая кольчуга наделяет носителя иммунитетом к отбрасыванию.Даже не спрашивайте,почему кольчуга сделана из пластин...
 
 
 
@@ -736,9 +736,9 @@ embers.research.page.heat=Нагрев
 embers.research.page.heat.title=Прилично Изношенный
 embers.research.page.heat.desc=С тех пор,как вы используете Золотитовую наковальню,для починки или разборки предметов,вы научились применять улучшения к вашей аммуниции.Поместите меч,инструмент или броню,затем разместите Древнее ядро,когда Молот прикоснется к ним,они получат способность поглощать пламя,которое может накапливаться в виде нагрева.
 
-embers.research.page.dismantling=Detaching Modifiers
-embers.research.page.dismantling.title=We have to go back
-embers.research.page.dismantling.desc=Sometimes you might add an augment to a tool or armor and eventually find that it no longer suits you. Augments are not permanent additions however, and the Dawnstone Anvil can help you deal with that. By placing the tool or armor on the anvil without an item on top and hammering it, you can remove all modifiers for no cost. The core itself and its accumulated heat will always remain on the tool however, and such tools cannot be completely destroyed.
+embers.research.page.dismantling=Разделительные материалы
+embers.research.page.dismantling.title=Мы должны вернуться
+embers.research.page.dismantling.desc=Иногда вы добавляете компонент к вашей броне,или оружию,но внезапно понимаете,что он вам не идет! Как никак компоненты - не постоянные улучшения и Золотитовая Наковальня поможет вам справиться с этим.Положив вещь на Золотитовую наковальню и вжарив пару раз Молотом Лудильщика вы избавитесь от модификатором без каких-либо затрат.В то время как Ядро и Панель нагрева останутся на инструменте,однако и такие инструменты не могут быть полностью уничтожены.
 
 embers.research.page.inferno_forge=Адская кузница
 embers.research.page.inferno_forge.title=Поднимаем уровень
@@ -777,39 +777,39 @@ embers.research.page.resonating_bell=Резонирующий колокольч
 embers.research.page.resonating_bell.title=Вибрации
 embers.research.page.resonating_bell.desc=Резонирующий колокольчик - компонент для инструментов и оружия,позволяющий "звонить" сквозь блоки и находить определенные обьекты.ПКМ по блоку,что бы такие же блоки были посдвечены.Зона применения Колокольчика зависит от уровня модификатора.
 
-embers.research.page.tinker_lens_augment=Tinker's Lens
-embers.research.page.tinker_lens_augment.title=What's What
-embers.research.page.tinker_lens_augment.desc=Holding this thing in your hand all the time is inconvenient. Fortunately, you can apply this to a helmet to receive the benefit of holding it all the time while wearing the helmet. This augment doesn't take up any slots, but it does need a Motive Core applied first.
+embers.research.page.tinker_lens_augment=Линза Лудильшика
+embers.research.page.tinker_lens_augment.title=Что к чему
+embers.research.page.tinker_lens_augment.desc=Держать эту вещицу в руке совсем неудобно,поэтому вы решаете закрепить ее на шлеме.Это не требует слота модификации,но интегрированное Древнее Ядро все же понадобится
 
-embers.research.page.anti_tinker_lens=Smoky Tinker's Lens
-embers.research.page.anti_tinker_lens.title=Blind to the Truth
-embers.research.page.anti_tinker_lens.desc=Sometimes, too much information can be a curse. Some helmets, like the Ashen Goggles can provide information about blocks like a Tinker's Lens, but this is not always desirable. This augment, when put on such a helmet, will turn this information off. This augment doesn't take up any slots, but it does need a Motive Core applied first.
+embers.research.page.anti_tinker_lens=Закоптившаяся Линза Лудильщика
+embers.research.page.anti_tinker_lens.title=Слеп к правде
+embers.research.page.anti_tinker_lens.desc=Иногда много информации может быть проклятьем.Некоторые шлемы,например Пепельные Очки способны показывать информацию о блоках,ровно как Линза Лудильщика,что не всегда удобно...Данный компонент при закреплении на шлеме позволит вам избавиться от данной информации.Это не требует слота модификации,но интегрированное Древнее Ядро все же понадобится
 
-embers.research.page.mystical_mechanics=Mystical Mechanics
-embers.research.page.mystical_mechanics.title=Not the mod you're looking for
-embers.research.page.mystical_mechanics.desc=Embers has Mystical Mechanics compatibility, but it's an optional dependency, and it's currently either turned off in the config, or Mystical Mechanics is not installed.
+embers.research.page.mystical_mechanics=Мистические Механизмы
+embers.research.page.mystical_mechanics.title=Не тот мод,который вы ищите 
+embers.research.page.mystical_mechanics.desc=У мода Эмберс есть совместимость с Мистическими Механиками,но она или отклчена в конфигурации,или данный мод попросту не установлен.
 
 embers.research.page.baubles=Baubles
-embers.research.page.baubles.title=Not the mod you're looking for
-embers.research.page.baubles.desc=Embers has Baubles compatibility, but it's an optional dependency, and it's currently either turned off in the config, or Baubles is not installed.
+embers.research.page.baubles.title=Не тот мод,который вы ищите
+embers.research.page.baubles.desc=У мода Эмберс есть совместимость с Baubles,но она или отклчена в конфигурации,или данный мод попросту не установлен.
 
-embers.research.page.diffraction_barrel=Diffraction Barrel
-embers.research.page.diffraction_barrel.title=This... is my Boomstick!
-embers.research.page.diffraction_barrel.desc=The Blazing Ray can be a quite inaccurate weapon when fired in quick succession. This Barrel augment can be placed on not only the Blazing Ray, but any Ember projectile weapon, and will effectively turn said weapon into a shotgun of sorts. Note that instead of a ray, the Blazing Ray would fire a spread of projectiles instead.
+embers.research.page.diffraction_barrel=Дифракционный барабан
+embers.research.page.diffraction_barrel.title=Это...Моя взрывная палочка!
+embers.research.page.diffraction_barrel.desc=Испепеляющий луч может быть не самым точным оружием при быстрой стрельбе.Данный копмонент может быть помещен на любое оружие дальнего боя,использующее Эмбер в качестве боеприпасов и достаточно эффективно превратит его в дробовик.Обратите вниманиме,что вместо того,что бы стрелять одним лучем,будет произведен залп из нескольких лучей
 
-embers.research.page.focal_lens=Focal Lens
-embers.research.page.focal_lens.title=Piercing Blaze
-embers.research.page.focal_lens.desc=A Focal Lens augment can help firing precision when using Ember weaponry a lot. Dependent on whether you place it on a weapon that shoots fireballs or rays, it will either produce homing projectiles, or a piercing ray instead.
+embers.research.page.focal_lens=Фокусирущая линза
+embers.research.page.focal_lens.title=Пронзающее пламя
+embers.research.page.focal_lens.desc=Использование Факусирующих линз в качестве компонента увеличат точность оружия дальнего боя,работающего на Эмбере.В зависимости от того,куда вы разместите Линзу,на оружие стреляющее зарядами,или лучами,оно будет вести себя по разному.Снаряды станут самонаводящимися,а лучи - пронзающими.
 
-embers.research.page.pipes_category=Pipes
-embers.research.page.mystical_mechanics_category=Mystical Mechanics
-embers.research.page.simple_alchemy_category=Simple Alchemy
-embers.research.page.wildfire_category=Wildfire Core
+embers.research.page.pipes_category=Трубы
+embers.research.page.mystical_mechanics_category=Мистические Механики
+embers.research.page.simple_alchemy_category=Простая алхимия
+embers.research.page.wildfire_category=Вайлдфаер Ядро
 embers.research.page.baubles_category=Baubles
-embers.research.page.weapon_augments_category=Weapon Augments
-embers.research.page.armor_augments_category=Armor Augments
-embers.research.page.projectile_augments_category=Projectile Augments
-embers.research.page.misc_augments_category=Other Augments
+embers.research.page.weapon_augments_category=Компоненты оружия
+embers.research.page.armor_augments_category=Компоненты брони
+embers.research.page.projectile_augments_category=Компоненты снарядов
+embers.research.page.misc_augments_category=Прочие компоненты
 
 embers.commands.fill.usage=/ember-fill <x> <z> <set|add|query> ...
 embers.commands.fill.usage.add=/ember-fill <x> <z> add <значение>
@@ -819,57 +819,57 @@ embers.commands.fill.added=Added %d to the ember level (now %d) in the chunk [%d
 embers.commands.fill.set=Added the ember level to %d in the chunk [%d, %d] (at x %d, z %d)
 embers.commands.fill.query=Ember level is %d in the chunk [%d, %d] (at x %d, z %d)
 
-subtitles.block.alchemy.fail=Energetic Alchemy fails...
-subtitles.block.alchemy.success=Energetic Alchemy succeeds!
-subtitles.block.alchemy.start=Energetic Alchemy begins
-subtitles.block.beam_cannon.fire=Beam Cannon fires
-subtitles.block.beam_cannon.hit=Beam impacts
-subtitles.block.activator.plume=Ember Activator releases Ember
-subtitles.block.boiler.plume=Pressure Refinery releases Ember
-subtitles.block.ignem_reactor.plume=Ignem Reactor releases Ember
-subtitles.block.stamp.down=Stamp slams down
-subtitles.block.stamp.up=Stamp recedes
-subtitles.block.bore.start=Ember Bore rumbles to life
-subtitles.block.bore.stop=Ember Bore sighs and stops
-subtitles.block.catalytic_plug.start=Catalytic Plug begins injecting catalyst
-subtitles.block.catalytic_plug.stop=Catalytic Plug is empty
-subtitles.block.metal_seed.ping=Metal Seed splits off pieces
-subtitles.block.inferno_forge.fail=Reforging fails...
-subtitles.block.inferno_forge.success=Reforging succeeds!
-subtitles.block.inferno_forge.start=Inferno Forge begins forging
-subtitles.block.inferno_forge.open=Inferno Forge opens
-subtitles.block.inferno_forge.close=Inferno Forge closes
-subtitles.block.steam_engine.start_steam=Steam Engine spins up
-subtitles.block.steam_engine.start_burn=Steam Engine begins burning fuel
-subtitles.block.steam_engine.stop=Steam Engine rattles and stops
-subtitles.block.mini_boiler.rupture=Mini Boiler ruptures violently
-subtitles.block.pump.slow=Mechanical Pump grinds its balls on sandpaper
-subtitles.block.pump.mid=Mechanical Pump pumps
-subtitles.block.pump.fast=Mechanical Pump pumps at incredibly fast speeds
-subtitles.block.pipe.connect=Pipe connected
-subtitles.block.pipe.disconnect=Pipe disconnected
-subtitles.ember_transfer.emit.small=Ember packet emitted
-subtitles.ember_transfer.emit.big=Big Ember packet emitted
-subtitles.ember_transfer.receive.small=Ember packet received
-subtitles.ember_transfer.receive.big=Big Ember packet received
-subtitles.ember_transfer.relay=Ember packet relayed
-subtitles.fireball.small.fire=Fireball is released
-subtitles.fireball.small.hit=Fireball impacts
-subtitles.fireball.big.fire=Big fireball is unleashed
-subtitles.fireball.big.hit=Big fireball impacts
-subtitles.blazing_ray.fire=Blazing Ray fires
-subtitles.blazing_ray.empty=Blazing Ray clicks
-subtitles.heated.level_up=Item levels up
-subtitles.cinder_staff.charge=Cinder Staff charges
-subtitles.cinder_staff.fail=Cinder Staff fizzles
-subtitles.cinder_jet.boost=Cinder Jet boosts
-subtitles.resonating_bell.ring=Resonating Bell rings
-subtitles.inflictor_gem.absorb=Inflictor Gem absorbs damage
-subtitles.metallurgic_dust.convert=Metallurgic Dust transmutes ore
-subtitles.metallurgic_dust.fail=Metallurgic Dust transmutes ore to worthless material
-subtitles.ash_amulet.burn=Item burns to ash
-subtitles.explosion_charm.absorb=Explosion is absorbed
-subtitles.ancient_golem.death=Ancient Golem is destroyed
-subtitles.ancient_golem.hurt=Ancient Golem is hit
-subtitles.ancient_golem.punch=Ancient Golem punches
-subtitles.ancient_golem.step=Ancient Golem walks
+subtitles.block.alchemy.fail=Энергетическая Алхимия не удалась...
+subtitles.block.alchemy.success=Энергетическая Алхимия удалась!
+subtitles.block.alchemy.start=Энергетическая Алхимия началась
+subtitles.block.beam_cannon.fire=Лучевая Пушка стреляет
+subtitles.block.beam_cannon.hit=Луч заряжается
+subtitles.block.activator.plume=Эмбер-активатор вырабатывает Эмбер
+subtitles.block.boiler.plume=Компрессор вырабатывает Эмбер
+subtitles.block.ignem_reactor.plume=Пламенный Реактор вырабатывает Эмбер
+subtitles.block.stamp.down=Штамп ударяет
+subtitles.block.stamp.up=Штамп возвращается
+subtitles.block.bore.start=Эмбер-скважина гремит
+subtitles.block.bore.stop=Эмбер-скважина замедляется и останавливается
+subtitles.block.catalytic_plug.start=Каталитический цилиндр начинает закачивать катализатор
+subtitles.block.catalytic_plug.stop=Каталитический цилиндр пуст!
+subtitles.block.metal_seed.ping=Металлические семена сорят кусочками металла
+subtitles.block.inferno_forge.fail=Перековка не удалась...
+subtitles.block.inferno_forge.success=Перековка успешна!
+subtitles.block.inferno_forge.start=Адская Кузница начала ковать
+subtitles.block.inferno_forge.open=Адская Кузница открыта
+subtitles.block.inferno_forge.close=Адская Кузница закрыта
+subtitles.block.steam_engine.start_steam=Паровой Двигатель разгоняется
+subtitles.block.steam_engine.start_burn=Паровой Двигатель начинает сжигать топливо
+subtitles.block.steam_engine.stop=Паровой Двигатель замедляется и останавливается
+subtitles.block.mini_boiler.rupture=Мини-Бойлер начинает разрываться
+subtitles.block.pump.slow=Механическая помпа измельчает свои шарики на наждачной бумаге
+subtitles.block.pump.mid=Механическая помпа засасывает
+subtitles.block.pump.fast=Механическая помпа засасывает с невероятной скоростью
+subtitles.block.pipe.connect=Труба присоеденена
+subtitles.block.pipe.disconnect=Труба отсоеденена
+subtitles.ember_transfer.emit.small=Луч Эмбера выслан
+subtitles.ember_transfer.emit.big=Большой Луч Эмбера выслан
+subtitles.ember_transfer.receive.small=Луч Эмбера принят
+subtitles.ember_transfer.receive.big=Большой Луч Эмбера принят
+subtitles.ember_transfer.relay=Луч Эмбере передан
+subtitles.fireball.small.fire=Файербол запущен
+subtitles.fireball.small.hit=Файербол запускается
+subtitles.fireball.big.fire=Большой Файербол запущен
+subtitles.fireball.big.hit=Большой Файербол запускается
+subtitles.blazing_ray.fire=Испепеляющий луч запускается
+subtitles.blazing_ray.empty=Испепеляющий луч щелкает
+subtitles.heated.level_up=Уровень предмета увеличен
+subtitles.cinder_staff.charge=Пепельный посох загорается
+subtitles.cinder_staff.fail=Пепельный посох угасает
+subtitles.cinder_jet.boost=Пепельный Бросок форсируется
+subtitles.resonating_bell.ring=Резонируюющий Колокольчик звенит
+subtitles.inflictor_gem.absorb=Гем Улучшения поглотил урон
+subtitles.metallurgic_dust.convert=Металлургическая пыль превратила руду
+subtitles.metallurgic_dust.fail=Металлургическая пыль превратила руду в ненужный материал
+subtitles.ash_amulet.burn=Вещь превратилась в пепел
+subtitles.explosion_charm.absorb=Взрыв поглощен
+subtitles.ancient_golem.death=Древний голем уничтожен
+subtitles.ancient_golem.hurt=Древний голем получил урон
+subtitles.ancient_golem.punch=Древний голем бьет
+subtitles.ancient_golem.step=Древний голем движется
