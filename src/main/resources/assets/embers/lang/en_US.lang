@@ -524,7 +524,7 @@ embers.research.page.linking.desc=To link Emitters and Receptors together, simpl
 
 embers.research.page.copper_cell=Copper Cell
 embers.research.page.copper_cell.title=Capacitor
-embers.research.page.copper_cell.desc=The Copper Cell fulfills a very simple purpose: Ember storage. It can be given Ember using an Ember Receptor, or have Ember removed from it through an Ember Emitter. Note that when a Copper Cell is broken, it will not retain its stored Ember.
+embers.research.page.copper_cell.desc=The Copper Cell fulfills a very simple purpose: Ember storage. It can be given Ember using an Ember Receptor, or have Ember removed from it through an Ember Emitter. Note that when a Copper Cell is broken, it will retain its stored Ember.
 
 
 

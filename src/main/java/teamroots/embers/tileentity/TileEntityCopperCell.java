@@ -1,7 +1,9 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -12,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.EventManager;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -72,6 +75,15 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
+		if (!world.isRemote && !player.capabilities.isCreativeMode){
+			ItemStack toDrop = new ItemStack(RegistryManager.copper_cell,1);
+			if(toDrop.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
+				IEmberCapability capability = toDrop.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
+				capability.setEmberCapacity(this.capability.getEmberCapacity());
+				capability.setEmber(this.capability.getEmber());
+			}
+			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,toDrop));
+		}
 		world.setTileEntity(pos, null);
 	}
 	
