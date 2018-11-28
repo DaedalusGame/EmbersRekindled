@@ -9,68 +9,51 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.item.ItemInflictorGem;
+import teamroots.embers.api.item.IInflictorGem;
+import teamroots.embers.api.item.IInflictorGemHolder;
 
 public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
-		boolean hasCloak = false;
-		boolean moreThanOneCloak = false;
-		boolean hasString = false;
-		boolean moreThanOneString = false;
-		boolean hasGem = false;
+		ItemStack cloak = ItemStack.EMPTY;
+		int cloaks = 0;
+		int strings = 0;
+		int gems = 0;
 		if (inv.getSizeInventory() > 4){
+			for (int i = 0; i < inv.getSizeInventory(); i ++) {
+				ItemStack stack = inv.getStackInSlot(i);
+				if (stack.getItem() instanceof IInflictorGemHolder && ((IInflictorGemHolder) stack.getItem()).getAttachedGemCount(stack) == 0) {
+					cloak = stack;
+				}
+			}
 			for (int i = 0; i < inv.getSizeInventory(); i ++){
-				if (!inv.getStackInSlot(i).isEmpty()){
-					if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest){
-						if (!inv.getStackInSlot(i).hasTagCompound() || !inv.getStackInSlot(i).getTagCompound().hasKey("gem1")
-								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem2")
-								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem3")
-								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem4")
-								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem5")
-								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem6")
-								&& !inv.getStackInSlot(i).getTagCompound().hasKey("gem7")){
-							if (!hasCloak && !moreThanOneCloak){
-								hasCloak = true;
-							}
-							else if (hasCloak){
-								hasCloak = false;
-								moreThanOneCloak = true;
-							}
-						}
+				ItemStack stack = inv.getStackInSlot(i);
+				if (!stack.isEmpty()){
+					if (stack.getItem() instanceof IInflictorGemHolder){
+						cloaks++;
 					}
-					else if (inv.getStackInSlot(i).getItem() == Items.STRING){
-						if (!hasString && !moreThanOneString){
-							hasString = true;
-						}
-						else if (hasString){
-							hasString = false;
-							moreThanOneString = true;
-						}
+					else if (stack.getItem() == Items.STRING){
+						strings++;
 					}
-					else if (inv.getStackInSlot(i).getItem() instanceof ItemInflictorGem){
-						hasGem = true;
+					else if (((IInflictorGemHolder)cloak.getItem()).canAttachGem(cloak,stack)){
+						gems++;
 					}
 					else {
-						if (!inv.getStackInSlot(i).isEmpty()){
-							return false;
-						}
+						return false;
 					}
 				}
 			}
 		}
-		return hasGem && hasString && hasCloak;
+		return !cloak.isEmpty() && cloaks == 1 && strings == 1 && gems > 0 && gems <= ((IInflictorGemHolder)cloak.getItem()).getGemSlots(cloak);
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack capeStack = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getSizeInventory(); i ++){
-			if (!inv.getStackInSlot(i).isEmpty()){
-				if (inv.getStackInSlot(i).getItem() == RegistryManager.ashen_cloak_chest){
-					capeStack = inv.getStackInSlot(i).copy();
-				}
+			if (!inv.getStackInSlot(i).isEmpty() && inv.getStackInSlot(i).getItem() instanceof IInflictorGemHolder) {
+				capeStack = inv.getStackInSlot(i).copy();
 			}
 		}
 		if (!capeStack.isEmpty()){
@@ -79,11 +62,10 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 			}
 			int counter = 1;
 			for (int i = 0; i < inv.getSizeInventory(); i ++){
-				if (!inv.getStackInSlot(i).isEmpty()){
-					if (inv.getStackInSlot(i).getItem() instanceof ItemInflictorGem){
-						capeStack.getTagCompound().setTag("gem"+counter, inv.getStackInSlot(i).writeToNBT(new NBTTagCompound()));
-						counter ++;
-					}
+				ItemStack stack = inv.getStackInSlot(i);
+				if (!stack.isEmpty() && stack.getItem() instanceof IInflictorGem) {
+					((IInflictorGemHolder)capeStack.getItem()).attachGem(capeStack,stack,counter);
+					counter++;
 				}
 			}
 			return capeStack;
@@ -99,13 +81,13 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
 		NonNullList<ItemStack> remaining = NonNullList.create();
-		inv.clear();
+		//inv.clear();
 		return remaining;
 	}
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return width > 2 && height > 2;
+		return width * height >= 3;
 	}
 
 }
