@@ -60,7 +60,8 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
         if (world.isBlockPowered(getPos()) && tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
             IItemHandler inventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
             Vec3i vec = facing.getDirectionVec();
-            List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX() - 6 + vec.getX() * 6, getPos().getY() - 6 + vec.getY() * 6, getPos().getZ() - 6 + vec.getZ() * 6, getPos().getX() + 7 + vec.getX() * 6, getPos().getY() + 7 + vec.getY() * 6, getPos().getZ() + 7 + vec.getZ() * 6));
+            AxisAlignedBB suckBB = new AxisAlignedBB(getPos().getX() - 6 + vec.getX() * 6, getPos().getY() - 6 + vec.getY() * 6, getPos().getZ() - 6 + vec.getZ() * 6, getPos().getX() + 7 + vec.getX() * 6, getPos().getY() + 7 + vec.getY() * 6, getPos().getZ() + 7 + vec.getZ() * 6);
+            List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, suckBB, entity -> getInsertedSlot(entity.getItem(), inventory) != -1);
             if (items.size() > 0) {
                 for (EntityItem item : items) {
                     Vec3d v = new Vec3d(item.posX - (this.getPos().getX() + 0.5), item.posY - (this.getPos().getY() + 0.5), item.posZ - (this.getPos().getZ() + 0.5));
@@ -75,25 +76,27 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
                 for (EntityItem item : nearestItems) {
                     if (item.isDead)
                         continue;
-                    int slot = -1;
-                    for (int j = 0; j < inventory.getSlots() && slot == -1; j ++){
-                        ItemStack added = inventory.insertItem(j, item.getItem(), true);
-                        if (added.getCount() < item.getItem().getCount() || !added.isItemEqual(item.getItem())){
-                            slot = j;
-                        }
-                    }
-                    if (slot != -1){
-                        ItemStack added = inventory.insertItem(slot, item.getItem(), true);
-                        if (added.getCount() < item.getItem().getCount() || !added.isItemEqual(item.getItem())){
-                            item.setItem(inventory.insertItem(slot, item.getItem(), false));
-                            if (item.getItem().isEmpty()) {
-                                item.setDead();
-                            }
+                    int slot = getInsertedSlot(item.getItem(), inventory);
+                    if (slot != -1) {
+                        item.setItem(inventory.insertItem(slot, item.getItem(), false));
+                        if (item.getItem().isEmpty()) {
+                            item.setDead();
                         }
                     }
                 }
             }
         }
+    }
+
+    int getInsertedSlot(ItemStack stack, IItemHandler inventory) {
+        int slot = -1;
+        for (int j = 0; j < inventory.getSlots() && slot == -1; j++) {
+            ItemStack added = inventory.insertItem(j, stack, true);
+            if (added.getCount() < stack.getCount() || !added.isItemEqual(stack)) {
+                slot = j;
+            }
+        }
+        return slot;
     }
 
     @Override
