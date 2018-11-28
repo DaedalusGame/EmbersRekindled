@@ -179,7 +179,7 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
 
     @Override
     public void update() {
-        if (world.isRemote && clogged)
+        if (world.isRemote && clogged && isAnySideUnclogged())
             Misc.spawnClogParticles(world,pos,2, 0.7f);
         angle += turnRate;
         super.update();

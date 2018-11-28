@@ -100,6 +100,18 @@ public abstract class TileEntityItemPipeBase extends TileEntity implements ITile
         return from[facing.getIndex()];
     }
 
+    protected boolean isAnySideUnclogged()
+    {
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            if (!isConnected(facing))
+                continue;
+            TileEntity tile = world.getTileEntity(pos.offset(facing));
+            if (tile instanceof TileEntityItemPipeBase && !((TileEntityItemPipeBase) tile).clogged)
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public void update() {
         if (!world.isRemote) {

@@ -81,7 +81,7 @@ public class TileEntityItemPipe extends TileEntityItemPipeBase {
 
     @Override
     public void update() {
-        if (world.isRemote && clogged)
+        if (world.isRemote && clogged && isAnySideUnclogged())
             Misc.spawnClogParticles(world, pos, 1, 0.25f);
         super.update();
     }
