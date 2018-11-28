@@ -93,7 +93,7 @@ public class EmberInventoryUtil {
             ItemStack stack = player.inventory.getStackInSlot(i);
             if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, null)) {
                 IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
-                if (capability instanceof IHeldEmberCell)
+                if (capability instanceof IInventoryEmberCell)
                     temp -= capability.removeAmount(temp, true);
             }
         }
