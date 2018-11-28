@@ -82,26 +82,32 @@ public class Misc {
     }
 
     public static ItemStack getRepairItem(ItemStack stack) {
-        if (stack.getItem() instanceof ItemTool) {
-            ItemStack mat = ToolMaterial.valueOf(((ItemTool) stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
-            if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                mat.setItemDamage(0);
+        try {
+            if (stack.getItem() instanceof ItemTool) {
+                ItemStack mat = ToolMaterial.valueOf(((ItemTool) stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
+                if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    mat.setItemDamage(0);
+                }
+                return mat;
             }
-            return mat;
+            if (stack.getItem() instanceof ItemSword) {
+                ItemStack mat = ToolMaterial.valueOf(((ItemSword) stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
+                if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    mat.setItemDamage(0);
+                }
+                return mat;
+            }
+            if (stack.getItem() instanceof ItemArmor) {
+                ItemStack mat = ((ItemArmor) stack.getItem()).getArmorMaterial().getRepairItemStack().copy();
+                if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    mat.setItemDamage(0);
+                }
+                return mat;
+            }
         }
-        if (stack.getItem() instanceof ItemSword) {
-            ItemStack mat = ToolMaterial.valueOf(((ItemSword) stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
-            if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                mat.setItemDamage(0);
-            }
-            return mat;
-        }
-        if (stack.getItem() instanceof ItemArmor) {
-            ItemStack mat = ((ItemArmor) stack.getItem()).getArmorMaterial().getRepairItemStack().copy();
-            if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                mat.setItemDamage(0);
-            }
-            return mat;
+        catch(Exception e) //Gotta catch em all
+        {
+            e.printStackTrace();
         }
         return ItemStack.EMPTY;
     }
