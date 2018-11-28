@@ -7,6 +7,7 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.mc1120.CraftTweaker;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -27,19 +28,19 @@ public class Melter {
     @ZenMethod
     public static void add(ILiquidStack output, IIngredient input) {
         ItemMeltingRecipe recipe = new ItemMeltingRecipe(CTUtil.toIngredient(input), CraftTweakerMC.getLiquidStack(output));
-        CraftTweakerAPI.apply(new Add(recipe));
+        CraftTweaker.LATE_ACTIONS.add(new Add(recipe));
     }
 
     @ZenMethod
     public static void remove(IItemStack input)
     {
-        CraftTweakerAPI.apply(new RemoveByInput(CraftTweakerMC.getItemStack(input)));
+        CraftTweaker.LATE_ACTIONS.add(new RemoveByInput(CraftTweakerMC.getItemStack(input)));
     }
 
     @ZenMethod
     public static void remove(ILiquidStack output)
     {
-        CraftTweakerAPI.apply(new RemoveByOutput(CraftTweakerMC.getLiquidStack(output)));
+        CraftTweaker.LATE_ACTIONS.add(new RemoveByOutput(CraftTweakerMC.getLiquidStack(output)));
     }
 
     private static List<ItemMeltingRecipe> getRecipesByInput(ItemStack stack)

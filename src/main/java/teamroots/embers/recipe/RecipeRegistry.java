@@ -2,8 +2,6 @@ package teamroots.embers.recipe;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import mysticalmechanics.MysticalMechanics;
-import mysticalmechanics.handler.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

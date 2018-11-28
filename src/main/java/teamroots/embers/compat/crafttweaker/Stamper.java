@@ -7,6 +7,7 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.mc1120.CraftTweaker;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.Optional;
@@ -28,12 +29,12 @@ public class Stamper {
     @ZenMethod
     public static void add(IItemStack output, ILiquidStack liquid, @NotNull IIngredient stamp, @Optional IIngredient input) {
         ItemStampingRecipe recipe = new ItemStampingRecipe(CTUtil.toIngredient(input), CraftTweakerMC.getLiquidStack(liquid),CTUtil.toIngredient(stamp),CraftTweakerMC.getItemStack(output));
-        CraftTweakerAPI.apply(new Add(recipe));
+        CraftTweaker.LATE_ACTIONS.add(new Add(recipe));
     }
 
     @ZenMethod
     public static void remove(IItemStack output) {
-        CraftTweakerAPI.apply(new RemoveByOutput(CraftTweakerMC.getItemStack(output)));
+        CraftTweaker.LATE_ACTIONS.add(new RemoveByOutput(CraftTweakerMC.getItemStack(output)));
     }
 
     private static List<ItemStampingRecipe> getRecipesByOutput(ItemStack stack)
