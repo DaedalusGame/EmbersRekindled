@@ -16,7 +16,7 @@ tile.pump.name=Pompa fluidica
 tile.block_furnace.name=Fonditore
 tile.ember_receiver.name=Ricettore Emberico
 tile.ember_emitter.name=Transitore Emberico
-tile.deep_line.name=Pozzo delle profondità
+tile.deep_line.name=Pozzo delle profonditï¿½
 tile.copper_cell.name=Cella di rame
 tile.item_pipe.name=Tubatura per oggetti
 tile.item_pump.name=Pompa d'oggetti
@@ -39,7 +39,7 @@ tile.item_gauge.name=Manometro d'oggetti
 tile.block_lantern.name=Lampada a Ember
 tile.stone_edge.name=Anello di caminite
 tile.beam_splitter.name=Scissore di fasci
-tile.ember_relay.name=Relè Emberico
+tile.ember_relay.name=Relï¿½ Emberico
 tile.crystal_cell.name=Cella di cristallo
 tile.charger.name=Caricatore di rame
 tile.block_caminite_brick_slab.name=Lastra di mattoni di caminite
@@ -347,7 +347,7 @@ embers.tooltip.tyrfing=Infligge danno a seconda dell'armatura del bersaglio.
 embers.tooltip.heat_amount=Calore:
 embers.tooltip.heat_level=Livello:
 embers.tooltip.modifiers=Modificatori:
-embers.tooltip.upgrade.actuator=Velocità meccanica: %s
+embers.tooltip.upgrade.actuator=Velocitï¿½ meccanica: %s
 embers.tooltip.dial.ember_multiplier=Moltiplicatore di produzione: %s
 embers.tooltip.dial.heat=Calore: %s/%s
 embers.tooltip.item.ember=Ember: %s/%s
@@ -363,7 +363,7 @@ embers.tooltip.modifier.intelligent_apparatus=Coscienza %s
 embers.tooltip.modifier.diffraction=Diffrazione %s
 embers.tooltip.modifier.focal_lens=Focalizzato %s
 embers.tooltip.modifier.tinker_lens=Vista dell'armeggiatore
-embers.tooltip.modifier.anti_tinker_lens=Cecità dell'armeggiatore
+embers.tooltip.modifier.anti_tinker_lens=Cecitï¿½ dell'armeggiatore
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II
@@ -382,8 +382,8 @@ embers.jei.recipe.dawnstone_anvil=Ricetta per incudine di pietralbore
 
 entity.ancient_golem.name=Golem antico
 
-death.attack.ember=%1$s è morto incenerito
-death.attack.ember.player=%1$s è stato incenerito da %2$s
+death.attack.ember=%1$s ï¿½ morto incenerito
+death.attack.ember.player=%1$s ï¿½ stato incenerito da %2$s
 
 embers.research.null=
 embers.research.world=Energia naturale
@@ -400,195 +400,195 @@ embers.research.page.empty.desc=
 
 embers.research.world.ores=Pietre
 embers.research.world.ores.title=Minerali grezzi
-embers.research.world.ores.desc=Nel profondo dei cunicoli della terra solida, un novizio scavatore può trovare molti minerali utili: rame, piombo, argento, quarzo... Il rame trova molti usi come conduttore, il piombo come metallo opaco e malleabile, e l'argento come catalizzatore arcano. Il quarzo, dal canto suo, è provato essere una buona fonte di materia cristallina cruda.
+embers.research.world.ores.desc=Nel profondo dei cunicoli della terra solida, un novizio scavatore puï¿½ trovare molti minerali utili: rame, piombo, argento, quarzo... Il rame trova molti usi come conduttore, il piombo come metallo opaco e malleabile, e l'argento come catalizzatore arcano. Il quarzo, dal canto suo, ï¿½ provato essere una buona fonte di materia cristallina cruda.
 
 embers.research.world.hammer=Martello da armeggiatore
 embers.research.world.hammer.title=Qualcosa che spacca
-embers.research.world.hammer.desc=Con la sua testa in piombo e ferro densi, il martello da armeggiatore si dimostra un buono strumento. Può essere usato per comprimere quattro lingotti di metallo in una piastra, e puoi immaginare che sia utile nel far funzionare certe macchine.
+embers.research.world.hammer.desc=Con la sua testa in piombo e ferro densi, il martello da armeggiatore si dimostra un buono strumento. Puï¿½ essere usato per comprimere quattro lingotti di metallo in una piastra, e puoi immaginare che sia utile nel far funzionare certe macchine.
 
 embers.research.world.ancient_golem=Antichi costrutti
 embers.research.world.ancient_golem.title=Avversari di lunga data
-embers.research.world.ancient_golem.desc=In rare occasioni, strani costrutti simili a umanoidi sono stati scoperti nel mondo. Questi enigmatici golem emettono raggi di calore puro, e posseggono forza innaturale, ma non sembrano necessitare di carburante o sostenimento. Come un simile automa possa esistere è oltre la tua comprensione, ma forse i meccanismi e materiali sconosciuti dentro di esso potrebbero tornare utili.
+embers.research.world.ancient_golem.desc=In rare occasioni, strani costrutti simili a umanoidi sono stati scoperti nel mondo. Questi enigmatici golem emettono raggi di calore puro, e posseggono forza innaturale, ma non sembrano necessitare di carburante o sostenimento. Come un simile automa possa esistere ï¿½ oltre la tua comprensione, ma forse i meccanismi e materiali sconosciuti dentro di esso potrebbero tornare utili.
 
 embers.research.world.gauge=Barometro atmosferico
 embers.research.world.gauge.title=Prospezione
-embers.research.world.gauge.desc=Sostenuto forse dall'esistenza di pietra fusa bollente nelle profondità terrestri, o dal caldo bagliore che alimenta i golem che combatti, hai cominciato a credere che al centro del tuo mondo riposi una potente fonte d'energia. Usando rame e ferro, hai trovato modo d'assemblare un dispositivo capace di misurare la densità di tale energia, ora battezzata "Ember", in qualsiasi data zona del mondo.
+embers.research.world.gauge.desc=Sostenuto forse dall'esistenza di pietra fusa bollente nelle profonditï¿½ terrestri, o dal caldo bagliore che alimenta i golem che combatti, hai cominciato a credere che al centro del tuo mondo riposi una potente fonte d'energia. Usando rame e ferro, hai trovato modo d'assemblare un dispositivo capace di misurare la densitï¿½ di tale energia, ora battezzata "Ember", in qualsiasi data zona del mondo.
 
 embers.research.world.caminite=Caminite
 embers.research.world.caminite.title=Resistente ceramica
-embers.research.world.caminite.desc=La caminite è una ceramica molto resistente, nata da una miscela d'argilla e sabbia. La mistura diventa, da cotta, un materiale che credi sarà duro abbastanza per i tuoi bisogni in qualsiasi delle tue stravaganze meccaniche.
+embers.research.world.caminite.desc=La caminite ï¿½ una ceramica molto resistente, nata da una miscela d'argilla e sabbia. La mistura diventa, da cotta, un materiale che credi sarï¿½ duro abbastanza per i tuoi bisogni in qualsiasi delle tue stravaganze meccaniche.
 
 embers.research.world.activator=Innescatore Emberico
 embers.research.world.activator.title=Estrazione
-embers.research.world.activator.desc=L'innescatore Emberico è un dispositivo ingegnoso, che ti permetterà finalmente di estrarre l'energia utile da frammenti e cristalli di Ember. Basta inserire tali frammenti e cristalli nella parte bassa del dispositivo usando una tramoggia o altri metodi per la trasportazione d'oggetti, e presto, come segnato da una scintillante combustione, dell'Ember attivato apparirà nella gabbia di rame sulla macchina.
+embers.research.world.activator.desc=L'innescatore Emberico ï¿½ un dispositivo ingegnoso, che ti permetterï¿½ finalmente di estrarre l'energia utile da frammenti e cristalli di Ember. Basta inserire tali frammenti e cristalli nella parte bassa del dispositivo usando una tramoggia o altri metodi per la trasportazione d'oggetti, e presto, come segnato da una scintillante combustione, dell'Ember attivato apparirï¿½ nella gabbia di rame sulla macchina.
 
 embers.research.world.crystals=Ember cristallizzato
 embers.research.world.crystals.title=Calore solido
-embers.research.world.crystals.desc=L'escavazione di una trivella Emberica porta vari cristalli luminosi ed interessanti. Questi cristalli esistono in più taglie, i più grandi sono chiamati cristalli d'Ember e i più piccoli frammenti d'Ember. Questi cristalli sono la chiara prova che il potere al nucleo del mondo esista e che possa essere indirettamente acceduto: attraverso l'immolazione di questi cristalli, tu credi, potresti riuscire a riusare il potere che contengono per altri usi.
+embers.research.world.crystals.desc=L'escavazione di una trivella Emberica porta vari cristalli luminosi ed interessanti. Questi cristalli esistono in piï¿½ taglie, i piï¿½ grandi sono chiamati cristalli d'Ember e i piï¿½ piccoli frammenti d'Ember. Questi cristalli sono la chiara prova che il potere al nucleo del mondo esista e che possa essere indirettamente acceduto: attraverso l'immolazione di questi cristalli, tu credi, potresti riuscire a riusare il potere che contengono per altri usi.
 
 embers.research.world.bore=Trivella Emberica
 embers.research.world.bore.title=Scavo, scavo una buca...
-embers.research.world.bore.desc=Mentre la roccia di fondo del substrato potrebbe fermare il tuo viaggio verso le profondità, non fermerà le tue macchine. La trivella Emberica viene alimentata dagli stessi oggetti di una normale fornace, e dev'essere posizionate in modo che le lame della trivella tocchino l'indistruttibile roccia madre. Da attiva, la trivella dissotterrerà cristalli d'Ember da punti più profondi della terra, per tuo uso futuro. Tramogge e altri trasportatori d'oggetti devono essere usati per dare carburante e prendere cristalli alla e dalla trivella.
+embers.research.world.bore.desc=Mentre la roccia di fondo del substrato potrebbe fermare il tuo viaggio verso le profonditï¿½, non fermerï¿½ le tue macchine. La trivella Emberica viene alimentata dagli stessi oggetti di una normale fornace, e dev'essere posizionate in modo che le lame della trivella tocchino l'indistruttibile roccia madre. Da attiva, la trivella dissotterrerï¿½ cristalli d'Ember da punti piï¿½ profondi della terra, per tuo uso futuro. Tramogge e altri trasportatori d'oggetti devono essere usati per dare carburante e prendere cristalli alla e dalla trivella.
 
 embers.research.world.pipes=Tubature
 embers.research.world.pipes.title=Vie di trasporto
-embers.research.world.pipes.desc=Uno dei meccanismi più semplici necessari per le tue stravaganze è il tubo, un semplice mezzo di spostamento di materiali. Hai sviluppato tubature sia in ferro che in piombo: quelle di ferro possono essere usate per trasportare fluidi, mentre quelle di piombo per gli oggetti. Le tubature possono solo inserire materiali in cisterne e inventari; per estrarli devi costruire una corrispettiva pompa, piazzarla in adiacenza del contenitore, e attivarla con la pietrarossa.
+embers.research.world.pipes.desc=Uno dei meccanismi piï¿½ semplici necessari per le tue stravaganze ï¿½ il tubo, un semplice mezzo di spostamento di materiali. Hai sviluppato tubature sia in ferro che in piombo: quelle di ferro possono essere usate per trasportare fluidi, mentre quelle di piombo per gli oggetti. Le tubature possono solo inserire materiali in cisterne e inventari; per estrarli devi costruire una corrispettiva pompa, piazzarla in adiacenza del contenitore, e attivarla con la pietrarossa.
 embers.research.page.routing.desc=Gli oggetti e i fluidi nei tubi seguono regole semplici per determinare dove andranno. Andranno sempre in avanti, e mai si ritroveranno a rimbalzare all'indietro o, gli dei non vogliano, saltare fuori dalla tubatura. Ad un incrocio, prioritizzeranno sempre l'uscita opposta, sempre che le altre uscite abbiano contenuto eguale. Se ci fosse un nodo da sciogliere, gli oggetti e i fluidi gireranno in circolo.
-embers.research.page.valves.desc=Gli estrattori hanno un certo numero di proprietà soeciali, qui elencate: Non si connettono mai ad altri estrattori. Se spenti, possono ricevere oggetti invece di limitarsi ad estrarne dai contenitori. Se attivati da un segnale a pietrarossa, non accetteranno oggetti dai tubi. Ciò rende le pompe estrattrici simili a valvole nei sistemi di tubature, per controllarne il flusso.
-embers.research.page.pipe_tools.desc=Un tubo si connetterà automaticamente a tubi adiacenti. Quando ciò non fosse voluto, il martello da armeggiatore può essere usato per disconnetterli (si noti che entrambe le parti possono essere scollegate individualmente). A volte, le vie di un collegamento di tubi possono andare a monte. Quando ciò accade, esse espelleranno fumo mostrando che sono intasate. Per sturare un tubo, basta cliccarci con il tasto destro usando un bastoncino.
+embers.research.page.valves.desc=Gli estrattori hanno un certo numero di proprietï¿½ soeciali, qui elencate: Non si connettono mai ad altri estrattori. Se spenti, possono ricevere oggetti invece di limitarsi ad estrarne dai contenitori. Se attivati da un segnale a pietrarossa, non accetteranno oggetti dai tubi. Ciï¿½ rende le pompe estrattrici simili a valvole nei sistemi di tubature, per controllarne il flusso.
+embers.research.page.pipe_tools.desc=Un tubo si connetterï¿½ automaticamente a tubi adiacenti. Quando ciï¿½ non fosse voluto, il martello da armeggiatore puï¿½ essere usato per disconnetterli (si noti che entrambe le parti possono essere scollegate individualmente). A volte, le vie di un collegamento di tubi possono andare a monte. Quando ciï¿½ accade, esse espelleranno fumo mostrando che sono intasate. Per sturare un tubo, basta cliccarci con il tasto destro usando un bastoncino.
 
 embers.research.world.tank=Cisterna fluidica
 embers.research.world.tank.title=Un contenitore di liquidi
-embers.research.world.tank.desc=Liquidi come acqua e lava sono occorrenze comuni nel tuo mondo. Questa tanica dovrebbe riuscire a contenere una sostanziale quantità di qualsiasi fluido, e manterrà i suoi contenuti se raccolta e ripiazzata.
+embers.research.world.tank.desc=Liquidi come acqua e lava sono occorrenze comuni nel tuo mondo. Questa tanica dovrebbe riuscire a contenere una sostanziale quantitï¿½ di qualsiasi fluido, e manterrï¿½ i suoi contenuti se raccolta e ripiazzata.
 
 embers.research.world.bin=Bidone
 embers.research.world.bin.title=Per la conservazione
-embers.research.world.bin.desc=Un semplice barile di ferro senza coperchio, il bidone può contenere uno stack di qualsiasi oggetto. Può anche essere usato per raccogliere automaticamente i prodotti di alcune macchine.
+embers.research.world.bin.desc=Un semplice barile di ferro senza coperchio, il bidone puï¿½ contenere uno stack di qualsiasi oggetto. Puï¿½ anche essere usato per raccogliere automaticamente i prodotti di alcune macchine.
 
 embers.research.world.boiler=Raffineria a pressione
 embers.research.world.boiler.title=Camera a vapore
-embers.research.world.boiler.desc=Mentre l'innescatore può raffinare l'Ember cristallino, ne produce solo una quantità modesta. La raffineria a pressione è un modo di ottenere risultati migliori da ogni cristallo. Richiede che vi siano pompati sia acqua che Ember, risultando in, di default, il 50% in più (1.5x) di produttività rispetto all'innescatore. However, se piazzato su un blocco di metallo con lava o fuoco intorno ad esso, può raggiungere risultati fino al 200% in più (3x) rispetto ad esso, sulla base di quanti blocchi caldi ci sono attorno alla base.
+embers.research.world.boiler.desc=Mentre l'innescatore puï¿½ raffinare l'Ember cristallino, ne produce solo una quantitï¿½ modesta. La raffineria a pressione ï¿½ un modo di ottenere risultati migliori da ogni cristallo. Richiede che vi siano pompati sia acqua che Ember, risultando in, di default, il 50%% in piï¿½ (1.5x) di produttivitï¿½ rispetto all'innescatore. However, se piazzato su un blocco di metallo con lava o fuoco intorno ad esso, puï¿½ raggiungere risultati fino al 200% in piï¿½ (3x) rispetto ad esso, sulla base di quanti blocchi caldi ci sono attorno alla base.
 
 embers.research.page.mini_boiler=Mini-bollitore
 embers.research.page.mini_boiler.title=Tentare le esplosioni
-embers.research.page.mini_boiler.desc=L'Ember è una sostanza altamente energetica, che irradia calore sia quando viene consumata, che quando viene prodotta. Sarebbe una vergogna lasciar che quel calore vada sprecato. Attaccando questo vaso a pressione sul lato di una macchina che produce o consuma Ember, puoi bollire l'acqua in vapore per altri usi. Ma attenzione, a pressioni alte il bollitore può facilmente scoppiare...
+embers.research.page.mini_boiler.desc=L'Ember ï¿½ una sostanza altamente energetica, che irradia calore sia quando viene consumata, che quando viene prodotta. Sarebbe una vergogna lasciar che quel calore vada sprecato. Attaccando questo vaso a pressione sul lato di una macchina che produce o consuma Ember, puoi bollire l'acqua in vapore per altri usi. Ma attenzione, a pressioni alte il bollitore puï¿½ facilmente scoppiare...
 
 embers.research.world.dials=Manometri
 embers.research.world.dials.title=Attente stime
-embers.research.world.dials.desc=I manometri sono un modo semplice di ottenere informazioni da una macchina. Due tipi ne esistono: quelli Emberici e quelli fluidici. Una volta attaccati ai rispettivi contenitori, ogni manometro mostrerà graficamente i contenuti di quel contenitore quando osservato.
+embers.research.world.dials.desc=I manometri sono un modo semplice di ottenere informazioni da una macchina. Due tipi ne esistono: quelli Emberici e quelli fluidici. Una volta attaccati ai rispettivi contenitori, ogni manometro mostrerï¿½ graficamente i contenuti di quel contenitore quando osservato.
 
 embers.research.page.tinker_lens=Lenti da armeggiatore
 embers.research.page.tinker_lens.title=Cosa sarebbe cosa?
-embers.research.page.tinker_lens.desc=Anche se hai creato tutto quest'arsenale da te, alcune sue funzionalità possono essere leggermente ambigue a volte. Fortunatamente hai sviluppato un apparecchio oculare che puoi usare per esaminare le macchine più da vicino. Tenendolo in mano, sarai sempre in grado di capire per che utilizzo le parti di una macchina sono state pensate. Nota che quest'attrezzo non è un periscopio, quindi potresti riscontrare problemi con i nuclei meccanici...
+embers.research.page.tinker_lens.desc=Anche se hai creato tutto quest'arsenale da te, alcune sue funzionalitï¿½ possono essere leggermente ambigue a volte. Fortunatamente hai sviluppato un apparecchio oculare che puoi usare per esaminare le macchine piï¿½ da vicino. Tenendolo in mano, sarai sempre in grado di capire per che utilizzo le parti di una macchina sono state pensate. Nota che quest'attrezzo non ï¿½ un periscopio, quindi potresti riscontrare problemi con i nuclei meccanici...
 
 embers.research.mechanisms.melter=Fonditore
 embers.research.mechanisms.melter.title=Fondendo roba
-embers.research.mechanisms.melter.desc=Usando il potere dell'Ember innescato, hai escogitato un modo di fondere oggetti. Quando il blocco base del fonditore viene fornito di Ember, esso liquefarà qualsiasi oggetto fondibile inserito nel suo blocco superiore, da dove il fluido fuso potrà essere estratto con dei tubi per uso esterno.
+embers.research.mechanisms.melter.desc=Usando il potere dell'Ember innescato, hai escogitato un modo di fondere oggetti. Quando il blocco base del fonditore viene fornito di Ember, esso liquefarï¿½ qualsiasi oggetto fondibile inserito nel suo blocco superiore, da dove il fluido fuso potrï¿½ essere estratto con dei tubi per uso esterno.
 
 embers.research.mechanisms.stamper=Pressore
 embers.research.mechanisms.stamper.title=Comprimilo tutto
-embers.research.mechanisms.stamper.desc=Per dare forma utile al metallo fuso, hai pensato al pressore. Per pressare metalli fusi richiede due parti: il pressore in sé e la base per pressore. Piazza il pressore due blocchi sopra alla sua base, dagli Ember, ed uno stampo particolare. Induci metallo fuso nella base del pressore con dei tubi e il pressore dovrebbe cominciare a processarlo. Puoi piazzare un bidone sotto alla base del pressore per raccoglierne i prodotti in automatico.
+embers.research.mechanisms.stamper.desc=Per dare forma utile al metallo fuso, hai pensato al pressore. Per pressare metalli fusi richiede due parti: il pressore in sï¿½ e la base per pressore. Piazza il pressore due blocchi sopra alla sua base, dagli Ember, ed uno stampo particolare. Induci metallo fuso nella base del pressore con dei tubi e il pressore dovrebbe cominciare a processarlo. Puoi piazzare un bidone sotto alla base del pressore per raccoglierne i prodotti in automatico.
 
 embers.research.mechanisms.hearth_coil=Bobina focolare
 embers.research.mechanisms.hearth_coil.title=Fuoco aperto
-embers.research.mechanisms.hearth_coil.desc=È finito il tempo dell'usare carburanti solidi in una fornace di pietra per cuocere i tuoi oggetti. Facendo uso del potere dell'Ember, hai sviluppato la bobina focolare. Quando gli verrà fornito Ember, la bobina si riscalderà. Più calda diventa, più veloce cuocerà gli oggetti su di essa. Tutti gli oggetti processati verranno contenuti nell'inventario interno della bobina, e possono esserne estratti dal di sotto da un'interfaccia meccanica.
+embers.research.mechanisms.hearth_coil.desc=ï¿½ finito il tempo dell'usare carburanti solidi in una fornace di pietra per cuocere i tuoi oggetti. Facendo uso del potere dell'Ember, hai sviluppato la bobina focolare. Quando gli verrï¿½ fornito Ember, la bobina si riscalderï¿½. Piï¿½ calda diventa, piï¿½ veloce cuocerï¿½ gli oggetti su di essa. Tutti gli oggetti processati verranno contenuti nell'inventario interno della bobina, e possono esserne estratti dal di sotto da un'interfaccia meccanica.
 
 embers.research.mechanisms.mixer=Centrifuga miscelatrice
 embers.research.mechanisms.mixer.title=Mischia il tutto
-embers.research.mechanisms.mixer.desc=Fino ad ora hai usato vari metalli per controllare il flusso dell'Ember, ma ora, tramite la centrifuga miscelatrice, credi di poter riuscire a creare nuove leghe. Ogni faccia della base della centrifuga è una tanica a parte. Quando del fluido viene pompato in queste taniche in una combinazione particolare, e al blocco superiore della centrifuga viene fornito Ember, verrà creata una lega fusa che potrà essere pompata fuori dal blocco superiore.
+embers.research.mechanisms.mixer.desc=Fino ad ora hai usato vari metalli per controllare il flusso dell'Ember, ma ora, tramite la centrifuga miscelatrice, credi di poter riuscire a creare nuove leghe. Ogni faccia della base della centrifuga ï¿½ una tanica a parte. Quando del fluido viene pompato in queste taniche in una combinazione particolare, e al blocco superiore della centrifuga viene fornito Ember, verrï¿½ creata una lega fusa che potrï¿½ essere pompata fuori dal blocco superiore.
 
 embers.research.mechanisms.access=Interfacciamento meccanico
 embers.research.mechanisms.access.title=Un punto d'accesso
-embers.research.mechanisms.access.desc=Macchine come la trivella Emberica o la bobina focolare sono abbastanza ingombranti. E hanno solo una porta che funga da punto d'accesso. Usando il nucleo meccanico e l'interfaccia meccanica, però, puoi estendere questa porta: il nucleo meccanico fungerà da tramite per l'inventario, contenimento fluidico, o contenimento Emberico di qualsiasi macchina grande che tocca, mentre le interfacce meccaniche possono essere attaccate al nucleo meccanico per fornirgli un pannello d'accesso più esteso.
+embers.research.mechanisms.access.desc=Macchine come la trivella Emberica o la bobina focolare sono abbastanza ingombranti. E hanno solo una porta che funga da punto d'accesso. Usando il nucleo meccanico e l'interfaccia meccanica, perï¿½, puoi estendere questa porta: il nucleo meccanico fungerï¿½ da tramite per l'inventario, contenimento fluidico, o contenimento Emberico di qualsiasi macchina grande che tocca, mentre le interfacce meccaniche possono essere attaccate al nucleo meccanico per fornirgli un pannello d'accesso piï¿½ esteso.
 
 embers.research.mechanisms.reservoir=Serbatoio
 embers.research.mechanisms.reservoir.title=Enormi cisterne
-embers.research.mechanisms.reservoir.desc=Il serbatoio è un mezzo semplice per contenere grandi quantità di fluidi. Anche se riuscirà a contenere il contenuto di intorno a 40 secchi di default, la sua capienza può essere estesa piazzando anelli di caminite in cima alla base del serbatoio, di 40 secchi per ogni anello. Il serbatoio può essere riempito o svuotato solo tramite la porta alla base di esso, o tramite un nucleo o interfaccia meccanici attaccati a quella porta.
+embers.research.mechanisms.reservoir.desc=Il serbatoio ï¿½ un mezzo semplice per contenere grandi quantitï¿½ di fluidi. Anche se riuscirï¿½ a contenere il contenuto di intorno a 40 secchi di default, la sua capienza puï¿½ essere estesa piazzando anelli di caminite in cima alla base del serbatoio, di 40 secchi per ogni anello. Il serbatoio puï¿½ essere riempito o svuotato solo tramite la porta alla base di esso, o tramite un nucleo o interfaccia meccanici attaccati a quella porta.
 
 embers.research.page.transfer=Trasferitore d'oggetti
 embers.research.page.transfer.title=Filtraggio
-embers.research.page.transfer.desc=Le tubature d'oggetti potrebbero essere un modo semplice di muovere oggetti da un posto all'altro, ma solo con lo sviluppo del trasferitore d'oggetti hai trovato un modo per esfiltrare oggetti specifici. Il trasferitore d'oggetti funziona in modo molto simile ad un normale tubo, ma con alcune regole. Si connette solo a tubi di fronte o dietro ad esso stesso, e avrà maggiore priorità degli altri tubi in termine di ricezione oggetti. Gli può anche essere ordinato un filtraggio cliccandolo con il tasto destro.
-embers.research.page.fluid_transfer.desc=I trasferitori fluidici sono l'equivalente per liquidi del trasferitore d'oggetti. Funzionano identicamente in quasi ogni aspetto. La differenza è che per impostare un filtro su un trasferitore fluidico, un secchio o altro contenitore contenente un fluido è necessario. Il fluido nel contenitore usato per l'impostazione non verrà consumato.
+embers.research.page.transfer.desc=Le tubature d'oggetti potrebbero essere un modo semplice di muovere oggetti da un posto all'altro, ma solo con lo sviluppo del trasferitore d'oggetti hai trovato un modo per esfiltrare oggetti specifici. Il trasferitore d'oggetti funziona in modo molto simile ad un normale tubo, ma con alcune regole. Si connette solo a tubi di fronte o dietro ad esso stesso, e avrï¿½ maggiore prioritï¿½ degli altri tubi in termine di ricezione oggetti. Gli puï¿½ anche essere ordinato un filtraggio cliccandolo con il tasto destro.
+embers.research.page.fluid_transfer.desc=I trasferitori fluidici sono l'equivalente per liquidi del trasferitore d'oggetti. Funzionano identicamente in quasi ogni aspetto. La differenza ï¿½ che per impostare un filtro su un trasferitore fluidico, un secchio o altro contenitore contenente un fluido ï¿½ necessario. Il fluido nel contenitore usato per l'impostazione non verrï¿½ consumato.
 
 embers.research.mechanisms.breaker=Frantumatrice automatica
 embers.research.mechanisms.breaker.title=Per romper blocchi
-embers.research.mechanisms.breaker.desc=La frantumatrice automatica è un meccanismo semplice. Piazzala con la lama lama abrasiva in una certa direzione, ed essa romperà il blocco di fronte. Di default, questi blocchi verranno semplicemente droppati in libertà, ma possono essere raccolti automaticamente piazzando un bidone dietro alla frantumatrice.
+embers.research.mechanisms.breaker.desc=La frantumatrice automatica ï¿½ un meccanismo semplice. Piazzala con la lama lama abrasiva in una certa direzione, ed essa romperï¿½ il blocco di fronte. Di default, questi blocchi verranno semplicemente droppati in libertï¿½, ma possono essere raccolti automaticamente piazzando un bidone dietro alla frantumatrice.
 
 embers.research.page.pump=Pompa meccanica
 embers.research.page.pump.title=Pompestalo!
-embers.research.page.pump.desc=Siccome la raffineria a pressione consuma acqua per alzare la sua produzione d'Ember, ti serve un modo di estrarla automaticamente. Una pompa meccanica dovrebbe andare, ma l'Ember non si converte benissimo in energia meccanica. Operare questa pompa col mero uso di Ember risulterà molto lento, e sarebbe una buona idea costruirne di multiple.
+embers.research.page.pump.desc=Siccome la raffineria a pressione consuma acqua per alzare la sua produzione d'Ember, ti serve un modo di estrarla automaticamente. Una pompa meccanica dovrebbe andare, ma l'Ember non si converte benissimo in energia meccanica. Operare questa pompa col mero uso di Ember risulterï¿½ molto lento, e sarebbe una buona idea costruirne di multiple.
 
 embers.research.mechanisms.vacuum=Vacuo d'oggetti
 embers.research.mechanisms.vacuum.title=Raccolta automatizzata
-embers.research.mechanisms.vacuum.desc=Il vacuo d'oggetti è un apparecchio che aspira oggetti dai suoi dintorni. Basta alimentarlo con la pietrarossa, e attirerà tutti gli oggetti in una grande area davanti ad esso. Spingerà gli oggetti nei tubi attaccati alla sua faccia posteriore in automatico.
-embers.research.page.vacuum_transfer.desc=I vacui d'oggetti non hanno un inventario interno, spingeranno gli oggetti in una tubatura o contenitore che gli viene connesso. Usando questa proprietà, puoi filtrare quali oggetti verranno aspirati attaccando un trasferitore d'oggetti alla sua faccia posteriore.
+embers.research.mechanisms.vacuum.desc=Il vacuo d'oggetti ï¿½ un apparecchio che aspira oggetti dai suoi dintorni. Basta alimentarlo con la pietrarossa, e attirerï¿½ tutti gli oggetti in una grande area davanti ad esso. Spingerï¿½ gli oggetti nei tubi attaccati alla sua faccia posteriore in automatico.
+embers.research.page.vacuum_transfer.desc=I vacui d'oggetti non hanno un inventario interno, spingeranno gli oggetti in una tubatura o contenitore che gli viene connesso. Usando questa proprietï¿½, puoi filtrare quali oggetti verranno aspirati attaccando un trasferitore d'oggetti alla sua faccia posteriore.
 
 embers.research.mechanisms.dropper=Gettatore d'oggetti
-embers.research.mechanisms.dropper.title=Gettalo giù
-embers.research.mechanisms.dropper.desc=Il gettatore d'oggetti è molto semplice. Quando degli oggetti vengono pompati nella porta sulla sua faccia superiore, li sputerà fuori in linea verticale, direttamente sotto ad esso.
+embers.research.mechanisms.dropper.title=Gettalo giï¿½
+embers.research.mechanisms.dropper.desc=Il gettatore d'oggetti ï¿½ molto semplice. Quando degli oggetti vengono pompati nella porta sulla sua faccia superiore, li sputerï¿½ fuori in linea verticale, direttamente sotto ad esso.
 
 embers.research.mechanisms.dawnstone=Pietralbore
 embers.research.mechanisms.dawnstone.title=Una lega luminosa
-embers.research.mechanisms.dawnstone.desc=La pietralbore è una forte lega d'oro e rame in egual misura, creata usando la centrifuga miscelatrice. Grazie all'Ember imbevuto nella natura stessa della sua creazione, credi che questa lega ti fornirà il materiale per la struttura di tanti, e più avanzati, meccanismi Emberici.
+embers.research.mechanisms.dawnstone.desc=La pietralbore ï¿½ una forte lega d'oro e rame in egual misura, creata usando la centrifuga miscelatrice. Grazie all'Ember imbevuto nella natura stessa della sua creazione, credi che questa lega ti fornirï¿½ il materiale per la struttura di tanti, e piï¿½ avanzati, meccanismi Emberici.
 
 embers.research.page.emitters=Trasferimento d'Ember
 embers.research.page.emitters.title=Mittente e destinatario
-embers.research.page.emitters.desc=La manipolazione in sé dell'Ember che ricevi dal tuo innescatore o altre raffinerie coinvolge due blocchi in particolare: i transitori e i ricettori Emberici. I transitori funzionano da mittente. Piazzali semplicemente su una macchina e ne succhieranno l'Ember nelle loro memorie di transito interne. E poi, attivate dalla pietrarossa, espelleranno Ember periodicamente.
-embers.research.page.receivers.desc=I ricettori funzionano da destinatari. Quando ricevono un influsso Emberico da un transitore, trasmetteranno l'Ember alla macchina a cui sono attaccati, senza bisogno di pietrarossa. Si noti che se dell'Ember viene ricevuto, ma il ricettore non può accoglierlo tutto, un po' di esso andrà perso, come illustrato da una scia di fumo e delle scintille.
-embers.research.page.linking.desc=Per connettere insieme transitori e ricettori, basta shiftare e premere tasto destro sul ricettore con un martello da armeggiatore, e cliccare il transitore col destro. Non ci sono limiti di distanza ai collegamenti, ma un flusso Emberico che sta transitando da un po' può svanire, perdendo tutto l'Ember che stava portando.
+embers.research.page.emitters.desc=La manipolazione in sï¿½ dell'Ember che ricevi dal tuo innescatore o altre raffinerie coinvolge due blocchi in particolare: i transitori e i ricettori Emberici. I transitori funzionano da mittente. Piazzali semplicemente su una macchina e ne succhieranno l'Ember nelle loro memorie di transito interne. E poi, attivate dalla pietrarossa, espelleranno Ember periodicamente.
+embers.research.page.receivers.desc=I ricettori funzionano da destinatari. Quando ricevono un influsso Emberico da un transitore, trasmetteranno l'Ember alla macchina a cui sono attaccati, senza bisogno di pietrarossa. Si noti che se dell'Ember viene ricevuto, ma il ricettore non puï¿½ accoglierlo tutto, un po' di esso andrï¿½ perso, come illustrato da una scia di fumo e delle scintille.
+embers.research.page.linking.desc=Per connettere insieme transitori e ricettori, basta shiftare e premere tasto destro sul ricettore con un martello da armeggiatore, e cliccare il transitore col destro. Non ci sono limiti di distanza ai collegamenti, ma un flusso Emberico che sta transitando da un po' puï¿½ svanire, perdendo tutto l'Ember che stava portando.
 
 embers.research.page.copper_cell=Cella di rame
 embers.research.page.copper_cell.title=Condensatore
-embers.research.page.copper_cell.desc=La cella di rame svolge un compito molto semplice: il contenimento d'Ember. Gli può essere trasmesso Ember usando un ricettore Emberico, come gliene può essere estratto con un transitore Emberico. Si noti che una cella di rame, se rotta, non riterrà il suo contenuto d'Ember.
+embers.research.page.copper_cell.desc=La cella di rame svolge un compito molto semplice: il contenimento d'Ember. Gli puï¿½ essere trasmesso Ember usando un ricettore Emberico, come gliene puï¿½ essere estratto con un transitore Emberico. Si noti che una cella di rame, se rotta, non riterrï¿½ il suo contenuto d'Ember.
 
 embers.research.page.gearbox=Riduttori
 embers.research.page.gearbox.title=Giunzioni meccaniche
-embers.research.page.gearbox.desc=Le cornici da riduttore rappresentano il cuore del trasferimento meccanico. Un ingranaggio può essere attaccato ad uno dei lati, ma solo i lati con assi meccaniche o altre macchine attaccate ne necessitano uno. C'è un lato-input marcato da una striscia, e tutte le altre facce sono per output. Il potere immesso verrà diviso tra tutti gli output in uso, quindi se due assi meccaniche gli fossero attaccate, ognuna riceverebbe metà dell'energia.
+embers.research.page.gearbox.desc=Le cornici da riduttore rappresentano il cuore del trasferimento meccanico. Un ingranaggio puï¿½ essere attaccato ad uno dei lati, ma solo i lati con assi meccaniche o altre macchine attaccate ne necessitano uno. C'ï¿½ un lato-input marcato da una striscia, e tutte le altre facce sono per output. Il potere immesso verrï¿½ diviso tra tutti gli output in uso, quindi se due assi meccaniche gli fossero attaccate, ognuna riceverebbe metï¿½ dell'energia.
 
 embers.research.page.axle_iron=Asse meccanica di ferro
 embers.research.page.axle_iron.title=Rotazione assiale
-embers.research.page.axle_iron.desc=Le assi meccaniche si usano per trasferire energia meccanica tra generatori, riduttori, e macchine che ne fanno uso. Le assi meccaniche non perdono potere con la distanza, perciò il loro raggio di trasporto è virtualmente illimitato.
+embers.research.page.axle_iron.desc=Le assi meccaniche si usano per trasferire energia meccanica tra generatori, riduttori, e macchine che ne fanno uso. Le assi meccaniche non perdono potere con la distanza, perciï¿½ il loro raggio di trasporto ï¿½ virtualmente illimitato.
 
 embers.research.page.gear_iron=Ingranaggio di ferro
 embers.research.page.gear_iron.title=Rotelle nel meccanismo
 embers.research.page.gear_iron.desc=Gli ingranaggi si usano come interfaccia per connettere assi meccaniche a riduttori o macchine. Gli ingranaggi di ferro sono convenienti e robusti ma hanno un limite di potere. L'energia fornita passato il limite viene per la maggior parte persa.
-embers.research.page.gear_dawnstone.desc=Gli ingranaggi di pietralbore sono più adatti a rotazioni ad alta velocità, e non hanno lo stesso limite che gli ingrnaggi di ferro hanno. Ad alte velocità rotazionali, l'ingranaggio s'illuminerà visibilmente di un arancio focoso. Quest'effetto collaterale è di norma innocuo, comunque sia.
+embers.research.page.gear_dawnstone.desc=Gli ingranaggi di pietralbore sono piï¿½ adatti a rotazioni ad alta velocitï¿½, e non hanno lo stesso limite che gli ingrnaggi di ferro hanno. Ad alte velocitï¿½ rotazionali, l'ingranaggio s'illuminerï¿½ visibilmente di un arancio focoso. Quest'effetto collaterale ï¿½ di norma innocuo, comunque sia.
 
 embers.research.page.actuator=Attuatore meccanico
 embers.research.page.actuator.title=Energia alternativa
-embers.research.page.actuator.desc=Alcune macchine che vanno a Ember potrebbero anche essere alimentate da potere meccanico, potenzialmente. Quest'attacco per macchine ha 4 facce-input per l'energia meccanica. Come per un riduttore, un ingranaggio deve essere attaccato ad uno dei lati per poterci connettere un'asse meccanica. L'energia da ogni faccia viene combinata insieme internamente, ma la maggior parte delle macchine hanno ritorni diminuiti per la quantità di energia fornita, quindi più potenza non è sempre meglio.
-embers.research.page.actuator_bore.desc=La trivella Emberica è quasi puramente meccanica e perciò si presta bene ad accettare energia meccanica. Alimentarla in questo modo ti farà risparmiare sul carbone, ma sarà un po' rallentata all'inizio.
-embers.research.page.actuator_pump.desc=La pompa è un esempio di macchina a cui fa solo male essere alimentata dall'Ember. Anche piccole quantità d'energia meccanica possono velocizzarla notevolmente, e può essere spinta a diventare davvero rapida.
-embers.research.page.actuator_stamper.desc=Il pressore è un'altra macchina con parti mobili, ma il fatto che l'Ember sia così energetico e la funzione del pressore così semplice, significano che applicarci direttamente potere meccanico lo velocizzerà solo di poco. È comunque più conveniente in termini di costo d'Ember.
+embers.research.page.actuator.desc=Alcune macchine che vanno a Ember potrebbero anche essere alimentate da potere meccanico, potenzialmente. Quest'attacco per macchine ha 4 facce-input per l'energia meccanica. Come per un riduttore, un ingranaggio deve essere attaccato ad uno dei lati per poterci connettere un'asse meccanica. L'energia da ogni faccia viene combinata insieme internamente, ma la maggior parte delle macchine hanno ritorni diminuiti per la quantitï¿½ di energia fornita, quindi piï¿½ potenza non ï¿½ sempre meglio.
+embers.research.page.actuator_bore.desc=La trivella Emberica ï¿½ quasi puramente meccanica e perciï¿½ si presta bene ad accettare energia meccanica. Alimentarla in questo modo ti farï¿½ risparmiare sul carbone, ma sarï¿½ un po' rallentata all'inizio.
+embers.research.page.actuator_pump.desc=La pompa ï¿½ un esempio di macchina a cui fa solo male essere alimentata dall'Ember. Anche piccole quantitï¿½ d'energia meccanica possono velocizzarla notevolmente, e puï¿½ essere spinta a diventare davvero rapida.
+embers.research.page.actuator_stamper.desc=Il pressore ï¿½ un'altra macchina con parti mobili, ma il fatto che l'Ember sia cosï¿½ energetico e la funzione del pressore cosï¿½ semplice, significano che applicarci direttamente potere meccanico lo velocizzerï¿½ solo di poco. ï¿½ comunque piï¿½ conveniente in termini di costo d'Ember.
 
 embers.research.page.steam_engine=Motore a vapore
 embers.research.page.steam_engine.title=La rivoluzione industriale
-embers.research.page.steam_engine.desc=Il motore a vapore è la matrice più semplice di energia meccanica. Tutto quel che gli serve è un po' di combustibile come il carbone, dell'acqua, e produrrà un modesto ammonto di rotazione dalla sua faccia-output. Mentre i motori a vapori sono più efficienti sul carburante che alimentare una trivella d'Ember con la stessa quantità di combustibile, possono anche essere dispendiosi se maneggiati impropriamente: se il motore finisce l'acqua mentre stava bruciando un pezzo di carburante, il resto di quel pezzo andrà semplicemente perso.
-embers.research.page.steam_engine_overclock.desc=Avendo già sperimentato la produzione di vapore tramite macchinari ad Ember, potresti usare quel vapore anche per alimentare i tuoi motori. Pompare vapore direttamente dall'esterno incrementerà notevolmente l'efficacia del motore, che produrrà molta più energia, ma il vapore verrà consumato molto velocemente, possibilmente necessitando di numerosi bollitori per ogni motore o che essi vengano attaccati a macchine che usino moltissimo Ember.
+embers.research.page.steam_engine.desc=Il motore a vapore ï¿½ la matrice piï¿½ semplice di energia meccanica. Tutto quel che gli serve ï¿½ un po' di combustibile come il carbone, dell'acqua, e produrrï¿½ un modesto ammonto di rotazione dalla sua faccia-output. Mentre i motori a vapori sono piï¿½ efficienti sul carburante che alimentare una trivella d'Ember con la stessa quantitï¿½ di combustibile, possono anche essere dispendiosi se maneggiati impropriamente: se il motore finisce l'acqua mentre stava bruciando un pezzo di carburante, il resto di quel pezzo andrï¿½ semplicemente perso.
+embers.research.page.steam_engine_overclock.desc=Avendo giï¿½ sperimentato la produzione di vapore tramite macchinari ad Ember, potresti usare quel vapore anche per alimentare i tuoi motori. Pompare vapore direttamente dall'esterno incrementerï¿½ notevolmente l'efficacia del motore, che produrrï¿½ molta piï¿½ energia, ma il vapore verrï¿½ consumato molto velocemente, possibilmente necessitando di numerosi bollitori per ogni motore o che essi vengano attaccati a macchine che usino moltissimo Ember.
 
 embers.research.page.pulser=Espulsore Emberico
 embers.research.page.pulser.title=Bombardamento d'energia
-embers.research.page.pulser.desc=Dei semplici transitori Emberici sono utili e tutto il resto, ma a volte potresti giusto volere maggior scorrimento d'energia. L'espulsore Emberico è un transitore rinforzato -- funzionalmente identico al suo precedessore, ma capace di prosciugare e grondare dieci volte tanto Ember nello stesso lasso di tempo. Nota che i ricettori si riempiono velocemente con questa massiccia quantità, e l'Ember in eccesso potrebbe andar completamente perso.
-embers.research.page.ember_funnel.desc=Sapendo che perdere Ember nelle transizioni è negativo, hai sviluppato la tramoggia Emberica, la quale cattura Ember da fonti multiple e lo trasferisce rapidamente alla macchina alla quale è connesso.
+embers.research.page.pulser.desc=Dei semplici transitori Emberici sono utili e tutto il resto, ma a volte potresti giusto volere maggior scorrimento d'energia. L'espulsore Emberico ï¿½ un transitore rinforzato -- funzionalmente identico al suo precedessore, ma capace di prosciugare e grondare dieci volte tanto Ember nello stesso lasso di tempo. Nota che i ricettori si riempiono velocemente con questa massiccia quantitï¿½, e l'Ember in eccesso potrebbe andar completamente perso.
+embers.research.page.ember_funnel.desc=Sapendo che perdere Ember nelle transizioni ï¿½ negativo, hai sviluppato la tramoggia Emberica, la quale cattura Ember da fonti multiple e lo trasferisce rapidamente alla macchina alla quale ï¿½ connesso.
 
 embers.research.page.splitter=Scissore di fasci
 embers.research.page.splitter.title=Divisione dell'Ember
-embers.research.page.splitter.desc=Usando la nuova lega di pietralbore, hai scoperto un modo di dividere le scie d'Ember. Lo scissore di fasci ha quattro fasce: due con una più piccola porta di rame, e due con più grandi porte in rame e pietralbore. Ognuna delle porte più grandi fungerà da transitore Emberico autonomo. Quando dell'Ember viene fornito allo scissore, esso dividerà l'Ember tra quelle due porte, che possono entrambe essere connesse a macchine diverse.
+embers.research.page.splitter.desc=Usando la nuova lega di pietralbore, hai scoperto un modo di dividere le scie d'Ember. Lo scissore di fasci ha quattro fasce: due con una piï¿½ piccola porta di rame, e due con piï¿½ grandi porte in rame e pietralbore. Ognuna delle porte piï¿½ grandi fungerï¿½ da transitore Emberico autonomo. Quando dell'Ember viene fornito allo scissore, esso dividerï¿½ l'Ember tra quelle due porte, che possono entrambe essere connesse a macchine diverse.
 
 embers.research.page.dawnstone_anvil=Incudine di pietralbore
 embers.research.page.dawnstone_anvil.title=Arrotino
-embers.research.page.dawnstone_anvil.desc=La resilienza della pietralbore la rende una buona scelta per usarla per un'incudine. L'incudine di pietralbore può essere usata sia per riparare oggetti, o frantumare un oggetto ai suoi componenti. Piazza un oggetto danneggiato sull'incudine, poi il materiale per ripararlo, e dagli un paio di botte col martello da armeggiatore per ripararlo. Piazza l'oggetto danneggiato da solo e dagli un po' di colpi pesanti, e di esso rimarranno le parti che lo componevano.
+embers.research.page.dawnstone_anvil.desc=La resilienza della pietralbore la rende una buona scelta per usarla per un'incudine. L'incudine di pietralbore puï¿½ essere usata sia per riparare oggetti, o frantumare un oggetto ai suoi componenti. Piazza un oggetto danneggiato sull'incudine, poi il materiale per ripararlo, e dagli un paio di botte col martello da armeggiatore per ripararlo. Piazza l'oggetto danneggiato da solo e dagli un po' di colpi pesanti, e di esso rimarranno le parti che lo componevano.
 
 embers.research.page.autohammer=Martellatore automatico
 embers.research.page.autohammer.title=Martellatore... automatico.
-embers.research.page.autohammer.desc=Riparare i tuoi attrezzi a martellate con pezzi di metallo ruba molto tempo. Con un po' di Ember, credi di avere la soluzione. Al martellatore automatico serve solo un po' di potere a pietrarossa ed Ember, e si occuperà di martellare gli oggetti sull'incudine di pietralbore con molta più forza e velocità di quanto tu potresti fare manualmente.
+embers.research.page.autohammer.desc=Riparare i tuoi attrezzi a martellate con pezzi di metallo ruba molto tempo. Con un po' di Ember, credi di avere la soluzione. Al martellatore automatico serve solo un po' di potere a pietrarossa ed Ember, e si occuperï¿½ di martellare gli oggetti sull'incudine di pietralbore con molta piï¿½ forza e velocitï¿½ di quanto tu potresti fare manualmente.
 
 embers.research.page.crystal_cell=Cella di cristallo
 embers.research.page.crystal_cell.title=Immagazzinamento di massa
-embers.research.page.crystal_cell.desc=I metodi di contenimento d'Ember che hai usato in passato non hanno mai avuto tanta capienza, e la cella di cristallo è la soluzione che cercavi. Essa inizierà in piccolo, e può avere Ember inserito ed estratto da essa. Può anche contenere combustibili Emberici come i cristalli d'Ember. Ogni combustibile Emberico accrescerà la capacità massima della cella, causando eventualmente la crescita fisica e visibile del luminoso cristallo che ha sopra.
+embers.research.page.crystal_cell.desc=I metodi di contenimento d'Ember che hai usato in passato non hanno mai avuto tanta capienza, e la cella di cristallo ï¿½ la soluzione che cercavi. Essa inizierï¿½ in piccolo, e puï¿½ avere Ember inserito ed estratto da essa. Puï¿½ anche contenere combustibili Emberici come i cristalli d'Ember. Ogni combustibile Emberico accrescerï¿½ la capacitï¿½ massima della cella, causando eventualmente la crescita fisica e visibile del luminoso cristallo che ha sopra.
 
 embers.research.page.charger=Caricatore di rame
 embers.research.page.charger.title=Carica Emberica
-embers.research.page.charger.desc=Il caricatore è un dispositivo molto semplice. Forniscigli Ember, e caricherà l'oggetto al suo interno, se esso è caricabile. L'oggetto può essere ritirato o immesso con un semplice clic destro.
+embers.research.page.charger.desc=Il caricatore ï¿½ un dispositivo molto semplice. Forniscigli Ember, e caricherï¿½ l'oggetto al suo interno, se esso ï¿½ caricabile. L'oggetto puï¿½ essere ritirato o immesso con un semplice clic destro.
 
 embers.research.page.jars=Contenitori mantellari
 embers.research.page.jars.title=Ember portatile
-embers.research.page.jars.desc=Per usi sul campo, portarsi in giro una cella di cristallo è, semplicemente, impratico. Con un po' di vetro e cristallo Emberico, hai sviluppato il vaso mantellare e la cartuccia mantellare. Entrambi possono contenere Ember, ed essere caricati con il caricatore di rame. Però, mentre i vasi possono essere usati da oggetti che vanno a Ember da ovunque nel tuo inventario, le cartucce devono essere tenute in mano per essere usate.
+embers.research.page.jars.desc=Per usi sul campo, portarsi in giro una cella di cristallo ï¿½, semplicemente, impratico. Con un po' di vetro e cristallo Emberico, hai sviluppato il vaso mantellare e la cartuccia mantellare. Entrambi possono contenere Ember, ed essere caricati con il caricatore di rame. Perï¿½, mentre i vasi possono essere usati da oggetti che vanno a Ember da ovunque nel tuo inventario, le cartucce devono essere tenute in mano per essere usate.
 
 embers.research.page.clockwork_tools=Attrezzi a scatto
 embers.research.page.clockwork_tools.title=Armi di distruzione
-embers.research.page.clockwork_tools.desc=Facendo uso dei tuoi nuovi contenitori mantellari, hai assemblato attrezzi in lega di pietralbore. Tutti e tre condividono certe proprietà: Richiedono ember accessibile dal tuo inventario per essere usati, e sono indistruttibili. Hanno anche un alto danno di base, permettendo a tutti di valere anche come armi. In più, quando alimentati da Ember, accenderanno fiamme sui nemici colpiti.
-embers.research.page.clockwork_pickaxe.desc=Il piccone a scatto funziona come una potente combinazione di pala e piccone. Come gli altri attrezzi, richiede Ember per rompere blocchi o attaccare. Valendo anche come arma, può ricevere incanti dedicati sia ad attrezzi che ad armi.
-embers.research.page.clockwork_hammer.desc=Il gran martello a scatto è una potente arma fisica. Come gli altri attrezzi, richiede Ember per rompere blocchi o attaccare. Se si usa per rompere un blocco, lo oblitererà completamente, senza lasciare drop. Come il piccone può ricevere incanti dedicati sia ad attrezzi che ad armi, ma per sua stessa natura è incompatibile con Fortuna e Tocco di Seta.
-embers.research.page.clockwork_axe.desc=L'ascia a scatto funziona come un'ascia molto potente. Come gli altri attrezzi, richiede Ember per rompere blocchi o attaccare. Può ricevere incanti dedicati sia ad attrezzi che ad armi, come i suoi simili.
+embers.research.page.clockwork_tools.desc=Facendo uso dei tuoi nuovi contenitori mantellari, hai assemblato attrezzi in lega di pietralbore. Tutti e tre condividono certe proprietï¿½: Richiedono ember accessibile dal tuo inventario per essere usati, e sono indistruttibili. Hanno anche un alto danno di base, permettendo a tutti di valere anche come armi. In piï¿½, quando alimentati da Ember, accenderanno fiamme sui nemici colpiti.
+embers.research.page.clockwork_pickaxe.desc=Il piccone a scatto funziona come una potente combinazione di pala e piccone. Come gli altri attrezzi, richiede Ember per rompere blocchi o attaccare. Valendo anche come arma, puï¿½ ricevere incanti dedicati sia ad attrezzi che ad armi.
+embers.research.page.clockwork_hammer.desc=Il gran martello a scatto ï¿½ una potente arma fisica. Come gli altri attrezzi, richiede Ember per rompere blocchi o attaccare. Se si usa per rompere un blocco, lo oblitererï¿½ completamente, senza lasciare drop. Come il piccone puï¿½ ricevere incanti dedicati sia ad attrezzi che ad armi, ma per sua stessa natura ï¿½ incompatibile con Fortuna e Tocco di Seta.
+embers.research.page.clockwork_axe.desc=L'ascia a scatto funziona come un'ascia molto potente. Come gli altri attrezzi, richiede Ember per rompere blocchi o attaccare. Puï¿½ ricevere incanti dedicati sia ad attrezzi che ad armi, come i suoi simili.
 
 embers.research.page.cinder_staff=Verga cinerea
 embers.research.page.cinder_staff.title=Proiettile magico
-embers.research.page.cinder_staff.desc=Strano, nevvero? Come il metallo argenteo possa aver tale controllo sulle caotiche braci dell'Ember. Canalizzando Ember da contenitori accessibili nel tuo inventario, caricherà una grande sfera di puro Ember di fronte a te. Più a lungo la si carica, più danno la sfera infliggerà, culminando in giusto poco meno danno di quello necessario per uccidere un tipico mostro.
+embers.research.page.cinder_staff.desc=Strano, nevvero? Come il metallo argenteo possa aver tale controllo sulle caotiche braci dell'Ember. Canalizzando Ember da contenitori accessibili nel tuo inventario, caricherï¿½ una grande sfera di puro Ember di fronte a te. Piï¿½ a lungo la si carica, piï¿½ danno la sfera infliggerï¿½, culminando in giusto poco meno danno di quello necessario per uccidere un tipico mostro.
 
 embers.research.page.blazing_ray=Raggio vampante
 embers.research.page.blazing_ray.title=Cannone Emberico
-embers.research.page.blazing_ray.desc=Per quanto il raggio vampante possa simigliare ad un'arma da fuoco mondana nella forma, più funzionalmente ricorda un pezzo d'artiglieria. Premuto il grilletto, scatenerà un retto raggio di puro Ember, che si fionderà in avanti fino a colpire un blocco solido o una creatura.
+embers.research.page.blazing_ray.desc=Per quanto il raggio vampante possa simigliare ad un'arma da fuoco mondana nella forma, piï¿½ funzionalmente ricorda un pezzo d'artiglieria. Premuto il grilletto, scatenerï¿½ un retto raggio di puro Ember, che si fionderï¿½ in avanti fino a colpire un blocco solido o una creatura.
 
 embers.research.page.aspecti=Aspetti metallici
 embers.research.page.aspecti.title=Focus alchemici
@@ -596,27 +596,27 @@ embers.research.page.aspecti.desc=Avvolgendo nel metallo fuso un frammento d'Emb
 
 embers.research.page.cinder_plinth=Plinto cinereo
 embers.research.page.cinder_plinth.title=Inceneritore
-embers.research.page.cinder_plinth.desc=Il plinto cinereo è una macchina semplice: piazzacci un blocco qualsiasi dentro, mandagli energia Emberica, e brucerà l'oggetto in nera cenere. Può anche passare la cenere automaticamente ad un bidone piazzato sotto di esso. La cenere ha svariati usi: può essere usato come debole combustibile, può essere applicato alla pietra per cambiarne il colore e l'aspetto, e credi che le energie rilasciate dalla sua combustione possano avere altre applicazioni.
+embers.research.page.cinder_plinth.desc=Il plinto cinereo ï¿½ una macchina semplice: piazzacci un blocco qualsiasi dentro, mandagli energia Emberica, e brucerï¿½ l'oggetto in nera cenere. Puï¿½ anche passare la cenere automaticamente ad un bidone piazzato sotto di esso. La cenere ha svariati usi: puï¿½ essere usato come debole combustibile, puï¿½ essere applicato alla pietra per cambiarne il colore e l'aspetto, e credi che le energie rilasciate dalla sua combustione possano avere altre applicazioni.
 
 embers.research.page.beam_cannon=Cannone a fasci
 embers.research.page.beam_cannon.title=Raggio calorifero
-embers.research.page.beam_cannon.desc=Il cannone a fasci potrebbe essere il più pericoloso dei tuoi congegni. Imposta il suo bersaglio con shift e clic destro con un martello da armeggiatore sul blocco a cui mirare, poi cliccando destro sul cannone col martello. Fornendogli abbastanza Ember, esso irradierà un fascio di puro calore. Questo fascio può uccidere quasi qualsiasi creatura senza armatura, e si può usare per iniziare una trasmutazione alla tavoletta di scambio.
+embers.research.page.beam_cannon.desc=Il cannone a fasci potrebbe essere il piï¿½ pericoloso dei tuoi congegni. Imposta il suo bersaglio con shift e clic destro con un martello da armeggiatore sul blocco a cui mirare, poi cliccando destro sul cannone col martello. Fornendogli abbastanza Ember, esso irradierï¿½ un fascio di puro calore. Questo fascio puï¿½ uccidere quasi qualsiasi creatura senza armatura, e si puï¿½ usare per iniziare una trasmutazione alla tavoletta di scambio.
 
 embers.research.page.alchemy=Alchimia energetica 
 embers.research.page.alchemy.title=Trasmutazione
-embers.research.page.alchemy.desc=L'alchemia Emberica è una scoperta davvero meravigliosa. La prima chiave è la tavoletta di scambio: clic destro sulle sue varie facce per inserire oggetti nei loro rispettivi slot. La prossima è il piedistallo alchemico: questi portano aspetti e possono contenere cenere. Per una ricetta alchemica, piazza un piedistallo per ogni aspectus necessario intorno alla tavoletta, riempilo con una quantità di cenere nel raggio determinato, e bombarda la tavoletta con il cannone a fasci.
+embers.research.page.alchemy.desc=L'alchemia Emberica ï¿½ una scoperta davvero meravigliosa. La prima chiave ï¿½ la tavoletta di scambio: clic destro sulle sue varie facce per inserire oggetti nei loro rispettivi slot. La prossima ï¿½ il piedistallo alchemico: questi portano aspetti e possono contenere cenere. Per una ricetta alchemica, piazza un piedistallo per ogni aspectus necessario intorno alla tavoletta, riempilo con una quantitï¿½ di cenere nel raggio determinato, e bombarda la tavoletta con il cannone a fasci.
 
 embers.research.page.catalytic_plug=Spina catalitica
 embers.research.page.catalytic_plug.title=Iniezione di sovraccarico
-embers.research.page.catalytic_plug.desc=Le spine catalitiche sono congegni fantastici per l'impaziente. Attaccata ad una macchina, la spina ne raddoppierà la velocità, ma solo se alimentata da liquame alchemico da dietro, che verrà consumato nel processo. Fino a 2 spine catalitiche possono essere attaccate ad una singola macchina, per quadruplarne la velocità.
+embers.research.page.catalytic_plug.desc=Le spine catalitiche sono congegni fantastici per l'impaziente. Attaccata ad una macchina, la spina ne raddoppierï¿½ la velocitï¿½, ma solo se alimentata da liquame alchemico da dietro, che verrï¿½ consumato nel processo. Fino a 2 spine catalitiche possono essere attaccate ad una singola macchina, per quadruplarne la velocitï¿½.
 
 embers.research.page.waste=Sperimentazione
 embers.research.page.waste.title=Processo alchemico
-embers.research.page.waste.desc=Hai velocemente scoperto che non sempre la trasmutazione alchemica va come si vorrebbe. Per tutte men che una particolare combinazione di valori cinerei, il tuo processo fallirà e risulterà in scorie alchemiche. Queste scorie possono essere immesse nel pressore per riciclare un po' della cenere usata nel processo, e può essere analizzata visivamente per determinare quanto lontano eri dalla vera ricetta del tuo prodotto desiderato.
+embers.research.page.waste.desc=Hai velocemente scoperto che non sempre la trasmutazione alchemica va come si vorrebbe. Per tutte men che una particolare combinazione di valori cinerei, il tuo processo fallirï¿½ e risulterï¿½ in scorie alchemiche. Queste scorie possono essere immesse nel pressore per riciclare un po' della cenere usata nel processo, e puï¿½ essere analizzata visivamente per determinare quanto lontano eri dalla vera ricetta del tuo prodotto desiderato.
 
 embers.research.page.hellish_synthesis=Sintesi assortite
 embers.research.page.hellish_synthesis.title=Strange Materials
-embers.research.page.hellish_synthesis.desc=Attraverso dei processi alchemici, hai scoperto come creare svariate nuove sostanze. Ciò include strane sabbie e rocce rosse, che secondo alcuni documenti antichi costituiscono la terra di uno strano e distante reame.
+embers.research.page.hellish_synthesis.desc=Attraverso dei processi alchemici, hai scoperto come creare svariate nuove sostanze. Ciï¿½ include strane sabbie e rocce rosse, che secondo alcuni documenti antichi costituiscono la terra di uno strano e distante reame.
 
 embers.research.page.archaic_brick=Mattoni arcaici
 embers.research.page.archaic_brick.title=Materiale da costruzione antico
@@ -624,51 +624,51 @@ embers.research.page.archaic_brick.desc=Le antiche sentinelle che vagano per le 
 
 embers.research.page.motive_core=Nuclei a motivo
 embers.research.page.motive_core.title=Tecnologia precorritrice
-embers.research.page.motive_core.desc=L'alchimia non ti permette solo di replicare mattoni. I nuclei a motivo sembrano essere la linfa e la scintilla dei golem antichi, e grazie all'alchimia, questo potere è adesso nelle tue mani.
+embers.research.page.motive_core.desc=L'alchimia non ti permette solo di replicare mattoni. I nuclei a motivo sembrano essere la linfa e la scintilla dei golem antichi, e grazie all'alchimia, questo potere ï¿½ adesso nelle tue mani.
 
 embers.research.page.adhesive=Collante
 embers.research.page.adhesive.title=Una soluzione appiccicosa
-embers.research.page.adhesive.desc=Le peculiari gelatine viventi che incroci nel sottosuolo sono utili, ma alla fine troppo rari per essere pratici. Il collante sintetico farà da sostituto per le palle di gelatina in qualsiasi ricetta.
+embers.research.page.adhesive.desc=Le peculiari gelatine viventi che incroci nel sottosuolo sono utili, ma alla fine troppo rari per essere pratici. Il collante sintetico farï¿½ da sostituto per le palle di gelatina in qualsiasi ricetta.
 
 embers.research.page.tyrfing=Tyrfing
 embers.research.page.tyrfing.title=Lama maledetta
-embers.research.page.tyrfing.desc=Uno strano costrutto di certo, il Tyrfing è un'arma di piombo pulsante con una struttura resa possibile dall'alchimia. Anche se risulta leggermente debole rispetto alla spada di piombo usata per crearla, la sua forma unica ti permette di infliggere grande danno ai nemici corazzati. Più armatura il tuo nemico sta indossando, più danno la lama infliggerà.
+embers.research.page.tyrfing.desc=Uno strano costrutto di certo, il Tyrfing ï¿½ un'arma di piombo pulsante con una struttura resa possibile dall'alchimia. Anche se risulta leggermente debole rispetto alla spada di piombo usata per crearla, la sua forma unica ti permette di infliggere grande danno ai nemici corazzati. Piï¿½ armatura il tuo nemico sta indossando, piï¿½ danno la lama infliggerï¿½.
 
 embers.research.page.ashen_cloak=Armatura cinerea
 embers.research.page.ashen_cloak.title=Manto del mago
-embers.research.page.ashen_cloak.desc=Imbevendo stoffa mondana con cenere alchemica, hai sintetizzato un flessibile ma forte tessuto cinereo, con il quale hai confezionato un'armatura. Essa in sé è piuttosto forte, e credi che il suo aspetto sia a dir poco sfavillante, ma senti che potrebbe ancora essere molto migliorata...
+embers.research.page.ashen_cloak.desc=Imbevendo stoffa mondana con cenere alchemica, hai sintetizzato un flessibile ma forte tessuto cinereo, con il quale hai confezionato un'armatura. Essa in sï¿½ ï¿½ piuttosto forte, e credi che il suo aspetto sia a dir poco sfavillante, ma senti che potrebbe ancora essere molto migliorata...
 
 embers.research.page.inflictor=Gemme infliggenti
 embers.research.page.inflictor.title=Assorbire il dolore
-embers.research.page.inflictor.desc=La gemma infliggente è davvero un cristallo strano. Tenendolo in mano, quando prenderai danno, essa assorbirà il tipo di danno che avrai preso. Cucendola con una cordicella al tuo manto cinereo in un banco da lavoro, la gemma ridurrà il danno preso da quella fonte di approssimatamente un terzo. Possono essere rimosse piazzando il manto nel banco da lavoro da solo, e fino a sette alla volta possono essercene su un manto.
+embers.research.page.inflictor.desc=La gemma infliggente ï¿½ davvero un cristallo strano. Tenendolo in mano, quando prenderai danno, essa assorbirï¿½ il tipo di danno che avrai preso. Cucendola con una cordicella al tuo manto cinereo in un banco da lavoro, la gemma ridurrï¿½ il danno preso da quella fonte di approssimatamente un terzo. Possono essere rimosse piazzando il manto nel banco da lavoro da solo, e fino a sette alla volta possono essercene su un manto.
 
 embers.research.page.glimmer=Cristallo del bagliore
 embers.research.page.glimmer.title=Luce accesa, luce spenta
-embers.research.page.glimmer.desc=Infondendo il quarzo con calore ed Ember, hai sviluppato un materiale luminescente che appare volenteroso di splendere di luce propria. Ciò ti permette di piazzare fonti di luce a piacere, ma vuoterà il cristallo. Comunque, mentre sei esposto alla luce, il cristallo si rigenererà da solo lentamente.
+embers.research.page.glimmer.desc=Infondendo il quarzo con calore ed Ember, hai sviluppato un materiale luminescente che appare volenteroso di splendere di luce propria. Ciï¿½ ti permette di piazzare fonti di luce a piacere, ma vuoterï¿½ il cristallo. Comunque, mentre sei esposto alla luce, il cristallo si rigenererï¿½ da solo lentamente.
 
 embers.research.page.metallurgic_dust=Polvere metallurgica
 embers.research.page.metallurgic_dust.title=Questo per quello
-embers.research.page.metallurgic_dust.desc=A volte quel che trovi negli intestini della terra non è quello che stavi cercando. E infatti, quel che abbiamo imparato dell'alchimia può risolverlo facilmente. Combinando le proprietà trasmutative dei semi di metallo con pietrarossa e detriti di Ember, una fine polvere bianca viene creata. Quando viene in contatto con dei minerali, ne trasmuterà la vena intera in una di tipo diverso. Un po' del minerale potrebbe essere trasmutato in pietra senza valore, però...
+embers.research.page.metallurgic_dust.desc=A volte quel che trovi negli intestini della terra non ï¿½ quello che stavi cercando. E infatti, quel che abbiamo imparato dell'alchimia puï¿½ risolverlo facilmente. Combinando le proprietï¿½ trasmutative dei semi di metallo con pietrarossa e detriti di Ember, una fine polvere bianca viene creata. Quando viene in contatto con dei minerali, ne trasmuterï¿½ la vena intera in una di tipo diverso. Un po' del minerale potrebbe essere trasmutato in pietra senza valore, perï¿½...
 
 embers.research.page.cluster=Ammassi Emberici
 embers.research.page.cluster.title=Cristalli purificati
-embers.research.page.cluster.desc=Le più piccole forme cristalline dell'Ember che hai usato in passato sono buone, ma credi che presto ti servirà più potere. Fondendo insieme alchemicamente più cristalli e frammenti Emberici, ottieni l'ammasso Emberico, un più grande mazzo di cristalli che credi ti aiuterà a fornire energia a macchine future.
+embers.research.page.cluster.desc=Le piï¿½ piccole forme cristalline dell'Ember che hai usato in passato sono buone, ma credi che presto ti servirï¿½ piï¿½ potere. Fondendo insieme alchemicamente piï¿½ cristalli e frammenti Emberici, ottieni l'ammasso Emberico, un piï¿½ grande mazzo di cristalli che credi ti aiuterï¿½ a fornire energia a macchine future.
 
 embers.research.page.field_chart=Mappa di campo
 embers.research.page.field_chart.title=Supervisione tattica
-embers.research.page.field_chart.desc=Trovare macchie con alta concentrazione Emberica può essere tedioso con solo il barometro atmosferico come misuratore. Ma, sembra che l'Ember risuoni a contatto con sé stesso, e di appropriata manifattura hai congegnato la mappa di campo, per mappare le concentrazioni Emberiche in un'area più grande di quella che si può percorrere a piedi.
+embers.research.page.field_chart.desc=Trovare macchie con alta concentrazione Emberica puï¿½ essere tedioso con solo il barometro atmosferico come misuratore. Ma, sembra che l'Ember risuoni a contatto con sï¿½ stesso, e di appropriata manifattura hai congegnato la mappa di campo, per mappare le concentrazioni Emberiche in un'area piï¿½ grande di quella che si puï¿½ percorrere a piedi.
 
 embers.research.page.wildfire=Nucleo incendiario
 embers.research.page.wildfire.title=Controllare la fiamma
-embers.research.page.wildfire.desc=L'ammasso Emberico, però, è un po' troppo fuori controllo per usi universali. Anche se azzeccato per l'immolazione di oggetti nel combustore o catalizzatore, un nucleo incendiario ne deve essere raffinato per usi più eleganti.
+embers.research.page.wildfire.desc=L'ammasso Emberico, perï¿½, ï¿½ un po' troppo fuori controllo per usi universali. Anche se azzeccato per l'immolazione di oggetti nel combustore o catalizzatore, un nucleo incendiario ne deve essere raffinato per usi piï¿½ eleganti.
 
 embers.research.page.injector=Cristalli di metallo
 embers.research.page.injector.title=Semi del mondo
-embers.research.page.injector.desc=Hai trovato un modo di sintetizzare semi di cristalli metallici per vari tipi di metallo nel mondo, insieme all'iniettore Emberico, una macchina designata per il loro controllo. Piazzando un seme di cristallo nel mondo, e poi iniettori Emberici rivolti verso di esso ed alimentati da Ember, il seme comincerà a riempirsi e crescere lentamente. Ad un certo livello, il seme comincerà a perdere pepite di metallo che possono essere raccolte tranquillamente.
+embers.research.page.injector.desc=Hai trovato un modo di sintetizzare semi di cristalli metallici per vari tipi di metallo nel mondo, insieme all'iniettore Emberico, una macchina designata per il loro controllo. Piazzando un seme di cristallo nel mondo, e poi iniettori Emberici rivolti verso di esso ed alimentati da Ember, il seme comincerï¿½ a riempirsi e crescere lentamente. Ad un certo livello, il seme comincerï¿½ a perdere pepite di metallo che possono essere raccolte tranquillamente.
 
 embers.research.page.combustor=Camera di combustione
 embers.research.page.combustor.title=Immolazione
-embers.research.page.combustor.desc=La camera di combustione è una macchina semplice che fa poco e niente da sola. In pratica, brucia alcuni combustibili. Ogni carburante usato ha un certo livello energetico: il carbone ha uno o due livelli, oggetti in mattoni del Nether hanno un livello energetico di tre, e la polvere di blaze è un quattro.
+embers.research.page.combustor.desc=La camera di combustione ï¿½ una macchina semplice che fa poco e niente da sola. In pratica, brucia alcuni combustibili. Ogni carburante usato ha un certo livello energetico: il carbone ha uno o due livelli, oggetti in mattoni del Nether hanno un livello energetico di tre, e la polvere di blaze ï¿½ un quattro.
 
 embers.research.image.combustor_coal=Coefficiente: 2x
 embers.research.image.combustor_nether_brick=Coefficiente: 3x
@@ -676,7 +676,7 @@ embers.research.image.combustor_blaze_powder=Coefficiente: 4x
 
 embers.research.page.catalyzer=Camera di catalisi
 embers.research.page.catalyzer.title=Energia chimica
-embers.research.page.catalyzer.desc=La camera di catalisi è una macchina semplice che fa poco e niente da sola, se non consumare oggetti catalizzanti. Ogni oggetto catalizzante ha un certo livello di catalisi: la pietrarossa ha un livello di due, la polvere da sparo è un tre, e la polvere di luminite ha un livello di catalisi pari a quattro.
+embers.research.page.catalyzer.desc=La camera di catalisi ï¿½ una macchina semplice che fa poco e niente da sola, se non consumare oggetti catalizzanti. Ogni oggetto catalizzante ha un certo livello di catalisi: la pietrarossa ha un livello di due, la polvere da sparo ï¿½ un tre, e la polvere di luminite ha un livello di catalisi pari a quattro.
 
 embers.research.image.catalyzer_redstone=Coefficiente: 2x
 embers.research.image.catalyzer_gunpowder=Coefficiente: 3x
@@ -684,19 +684,19 @@ embers.research.image.catalyzer_glowstone=Coefficiente: 4x
 
 embers.research.page.reactor=Reattore Ignem
 embers.research.page.reactor.title=Chimica Emberica
-embers.research.page.reactor.desc=Il reattore Ignem è un mezzo molto potente usato per raffinare cristalli d'Ember. Esso dev'essere posizionato in modo adiacente alle parti superiori delle camere di combustione e di catalisi. Quando entrambe le camere sono attive, il reattore raffinerà Ember cristallino con un moltiplicatore pari al livello energetico e di catalisi delle due camere addizionato insieme, più uno. I livelli delle due camere devono anche essere vicini abbastanza.
+embers.research.page.reactor.desc=Il reattore Ignem ï¿½ un mezzo molto potente usato per raffinare cristalli d'Ember. Esso dev'essere posizionato in modo adiacente alle parti superiori delle camere di combustione e di catalisi. Quando entrambe le camere sono attive, il reattore raffinerï¿½ Ember cristallino con un moltiplicatore pari al livello energetico e di catalisi delle due camere addizionato insieme, piï¿½ uno. I livelli delle due camere devono anche essere vicini abbastanza.
 
 embers.research.page.materia=Materia isolata
 embers.research.page.materia.title=Ricambio universale
-embers.research.page.materia.desc=La materia isolata è un materiale peculiare. Ha la proprietà di potersi trasformare nel materiale di altri oggetti in certe circostanze. Per i bisogni che hai al momento, essa ti permetterà di riparare oggetti all'incudine di pietralbore, usando questa materia al posto dei loro soliti materiali. Già prevedi che troverà ache altri usi nel futuro...
+embers.research.page.materia.desc=La materia isolata ï¿½ un materiale peculiare. Ha la proprietï¿½ di potersi trasformare nel materiale di altri oggetti in certe circostanze. Per i bisogni che hai al momento, essa ti permetterï¿½ di riparare oggetti all'incudine di pietralbore, usando questa materia al posto dei loro soliti materiali. Giï¿½ prevedi che troverï¿½ ache altri usi nel futuro...
 
 embers.research.page.cost_reduction=Gioielleria d'Ember
 embers.research.page.cost_reduction.title=Riduzione dei costi
-embers.research.page.cost_reduction.desc=Usare attrezzi a scatto o armamenti a Ember può essere problematico, essendo che i vasi e le cartucce Emberiche devono essere rifornite periodicamente. Questi gioielli sminuiranno il problema diminuendo l'ammonto di Ember consumato da un fattore. L'anello, amuleto, e la cintura hanno diversi tassi di riduzione; ma i loro effetti si addizionano tra di loro.
+embers.research.page.cost_reduction.desc=Usare attrezzi a scatto o armamenti a Ember puï¿½ essere problematico, essendo che i vasi e le cartucce Emberiche devono essere rifornite periodicamente. Questi gioielli sminuiranno il problema diminuendo l'ammonto di Ember consumato da un fattore. L'anello, amuleto, e la cintura hanno diversi tassi di riduzione; ma i loro effetti si addizionano tra di loro.
 
 embers.research.page.mantle_bulb=Bulbo mantellare
 embers.research.page.mantle_bulb.title=Rintanato via
-embers.research.page.mantle_bulb.desc=Se tenere una cartuccia Emberica in mano o anche solo un vaso Emberico nella borsa è troppo ingombrante per te, questo gioiellino può aiutare. Invece di tenerlo nell'inventario, questo contenitore Emberico può essere tenuto in qualsiasi slot per gioielli. Ciò coesiste, però, con una capienza molto ridotta.
+embers.research.page.mantle_bulb.desc=Se tenere una cartuccia Emberica in mano o anche solo un vaso Emberico nella borsa ï¿½ troppo ingombrante per te, questo gioiellino puï¿½ aiutare. Invece di tenerlo nell'inventario, questo contenitore Emberico puï¿½ essere tenuto in qualsiasi slot per gioielli. Ciï¿½ coesiste, perï¿½, con una capienza molto ridotta.
 
 embers.research.page.explosion_charm=Talismano dell'esplosione
 embers.research.page.explosion_charm.title=Neutralizzante manifatturato
@@ -704,88 +704,88 @@ embers.research.page.explosion_charm.desc=Indossando questo talismano, le esplos
 
 embers.research.page.nonbeliever_amulet=Amuleto dell'eretico
 embers.research.page.nonbeliever_amulet.title=Ed ecco che va via
-embers.research.page.nonbeliever_amulet.desc=Dannate le streghe e la loro resistenza all'immondo... Quest'amuleto sarà la chiave per diventare come loro in questo aspetto. Quando vieni colpito da un attacco magico, il 90% del danno sarà annullato. Nota comunque bene che prenderai sempre almeno mezzo cuore di danno da attacchi magici.
+embers.research.page.nonbeliever_amulet.desc=Dannate le streghe e la loro resistenza all'immondo... Quest'amuleto sarï¿½ la chiave per diventare come loro in questo aspetto. Quando vieni colpito da un attacco magico, il 90% del danno sarï¿½ annullato. Nota comunque bene che prenderai sempre almeno mezzo cuore di danno da attacchi magici.
 
 embers.research.page.ashen_amulet=Amuleto cinereo
 embers.research.page.ashen_amulet.title=Polvere sei e polvere tornerai
-embers.research.page.ashen_amulet.desc=Trasformare cose in cenere è... certamente una dimostrazione di potere. Potere non ben pianificato, ma potere che riposa in questo amuleto a prescindere. Quando si uccide una creatura o si rompe qualche cosa mentre s'indossa quest'amuleto, essa si trasformerà in polvere, e lascerà indietro solo cenere.
+embers.research.page.ashen_amulet.desc=Trasformare cose in cenere ï¿½... certamente una dimostrazione di potere. Potere non ben pianificato, ma potere che riposa in questo amuleto a prescindere. Quando si uccide una creatura o si rompe qualche cosa mentre s'indossa quest'amuleto, essa si trasformerï¿½ in polvere, e lascerï¿½ indietro solo cenere.
 
 embers.research.page.dawnstone_mail=Maglia di pietralbore
 embers.research.page.dawnstone_mail.title=Posizione difensiva
-embers.research.page.dawnstone_mail.desc=La pietralbore è un materiale con molte proprietà che la rendono buona per vestimenti ed armature. Questa maglia proteggerà chi la indossa da qualsiasi contraccolpo. Basta fidarsi e non chiedersi come mai una maglia si costruisce con delle piastre.
+embers.research.page.dawnstone_mail.desc=La pietralbore ï¿½ un materiale con molte proprietï¿½ che la rendono buona per vestimenti ed armature. Questa maglia proteggerï¿½ chi la indossa da qualsiasi contraccolpo. Basta fidarsi e non chiedersi come mai una maglia si costruisce con delle piastre.
 
 embers.research.page.modifiers=Attaccare modificatori
 embers.research.page.modifiers.title=Migliorie
-embers.research.page.modifiers.desc=Credi che con meccanismi sufficientemente avanzati, saresti capace d'ideare congegni che garantiscano abilità addizionali al tuo equipaggiamento. Questi oggetti possono essere applicati ad armature, attrezzi, o armi, e ci si deve martellare all'incudine di pietralbore. Piazza giù l'oggetto originale, poi il modificatore, e comincia a martellare. I modificatori hanno livelli, che ne alzano il potere.
+embers.research.page.modifiers.desc=Credi che con meccanismi sufficientemente avanzati, saresti capace d'ideare congegni che garantiscano abilitï¿½ addizionali al tuo equipaggiamento. Questi oggetti possono essere applicati ad armature, attrezzi, o armi, e ci si deve martellare all'incudine di pietralbore. Piazza giï¿½ l'oggetto originale, poi il modificatore, e comincia a martellare. I modificatori hanno livelli, che ne alzano il potere.
 
 embers.research.page.heat=Calore
 embers.research.page.heat.title=Vissuto
-embers.research.page.heat.desc=Proprio come hai usato l'incudine di pietralbore per smontare o riparare oggetti, puoi usarla per attaccare modificatori all'equipaggiamento. Piazza un attrezzo, spada, o pezzo d'armatura sull'incudine, poi il nucleo a motivo antico. Al colpo del martello, l'oggetto otterrà l'abilità di assorbire calore. Questo viene raccolto tramite l'uso normale dell'oggetto.
+embers.research.page.heat.desc=Proprio come hai usato l'incudine di pietralbore per smontare o riparare oggetti, puoi usarla per attaccare modificatori all'equipaggiamento. Piazza un attrezzo, spada, o pezzo d'armatura sull'incudine, poi il nucleo a motivo antico. Al colpo del martello, l'oggetto otterrï¿½ l'abilitï¿½ di assorbire calore. Questo viene raccolto tramite l'uso normale dell'oggetto.
 
 embers.research.page.dismantling=Staccare modificatori
 embers.research.page.dismantling.title=Dobbiamo tornare indietro
-embers.research.page.dismantling.desc=Occasionalmente potresti applicare ad un attrezzi o armatura un certo aumento solo per scoprire in seguito che non ti sarebbe utile. Ma gli aumenti non sono addizioni permanenti, e l'incudine di pietralbore può aiutarti. Mettendo l'attrezzo o armatura su un'incudine senza oggetti sopra, puoi rimuoverne i modificatori senza costi. Il nucleo in sé e il suo calore accumulato rimarranno sempre sull'oggetto comunque, e tali attrezzi non possono essere distrutti completamente
+embers.research.page.dismantling.desc=Occasionalmente potresti applicare ad un attrezzi o armatura un certo aumento solo per scoprire in seguito che non ti sarebbe utile. Ma gli aumenti non sono addizioni permanenti, e l'incudine di pietralbore puï¿½ aiutarti. Mettendo l'attrezzo o armatura su un'incudine senza oggetti sopra, puoi rimuoverne i modificatori senza costi. Il nucleo in sï¿½ e il suo calore accumulato rimarranno sempre sull'oggetto comunque, e tali attrezzi non possono essere distrutti completamente
 
 embers.research.page.inferno_forge=Fucina Inferno
 embers.research.page.inferno_forge.title=Livellaggio
-embers.research.page.inferno_forge.desc=Dopo che la barra di calore di un oggetto si è riempita, dev'ssere temprata. Fornendogli energia Emberica, la fucina Inferno fa esattamente questo. Apri la copertura in cima, lanciaci dentro il tuo caloroso oggetto, e un po' di Ember cristallino. Più Ember si inserisce, più è plausibile un successo. Livellare l'oggetto gli garantirà uno slot modificatore. I modificatori possono poi essere attaccati all'oggetto dall'incudine di pietralbore, per un numero massimo pari al livello dell'oggetto.
+embers.research.page.inferno_forge.desc=Dopo che la barra di calore di un oggetto si ï¿½ riempita, dev'ssere temprata. Fornendogli energia Emberica, la fucina Inferno fa esattamente questo. Apri la copertura in cima, lanciaci dentro il tuo caloroso oggetto, e un po' di Ember cristallino. Piï¿½ Ember si inserisce, piï¿½ ï¿½ plausibile un successo. Livellare l'oggetto gli garantirï¿½ uno slot modificatore. I modificatori possono poi essere attaccati all'oggetto dall'incudine di pietralbore, per un numero massimo pari al livello dell'oggetto.
 
 embers.research.page.superheater=Surriscaldatore
 embers.research.page.superheater.title=Scaldiamoci
-embers.research.page.superheater.desc=Il surriscaldatore è un aumento applicabile agli oggetti che hanno accumulato calore. Applicato, tutti gli oggetti rilasciati da blocchi rotti o creature uccise saranno cucinati automaticamente, e il danno addizionale sarà aggiunto all'oggetto mentre brucia i bersagli. Più alto il livello modificatore, più alto il danno da fuoco. Esso richiede Ember accessibile dall'inventario per funzionare.
+embers.research.page.superheater.desc=Il surriscaldatore ï¿½ un aumento applicabile agli oggetti che hanno accumulato calore. Applicato, tutti gli oggetti rilasciati da blocchi rotti o creature uccise saranno cucinati automaticamente, e il danno addizionale sarï¿½ aggiunto all'oggetto mentre brucia i bersagli. Piï¿½ alto il livello modificatore, piï¿½ alto il danno da fuoco. Esso richiede Ember accessibile dall'inventario per funzionare.
 
 embers.research.page.cinder_jet=Getto cinereo
-embers.research.page.cinder_jet.title=Passi più lunghi della gamba
-embers.research.page.cinder_jet.desc=Il getto cinereo è un aumento per le armature che ti consente di slanciarti in avanti. Applicato, quando cominci a correre e abbastanza Ember è accessibile dall'inventario, esso spingerà il suo portatore con velocità parabolica a seconda del livello modificatore.
+embers.research.page.cinder_jet.title=Passi piï¿½ lunghi della gamba
+embers.research.page.cinder_jet.desc=Il getto cinereo ï¿½ un aumento per le armature che ti consente di slanciarti in avanti. Applicato, quando cominci a correre e abbastanza Ember ï¿½ accessibile dall'inventario, esso spingerï¿½ il suo portatore con velocitï¿½ parabolica a seconda del livello modificatore.
 
 embers.research.page.blasting_core=Nucleo detonatore
 embers.research.page.blasting_core.title=Volatile
-embers.research.page.blasting_core.desc=Il nucleo detonatore è un aumento per creare esplosioni. Applicato agli attrezzi, romperà non solo il blocco a cui si mira, ma anche quelli vicini. Applicato alle armi, usarle provocherà un esplosione che danneggerà le creature vicine. Applicato alle armature, l'esplosione accadrà quando l'armatura prende danno, spazzando via i nemici. Tutti e tre gli effetti crescono di potere col livello modificatore.
+embers.research.page.blasting_core.desc=Il nucleo detonatore ï¿½ un aumento per creare esplosioni. Applicato agli attrezzi, romperï¿½ non solo il blocco a cui si mira, ma anche quelli vicini. Applicato alle armi, usarle provocherï¿½ un esplosione che danneggerï¿½ le creature vicine. Applicato alle armature, l'esplosione accadrï¿½ quando l'armatura prende danno, spazzando via i nemici. Tutti e tre gli effetti crescono di potere col livello modificatore.
 
 embers.research.page.caster_orb=Sfera fattucchiera
 embers.research.page.caster_orb.title=Lancia-Ember
-embers.research.page.caster_orb.desc=La sfera fattucchiera è un aumento per armi e attrezzi che crea proiettili di Ember innescato. Quando un oggetto con questo aumento viene brandito, e c'è abbastanza Ember accessibile dall'inventario, un piccolo proiettile di Ember verrà sparato. La taglia e danno aumentano col livello modificatore.
-embers.research.page.caster_orb_addendum.desc=Essendo che la sfera fattucchiera permette ad armi ed attrezzi di lanciare proiettili, l'oggetto in questione potrà ora anche accettare aumenti rivolti alla modifica dei proiettili.
+embers.research.page.caster_orb.desc=La sfera fattucchiera ï¿½ un aumento per armi e attrezzi che crea proiettili di Ember innescato. Quando un oggetto con questo aumento viene brandito, e c'ï¿½ abbastanza Ember accessibile dall'inventario, un piccolo proiettile di Ember verrï¿½ sparato. La taglia e danno aumentano col livello modificatore.
+embers.research.page.caster_orb_addendum.desc=Essendo che la sfera fattucchiera permette ad armi ed attrezzi di lanciare proiettili, l'oggetto in questione potrï¿½ ora anche accettare aumenti rivolti alla modifica dei proiettili.
 
 embers.research.page.flame_barrier=Pelta fiammante
 embers.research.page.flame_barrier.title=Difese focose
-embers.research.page.flame_barrier.desc=La pelta fiammante è un aumento per armature che materializza uno scudo di fiamme intorno al portatore quando esso viene colpito. Al prendere un colpo, se quest'aumento  presente sull'armatura di un giocatore, l'attaccante sarà appiccato e prenderà del danno. Questo danno aumenta col livello modificatore.
+embers.research.page.flame_barrier.desc=La pelta fiammante ï¿½ un aumento per armature che materializza uno scudo di fiamme intorno al portatore quando esso viene colpito. Al prendere un colpo, se quest'aumento  presente sull'armatura di un giocatore, l'attaccante sarï¿½ appiccato e prenderï¿½ del danno. Questo danno aumenta col livello modificatore.
 
 embers.research.page.eldritch_insignia=Stemma Orrifico
 embers.research.page.eldritch_insignia.title=Marchio inquieto
-embers.research.page.eldritch_insignia.desc=Con l'aumento stemma orrifico sull'armatura, certe creature avranno paura di te. Ottieni il potere di sottomettere per intimidazione delle creature che normalmente ti attaccherebbero, e che ora attaccheranno solo se colpite prima. La varietà di creature che temeranno il portatore di questo simbolo cresce col livello modificatore.
+embers.research.page.eldritch_insignia.desc=Con l'aumento stemma orrifico sull'armatura, certe creature avranno paura di te. Ottieni il potere di sottomettere per intimidazione delle creature che normalmente ti attaccherebbero, e che ora attaccheranno solo se colpite prima. La varietï¿½ di creature che temeranno il portatore di questo simbolo cresce col livello modificatore.
 
 embers.research.page.intelligent_apparatus=Apparato cosciente
 embers.research.page.intelligent_apparatus.title=Saggezza decaduta
-embers.research.page.intelligent_apparatus.desc=L'apparato cosciente è un semplice aumento per armature che incrementa l'esperienza ottenuta dalle creature uccise da chi indossa l'armatura aumentata in questione. La quantità addizionale d'esperienza rilasciata aumenta col livello modificatore.
+embers.research.page.intelligent_apparatus.desc=L'apparato cosciente ï¿½ un semplice aumento per armature che incrementa l'esperienza ottenuta dalle creature uccise da chi indossa l'armatura aumentata in questione. La quantitï¿½ addizionale d'esperienza rilasciata aumenta col livello modificatore.
 
 embers.research.page.resonating_bell=Campanaccio risonante
 embers.research.page.resonating_bell.title=Vibrazioni
-embers.research.page.resonating_bell.desc=Il campanaccio risonante permette ad un attrezzo o arma di squillare attraverso i blocchi e cercare oggetti particolari. Facendo clic destro su un blocco, blocchi vicini dello stesso tipo s'illumineranno di una luce splendente, a meno che il blocco fosse di un materiale dalla presenza già molto significativa nell'ambiente vicino. L'area della risonanza cresce col livello modificatore.
+embers.research.page.resonating_bell.desc=Il campanaccio risonante permette ad un attrezzo o arma di squillare attraverso i blocchi e cercare oggetti particolari. Facendo clic destro su un blocco, blocchi vicini dello stesso tipo s'illumineranno di una luce splendente, a meno che il blocco fosse di un materiale dalla presenza giï¿½ molto significativa nell'ambiente vicino. L'area della risonanza cresce col livello modificatore.
 
 embers.research.page.tinker_lens_augment=Lenti da armeggiatore
 embers.research.page.tinker_lens_augment.title=Cosa sarebbe cosa?
-embers.research.page.tinker_lens_augment.desc=Tenere questo coso in mano tutto il tempo è sconveniente. Fortunatamente, puoi applicarlo ad un elmo ed ottenere il suo solito effetto semplicemente indossandolo. Quest'aumento non occupa slot, ma per funzionare gli serve prima l'applicazione di un nucleo a motivo.
+embers.research.page.tinker_lens_augment.desc=Tenere questo coso in mano tutto il tempo ï¿½ sconveniente. Fortunatamente, puoi applicarlo ad un elmo ed ottenere il suo solito effetto semplicemente indossandolo. Quest'aumento non occupa slot, ma per funzionare gli serve prima l'applicazione di un nucleo a motivo.
 
 embers.research.page.anti_tinker_lens=Lenti da armeggiatore annerite
-embers.research.page.anti_tinker_lens.title=Ceco davanti alla verità
-embers.research.page.anti_tinker_lens.desc=A volte, troppe informazioni possono essere una maledizione. Certi copricapi, come le lenti cineree, forniscono informazioni sui blocchi come fossero lenti da armeggiatore , ma ciò può essere distraente. Quest'aumento, applicato ad un tale copricapo, ne annullerà l'influsso di informazioni. Quest'aumento non occupa slot, ma per funzionare gli serve prima l'applicazione di un nucleo a motivo.
+embers.research.page.anti_tinker_lens.title=Ceco davanti alla veritï¿½
+embers.research.page.anti_tinker_lens.desc=A volte, troppe informazioni possono essere una maledizione. Certi copricapi, come le lenti cineree, forniscono informazioni sui blocchi come fossero lenti da armeggiatore , ma ciï¿½ puï¿½ essere distraente. Quest'aumento, applicato ad un tale copricapo, ne annullerï¿½ l'influsso di informazioni. Quest'aumento non occupa slot, ma per funzionare gli serve prima l'applicazione di un nucleo a motivo.
 
 embers.research.page.mystical_mechanics=Mystical Mechanics
 embers.research.page.mystical_mechanics.title=Non la mod che stai cercando
-embers.research.page.mystical_mechanics.desc=La mod Embers è compatibile con la Mystical Mechanics, ma è una dipendenza opzionale, ed essa è al momento disattivata dal config, o non è stata installata.
+embers.research.page.mystical_mechanics.desc=La mod Embers ï¿½ compatibile con la Mystical Mechanics, ma ï¿½ una dipendenza opzionale, ed essa ï¿½ al momento disattivata dal config, o non ï¿½ stata installata.
 
 embers.research.page.baubles=Baubles
 embers.research.page.baubles.title=Non la mod che stai cercando
-embers.research.page.baubles.desc=La mod Embers è compatibile con la Baubles, ma è una dipendenza opzionale, ed essa è al momento disattivata dal config, o non è stata installata.
+embers.research.page.baubles.desc=La mod Embers ï¿½ compatibile con la Baubles, ma ï¿½ una dipendenza opzionale, ed essa ï¿½ al momento disattivata dal config, o non ï¿½ stata installata.
 
 embers.research.page.diffraction_barrel=Tamburo di diffrazione
-embers.research.page.diffraction_barrel.title=Questo... è il mio bastone di tuono!
-embers.research.page.diffraction_barrel.desc=Il raggio vampante può essere un'arma alquanto inaccurata se usata in successione veloce. Quest'aumento per tamburo può essere applicato non solo sul vampante, ma su qualsiasi arma a proiettili Emberici, e trasformerà tale arma in una specie di fucile a canne multiple. Si noti che invece di un fascio, il raggio vampante sparerebbe un certo numero di proiettili tondi.
+embers.research.page.diffraction_barrel.title=Questo... ï¿½ il mio bastone di tuono!
+embers.research.page.diffraction_barrel.desc=Il raggio vampante puï¿½ essere un'arma alquanto inaccurata se usata in successione veloce. Quest'aumento per tamburo puï¿½ essere applicato non solo sul vampante, ma su qualsiasi arma a proiettili Emberici, e trasformerï¿½ tale arma in una specie di fucile a canne multiple. Si noti che invece di un fascio, il raggio vampante sparerebbe un certo numero di proiettili tondi.
 
 embers.research.page.focal_lens=Lenti focali
 embers.research.page.focal_lens.title=Vampata perforante
-embers.research.page.focal_lens.desc=Un aumento lenti focali può aiutare a colpire di precisione quando si usano molto le armi ad Ember. A seconda di se lo si piazza su un'arma che spara sfere o fasci, produrrà dei proiettili autoguidati o dei raggi perforanti.
+embers.research.page.focal_lens.desc=Un aumento lenti focali puï¿½ aiutare a colpire di precisione quando si usano molto le armi ad Ember. A seconda di se lo si piazza su un'arma che spara sfere o fasci, produrrï¿½ dei proiettili autoguidati o dei raggi perforanti.
 
 embers.research.page.pipes_category=Tubature
 embers.research.page.mystical_mechanics_category=Mystical Mechanics
@@ -803,7 +803,7 @@ embers.commands.fill.usage.set=/ember-fill <x> <z> set <value>
 embers.commands.fill.failed=Dati Emberici mancanti per il chunk [%s, %s] (ad x %s, z %s)
 embers.commands.fill.added=Aggiunto %s al livello Emberico (ora %s) nel chunk [%s, %s] (at x %s, z %s)
 embers.commands.fill.set=Added the ember level to %s in the chunk [%s, %s] (ad x %s, z %s)
-embers.commands.fill.query=Il livello Emberico è %s nel chunk [%s, %s] (ad x %s, z %s)
+embers.commands.fill.query=Il livello Emberico ï¿½ %s nel chunk [%s, %s] (ad x %s, z %s)
 
 subtitles.block.alchemy.fail=Processo d'alchimia energetica fallito...
 subtitles.block.alchemy.success=Processo d'alchimia energetica completato con successo!
@@ -818,7 +818,7 @@ subtitles.block.stamp.up=Pressore risale
 subtitles.block.bore.start=Trivella Emberica si sveglia tuonando
 subtitles.block.bore.stop=Trivella Emberica sospira e si ferma
 subtitles.block.catalytic_plug.start=Spina catalitica comincia ad iniettare del catalizzante
-subtitles.block.catalytic_plug.stop=Spina catalitica è vuota
+subtitles.block.catalytic_plug.stop=Spina catalitica ï¿½ vuota
 subtitles.block.metal_seed.ping=Seme di metallo rilascia pepite
 subtitles.block.inferno_forge.fail=Riforgiamento fallito...
 subtitles.block.inferno_forge.success=Riforgiamento completato con successo!
@@ -831,7 +831,7 @@ subtitles.block.steam_engine.stop=Motore a vapore tintinna e si ferma
 subtitles.block.mini_boiler.rupture=Mini-bollitore scoppia con violenza
 subtitles.block.pump.slow=Pompa meccanica stride sulla carta vetrata
 subtitles.block.pump.mid=Pompa meccanica pompa
-subtitles.block.pump.fast=Pompa meccanica pompa a velocità incredibilmente rapide
+subtitles.block.pump.fast=Pompa meccanica pompa a velocitï¿½ incredibilmente rapide
 subtitles.block.pipe.connect=Tubatura connessa
 subtitles.block.pipe.disconnect=Tubatura disconnessa
 subtitles.ember_transfer.emit.small=Pacchetto Emberico emesso
