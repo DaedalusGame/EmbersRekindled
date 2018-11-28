@@ -60,7 +60,7 @@ public class EntityAncientGolem extends EntityMob {
     public void onUpdate(){
     	super.onUpdate();
     	this.rotationYaw = this.rotationYawHead;
-    	if (this.ticksExisted % 100 == 0 && this.getAttackTarget() != null){
+    	if (!this.isDead && this.ticksExisted % 100 == 0 && this.getAttackTarget() != null){
     		if (!getEntityWorld().isRemote){
                 playSound(SoundManager.FIREBALL,1.0f,1.0f);
                 EffectDamage effect = new EffectDamage(4.0f, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0f);
