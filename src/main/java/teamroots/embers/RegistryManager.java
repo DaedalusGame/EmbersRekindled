@@ -550,6 +550,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityMiniBoiler.class, Embers.MODID+":tile_entity_mini_boiler");
 		GameRegistry.registerTileEntity(TileEntityEmberGauge.class, Embers.MODID+":tile_entity_ember_gauge");
 		GameRegistry.registerTileEntity(TileEntityFluidGauge.class, Embers.MODID+":tile_entity_fluid_gauge");
+		//GameRegistry.registerTileEntity(TileEntityItemGauge.class, Embers.MODID+":tile_entity_item_gauge");
 		GameRegistry.registerTileEntity(TileEntityFluidTransfer.class, Embers.MODID+":tile_entity_fluid_transfer");
 	}
 

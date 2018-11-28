@@ -2,6 +2,7 @@ package teamroots.embers.itemmod;
 
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -46,6 +47,8 @@ public class ModifierFocalLens extends ModifierProjectileBase {
 					else if(projectile instanceof ProjectileFireball) {
 						((ProjectileFireball) projectile).setHoming(level * 10,4.0 + level * 1.0,index,modulo, Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, entity -> {
 							Entity shooter = projectile.getShooter();
+							if(!(entity instanceof EntityLivingBase))
+								return false;
 							if(shooter != null && entity.isOnSameTeam(shooter))
 								return false;
 							if(entity instanceof EntityPlayer && shooter instanceof EntityPlayer && !isPVPEnabled(entity.getEntityWorld()))

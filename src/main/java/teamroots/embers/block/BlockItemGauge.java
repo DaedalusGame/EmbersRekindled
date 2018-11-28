@@ -1,31 +1,20 @@
 package teamroots.embers.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import teamroots.embers.Embers;
-import teamroots.embers.api.block.IDial;
-import teamroots.embers.api.tile.IExtraDialInformation;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageTEUpdateRequest;
-import teamroots.embers.util.Misc;
+import teamroots.embers.tileentity.TileEntityItemGauge;
 
+import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BlockItemGauge extends BlockBaseGauge {
 	public static final String DIAL_TYPE = "item";
@@ -60,5 +49,11 @@ public class BlockItemGauge extends BlockBaseGauge {
 	@Override
 	public String getDialType() {
 		return DIAL_TYPE;
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityItemGauge();
 	}
 }
