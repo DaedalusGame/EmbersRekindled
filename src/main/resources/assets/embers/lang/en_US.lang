@@ -547,6 +547,8 @@ embers.research.page.actuator.desc=Some machines that are powered using Ember co
 embers.research.page.actuator_bore.desc=The Ember Bore is almost purely mechanical and lends itself well to being powered by mechanical energy. Powering it this way is more coal efficient, but initially a bit slower.
 embers.research.page.actuator_pump.desc=The Pump is a machine that really suffers from being powered by Ember. Even small amounts of mechanical power speed it up significantly, and it can be pushed to become quite fast.
 embers.research.page.actuator_stamper.desc=The Stamper is another machine with moving parts, but the fact that Ember is so energetic and the motion of the Stamper is so simple mean that directly applying mechanical power will only speed it up a little bit. It is quite a bit more efficient in terms of Ember cost however.
+embers.research.page.actuator_mixer.desc=Mixer Centrifuges use Ember and moving parts to bind liquid metal together, and while the moving parts can certainly be powered by mechanical energy, not all of the process can be powered by mechanical energy.
+embers.research.page.actuator_auto_hammer.desc=The Automatic Hammer is very similar to the Stamper, and similar speedup and ember savings can be achieved by hooking up mechanical power instead.
 
 embers.research.page.steam_engine=Steam Engine
 embers.research.page.steam_engine.title=Industrial Revolution

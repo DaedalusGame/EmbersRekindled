@@ -240,7 +240,7 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
 
     @Override
     public double getMechanicalSpeed(double power) {
-        return Math.min(1.5,power);
+        return Misc.getDiminishedPower(power,20,1.5/20);
     }
 
     @Override

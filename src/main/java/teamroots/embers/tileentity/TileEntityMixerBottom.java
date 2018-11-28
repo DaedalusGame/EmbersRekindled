@@ -25,6 +25,7 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
+import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockFluidGauge;
@@ -39,7 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
+public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
     public static final double EMBER_COST = 2.0;
 
     public FluidTank north = new FluidTank(8000);
@@ -277,5 +278,25 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
     @Override
     public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
         strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.metal")));
+    }
+
+    @Override
+    public double getMinimumPower() {
+        return 20;
+    }
+
+    @Override
+    public double getMechanicalSpeed(double power) {
+        return Misc.getDiminishedPower(power,80,1.5/80);
+    }
+
+    @Override
+    public double getNominalSpeed() {
+        return 1;
+    }
+
+    @Override
+    public double getStandardPowerRatio() {
+        return 0.5;
     }
 }

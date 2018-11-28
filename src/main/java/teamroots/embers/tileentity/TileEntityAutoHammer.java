@@ -154,7 +154,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public double getMechanicalSpeed(double power) {
-		return Math.min(1.5,power);
+		return Misc.getDiminishedPower(power,20,1.5/20);
 	}
 
 	@Override

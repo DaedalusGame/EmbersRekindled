@@ -171,7 +171,9 @@ public class MysticalMechanicsIntegration {
         ResearchManager.actuator = new ResearchBase("actuator", new ItemStack(mech_actuator), 9, 5).addAncestor(ResearchManager.gearbox)
                 .addPage(new ResearchShowItem("actuator_bore",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.ember_bore))))
                 .addPage(new ResearchShowItem("actuator_pump",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.mechanical_pump))))
-                .addPage(new ResearchShowItem("actuator_stamper",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.stamper))));
+                .addPage(new ResearchShowItem("actuator_stamper",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.stamper))))
+                .addPage(new ResearchShowItem("actuator_mixer",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.mixer))))
+                .addPage(new ResearchShowItem("actuator_auto_hammer",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.auto_hammer))));
         ResearchFakePage mechanical_mini_boiler = new ResearchFakePage(ResearchManager.mini_boiler, 12, 0);
         ResearchManager.steam_engine = new ResearchBase("steam_engine", new ItemStack(steam_engine), 9, 2).addAncestor(ResearchManager.gearbox).addAncestor(mechanical_mini_boiler)
                 .addPage(new ResearchBase("steam_engine_overclock",ItemStack.EMPTY,0,0));

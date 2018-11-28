@@ -12,4 +12,9 @@ public interface IMechanicallyPowered {
     default double getMaximumPower() {
         return Double.POSITIVE_INFINITY;
     }
+
+    //How much "normal" power the machine still uses in addition to mechanical.
+    default double getStandardPowerRatio() {
+        return 0;
+    }
 }
