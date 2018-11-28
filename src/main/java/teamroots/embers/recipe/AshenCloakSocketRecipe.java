@@ -20,7 +20,6 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 		int cloaks = 0;
 		int strings = 0;
 		int gems = 0;
-		if (inv.getSizeInventory() > 4){
 			for (int i = 0; i < inv.getSizeInventory(); i ++) {
 				ItemStack stack = inv.getStackInSlot(i);
 				if (stack.getItem() instanceof IInflictorGemHolder && ((IInflictorGemHolder) stack.getItem()).getAttachedGemCount(stack) == 0) {
@@ -36,7 +35,7 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 					else if (stack.getItem() == Items.STRING){
 						strings++;
 					}
-					else if (((IInflictorGemHolder)cloak.getItem()).canAttachGem(cloak,stack)){
+					else if (!cloak.isEmpty() && ((IInflictorGemHolder)cloak.getItem()).canAttachGem(cloak,stack)){
 						gems++;
 					}
 					else {
@@ -44,7 +43,6 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 					}
 				}
 			}
-		}
 		return !cloak.isEmpty() && cloaks == 1 && strings == 1 && gems > 0 && gems <= ((IInflictorGemHolder)cloak.getItem()).getGemSlots(cloak);
 	}
 
@@ -80,8 +78,7 @@ public class AshenCloakSocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> im
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		NonNullList<ItemStack> remaining = NonNullList.create();
-		//inv.clear();
+		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 		return remaining;
 	}
 

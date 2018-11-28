@@ -15,7 +15,7 @@ public class AshenCloakUnsocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
     public boolean matches(InventoryCrafting inv, World worldIn) {
         ItemStack cloak = ItemStack.EMPTY;
         int cloaks = 0;
-        if (inv.getSizeInventory() > 4) {
+
             for (int i = 0; i < inv.getSizeInventory(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
                 if (!stack.isEmpty()) {
@@ -29,7 +29,6 @@ public class AshenCloakUnsocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
                     }
                 }
             }
-        }
         return !cloak.isEmpty() && cloaks == 1 && inv.getSizeInventory() >= ((IInflictorGemHolder) cloak.getItem()).getAttachedGemCount(cloak);
     }
 
@@ -54,20 +53,21 @@ public class AshenCloakUnsocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        NonNullList<ItemStack> gems = NonNullList.create();
+        NonNullList<ItemStack> gems = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+        int index = 0;
         for (int i = 0; i < inv.getSizeInventory(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof IInflictorGemHolder) {
                     for (ItemStack gem : ((IInflictorGemHolder) stack.getItem()).getAttachedGems(stack)) {
                         if (!gem.isEmpty()) {
-                            gems.add(gem);
+                            gems.set(index,gem);
+                            index++;
                         }
                     }
                 }
             }
         }
-        //inv.clear();
         return gems;
     }
 
@@ -75,5 +75,4 @@ public class AshenCloakUnsocketRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
     public boolean canFit(int width, int height) {
         return width * height >= 1;
     }
-
 }

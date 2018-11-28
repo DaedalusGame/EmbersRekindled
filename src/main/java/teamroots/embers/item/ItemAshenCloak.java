@@ -43,7 +43,7 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 
 	@Override
 	public boolean canAttachGem(ItemStack holder, ItemStack gem) {
-		return holder.getItem() instanceof IInflictorGem;
+		return gem.getItem() instanceof IInflictorGem;
 	}
 
 	@Override
