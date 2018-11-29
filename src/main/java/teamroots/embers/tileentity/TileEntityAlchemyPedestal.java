@@ -53,7 +53,17 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 
 		@Nonnull
 		@Override
+		public ItemStack extractItem(int slot, int amount, boolean simulate) {
+			if(TileEntityAlchemyPedestal.this.active > 0)
+				return ItemStack.EMPTY;
+			return super.extractItem(slot, amount, simulate);
+		}
+
+		@Nonnull
+		@Override
 		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+			if(TileEntityAlchemyPedestal.this.active > 0)
+				return stack;
 			return slot == stackAsh && !ItemUtil.matchesOreDict(stack,"dustAsh") ? this.insertItem(slot + 1, stack, simulate) : super.insertItem(slot, stack, simulate);
 		}
 	};
