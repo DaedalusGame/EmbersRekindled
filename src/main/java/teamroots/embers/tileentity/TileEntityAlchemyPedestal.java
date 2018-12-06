@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
@@ -38,35 +39,8 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	int ash = 0;
 	int stackAsh = 0;
 	int stackItem = 1;
-	public ItemStackHandler inventory = new ItemStackHandler(2){
-        @Override
-        protected void onContentsChanged(int slot) {
-            // We need to tell the tile entity that something has changed so
-            // that the chest contents is persisted
-        	TileEntityAlchemyPedestal.this.markDirty();
-        }
-
-		@Override
-		public int getSlotLimit(int slot) {
-			return slot == stackItem ? 1 : super.getSlotLimit(slot);
-		}
-
-		@Nonnull
-		@Override
-		public ItemStack extractItem(int slot, int amount, boolean simulate) {
-			if(TileEntityAlchemyPedestal.this.active > 0)
-				return ItemStack.EMPTY;
-			return super.extractItem(slot, amount, simulate);
-		}
-
-		@Nonnull
-		@Override
-		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-			if(TileEntityAlchemyPedestal.this.active > 0)
-				return stack;
-			return slot == stackAsh && !ItemUtil.matchesOreDict(stack,"dustAsh") ? this.insertItem(slot + 1, stack, simulate) : super.insertItem(slot, stack, simulate);
-		}
-	};
+	public ItemStackHandler inventory;
+	IItemHandler externalInventory;
 	Random random = new Random();
 
 	public static final int SOUND_PROCESS = 1;
@@ -77,6 +51,40 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	
 	public TileEntityAlchemyPedestal(){
 		super();
+		inventory = new ItemStackHandler(2){
+            @Override
+            protected void onContentsChanged(int slot) {
+                // We need to tell the tile entity that something has changed so
+                // that the chest contents is persisted
+                TileEntityAlchemyPedestal.this.markDirty();
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return slot == stackItem ? 1 : super.getSlotLimit(slot);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return super.extractItem(slot, amount, simulate);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                return slot == stackAsh && !ItemUtil.matchesOreDict(stack,"dustAsh") ? this.insertItem(slot + 1, stack, simulate) : super.insertItem(slot, stack, simulate);
+            }
+        };
+		externalInventory = Misc.makeBlockedItemHandler(inventory,this::isNotActive,this::isNotActive);
+	}
+
+	private boolean isNotActive() {
+		return !isActive();
+	}
+
+	public boolean isActive() {
+		return this.active > 0;
 	}
 
 	public void setActive(int time) {
@@ -123,7 +131,7 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return (T)this.inventory;
+			return (T)this.externalInventory;
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -141,25 +149,25 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 			boolean isAsh = ItemUtil.matchesOreDict(heldItem,"dustAsh");
 
 			if (isAsh)
-				player.setHeldItem(hand, inventory.insertItem(stackAsh,heldItem,false));
+				player.setHeldItem(hand, externalInventory.insertItem(stackAsh,heldItem,false));
 			else
-				player.setHeldItem(hand, inventory.insertItem(stackItem,heldItem,false));
+				player.setHeldItem(hand, externalInventory.insertItem(stackItem,heldItem,false));
 			markDirty();
 			return true;
 		}
 		else {
-			ItemStack ashStack = inventory.getStackInSlot(stackAsh);
-			ItemStack itemStack = inventory.getStackInSlot(stackItem);
+			ItemStack ashStack = externalInventory.getStackInSlot(stackAsh);
+			ItemStack itemStack = externalInventory.getStackInSlot(stackItem);
 			if (!ashStack.isEmpty()){
 				if (!world.isRemote){
-					player.setHeldItem(hand, inventory.extractItem(stackAsh, ashStack.getCount(), false));
+					player.setHeldItem(hand, externalInventory.extractItem(stackAsh, ashStack.getCount(), false));
 					markDirty();
 				}
 				return true;
 			}
 			else if (!itemStack.isEmpty()) {
 				if (!world.isRemote) {
-					player.setHeldItem(hand, inventory.extractItem(stackItem, itemStack.getCount(), false));
+					player.setHeldItem(hand, externalInventory.extractItem(stackItem, itemStack.getCount(), false));
 					markDirty();
 				}
 				return true;
@@ -211,7 +219,7 @@ public class TileEntityAlchemyPedestal extends TileEntity implements ITileEntity
 
 	@Override
 	public boolean shouldPlaySound(int id) {
-		return id == SOUND_PROCESS && active > 0;
+		return id == SOUND_PROCESS && isActive();
 	}
 
 	@Override
