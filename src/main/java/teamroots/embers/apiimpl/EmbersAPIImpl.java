@@ -1,6 +1,8 @@
 package teamroots.embers.apiimpl;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +18,7 @@ import teamroots.embers.api.misc.IFuel;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.itemmod.ModifierShiftingScales;
 import teamroots.embers.tileentity.TileEntityCatalyzer;
 import teamroots.embers.tileentity.TileEntityCombustor;
 import teamroots.embers.util.*;
@@ -248,5 +251,17 @@ public class EmbersAPIImpl implements IEmbersAPI {
     @Override
     public void removeEmber(EntityPlayer player, double amount) {
         EmberInventoryUtil.removeEmber(player, amount);
+    }
+
+    @Override
+    public double getScales(EntityLivingBase entity) {
+        IAttributeInstance instance = entity.getEntityAttribute(ModifierShiftingScales.SCALES);
+        return instance.getBaseValue();
+    }
+
+    @Override
+    public void setScales(EntityLivingBase entity, double scales) {
+        IAttributeInstance instance = entity.getEntityAttribute(ModifierShiftingScales.SCALES);
+        instance.setBaseValue(scales);
     }
 }

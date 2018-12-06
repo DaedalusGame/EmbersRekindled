@@ -1,6 +1,7 @@
 package teamroots.embers.api;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -62,4 +63,8 @@ public interface IEmbersAPI {
     double getEmberCapacityTotal(EntityPlayer player);
 
     void removeEmber(EntityPlayer player, double amount);
+
+    double getScales(EntityLivingBase entity);
+
+    void setScales(EntityLivingBase entity, double scales);
 }

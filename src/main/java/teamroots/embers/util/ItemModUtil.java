@@ -1,5 +1,6 @@
 package teamroots.embers.util;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
@@ -234,7 +235,7 @@ public class ItemModUtil {
 		return false;
 	}
 	
-	public static int getArmorMod(EntityPlayer p, String name){
+	public static int getArmorMod(EntityLivingBase p, String name){
 		int maxLevel = 0;
 		if (hasHeat(p.getItemStackFromSlot(EntityEquipmentSlot.HEAD))){
 			int l = getModifierLevel(p.getItemStackFromSlot(EntityEquipmentSlot.HEAD),name);

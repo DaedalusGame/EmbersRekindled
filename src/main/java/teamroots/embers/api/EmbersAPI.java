@@ -1,6 +1,7 @@
 package teamroots.embers.api;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,9 @@ public class EmbersAPI {
     public static ModifierBase FOCAL_LENS;
     public static ModifierBase TINKER_LENS;
     public static ModifierBase ANTI_TINKER_LENS;
+    public static ModifierBase SHIFTING_SCALES;
+    public static ModifierBase WINDING_GEARS;
+    public static ModifierBase CORE_STONE;
 
     public static void registerModifier(Item item, ModifierBase modifier) {
         IMPL.registerModifier(item, modifier);
@@ -121,5 +125,13 @@ public class EmbersAPI {
 
     public static void removeEmber(EntityPlayer player, double amount){
         IMPL.removeEmber(player, amount);
+    }
+
+    public static double getScales(EntityLivingBase entity) {
+        return IMPL.getScales(entity);
+    }
+
+    public static void setScales(EntityLivingBase entity, double scales) {
+        IMPL.setScales(entity,scales);
     }
 }
