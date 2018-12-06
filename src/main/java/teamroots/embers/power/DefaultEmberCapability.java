@@ -36,7 +36,7 @@ public class DefaultEmberCapability implements IEmberCapability {
 				onContentsChanged();
 			ember += added;
 		}
-		return value;
+		return added;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class DefaultEmberCapability implements IEmberCapability {
 				onContentsChanged();
 			ember -= removed;
 		}
-		return value;
+		return removed;
 	}
 
 	@Override
