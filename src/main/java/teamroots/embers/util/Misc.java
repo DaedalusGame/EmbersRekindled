@@ -1,5 +1,6 @@
 package teamroots.embers.util;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
@@ -39,6 +40,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 
 public class Misc {
@@ -329,8 +331,44 @@ public class Misc {
             float vx = xOffset * speed + random.nextFloat() * speed * 0.3f;
             float vy = yOffset * speed + random.nextFloat() * speed * 0.3f;
             float vz = zOffset * speed + random.nextFloat() * speed * 0.3f;
-            ParticleUtil.spawnParticleVapor(world, pos.getX() + 0.5f + xOffset * radius, pos.getY() + 0.5f + yOffset * radius, pos.getZ() + 0.5f + zOffset * radius, vx, vy, vz, 64, 64, 64, 64, 0.2f, 3.0f, 40);
+            ParticleUtil.spawnParticleVapor(world, pos.getX() + 0.5f + xOffset * radius, pos.getY() + 0.5f + yOffset * radius, pos.getZ() + 0.5f + zOffset * radius, vx, vy, vz, 64, 64, 64, 1.0f, 0.2f, 3.0f, 40);
         }
+    }
+
+    public static IItemHandler makeBlockedItemHandler(IItemHandler handler, BooleanSupplier canInput, BooleanSupplier canOutput) {
+        return new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return handler.getSlots();
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return handler.getStackInSlot(slot);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                if(!canInput.getAsBoolean())
+                    return stack;
+                return handler.insertItem(slot,stack,simulate);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if(!canOutput.getAsBoolean())
+                    return ItemStack.EMPTY;
+                return handler.extractItem(slot,amount,simulate);
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return handler.getSlotLimit(slot);
+            }
+        };
     }
 
     public static IItemHandler makeRestrictedItemHandler(IItemHandler handler, boolean input, boolean output) {

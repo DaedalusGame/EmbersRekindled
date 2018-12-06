@@ -1,7 +1,6 @@
 package teamroots.embers;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -24,10 +23,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -39,6 +41,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -73,6 +76,7 @@ import teamroots.embers.network.message.MessageTyrfingBurstFX;
 import teamroots.embers.proxy.ClientProxy;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
+import teamroots.embers.tileentity.TileEntityExplosionPedestal;
 import teamroots.embers.tileentity.TileEntityMechAccessor;
 import teamroots.embers.util.EmberGenUtil;
 import teamroots.embers.util.Misc;
@@ -83,6 +87,45 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class EventManager {
+    public static class ExplosionCharmWorldInfo { //basicly a k-d tree
+        HashMultimap<ChunkPos, BlockPos> data = HashMultimap.create();
+
+        public ExplosionCharmWorldInfo() {
+        }
+
+        public void put(BlockPos pos) {
+            ChunkPos chunkPos = new ChunkPos(pos);
+            data.put(chunkPos, pos);
+        }
+
+        public BlockPos getClosestExplosionCharm(World world, BlockPos pos, int radius) {
+            BlockPos chosen = null;
+            double minDistance = Double.POSITIVE_INFINITY;
+            ChunkPos chunkPosA = new ChunkPos(pos.add(-radius, 0, -radius));
+            ChunkPos chunkPosB = new ChunkPos(pos.add(radius, 0, radius));
+            for (int x = chunkPosA.x; x <= chunkPosB.x; x++)
+                for (int z = chunkPosA.z; z <= chunkPosB.z; z++) {
+                    ChunkPos chunkPos = new ChunkPos(x, z);
+                    Iterator<BlockPos> iterator = data.get(chunkPos).iterator();
+                    while(iterator.hasNext())
+                    {
+                        BlockPos testpos = iterator.next();
+                        double testdist = testpos.distanceSq(pos.getX(), pos.getY(), pos.getZ());
+                        if (testdist >= minDistance || testdist > radius * radius)
+                            continue;
+                        TileEntity tile = world.getTileEntity(testpos);
+                        if (tile instanceof TileEntityExplosionPedestal && !tile.isInvalid()) {
+                            chosen = testpos;
+                            minDistance = testdist;
+                        } else {
+                            iterator.remove();
+                        }
+                    }
+                }
+            return chosen;
+        }
+    }
+
     double gaugeAngle = 0;
     public static boolean hasRenderedParticles = false;
     Random random = new Random();
@@ -101,6 +144,8 @@ public class EventManager {
     public static int ticks = 0;
     public static float prevCooledStrength = 0;
     public static boolean acceptUpdates = true;
+
+    public static WeakHashMap<World,ExplosionCharmWorldInfo> explosionCharmData = new WeakHashMap<>();
 
     //public static Map<BlockPos, TileEntity> toUpdate = new HashMap<BlockPos, TileEntity>();
     //public static Map<BlockPos, TileEntity> overflow = new HashMap<BlockPos, TileEntity>();
@@ -125,6 +170,32 @@ public class EventManager {
 			}
 		}
 	}*/
+
+    @SubscribeEvent
+    public void onExplosion(ExplosionEvent.Start event)
+    {
+        World world = event.getWorld();
+        Explosion explosion = event.getExplosion();
+        ExplosionCharmWorldInfo data = explosionCharmData.get(world);
+        if(data == null)
+            return;
+        BlockPos charmPos = data.getClosestExplosionCharm(world,new BlockPos(explosion.getPosition()),8);
+        if(charmPos != null) {
+            TileEntity tile = world.getTileEntity(charmPos);
+            if(tile instanceof TileEntityExplosionPedestal) {
+                ((TileEntityExplosionPedestal) tile).absorb(explosion);
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    public static void putExplosionCharm(World world, BlockPos pos)
+    {
+        if(!explosionCharmData.containsKey(world))
+            explosionCharmData.put(world, new ExplosionCharmWorldInfo());
+        ExplosionCharmWorldInfo data = explosionCharmData.get(world);
+        data.put(pos);
+    }
 
     private static ThreadLocal<Boolean> captureDrops = ThreadLocal.withInitial(() -> false);
     private static ThreadLocal<NonNullList<ItemStack>> capturedDrops = ThreadLocal.withInitial(NonNullList::create);
@@ -360,9 +431,9 @@ public class EventManager {
         addCapabilityItemDescription(text, tile, facing);
         addCapabilityFluidDescription(text, tile, facing);
         addCapabilityEmberDescription(text, tile, facing);
-        if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
-            MysticalMechanicsIntegration.addCapabilityInformation(text,tile,facing);
-        if (tile.hasCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY,facing))
+        if (ConfigManager.isMysticalMechanicsIntegrationEnabled())
+            MysticalMechanicsIntegration.addCapabilityInformation(text, tile, facing);
+        if (tile.hasCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY, facing))
             text.add(I18n.format("embers.tooltip.goggles.upgrade"));
         if (TileEntityMechAccessor.canAccess(tile))
             text.add(I18n.format("embers.tooltip.goggles.accessor_slot"));
@@ -374,11 +445,11 @@ public class EventManager {
 
     public static void addCapabilityItemDescription(List<String> text, TileEntity tile, EnumFacing facing) {
         Capability<IItemHandler> capability = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-        if(tile.hasCapability(capability,facing)) {
+        if (tile.hasCapability(capability, facing)) {
             IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
             String filter = null;
-            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
-                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            if (tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability, facing);
             } else {
                 text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.item", filter));
             }
@@ -387,24 +458,24 @@ public class EventManager {
 
     public static void addCapabilityFluidDescription(List<String> text, TileEntity tile, EnumFacing facing) {
         Capability<IFluidHandler> capability = CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
-        if(tile.hasCapability(capability,facing)) {
+        if (tile.hasCapability(capability, facing)) {
             IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
             String filter = null;
-            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
-                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            if (tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability, facing);
             } else {
                 IFluidHandler handler = tile.getCapability(capability, facing);
-                for(IFluidTankProperties properties : handler.getTankProperties()) {
+                for (IFluidTankProperties properties : handler.getTankProperties()) {
                     boolean input = properties.canFill();
                     boolean output = properties.canDrain();
-                    if(!input && !output)
+                    if (!input && !output)
                         ioType = IExtraCapabilityInformation.EnumIOType.NONE;
-                    else if(input && !output)
+                    else if (input && !output)
                         ioType = IExtraCapabilityInformation.EnumIOType.INPUT;
-                    else if(output && !input)
+                    else if (output && !input)
                         ioType = IExtraCapabilityInformation.EnumIOType.OUTPUT;
                 }
-                text.add(IExtraCapabilityInformation.formatCapability(ioType,"embers.tooltip.goggles.fluid",filter));
+                text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.fluid", filter));
             }
 
         }
@@ -412,10 +483,10 @@ public class EventManager {
 
     public static void addCapabilityEmberDescription(List<String> text, TileEntity tile, EnumFacing facing) {
         Capability<IEmberCapability> capability = EmbersCapabilities.EMBER_CAPABILITY;
-        if(tile.hasCapability(capability,facing)) {
+        if (tile.hasCapability(capability, facing)) {
             IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
-            if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
-                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
+            if (tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
+                ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability, facing);
             } else {
                 text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.ember", null));
             }
@@ -498,7 +569,7 @@ public class EventManager {
                     addHeat(player, s, 1.0f);
                 }
                 /*if (event.getPlayer().getHeldItemMainhand().getItem() instanceof IEmberChargedTool){
-					PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
+                    PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getPos().getX()+0.5,event.getPos().getY()+0.5,event.getPos().getZ()+0.5));
 				}*/
                 if (player.getHeldItemMainhand().getItem() instanceof ItemGrandhammer) {
                     event.setCanceled(true);
