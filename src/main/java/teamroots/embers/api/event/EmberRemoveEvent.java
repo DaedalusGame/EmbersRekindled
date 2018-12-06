@@ -14,6 +14,7 @@ public class EmberRemoveEvent extends Event {
 	
 	public EmberRemoveEvent(EntityPlayer player, double amount){
 		this.player = player;
+		this.originalAmount = amount;
 		this.amount = amount;
 	}
 	
