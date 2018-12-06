@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "embers:ember_siphon"
+  },
+  "variants":{
+    "normal":[{}],
+    "inventory":[{ "transform": "forge:default-block" }]
+  }
+}

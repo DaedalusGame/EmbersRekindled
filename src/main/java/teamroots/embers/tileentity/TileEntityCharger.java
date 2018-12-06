@@ -157,13 +157,19 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 		ItemStack stack = inventory.getStackInSlot(0);
 		isWorking = false;
 
-		if (capability.getEmber() > 0 && stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
+		if (stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
 			if(!cancel) {
 				IEmberCapability itemCapability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
 				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER;
-				double emberAdded = itemCapability.addAmount(Math.min(transferRate, capability.getEmber()), true);
-				capability.removeAmount(emberAdded, true);
+				double emberAdded;
+				if(transferRate > 0) {
+					emberAdded = itemCapability.addAmount(Math.min(Math.abs(transferRate), capability.getEmber()), true);
+					capability.removeAmount(emberAdded, true);
+				} else {
+					emberAdded = capability.addAmount(Math.min(Math.abs(transferRate), itemCapability.getEmber()), true);
+					itemCapability.removeAmount(emberAdded, true);
+				}
 				if (emberAdded > 0)
 					isWorking = true;
 				markDirty();
