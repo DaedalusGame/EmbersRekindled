@@ -248,12 +248,11 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
 
     @Override
     public boolean hasCapabilityDescription(Capability<?> capability) {
-        return capability == MysticalMechanicsAPI.MECH_CAPABILITY;
+        return false;
     }
 
     @Override
     public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
-        if(capability == MysticalMechanicsAPI.MECH_CAPABILITY && getFacing().getAxis() != facing.getAxis())
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.mechanical",null));
+        //NOOP
     }
 }

@@ -332,7 +332,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
 
     @Override
     public boolean hasCapabilityDescription(Capability<?> capability) {
-        return true;
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
     }
 
     @Override
@@ -341,7 +341,5 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
             strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT, "embers.tooltip.goggles.item", I18n.format("embers.tooltip.goggles.item.fuel")));
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT, "embers.tooltip.goggles.fluid", I18n.format("embers.tooltip.goggles.fluid.water_or_steam")));
-        if (capability == MysticalMechanicsAPI.MECH_CAPABILITY)
-            strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT, "embers.tooltip.goggles.mechanical", null));
     }
 }

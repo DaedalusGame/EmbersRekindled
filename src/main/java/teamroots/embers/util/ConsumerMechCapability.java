@@ -59,4 +59,9 @@ public class ConsumerMechCapability implements IMechCapability {
     public void onPowerChange() {
 
     }
+
+    @Override
+    public boolean isOutput(EnumFacing from) {
+        return false;
+    }
 }
