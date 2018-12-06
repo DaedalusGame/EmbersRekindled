@@ -8,6 +8,7 @@ import teamroots.embers.research.ResearchCategory;
 
 public class ResearchSwitchCategory extends ResearchBase {
     ResearchCategory targetCategory;
+    int minEntries;
 
     public ResearchSwitchCategory(String location, ItemStack icon, double x, double y) {
         super(location, icon, x, y);
@@ -15,6 +16,11 @@ public class ResearchSwitchCategory extends ResearchBase {
 
     public ResearchSwitchCategory setTargetCategory(ResearchCategory category) {
         this.targetCategory = category;
+        return this;
+    }
+
+    public ResearchSwitchCategory setMinEntries(int entries) {
+        this.minEntries = entries;
         return this;
     }
 
@@ -28,6 +34,6 @@ public class ResearchSwitchCategory extends ResearchBase {
 
     @Override
     public boolean isHidden() {
-        return targetCategory.researches.isEmpty();
+        return targetCategory.researches.size() < minEntries;
     }
 }
