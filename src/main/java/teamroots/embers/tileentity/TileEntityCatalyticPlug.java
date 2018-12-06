@@ -157,7 +157,7 @@ public class TileEntityCatalyticPlug extends TileEntity implements ITickable, IT
                 float motionx = planar.getFrontOffsetX() * 0.03f - facing.getFrontOffsetX() * 0.015f - 0.01f + random.nextFloat() * 0.02f;
                 float motiony = planar.getFrontOffsetY() * 0.03f - facing.getFrontOffsetY() * 0.015f - 0.01f + random.nextFloat() * 0.02f;
                 float motionz = planar.getFrontOffsetZ() * 0.03f - facing.getFrontOffsetZ() * 0.015f - 0.01f + random.nextFloat() * 0.02f;
-                ParticleUtil.spawnParticleVapor(getWorld(), x, y, z, motionx, motiony, motionz, 255, 16, 16, 255, 0.4f, 2.0f, 24);
+                ParticleUtil.spawnParticleVapor(getWorld(), x, y, z, motionx, motiony, motionz, 255, 16, 16, 1.0f, 1.0f, 2.0f, 24);
             }
         }
     }

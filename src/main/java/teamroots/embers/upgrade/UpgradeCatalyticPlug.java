@@ -28,6 +28,11 @@ public class UpgradeCatalyticPlug extends DefaultUpgradeProvider {
     }
 
     @Override
+    public double transformEmberConsumption(TileEntity tile, double ember) {
+        return hasCatalyst() ? ember * 2.0 : ember; //+200% if catalyst available
+    }
+
+    @Override
     public double getSpeed(TileEntity tile, double speed) {
         return hasCatalyst() ? speed * 2.0 : speed; //+200% if catalyst available
     }
