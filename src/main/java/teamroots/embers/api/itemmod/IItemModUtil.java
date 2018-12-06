@@ -1,5 +1,6 @@
 package teamroots.embers.api.itemmod;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import teamroots.embers.Embers;
@@ -50,5 +51,5 @@ public interface IItemModUtil {
 
     void setLevel(ItemStack stack, int level);
 
-    int getArmorModifierLevel(EntityPlayer p, ModifierBase modifier);
+    int getArmorModifierLevel(EntityLivingBase p, ModifierBase modifier);
 }

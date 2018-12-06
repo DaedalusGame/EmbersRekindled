@@ -31,6 +31,10 @@ public class ModifierBase {
 	}
 
 	public boolean canApplyTo(ItemStack stack) {
+		return canApplyToType(stack,type);
+	}
+
+	protected boolean canApplyToType(ItemStack stack, EnumType type) {
 		Item item = stack.getItem();
 		switch (type) {
 			case ALL:

@@ -1,6 +1,7 @@
 package teamroots.embers.apiimpl;
 
 import com.google.common.collect.Lists;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -157,7 +158,7 @@ class ItemModUtilImpl implements IItemModUtil {
     }
 
     @Override
-    public int getArmorModifierLevel(EntityPlayer p, ModifierBase modifier) {
+    public int getArmorModifierLevel(EntityLivingBase p, ModifierBase modifier) {
         return teamroots.embers.util.ItemModUtil.getArmorMod(p,modifier.name);
     }
 }
