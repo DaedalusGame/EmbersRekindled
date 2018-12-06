@@ -49,11 +49,16 @@ import teamroots.embers.util.Misc;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 public class MysticalMechanicsIntegration {
     public static final ResourceLocation IRON_GEAR_BEHAVIOR = new ResourceLocation("mysticalmechanics", "gear_iron");
+    public static final ResourceLocation GOLD_GEAR_BEHAVIOR = new ResourceLocation("mysticalmechanics", "gear_gold");
+    public static final ResourceLocation GOLD_GEAR_ON_BEHAVIOR = new ResourceLocation("mysticalmechanics", "gear_gold_on");
+    public static final ResourceLocation GOLD_GEAR_OFF_BEHAVIOR = new ResourceLocation("mysticalmechanics", "gear_gold_off");
     public static final ResourceLocation DAWNSTONE_GEAR_BEHAVIOR = new ResourceLocation(Embers.MODID, "gear_dawnstone");
-    public static final int IRON_GEAR_MAX_POWER = 80;
+    public static final double IRON_GEAR_MAX_POWER = 80;
+    public static final double GOLD_GEAR_MAX_POWER = 320;
 
     public static Item gear_dawnstone;
 
@@ -110,9 +115,6 @@ public class MysticalMechanicsIntegration {
     {
         OreDictionary.registerOre("gearDawnstone",gear_dawnstone);
 
-        IGearBehavior ironGear = MysticalMechanicsAPI.IMPL.getGearBehavior(IRON_GEAR_BEHAVIOR);
-        MysticalMechanicsAPI.IMPL.unregisterGear(IRON_GEAR_BEHAVIOR);
-
         MysticalMechanicsAPI.IMPL.registerGear(DAWNSTONE_GEAR_BEHAVIOR, new OreIngredient("gearDawnstone"), new IGearBehavior() {
             @Override
             public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, double power) {
@@ -143,18 +145,33 @@ public class MysticalMechanicsIntegration {
                 }
             }
         });
-        MysticalMechanicsAPI.IMPL.registerGear(IRON_GEAR_BEHAVIOR, new OreIngredient("gearIron"), new IGearBehavior() {
+
+        replaceBehavior(IRON_GEAR_BEHAVIOR,new OreIngredient("gearIron"),behavior -> wrapPowerLevelBehavior(behavior,IRON_GEAR_MAX_POWER,1));
+        replaceBehavior(GOLD_GEAR_BEHAVIOR,new OreIngredient("gearGold"),behavior -> wrapPowerLevelBehavior(behavior,GOLD_GEAR_MAX_POWER,1));
+        replaceBehavior(GOLD_GEAR_ON_BEHAVIOR,Ingredient.fromItem(RegistryHandler.GOLD_GEAR_ON),behavior -> wrapPowerLevelBehavior(behavior,GOLD_GEAR_MAX_POWER,1));
+        replaceBehavior(GOLD_GEAR_OFF_BEHAVIOR,Ingredient.fromItem(RegistryHandler.GOLD_GEAR_OFF),behavior -> wrapPowerLevelBehavior(behavior,GOLD_GEAR_MAX_POWER,1));
+    }
+
+    private static void replaceBehavior(ResourceLocation name, Ingredient ingredient, Function<IGearBehavior, IGearBehavior> transformer)
+    {
+        IGearBehavior behavior = MysticalMechanicsAPI.IMPL.getGearBehavior(name);
+        MysticalMechanicsAPI.IMPL.unregisterGear(name);
+        MysticalMechanicsAPI.IMPL.registerGear(name, ingredient,transformer.apply(behavior));
+    }
+
+    private static IGearBehavior wrapPowerLevelBehavior(IGearBehavior behavior, double max_power, double slope) {
+        return new IGearBehavior() {
             @Override
             public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, double power) {
-                power = ironGear.transformPower(tile, facing, gear, power);
-                return Misc.getDiminishedPower(power,IRON_GEAR_MAX_POWER,1); //Diminishing returns
+                power = behavior.transformPower(tile, facing, gear, power);
+                return Misc.getDiminishedPower(power,max_power,slope); //Diminishing returns
             }
 
             @Override
             public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear) {
-                ironGear.visualUpdate(tile,facing,gear);
+                behavior.visualUpdate(tile,facing,gear);
             }
-        });
+        };
     }
 
     @SideOnly(Side.CLIENT)
@@ -165,9 +182,17 @@ public class MysticalMechanicsIntegration {
 
     public static void initMysticalMechanicsCategory() {
         ResearchManager.gearbox = new ResearchBase("gearbox", new ItemStack(RegistryHandler.GEARBOX_FRAME), 2, 4);
+        ResearchManager.mergebox = new ResearchBase("mergebox", new ItemStack(RegistryHandler.MERGEBOX_FRAME), 1, 6).addAncestor(ResearchManager.gearbox);
         ResearchManager.axle_iron = new ResearchBase("axle_iron", new ItemStack(RegistryHandler.IRON_AXLE), 2, 0).addAncestor(ResearchManager.gearbox);
-        ResearchManager.gear_iron = new ResearchShowItem("gear_iron", new ItemStack(RegistryHandler.IRON_GEAR), 4, 1).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryHandler.IRON_GEAR))).addAncestor(ResearchManager.gearbox)
-                .addPage(new ResearchShowItem("gear_dawnstone",new ItemStack(gear_dawnstone),0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(gear_dawnstone))));
+        ItemStack gearIron = new ItemStack(RegistryHandler.IRON_GEAR);
+        ItemStack gearGold = new ItemStack(RegistryHandler.GOLD_GEAR);
+        ItemStack gearDawnstone = new ItemStack(gear_dawnstone);
+        ItemStack gearGoldOn = new ItemStack(RegistryHandler.GOLD_GEAR_ON);
+        ItemStack gearGoldOff = new ItemStack(RegistryHandler.GOLD_GEAR_OFF);
+        ResearchManager.gear_iron = new ResearchShowItem("gear_iron", gearIron, 4, 1).addItem(new ResearchShowItem.DisplayItem(gearIron)).addAncestor(ResearchManager.gearbox)
+                .addPage(new ResearchShowItem("gear_gold", gearGold,0,0).addItem(new ResearchShowItem.DisplayItem(gearGold)))
+                .addPage(new ResearchShowItem("gear_redstone", gearGoldOn,0,0).addItem(new ResearchShowItem.DisplayItem(gearGoldOff,gearGoldOn)))
+                .addPage(new ResearchShowItem("gear_dawnstone", gearDawnstone,0,0).addItem(new ResearchShowItem.DisplayItem(gearDawnstone)));
         ResearchManager.actuator = new ResearchBase("actuator", new ItemStack(mech_actuator), 9, 5).addAncestor(ResearchManager.gearbox)
                 .addPage(new ResearchShowItem("actuator_bore",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.ember_bore))))
                 .addPage(new ResearchShowItem("actuator_pump",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.mechanical_pump))))
@@ -180,6 +205,7 @@ public class MysticalMechanicsIntegration {
 
 
         ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.gearbox);
+        ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.mergebox);
         ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.axle_iron);
         ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.gear_iron);
         ResearchManager.subCategoryMechanicalPower.addResearch(ResearchManager.actuator);
@@ -195,12 +221,28 @@ public class MysticalMechanicsIntegration {
     public static void addCapabilityMechanicalDescription(List<String> text, TileEntity tile, EnumFacing facing) {
         Capability<IMechCapability> capability = MysticalMechanicsAPI.MECH_CAPABILITY;
         if(tile.hasCapability(capability,facing)) {
-            IExtraCapabilityInformation.EnumIOType ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
+            IMechCapability mechCapability = tile.getCapability(capability,facing);
+            boolean canInput = mechCapability.isInput(facing);
+            boolean canOutput = mechCapability.isOutput(facing);
+            IExtraCapabilityInformation.EnumIOType ioType = getEnumIOType(canInput, canOutput);
             if(tile instanceof IExtraCapabilityInformation && ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability)) {
                 ((IExtraCapabilityInformation) tile).addCapabilityDescription(text, capability,facing);
             } else {
                 text.add(IExtraCapabilityInformation.formatCapability(ioType, "embers.tooltip.goggles.mechanical", null));
             }
         }
+    }
+
+    private static IExtraCapabilityInformation.EnumIOType getEnumIOType(boolean canInput, boolean canOutput) {
+        IExtraCapabilityInformation.EnumIOType ioType;
+        if(canInput && canOutput)
+            ioType = IExtraCapabilityInformation.EnumIOType.BOTH;
+        else if(canInput)
+            ioType = IExtraCapabilityInformation.EnumIOType.INPUT;
+        else if(canOutput)
+            ioType = IExtraCapabilityInformation.EnumIOType.OUTPUT;
+        else
+            ioType = IExtraCapabilityInformation.EnumIOType.NONE;
+        return ioType;
     }
 }
