@@ -536,6 +536,7 @@ public class EventManager {
         if (event.getSource().getTrueSource() != null) {
             if (event.getSource().getTrueSource() instanceof EntityPlayer) {
                 if (((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand().getItem() == RegistryManager.tyrfing) {
+                    event.getEntity().playSound(SoundManager.TYRFING_HIT,1.0f,1.0f);
                     if (!event.getEntity().world.isRemote) {
                         PacketHandler.INSTANCE.sendToAll(new MessageTyrfingBurstFX(event.getEntity().posX, event.getEntity().posY + event.getEntity().height / 2.0f, event.getEntity().posZ));
                     }

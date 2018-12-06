@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.ConfigManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.ScaleEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
@@ -170,8 +172,12 @@ public class ModifierShiftingScales extends ModifierBase {
         double damage = totalDamage * multiplier;
         double scales = EmbersAPI.getScales(entity);
         double absorbed = Math.min(scales, damage);
+        double prevScales = scales;
         scales -= absorbed;
         damage -= absorbed;
+        if((int)scales < (int)prevScales) {
+            entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundManager.SHIFTING_SCALES_BREAK, entity instanceof EntityPlayer ? SoundCategory.PLAYERS : SoundCategory.HOSTILE, 10.0f, 1.0f);
+        }
         EmbersAPI.setScales(entity, scales);
         event.setAmount((float) ((damage == 0 ? 0 : damage / multiplier) + extraDamage));
     }

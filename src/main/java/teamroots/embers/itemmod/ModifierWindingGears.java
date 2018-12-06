@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
@@ -177,7 +178,7 @@ public class ModifierWindingGears extends ModifierBase {
         ItemStack stack = getHeldClockworkTool(entity);
         if(!stack.isEmpty() && isClockworkTool(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET))) {
             double charge = getCharge(entity.world, stack);
-            double cost = charge * (80.0/500.0);
+            double cost = Math.max(16,charge * (80.0/500.0));
             if(charge > 0)
             {
                 if(entity.isSprinting() && charge > Math.max(40,cost*1.5)) {
@@ -186,6 +187,8 @@ public class ModifierWindingGears extends ModifierBase {
                     cost = Math.max(40,cost*1.5);
                 }
                 entity.motionY += MathHelper.clampedLerp(0.0,7.0/20.0,charge / 500.0);
+                if(charge >= cost)
+                    entity.playSound(SoundManager.WINDING_GEARS_SPRING,1.0f,1.5f);
             }
 
             if(!entity.world.isRemote)

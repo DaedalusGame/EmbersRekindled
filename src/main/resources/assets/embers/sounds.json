@@ -625,6 +625,25 @@
       "embers:bauble_unequip"
     ]
   },
+  "item.tyrfing.hit": {
+    "sounds": [
+      "embers:tyrfing_hit1",
+      "embers:tyrfing_hit2"
+    ]
+  },
+  "item.scale.break": {
+    "sounds": [
+      "embers:scale_heart_break1",
+      "embers:scale_heart_break2",
+      "embers:scale_heart_break3",
+      "embers:scale_heart_break4"
+    ]
+  },
+  "item.windup.spring": {
+    "sounds": [
+      "embers:spring"
+    ]
+  },
   "entity.ancient_golem.death": {
     "sounds": [
       "embers:agolem/die"

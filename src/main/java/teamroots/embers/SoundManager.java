@@ -222,6 +222,13 @@ public class SoundManager {
     @GameRegistry.ObjectHolder("embers:item.bauble.unequip")
     public static SoundEvent BAUBLE_UNEQUIP;
 
+    @GameRegistry.ObjectHolder("embers:item.tyrfing.hit")
+    public static SoundEvent TYRFING_HIT;
+    @GameRegistry.ObjectHolder("embers:item.scale.break")
+    public static SoundEvent SHIFTING_SCALES_BREAK;
+    @GameRegistry.ObjectHolder("embers:item.windup.spring")
+    public static SoundEvent WINDING_GEARS_SPRING;
+
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.step")
     public static SoundEvent ANCIENT_GOLEM_STEP;
     @GameRegistry.ObjectHolder("embers:entity.ancient_golem.hurt")
@@ -351,6 +358,10 @@ public class SoundManager {
 
         event.getRegistry().register(registerSound("item.bauble.equip"));
         event.getRegistry().register(registerSound("item.bauble.unequip"));
+
+        event.getRegistry().register(registerSound("item.tyrfing.hit"));
+        event.getRegistry().register(registerSound("item.scale.break"));
+        event.getRegistry().register(registerSound("item.windup.spring"));
 
         event.getRegistry().register(registerSound("entity.ancient_golem.death"));
         event.getRegistry().register(registerSound("entity.ancient_golem.hurt"));
