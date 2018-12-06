@@ -9,9 +9,9 @@ import teamroots.embers.tileentity.TileEntityStampBase;
 import teamroots.embers.tileentity.TileEntityTank;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfigManager {
 
@@ -53,6 +53,19 @@ public class ConfigManager {
 	public static int stampAspectusAmount;
 	public static int stampGearAmount;
 	public static int reservoirCapacity;
+
+	static Pattern damageRatePattern = Pattern.compile("(\\w+):(\\d+(?:\\.\\d+|))");
+
+	public static String[] defaultScaleDamagePasses = new String[] {
+			"drown:1.0",
+			"starve:1.0",
+	};
+	public static String[] defaultScaleDamageRates = new String[] {
+
+	};
+
+	public static Map<String,Double> scaleDamagePasses = new HashMap<>();
+	public static Map<String,Double> scaleDamageRates = new HashMap<>();
 
 	public static boolean isBaublesIntegrationEnabled() {
 		return enableBaublesIntegration && Loader.isModLoaded("baubles");
@@ -149,6 +162,23 @@ public class ConfigManager {
 		TileEntityTank.capacity = config.getInt("tankCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into the Fluid Vessel.");
 		reservoirCapacity = config.getInt("reservoirCapacity", "parameters", Fluid.BUCKET_VOLUME * 40, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
 
+		scaleDamagePasses.clear();
+		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))
+		{
+			Matcher matcher = damageRatePattern.matcher(pair);
+			if(matcher.matches()) {
+				scaleDamagePasses.put(matcher.group(1),Double.parseDouble(matcher.group(2)));
+			}
+		}
+
+		scaleDamageRates.clear();
+		for(String pair : config.getStringList("scaleDamageRates","parameters",defaultScaleDamageRates,"Syntax is 'damagetype:rate'. Specifies a separate damage rate for depleting the scales."))
+		{
+			Matcher matcher = damageRatePattern.matcher(pair);
+			if(matcher.matches()) {
+				scaleDamageRates.put(matcher.group(1),Double.parseDouble(matcher.group(2)));
+			}
+		}
 
 		if (config.hasChanged())
 		{

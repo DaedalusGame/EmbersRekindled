@@ -26,19 +26,19 @@ public class ResearchManager {
     public static List<ResearchCategory> researches = new ArrayList<ResearchCategory>();
 
     public static ResearchBase dials, boiler, mini_boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, tinker_lens,//WORLD
-            copper_cell, emitters, dawnstone, melter, stamper, mixer, breaker, hearth_coil, access, pump, //MECHANISMS
-            beam_cannon, pulser, splitter, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, catalytic_plug, //METALLURGY
+            copper_cell, emitters, dawnstone, melter, stamper, mixer, breaker, hearth_coil, access, pump, clockwork_attenuator, //MECHANISMS
+            beam_cannon, pulser, splitter, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, catalytic_plug, ember_siphon, //METALLURGY
             tyrfing, waste, cluster, ashen_cloak, inflictor, materia, field_chart, glimmer, metallurgic_dust, //ALCHEMY
             modifiers, inferno_forge, heat, dawnstone_anvil, autohammer, dismantling //SMITHING
             ;
     public static ResearchBase pipes, tank, bin, dropper, reservoir, vacuum, transfer; //PIPES
     public static ResearchBase adhesive, hellish_synthesis, archaic_brick, motive_core; //SIMPLE ALCHEMY
-    public static ResearchBase wildfire, combustor, catalyzer, reactor, injector; //WILDFIRE
-    public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core; //WEAPON AUGMENTS
-    public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier, tinker_lens_augment, anti_tinker_lens; //ARMOR_AUGMENTS
+    public static ResearchBase wildfire, combustor, catalyzer, reactor, injector, stirling; //WILDFIRE
+    public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core, core_stone, winding_gears; //WEAPON AUGMENTS
+    public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier, tinker_lens_augment, anti_tinker_lens, shifting_scales; //ARMOR_AUGMENTS
     public static ResearchBase diffraction_barrel, focal_lens; //PROJECTILE_AUGMENTS
-    public static ResearchBase cost_reduction, mantle_bulb, explosion_charm, nonbeliever_amulet, ashen_amulet, dawnstone_mail; //BAUBLE
-    public static ResearchBase gearbox, axle_iron, gear_iron, actuator, steam_engine; //MECHANICAL POWER
+    public static ResearchBase cost_reduction, mantle_bulb, explosion_charm, nonbeliever_amulet, ashen_amulet, dawnstone_mail, explosion_pedestal; //BAUBLE
+    public static ResearchBase gearbox, mergebox, axle_iron, gear_iron, actuator, steam_engine; //MECHANICAL POWER
 
     public static ResearchCategory categoryWorld;
     public static ResearchCategory categoryMechanisms;
@@ -112,14 +112,16 @@ public class ResearchManager {
         breaker = new ResearchBase("breaker", new ItemStack(RegistryManager.breaker), 4, 7).addAncestor(stamper);
         dawnstone = new ResearchBase("dawnstone", new ItemStack(RegistryManager.ingot_dawnstone), 11, 4).addAncestor(mixer);
         copper_cell = new ResearchBase("copper_cell", new ItemStack(RegistryManager.copper_cell), 0, 5).addAncestor(emitters);
+        clockwork_attenuator = new ResearchBase("clockwork_attenuator", new ItemStack(RegistryManager.clockwork_attenuator), 12, 7);
 
         //METALLURGY
         crystal_cell = new ResearchBase("crystal_cell", new ItemStack(RegistryManager.crystal_cell), 0, 1);
         pulser = new ResearchShowItem("pulser", new ItemStack(RegistryManager.ember_pulser), 0, 3.5).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_pulser))).addAncestor(crystal_cell)
                 .addPage(new ResearchShowItem("ember_funnel",new ItemStack(RegistryManager.ember_funnel),0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_funnel))));
-        charger = new ResearchBase("charger", new ItemStack(RegistryManager.charger), 3, 0);
+        charger = new ResearchBase("charger", new ItemStack(RegistryManager.charger), 4, 0);
+        ember_siphon = new ResearchBase("ember_siphon", new ItemStack(RegistryManager.ember_siphon), 2, 0).addAncestor(ResearchManager.charger);
         ItemStack fullJar = ((ItemEmberStorage)RegistryManager.ember_jar).withFill(((ItemEmberStorage)RegistryManager.ember_jar).getCapacity());
-        jars = new ResearchBase("jars", fullJar, 6, 1).addAncestor(charger);
+        jars = new ResearchBase("jars", fullJar, 7, 1).addAncestor(charger);
         clockwork_tools = new ResearchBase("clockwork_tools", new ItemStack(RegistryManager.axe_clockwork), 2, 2).addAncestor(jars)
                 .addPage(new ResearchShowItem("clockwork_pickaxe",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.pickaxe_clockwork))))
                 .addPage(new ResearchShowItem("clockwork_hammer",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.grandhammer))))
@@ -165,6 +167,7 @@ public class ResearchManager {
                 .addItem(new DisplayItem("catalyzer_glowstone",new ItemStack(Items.GLOWSTONE_DUST)))
         );
         reactor = new ResearchBase("reactor", new ItemStack(RegistryManager.reactor), 9, 7).addAncestor(combustor).addAncestor(catalyzer);
+        stirling = new ResearchBase("stirling", new ItemStack(RegistryManager.stirling), 0, 2).addAncestor(ResearchManager.wildfire);
 
         //SMITHING
         dawnstone_anvil = new ResearchBase("dawnstone_anvil", new ItemStack(RegistryManager.dawnstone_anvil), 12, 7);
@@ -178,6 +181,8 @@ public class ResearchManager {
         blasting_core = new ResearchBase("blasting_core", new ItemStack(RegistryManager.blasting_core), subCategoryWeaponAugments.popGoodLocation());
         caster_orb = new ResearchBase("caster_orb", new ItemStack(RegistryManager.caster_orb), subCategoryWeaponAugments.popGoodLocation()).addPage(new ResearchBase("caster_orb_addendum",ItemStack.EMPTY,0,0));
         resonating_bell = new ResearchBase("resonating_bell", new ItemStack(RegistryManager.resonating_bell), subCategoryWeaponAugments.popGoodLocation());
+        core_stone = new ResearchBase("core_stone", new ItemStack(RegistryManager.core_stone), subCategoryWeaponAugments.popGoodLocation());
+        winding_gears = new ResearchBase("winding_gears", new ItemStack(RegistryManager.winding_gears), subCategoryWeaponAugments.popGoodLocation()).addPage(new ResearchShowItem("winding_gears_boots",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(Items.IRON_BOOTS))));
 
         eldritch_insignia = new ResearchBase("eldritch_insignia", new ItemStack(RegistryManager.eldritch_insignia), subCategoryArmorAugments.popGoodLocation());
         intelligent_apparatus = new ResearchBase("intelligent_apparatus", new ItemStack(RegistryManager.intelligent_apparatus), subCategoryArmorAugments.popGoodLocation());
@@ -185,6 +190,7 @@ public class ResearchManager {
         cinder_jet = new ResearchBase("cinder_jet", new ItemStack(RegistryManager.jet_augment), subCategoryArmorAugments.popGoodLocation());
         tinker_lens_augment = new ResearchBase("tinker_lens_augment", new ItemStack(RegistryManager.tinker_lens), subCategoryArmorAugments.popGoodLocation());
         anti_tinker_lens = new ResearchBase("anti_tinker_lens", new ItemStack(RegistryManager.anti_tinker_lens), subCategoryArmorAugments.popGoodLocation()).addAncestor(tinker_lens_augment);
+        shifting_scales = new ResearchBase("shifting_scales", new ItemStack(RegistryManager.shifting_scales), subCategoryArmorAugments.popGoodLocation());
 
         diffraction_barrel = new ResearchBase("diffraction_barrel", new ItemStack(RegistryManager.diffraction_barrel), subCategoryProjectileAugments.popGoodLocation());
         focal_lens = new ResearchBase("focal_lens", new ItemStack(RegistryManager.focal_lens), subCategoryProjectileAugments.popGoodLocation());
@@ -197,6 +203,8 @@ public class ResearchManager {
         subCategoryWeaponAugments.addResearch(blasting_core.addAncestor(infernoForgeWeapon));
         subCategoryWeaponAugments.addResearch(caster_orb.addAncestor(infernoForgeWeapon));
         subCategoryWeaponAugments.addResearch(resonating_bell.addAncestor(infernoForgeWeapon));
+        subCategoryWeaponAugments.addResearch(core_stone.addAncestor(infernoForgeWeapon));
+        subCategoryWeaponAugments.addResearch(winding_gears.addAncestor(infernoForgeWeapon));
 
         ResearchBase infernoForgeArmor = new ResearchFakePage(inferno_forge, 6, 4);
         subCategoryArmorAugments.addResearch(infernoForgeArmor);
@@ -207,6 +215,9 @@ public class ResearchManager {
         subCategoryArmorAugments.addResearch(new ResearchFakePage(blasting_core,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
         subCategoryArmorAugments.addResearch(tinker_lens_augment.addAncestor(infernoForgeArmor));
         subCategoryArmorAugments.addResearch(anti_tinker_lens.addAncestor(infernoForgeArmor));
+        subCategoryArmorAugments.addResearch(shifting_scales.addAncestor(infernoForgeArmor));
+        subCategoryArmorAugments.addResearch(new ResearchFakePage(winding_gears,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
+        subCategoryArmorAugments.addResearch(new ResearchFakePage(core_stone,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
 
         ResearchBase infernoForgeProjectile = new ResearchFakePage(inferno_forge, 6, 4);
         subCategoryProjectileAugments.addResearch(infernoForgeProjectile);
@@ -234,6 +245,7 @@ public class ResearchManager {
         subCategoryWildfire.addResearch(combustor);
         subCategoryWildfire.addResearch(catalyzer);
         subCategoryWildfire.addResearch(reactor);
+        subCategoryWildfire.addResearch(stirling);
 
 
         ResearchBase mechanicalPowerSwitch;
@@ -258,10 +270,10 @@ public class ResearchManager {
 
 
         ResearchBase pipeSwitch = makeCategorySwitch(subCategoryPipes, 3, 0, new ItemStack(RegistryManager.pipe), 0, 1).addAncestor(ores);
-        ResearchBase weaponAugmentSwitch = makeCategorySwitch(subCategoryWeaponAugments, 2, 1, ItemStack.EMPTY, 1, 1).addAncestor(inferno_forge);
-        ResearchBase armorAugmentSwitch = makeCategorySwitch(subCategoryArmorAugments, 1, 3, ItemStack.EMPTY, 2, 1).addAncestor(inferno_forge);
-        ResearchBase projectileAugmentSwitch = makeCategorySwitch(subCategoryProjectileAugments, 11, 3, ItemStack.EMPTY, 3, 1).addAncestor(inferno_forge);
-        ResearchBase miscAugmentSwitch = makeCategorySwitch(subCategoryMiscAugments, 10, 1, ItemStack.EMPTY, 0, 1).addAncestor(inferno_forge);
+        ResearchBase weaponAugmentSwitch = makeCategorySwitch(subCategoryWeaponAugments, 2, 1, ItemStack.EMPTY, 1, 1).setMinEntries(2).addAncestor(inferno_forge);
+        ResearchBase armorAugmentSwitch = makeCategorySwitch(subCategoryArmorAugments, 1, 3, ItemStack.EMPTY, 2, 1).setMinEntries(2).addAncestor(inferno_forge);
+        ResearchBase projectileAugmentSwitch = makeCategorySwitch(subCategoryProjectileAugments, 11, 3, ItemStack.EMPTY, 3, 1).setMinEntries(2).addAncestor(inferno_forge);
+        ResearchBase miscAugmentSwitch = makeCategorySwitch(subCategoryMiscAugments, 10, 1, ItemStack.EMPTY, 0, 1).setMinEntries(2).addAncestor(inferno_forge);
         ResearchBase wildfireSwitch = makeCategorySwitch(subCategoryWildfire, 1, 7, new ItemStack(RegistryManager.wildfire_core), 0, 1).addAncestor(cluster);
         ResearchBase simpleAlchemySwitch = makeCategorySwitch(subCategorySimpleAlchemy, 12, 1, new ItemStack(Blocks.SOUL_SAND), 0, 1).addAncestor(waste);
 
@@ -290,12 +302,14 @@ public class ResearchManager {
                 .addResearch(breaker)
                 .addResearch(dawnstone)
                 .addResearch(emitters)
-                .addResearch(copper_cell);
+                .addResearch(copper_cell)
+                .addResearch(clockwork_attenuator);
         categoryMetallurgy
                 .addResearch(splitter)
                 .addResearch(pulser)
                 .addResearch(crystal_cell)
                 .addResearch(charger)
+                .addResearch(ember_siphon)
                 .addResearch(jars)
                 .addResearch(clockwork_tools)
                 .addResearch(cinder_staff)
@@ -339,7 +353,7 @@ public class ResearchManager {
         //researches.add(new ResearchCategory("core", 96));
     }
 
-    private static ResearchBase makeCategorySwitch(ResearchCategory targetCategory, int x, int y, ItemStack icon, int u, int v) {
-        return new ResearchSwitchCategory(targetCategory.name+"_category", icon, x, y).setTargetCategory(targetCategory).setIconBackground(PAGE_ICONS, PAGE_ICON_SIZE * u, PAGE_ICON_SIZE * v);
+    private static ResearchSwitchCategory makeCategorySwitch(ResearchCategory targetCategory, int x, int y, ItemStack icon, int u, int v) {
+        return (ResearchSwitchCategory) new ResearchSwitchCategory(targetCategory.name+"_category", icon, x, y).setTargetCategory(targetCategory).setIconBackground(PAGE_ICONS, PAGE_ICON_SIZE * u, PAGE_ICON_SIZE * v);
     }
 }

@@ -3,6 +3,8 @@ package teamroots.embers.compat;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import com.google.common.collect.Lists;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -12,6 +14,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -21,6 +24,7 @@ import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.block.BlockExplosionPedestal;
 import teamroots.embers.item.ItemEmberStorage;
 import teamroots.embers.item.bauble.*;
 import teamroots.embers.recipe.AlchemyRecipe;
@@ -28,8 +32,11 @@ import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.research.ResearchBase;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.research.subtypes.ResearchShowItem;
+import teamroots.embers.tileentity.TileEntityExplosionPedestal;
 
 public class BaublesIntegration {
+    public static Block explosion_pedestal;
+
     public static Item ember_amulet, ember_belt, ember_ring, mantle_bulb;
     public static Item radiant_crown, rocket_booster, ashen_amulet, glimmer_charm, nonbeliever_amulet, dawnstone_mail, explosion_charm, climbers_belt, crystal_lenses;
 
@@ -105,6 +112,8 @@ public class BaublesIntegration {
 
     public static void registerAll() //éw
     {
+        RegistryManager.blocks.add(explosion_pedestal = (new BlockExplosionPedestal(Material.ROCK, "explosion_pedestal",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+
         RegistryManager.items.add(ember_ring = new ItemEmberRing("ember_ring", true));
         RegistryManager.items.add(ember_belt = new ItemEmberBelt("ember_belt", true));
         RegistryManager.items.add(ember_amulet = new ItemEmberAmulet("ember_amulet", true));
@@ -113,6 +122,8 @@ public class BaublesIntegration {
         RegistryManager.items.add(ashen_amulet = new ItemAshenAmulet("ashen_amulet", true));
         RegistryManager.items.add(nonbeliever_amulet = new ItemNonbelieverAmulet("nonbeliever_amulet", true));
         RegistryManager.items.add(explosion_charm = new ItemExplosionCharm("explosion_charm", true));
+
+        GameRegistry.registerTileEntity(TileEntityExplosionPedestal.class, Embers.MODID+":tile_entity_explosion_pedestal");
     }
 
     public static void init() {
@@ -171,6 +182,7 @@ public class BaublesIntegration {
         ResearchManager.nonbeliever_amulet = new ResearchBase("nonbeliever_amulet", new ItemStack(nonbeliever_amulet), 1, 3);
         ResearchManager.ashen_amulet = new ResearchBase("ashen_amulet", new ItemStack(ashen_amulet), 4, 3);
         ResearchManager.dawnstone_mail = new ResearchBase("dawnstone_mail", new ItemStack(dawnstone_mail), 3, 7);
+        ResearchManager.explosion_pedestal = new ResearchBase("explosion_pedestal", new ItemStack(explosion_pedestal), 11, 1).addAncestor(ResearchManager.explosion_charm);
 
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.cost_reduction);
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.mantle_bulb);
@@ -178,5 +190,6 @@ public class BaublesIntegration {
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.nonbeliever_amulet);
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.ashen_amulet);
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.dawnstone_mail);
+        ResearchManager.subCategoryBaubles.addResearch(ResearchManager.explosion_pedestal);
     }
 }

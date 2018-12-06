@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,6 +31,8 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
+import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.block.BlockSeed;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
@@ -40,6 +43,7 @@ import teamroots.embers.util.WeightedItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecipeRegistry {
 	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<>();
@@ -1306,6 +1310,24 @@ public class RecipeRegistry {
 		dawnstoneAnvilRecipes.add(new AnvilRepairRecipe()); //Repair with repair item
 		dawnstoneAnvilRecipes.add(new AnvilRepairMateriaRecipe()); //Repair with Isolated Materia
 		dawnstoneAnvilRecipes.add(new AnvilBreakdownRecipe()); //BREAKDOWN BREAKDOWN
+		dawnstoneAnvilRecipes.add(new DawnstoneAnvilRecipe() {
+			@Override
+			public boolean matches(ItemStack input1, ItemStack input2) {
+				return ItemModUtil.hasHeat(input1) && input2.getItem() == RegistryManager.creative_heat;
+			}
+
+			@Override
+			public List<ItemStack> getResult(TileEntity tile, ItemStack input1, ItemStack input2) {
+				ItemStack result = input1.copy();
+				ItemModUtil.setHeat(result,ItemModUtil.getMaxHeat(result));
+				return Lists.newArrayList(result);
+			}
+
+			@Override
+			public List<IWrappableRecipe> getWrappers() {
+				return Lists.newArrayList();
+			}
+		}); //Creative Heat
 	}
 
 	public static BoreOutput getBoreOutput(World world, BlockPos pos) {

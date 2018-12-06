@@ -82,6 +82,9 @@ public class RegistryManager {
 	public static Block block_alchemical_redstone;
 	public static Block mini_boiler;
 	public static Block fluid_transfer;
+	public static Block ember_siphon;
+	public static Block stirling;
+	public static Block clockwork_attenuator;
 	
 	public static Fluid fluid_steam, fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
 						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
@@ -98,7 +101,11 @@ public class RegistryManager {
 	public static Item focal_lens;
 	public static Item stamp_gear, stamp_gear_raw;
 	public static Item tinker_lens, anti_tinker_lens;
-	
+	public static Item winding_gears;
+	public static Item shifting_scales;
+	public static Item core_stone;
+	public static Item creative_heat;
+
 	public static DamageSource damage_ember;
 	
 	public static Material unpushable;
@@ -233,6 +240,9 @@ public class RegistryManager {
 		blocks.add(ember_funnel = (new BlockEmberFunnel(Material.IRON,"ember_funnel",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(mini_boiler = (new BlockMiniBoiler(Material.IRON,"mini_boiler",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(fluid_transfer = (new BlockFluidTransfer(Material.ROCK, "fluid_transfer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(ember_siphon = (new BlockEmberSiphon(Material.ROCK, "ember_siphon",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(stirling = (new BlockStirling(Material.ROCK, "stirling",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(clockwork_attenuator = (new BlockClockworkAttenuator(Material.ROCK, "clockwork_attenuator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 
 		if (ConfigManager.enableAluminum){
 			blocks.add(block_aluminum = (new BlockBase(Material.ROCK,"block_aluminum",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
@@ -361,7 +371,10 @@ public class RegistryManager {
 		items.add(focal_lens = new ItemBase("focal_lens",true));
 		items.add(tinker_lens = new ItemTinkerLens("tinker_lens",true));
 		items.add(anti_tinker_lens = new ItemBase("anti_tinker_lens",true));
-
+		items.add(shifting_scales = new ItemBase("shifting_scales",true));
+		items.add(winding_gears = new ItemBase("winding_gears",true));
+		items.add(core_stone = new ItemBase("core_stone",true));
+		items.add(creative_heat = new ItemHidden("creative_heat"));
 		
 		if (ConfigManager.enableAluminum){
 			tool_mat_aluminum = EnumHelper.addToolMaterial(Embers.MODID+":aluminum", 2, 220, 5.2f, 1.5f, 14);
@@ -552,6 +565,9 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityFluidGauge.class, Embers.MODID+":tile_entity_fluid_gauge");
 		//GameRegistry.registerTileEntity(TileEntityItemGauge.class, Embers.MODID+":tile_entity_item_gauge");
 		GameRegistry.registerTileEntity(TileEntityFluidTransfer.class, Embers.MODID+":tile_entity_fluid_transfer");
+		GameRegistry.registerTileEntity(TileEntityStirling.class, Embers.MODID+":tile_entity_stirling");
+		GameRegistry.registerTileEntity(TileEntityEmberSiphon.class, Embers.MODID+":tile_entity_ember_siphon");
+		GameRegistry.registerTileEntity(TileEntityClockworkAttenuator.class, Embers.MODID+":tile_entity_clockwork_attenuator");
 	}
 
 	private static void registerCapabilities() {
@@ -586,6 +602,8 @@ public class RegistryManager {
 		EmbersAPI.FOCAL_LENS = new ModifierFocalLens();
 		EmbersAPI.TINKER_LENS = new ModifierTinkerLens("tinker_lens",false);
 		EmbersAPI.ANTI_TINKER_LENS = new ModifierTinkerLens("anti_tinker_lens",true);
+		EmbersAPI.SHIFTING_SCALES = new ModifierShiftingScales();
+		EmbersAPI.WINDING_GEARS = new ModifierWindingGears();
 
 		EmbersAPI.registerModifier(ancient_motive_core, EmbersAPI.CORE);
 		EmbersAPI.registerModifier(superheater, EmbersAPI.SUPERHEATER);
@@ -600,6 +618,8 @@ public class RegistryManager {
 		EmbersAPI.registerModifier(focal_lens, EmbersAPI.FOCAL_LENS);
 		EmbersAPI.registerModifier(tinker_lens, EmbersAPI.TINKER_LENS);
 		EmbersAPI.registerModifier(anti_tinker_lens, EmbersAPI.ANTI_TINKER_LENS);
+		EmbersAPI.registerModifier(shifting_scales, EmbersAPI.SHIFTING_SCALES);
+		EmbersAPI.registerModifier(winding_gears, EmbersAPI.WINDING_GEARS);
 	}
 
 	@SubscribeEvent
