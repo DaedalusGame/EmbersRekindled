@@ -1,0 +1,36 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"parent": "block/block",
+	"textures": {
+		"0": "embers:blocks/attenuator",
+		"particle": "embers:blocks/attenuator"
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"from": [7, 7, 0],
+			"to": [9, 9, 8],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [1, 7, 3, 9], "texture": "#0"},
+				"east": {
+					"uv": [6, 0, 8, 8],
+					"texture": "#0",
+					"rotation": 90
+				},
+				"south": {"uv": [6, 6, 8, 8], "texture": "#0"},
+				"west": {
+					"uv": [6, 0, 8, 8],
+					"texture": "#0",
+					"rotation": 270
+				},
+				"up": {"uv": [6, 0, 8, 8], "texture": "#0"},
+				"down": {
+					"uv": [6, 0, 8, 8],
+					"texture": "#0",
+					"rotation": 180
+				}
+			}
+		}
+	]
+}
