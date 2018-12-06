@@ -103,7 +103,7 @@ public class RegistryManager {
 	public static Item tinker_lens, anti_tinker_lens;
 	public static Item winding_gears;
 	public static Item shifting_scales;
-	public static Item core_stone;
+	//public static Item core_stone;
 	public static Item creative_heat;
 
 	public static DamageSource damage_ember;
@@ -373,7 +373,7 @@ public class RegistryManager {
 		items.add(anti_tinker_lens = new ItemBase("anti_tinker_lens",true));
 		items.add(shifting_scales = new ItemBase("shifting_scales",true));
 		items.add(winding_gears = new ItemBase("winding_gears",true));
-		items.add(core_stone = new ItemBase("core_stone",true));
+		//items.add(core_stone = new ItemBase("core_stone",true));
 		items.add(creative_heat = new ItemHidden("creative_heat"));
 		
 		if (ConfigManager.enableAluminum){

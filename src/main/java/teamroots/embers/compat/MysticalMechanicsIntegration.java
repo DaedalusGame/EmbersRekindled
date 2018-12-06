@@ -97,6 +97,7 @@ public class MysticalMechanicsIntegration {
         Ingredient stampGear = Ingredient.fromItem(RegistryManager.stamp_gear);
         int gearAmount = ConfigManager.stampGearAmount * RecipeRegistry.INGOT_AMOUNT;
         RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_iron, gearAmount), stampGear, new ItemStack(RegistryHandler.IRON_GEAR,1)));
+        RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_gold, gearAmount), stampGear, new ItemStack(RegistryHandler.GOLD_GEAR,1)));
         RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_dawnstone, gearAmount), stampGear, new ItemStack(MysticalMechanicsIntegration.gear_dawnstone,1)));
     }
 

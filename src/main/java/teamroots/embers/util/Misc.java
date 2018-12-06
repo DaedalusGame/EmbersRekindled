@@ -475,4 +475,8 @@ public class Misc {
     public static int writeNullableFacing(EnumFacing facing) {
         return facing != null ? facing.getIndex() : -1;
     }
+
+    public static boolean isGaseousFluid(FluidStack resource) {
+        return resource != null && !resource.getFluid().getName().startsWith("aetherworks.") && resource.getFluid().getDensity() <= 0;
+    }
 }

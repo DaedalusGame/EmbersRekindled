@@ -9,6 +9,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -16,14 +17,19 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
-import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Random;
 
-public class TileEntityTank extends TileFluidHandler implements ITileEntityBase {
+public class TileEntityTank extends TileEntityOpenTank implements ITileEntityBase, ITickable {
 	public static int capacity = Fluid.BUCKET_VOLUME*16;
+
+
 	
 	public TileEntityTank(){
 		super();
@@ -35,14 +41,35 @@ public class TileEntityTank extends TileFluidHandler implements ITileEntityBase 
 
 			@Override
 			public int fill(FluidStack resource, boolean doFill) {
-				if(resource != null && resource.getFluid().getDensity() <= 0)
+				if(Misc.isGaseousFluid(resource)) {
+					setEscapedFluid(resource);
 					return resource.amount;
+				}
 				return super.fill(resource, doFill);
 			}
 		};
 		tank.setTileEntity(this);
 		tank.setCanFill(true);
 		tank.setCanDrain(true);
+	}
+
+	@Override
+	public void update() {
+		if (world.isRemote && shouldEmitParticles())
+			updateEscapeParticles();
+	}
+
+	@Override
+	protected void updateEscapeParticles() {
+		Color fluidColor = new Color(FluidColorHelper.getColor(lastEscaped), true);
+		Random random = new Random();
+		for (int i = 0; i < 3; i++) {
+			float xOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.2f;
+			float yOffset = 0.9f;
+			float zOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.2f;
+
+			ParticleUtil.spawnParticleVapor(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0, 1 / 20f, 0, fluidColor.getRed() / 255f, fluidColor.getGreen() / 255f, fluidColor.getBlue() / 255f, fluidColor.getAlpha() / 255f, 4, 2, 20);
+		}
 	}
 
 	@Override

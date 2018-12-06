@@ -108,6 +108,10 @@ public class BaublesIntegration {
 
         RecipeRegistry.alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 8, 32).setRange("copper", 8, 32), Ingredient.fromItem(RegistryManager.ember_cluster), Lists.newArrayList(archaicBrick, leather, archaicBrick, archaicBrick), new ItemStack(explosion_charm, 1)));
         RecipeRegistry.alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 32, 64).setRange("silver", 32, 64), Ingredient.fromItem(ashen_amulet), Lists.newArrayList(archaicCircuit, archaicBrick, archaicCircuit, eldritchInsignia), new ItemStack(nonbeliever_amulet, 1)));
+        RecipeRegistry.alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper", 16, 24).setRange("silver", 16, 24),
+                Ingredient.fromItem(RegistryManager.dust_ember),
+                Lists.newArrayList( Ingredient.EMPTY, Ingredient.fromItem(explosion_charm), Ingredient.EMPTY, Ingredient.fromStacks(new ItemStack(RegistryManager.alchemy_pedestal))),
+                new ItemStack(explosion_pedestal,1)));
     }
 
     public static void registerAll() //éw

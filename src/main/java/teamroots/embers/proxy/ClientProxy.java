@@ -27,6 +27,7 @@ import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.ParticleRenderer;
 import teamroots.embers.util.DecimalFormats;
+import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.sound.ItemUseSound;
 import teamroots.embers.util.sound.MachineSound;
 
@@ -54,6 +55,7 @@ public class ClientProxy extends CommonProxy{
 			MysticalMechanicsIntegration.registerClientSide();
 
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new DecimalFormats());
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new FluidColorHelper());
 	}
 	
 	@Override

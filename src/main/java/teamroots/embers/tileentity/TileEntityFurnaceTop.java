@@ -23,12 +23,16 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
+import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
+import java.util.Random;
 
-public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntityBase, ITickable, IExtraCapabilityInformation {
+public class TileEntityFurnaceTop extends TileEntityOpenTank implements ITileEntityBase, ITickable, IExtraCapabilityInformation {
 	public static int capacity = Fluid.BUCKET_VOLUME*4;
 	public double angle = 0;
 	int ticksExisted = 0;
@@ -52,8 +56,10 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 
 			@Override
 			public int fill(FluidStack resource, boolean doFill) {
-				if(resource != null && resource.getFluid().isGaseous())
+				if(Misc.isGaseousFluid(resource)) {
+					setEscapedFluid(resource);
 					return resource.amount;
+				}
 				return super.fill(resource, doFill);
 			}
 		};
@@ -190,6 +196,21 @@ public class TileEntityFurnaceTop extends TileFluidHandler implements ITileEntit
 					getWorld().removeEntity(items.get(i));
 				}
 			}
+		}
+		if (world.isRemote && shouldEmitParticles())
+			updateEscapeParticles();
+	}
+
+	@Override
+	protected void updateEscapeParticles() {
+		Color fluidColor = new Color(FluidColorHelper.getColor(lastEscaped), true);
+		Random random = new Random();
+		for (int i = 0; i < 3; i++) {
+			float xOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.2f;
+			float yOffset = 0.9f;
+			float zOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.2f;
+
+			ParticleUtil.spawnParticleVapor(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0, 1 / 20f, 0, fluidColor.getRed() / 255f, fluidColor.getGreen() / 255f, fluidColor.getBlue() / 255f, fluidColor.getAlpha() / 255f, 4, 2, 20);
 		}
 	}
 

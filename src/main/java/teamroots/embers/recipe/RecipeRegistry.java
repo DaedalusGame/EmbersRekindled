@@ -1042,6 +1042,30 @@ public class RecipeRegistry {
 				'G', RegistryManager.glimmer_shard,
 				'X', Blocks.IRON_BARS,
 				'P', "plateIron"}).setRegistryName(getRL("glimmer_lamp")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("ember_siphon"),new ItemStack(RegistryManager.ember_siphon,1),true,new Object[]{
+				"PGP",
+				"XGX",
+				"BBB",
+				'G', "ingotCopper",
+				'X', "plateNickel",
+				'P', new ItemStack(RegistryManager.wall_caminite_brick),
+				'B', RegistryManager.brick_caminite}).setRegistryName(getRL("ember_siphon")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("stirling"),new ItemStack(RegistryManager.stirling,1),true,new Object[]{
+				"XGX",
+				"XGX",
+				"BPB",
+				'G', "blockCopper",
+				'X', "plateDawnstone",
+				'P', RegistryManager.wildfire_core,
+				'B', RegistryManager.shard_ember}).setRegistryName(getRL("stirling")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("clockwork_attenuator"),new ItemStack(RegistryManager.clockwork_attenuator,1),true,new Object[]{
+				"GBG",
+				" P ",
+				"GIG",
+				'P', Items.PAPER,
+				'I', "plateElectrum",
+				'B', "dustRedstone",
+				'G', "nuggetElectrum"}).setRegistryName(getRL("clockwork_attenuator")));
 
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
@@ -1137,7 +1161,9 @@ public class RecipeRegistry {
 		meltingRecipes.add(new ItemMeltingRecipe(ingotDawnstone,new FluidStack(RegistryManager.fluid_molten_dawnstone, INGOT_AMOUNT)));
 		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("nuggetDawnstone"),new FluidStack(RegistryManager.fluid_molten_dawnstone, NUGGET_AMOUNT)));
 		meltingRecipes.add(new ItemMeltingRecipe(plateDawnstone,new FluidStack(RegistryManager.fluid_molten_dawnstone, plateAmount)));
-		
+
+		OreIngredient ingotBronze = new OreIngredient("ingotBronze");
+		OreIngredient plateBronze = new OreIngredient("plateBronze");
 		if (ConfigManager.enableBronze){
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("ingotBronze"),new FluidStack(RegistryManager.fluid_molten_bronze, INGOT_AMOUNT)));
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("nuggetBronze"),new FluidStack(RegistryManager.fluid_molten_bronze, NUGGET_AMOUNT)));
@@ -1289,6 +1315,14 @@ public class RecipeRegistry {
 				emberCrystal,
 				Lists.newArrayList(plateDawnstone, plateSilver, plateDawnstone, plateSilver),
 				new ItemStack(RegistryManager.focal_lens,1)));
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("lead",  32, 128),
+				Ingredient.fromItem(RegistryManager.ashen_cloth),
+				Lists.newArrayList(plateLead, plateLead, plateLead, plateLead),
+				new ItemStack(RegistryManager.shifting_scales,1)));
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("copper",  32, 128),
+				ingotBronze,
+				Lists.newArrayList(plateBronze, plateBronze, plateBronze, plateBronze),
+				new ItemStack(RegistryManager.winding_gears,1)));
 
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 20, 30).setRange("silver", 32, 64),
 				ingotSilver,

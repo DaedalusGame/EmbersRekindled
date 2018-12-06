@@ -34,7 +34,7 @@ public class ResearchManager {
     public static ResearchBase pipes, tank, bin, dropper, reservoir, vacuum, transfer; //PIPES
     public static ResearchBase adhesive, hellish_synthesis, archaic_brick, motive_core; //SIMPLE ALCHEMY
     public static ResearchBase wildfire, combustor, catalyzer, reactor, injector, stirling; //WILDFIRE
-    public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core, core_stone, winding_gears; //WEAPON AUGMENTS
+    public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core, /*core_stone,*/ winding_gears; //WEAPON AUGMENTS
     public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier, tinker_lens_augment, anti_tinker_lens, shifting_scales; //ARMOR_AUGMENTS
     public static ResearchBase diffraction_barrel, focal_lens; //PROJECTILE_AUGMENTS
     public static ResearchBase cost_reduction, mantle_bulb, explosion_charm, nonbeliever_amulet, ashen_amulet, dawnstone_mail, explosion_pedestal; //BAUBLE
@@ -181,7 +181,7 @@ public class ResearchManager {
         blasting_core = new ResearchBase("blasting_core", new ItemStack(RegistryManager.blasting_core), subCategoryWeaponAugments.popGoodLocation());
         caster_orb = new ResearchBase("caster_orb", new ItemStack(RegistryManager.caster_orb), subCategoryWeaponAugments.popGoodLocation()).addPage(new ResearchBase("caster_orb_addendum",ItemStack.EMPTY,0,0));
         resonating_bell = new ResearchBase("resonating_bell", new ItemStack(RegistryManager.resonating_bell), subCategoryWeaponAugments.popGoodLocation());
-        core_stone = new ResearchBase("core_stone", new ItemStack(RegistryManager.core_stone), subCategoryWeaponAugments.popGoodLocation());
+        //core_stone = new ResearchBase("core_stone", new ItemStack(RegistryManager.core_stone), subCategoryWeaponAugments.popGoodLocation());
         winding_gears = new ResearchBase("winding_gears", new ItemStack(RegistryManager.winding_gears), subCategoryWeaponAugments.popGoodLocation()).addPage(new ResearchShowItem("winding_gears_boots",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(Items.IRON_BOOTS))));
 
         eldritch_insignia = new ResearchBase("eldritch_insignia", new ItemStack(RegistryManager.eldritch_insignia), subCategoryArmorAugments.popGoodLocation());
@@ -203,7 +203,7 @@ public class ResearchManager {
         subCategoryWeaponAugments.addResearch(blasting_core.addAncestor(infernoForgeWeapon));
         subCategoryWeaponAugments.addResearch(caster_orb.addAncestor(infernoForgeWeapon));
         subCategoryWeaponAugments.addResearch(resonating_bell.addAncestor(infernoForgeWeapon));
-        subCategoryWeaponAugments.addResearch(core_stone.addAncestor(infernoForgeWeapon));
+        //subCategoryWeaponAugments.addResearch(core_stone.addAncestor(infernoForgeWeapon));
         subCategoryWeaponAugments.addResearch(winding_gears.addAncestor(infernoForgeWeapon));
 
         ResearchBase infernoForgeArmor = new ResearchFakePage(inferno_forge, 6, 4);
@@ -217,7 +217,7 @@ public class ResearchManager {
         subCategoryArmorAugments.addResearch(anti_tinker_lens.addAncestor(infernoForgeArmor));
         subCategoryArmorAugments.addResearch(shifting_scales.addAncestor(infernoForgeArmor));
         subCategoryArmorAugments.addResearch(new ResearchFakePage(winding_gears,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
-        subCategoryArmorAugments.addResearch(new ResearchFakePage(core_stone,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
+        //subCategoryArmorAugments.addResearch(new ResearchFakePage(core_stone,subCategoryArmorAugments.popGoodLocation()).addAncestor(infernoForgeArmor));
 
         ResearchBase infernoForgeProjectile = new ResearchFakePage(inferno_forge, 6, 4);
         subCategoryProjectileAugments.addResearch(infernoForgeProjectile);

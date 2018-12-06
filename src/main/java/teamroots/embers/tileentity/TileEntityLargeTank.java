@@ -19,11 +19,15 @@ import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.particle.ParticleUtil;
+import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Random;
 
-public class TileEntityLargeTank extends TileFluidHandler implements ITileEntityBase, ITickable, IMultiblockMachine {
+public class TileEntityLargeTank extends TileEntityOpenTank implements ITileEntityBase, ITickable, IMultiblockMachine {
 	int ticksExisted = 0;
 	
 	@Override
@@ -41,8 +45,10 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 
 			@Override
 			public int fill(FluidStack resource, boolean doFill) {
-				if(resource != null && resource.getFluid().getDensity() <= 0)
+				if(Misc.isGaseousFluid(resource)) {
+					setEscapedFluid(resource);
 					return resource.amount;
+				}
 				return super.fill(resource, doFill);
 			}
 		};
@@ -134,6 +140,22 @@ public class TileEntityLargeTank extends TileFluidHandler implements ITileEntity
 		ticksExisted ++;
 		if (ticksExisted % 20 == 0){
 			updateCapacity();
+		}
+		if (world.isRemote && shouldEmitParticles())
+			updateEscapeParticles();
+	}
+
+	@Override
+	protected void updateEscapeParticles() {
+		Color fluidColor = new Color(FluidColorHelper.getColor(lastEscaped), true);
+		Random random = new Random();
+		int height = getCapacity() / ConfigManager.reservoirCapacity;
+		for (int i = 0; i < 3; i++) {
+			float xOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.6f;
+			float yOffset = height+0.9f;
+			float zOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.6f;
+
+			ParticleUtil.spawnParticleVapor(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0, 1 / 20f, 0, fluidColor.getRed() / 255f, fluidColor.getGreen() / 255f, fluidColor.getBlue() / 255f, fluidColor.getAlpha() / 255f, 8, 6, 50);
 		}
 	}
 
