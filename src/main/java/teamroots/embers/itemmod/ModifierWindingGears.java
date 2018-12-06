@@ -67,10 +67,12 @@ public class ModifierWindingGears extends ModifierBase {
         return super.canApplyTo(stack) && (canApplyToType(stack,EnumType.TOOL) || canApplyToType(stack,EnumType.BOOTS)); //This is dumb and i feel dumb for writing it
     }
 
+    @SideOnly(Side.CLIENT)
     private int getBarY(ScaledResolution resolution) {
         return resolution.getScaledHeight() - 31;
     }
 
+    @SideOnly(Side.CLIENT)
     private int getBarX(ScaledResolution resolution) {
         return resolution.getScaledWidth() / 2 - 11 - 81;
     }
@@ -318,10 +320,12 @@ public class ModifierWindingGears extends ModifierBase {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     private boolean canAutoAttack(EntityPlayerSP player, ItemStack stack, RayTraceResult objectMouseOver) {
         return player.getCooledAttackStrength(0) >= 1.0f && getCharge(player.world, stack) > 0 && objectMouseOver != null && objectMouseOver.typeOfHit == RayTraceResult.Type.ENTITY && /*!isInvulnerable(objectMouseOver.entityHit) &&*/ !player.isRowingBoat();
     }
 
+    @SideOnly(Side.CLIENT)
     private boolean isInvulnerable(Entity entity)
     {
         return entity.getIsInvulnerable() || (entity instanceof EntityLivingBase && entity.hurtResistantTime > 0);

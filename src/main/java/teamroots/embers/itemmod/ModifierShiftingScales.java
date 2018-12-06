@@ -215,10 +215,12 @@ public class ModifierShiftingScales extends ModifierBase {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     private int getBarY(ScaledResolution resolution) {
         return resolution.getScaledHeight() - 42;
     }
 
+    @SideOnly(Side.CLIENT)
     private int getBarX(ScaledResolution resolution) {
         return resolution.getScaledWidth() / 2 - 11 - 8 * 10;
     }
