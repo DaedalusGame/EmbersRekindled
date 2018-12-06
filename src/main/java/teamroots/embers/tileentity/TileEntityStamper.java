@@ -28,6 +28,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
@@ -179,8 +180,8 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
                         BlockPos outputPos = getPos().offset(face, 3);
                         TileEntity outputTile = getWorld().getTileEntity(outputPos);
                         for (ItemStack remainder : results) {
-                            if (outputTile instanceof TileEntityBin) {
-                                remainder = ((TileEntityBin) outputTile).inventory.insertItem(0, remainder, false);
+                            if (outputTile instanceof IBin) {
+                                remainder = ((IBin) outputTile).getInventory().insertItem(0, remainder, false);
                             }
                             if (!remainder.isEmpty() && !getWorld().isRemote) {
                                 getWorld().spawnEntity(new EntityItem(getWorld(), middlePos.getX() + 0.5, middlePos.getY() + 0.5, middlePos.getZ() + 0.5, remainder));

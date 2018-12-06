@@ -20,6 +20,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.event.MachineRecipeEvent;
+import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAnvilSparksFX;
@@ -249,9 +250,9 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 				ItemStack[] results = getResult(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
 				for (int i = 0; i < results.length; i ++){
 					ItemStack result = results[i];
-					if (getWorld().getTileEntity(getPos().down()) instanceof TileEntityBin){
-						TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(getPos().down());
-						ItemStack remainder = bin.inventory.insertItem(0, result, false);
+					TileEntity bin = getWorld().getTileEntity(getPos().down());
+					if (bin instanceof IBin){
+						ItemStack remainder = ((TileEntityBin) bin).getInventory().insertItem(0, result, false);
 						if (!remainder.isEmpty() && !getWorld().isRemote){
 							EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,remainder);
 							getWorld().spawnEntity(item);

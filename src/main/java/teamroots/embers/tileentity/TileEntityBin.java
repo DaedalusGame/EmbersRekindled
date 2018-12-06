@@ -16,15 +16,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IBin;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityBin extends TileEntity implements ITileEntityBase, ITickable {
+public class TileEntityBin extends TileEntity implements ITileEntityBase, ITickable, IBin {
 	int ticksExisted = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(1){
         @Override
@@ -133,5 +135,10 @@ public class TileEntityBin extends TileEntity implements ITileEntityBase, ITicka
 				}
 			}
 		}
+	}
+
+	@Override
+	public IItemHandler getInventory() {
+		return inventory;
 	}
 }

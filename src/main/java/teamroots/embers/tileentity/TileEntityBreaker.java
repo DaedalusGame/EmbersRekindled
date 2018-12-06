@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.tile.IBin;
 import teamroots.embers.block.BlockBreaker;
 import teamroots.embers.util.Misc;
 
@@ -166,11 +167,11 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 		EnumFacing facing = getFacing();
 		BlockPos frontPos = getPos().offset(facing);
 		BlockPos binPos = getPos().offset(facing.getOpposite());
-		boolean capture = getWorld().getTileEntity(binPos) instanceof TileEntityBin;
+		TileEntity bin = getWorld().getTileEntity(binPos);
+		boolean capture = bin instanceof IBin;
 		for (ItemStack stack : stacks){
 			if (capture){
-				TileEntityBin bin = (TileEntityBin)getWorld().getTileEntity(binPos);
-				ItemStack remainder = bin.inventory.insertItem(0, stack, false);
+				ItemStack remainder = ((IBin)bin).getInventory().insertItem(0, stack, false);
 				if (!remainder.isEmpty() && !getWorld().isRemote){
 					EntityItem item = new EntityItem(getWorld(), frontPos.getX()+0.5, frontPos.getY()+1.0625f, frontPos.getZ()+0.5,remainder);
 					getWorld().spawnEntity(item);

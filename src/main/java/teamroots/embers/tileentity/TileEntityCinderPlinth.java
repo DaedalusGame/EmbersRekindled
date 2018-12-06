@@ -27,6 +27,7 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
+import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -185,8 +186,8 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
                     List<ItemStack> outputs = Lists.newArrayList(new ItemStack(RegistryManager.dust_ash, 1));
                     UpgradeUtil.transformOutput(this, outputs, upgrades);
                     for (ItemStack remainder : outputs) {
-                        if (tile instanceof TileEntityBin) {
-                            remainder = ((TileEntityBin) tile).inventory.insertItem(0, remainder, false);
+                        if (tile instanceof IBin) {
+                            remainder = ((IBin) tile).getInventory().insertItem(0, remainder, false);
                         }
                         if (!remainder.isEmpty() && !getWorld().isRemote) {
                             getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0, getPos().getZ() + 0.5, remainder));
