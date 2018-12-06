@@ -1,0 +1,74 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"parent": "block/block",
+	"textures": {
+		"2": "embers:blocks/archaic_edge",
+		"3": "embers:blocks/archaic_tile",
+		"mnemonic": "embers:blocks/mnemonic_off"
+	},
+	"elements": [
+		{
+			"name": "Cube",
+			"from": [0, 0, 0],
+			"to": [16, 4, 16],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"east": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"west": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#3"}
+			}
+		},
+		{
+			"name": "Cube",
+			"from": [0, 4, 12],
+			"to": [16, 12, 14],
+			"shade": true,
+			"faces": {
+				"south": {"uv": [0, 4, 16, 12], "texture": "#4"}
+			}
+		},
+		{
+			"name": "Cube",
+			"from": [0, 12, 0],
+			"to": [16, 16, 4],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"up": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"down": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"}
+			}
+		},
+		{
+			"name": "Cube",
+			"from": [0, 12, 12],
+			"to": [16, 16, 16],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"up": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"down": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"}
+			}
+		},
+		{
+			"name": "Cube",
+			"from": [0, 4, 2],
+			"to": [16, 12, 4],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [0, 4, 16, 12], "texture": "#4"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [0, 13, 4],
+			"to": [16, 15, 12],
+			"shade": true,
+			"faces": {"up": {"uv": [0, 4, 16, 12], "texture": "#4"}}
+		}
+	]
+}
