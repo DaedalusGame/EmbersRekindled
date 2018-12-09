@@ -16,10 +16,10 @@ public class ModifierBase {
 		BOOTS,
 	}
 	
-	public EnumType type = EnumType.ALL;
-	public String name = "";
-	public double cost = 0;
-	public boolean countTowardsTotalLevel = false;
+	public EnumType type;
+	public String name;
+	public double cost;
+	public boolean countTowardsTotalLevel;
 	public boolean canRemove = true;
 	public boolean shouldRenderTooltip = true;
 
