@@ -16,10 +16,10 @@ public class ModifierBase {
 		BOOTS,
 	}
 	
-	public EnumType type = EnumType.ALL;
-	public String name = "";
-	public double cost = 0;
-	public boolean countTowardsTotalLevel = false;
+	public EnumType type;
+	public String name;
+	public double cost;
+	public boolean countTowardsTotalLevel;
 	public boolean canRemove = true;
 	public boolean shouldRenderTooltip = true;
 
@@ -40,9 +40,9 @@ public class ModifierBase {
 			case ALL:
 				return true;
 			case TOOL_OR_ARMOR:
-				return isTool(item) || item instanceof ItemArmor;
+				if(item instanceof ItemArmor) return true;
 			case TOOL:
-				return isTool(item);
+				return !item.getToolClasses(stack).isEmpty() || item instanceof ItemSword || item instanceof ItemHoe || item instanceof ItemTool;
 			case ARMOR:
 				return item instanceof ItemArmor;
 			case HELMET:
@@ -56,10 +56,6 @@ public class ModifierBase {
 			default:
 				return false;
 		}
-	}
-
-	private boolean isTool(Item item) {
-		return item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemHoe;
 	}
 
 	public void onApply(ItemStack stack) {
