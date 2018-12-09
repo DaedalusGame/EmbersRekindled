@@ -42,7 +42,7 @@ public class ModifierBase {
 			case TOOL_OR_ARMOR:
 				if(item instanceof ItemArmor) return true;
 			case TOOL:
-				return !item.getToolClasses(stack).isEmpty() || item instanceof ItemSword || item instanceof ItemHoe;
+				return !item.getToolClasses(stack).isEmpty() || item instanceof ItemSword || item instanceof ItemHoe || item instanceof ItemTool;
 			case ARMOR:
 				return item instanceof ItemArmor;
 			case HELMET:
