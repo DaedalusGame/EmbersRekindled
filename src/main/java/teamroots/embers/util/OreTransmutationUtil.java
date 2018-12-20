@@ -68,6 +68,18 @@ public class OreTransmutationUtil {
         ALTERNATE_ORES.put("thebetweenlands:aqua_middle_gem_ore", BETWEEN_GEM);
         ALTERNATE_ORES.put("thebetweenlands:crimson_middle_gem_ore", BETWEEN_GEM);
         ALTERNATE_ORES.put("thebetweenlands:green_middle_gem_ore", BETWEEN_GEM);
+        ALTERNATE_ORES.put("betweenores:between_iron_ore", BETWEEN_STONE);
+        ALTERNATE_ORES.put("betweenores:between_copper_ore", BETWEEN_STONE);
+        ALTERNATE_ORES.put("betweenores:between_tin_ore", BETWEEN_STONE);
+        ALTERNATE_ORES.put("betweenores:between_gold_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_redstone_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_lapis_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_diamond_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_lead_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_nickel_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_silver_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:between_quartz_ore", BETWEEN_PIT);
+        
         //How about this
         //You click the make pr button if you want more support
 
