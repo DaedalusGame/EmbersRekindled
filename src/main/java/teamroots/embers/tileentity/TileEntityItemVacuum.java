@@ -57,7 +57,7 @@ public class TileEntityItemVacuum extends TileEntity implements ITileEntityBase,
         IBlockState state = getWorld().getBlockState(getPos());
         EnumFacing facing = state.getValue(BlockVacuum.facing);
         TileEntity tile = getWorld().getTileEntity(getPos().offset(facing.getOpposite()));
-        if (world.isBlockPowered(getPos()) && tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
+        if (!world.isRemote && world.isBlockPowered(getPos()) && tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
             IItemHandler inventory = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
             Vec3i vec = facing.getDirectionVec();
             AxisAlignedBB suckBB = new AxisAlignedBB(getPos().getX() - 6 + vec.getX() * 6, getPos().getY() - 6 + vec.getY() * 6, getPos().getZ() - 6 + vec.getZ() * 6, getPos().getX() + 7 + vec.getX() * 6, getPos().getY() + 7 + vec.getY() * 6, getPos().getZ() + 7 + vec.getZ() * 6);

@@ -254,6 +254,15 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	}
 
 	@Override
+	public int getComparatorData(EnumFacing facing, int data, String dialType) {
+		if(BlockFluidGauge.DIAL_TYPE.equals(dialType) && facing.getAxis() != EnumFacing.Axis.Y) {
+			double fill = getGasAmount() / (double)getCapacity();
+			return fill > 0 ? (int) (1 + fill * 14) : 0;
+		}
+		return data;
+	}
+
+	@Override
 	public void update() {
 		if(world.isRemote) {
 			handleSound();

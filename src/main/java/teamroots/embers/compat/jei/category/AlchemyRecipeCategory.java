@@ -72,7 +72,7 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 
 		recipeWrapper.helper = helper;
 		helper.addAspectStacks(recipeWrapper, stacks, 6);
-		stacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {if(slotIndex >= 6) tooltip.clear();});
+		//stacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {if(slotIndex >= 6) tooltip.clear();});
 		stacks.setOverrideDisplayFocus(null);
 		for(int i = 0; i < 5; i++) {
 			if(ingredients.getInputs(ItemStack.class).size() > i && ingredients.getInputs(ItemStack.class).get(i) != null) {

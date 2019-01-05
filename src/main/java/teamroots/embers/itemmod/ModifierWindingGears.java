@@ -190,7 +190,7 @@ public class ModifierWindingGears extends ModifierBase {
                 }
                 entity.motionY += MathHelper.clampedLerp(0.0,7.0/20.0,charge / 500.0);
                 if(charge >= cost)
-                    entity.playSound(SoundManager.WINDING_GEARS_SPRING,1.0f,1.5f);
+                    entity.playSound(SoundManager.WINDING_GEARS_SPRING,1.0f,1.0f);
             }
 
             if(!entity.world.isRemote)

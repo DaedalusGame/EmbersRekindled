@@ -166,6 +166,12 @@ public class RecipeRegistry {
 			OreDictionary.registerOre("nuggetAluminum", RegistryManager.nugget_aluminum);
 			OreDictionary.registerOre("plateAluminum", RegistryManager.plate_aluminum);
 			OreDictionary.registerOre("oreAluminum", RegistryManager.ore_aluminum);
+
+			OreDictionary.registerOre("blockAluminium", RegistryManager.block_aluminum);
+			OreDictionary.registerOre("ingotAluminium", RegistryManager.ingot_aluminum);
+			OreDictionary.registerOre("nuggetAluminium", RegistryManager.nugget_aluminum);
+			OreDictionary.registerOre("plateAluminium", RegistryManager.plate_aluminum);
+			OreDictionary.registerOre("oreAluminium", RegistryManager.ore_aluminum);
 		}
 		
 		if (ConfigManager.enableTin){

@@ -641,7 +641,8 @@
   },
   "item.windup.spring": {
     "sounds": [
-      "embers:spring"
+      "embers:spring_launch1",
+      "embers:spring_launch2"
     ]
   },
   "entity.ancient_golem.death": {

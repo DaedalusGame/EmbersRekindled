@@ -86,14 +86,21 @@ public class Misc {
     public static ItemStack getRepairItem(ItemStack stack) {
         try {
             if (stack.getItem() instanceof ItemTool) {
-                ItemStack mat = ToolMaterial.valueOf(((ItemTool) stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
+                ItemStack mat = ((ItemTool) stack.getItem()).toolMaterial.getRepairItemStack().copy();
                 if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                     mat.setItemDamage(0);
                 }
                 return mat;
             }
             if (stack.getItem() instanceof ItemSword) {
-                ItemStack mat = ToolMaterial.valueOf(((ItemSword) stack.getItem()).getToolMaterialName()).getRepairItemStack().copy();
+                ItemStack mat = ((ItemSword) stack.getItem()).material.getRepairItemStack().copy();
+                if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                    mat.setItemDamage(0);
+                }
+                return mat;
+            }
+            if (stack.getItem() instanceof ItemHoe) {
+                ItemStack mat = ((ItemHoe) stack.getItem()).toolMaterial.getRepairItemStack().copy();
                 if (mat.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
                     mat.setItemDamage(0);
                 }
@@ -189,6 +196,8 @@ public class Misc {
                 baseCount = 4;
         }
         if (stack.getItem() instanceof ItemSword)
+            baseCount = 2;
+        if (stack.getItem() instanceof ItemHoe)
             baseCount = 2;
         if (stack.getItem() instanceof ItemBow)
             baseCount = 3;
