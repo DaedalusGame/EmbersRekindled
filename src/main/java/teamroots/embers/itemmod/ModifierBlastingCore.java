@@ -39,7 +39,7 @@ public class ModifierBlastingCore extends ModifierBase {
 					event.getWorld().createExplosion(event.getPlayer(), event.getPos().getX()+0.5, event.getPos().getY()+0.5, event.getPos().getZ()+0.5, 0.5f, true);
 					for (int i = 0; i < 6; i ++){
 						EnumFacing face = EnumFacing.getFront(i);
-						if (Misc.random.nextInt(blastingLevel) != 0){
+						if (Misc.random.nextInt(blastingLevel+1) != 0){
 							BlockPos pos = event.getPos().offset(face);
 							if (event.getPlayer().canHarvestBlock(event.getWorld().getBlockState(pos))){
 								IBlockState state = event.getWorld().getBlockState(pos);
@@ -63,33 +63,36 @@ public class ModifierBlastingCore extends ModifierBase {
 				int blastingLevel = ItemModUtil.getModifierLevel(s, EmbersAPI.BLASTING_CORE);
 				float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
 				if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
-					event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY+event.getEntityLiving().height/2.0, event.getEntityLiving().posZ, 0.5f, true);
 					EmberInventoryUtil.removeEmber(damager, cost);
 					List<EntityLivingBase> entities = damager.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX-4.0*strength,event.getEntityLiving().posY-4.0*strength,event.getEntityLiving().posZ-4.0*strength,
 																																	event.getEntityLiving().posX+4.0*strength,event.getEntityLiving().posY+4.0*strength,event.getEntityLiving().posZ+4.0*strength));
 					for (EntityLivingBase e : entities){
 						if (e.getUniqueID().compareTo(damager.getUniqueID()) != 0){
-							e.attackEntityFrom(DamageSource.GENERIC, event.getAmount()*strength);
+							e.attackEntityFrom(DamageSource.causeExplosionDamage(damager), event.getAmount()*strength);
+							e.hurtResistantTime = 0;
 						}
 					}
+					event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY+event.getEntityLiving().height/2.0, event.getEntityLiving().posZ, 0.5f, true);
 				}
 			}
 		}
 		if (event.getEntity() instanceof EntityPlayer){
-			int blastingLevel = ItemModUtil.getArmorModifierLevel((EntityPlayer)event.getEntity(), EmbersAPI.BLASTING_CORE);
+			EntityPlayer damager = (EntityPlayer)event.getEntity();
+			int blastingLevel = ItemModUtil.getArmorModifierLevel(damager, EmbersAPI.BLASTING_CORE);
 
-			float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
-			if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(((EntityPlayer)event.getEntity())) >= cost){
-				event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY+event.getEntityLiving().height/2.0, event.getEntityLiving().posZ, 0.5f, true);
-				EmberInventoryUtil.removeEmber(((EntityPlayer)event.getEntity()), cost);
-				List<EntityLivingBase> entities = event.getEntity().world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX-4.0*strength,event.getEntityLiving().posY-4.0*strength,event.getEntityLiving().posZ-4.0*strength,
+			if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
+				float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
+				EmberInventoryUtil.removeEmber(damager, cost);
+				List<EntityLivingBase> entities = damager.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX-4.0*strength,event.getEntityLiving().posY-4.0*strength,event.getEntityLiving().posZ-4.0*strength,
 																																event.getEntityLiving().posX+4.0*strength,event.getEntityLiving().posY+4.0*strength,event.getEntityLiving().posZ+4.0*strength));
 				for (EntityLivingBase e : entities){
 					if (e.getUniqueID().compareTo(event.getEntity().getUniqueID()) != 0){
-						e.attackEntityFrom(DamageSource.GENERIC, event.getAmount()*strength*0.25f);
-						e.knockBack(event.getEntity(), 2.0f*strength, -e.posX+event.getEntity().posX, -e.posZ+event.getEntity().posZ);
+						e.attackEntityFrom(DamageSource.causeExplosionDamage(damager), event.getAmount()*strength*0.25f);
+						e.knockBack(event.getEntity(), 2.0f*strength, -e.posX+damager.posX, -e.posZ+damager.posZ);
+						e.hurtResistantTime = 0;
 					}
 				}
+				event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY+event.getEntityLiving().height/2.0, event.getEntityLiving().posZ, 0.5f, true);
 			}
 		}
 	}

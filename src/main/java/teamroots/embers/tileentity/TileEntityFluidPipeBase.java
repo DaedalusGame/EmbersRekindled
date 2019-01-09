@@ -1,6 +1,5 @@
 package teamroots.embers.tileentity;
 
-import com.google.common.collect.TreeMultimap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -11,7 +10,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
 import teamroots.embers.Embers;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EnumPipeConnection;
@@ -129,8 +127,8 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                     if (tile != null && tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite())) {
                         IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite());
                         int priority = PRIORITY_BLOCK;
-                        if (tile instanceof IItemPipePriority)
-                            priority = ((IItemPipePriority) tile).getPriority(facing.getOpposite());
+                        if (tile instanceof IFluidPipePriority)
+                            priority = ((IFluidPipePriority) tile).getPriority(facing.getOpposite());
                         if (isFrom(facing.getOpposite()))
                             priority -= 5; //aka always try opposite first
                         possibleDirections.put(priority, facing);

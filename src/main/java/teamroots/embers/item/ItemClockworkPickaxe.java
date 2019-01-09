@@ -104,7 +104,7 @@ public class ItemClockworkPickaxe extends ItemTool implements IModeledItem, IEmb
 	
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant){
-		return enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER;
+		return enchant.type != EnumEnchantmentType.BREAKABLE && enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER;
 	}
 	
 	@Override
