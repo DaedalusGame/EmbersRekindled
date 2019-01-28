@@ -71,11 +71,22 @@ public class EmbersAPIImpl implements IEmbersAPI {
     }
 
     @Override
-    public double getEmberValue(ItemStack stack) {
+    public void unregisterEmberFuel(IFuel fuel) {
+        emberFuels.remove(fuel);
+    }
+
+    @Override
+    public IFuel getEmberFuel(ItemStack stack) {
         for(IFuel fuel : emberFuels)
             if(fuel.matches(stack))
-                return fuel.getFuelValue(stack);
-        return 0;
+                return fuel;
+        return null;
+    }
+
+    @Override
+    public double getEmberValue(ItemStack stack) {
+        IFuel fuel = getEmberFuel(stack);
+        return fuel != null ? fuel.getFuelValue(stack) : 0;
     }
 
     @Override
@@ -101,6 +112,11 @@ public class EmbersAPIImpl implements IEmbersAPI {
     @Override
     public void registerCatalysisFuel(ICoefficientFuel fuel) {
         catalysisFuels.add(fuel);
+    }
+
+    @Override
+    public void unregisterCatalysisFuel(ICoefficientFuel fuel) {
+        catalysisFuels.remove(fuel);
     }
 
     @Override
@@ -137,6 +153,11 @@ public class EmbersAPIImpl implements IEmbersAPI {
     }
 
     @Override
+    public void unregisterCombustionFuel(ICoefficientFuel fuel) {
+        combustionFuels.remove(fuel);
+    }
+
+    @Override
     public ICoefficientFuel getCombustionFuel(ItemStack stack) {
         for(ICoefficientFuel fuel : combustionFuels)
             if(fuel.matches(stack))
@@ -165,11 +186,16 @@ public class EmbersAPIImpl implements IEmbersAPI {
     }
 
     @Override
-    public double getMetalCoefficient(IBlockState state) {
+    public void unregisterMetalCoefficient(IMetalCoefficient coefficient) {
+        metalCoefficients.remove(coefficient);
+    }
+
+    @Override
+    public IMetalCoefficient getMetalCoefficient(IBlockState state) {
         for(IMetalCoefficient coefficient : metalCoefficients)
             if(coefficient.matches(state))
-                return coefficient.getCoefficient(state);
-        return 0;
+                return coefficient;
+        return null;
     }
 
     @Override
@@ -195,6 +221,11 @@ public class EmbersAPIImpl implements IEmbersAPI {
     @Override
     public void registerBoilerFluid(ILiquidFuel fuel) {
         boilerLiquids.add(fuel);
+    }
+
+    @Override
+    public void unregisterBoilerFluid(ILiquidFuel fuel) {
+        boilerLiquids.remove(fuel);
     }
 
     @Override
@@ -228,6 +259,11 @@ public class EmbersAPIImpl implements IEmbersAPI {
     @Override
     public void registerSteamEngineFuel(ILiquidFuel fuel) {
         steamEngineFuels.add(fuel);
+    }
+
+    @Override
+    public void unregisterSteamEngineFuel(ILiquidFuel fuel) {
+        steamEngineFuels.remove(fuel);
     }
 
     @Override
