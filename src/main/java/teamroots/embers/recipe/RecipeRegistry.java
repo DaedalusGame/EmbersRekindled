@@ -260,7 +260,7 @@ public class RecipeRegistry {
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("gunpowder"),3.0);
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("dustGlowstone"),4.0);
 
-		EmbersAPI.registerBoilerFluid(FluidRegistry.WATER,FluidRegistry.getFluid("steam"),ConfigManager.miniBoilerWaterMultiplier);
+		EmbersAPI.registerBoilerFluid(FluidRegistry.WATER,FluidRegistry.getFluid("steam"),5.0);
 
 		EmbersAPI.registerSteamEngineFuel(FluidRegistry.getFluid("steam"),2.0);
 	}

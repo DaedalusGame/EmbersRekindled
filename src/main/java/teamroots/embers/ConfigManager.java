@@ -55,7 +55,6 @@ public class ConfigManager {
 	public static int reservoirCapacity;
 	public static int miniBoilerCapacity;
 	public static float miniBoilerHeatMultiplier;
-	public static float miniBoilerWaterMultiplier;
 	public static boolean miniBoilerCanExplode;
 
 	static Pattern damageRatePattern = Pattern.compile("(\\w+):(\\d+(?:\\.\\d+|))");
@@ -167,7 +166,6 @@ public class ConfigManager {
 		reservoirCapacity = config.getInt("reservoirCapacity", "parameters", Fluid.BUCKET_VOLUME * 40, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
 		miniBoilerCapacity = config.getInt("miniBoilerCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1000, Integer.MAX_VALUE, "How much fluid (in mb) fits into a mini boiler.");
 		miniBoilerHeatMultiplier = config.getFloat("miniBoilerHeatMultiplier", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, heat-wise, the mini boiler is at making steam.");
-		miniBoilerWaterMultiplier = config.getFloat("miniBoilerWaterMultiplier", "parameters", 5.0f, 0.0f, Float.MAX_VALUE, "How efficient, water-wise, the mini boiler is at making steam. For example, a 5.0 value would make the mini boiler consume 1mb of water to produce 5mb of steam.");
 		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 
 		scaleDamagePasses.clear();
