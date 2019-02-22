@@ -486,7 +486,7 @@ embers.research.page.melter.desc=Using the power of activated Ember, you have de
 
 embers.research.page.stamper=Stamper
 embers.research.page.stamper.title=Pound It Flat
-embers.research.page.stamper.desc=To shape molten metal into useful forms, you have devised the Stamper. To stamp molten metal requires two parts: the Stamper itself and the Stamper Base. Place the Stamper two blocks above the Stamper Base, give it Ember, as well as a particular Stamp. Pipe molten metal into the Stamper Base and the Stamper should begin to process it. You may place a Bin beneath the Stamper Base to automatically collect the products.
+embers.research.page.stamper.desc=To shape molten metal into useful forms, you have devised the Stamper. To stamp molten metal requires two parts: the Stamper itself and the Stamper Base. Place the Stamper one block above the Stamper Base, give it Ember, as well as a particular Stamp. Pipe molten metal into the Stamper Base and the Stamper should begin to process it. You may place a Bin beneath the Stamper Base to automatically collect the products.
 
 embers.research.page.hearth_coil=Hearth Coil
 embers.research.page.hearth_coil.title=Open Fire
