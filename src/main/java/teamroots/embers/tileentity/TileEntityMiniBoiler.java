@@ -9,6 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -191,8 +192,8 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	{
 		FluidStack fluid = getFluidStack();
 		ILiquidFuel fuelHandler = EmbersAPI.getBoilerFluid(fluid);
-		if(fuelHandler != null && fluid.amount > 0) {
-			int fluidBoiled = Math.min(fluid.amount, (int) Math.round(ConfigManager.miniBoilerHeatMultiplier * heat));
+		if(fuelHandler != null && fluid.amount > 0 && heat > 0) {
+			int fluidBoiled = MathHelper.clamp((int) (ConfigManager.miniBoilerHeatMultiplier  * heat),1,fluid.amount);
 
 			if(fluidBoiled > 0) {
 				fluid = fluidTank.drain(fluidBoiled,false);
