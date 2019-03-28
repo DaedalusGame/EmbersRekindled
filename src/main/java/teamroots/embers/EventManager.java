@@ -261,15 +261,19 @@ public class EventManager {
     @SubscribeEvent
     public void onServerTick(WorldTickEvent event) {
         if (event.world.provider.getDimensionType() == DimensionType.OVERWORLD) {
+            boolean changed = false;
             if (Misc.random.nextInt(400) == 0) {
                 EmberGenUtil.offX++;
                 EmberWorldData.get(event.world).markDirty();
+                changed = true;
             }
             if (Misc.random.nextInt(400) == 0) {
                 EmberGenUtil.offZ++;
                 EmberWorldData.get(event.world).markDirty();
+                changed = true;
             }
-            PacketHandler.INSTANCE.sendToAll(new MessageEmberGenOffset(EmberGenUtil.offX, EmberGenUtil.offZ));
+            if(changed)
+                PacketHandler.INSTANCE.sendToAll(new MessageEmberGenOffset(EmberGenUtil.offX, EmberGenUtil.offZ));
         }
     }
 
