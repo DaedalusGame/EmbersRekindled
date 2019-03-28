@@ -43,6 +43,11 @@ public class Melter {
         CraftTweaker.LATE_ACTIONS.add(new RemoveByOutput(CraftTweakerMC.getLiquidStack(output)));
     }
 
+    @ZenMethod
+    public static void removeAll() {
+        CraftTweaker.LATE_ACTIONS.add(new RemoveAll());
+    }
+
     private static List<ItemMeltingRecipe> getRecipesByInput(ItemStack stack)
     {
         return RecipeRegistry.meltingRecipes.stream().filter(recipe -> recipe.input.apply(stack)).collect(Collectors.toCollection(ArrayList::new));
@@ -107,6 +112,23 @@ public class Melter {
         @Override
         public String describe() {
             return String.format("Removing %s recipes with input: %s",NAME,input.toString());
+        }
+    }
+
+    public static class RemoveAll implements IAction
+    {
+        protected RemoveAll() {
+
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.meltingRecipes.clear();
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Removing all %s recipes",NAME);
         }
     }
 }

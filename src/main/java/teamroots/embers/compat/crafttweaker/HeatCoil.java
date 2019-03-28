@@ -33,6 +33,11 @@ public class HeatCoil {
         CraftTweakerAPI.apply(new RemoveByInput(CraftTweakerMC.getItemStack(input)));
     }
 
+    @ZenMethod
+    public static void removeAll() {
+        CraftTweakerAPI.apply(new RemoveAll());
+    }
+
     private static List<HeatCoilRecipe> getRecipesByInput(ItemStack stack) {
         return RecipeRegistry.heatCoilRecipes.stream().filter(recipe -> recipe.matches(stack)).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -72,6 +77,23 @@ public class HeatCoil {
         @Override
         public String describe() {
             return String.format("Removing %s recipes with input: %s",NAME, input.toString());
+        }
+    }
+
+    public static class RemoveAll implements IAction
+    {
+        protected RemoveAll() {
+
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.heatCoilRecipes.clear();
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Removing all %s recipes",NAME);
         }
     }
 }

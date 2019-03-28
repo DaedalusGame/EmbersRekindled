@@ -37,6 +37,11 @@ public class Stamper {
         CraftTweaker.LATE_ACTIONS.add(new RemoveByOutput(CraftTweakerMC.getItemStack(output)));
     }
 
+    @ZenMethod
+    public static void removeAll() {
+        CraftTweaker.LATE_ACTIONS.add(new RemoveAll());
+    }
+
     private static List<ItemStampingRecipe> getRecipesByOutput(ItemStack stack)
     {
         return RecipeRegistry.stampingRecipes.stream().filter(recipe -> ItemStack.areItemStacksEqual(stack,recipe.result)).collect(Collectors.toCollection(ArrayList::new));
@@ -77,6 +82,23 @@ public class Stamper {
         @Override
         public String describe() {
             return String.format("Removing %s recipes with output: %s",NAME,output.toString());
+        }
+    }
+
+    public static class RemoveAll implements IAction
+    {
+        protected RemoveAll() {
+
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.stampingRecipes.clear();
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Removing all %s recipes",NAME);
         }
     }
 }

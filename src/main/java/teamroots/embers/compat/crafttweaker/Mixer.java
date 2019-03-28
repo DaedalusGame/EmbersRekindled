@@ -5,6 +5,7 @@ import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.mc1120.CraftTweaker;
 import net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -32,6 +33,11 @@ public class Mixer {
     public static void remove(ILiquidStack output)
     {
         CraftTweakerAPI.apply(new RemoveByOutput(CraftTweakerMC.getLiquidStack(output)));
+    }
+
+    @ZenMethod
+    public static void removeAll() {
+        CraftTweakerAPI.apply(new RemoveAll());
     }
 
     private static List<FluidMixingRecipe> getRecipesByOutput(FluidStack stack)
@@ -74,6 +80,23 @@ public class Mixer {
         @Override
         public String describe() {
             return String.format("Removing %s recipes with output: %s",NAME,output.toString());
+        }
+    }
+
+    public static class RemoveAll implements IAction
+    {
+        protected RemoveAll() {
+
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.mixingRecipes.clear();
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Removing all %s recipes",NAME);
         }
     }
 }
