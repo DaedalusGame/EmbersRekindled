@@ -1,5 +1,6 @@
 package teamroots.embers.gui;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,6 +16,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import teamroots.embers.EventManager;
@@ -25,8 +31,11 @@ import teamroots.embers.research.ResearchManager;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
 
+import javax.annotation.Nonnull;
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 public class GuiCodex extends GuiScreen {
 	public double mouseX = 0;
@@ -52,6 +61,10 @@ public class GuiCodex extends GuiScreen {
 	LinkedList<ResearchCategory> lastCategories = new LinkedList<>();
 	public boolean nextPageSelected;
 	public boolean previousPageSelected;
+
+	public String searchString = "";
+	public int searchDelay;
+	public ArrayList<ResearchBase> searchResult = new ArrayList<>();
 	
 	public GuiCodex(){
 	}
@@ -144,7 +157,21 @@ public class GuiCodex extends GuiScreen {
 				return;
 			}
 		}
+		else if(researchPage == null)
+		{
+			if(keyCode == Keyboard.KEY_BACK) {
+				if (!searchString.isEmpty())
+					setSearchString(searchString.substring(0, searchString.length() - 1));
+			}
+			else if(!Character.isISOControl(typedChar))
+				setSearchString(searchString + typedChar);
+		}
 		super.keyTyped(typedChar, keyCode);
+	}
+
+	private void setSearchString(String string) {
+		searchString = string;
+		searchDelay = 20;
 	}
 
 	private void switchNextPage() {
@@ -169,14 +196,26 @@ public class GuiCodex extends GuiScreen {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton){
 		if (selectedIndex != -1 && this.researchCategory == null){
-			this.researchCategory = ResearchManager.researches.get(selectedIndex);
-			playSound(SoundManager.CODEX_CATEGORY_OPEN);
+			ResearchCategory selectedCategory = ResearchManager.researches.get(selectedIndex);
+			if(selectedCategory.isChecked()) {
+				this.researchCategory = selectedCategory;
+				playSound(SoundManager.CODEX_CATEGORY_OPEN);
+			}
 		}
 		if (selectedPageIndex != -1 && this.researchPage == null){
 			ResearchBase selectedResearchPage = researchCategory.researches.get(selectedPageIndex);
-			if(selectedResearchPage.onOpen(this)) {
-				this.researchPage = selectedResearchPage;
-				playSound(SoundManager.CODEX_PAGE_OPEN);
+			if(mouseButton == 0) {
+				if (selectedResearchPage.onOpen(this)) {
+					this.researchPage = selectedResearchPage;
+					playSound(SoundManager.CODEX_PAGE_OPEN);
+				}
+			} else if(mouseButton == 1) {
+				boolean newChecked = !selectedResearchPage.isChecked();
+				selectedResearchPage.check(newChecked);
+				if(selectedResearchPage.isChecked() == newChecked) {
+					playSound(SoundManager.CODEX_PAGE_SWITCH);
+					ResearchManager.sendCheckmark(selectedResearchPage,newChecked); //hmmm...
+				}
 			}
 		}
 		if(researchPage != null && researchPage.hasMultiplePages()) {
@@ -188,7 +227,7 @@ public class GuiCodex extends GuiScreen {
 			}
 		}
 	}
-	
+
 	public static void drawText(FontRenderer font, String s, int x, int y, int color){
 		RenderUtil.drawTextRGBA(font, s, x-1, y, 0, 0, 0, 64);
 		RenderUtil.drawTextRGBA(font, s, x+1, y, 0, 0, 0, 64);
@@ -329,6 +368,8 @@ public class GuiCodex extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks){
+		boolean showTooltips = true;
+		boolean showSearchString = searchDelay >= 0 && !searchString.isEmpty();
 		boolean doUpdateSynced = ticks > partialTicks;
 		ticks = partialTicks;
 		int numResearches = ResearchManager.researches.size();
@@ -344,7 +385,6 @@ public class GuiCodex extends GuiScreen {
 				raiseTargets[i] = 0f;
 			}
 		}
-		String categoryString = "null";
 		
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.disableLighting();
@@ -365,7 +405,7 @@ public class GuiCodex extends GuiScreen {
 		if (this.researchCategory == null){
 			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_index.png"));
 			GlStateManager.color(1, 1, 1, 1);
-			
+
 			this.drawTexturedModalRect(basePosX, basePosY, 0, 0, 192, 256);
 			
 			GlStateManager.enableBlend();
@@ -395,12 +435,16 @@ public class GuiCodex extends GuiScreen {
 				float diff = Math.min(Math.min(Math.abs(mouseDir - angle),Math.abs((mouseDir-360f) - angle)), (Math.abs(mouseDir+360f) - angle));
 				ResearchCategory category = ResearchManager.researches.get((int) i);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(category.getIndexTexture());
+				boolean alreadyGlowing = category.researches.stream().anyMatch(entry -> searchResult.contains(entry));
 				if (diff < 180.0f/(float) numResearches && distSq < 16000){
-					if (lastSelectedIndex != (int)i)
-						playSound(SoundManager.CODEX_CATEGORY_SELECT);
+					if (lastSelectedIndex != (int)i) {
+						if(category.isChecked() && !alreadyGlowing)
+							playSound(SoundManager.CODEX_CATEGORY_SELECT);
+						else
+							playSound(SoundManager.CODEX_CATEGORY_UNSELECT);
+					}
 					selected = true;
 					selectedIndex = (int)i;
-					categoryString = category.name;
 					if (raise[(int)i] < 1.0f && doUpdateSynced){
 						raise[(int)i] = raiseTargets[(int)i];
 						raiseTargets[(int)i] = raiseTargets[(int)i] * 0.5f + 0.5f;
@@ -418,15 +462,35 @@ public class GuiCodex extends GuiScreen {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(basePosX+96, basePosY+88, 0);
 				GlStateManager.rotate(angle, 0, 0, 1);
+				boolean glowing = alreadyGlowing || selected && category.isChecked();
 				this.drawTexturedModalRect(-16, -88-12f*instRaise, 192, 112, 32, 64);
-				this.drawTexturedModalRect(-6, -80-12f*instRaise, (int) category.getIconU()+(selected ? 16 : 0), (int) category.getIconV(), 12, 12);
+				this.drawTexturedModalRect(-6, -80-12f*instRaise, (int) category.getIconU()+(glowing ? 16 : 0), (int) category.getIconV(), 12, 12);
 				GlStateManager.popMatrix();
 			}
 
 			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("embers:textures/gui/codex_index.png"));
 			this.drawTexturedModalRect(basePosX+64, basePosY+56, 192, 176, 64, 64);
-			
-			drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research."+categoryString), basePosX+96, basePosY+207);
+
+			if(!showSearchString && selectedIndex >= 0) {
+				ResearchCategory category = ResearchManager.researches.get(selectedIndex);
+				drawCenteredTextGlowing(this.fontRenderer, category.getName(), basePosX + 96, basePosY + 207);
+
+			} else if(!searchString.isEmpty()) {
+				drawCenteredTextGlowing(this.fontRenderer, getSearchStringPrint(), basePosX+96, basePosY+207);
+			} else {
+				drawCenteredTextGlowing(this.fontRenderer, I18n.format("embers.research.null"), basePosX+96, basePosY+207);
+			}
+
+			if(selectedIndex >= 0) {
+				ResearchCategory category = ResearchManager.researches.get(selectedIndex);
+				List<String> tooltip = category.getTooltip(showTooltips);
+				if (!tooltip.isEmpty())
+					renderTooltip(tooltip, mouseX, mouseY);
+			}
+			else if(mouseX > basePosX-16 && mouseY > basePosY+224 && mouseX < basePosX-16+48 && mouseY < basePosY+224+48)
+			{
+				renderTooltip(Lists.newArrayList("Right-click entries to mark them as "+TextFormatting.GREEN+ "\u2714" +TextFormatting.RESET+" complete.","Categories will open as you complete entries.","","Enter text to search and highlight entries.","You can search entries matching multiple words with "+TextFormatting.WHITE+"|"+TextFormatting.RESET+".","ex: "+TextFormatting.WHITE+"Ember|Generator"+TextFormatting.RESET), mouseX, mouseY);
+			}
 		}
 		else {
 			if (this.researchPage == null){
@@ -446,18 +510,48 @@ public class GuiCodex extends GuiScreen {
 					ResearchBase r = researchCategory.researches.get(i);
 					if (r.isHidden())
 						continue;
-					if (mouseX >= basePosX+r.x-24 && mouseY >= basePosY+r.y-24 && mouseX <= basePosX+r.x+24 && mouseY <= basePosY+r.y+24){
+					r.shownAmount = r.shownTarget;
+					if(r.areAncestorsChecked())
+						r.shownTarget = Math.min(1.0f,r.shownTarget + partialTicks * 0.03f);//r.shownTarget*(1.0f-partialTicks) + (r.shownTarget * 0.8f + 0.2f) *partialTicks;
+					else
+						r.shownTarget = Math.max(0.0f,r.shownTarget - partialTicks * 0.03f);
+					boolean isShown = r.shownAmount >= 1.0;
+					if (isShown && mouseX >= basePosX+r.x-24 && mouseY >= basePosY+r.y-24 && mouseX <= basePosX+r.x+24 && mouseY <= basePosY+r.y+24){
 						this.selectedPageIndex = i;
-						if (r.selectedAmount < 1.0f && doUpdateSynced){
+						if (r.selectedAmount < 1.0f){
 							r.selectedAmount = r.selectionTarget;
 							r.selectionTarget = r.selectionTarget*(1.0f-partialTicks) + (r.selectionTarget * 0.8f + 0.2f) *partialTicks;
 						}
 					}
-					else if (r.selectedAmount > 0.0f && doUpdateSynced){
+					else if (r.selectedAmount > 0.0f){
 						r.selectedAmount = r.selectionTarget;
 						r.selectionTarget = r.selectionTarget*(1.0f-partialTicks) + (r.selectionTarget * 0.9f) *partialTicks;
 					}
-					if (r.selectedAmount > 0.1f){
+					//Highlight search results
+					if (isShown && searchResult.contains(r)){
+						Tessellator tess = Tessellator.getInstance();
+						BufferBuilder b = tess.getBuffer();
+						float x = r.x;
+						float y = r.y;
+						GlStateManager.color(1, 1, 1, 1);
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+						GlStateManager.shadeModel(GL11.GL_SMOOTH);
+						GlStateManager.disableTexture2D();
+						int index = searchResult.indexOf(r);
+						float amt = MathHelper.clamp(-searchDelay,0,10) / 10.0f;
+						amt *= MathHelper.clampedLerp(0.5,1.0,(float)(searchResult.size()-index) / searchResult.size());
+						for (float j = 0; j < 3; j ++){
+							float coeff = (j+1.0f) / 3.0f;
+							b.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+							RenderUtil.renderHighlightCircle(b,basePosX+x,basePosY+y,(25.0f+20.0f*coeff*coeff)* amt);
+							tess.draw();
+						}
+						GlStateManager.shadeModel(GL11.GL_FLAT);
+						GlStateManager.enableTexture2D();
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					}
+					//Highlight selection
+					if (isShown && r.selectedAmount > 0.1f){
 						Tessellator tess = Tessellator.getInstance();
 						BufferBuilder b = tess.getBuffer();
 						float x = r.x;
@@ -481,19 +575,21 @@ public class GuiCodex extends GuiScreen {
 						for (int l = 0; l < r.ancestors.size(); l ++){
 							Tessellator tess = Tessellator.getInstance();
 							BufferBuilder b = tess.getBuffer();
+							ResearchBase ancestor = r.ancestors.get(l);
 							float x1 = r.x;
 							float y1 = r.y;
-							float x2 = r.ancestors.get(l).x;
-							float y2 = r.ancestors.get(l).y;
-							float dx = Math.abs(x1-x2);
-							float dy = Math.abs(y1-y2);
+							float x2 = ancestor.x;
+							float y2 = ancestor.y;
+							//float dx = Math.abs(x1-x2);
+							//float dy = Math.abs(y1-y2);
 							GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 							GlStateManager.shadeModel(GL11.GL_SMOOTH);
 							GlStateManager.disableTexture2D();
 							for (float j = 0; j < 8; j ++){
 								float coeff = (float)Math.pow((j+1.0f)/8.0f,1.5f);
+								float appearCoeff = Math.min(r.shownAmount,ancestor.shownAmount);
 								b.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
-								RenderUtil.renderWavyEmberLine(b, basePosX+x1, basePosY+y1, basePosX+x2, basePosY+y2, 4.0f*coeff);
+								RenderUtil.renderWavyEmberLine(b, basePosX+x1, basePosY+y1, basePosX+x2, basePosY+y2, 4.0f*coeff, appearCoeff, new Color(255,64,16));
 								tess.draw();
 							}
 							GlStateManager.shadeModel(GL11.GL_FLAT);
@@ -506,23 +602,66 @@ public class GuiCodex extends GuiScreen {
 					ResearchBase r = researchCategory.researches.get(i);
 					if (r.isHidden())
 						continue;
-					Minecraft.getMinecraft().getTextureManager().bindTexture(r.getIconBackground());
-					double u = r.getIconBackgroundU();
-					double v = r.getIconBackgroundV();
-					RenderUtil.drawTexturedModalRect(basePosX+r.x-24, basePosY+r.y-24, zLevel, u, v, u + 24f/256f, v + 24f/256f, 48, 48);
-					this.renderItemStackMinusTooltipAt(r.getIcon(), basePosX+r.x-8, basePosY+r.y-8);
+					if (r.shownAmount > 0.5) {
+						Minecraft.getMinecraft().getTextureManager().bindTexture(r.getIconBackground());
+						double u = r.getIconBackgroundU();
+						double v = r.getIconBackgroundV();
+						RenderUtil.drawTexturedModalRect(basePosX + r.x - 24, basePosY + r.y - 24, zLevel, u, v, u + 24f / 256f, v + 24f / 256f, 48, 48);
+						if (r.isChecked()) { //TODO: cleanup
+							Minecraft.getMinecraft().getTextureManager().bindTexture(ResearchManager.PAGE_ICONS);
+							double uOverlay = 4 * 24f / 256f;
+							double vOverlay = 0 * 24f / 256f;
+							RenderUtil.drawTexturedModalRect(basePosX + r.x - 24, basePosY + r.y - 24, zLevel, uOverlay, vOverlay, uOverlay + 24f / 256f, vOverlay + 24f / 256f, 48, 48);
+						}
+						this.renderItemStackMinusTooltipAt(r.getIcon(), basePosX + r.x - 8, basePosY + r.y - 8);
+					}
 				}
 				Minecraft.getMinecraft().getTextureManager().bindTexture(researchCategory.getBackgroundTexture());
 				RenderUtil.drawTexturedModalRect(basePosX, basePosY2, zLevel, 0f/256f, 272f/512f, 192f/256f,305f/512f, 384, 33);
+				if(!showSearchString && this.selectedPageIndex >= 0) {
+					ResearchBase research = researchCategory.researches.get(this.selectedPageIndex);
+					drawCenteredTextGlowing(this.fontRenderer, research.getName(), basePosX + 192, basePosY2 + 13);
+					GlStateManager.color(1f, 1f, 1f, 1f);
+				} else if(!searchString.isEmpty()) {
+					drawCenteredTextGlowing(this.fontRenderer, getSearchStringPrint(), basePosX + 192, basePosY2 + 13);
+					GlStateManager.color(1f, 1f, 1f, 1f);
+				}
 				for (int i = 0; i < researchCategory.researches.size(); i ++){
-					if (i == this.selectedPageIndex){
-						drawCenteredTextGlowing(this.fontRenderer, researchCategory.researches.get(i).getName(), basePosX+192, basePosY2+13);
-						GlStateManager.color(1f, 1f, 1f, 1f);
+					ResearchBase r = researchCategory.researches.get(i);
+					if (r.isHidden())
+						continue;
+					//Appearance effect
+					if (r.shownAmount > 0.0 && r.shownAmount < 1.0f){
+						Tessellator tess = Tessellator.getInstance();
+						BufferBuilder b = tess.getBuffer();
+						float x = r.x;
+						float y = r.y;
+						GlStateManager.color(1, 1, 1, 1);
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+						GlStateManager.shadeModel(GL11.GL_SMOOTH);
+						GlStateManager.disableTexture2D();
+						float amt = (float)Math.sin(r.shownAmount*Math.PI);
+						for (float j = 0; j < 8; j ++){
+							float coeff = (j+1.0f) /8.0f;
+							b.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+							RenderUtil.renderHighlightCircle(b,basePosX+x,basePosY+y,(25.0f+20.0f*coeff*coeff)* amt,200,new Color(255,64,16));
+							tess.draw();
+						}
+						GlStateManager.shadeModel(GL11.GL_FLAT);
+						GlStateManager.enableTexture2D();
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 					}
 				}
 				GlStateManager.enableBlend();
 				GlStateManager.disableLighting();
 				GlStateManager.enableAlpha();
+
+				if(selectedPageIndex >= 0) {
+					ResearchBase page = researchCategory.researches.get(selectedPageIndex);
+					List<String> tooltip = page.getTooltip(showTooltips);
+					if(!tooltip.isEmpty())
+						renderTooltip(tooltip,mouseX,mouseY);
+				}
 			}
 			else {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(researchPage.getBackground());
@@ -569,6 +708,21 @@ public class GuiCodex extends GuiScreen {
 		GlStateManager.alphaFunc(func, ref);
 	}
 
+	private String getSearchStringPrint() {
+		String searchStringFormat;
+		if(searchDelay > 0)
+            searchStringFormat = "";
+        else if(searchResult.isEmpty())
+            searchStringFormat = TextFormatting.DARK_GRAY.toString();
+        else
+            searchStringFormat = TextFormatting.GREEN.toString();
+		return searchStringFormat + searchString;
+	}
+
+	public void renderTooltip(List<String> text, int x, int y) {
+		drawHoveringTextGlowing(text, x, y, width, height, -1, fontRenderer);
+	}
+
 	public void renderAura(float x, float y){
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder b = tess.getBuffer();
@@ -594,5 +748,173 @@ public class GuiCodex extends GuiScreen {
 			}
 		}
 		playSound(SoundManager.CODEX_CLOSE);
+	}
+
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+
+		searchDelay--;
+		if(searchDelay == 0) {
+			searchResult.clear();
+			Map<ResearchBase,Integer> results = ResearchManager.findByTag(searchString);
+			results.entrySet().stream().sorted((x,y) -> y.getValue().compareTo(x.getValue())).map(Map.Entry::getKey).forEach(result -> searchResult.add(result));
+
+		}
+	}
+
+	// Copied from GUIUtils
+	public static void drawHoveringTextGlowing(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font)
+	{
+		if (!textLines.isEmpty())
+		{
+			//RenderTooltipEvent.Pre event = new RenderTooltipEvent.Pre(stack, textLines, mouseX, mouseY, screenWidth, screenHeight, maxTextWidth, font);
+			//if (MinecraftForge.EVENT_BUS.post(event)) {
+			//	return;
+			//}
+
+			GlStateManager.disableRescaleNormal();
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.disableLighting();
+			GlStateManager.disableDepth();
+			int tooltipTextWidth = 0;
+
+			for (String textLine : textLines)
+			{
+				int textLineWidth = font.getStringWidth(textLine);
+
+				if (textLineWidth > tooltipTextWidth)
+				{
+					tooltipTextWidth = textLineWidth;
+				}
+			}
+
+			boolean needsWrap = false;
+
+			int titleLinesCount = 1;
+			int tooltipX = mouseX + 12;
+			if (tooltipX + tooltipTextWidth + 4 > screenWidth)
+			{
+				tooltipX = mouseX - 16 - tooltipTextWidth;
+				if (tooltipX < 4) // if the tooltip doesn't fit on the screen
+				{
+					if (mouseX > screenWidth / 2)
+					{
+						tooltipTextWidth = mouseX - 12 - 8;
+					}
+					else
+					{
+						tooltipTextWidth = screenWidth - 16 - mouseX;
+					}
+					needsWrap = true;
+				}
+			}
+
+			if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth)
+			{
+				tooltipTextWidth = maxTextWidth;
+				needsWrap = true;
+			}
+
+			if (needsWrap)
+			{
+				int wrappedTooltipWidth = 0;
+				List<String> wrappedTextLines = new ArrayList<>();
+				for (int i = 0; i < textLines.size(); i++)
+				{
+					String textLine = textLines.get(i);
+					List<String> wrappedLine = font.listFormattedStringToWidth(textLine, tooltipTextWidth);
+					if (i == 0)
+					{
+						titleLinesCount = wrappedLine.size();
+					}
+
+					for (String line : wrappedLine)
+					{
+						int lineWidth = font.getStringWidth(line);
+						if (lineWidth > wrappedTooltipWidth)
+						{
+							wrappedTooltipWidth = lineWidth;
+						}
+						wrappedTextLines.add(line);
+					}
+				}
+				tooltipTextWidth = wrappedTooltipWidth;
+				textLines = wrappedTextLines;
+
+				if (mouseX > screenWidth / 2)
+				{
+					tooltipX = mouseX - 16 - tooltipTextWidth;
+				}
+				else
+				{
+					tooltipX = mouseX + 12;
+				}
+			}
+
+			int tooltipY = mouseY - 12;
+			int tooltipHeight = 8;
+
+			if (textLines.size() > 1)
+			{
+				tooltipHeight += (textLines.size() - 1) * 10;
+				if (textLines.size() > titleLinesCount) {
+					tooltipHeight += 2; // gap between title lines and next lines
+				}
+			}
+
+			if (tooltipY < 4)
+			{
+				tooltipY = 4;
+			}
+			else if (tooltipY + tooltipHeight + 4 > screenHeight)
+			{
+				tooltipY = screenHeight - tooltipHeight - 4;
+			}
+
+			final int zLevel = 300;
+			int backgroundColor = new Color(0,0,0,128).getRGB();
+			float sine = 0.5f*((float)Math.sin(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
+			float cosine = 0.5f*((float)Math.cos(Math.toRadians(4.0f*((float)EventManager.ticks + Minecraft.getMinecraft().getRenderPartialTicks())))+1.0f);
+			int borderColorStart = new Color(255,64+(int)(64*sine),16,128).getRGB();
+			int borderColorEnd =  new Color(255,64+(int)(64*cosine),16,128).getRGB();
+			//RenderTooltipEvent.Color colorEvent = new RenderTooltipEvent.Color(stack, textLines, tooltipX, tooltipY, font, backgroundColor, borderColorStart, borderColorEnd);
+			//MinecraftForge.EVENT_BUS.post(colorEvent);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+			GuiUtils.drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+			GuiUtils.drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColorStart, borderColorStart);
+			GuiUtils.drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
+
+			//MinecraftForge.EVENT_BUS.post(new RenderTooltipEvent.PostBackground(stack, textLines, tooltipX, tooltipY, font, tooltipTextWidth, tooltipHeight));
+			//int tooltipTop = tooltipY;
+			GlStateManager.enableBlend();
+			GlStateManager.enableAlpha();
+
+			for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber)
+			{
+				String line = textLines.get(lineNumber);
+				drawTextGlowing(font,line,tooltipX,tooltipY);
+				//font.drawStringWithShadow(line, (float)tooltipX, (float)tooltipY, -1);
+
+				if (lineNumber + 1 == titleLinesCount)
+				{
+					tooltipY += 2;
+				}
+
+				tooltipY += 10;
+			}
+
+			//MinecraftForge.EVENT_BUS.post(new RenderTooltipEvent.PostText(stack, textLines, tooltipX, tooltipTop, font, tooltipTextWidth, tooltipHeight));
+
+			GlStateManager.enableLighting();
+			GlStateManager.enableDepth();
+			RenderHelper.enableStandardItemLighting();
+			GlStateManager.enableRescaleNormal();
+		}
 	}
 }
