@@ -11,6 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
@@ -96,6 +97,11 @@ public class TileEntityInfernoForgeOpening extends TileEntity implements ITileEn
 			if (world.getTileEntity(pos.down()) instanceof TileEntityInfernoForge){
 				TileEntityInfernoForge forge = getForge(world, pos);
 				if (forge != null && forge.progress == 0){
+					if(isOpen && forge.capability.getEmber() <= 0) { //Syke bitch, not enough ember
+						if(!world.isRemote)
+							player.sendStatusMessage(new TextComponentTranslation("embers.tooltip.forge.cannot_start"),true);
+						return true;
+					}
 					toggle();
 					return true;
 				}
