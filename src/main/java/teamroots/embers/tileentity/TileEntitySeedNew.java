@@ -1,9 +1,9 @@
 package teamroots.embers.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,31 +13,26 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.tile.IEmberInjectable;
-import teamroots.embers.block.BlockSeed;
+import teamroots.embers.api.tile.IExtraCapabilityInformation;
+import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
-@Deprecated
-public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable, ISoundController {
-	boolean[] willSpawn = new boolean[12];
-
-	public static ResourceLocation TEXTURE_IRON = new ResourceLocation(Embers.MODID + ":textures/blocks/material_iron.png");
-	public static ResourceLocation TEXTURE_GOLD = new ResourceLocation(Embers.MODID + ":textures/blocks/material_gold.png");
-	public static ResourceLocation TEXTURE_COPPER = new ResourceLocation(Embers.MODID + ":textures/blocks/material_copper.png");
-	public static ResourceLocation TEXTURE_LEAD = new ResourceLocation(Embers.MODID + ":textures/blocks/material_lead.png");
-	public static ResourceLocation TEXTURE_SILVER = new ResourceLocation(Embers.MODID + ":textures/blocks/material_silver.png");
-
+public class TileEntitySeedNew extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable, ISoundController, IExtraCapabilityInformation {
+	BlockSeedNew type;
+	protected boolean[] willSpawn;
 	protected int size = 0;
+	protected int xp = 0;
+	protected int bonusParts = 0;
 	protected int ticksExisted = 0;
-	protected int material = -1;
 	protected Random random = new Random();
 
 	public static final int SOUND_AMBIENT = 1;
@@ -45,31 +40,44 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 
 	HashSet<Integer> soundsPlaying = new HashSet<>();
 
-	public TileEntitySeed() {
+	public TileEntitySeedNew() {
 		resetSpawns();
 	}
 
 	public void resetSpawns(){
-		for (int i = 0; i < 12; i ++){
+		int segments = Math.max(6 + bonusParts, 1);
+		segments += getLevelBonus(getLevel(xp));
+		willSpawn = new boolean[segments];
+		for (int i = 0; i < willSpawn.length; i ++){
 			willSpawn[i] = random.nextInt(3) == 0;
 		}
 	}
-	
-	public TileEntitySeed setMaterial(int material){
-		this.material = material;
-		return this;
+
+	private int getLevelBonus(int level) {
+		if(level > 50) {
+			return getLevelBonus(50) + (level-50)/25;
+		} else if(level > 20) {
+			return getLevelBonus(20) + (level-20)/10;
+		} else if(level > 10) {
+			return getLevelBonus(10) + (level-10)/5;
+		} else if(level > 5) {
+			return getLevelBonus(5) + (level-5)/3;
+		} else {
+			return (level+1)/2;
+		}
 	}
 
 	public String getSpawnString(){
 		String result = "";
-		for (int i = 0; i < 12; i ++){
+		for (int i = 0; i < willSpawn.length; i ++){
 			result += willSpawn[i] ? "1" : "0";
 		}
 		return result;
 	}
 
 	public void loadSpawnsFromString(String s){
-		for (int i = 0; i < 12; i ++){
+		willSpawn = new boolean[s.length()];
+		for (int i = 0; i < s.length(); i ++){
 			willSpawn[i] = s.substring(i, i+1).compareTo("1") == 0;
 		}
 	}
@@ -79,7 +87,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		super.writeToNBT(tag);
 		tag.setString("spawns", getSpawnString());
 		tag.setInteger("size", size);
-		tag.setInteger("material", material);
+		tag.setInteger("xp", xp);
 		return tag;
 	}
 	
@@ -88,7 +96,7 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		super.readFromNBT(tag);
 		loadSpawnsFromString(tag.getString("spawns"));
 		size = tag.getInteger("size");
-		material = tag.getInteger("material");
+		xp = tag.getInteger("xp");
 	}
 
 	@Override
@@ -123,17 +131,16 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	public void update() {
 		if(getWorld().isRemote)
 			handleSound();
-		if (material == -1){
-			material = world.getBlockState(getPos()).getValue(BlockSeed.type);
-		}
 		ticksExisted ++;
 		if (size > 1000){
 			size = 0;
-			for (int i = 0; i < 12; i ++){
+			ItemStack[] stacks = getNuggetDrops(willSpawn.length);
+			double oneAng = 360.0 / willSpawn.length;
+			for (int i = 0; i < willSpawn.length; i ++){
 				if (willSpawn[i] && !getWorld().isRemote){
-					ItemStack nuggetStack = getDrop();
-					float offX = 0.4f*(float)Math.sin(Math.toRadians(i*30.0));
-					float offZ = 0.4f*(float)Math.cos(Math.toRadians(i*30.0));
+					ItemStack nuggetStack = stacks[i];
+					float offX = 0.4f*(float)Math.sin(Math.toRadians(i * oneAng));
+					float offZ = 0.4f*(float)Math.cos(Math.toRadians(i * oneAng));
 					world.spawnEntity(new EntityItem(world,getPos().getX()+0.5+offX,getPos().getY()+0.5f,getPos().getZ()+0.5+offZ,nuggetStack));
 					world.playSound(null,getPos().getX()+0.5+offX,getPos().getY()+0.5f,getPos().getZ()+0.5+offZ, SoundManager.METAL_SEED_PING, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				}
@@ -143,20 +150,38 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 		}
 	}
 
-	protected ItemStack getDrop() {
-		switch (material) {
-			case 0: return new ItemStack(Items.IRON_NUGGET,1);
-			case 1: return new ItemStack(Items.GOLD_NUGGET,1);
-			case 2: return new ItemStack(RegistryManager.nugget_copper,1);
-			case 3: return new ItemStack(RegistryManager.nugget_lead,1);
-			case 4: return new ItemStack(RegistryManager.nugget_silver,1);
-			default: return ItemStack.EMPTY;
+	private BlockSeedNew getBlockSeedType() {
+		if(type == null) {
+			Block block = getBlockType();
+			if (block instanceof BlockSeedNew)
+				type = (BlockSeedNew) block;
 		}
+
+		return type != null ? type : (BlockSeedNew)RegistryManager.seed_iron;
+	}
+
+	protected ItemStack[] getNuggetDrops(int n) {
+		return getBlockSeedType().getNuggetDrops(this,n);
+	}
+
+	public void addExperience(int xp) {
+		this.xp += xp;
+	}
+
+	public int getRequiredExperienceForLevel(int level)
+	{
+		return ((level*(level+1))/2)*1000;
+	}
+
+	public int getLevel(int xp)
+	{
+		return (int)Math.floor((Math.sqrt(5)*Math.sqrt(xp+125)-25)/50);
 	}
 
 	@Override
 	public void inject(TileEntity injector, double ember) {
 		size++;
+		addExperience(1);
 		markDirty();
 	}
 
@@ -201,13 +226,16 @@ public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITick
 	}
 
 	public ResourceLocation getTexture() {
-		switch (material) {
-			case 0: return TEXTURE_IRON;
-			case 1: return TEXTURE_GOLD;
-			case 2: return TEXTURE_COPPER;
-			case 3: return TEXTURE_LEAD;
-			case 4: return TEXTURE_SILVER;
-			default: return TEXTURE_IRON;
-		}
+		return getBlockSeedType().getTexture(this);
+	}
+
+	@Override
+	public void addOtherDescription(List<String> strings, EnumFacing facing) {
+		int level = getLevel(xp);
+		int requiredCurrentXP = getRequiredExperienceForLevel(level);
+		int requiredNextXP = getRequiredExperienceForLevel(level+1);
+
+		strings.add(Embers.proxy.formatLocalize("embers.tooltip.crystal.level",level));
+		strings.add(Embers.proxy.formatLocalize("embers.tooltip.crystal.xp",xp-requiredCurrentXP,requiredNextXP-requiredCurrentXP));
 	}
 }

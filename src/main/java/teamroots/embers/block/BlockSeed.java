@@ -20,9 +20,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import teamroots.embers.Embers;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntitySeed;
 
+import java.util.Random;
+
+@Deprecated
 public class BlockSeed extends BlockBase implements ITileEntityProvider, IModeledBlock {
 	public static final PropertyInteger type = PropertyInteger.create("type", 0, 4);
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0.3125,0.0625,0.3125,0.6875,0.9375,0.6875);
@@ -47,10 +51,31 @@ public class BlockSeed extends BlockBase implements ITileEntityProvider, IModele
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos){
 		return AABB_BASE;
 	}
-	
+
+	@Override
+	public boolean canSilkHarvest(World p_canSilkHarvest_1_, BlockPos p_canSilkHarvest_2_, IBlockState p_canSilkHarvest_3_, EntityPlayer p_canSilkHarvest_4_) {
+		return false;
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random random, int fortune) {
+		if(state.getBlock() == this) //I swear to god this will trip at least once in the lifetime of this mod.
+			switch(state.getValue(type))
+			{
+				case(0): return Item.getItemFromBlock(RegistryManager.seed_iron);
+				case(1): return Item.getItemFromBlock(RegistryManager.seed_gold);
+				case(2): return Item.getItemFromBlock(RegistryManager.seed_copper);
+				case(3): return Item.getItemFromBlock(RegistryManager.seed_lead);
+				case(4): return Item.getItemFromBlock(RegistryManager.seed_silver);
+				default: return Item.getItemFromBlock(RegistryManager.seed_iron);
+			}
+
+		return super.getItemDropped(state, random, fortune);
+	}
+
 	@Override
 	public int damageDropped(IBlockState state){
-		return state.getValue(type);
+		return 0;
 	}
 	
 	public BlockSeed setIsOpaqueCube(boolean b){
@@ -85,11 +110,11 @@ public class BlockSeed extends BlockBase implements ITileEntityProvider, IModele
 	
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list){
-		list.add(new ItemStack(this,1,0));
+		/*list.add(new ItemStack(this,1,0));
 		list.add(new ItemStack(this,1,1));
 		list.add(new ItemStack(this,1,2));
 		list.add(new ItemStack(this,1,3));
-		list.add(new ItemStack(this,1,4));
+		list.add(new ItemStack(this,1,4));*/
 	}
 	
 	@Override

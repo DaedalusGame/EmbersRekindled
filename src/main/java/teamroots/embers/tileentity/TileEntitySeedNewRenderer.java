@@ -9,27 +9,15 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
-@Deprecated
-public class TileEntitySeedRenderer extends TileEntitySpecialRenderer<TileEntitySeed> {
-	@Deprecated
-	public ResourceLocation textureIron = TileEntitySeed.TEXTURE_IRON;
-	@Deprecated
-	public ResourceLocation textureGold = TileEntitySeed.TEXTURE_GOLD;
-	@Deprecated
-	public ResourceLocation textureCopper = TileEntitySeed.TEXTURE_COPPER;
-	@Deprecated
-	public ResourceLocation textureLead = TileEntitySeed.TEXTURE_LEAD;
-	@Deprecated
-	public ResourceLocation textureSilver = TileEntitySeed.TEXTURE_SILVER;
+public class TileEntitySeedNewRenderer extends TileEntitySpecialRenderer<TileEntitySeedNew> {
 	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	Random random = new Random();
-	public TileEntitySeedRenderer(){
+	public TileEntitySeedNewRenderer(){
 		super();
 	}
 	
@@ -101,7 +89,7 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer<TileEntity
 	}
 	
 	@Override
-	public void render(TileEntitySeed tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
+	public void render(TileEntitySeedNew tile, double x, double y, double z, float partialTicks, int destroyStage, float tileAlpha){
 		if (tile != null){
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
@@ -118,11 +106,21 @@ public class TileEntitySeedRenderer extends TileEntitySpecialRenderer<TileEntity
             GlStateManager.rotate(-15.0f*(float)Math.sin(Math.toRadians(tile.ticksExisted+partialTicks)), 1, 0, 0);
             GlStateManager.rotate(-15.0f*(float)Math.sin(Math.toRadians(2.5f*(tile.ticksExisted+partialTicks))), 1, 0, 0);
             buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-            for (int i = 0; i < 12; i += 1){
+			float oneAng = 360f/tile.willSpawn.length;
+			Random crystalRandom = new Random(tile.getWorld().getSeed());
+            for (int i = 0; i < tile.willSpawn.length; i += 1){
             	if (tile.willSpawn[i]){
-	            	float offX = 0.4f * (float)Math.sin(Math.toRadians(30*i+((float) tile.ticksExisted+partialTicks)*2.0f));
-	            	float offZ = 0.4f * (float)Math.cos(Math.toRadians(30*i+((float) tile.ticksExisted+partialTicks)*2.0f));
-	            	this.drawCrystal(buffer, offX, 0, offZ, ((float) tile.ticksExisted+partialTicks)*2.0f, 0.4f*((float) tile.size/1000.0f), 0.0f, 0.0f, 0.125f, 0.25f);
+					float distVariation = 1.0f;
+					if(tile.willSpawn.length > 12)
+						distVariation += crystalRandom.nextFloat() * 0.5f;
+	            	float offX = distVariation * 0.4f * (float)Math.sin(Math.toRadians(oneAng*i+((float) tile.ticksExisted+partialTicks)*2.0f));
+	            	float offZ = distVariation * 0.4f * (float)Math.cos(Math.toRadians(oneAng*i+((float) tile.ticksExisted+partialTicks)*2.0f));
+					float texWidth = 0.125f*2*tile.size/1000.0f;
+					float texHeight = 0.25f*2*tile.size/1000.0f;
+					float texX = crystalRandom.nextFloat() * (1 - texWidth);
+					float texY = crystalRandom.nextFloat() * (1 - texHeight);
+					float sizeVariation = 0.5f + crystalRandom.nextFloat() * 0.5f;
+	            	this.drawCrystal(buffer, offX, 0, offZ, (tile.ticksExisted+partialTicks)*2.0f, sizeVariation*0.4f*(tile.size/1000.0f), texX, texY, texX+texWidth, texY+texHeight);
             	}
             }
     		tess.draw();
