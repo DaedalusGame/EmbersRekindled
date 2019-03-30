@@ -200,7 +200,7 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
             handler.fill(passStack, true);
             this.tank.drain(added, true);
             passStack.amount -= added;
-            return true;
+            return passStack.amount <= 0;
         }
 
         if (isFrom(facing))
