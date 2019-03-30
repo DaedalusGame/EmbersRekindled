@@ -19,6 +19,7 @@ public class ItemMeltingRecipe {
 
 	public Ingredient input;
 	public FluidStack fluid;
+	public FluidStack bonus; //for geologic separator
 
 	//Binary compat
 	@Deprecated
@@ -59,5 +60,10 @@ public class ItemMeltingRecipe {
 
 	public FluidStack getResult(TileEntity tile, ItemStack input){
 		return fluid.copy();
+	}
+
+	public ItemMeltingRecipe addBonusOutput(FluidStack fluid) {
+		bonus = fluid;
+		return this;
 	}
 }

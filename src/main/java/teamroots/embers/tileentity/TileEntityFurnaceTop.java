@@ -108,8 +108,7 @@ public class TileEntityFurnaceTop extends TileEntityOpenTank implements ITileEnt
 				boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
 				this.markDirty();
 				return didFill;
-			}
-			else {
+			} else {
 				player.setHeldItem(hand, this.inventory.insertItem(0,heldItem,false));
 				markDirty();
 				return true;

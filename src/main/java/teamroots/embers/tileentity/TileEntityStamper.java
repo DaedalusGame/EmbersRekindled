@@ -27,6 +27,7 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
@@ -208,7 +209,10 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
     }
 
     private ItemStampingRecipe getRecipe(ItemStack input, FluidStack fluid, ItemStack stamp) {
-        return RecipeRegistry.getStampingRecipe(input, fluid, stamp);
+        ItemStampingRecipe recipe = RecipeRegistry.getStampingRecipe(input, fluid, stamp);
+        MachineRecipeEvent<ItemStampingRecipe> event = new MachineRecipeEvent<>(this, recipe);
+        UpgradeUtil.throwEvent(this, event, upgrades);
+        return event.getRecipe();
     }
 
     @Override

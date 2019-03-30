@@ -160,7 +160,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
     @Override
     public void update() {
-        upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.UP});
+        upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.UP});
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if (UpgradeUtil.doTick(this, upgrades))
             return;

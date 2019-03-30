@@ -18,7 +18,7 @@ public class StampingRecipeWrapper extends BaseRecipeWrapper<ItemStampingRecipe>
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		List<ItemStack> inputStacks = recipe.getInputs();
-		ArrayList<ItemStack> stampStacks = Lists.newArrayList(recipe.stamp.getMatchingStacks());
+		List<ItemStack> stampStacks = recipe.getStamps();
 		List<ItemStack> outputStacks = recipe.getOutputs();
 		ingredients.setInputLists(ItemStack.class, Lists.newArrayList(inputStacks,stampStacks));
 		ingredients.setInput(FluidStack.class, recipe.getFluid());

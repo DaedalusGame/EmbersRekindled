@@ -9,30 +9,30 @@ import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.UpgradeEvent;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.IUpgradeProxy;
 import teamroots.embers.api.upgrades.IUpgradeUtil;
-import teamroots.embers.tileentity.TileEntityMechCore;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class UpgradeUtilImpl implements IUpgradeUtil {
     public List<IUpgradeProvider> getUpgrades(World world, BlockPos pos, EnumFacing[] facings)
     {
         LinkedList<IUpgradeProvider> upgrades = new LinkedList<>();
-        for (EnumFacing facing: facings) {
+        /*for (EnumFacing facing: facings) {
             TileEntity te = world.getTileEntity(pos.offset(facing));
             if(te != null && te.hasCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY,facing.getOpposite()))
             {
                 upgrades.add(te.getCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY,facing.getOpposite()));
             }
-        }
+        }*/
+        getUpgrades(world,pos,facings,upgrades);
         return upgrades;
     }
 
+    @Deprecated
     public List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings)
     {
-        LinkedList<IUpgradeProvider> upgrades = new LinkedList<>();
+        /*LinkedList<IUpgradeProvider> upgrades = new LinkedList<>();
         for (EnumFacing facing: facings) {
             TileEntity te = world.getTileEntity(pos.offset(facing));
             if(te instanceof TileEntityMechCore)
@@ -40,7 +40,47 @@ public class UpgradeUtilImpl implements IUpgradeUtil {
                 upgrades.addAll(getUpgrades(world,pos.offset(facing),EnumFacing.VALUES));
             }
         }
-        return upgrades;
+        return upgrades;*/
+        return getUpgrades(world,pos,facings);
+    }
+
+    public void getUpgrades(World world, BlockPos pos, EnumFacing[] facings, List<IUpgradeProvider> upgrades)
+    {
+        for (EnumFacing facing: facings) {
+            collectUpgrades(world,pos.offset(facing),facing.getOpposite(),upgrades);
+        }
+        resetCheckedProxies();
+    }
+
+    ThreadLocal<Set<IUpgradeProxy>> checkedProxies = ThreadLocal.withInitial(HashSet::new);
+
+    private boolean isProxyChecked(IUpgradeProxy proxy)
+    {
+        return checkedProxies.get().contains(proxy);
+    }
+
+    private void addCheckedProxy(IUpgradeProxy proxy)
+    {
+        checkedProxies.get().add(proxy);
+    }
+
+    private void resetCheckedProxies()
+    {
+        checkedProxies.remove();
+    }
+
+    public void collectUpgrades(World world, BlockPos pos, EnumFacing side, List<IUpgradeProvider> upgrades) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null && te.hasCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY, side)) {
+            upgrades.add(te.getCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY, side));
+        }
+        if (te instanceof IUpgradeProxy) {
+            IUpgradeProxy proxy = (IUpgradeProxy) te;
+            if (!isProxyChecked(proxy) && proxy.isProvider(side)) { //Prevent infinite recursion
+                addCheckedProxy(proxy);
+                proxy.collectUpgrades(upgrades);
+            }
+        }
     }
 
     public void verifyUpgrades(TileEntity tile,List<IUpgradeProvider> list)

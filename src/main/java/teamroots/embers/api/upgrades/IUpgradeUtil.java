@@ -15,6 +15,10 @@ public interface IUpgradeUtil {
 
     List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings);
 
+    void getUpgrades(World world, BlockPos pos, EnumFacing[] facings, List<IUpgradeProvider> upgrades);
+
+    void collectUpgrades(World world, BlockPos pos, EnumFacing side, List<IUpgradeProvider> upgrades);
+
     void verifyUpgrades(TileEntity tile, List<IUpgradeProvider> list);
 
     int getWorkTime(TileEntity tile, int time, List<IUpgradeProvider> list);
