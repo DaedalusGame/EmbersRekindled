@@ -13,10 +13,10 @@
 			"to": [16, 4, 16],
 			"shade": true,
 			"faces": {
-				"north": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"east": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"south": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"west": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
+				"north": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"east": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"west": {"uv": [0, 12, 16, 16], "texture": "#2"},
 				"up": {"uv": [0, 0, 16, 16], "texture": "#3"},
 				"down": {"uv": [0, 0, 16, 16], "texture": "#3"}
 			}
@@ -27,7 +27,7 @@
 			"to": [16, 12, 14],
 			"shade": true,
 			"faces": {
-				"south": {"uv": [0, 4, 16, 12], "texture": "#4"}
+				"south": {"uv": [0, 4, 16, 12], "texture": "#mnemonic"}
 			}
 		},
 		{
@@ -36,10 +36,10 @@
 			"to": [16, 16, 4],
 			"shade": true,
 			"faces": {
-				"north": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"south": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"up": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"down": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"}
+				"north": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"up": {"uv": [0, 0, 16, 4], "texture": "#3"},
+				"down": {"uv": [0, 12, 16, 16], "texture": "#2"}
 			}
 		},
 		{
@@ -48,10 +48,10 @@
 			"to": [16, 16, 16],
 			"shade": true,
 			"faces": {
-				"north": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"south": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"up": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"},
-				"down": {"uv": [0, 12, 16, 16], "texture": "#mnemonic"}
+				"north": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#2"},
+				"up": {"uv": [0, 12, 16, 16], "texture": "#3"},
+				"down": {"uv": [0, 12, 16, 16], "texture": "#2"}
 			}
 		},
 		{
@@ -60,7 +60,7 @@
 			"to": [16, 12, 4],
 			"shade": true,
 			"faces": {
-				"north": {"uv": [0, 4, 16, 12], "texture": "#4"}
+				"north": {"uv": [0, 4, 16, 12], "texture": "#mnemonic"}
 			}
 		},
 		{
@@ -68,7 +68,9 @@
 			"from": [0, 13, 4],
 			"to": [16, 15, 12],
 			"shade": true,
-			"faces": {"up": {"uv": [0, 4, 16, 12], "texture": "#4"}}
+			"faces": {
+				"up": {"uv": [0, 4, 16, 12], "texture": "#mnemonic"}
+			}
 		}
 	]
 }

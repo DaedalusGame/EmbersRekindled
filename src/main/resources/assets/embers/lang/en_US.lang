@@ -338,6 +338,9 @@ embers.tooltip.goggles.upgrade=• Machine Upgrade
 embers.tooltip.goggles.accessor_slot=• Machine Accessor Slot
 embers.tooltip.goggles.actuator_slot=• Actuator Slot
 
+embers.tooltip.crystal.level=Level %s
+embers.tooltip.crystal.xp=Refinement %s/%s
+
 embers.tooltip.atmosEmber=Atmospheric Ember:
 embers.tooltip.targetingBlock=Targeting:
 embers.tooltip.itemdial.slot=Slot %s: %s

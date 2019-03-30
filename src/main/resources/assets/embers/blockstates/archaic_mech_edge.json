@@ -1,0 +1,12 @@
+{
+    "variants":{
+        "state=0":  { "model": "embers:archaic_edge_straight", "y": 0 },
+        "state=1":  { "model": "embers:archaic_edge_corner", "y": 270 },
+        "state=2":  { "model": "embers:archaic_edge_straight", "y": 270 },
+        "state=3":  { "model": "embers:archaic_edge_corner", "y": 180 },
+        "state=4":  { "model": "embers:archaic_edge_straight", "y": 180 },
+        "state=5":  { "model": "embers:archaic_edge_corner", "y": 90 },
+        "state=6":  { "model": "embers:archaic_edge_straight", "y": 90 },
+        "state=7":  { "model": "embers:archaic_edge_corner", "y": 0 }
+    }
+}

@@ -183,16 +183,24 @@ public class ThaumcraftIntegration {
                 new AspectList().add(Aspect.VOID, 15).add(Aspect.MECHANISM, 5).add(Aspect.EXCHANGE, 5));
         register.registerComplexObjectTag(new ItemStack(RegistryManager.breaker),
                 new AspectList().add(Aspect.ENTROPY, 15).add(Aspect.MECHANISM, 10).add(Aspect.TOOL, 8));
-        register.registerObjectTag(new ItemStack(RegistryManager.seed, 1, 0),
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_iron),
                 new AspectList().add(Aspect.METAL, 25).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 10));
-        register.registerObjectTag(new ItemStack(RegistryManager.seed, 1, 1),
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_gold),
                 new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 20));
-        register.registerObjectTag(new ItemStack(RegistryManager.seed, 1, 2),
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_copper),
                 new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 10).add(Aspect.EXCHANGE, 5));
-        register.registerObjectTag(new ItemStack(RegistryManager.seed, 1, 3),
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_lead),
                 new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 10).add(Aspect.DESIRE, 10));
-        register.registerObjectTag(new ItemStack(RegistryManager.seed, 1, 4),
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_silver),
                 new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 15));
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_aluminum),
+                new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 10).add(Aspect.AIR, 5));
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_nickel),
+                new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 10).add(Aspect.CRAFT, 5));
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_tin),
+                new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 10).add(Aspect.ORDER, 5).add(Aspect.DESIRE, 10));
+        register.registerObjectTag(new ItemStack(RegistryManager.seed_dawnstone),
+                new AspectList().add(Aspect.METAL, 20).add(Aspect.CRYSTAL, 5).add(Aspect.ORDER, 5).add(Aspect.MECHANISM, 5).add(Aspect.FIRE, 5));
         register.registerComplexObjectTag(new ItemStack(RegistryManager.field_chart),
                 new AspectList().add(Aspect.SENSES, 15));
         register.registerComplexObjectTag(new ItemStack(RegistryManager.ember_pulser),

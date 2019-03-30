@@ -19,6 +19,7 @@ import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -46,6 +47,19 @@ import java.util.stream.Collectors;
 public class Misc {
     public static final double LOG_E = Math.log10(Math.exp(1));
     public static Random random = new Random();
+
+    public static EntityEquipmentSlot handToSlot(EnumHand hand)
+    {
+        switch(hand)
+        {
+            case MAIN_HAND:
+                return EntityEquipmentSlot.MAINHAND;
+            case OFF_HAND:
+                return EntityEquipmentSlot.OFFHAND;
+            default:
+                return null;
+        }
+    }
 
     public static boolean isValidLever(IBlockAccess world, BlockPos pos, EnumFacing side) {
         IBlockState state = world.getBlockState(pos);

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -11,6 +12,7 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -49,17 +51,19 @@ import teamroots.embers.item.block.ItemBlockSlab;
 import teamroots.embers.itemmod.*;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.power.EmberCapabilityStorage;
+import teamroots.embers.research.capability.DefaultResearchCapability;
+import teamroots.embers.research.capability.IResearchCapability;
 import teamroots.embers.tileentity.*;
 import teamroots.embers.upgrade.UpgradeCatalyticPlug;
-import teamroots.embers.util.DefaultUpgradeProvider;
-import teamroots.embers.util.EmbersFuelHandler;
-import teamroots.embers.util.Misc;
+import teamroots.embers.util.*;
 import teamroots.embers.world.WorldGenOres;
 import teamroots.embers.world.WorldGenSmallRuin;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 public class RegistryManager {
 	public static ArrayList<Block> blocks = new ArrayList<Block>();
@@ -69,7 +73,9 @@ public class RegistryManager {
 	public static ToolMaterial tool_mat_aluminum, tool_mat_bronze, tool_mat_tin, tool_mat_electrum, tool_mat_nickel;
 	public static ArmorMaterial armor_mat_ashen_cloak;
 	
-	public static Block mechanical_pump, creative_ember_source, caminite_lever, inferno_forge, inferno_forge_edge, ember_pulser, field_chart, catalyzer, combustor, reactor, archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, seed, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, block_mithril, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
+	public static Block mechanical_pump, creative_ember_source, caminite_lever, inferno_forge, inferno_forge_edge, ember_pulser, field_chart, catalyzer, combustor, reactor, archaic_tile, archaic_edge, wrapped_sealed_planks, structure_marker, boiler, ember_injector, breaker, vacuum, sealed_planks, ore_quartz, auto_hammer, dawnstone_anvil, archaic_light, archaic_bricks, glow, beam_cannon, item_transfer, alchemy_tablet, alchemy_pedestal, knowledge_table, cinder_plinth, ashen_tile, stairs_ashen_tile, wall_ashen_tile, ashen_tile_slab, ashen_tile_slab_double, ashen_stone, ashen_brick, stairs_ashen_stone, wall_ashen_stone, ashen_stone_slab, ashen_stone_slab_double, stairs_ashen_brick, wall_ashen_brick, ashen_brick_slab, ashen_brick_slab_double, block_caminite_brick_slab, block_caminite_brick_slab_double, charger, crystal_cell, advanced_edge, ember_relay, beam_splitter, block_lantern, ember_gauge, item_gauge, fluid_gauge, large_tank, item_dropper, heat_coil, wall_caminite_brick, block_dawnstone, mixer, stone_edge, ember_activator, mech_core, stairs_caminite_brick, mech_accessor, ember_bore, mech_edge, item_pump, item_pipe, block_oven, stamp_base, stamper, block_caminite_large_brick, bin, copper_cell, deep_line, ember_emitter, ember_receiver, block_furnace, pump, block_copper, block_lead, block_silver, block_mithril, ore_copper, ore_lead, ore_silver, block_caminite_brick, block_tank, pipe;
+	@Deprecated
+	public static Block seed;
 	public static Block block_molten_dawnstone, block_molten_gold, block_molten_copper, block_molten_lead, block_molten_silver, block_molten_iron,
 						block_molten_aluminum, block_molten_tin, block_molten_bronze, block_molten_electrum, block_molten_nickel;
 	public static Block ore_nickel, block_nickel;
@@ -85,6 +91,11 @@ public class RegistryManager {
 	public static Block ember_siphon;
 	public static Block stirling;
 	public static Block clockwork_attenuator;
+	public static Block seed_iron, seed_gold, seed_copper, seed_silver, seed_lead, seed_tin, seed_aluminum, seed_nickel, seed_dawnstone;
+	public static Block archaic_mech_edge;
+	public static Block archaic_geysir;
+	public static Block stone_valve;
+	public static Block geo_separator;
 	
 	public static Fluid fluid_steam, fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
 						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
@@ -117,6 +128,20 @@ public class RegistryManager {
 	public static WorldGenOres world_gen_ores;
 	
 	public static IWorldGenerator world_gen_small_ruin;
+
+	private static BlockSeedNew createSimpleSeed(Material material, String name, ResourceLocation texture, BiFunction<TileEntitySeedNew,Integer,ItemStack> nuggetGenerator) {
+		return new BlockSeedNew(material,name,true) {
+			@Override
+			public ResourceLocation getTexture(TileEntitySeedNew tile) {
+				return texture;
+			}
+
+			@Override
+			public ItemStack[] getNuggetDrops(TileEntitySeedNew tile, int n) {
+				return IntStream.range(0,n).mapToObj(i -> nuggetGenerator.apply(tile,n)).toArray(ItemStack[]::new);
+			}
+		};
+	}
 	
 	public static void registerAll(){
 		registerCapabilities();
@@ -243,10 +268,21 @@ public class RegistryManager {
 		blocks.add(ember_siphon = (new BlockEmberSiphon(Material.ROCK, "ember_siphon",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(stirling = (new BlockStirling(Material.ROCK, "stirling",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(clockwork_attenuator = (new BlockClockworkAttenuator(Material.ROCK, "clockwork_attenuator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(seed_iron = createSimpleSeed(Material.ROCK, "seed_iron", new ResourceLocation(Embers.MODID + ":textures/blocks/material_iron.png"),(tile,i) -> new ItemStack(Items.IRON_NUGGET)));
+		blocks.add(seed_gold = createSimpleSeed(Material.ROCK, "seed_gold", new ResourceLocation(Embers.MODID + ":textures/blocks/material_gold.png"),(tile,i) -> new ItemStack(Items.GOLD_NUGGET)));
+		blocks.add(seed_copper = createSimpleSeed(Material.ROCK, "seed_copper", new ResourceLocation(Embers.MODID + ":textures/blocks/material_copper.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_copper)));
+		blocks.add(seed_silver = createSimpleSeed(Material.ROCK, "seed_silver", new ResourceLocation(Embers.MODID + ":textures/blocks/material_silver.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_silver)));
+		blocks.add(seed_lead = createSimpleSeed(Material.ROCK, "seed_lead", new ResourceLocation(Embers.MODID + ":textures/blocks/material_lead.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_lead)));
+		blocks.add(seed_dawnstone = createSimpleSeed(Material.ROCK, "seed_dawnstone", new ResourceLocation(Embers.MODID + ":textures/blocks/material_dawnstone.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_dawnstone)));
+		blocks.add(stone_valve = (new BlockStoneValve(unpushable,"stone_valve",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(archaic_geysir = (new BlockArchaicGeysir(Material.ROCK,"archaic_geysir",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(archaic_mech_edge = (new BlockMechEdge(unpushable,"archaic_mech_edge",false)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		blocks.add(geo_separator = (new BlockGeoSeparator(Material.IRON,"geo_separator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 
 		if (ConfigManager.enableAluminum){
 			blocks.add(block_aluminum = (new BlockBase(Material.ROCK,"block_aluminum",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
 			blocks.add(ore_aluminum = (new BlockBase(Material.ROCK,"ore_aluminum",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 1).setHardness(1.6f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
+			blocks.add(seed_aluminum = createSimpleSeed(Material.ROCK, "seed_aluminum", new ResourceLocation(Embers.MODID + ":textures/blocks/material_aluminum.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_aluminum)));
 		}
 		
 		if (ConfigManager.enableBronze){
@@ -260,11 +296,13 @@ public class RegistryManager {
 		if (ConfigManager.enableNickel){
 			blocks.add(block_nickel = (new BlockBase(Material.ROCK,"block_nickel",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(2.2f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
 			blocks.add(ore_nickel = (new BlockBase(Material.ROCK,"ore_nickel",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 1).setHardness(2.2f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
+			blocks.add(seed_nickel = createSimpleSeed(Material.ROCK, "seed_nickel", new ResourceLocation(Embers.MODID + ":textures/blocks/material_nickel.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_nickel)));
 		}
 		
 		if (ConfigManager.enableTin){
 			blocks.add(block_tin = (new BlockBase(Material.ROCK,"block_tin",true)).setBeaconBase(true).setHarvestProperties("pickaxe", 1).setHardness(1.3f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
 			blocks.add(ore_tin = (new BlockBase(Material.ROCK,"ore_tin",true)).setIsFullCube(true).setIsOpaqueCube(true).setHarvestProperties("pickaxe", 1).setHardness(1.3f).setLightOpacity(16).setCreativeTab(Embers.resource_tab));
+			blocks.add(seed_tin = createSimpleSeed(Material.ROCK, "seed_tin", new ResourceLocation(Embers.MODID + ":textures/blocks/material_tin.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_tin)));
 		}
 		
 		items.add(ingot_copper = new ItemBase("ingot_copper",true).setCreativeTab(Embers.resource_tab));
@@ -545,6 +583,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityItemVacuum.class, Embers.MODID+":tile_entity_vacuum");
 		GameRegistry.registerTileEntity(TileEntityBreaker.class, Embers.MODID+":tile_entity_breaker");
 		GameRegistry.registerTileEntity(TileEntitySeed.class, Embers.MODID+":tile_entity_seed");
+		GameRegistry.registerTileEntity(TileEntitySeedNew.class, Embers.MODID+":tile_entity_seed_new");
 		GameRegistry.registerTileEntity(TileEntityEmberInjector.class, Embers.MODID+":tile_entity_ember_injector");
 		GameRegistry.registerTileEntity(TileEntityBoilerBottom.class, Embers.MODID+":tile_entity_boiler_bottom");
 		GameRegistry.registerTileEntity(TileEntityBoilerTop.class, Embers.MODID+":tile_entity_boiler_top");
@@ -568,6 +607,9 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityStirling.class, Embers.MODID+":tile_entity_stirling");
 		GameRegistry.registerTileEntity(TileEntityEmberSiphon.class, Embers.MODID+":tile_entity_ember_siphon");
 		GameRegistry.registerTileEntity(TileEntityClockworkAttenuator.class, Embers.MODID+":tile_entity_clockwork_attenuator");
+		GameRegistry.registerTileEntity(TileEntityArchaicGeysir.class, Embers.MODID+":tile_entity_archaic_geysir");
+		GameRegistry.registerTileEntity(TileEntityStoneValve.class, Embers.MODID+":tile_entity_stone_valve");
+		GameRegistry.registerTileEntity(TileEntityGeoSeparator.class, Embers.MODID+":tile_entity_geo_separator");
 	}
 
 	private static void registerCapabilities() {
@@ -586,6 +628,21 @@ public class RegistryManager {
 		}, () -> {
 			return new DefaultUpgradeProvider("none", null);
 		});
+		CapabilityManager.INSTANCE.register(IResearchCapability.class, new Capability.IStorage<IResearchCapability>() {
+			@Nullable
+			@Override
+			public NBTBase writeNBT(Capability<IResearchCapability> capability, IResearchCapability instance, EnumFacing side) {
+				NBTTagCompound compound = new NBTTagCompound();
+				instance.writeToNBT(compound);
+				return compound;
+			}
+
+			@Override
+			public void readNBT(Capability<IResearchCapability> capability, IResearchCapability instance, EnumFacing side, NBTBase nbt) {
+				NBTTagCompound compound = (NBTTagCompound) nbt;
+				instance.readFromNBT(compound);
+			}
+		}, DefaultResearchCapability::new);
 	}
 
 	public static void registerItemModifiers(){
@@ -729,11 +786,13 @@ public class RegistryManager {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHammer.class, new TileEntityAutoHammerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBreaker.class, new TileEntityBreakerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeed.class, new TileEntitySeedRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySeedNew.class, new TileEntitySeedNewRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFieldChart.class, new TileEntityFieldChartRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPulser.class, new TileEntityPulserRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfernoForgeOpening.class, new TileEntityInfernoForgeOpeningRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPumpBottom.class, new TileEntityPumpRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFluidTransfer.class, new TileEntityFluidTransferRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeoSeparator.class, new TileEntityGeoSeparatorRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberPacket.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
