@@ -172,8 +172,8 @@ public class ResearchManager {
         activator = new ResearchBase("activator", new ItemStack(RegistryManager.ember_activator), 9, 5).addAncestor(crystals);
         boiler = new ResearchBase("boiler", new ItemStack(RegistryManager.boiler), 9, 7).addAncestor(activator);
         mini_boiler = new ResearchBase("mini_boiler", new ItemStack(RegistryManager.mini_boiler), 11, 7).addAncestor(activator);
-        dials = new ResearchBase("dials", new ItemStack(RegistryManager.ember_gauge), 5, 5).addAncestor(ores);
-        tinker_lens = new ResearchBase("tinker_lens", new ItemStack(RegistryManager.tinker_lens),4,7).addAncestor(ores);
+        dials = new ResearchBase("dials", new ItemStack(RegistryManager.ember_gauge), 5, 5).addAncestor(hammer);
+        tinker_lens = new ResearchBase("tinker_lens", new ItemStack(RegistryManager.tinker_lens),4,7).addAncestor(hammer);
 
         pipes = new ResearchBase("pipes", new ItemStack(RegistryManager.pump), 2, 4);
         pipes.addPage(new ResearchShowItem("routing",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_pipe),new ItemStack(RegistryManager.pipe))));
@@ -357,7 +357,7 @@ public class ResearchManager {
         baublesSwitch.addAncestor(cluster);
 
 
-        ResearchBase pipeSwitch = makeCategorySwitch(subCategoryPipes, 3, 0, new ItemStack(RegistryManager.pipe), 0, 1).addAncestor(ores);
+        ResearchBase pipeSwitch = makeCategorySwitch(subCategoryPipes, 3, 0, new ItemStack(RegistryManager.pipe), 0, 1).addAncestor(hammer);
         ResearchBase weaponAugmentSwitch = makeCategorySwitch(subCategoryWeaponAugments, 2, 1, ItemStack.EMPTY, 1, 1).setMinEntries(2).addAncestor(inferno_forge);
         ResearchBase armorAugmentSwitch = makeCategorySwitch(subCategoryArmorAugments, 1, 3, ItemStack.EMPTY, 2, 1).setMinEntries(2).addAncestor(inferno_forge);
         ResearchBase projectileAugmentSwitch = makeCategorySwitch(subCategoryProjectileAugments, 11, 3, ItemStack.EMPTY, 3, 1).setMinEntries(2).addAncestor(inferno_forge);
