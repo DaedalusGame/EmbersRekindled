@@ -158,6 +158,7 @@ public class ModifierShiftingScales extends ModifierBase {
                 EmbersAPI.setScales(entity, scales);
                 setLastPosition(uuid, entity.getPositionVector());
             } else {
+                EmbersAPI.setScales(entity, 0);
                 resetEntity(uuid);
             }
         }
@@ -196,7 +197,7 @@ public class ModifierShiftingScales extends ModifierBase {
     }
 
     @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onDrawScreenPre(RenderGameOverlayEvent.Pre event) {
         ScaledResolution resolution = event.getResolution();
         if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {
