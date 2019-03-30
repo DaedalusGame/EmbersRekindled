@@ -35,6 +35,7 @@ import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.block.BlockSeed;
+import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.EnumStampType;
@@ -608,6 +609,12 @@ public class RecipeRegistry {
 				"XXX",
 				'Y', RegistryManager.brick_caminite,
 				'X', new ItemStack(RegistryManager.wall_caminite_brick)}).setRegistryName(getRL("stone_edge")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("stone_valve"),new ItemStack(RegistryManager.stone_valve,1),true,new Object[]{
+				"XXX",
+				"Y Y",
+				"XXX",
+				'Y', RegistryManager.mech_accessor,
+				'X', new ItemStack(RegistryManager.wall_caminite_brick)}).setRegistryName(getRL("stone_valve")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("mixer"),new ItemStack(RegistryManager.mixer,1),true,new Object[]{
 				"PPP",
 				"PCP",
@@ -1077,6 +1084,12 @@ public class RecipeRegistry {
 				'I', "plateElectrum",
 				'B', "dustRedstone",
 				'G', "nuggetElectrum"}).setRegistryName(getRL("clockwork_attenuator")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("geo_separator"),new ItemStack(RegistryManager.geo_separator,1),true,new Object[]{
+				"  B",
+				"GIG",
+				'I', RegistryManager.block_tank,
+				'B', "blockNickel",
+				'G', RegistryManager.brick_caminite}).setRegistryName(getRL("geo_separator")));
 
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
@@ -1365,7 +1378,7 @@ public class RecipeRegistry {
 				Lists.newArrayList(fluidPipe, glass, fluidPipe, redstoneBlock),
 				new ItemStack(RegistryManager.catalytic_plug,1)));
 
-		Ingredient anyMetalSeed = new IngredientSpecial(stack -> Block.getBlockFromItem(stack.getItem()) instanceof BlockSeed);
+		Ingredient anyMetalSeed = new IngredientSpecial(stack -> Block.getBlockFromItem(stack.getItem()) instanceof BlockSeedNew);
 
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList(AspectList.createStandard(0, 0, 0, 0, 0), AspectList.createStandard(16, 16, 16, 16, 16)),
 				anyMetalSeed,

@@ -185,7 +185,11 @@ public class GuiCodex extends GuiScreen {
 	}
 
 	public void playSound(SoundEvent sound) {
-		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound,1.0f));
+		playSound(sound,1.0f);
+	}
+
+	public void playSound(SoundEvent sound, float pitch) {
+		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(sound,pitch));
 	}
 
 	@Override
@@ -213,7 +217,10 @@ public class GuiCodex extends GuiScreen {
 				boolean newChecked = !selectedResearchPage.isChecked();
 				selectedResearchPage.check(newChecked);
 				if(selectedResearchPage.isChecked() == newChecked) {
-					playSound(SoundManager.CODEX_PAGE_SWITCH);
+					if(newChecked)
+						playSound(SoundManager.CODEX_CHECK);
+					else
+						playSound(SoundManager.CODEX_UNCHECK);
 					ResearchManager.sendCheckmark(selectedResearchPage,newChecked); //hmmm...
 				}
 			}
@@ -494,6 +501,9 @@ public class GuiCodex extends GuiScreen {
 		}
 		else {
 			if (this.researchPage == null){
+				float showSpeed = 0.3f;
+				boolean playUnlockSound = false;
+				boolean playLockSound = false;
 				
 				GlStateManager.enableBlend();
 				GlStateManager.disableLighting();
@@ -511,10 +521,15 @@ public class GuiCodex extends GuiScreen {
 					if (r.isHidden())
 						continue;
 					r.shownAmount = r.shownTarget;
-					if(r.areAncestorsChecked())
-						r.shownTarget = Math.min(1.0f,r.shownTarget + partialTicks * 0.03f);//r.shownTarget*(1.0f-partialTicks) + (r.shownTarget * 0.8f + 0.2f) *partialTicks;
-					else
-						r.shownTarget = Math.max(0.0f,r.shownTarget - partialTicks * 0.03f);
+					if(r.areAncestorsChecked()) {
+						if(r.shownTarget <= 0)
+							playUnlockSound = true;
+						r.shownTarget = Math.min(1.0f, r.shownTarget + partialTicks * 0.1f * showSpeed);//r.shownTarget*(1.0f-partialTicks) + (r.shownTarget * 0.8f + 0.2f) *partialTicks;
+					} else {
+						if(r.shownTarget >= 1)
+							playLockSound = true;
+						r.shownTarget = Math.max(0.0f, r.shownTarget - partialTicks * 0.1f * showSpeed);
+					}
 					boolean isShown = r.shownAmount >= 1.0;
 					if (isShown && mouseX >= basePosX+r.x-24 && mouseY >= basePosY+r.y-24 && mouseX <= basePosX+r.x+24 && mouseY <= basePosY+r.y+24){
 						this.selectedPageIndex = i;
@@ -662,6 +677,12 @@ public class GuiCodex extends GuiScreen {
 					if(!tooltip.isEmpty())
 						renderTooltip(tooltip,mouseX,mouseY);
 				}
+
+				if(playLockSound)
+					playSound(SoundManager.CODEX_LOCK,showSpeed);
+				if(playUnlockSound)
+					playSound(SoundManager.CODEX_UNLOCK,showSpeed);
+
 			}
 			else {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(researchPage.getBackground());
