@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.EmberProjectileEvent;
+import teamroots.embers.api.event.ItemVisualEvent;
 import teamroots.embers.api.item.IProjectileWeapon;
 import teamroots.embers.api.projectile.EffectArea;
 import teamroots.embers.api.projectile.EffectDamage;
@@ -23,6 +24,9 @@ import teamroots.embers.api.projectile.ProjectileFireball;
 import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
+import teamroots.embers.util.Misc;
+
+import java.awt.*;
 
 public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
 
@@ -92,11 +96,15 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
         if (stack.getTagCompound().getInteger("cooldown") > 0)
             player.resetActiveHand();
         double charge = ((Math.min(60, 72000 - count)) / 60.0) * 15.0;
+        boolean fullCharge = charge >= 15.0;
+        ItemVisualEvent event = new ItemVisualEvent(player, Misc.handToSlot(player.getActiveHand()),stack,new Color(255,64,16),fullCharge ? SoundManager.CINDER_STAFF_LOOP : null, 1.0f, 1.0f, "charge");
+
+        MinecraftForge.EVENT_BUS.post(event);
 
         if (player.world.isRemote) {
-            if (charge >= 15.0) {
+            if (event.hasSound()) {
                 if (!soundPlaying) {
-                    Embers.proxy.playItemSound(player, this, SoundManager.CINDER_STAFF_LOOP, SoundCategory.PLAYERS, true, 1.0f, 1.0f);
+                    Embers.proxy.playItemSound(player, this, event.getSound(), SoundCategory.PLAYERS, true, event.getVolume(), event.getPitch());
                     soundPlaying = true;
                 }
             } else {
@@ -104,10 +112,12 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
-            float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
-            ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float) player.posX + spawnDistance * (float) player.getLookVec().x + (itemRand.nextFloat() * 0.1f - 0.05f), (float) player.posY + player.getEyeHeight() + spawnDistance * (float) player.getLookVec().y + (itemRand.nextFloat() * 0.1f - 0.05f), (float) player.posZ + spawnDistance * (float) player.getLookVec().z + (itemRand.nextFloat() * 0.1f - 0.05f), 0, 0, 0, 255, 64, 16, (float) charge / 1.75f, 24);
-        }
+        if(event.hasParticles())
+            for (int i = 0; i < 4; i++) {
+                float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
+                Color color = event.getColor();
+                ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float) player.posX + spawnDistance * (float) player.getLookVec().x + (itemRand.nextFloat() * 0.1f - 0.05f), (float) player.posY + player.getEyeHeight() + spawnDistance * (float) player.getLookVec().y + (itemRand.nextFloat() * 0.1f - 0.05f), (float) player.posZ + spawnDistance * (float) player.getLookVec().z + (itemRand.nextFloat() * 0.1f - 0.05f), 0, 0, 0, color.getRed(), color.getGreen(), color.getBlue(), (float) charge / 1.75f, 24);
+            }
     }
 
     @Override
