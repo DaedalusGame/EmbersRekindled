@@ -13,7 +13,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
 import teamroots.embers.tileentity.TileEntityLargeTank;
 
@@ -119,7 +118,7 @@ public class BlockStoneEdge extends BlockBase {
 		if (world.getTileEntity(pos) instanceof ITileEntityBase){
 			((ITileEntityBase)world.getTileEntity(pos)).breakBlock(world, pos, world.getBlockState(pos), player);
 		}
-		if (world.getBlockState(pos).getBlock() == RegistryManager.stone_edge){
+		if (world.getBlockState(pos).getBlock() == this){
 			if (world.getBlockState(pos).getValue(BlockStoneEdge.state) == 8){
 				boolean foundBlock = false;
 				for (int i = 1; i < 64 && !foundBlock; i ++){
