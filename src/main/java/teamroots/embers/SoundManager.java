@@ -216,6 +216,14 @@ public class SoundManager {
     public static SoundEvent CODEX_PAGE_CLOSE;
     @GameRegistry.ObjectHolder("embers:item.codex.page.switch")
     public static SoundEvent CODEX_PAGE_SWITCH;
+    @GameRegistry.ObjectHolder("embers:item.codex.check")
+    public static SoundEvent CODEX_CHECK;
+    @GameRegistry.ObjectHolder("embers:item.codex.uncheck")
+    public static SoundEvent CODEX_UNCHECK;
+    @GameRegistry.ObjectHolder("embers:item.codex.lock")
+    public static SoundEvent CODEX_LOCK;
+    @GameRegistry.ObjectHolder("embers:item.codex.unlock")
+    public static SoundEvent CODEX_UNLOCK;
 
     @GameRegistry.ObjectHolder("embers:item.bauble.equip")
     public static SoundEvent BAUBLE_EQUIP;
@@ -355,6 +363,10 @@ public class SoundManager {
         event.getRegistry().register(registerSound("item.codex.page.open"));
         event.getRegistry().register(registerSound("item.codex.page.close"));
         event.getRegistry().register(registerSound("item.codex.page.switch"));
+        event.getRegistry().register(registerSound("item.codex.check"));
+        event.getRegistry().register(registerSound("item.codex.uncheck"));
+        event.getRegistry().register(registerSound("item.codex.lock"));
+        event.getRegistry().register(registerSound("item.codex.unlock"));
 
         event.getRegistry().register(registerSound("item.bauble.equip"));
         event.getRegistry().register(registerSound("item.bauble.unequip"));

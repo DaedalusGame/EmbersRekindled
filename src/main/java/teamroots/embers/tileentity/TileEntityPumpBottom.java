@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -33,6 +34,7 @@ import teamroots.embers.util.Misc;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase, ITickable, IMechanicallyPowered, IExtraDialInformation {
 	public static final double EMBER_COST = 0.5;
@@ -129,12 +131,24 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 						}
 						t.markDirty();
 						world.setBlockToAir(pos);
+						for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+							updateWater(pos.offset(facing));
+						}
 						return false;
 					}
 				}
 			}
 		}
 		return true;
+	}
+
+	private void updateWater(BlockPos pos)
+	{
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() instanceof IFluidBlock || state.getBlock() instanceof BlockLiquid)
+		{
+			state.getBlock().updateTick(world,pos,state,new Random());
+		}
 	}
 
 	@Override
@@ -160,11 +174,13 @@ public class TileEntityPumpBottom extends TileEntity implements ITileEntityBase,
 				if (this.progress > 400) {
 					progress -= 400;
 					boolean doContinue = true;
-					for (int r = 0; r < 6 && doContinue; r++) {
-						for (int i = -r; i < r + 1 && doContinue; i++) {
-							for (int j = -r; j < 1 && doContinue; j++) {
-								for (int k = -r; k < r + 1 && doContinue; k++) {
-									doContinue = attemptPump(getPos().add(i, j - 1, k));
+					if(!world.isRemote) {
+						for (int r = 0; r < 6 && doContinue; r++) {
+							for (int i = -r; i < r + 1 && doContinue; i++) {
+								for (int j = -r; j < 1 && doContinue; j++) {
+									for (int k = -r; k < r + 1 && doContinue; k++) {
+										doContinue = attemptPump(getPos().add(i, j - 1, k));
+									}
 								}
 							}
 						}

@@ -21,6 +21,7 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.alchemy.AlchemyResult;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.event.AlchemyResultEvent;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.ISparkable;
@@ -32,6 +33,7 @@ import teamroots.embers.network.message.MessageEmberSphereFX;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.recipe.AlchemyRecipe;
+import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.util.Misc;
@@ -224,8 +226,12 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
     }
 
     private AlchemyRecipe getRecipe() {
-        return RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), Lists.newArrayList(north.getStackInSlot(0), east.getStackInSlot(0), south.getStackInSlot(0), west.getStackInSlot(0)));
+        AlchemyRecipe recipe = RecipeRegistry.getAlchemyRecipe(center.getStackInSlot(0), Lists.newArrayList(north.getStackInSlot(0), east.getStackInSlot(0), south.getStackInSlot(0), west.getStackInSlot(0)));
+        MachineRecipeEvent<AlchemyRecipe> event = new MachineRecipeEvent<>(this, recipe);
+        UpgradeUtil.throwEvent(this, event,new ArrayList<>());
+        return event.getRecipe();
     }
+
 
     @Override
     public void markDirty() {

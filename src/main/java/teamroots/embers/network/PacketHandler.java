@@ -36,5 +36,8 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageCasterOrb.MessageHolder.class,MessageCasterOrb.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageSetPlayerMotion.MessageHolder.class,MessageSetPlayerMotion.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageTEUpdateRequest.MessageHolder.class,MessageTEUpdateRequest.class,id ++,Side.SERVER);
+
+        INSTANCE.registerMessage(MessageResearchData.MessageHolder.class,MessageResearchData.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageResearchTick.MessageHolder.class,MessageResearchTick.class,id ++,Side.SERVER);
     }
 }

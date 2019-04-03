@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Random;
 
+@Deprecated
 public class TileEntitySeed extends TileEntity implements ITileEntityBase, ITickable, IEmberInjectable, ISoundController {
 	boolean[] willSpawn = new boolean[12];
 

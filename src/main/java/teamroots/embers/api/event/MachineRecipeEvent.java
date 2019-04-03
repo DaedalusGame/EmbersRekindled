@@ -23,4 +23,10 @@ public class MachineRecipeEvent<T> extends UpgradeEvent {
     public void setRecipe(T recipe) {
         this.recipe = recipe;
     }
+
+    public static class Success<T> extends MachineRecipeEvent<T> {
+        public Success(TileEntity tile, T recipe) {
+            super(tile, recipe);
+        }
+    }
 }

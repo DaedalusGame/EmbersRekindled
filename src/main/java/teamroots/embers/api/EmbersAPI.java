@@ -51,6 +51,14 @@ public class EmbersAPI {
         IMPL.registerEmberFuel(fuel);
     }
 
+    public static void unregisterEmberFuel(IFuel fuel){
+        IMPL.unregisterEmberFuel(fuel);
+    }
+
+    public static IFuel getEmberFuel(ItemStack stack) {
+        return IMPL.getEmberFuel(stack);
+    }
+
     public static double getEmberValue(ItemStack stack) {
         return IMPL.getEmberValue(stack);
     }
@@ -61,6 +69,10 @@ public class EmbersAPI {
 
     public static void registerCatalysisFuel(ICoefficientFuel fuel){
         IMPL.registerCatalysisFuel(fuel);
+    }
+
+    public static void unregisterCatalysisFuel(ICoefficientFuel fuel){
+        IMPL.unregisterCatalysisFuel(fuel);
     }
 
     public static ICoefficientFuel getCatalysisFuel(ItemStack stack) {
@@ -75,6 +87,10 @@ public class EmbersAPI {
         IMPL.registerCombustionFuel(fuel);
     }
 
+    public static void unregisterCombustionFuel(ICoefficientFuel fuel){
+        IMPL.unregisterCombustionFuel(fuel);
+    }
+
     public static ICoefficientFuel getCombustionFuel(ItemStack stack) {
         return IMPL.getCombustionFuel(stack);
     }
@@ -87,7 +103,11 @@ public class EmbersAPI {
         IMPL.registerMetalCoefficient(coefficient);
     }
 
-    public static double getMetalCoefficient(IBlockState state) {
+    public static void unregisterMetalCoefficient(IMetalCoefficient coefficient){
+        IMPL.unregisterMetalCoefficient(coefficient);
+    }
+
+    public static IMetalCoefficient getMetalCoefficient(IBlockState state) {
         return IMPL.getMetalCoefficient(state);
     }
 
@@ -97,6 +117,10 @@ public class EmbersAPI {
 
     public static void registerBoilerFluid(ILiquidFuel fuel) {
         IMPL.registerBoilerFluid(fuel);
+    }
+
+    public static void unregisterBoilerFluid(ILiquidFuel fuel) {
+        IMPL.unregisterBoilerFluid(fuel);
     }
 
     public static ILiquidFuel getBoilerFluid(FluidStack fluidstack) {
@@ -109,6 +133,10 @@ public class EmbersAPI {
 
     public static void registerSteamEngineFuel(ILiquidFuel fuel) {
         IMPL.registerSteamEngineFuel(fuel);
+    }
+
+    public static void unregisterSteamEngineFuel(ILiquidFuel fuel) {
+        IMPL.unregisterSteamEngineFuel(fuel);
     }
 
     public static ILiquidFuel getSteamEngineFuel(FluidStack fluidstack) {

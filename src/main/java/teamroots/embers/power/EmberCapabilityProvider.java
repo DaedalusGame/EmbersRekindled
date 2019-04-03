@@ -30,7 +30,7 @@ public class EmberCapabilityProvider implements ICapabilityProvider {
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
     	if (EmbersCapabilities.EMBER_CAPABILITY != null && capability == EmbersCapabilities.EMBER_CAPABILITY) return
-				(T)capability;
+				EmbersCapabilities.EMBER_CAPABILITY.cast(this.capability);
     	return null;
 	}
 }

@@ -9,6 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -19,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
@@ -45,8 +47,6 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase, ISoundController, ITickable, IExtraDialInformation, IExtraCapabilityInformation {
-	public static int FLUID_CAPACITY = Fluid.BUCKET_VOLUME*16;
-	public static int FLUID_PROCESS_AMOUNT = 1;
 
 	public static final int SOUND_SLOW = 1;
 	public static final int SOUND_MEDIUM = 2;
@@ -58,8 +58,8 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 
 	Random random = new Random();
 	HashSet<Integer> soundsPlaying = new HashSet<>();
-	protected FluidTank fluidTank = new FluidTank(FLUID_CAPACITY);
-	protected FluidTank gasTank = new FluidTank(FLUID_CAPACITY);
+	protected FluidTank fluidTank = new FluidTank(ConfigManager.miniBoilerCapacity);
+	protected FluidTank gasTank = new FluidTank(ConfigManager.miniBoilerCapacity);
 	protected UpgradeMiniBoiler upgrade;
 	int lastBoil;
 	int boilTime;
@@ -147,7 +147,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	}
 
 	public int getCapacity(){
-		return FLUID_CAPACITY;
+		return ConfigManager.miniBoilerCapacity;
 	}
 	
 	public int getFluidAmount(){
@@ -192,15 +192,16 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	{
 		FluidStack fluid = getFluidStack();
 		ILiquidFuel fuelHandler = EmbersAPI.getBoilerFluid(fluid);
-		if(fuelHandler != null && fluid.amount > 0) {
-			int fluidBoiled = Math.min(fluid.amount, (int) (FLUID_PROCESS_AMOUNT * heat));
+		if(fuelHandler != null && fluid.amount > 0 && heat > 0) {
+			int fluidBoiled = MathHelper.clamp((int) (ConfigManager.miniBoilerHeatMultiplier  * heat),1,fluid.amount);
+
 			if(fluidBoiled > 0) {
 				fluid = fluidTank.drain(fluidBoiled,false);
 				FluidStack gas = fuelHandler.getRemainder(fluid);
 				if(gas != null) {
 					fluidTank.drain(fluidBoiled,true);
 					gas.amount -= gasTank.fill(gas,true);
-					if(gas.amount > 0 && !world.isRemote) {
+					if(ConfigManager.miniBoilerCanExplode && gas.amount > 0 && !world.isRemote) {
 						explode();
 					}
 				}
@@ -251,6 +252,15 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 			information.add(gasFormat+BlockFluidGauge.formatFluidStack(getGasStack(),getCapacity()));
 			information.add(BlockFluidGauge.formatFluidStack(getFluidStack(),getCapacity()));
 		}
+	}
+
+	@Override
+	public int getComparatorData(EnumFacing facing, int data, String dialType) {
+		if(BlockFluidGauge.DIAL_TYPE.equals(dialType) && facing.getAxis() != EnumFacing.Axis.Y) {
+			double fill = getGasAmount() / (double)getCapacity();
+			return fill > 0 ? (int) (1 + fill * 14) : 0;
+		}
+		return data;
 	}
 
 	@Override

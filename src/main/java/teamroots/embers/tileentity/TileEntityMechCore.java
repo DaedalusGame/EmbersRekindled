@@ -16,6 +16,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
+import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.api.upgrades.IUpgradeProxy;
+import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMechCore extends TileEntity implements ITileEntityBase, IExtraDialInformation, IExtraCapabilityInformation {
+public class TileEntityMechCore extends TileEntity implements ITileEntityBase, IExtraDialInformation, IExtraCapabilityInformation, IUpgradeProxy {
 	Random random = new Random();
 	
 	public TileEntityMechCore(){
@@ -74,6 +77,28 @@ public class TileEntityMechCore extends TileEntity implements ITileEntityBase, I
 		}
 		if (getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH)) instanceof IMultiblockMachine){
 			return getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH));
+		}
+		return null;
+	}
+
+	public EnumFacing getAttachedSide() {
+		if (getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN)) instanceof IMultiblockMachine){
+			return EnumFacing.DOWN;
+		}
+		if (getWorld().getTileEntity(getPos().offset(EnumFacing.UP)) instanceof IMultiblockMachine){
+			return EnumFacing.UP;
+		}
+		if (getWorld().getTileEntity(getPos().offset(EnumFacing.WEST)) instanceof IMultiblockMachine){
+			return EnumFacing.WEST;
+		}
+		if (getWorld().getTileEntity(getPos().offset(EnumFacing.EAST)) instanceof IMultiblockMachine){
+			return EnumFacing.EAST;
+		}
+		if (getWorld().getTileEntity(getPos().offset(EnumFacing.NORTH)) instanceof IMultiblockMachine){
+			return EnumFacing.NORTH;
+		}
+		if (getWorld().getTileEntity(getPos().offset(EnumFacing.SOUTH)) instanceof IMultiblockMachine){
+			return EnumFacing.SOUTH;
 		}
 		return null;
 	}
@@ -139,5 +164,25 @@ public class TileEntityMechCore extends TileEntity implements ITileEntityBase, I
 		TileEntity multiblock = getAttachedMultiblock();
 		if(multiblock instanceof IExtraCapabilityInformation)
 			((IExtraCapabilityInformation) multiblock).addOtherDescription(strings,facing);
+	}
+
+	@Override
+	public void collectUpgrades(List<IUpgradeProvider> upgrades) {
+		for (EnumFacing facing : EnumFacing.VALUES) {
+			if(isSocket(facing))
+				UpgradeUtil.collectUpgrades(world,pos.offset(facing),facing.getOpposite(),upgrades);
+		}
+	}
+
+	@Override
+	public boolean isSocket(EnumFacing facing) {
+		EnumFacing attachedSide = getAttachedSide();
+		return facing != attachedSide;
+	}
+
+	@Override
+	public boolean isProvider(EnumFacing facing) {
+		EnumFacing attachedSide = getAttachedSide();
+		return facing == attachedSide;
 	}
 }

@@ -5,6 +5,7 @@ import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.oredict.IOreDictEntry;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +19,7 @@ import teamroots.embers.util.Misc;
 import java.util.function.Predicate;
 
 @ZenRegister
-@ZenClass(EmberGeneration.CLASS)
+@ZenClass(EmberGeneration.CLASS) //I'm mad that i gave this a terrible name. should've been ember utils.
 public class EmberGeneration {
     public static final String NAME = "EmberGeneration";
     public static final String CLASS = "mods.embers.EmberGeneration";
@@ -29,8 +30,18 @@ public class EmberGeneration {
     }
 
     @ZenMethod
+    public static void removeEmberFuel(IItemStack item) {
+        CraftTweakerAPI.apply(new RemoveEmberFuel(item));
+    }
+
+    @ZenMethod
     public static void addCatalysisFuel(IIngredient item, double coefficient) {
         CraftTweakerAPI.apply(new AddCatalysisFuel(item, coefficient));
+    }
+
+    @ZenMethod
+    public static void removeCatalysisFuel(IItemStack item) {
+        CraftTweakerAPI.apply(new RemoveCatalysisFuel(item));
     }
 
     @ZenMethod
@@ -39,8 +50,33 @@ public class EmberGeneration {
     }
 
     @ZenMethod
+    public static void removeCombustionFuel(IItemStack item) {
+        CraftTweakerAPI.apply(new RemoveCombustionFuel(item));
+    }
+
+    @ZenMethod
     public static void addMetalCoefficient(IIngredient block, double coefficient) {
         CraftTweakerAPI.apply(new AddMetalCoefficient(block.toString(), (state) -> block.matches(CraftTweakerMC.getIItemStack(Misc.getStackFromState(state))), coefficient));
+    }
+
+    @ZenMethod
+    public static void addBoilerFluid(ILiquidStack liquid, ILiquidStack gas, double multiplier) {
+        CraftTweakerAPI.apply(new AddBoilerFluid(liquid, gas, multiplier));
+    }
+
+    @ZenMethod
+    public static void removeBoilerFluid(ILiquidStack liquid) {
+        CraftTweakerAPI.apply(new RemoveBoilerFluid(liquid));
+    }
+
+    @ZenMethod
+    public static void addSteamEngineFuel(ILiquidStack liquid, double multiplier) {
+        CraftTweakerAPI.apply(new AddSteamEngineFuel(liquid, multiplier));
+    }
+
+    @ZenMethod
+    public static void removeSteamEngineFuel(ILiquidStack liquid) {
+        CraftTweakerAPI.apply(new RemoveSteamEngineFuel(liquid));
     }
 
     public static class AddEmberFuel implements IAction
@@ -61,6 +97,25 @@ public class EmberGeneration {
         @Override
         public String describe() {
             return "Adding ember fuel "+item.toString()+" with value "+ember;
+        }
+    }
+
+    public static class RemoveEmberFuel implements IAction
+    {
+        IItemStack item;
+
+        public RemoveEmberFuel(IItemStack item) {
+            this.item = item;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.unregisterEmberFuel(EmbersAPI.getEmberFuel(CraftTweakerMC.getItemStack(item)));
+        }
+
+        @Override
+        public String describe() {
+            return "Removing ember fuel "+item.toString();
         }
     }
 
@@ -85,6 +140,25 @@ public class EmberGeneration {
         }
     }
 
+    public static class RemoveCatalysisFuel implements IAction
+    {
+        IItemStack item;
+
+        public RemoveCatalysisFuel(IItemStack item) {
+            this.item = item;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.unregisterCatalysisFuel(EmbersAPI.getCatalysisFuel(CraftTweakerMC.getItemStack(item)));
+        }
+
+        @Override
+        public String describe() {
+            return "Removing catalysis fuel "+item.toString();
+        }
+    }
+
     public static class AddCombustionFuel implements IAction
     {
         double coefficient;
@@ -103,6 +177,25 @@ public class EmberGeneration {
         @Override
         public String describe() {
             return "Adding combustion fuel "+item.toString()+" with coefficient "+coefficient;
+        }
+    }
+
+    public static class RemoveCombustionFuel implements IAction
+    {
+        IItemStack item;
+
+        public RemoveCombustionFuel(IItemStack item) {
+            this.item = item;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.unregisterCombustionFuel(EmbersAPI.getCombustionFuel(CraftTweakerMC.getItemStack(item)));
+        }
+
+        @Override
+        public String describe() {
+            return "Removing combustion fuel "+item.toString();
         }
     }
 
@@ -136,6 +229,88 @@ public class EmberGeneration {
         @Override
         public String describe() {
             return "Adding metal coefficient "+coefficient+" for "+matchDesc;
+        }
+    }
+
+    public static class AddBoilerFluid implements IAction
+    {
+        double multiplier;
+        ILiquidStack liquid;
+        ILiquidStack gas;
+
+        public AddBoilerFluid(ILiquidStack liquid, ILiquidStack gas, double multiplier) {
+            this.liquid = liquid;
+            this.gas = gas;
+            this.multiplier = multiplier;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.registerBoilerFluid(CraftTweakerMC.getLiquidStack(liquid).getFluid(),CraftTweakerMC.getLiquidStack(gas).getFluid(),multiplier);
+        }
+
+        @Override
+        public String describe() {
+            return "Adding boiler fluid "+liquid.toString()+" -> "+gas.toString()+": "+multiplier;
+        }
+    }
+
+    public static class RemoveBoilerFluid implements IAction
+    {
+        ILiquidStack liquid;
+
+        public RemoveBoilerFluid(ILiquidStack liquid) {
+            this.liquid = liquid;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.unregisterBoilerFluid(EmbersAPI.getBoilerFluid(CraftTweakerMC.getLiquidStack(liquid)));
+        }
+
+        @Override
+        public String describe() {
+            return "Removing boiler fuel "+liquid.toString();
+        }
+    }
+
+    public static class AddSteamEngineFuel implements IAction
+    {
+        double power;
+        ILiquidStack liquid;
+
+        public AddSteamEngineFuel(ILiquidStack liquid, double power) {
+            this.liquid = liquid;
+            this.power = power;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.registerSteamEngineFuel(CraftTweakerMC.getLiquidStack(liquid).getFluid(),power);
+        }
+
+        @Override
+        public String describe() {
+            return "Adding steam engine fuel "+liquid.toString()+" -> "+power;
+        }
+    }
+
+    public static class RemoveSteamEngineFuel implements IAction
+    {
+        ILiquidStack liquid;
+
+        public RemoveSteamEngineFuel(ILiquidStack liquid) {
+            this.liquid = liquid;
+        }
+
+        @Override
+        public void apply() {
+            EmbersAPI.unregisterSteamEngineFuel(EmbersAPI.getSteamEngineFuel(CraftTweakerMC.getLiquidStack(liquid)));
+        }
+
+        @Override
+        public String describe() {
+            return "Removing steam engine fuel "+liquid.toString();
         }
     }
 }

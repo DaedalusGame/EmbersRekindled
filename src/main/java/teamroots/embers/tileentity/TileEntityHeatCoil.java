@@ -27,6 +27,7 @@ import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.event.HeatCoilVisualEvent;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
@@ -169,7 +170,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 		if(getWorld().isRemote)
 			handleSound();
 
-		upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
+		upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.DOWN});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
@@ -202,13 +203,13 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 			if (items.size() > 0){
 				int i = random.nextInt(items.size());
 				EntityItem entityItem = items.get(i);
-				HeatCoilRecipe recipe = RecipeRegistry.getHeatCoilRecipe(entityItem.getItem());
+				HeatCoilRecipe recipe = getRecipe(entityItem);
 				if (recipe != null){
 					ArrayList<ItemStack> returns = Lists.newArrayList(recipe.getResult(this, entityItem.getItem()));
 					int inputCount = recipe.getInputConsumed();
-					depleteItem(entityItem, inputCount);
 					boolean dirty = false;
 					UpgradeUtil.transformOutput(this,returns, upgrades);
+					depleteItem(entityItem, inputCount);
 					for(ItemStack stack : returns) {
 						ItemStack remainder = inventory.insertItem(0, stack, false);
 						dirty = true;
@@ -229,6 +230,13 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 				ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX()-0.2f+random.nextFloat()*1.4f, getPos().getY()+1.275f, getPos().getZ()-0.2f+random.nextFloat()*1.4f, 0, random.nextFloat() * event.getVerticalSpeed(), 0, color.getRed(), color.getGreen(), color.getBlue(), 2.0f, 24);
 			}
 		}
+	}
+
+	private HeatCoilRecipe getRecipe(EntityItem entityItem) {
+		HeatCoilRecipe recipe = RecipeRegistry.getHeatCoilRecipe(entityItem.getItem());
+		MachineRecipeEvent<HeatCoilRecipe> event = new MachineRecipeEvent<>(this, recipe);
+		UpgradeUtil.throwEvent(this, event,upgrades);
+		return event.getRecipe();
 	}
 
 	public void depleteItem(EntityItem entityItem, int inputCount) {

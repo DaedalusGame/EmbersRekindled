@@ -23,6 +23,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
@@ -56,6 +57,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
     public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
 
     HashSet<Integer> soundsPlaying = new HashSet<>();
+    private List<IUpgradeProvider> upgrades;
 
     public TileEntityMixerBottom() {
         super();
@@ -180,14 +182,14 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
         TileEntityMixerTop top = (TileEntityMixerTop) world.getTileEntity(pos.up());
         isWorking = false;
         if (top != null) {
-            List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos.up(), EnumFacing.VALUES);
+            upgrades = UpgradeUtil.getUpgrades(world, pos.up(), EnumFacing.VALUES);
             UpgradeUtil.verifyUpgrades(this, upgrades);
             if (UpgradeUtil.doTick(this, upgrades))
                 return;
             double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
             if (top.capability.getEmber() >= emberCost) {
                 ArrayList<FluidStack> fluids = getFluids();
-                FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
+                FluidMixingRecipe recipe = getRecipe(fluids);
                 if (recipe != null) {
                     boolean cancel = UpgradeUtil.doWork(this, upgrades);
                     if(!cancel) {
@@ -208,6 +210,13 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
                 }
             }
         }
+    }
+
+    private FluidMixingRecipe getRecipe(ArrayList<FluidStack> fluids) {
+        FluidMixingRecipe recipe = RecipeRegistry.getMixingRecipe(fluids);
+        MachineRecipeEvent<FluidMixingRecipe> event = new MachineRecipeEvent<>(this, recipe);
+        UpgradeUtil.throwEvent(this, event, upgrades);
+        return event.getRecipe();
     }
 
     public void consumeFluids(FluidMixingRecipe recipe) {

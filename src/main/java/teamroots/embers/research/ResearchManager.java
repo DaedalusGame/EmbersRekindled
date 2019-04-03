@@ -1,26 +1,40 @@
 package teamroots.embers.research;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.ItemEmberStorage;
+import teamroots.embers.network.PacketHandler;
+import teamroots.embers.network.message.MessageResearchData;
+import teamroots.embers.network.message.MessageResearchTick;
+import teamroots.embers.research.capability.DefaultResearchCapability;
+import teamroots.embers.research.capability.IResearchCapability;
+import teamroots.embers.research.capability.ResearchCapabilityProvider;
 import teamroots.embers.research.subtypes.ResearchShowItem;
 import teamroots.embers.research.subtypes.ResearchSwitchCategory;
 import teamroots.embers.research.subtypes.ResearchFakePage;
 import teamroots.embers.util.Vec2i;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static teamroots.embers.research.subtypes.ResearchShowItem.*;
 
 public class ResearchManager {
+    public static final ResourceLocation PLAYER_RESEARCH = new ResourceLocation(Embers.MODID, "research");
     public static final ResourceLocation PAGE_ICONS = new ResourceLocation(Embers.MODID, "textures/gui/codex_pageicons.png");
     public static final double PAGE_ICON_SIZE = 0.09375;
     public static List<ResearchCategory> researches = new ArrayList<ResearchCategory>();
@@ -56,6 +70,80 @@ public class ResearchManager {
     public static ResearchCategory subCategorySimpleAlchemy;
     public static ResearchCategory subCategoryWildfire;
 
+    @SubscribeEvent
+    public void onJoin(EntityJoinWorldEvent event) {
+        if(event.getEntity() instanceof EntityPlayerMP && !event.getWorld().isRemote) {
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            sendResearchData(player);
+        }
+    }
+
+    public static void sendResearchData(EntityPlayerMP player) {
+        IResearchCapability research = getPlayerResearch(player);
+        if(research != null) {
+            PacketHandler.INSTANCE.sendTo(new MessageResearchData(research.getCheckmarks()), player);
+        }
+    }
+
+    public static void receiveResearchData(Map<String,Boolean> checkmarks) {
+        for(ResearchBase research : getAllResearch()) {
+            Boolean checked = checkmarks.get(research.name);
+            if(checked != null)
+                research.check(checked);
+        }
+    }
+
+    public static void sendCheckmark(ResearchBase research, boolean checked) {
+        PacketHandler.INSTANCE.sendToServer(new MessageResearchTick(research.name,checked));
+    }
+
+    @SubscribeEvent
+    public void attachCapability(AttachCapabilitiesEvent<Entity> event)
+    {
+        if (event.getObject() instanceof EntityPlayer && !event.getCapabilities().containsKey(PLAYER_RESEARCH)) {
+            event.addCapability(PLAYER_RESEARCH,new ResearchCapabilityProvider(new DefaultResearchCapability()));
+        }
+    }
+
+    @SubscribeEvent
+    public void onClone(PlayerEvent.Clone event) {
+        IResearchCapability oldCap = getPlayerResearch(event.getOriginal());
+        IResearchCapability newCap = getPlayerResearch(event.getEntityPlayer());
+        if (oldCap != null && newCap != null) {
+            NBTTagCompound compound = new NBTTagCompound();
+            oldCap.writeToNBT(compound);
+            newCap.readFromNBT(compound);
+        }
+    }
+
+    public static IResearchCapability getPlayerResearch(EntityPlayer player) {
+        if(player.hasCapability(ResearchCapabilityProvider.researchCapability,null)) {
+            //Object o = player.getCapability(ResearchCapabilityProvider.researchCapability,null);
+            return player.getCapability(ResearchCapabilityProvider.researchCapability,null);
+        }
+        return null;
+    }
+
+    public static List<ResearchBase> getAllResearch()
+    {
+        Set<ResearchBase> result = new HashSet<>();
+        for (ResearchCategory category : researches) {
+            category.getAllResearch(result);
+        }
+        return new ArrayList<>(result);
+    }
+
+    public static Map<ResearchBase,Integer> findByTag(String match)
+    {
+        HashMap<ResearchBase,Integer> result = new HashMap<>();
+        HashSet<ResearchCategory> categories = new HashSet<>();
+        if(!match.isEmpty())
+        for (ResearchCategory category : researches) {
+            category.findByTag(match,result,categories);
+        }
+        return result;
+    }
+
     public static void initResearches() {
         categoryWorld = new ResearchCategory("world", 16);
         categoryMechanisms = new ResearchCategory("mechanisms", 32);
@@ -84,8 +172,8 @@ public class ResearchManager {
         activator = new ResearchBase("activator", new ItemStack(RegistryManager.ember_activator), 9, 5).addAncestor(crystals);
         boiler = new ResearchBase("boiler", new ItemStack(RegistryManager.boiler), 9, 7).addAncestor(activator);
         mini_boiler = new ResearchBase("mini_boiler", new ItemStack(RegistryManager.mini_boiler), 11, 7).addAncestor(activator);
-        dials = new ResearchBase("dials", new ItemStack(RegistryManager.ember_gauge), 5, 5).addAncestor(ores);
-        tinker_lens = new ResearchBase("tinker_lens", new ItemStack(RegistryManager.tinker_lens),4,7).addAncestor(ores);
+        dials = new ResearchBase("dials", new ItemStack(RegistryManager.ember_gauge), 5, 5).addAncestor(hammer);
+        tinker_lens = new ResearchBase("tinker_lens", new ItemStack(RegistryManager.tinker_lens),4,7).addAncestor(hammer);
 
         pipes = new ResearchBase("pipes", new ItemStack(RegistryManager.pump), 2, 4);
         pipes.addPage(new ResearchShowItem("routing",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_pipe),new ItemStack(RegistryManager.pipe))));
@@ -269,7 +357,7 @@ public class ResearchManager {
         baublesSwitch.addAncestor(cluster);
 
 
-        ResearchBase pipeSwitch = makeCategorySwitch(subCategoryPipes, 3, 0, new ItemStack(RegistryManager.pipe), 0, 1).addAncestor(ores);
+        ResearchBase pipeSwitch = makeCategorySwitch(subCategoryPipes, 3, 0, new ItemStack(RegistryManager.pipe), 0, 1).addAncestor(hammer);
         ResearchBase weaponAugmentSwitch = makeCategorySwitch(subCategoryWeaponAugments, 2, 1, ItemStack.EMPTY, 1, 1).setMinEntries(2).addAncestor(inferno_forge);
         ResearchBase armorAugmentSwitch = makeCategorySwitch(subCategoryArmorAugments, 1, 3, ItemStack.EMPTY, 2, 1).setMinEntries(2).addAncestor(inferno_forge);
         ResearchBase projectileAugmentSwitch = makeCategorySwitch(subCategoryProjectileAugments, 11, 3, ItemStack.EMPTY, 3, 1).setMinEntries(2).addAncestor(inferno_forge);
@@ -343,6 +431,11 @@ public class ResearchManager {
                 .addResearch(armorAugmentSwitch)
                 .addResearch(projectileAugmentSwitch)
                 .addResearch(miscAugmentSwitch);
+
+        categoryMechanisms.addPrerequisite(activator);
+        categoryMetallurgy.addPrerequisite(dawnstone);
+        categoryAlchemy.addPrerequisite(alchemy);
+        categorySmithing.addPrerequisite(wildfire);
 
         researches.add(categoryWorld);
         researches.add(categoryMechanisms);

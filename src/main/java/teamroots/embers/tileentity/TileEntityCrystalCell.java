@@ -157,7 +157,7 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
 
     @Override
     public void update() {
-        List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgradesForMultiblock(world, pos, new EnumFacing[]{EnumFacing.DOWN});
+        List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.DOWN});
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if (UpgradeUtil.doTick(this, upgrades))
             return;

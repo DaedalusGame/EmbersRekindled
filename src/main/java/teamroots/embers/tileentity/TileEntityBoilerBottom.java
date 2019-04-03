@@ -27,6 +27,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -126,7 +127,9 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
     }
 
     public double getMultiplier() {
-        double metalMultiplier = EmbersAPI.getMetalCoefficient(world.getBlockState(pos.down()));
+        IBlockState metalState = world.getBlockState(pos.down());
+        IMetalCoefficient metalCoefficient = EmbersAPI.getMetalCoefficient(metalState);
+        double metalMultiplier = metalCoefficient != null ? metalCoefficient.getCoefficient(metalState) : 0.0;
         double totalMult = BASE_MULTIPLIER;
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             IBlockState state = world.getBlockState(pos.down().offset(facing));
@@ -173,7 +176,6 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
                     double emberValue = EmbersAPI.getEmberValue(emberStack);
                     double ember = UpgradeUtil.getTotalEmberProduction(this, emberValue * getMultiplier(), upgrades);
                     if (ember > 0 && top.capability.getEmber() + ember <= top.capability.getEmberCapacity()) {
-                        tank.drain(FLUID_CONSUMED, true);
                         if (!world.isRemote) {
                             world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, SoundManager.PRESSURE_REFINERY, SoundCategory.BLOCKS, 1.0f, 1.0f);
                             PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5f, getPos().getY() + 1.5f, getPos().getZ() + 0.5f));
@@ -181,6 +183,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
                         UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.PRODUCE, ember), upgrades);
                         top.capability.addAmount(ember, true);
                         inventory.extractItem(i, 1, false);
+                        tank.drain(FLUID_CONSUMED, true);
                         markDirty();
                         top.markDirty();
                     }

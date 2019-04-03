@@ -17,8 +17,17 @@ public class UpgradeUtil {
         return IMPL.getUpgrades(world, pos, facings);
     }
 
+    @Deprecated
     public static List<IUpgradeProvider> getUpgradesForMultiblock(World world, BlockPos pos, EnumFacing[] facings) {
         return IMPL.getUpgradesForMultiblock(world, pos, facings);
+    }
+
+    public static void getUpgrades(World world, BlockPos pos, EnumFacing[] facings, List<IUpgradeProvider> upgrades) {
+        IMPL.getUpgrades(world, pos, facings, upgrades);
+    }
+
+    public static void collectUpgrades(World world, BlockPos pos, EnumFacing side, List<IUpgradeProvider> upgrades) {
+        IMPL.collectUpgrades(world, pos, side, upgrades);
     }
 
     public static void verifyUpgrades(TileEntity tile, List<IUpgradeProvider> list) {

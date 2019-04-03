@@ -9,16 +9,24 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.function.Predicate;
 
 public class IngredientSpecial extends Ingredient {
-    ItemStack[] matchingStacks = new ItemStack[0];
-    boolean matchingStacksCached;
-    Predicate<ItemStack> matcher;
+    private static Set<IngredientSpecial> uncachedIngredients = Collections.newSetFromMap(new WeakHashMap<>());
+    private ItemStack[] matchingStacks = new ItemStack[0];
+    private boolean matchingStacksCached;
+    private final Predicate<ItemStack> matcher;
 
     public IngredientSpecial(Predicate<ItemStack> matcher) {
         super(0);
         this.matcher = matcher;
+        uncachedIngredients.add(this);
     }
 
     @Override
@@ -36,8 +44,9 @@ public class IngredientSpecial extends Ingredient {
         return matchingStacks;
     }
 
-    public void cacheMatchingStacks() {
-        ArrayList<ItemStack> matches = new ArrayList<>();
+    private static void cacheMatchingStacks() {
+        //Update all ingredients at once, so we don't have to iterate the registry multiple times
+        Map<IngredientSpecial, List<ItemStack>> matches = new HashMap<>();
         for (Item item : ForgeRegistries.ITEMS) {
             CreativeTabs[] tabs = item.getCreativeTabs();
             for (CreativeTabs tab : tabs) {
@@ -45,11 +54,16 @@ public class IngredientSpecial extends Ingredient {
                     continue;
                 NonNullList<ItemStack> items = NonNullList.create();
                 item.getSubItems(tab, items);
-                items.stream().filter(matcher::test).forEach(matches::add);
+                for (IngredientSpecial ingredient : uncachedIngredients) {
+                    items.stream().filter(ingredient.matcher).forEach(stack -> matches.computeIfAbsent(ingredient, ingredientSpecial -> new ArrayList<>()).add(stack));
+                }
             }
         }
-        matchingStacks = matches.toArray(matchingStacks);
-        matchingStacksCached = true;
+        for (Map.Entry<IngredientSpecial, List<ItemStack>> entry : matches.entrySet()) {
+            entry.getKey().matchingStacks = entry.getValue() == null ? new ItemStack[0] : entry.getValue().toArray(new ItemStack[0]);
+            entry.getKey().matchingStacksCached = true;
+        }
+        uncachedIngredients.clear();
     }
 
 }

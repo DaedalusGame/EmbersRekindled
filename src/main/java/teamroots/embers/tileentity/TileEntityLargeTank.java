@@ -15,10 +15,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import teamroots.embers.ConfigManager;
-import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.block.BlockStoneEdge;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.Misc;
@@ -122,7 +121,7 @@ public class TileEntityLargeTank extends TileEntityOpenTank implements ITileEnti
 	
 	public void updateCapacity(){
 		int capacity = 0;
-		for (int i = 1; getWorld().getBlockState(getPos().add(0, i, 0)) == RegistryManager.stone_edge.getStateFromMeta(8); i ++){
+		for (int i = 1; isReservoirPart(getPos().add(0, i, 0)); i++){
 			capacity += ConfigManager.reservoirCapacity;
 		}
 		if(tank.getCapacity() != capacity) {
@@ -133,6 +132,11 @@ public class TileEntityLargeTank extends TileEntityOpenTank implements ITileEnti
 			}
 			markDirty();
 		}
+	}
+
+	protected boolean isReservoirPart(BlockPos pos) {
+		IBlockState state = getWorld().getBlockState(pos);
+		return state.getBlock() instanceof BlockStoneEdge && state.getValue(BlockStoneEdge.state) == 8;
 	}
 
 	@Override

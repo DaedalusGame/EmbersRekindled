@@ -17,10 +17,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
+import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
@@ -48,6 +48,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 
 	HashSet<Integer> soundsPlaying = new HashSet<>();
 	boolean isWorking;
+	private List<IUpgradeProvider> upgrades;
 
 	public TileEntityFurnaceBottom(){
 		super();
@@ -126,12 +127,12 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 		if(getWorld().isRemote)
 			handleSound();
 		TileEntityFurnaceTop top = (TileEntityFurnaceTop) world.getTileEntity(getPos().up());
-		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+		upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
 		if(top != null && !top.inventory.getStackInSlot(0).isEmpty()) {
-				double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
+				double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST, upgrades);
 				if (capability.getEmber() >= emberCost) {
 					boolean cancel = UpgradeUtil.doWork(this, upgrades);
 					if(!cancel) {
@@ -152,7 +153,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 						markDirty();
 						if (progress >= UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
 							ItemStack recipeStack = top.inventory.getStackInSlot(0);
-							ItemMeltingRecipe recipe = RecipeRegistry.getMeltingRecipe(recipeStack);
+							ItemMeltingRecipe recipe = getRecipe(recipeStack);
 							if (recipe != null && !world.isRemote) {
 								FluidStack output = recipe.getResult(this, recipeStack);
 								FluidTank tank = top.getTank();
@@ -162,6 +163,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 									top.markDirty();
 									top.inventory.extractItem(0, recipe.getInputConsumed(), false);
 									progress = 0;
+									UpgradeUtil.throwEvent(this, new MachineRecipeEvent.Success<>(this,recipe), upgrades);
 									markDirty();
 								}
 							}
@@ -175,6 +177,13 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 				markDirty();
 			}
 		}
+	}
+
+	private ItemMeltingRecipe getRecipe(ItemStack recipeStack) {
+		ItemMeltingRecipe recipe = RecipeRegistry.getMeltingRecipe(recipeStack);
+		MachineRecipeEvent<ItemMeltingRecipe> event = new MachineRecipeEvent<>(this, recipe);
+		UpgradeUtil.throwEvent(this, event,upgrades);
+		return event.getRecipe();
 	}
 
 	@Override

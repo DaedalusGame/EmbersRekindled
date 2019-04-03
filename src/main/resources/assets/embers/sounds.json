@@ -615,6 +615,26 @@
       "embers:ancient_codex/category_scrape_down3"
     ]
   },
+  "item.codex.check": {
+    "sounds": [
+      "embers:ancient_codex/check"
+    ]
+  },
+  "item.codex.uncheck": {
+    "sounds": [
+      "embers:ancient_codex/uncheck"
+    ]
+  },
+  "item.codex.lock": {
+    "sounds": [
+      "embers:ancient_codex/lock"
+    ]
+  },
+  "item.codex.unlock": {
+    "sounds": [
+      "embers:ancient_codex/unlock"
+    ]
+  },
   "item.bauble.equip": {
     "sounds": [
       "embers:bauble_equip"
@@ -641,7 +661,8 @@
   },
   "item.windup.spring": {
     "sounds": [
-      "embers:spring"
+      "embers:spring_launch1",
+      "embers:spring_launch2"
     ]
   },
   "entity.ancient_golem.death": {

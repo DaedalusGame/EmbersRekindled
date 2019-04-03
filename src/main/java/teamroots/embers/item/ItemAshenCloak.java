@@ -1,6 +1,8 @@
 package teamroots.embers.item;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.item.IInflictorGem;
@@ -16,9 +21,12 @@ import teamroots.embers.api.item.IInflictorGemHolder;
 import teamroots.embers.api.item.IInfoGoggles;
 import teamroots.embers.model.ModelAshenCloak;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 
-public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder, IInfoGoggles {
+public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder, IInfoGoggles, ISpecialArmor {
 
 	public ItemAshenCloak(ArmorMaterial material, int reduction, EntityEquipmentSlot slot) {
 		super(material, reduction, slot, "ashen_cloak", true);
@@ -29,7 +37,7 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type){
 		return "embers:textures/models/armor/robe.png";
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped _default){
@@ -89,17 +97,36 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 	}
 
 	@Override
+	public void setDamage(ItemStack stack, int damage) {
+		super.setDamage(stack, Math.min(damage,getMaxDamage(stack) - 1));
+	}
+
+	private boolean isBroken(ItemStack armor) {
+		return armor.getItemDamage() >= armor.getMaxDamage() - 1;
+	}
+
+    private boolean isProtectiveCloakPiece(ItemStack armor)
+    {
+        if(armor.getItem() instanceof ItemAshenCloak)
+        {
+            ItemAshenCloak cloak = (ItemAshenCloak) armor.getItem();
+            return cloak.isBroken(armor);
+        }
+        return false;
+    }
+
+	@Override
 	public float getTotalDamageResistance(EntityLivingBase entity, DamageSource source, ItemStack holder) {
 		float reduction = 0;
 
-		if (entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemAshenCloak &&
-				entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemAshenCloak &&
-				entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemAshenCloak &&
-				entity.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemAshenCloak) {
+		if (isProtectiveCloakPiece(entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD)) &&
+                isProtectiveCloakPiece(entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST)) &&
+                isProtectiveCloakPiece(entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS)) &&
+                isProtectiveCloakPiece(entity.getItemStackFromSlot(EntityEquipmentSlot.FEET))) {
 			for (ItemStack stack : getAttachedGems(holder)) {
 				Item item = stack.getItem();
-				if(item instanceof IInflictorGem && Objects.equals(((IInflictorGem) item).getAttunedSource(stack),source.getDamageType())) {
-					reduction += ((IInflictorGem) item).getDamageResistance(stack,reduction);
+				if (item instanceof IInflictorGem && Objects.equals(((IInflictorGem) item).getAttunedSource(stack), source.getDamageType())) {
+					reduction += ((IInflictorGem) item).getDamageResistance(stack, reduction);
 				}
 			}
 		}
@@ -111,4 +138,31 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 	public boolean shouldDisplayInfo(EntityPlayer player, ItemStack stack, EntityEquipmentSlot slot) {
 		return slot == EntityEquipmentSlot.HEAD;
 	}
+
+	@Override
+	public ArmorProperties getProperties(EntityLivingBase player, @Nonnull ItemStack armor, DamageSource source, double damage, int slot) {
+		ArmorProperties prop = new ArmorProperties(0,0,Integer.MAX_VALUE);
+		if(!isBroken(armor)) {
+			prop.Armor = damageReduceAmount;
+			prop.Toughness = toughness;
+		}
+		return prop;
+	}
+
+	@Override
+	public int getArmorDisplay(EntityPlayer player, @Nonnull ItemStack armor, int slot) {
+		return 0; //Unchanged from vanilla
+	}
+
+	@Override
+	public void damageArmor(EntityLivingBase entity, @Nonnull ItemStack stack, DamageSource source, int damage, int slot) {
+        //NOOP
+	}
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        if(isBroken(stack))
+            tooltip.add(I18n.format(TextFormatting.GRAY+"embers.tooltip.broken"));
+    }
 }

@@ -56,6 +56,11 @@ public class Alchemy {
         CraftTweakerAPI.apply(new RemoveByOutput(CraftTweakerMC.getItemStack(output)));
     }
 
+    @ZenMethod
+    public static void removeAll() {
+        CraftTweakerAPI.apply(new RemoveAll());
+    }
+
     private static List<AlchemyRecipe> getRecipesByOutput(ItemStack stack) {
         return RecipeRegistry.alchemyRecipes.stream().filter(recipe -> ItemStack.areItemsEqual(recipe.result, stack)).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -116,6 +121,23 @@ public class Alchemy {
         @Override
         public String describe() {
             return String.format("Removing %s recipes with output: %s",NAME,output.toString());
+        }
+    }
+
+    public static class RemoveAll implements IAction
+    {
+        protected RemoveAll() {
+
+        }
+
+        @Override
+        public void apply() {
+            RecipeRegistry.alchemyRecipes.clear();
+        }
+
+        @Override
+        public String describe() {
+            return String.format("Removing all %s recipes",NAME);
         }
     }
 }

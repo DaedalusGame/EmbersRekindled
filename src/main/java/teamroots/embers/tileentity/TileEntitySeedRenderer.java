@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
+@Deprecated
 public class TileEntitySeedRenderer extends TileEntitySpecialRenderer<TileEntitySeed> {
 	@Deprecated
 	public ResourceLocation textureIron = TileEntitySeed.TEXTURE_IRON;

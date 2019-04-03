@@ -78,9 +78,7 @@ import teamroots.embers.research.ResearchBase;
 import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
 import teamroots.embers.tileentity.TileEntityExplosionPedestal;
 import teamroots.embers.tileentity.TileEntityMechAccessor;
-import teamroots.embers.util.EmberGenUtil;
-import teamroots.embers.util.Misc;
-import teamroots.embers.util.RenderUtil;
+import teamroots.embers.util.*;
 import teamroots.embers.world.EmberWorldData;
 
 import java.util.*;
@@ -261,15 +259,19 @@ public class EventManager {
     @SubscribeEvent
     public void onServerTick(WorldTickEvent event) {
         if (event.world.provider.getDimensionType() == DimensionType.OVERWORLD) {
+            boolean changed = false;
             if (Misc.random.nextInt(400) == 0) {
                 EmberGenUtil.offX++;
                 EmberWorldData.get(event.world).markDirty();
+                changed = true;
             }
             if (Misc.random.nextInt(400) == 0) {
                 EmberGenUtil.offZ++;
                 EmberWorldData.get(event.world).markDirty();
+                changed = true;
             }
-            PacketHandler.INSTANCE.sendToAll(new MessageEmberGenOffset(EmberGenUtil.offX, EmberGenUtil.offZ));
+            if(changed)
+                PacketHandler.INSTANCE.sendToAll(new MessageEmberGenOffset(EmberGenUtil.offX, EmberGenUtil.offZ));
         }
     }
 
@@ -336,31 +338,31 @@ public class EventManager {
             EventManager.frameCounter++;
             EventManager.frameTime = (System.nanoTime() - prevTime) / 1000000000.0f;
             EventManager.prevTime = System.nanoTime();
-        }
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        boolean showBar = false;
 
-        int w = e.getResolution().getScaledWidth();
-        int h = e.getResolution().getScaledHeight();
+            EntityPlayer player = Minecraft.getMinecraft().player;
+            boolean showBar = false;
 
-        int x = w / 2;
-        int y = h / 2;
-        if (!player.getHeldItemMainhand().isEmpty()) {
-            if (player.getHeldItemMainhand().getItem() instanceof ItemEmberGauge) {
-                showBar = true;
+            int w = e.getResolution().getScaledWidth();
+            int h = e.getResolution().getScaledHeight();
+
+            int x = w / 2;
+            int y = h / 2;
+            if (!player.getHeldItemMainhand().isEmpty()) {
+                if (player.getHeldItemMainhand().getItem() instanceof ItemEmberGauge) {
+                    showBar = true;
+                }
             }
-        }
-        if (!player.getHeldItemOffhand().isEmpty()) {
-            if (player.getHeldItemOffhand().getItem() instanceof ItemEmberGauge) {
-                showBar = true;
+            if (!player.getHeldItemOffhand().isEmpty()) {
+                if (player.getHeldItemOffhand().getItem() instanceof ItemEmberGauge) {
+                    showBar = true;
+                }
             }
-        }
 
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder b = tess.getBuffer();
-        if (showBar) {
-            World world = player.getEntityWorld();
-            if (e.getType() == ElementType.TEXT) {
+            Tessellator tess = Tessellator.getInstance();
+            BufferBuilder b = tess.getBuffer();
+            if (showBar) {
+                World world = player.getEntityWorld();
+
                 GlStateManager.disableDepth();
                 GlStateManager.disableCull();
                 GlStateManager.pushMatrix();
@@ -398,28 +400,29 @@ public class EventManager {
                 GlStateManager.popMatrix();
                 GlStateManager.enableCull();
                 GlStateManager.enableDepth();
+
             }
-        }
-        World world = player.getEntityWorld();
-        RayTraceResult result = player.rayTrace(6.0, e.getPartialTicks());
+            World world = player.getEntityWorld();
+            RayTraceResult result = player.rayTrace(6.0, e.getPartialTicks());
 
-        if (result != null) {
-            if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                IBlockState state = world.getBlockState(result.getBlockPos());
-                EnumFacing facing = result.sideHit;
-                List<String> text = Lists.newArrayList();
-                if (state.getBlock() instanceof IDial) {
-                    text.addAll(((IDial) state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state));
-                }
-                if (Embers.proxy.isPlayerWearingGoggles()) {
-                    TileEntity tileEntity = world.getTileEntity(result.getBlockPos());
-                    if (tileEntity != null) {
-                        addCapabilityInformation(text, tileEntity, facing);
+            if (result != null) {
+                if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+                    IBlockState state = world.getBlockState(result.getBlockPos());
+                    EnumFacing facing = result.sideHit;
+                    List<String> text = Lists.newArrayList();
+                    if (state.getBlock() instanceof IDial) {
+                        text.addAll(((IDial) state.getBlock()).getDisplayInfo(world, result.getBlockPos(), state));
                     }
-                }
+                    if (Embers.proxy.isPlayerWearingGoggles()) {
+                        TileEntity tileEntity = world.getTileEntity(result.getBlockPos());
+                        if (tileEntity != null) {
+                            addCapabilityInformation(text, tileEntity, facing);
+                        }
+                    }
 
-                for (int i = 0; i < text.size(); i++) {
-                    Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text.get(i), x - Minecraft.getMinecraft().fontRenderer.getStringWidth(text.get(i)) / 2, y + 40 + 11 * i, 0xFFFFFF);
+                    for (int i = 0; i < text.size(); i++) {
+                        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(text.get(i), x - Minecraft.getMinecraft().fontRenderer.getStringWidth(text.get(i)) / 2, y + 40 + 11 * i, 0xFFFFFF);
+                    }
                 }
             }
         }

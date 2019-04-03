@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.proxy.CommonProxy;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.research.ResearchManager;
 
 @Mod(modid = Embers.MODID, name = Embers.MODNAME, dependencies = Embers.DEPENDENCIES)
 public class Embers {
@@ -65,6 +66,7 @@ public class Embers {
 		MinecraftForge.EVENT_BUS.register(new ConfigManager());
 		MinecraftForge.EVENT_BUS.register(new RegistryManager());
 		MinecraftForge.EVENT_BUS.register(new RecipeRegistry());
+		MinecraftForge.EVENT_BUS.register(new ResearchManager());
         ConfigManager.init(event.getSuggestedConfigurationFile());
 		proxy.preInit(event);
 	}

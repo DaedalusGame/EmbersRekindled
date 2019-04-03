@@ -11,8 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.gui.GuiCodex;
 import teamroots.embers.util.Vec2i;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ResearchBase {
 	public String name = "";
@@ -31,6 +30,11 @@ public class ResearchBase {
 	
 	public float selectedAmount = 0;
 	public float selectionTarget = 0;
+
+	public float shownAmount = 0;
+	public float shownTarget = 0;
+
+	public boolean checked;
 	
 	public ResearchBase(String location, ItemStack icon, double x, double y){
 		this.name = location;
@@ -42,7 +46,71 @@ public class ResearchBase {
 	public ResearchBase(String location, ItemStack icon, Vec2i pos) {
 		this(location,icon,pos.x,pos.y);
 	}
-	
+
+	public List<ResearchCategory> getNeededFor() {
+		ArrayList<ResearchCategory> neededFor = new ArrayList<>();
+		for (ResearchCategory category : ResearchManager.researches) {
+			if(category.prerequisites.contains(this))
+				neededFor.add(category);
+		}
+		return neededFor;
+	}
+
+	public void findByTag(String match,Map<ResearchBase,Integer> result, Set<ResearchCategory> categories)
+	{
+		if(result.containsKey(this))
+			return;
+		String[] matchParts = match.split("\\|");
+		int totalScore = 0;
+
+		for (String matchPart : matchParts)
+			if(!matchPart.isEmpty()) {
+				int tagScore = matchTags(matchPart);
+				int nameScore = scoreMatches(getName(),matchPart);
+				int textScore = scoreMatches(getText(),matchPart);
+				int score = textScore + tagScore * 100 + nameScore * 1000;
+				if(score <= 0)
+					return;
+				totalScore += score;
+			}
+
+		if(totalScore > 0)
+			result.put(this, totalScore);
+	}
+
+	public int matchTags(String match)
+	{
+		int score = 0;
+		int matches = 0;
+		for (String tag : getTags()) {
+			int matchScore = scoreMatches(tag,match);
+			if(matchScore > 0)
+				matches++;
+			score += matchScore;
+		}
+		return score + matches * 100;
+	}
+
+	private int scoreMatches(String tag, String match)
+	{
+
+			tag = tag.toLowerCase();
+			match = match.toLowerCase();
+			int matches = 0;
+			int positionalScore = 0;
+			int index = 0;
+			do {
+				index = tag.indexOf(match, index);
+				if (index >= 0) {
+					matches++;
+					positionalScore += tag.length() - index;
+					index++;
+				}
+			} while (index >= 0);
+			return matches * 10 + positionalScore;
+
+	}
+
 	public ResearchBase addAncestor(ResearchBase base){
 		this.ancestors.add(base);
 		return this;
@@ -73,6 +141,30 @@ public class ResearchBase {
 		return false;
 	}
 
+	public void check(boolean checked) {
+		this.checked = checked;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public boolean areAncestorsChecked() {
+		return isChecked() || ancestors.stream().allMatch(ResearchBase::isChecked)/*ancestors.isEmpty() || ancestors.stream().anyMatch(ResearchBase::isChecked)*/;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public List<String> getTooltip(boolean showTooltips)
+	{
+		ArrayList<String> tooltip = new ArrayList<>();
+		if(showTooltips || !isChecked()) {
+			for (ResearchCategory neededFor : getNeededFor()) {
+				tooltip.add("Needed for "+neededFor.getName());
+			}
+		}
+		return tooltip;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public String getName(){
 		return I18n.format("embers.research.page."+name);
@@ -84,6 +176,16 @@ public class ResearchBase {
 			return I18n.format("embers.research.multipage",I18n.format("embers.research.page."+getFirstPage().name+".title"),pageNumber+1,getPageCount()+1);
 		else
 			return I18n.format("embers.research.page."+name+".title");
+	}
+
+	@SideOnly(Side.CLIENT)
+	private String[] getTags() {
+		String translateKey = "embers.research.page." + name + ".tags";
+		if(I18n.hasKey(translateKey)) {
+			return I18n.format(translateKey).split(";");
+		} else {
+			return new String[0];
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -167,5 +269,11 @@ public class ResearchBase {
 		for (int i = 0; i < Math.min(strings.size(),17); i++){
 			GuiCodex.drawTextGlowing(fontRenderer, strings.get(i), basePosX+20, basePosY+43+i*(fontRenderer.FONT_HEIGHT+3));
 		}
+	}
+
+	public void getAllResearch(Set<ResearchBase> result) {
+		if(result.contains(this))
+			return;
+		result.add(this);
 	}
 }

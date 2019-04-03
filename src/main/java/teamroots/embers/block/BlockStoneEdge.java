@@ -252,15 +252,15 @@ public class BlockStoneEdge extends BlockBase {
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
 		if (state.getValue(BlockStoneEdge.state) == 0){
-			world.setBlockState(pos, RegistryManager.stone_edge.getStateFromMeta(8));
-			world.setBlockState(pos.north(), RegistryManager.stone_edge.getStateFromMeta(9));
-			world.setBlockState(pos.north().west(), RegistryManager.stone_edge.getStateFromMeta(1));
-			world.setBlockState(pos.west(), RegistryManager.stone_edge.getStateFromMeta(2));
-			world.setBlockState(pos.south().west(), RegistryManager.stone_edge.getStateFromMeta(3));
-			world.setBlockState(pos.south(), RegistryManager.stone_edge.getStateFromMeta(4));
-			world.setBlockState(pos.south().east(), RegistryManager.stone_edge.getStateFromMeta(5));
-			world.setBlockState(pos.east(), RegistryManager.stone_edge.getStateFromMeta(6));
-			world.setBlockState(pos.north().east(), RegistryManager.stone_edge.getStateFromMeta(7));
+			world.setBlockState(pos, this.getStateFromMeta(8));
+			world.setBlockState(pos.north(), this.getStateFromMeta(9));
+			world.setBlockState(pos.north().west(), this.getStateFromMeta(1));
+			world.setBlockState(pos.west(), this.getStateFromMeta(2));
+			world.setBlockState(pos.south().west(), this.getStateFromMeta(3));
+			world.setBlockState(pos.south(), this.getStateFromMeta(4));
+			world.setBlockState(pos.south().east(), this.getStateFromMeta(5));
+			world.setBlockState(pos.east(), this.getStateFromMeta(6));
+			world.setBlockState(pos.north().east(), this.getStateFromMeta(7));
 		}
 		boolean foundBlock = false;
 		for (int i = 0; i < 64 && !foundBlock; i ++){

@@ -26,11 +26,17 @@ public interface IEmbersAPI {
 
     void registerEmberFuel(IFuel fuel);
 
+    void unregisterEmberFuel(IFuel fuel);
+
+    IFuel getEmberFuel(ItemStack stack);
+
     double getEmberValue(ItemStack stack);
 
     void registerCatalysisFuel(Ingredient ingredient, double coefficient);
 
     void registerCatalysisFuel(ICoefficientFuel fuel);
+
+    void unregisterCatalysisFuel(ICoefficientFuel fuel);
 
     ICoefficientFuel getCatalysisFuel(ItemStack stack);
 
@@ -38,23 +44,31 @@ public interface IEmbersAPI {
 
     void registerCombustionFuel(ICoefficientFuel fuel);
 
+    void unregisterCombustionFuel(ICoefficientFuel fuel);
+
     ICoefficientFuel getCombustionFuel(ItemStack stack);
 
     void registerMetalCoefficient(String oredict, double coefficient);
 
     void registerMetalCoefficient(IMetalCoefficient coefficient);
 
-    double getMetalCoefficient(IBlockState state);
+    void unregisterMetalCoefficient(IMetalCoefficient coefficient);
+
+    IMetalCoefficient getMetalCoefficient(IBlockState state);
 
     void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier);
 
     void registerBoilerFluid(ILiquidFuel fuel);
+
+    void unregisterBoilerFluid(ILiquidFuel fuel);
 
     ILiquidFuel getBoilerFluid(FluidStack fluidstack);
 
     void registerSteamEngineFuel(Fluid fluid, double power);
 
     void registerSteamEngineFuel(ILiquidFuel fuel);
+
+    void unregisterSteamEngineFuel(ILiquidFuel fuel);
 
     ILiquidFuel getSteamEngineFuel(FluidStack fluidstack);
 

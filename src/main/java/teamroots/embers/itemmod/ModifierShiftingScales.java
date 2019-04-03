@@ -98,6 +98,11 @@ public class ModifierShiftingScales extends ModifierBase {
         return lastPos.distanceTo(pos);
     }
 
+    private static void resetEntity(UUID uuid) {
+        lastPositionServer.remove(uuid);
+        cooldownTicksServer.remove(uuid);
+    }
+
     public static void setCooldown(UUID uuid, int ticks) {
         cooldownTicksServer.put(uuid, ticks);
     }
@@ -138,52 +143,61 @@ public class ModifierShiftingScales extends ModifierBase {
         EntityLivingBase entity = event.getEntityLiving();
 
         if (!entity.world.isRemote) {
-            int scaleLevel = ItemModUtil.getArmorModifierLevel(entity, EmbersAPI.SHIFTING_SCALES) * 2;
             UUID uuid = entity.getUniqueID();
+            int scaleLevel = ItemModUtil.getArmorModifierLevel(entity, EmbersAPI.SHIFTING_SCALES) * 2;
+            if (scaleLevel > 0) {
+                if (getMoveDistance(uuid, entity.getPositionVector()) * 20 > MOVE_PER_SECOND_THRESHOLD)
+                    setMaxCooldown(uuid, COOLDOWN);
 
-            if (getMoveDistance(uuid, entity.getPositionVector()) * 20 > MOVE_PER_SECOND_THRESHOLD)
-                setMaxCooldown(uuid, COOLDOWN);
-
-            double scales = EmbersAPI.getScales(entity);
-            if (!hasCooldown(uuid)) {
-                scales += 1;
-                setCooldown(uuid, COOLDOWN);
+                double scales = EmbersAPI.getScales(entity);
+                if (!hasCooldown(uuid)) {
+                    scales += 1;
+                    setCooldown(uuid, COOLDOWN);
+                }
+                scales = Math.min(Math.min(scales, scaleLevel * 3), entity.getMaxHealth() * 1.5);
+                EmbersAPI.setScales(entity, scales);
+                setLastPosition(uuid, entity.getPositionVector());
+            } else {
+                EmbersAPI.setScales(entity, 0);
+                resetEntity(uuid);
             }
-            scales = Math.min(Math.min(scales, scaleLevel * 3), entity.getMaxHealth() * 1.5);
-            EmbersAPI.setScales(entity, scales);
-            setLastPosition(uuid, entity.getPositionVector());
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onHit(LivingDamageEvent event) {
-        if (unaffectedDamageTypes.contains(event.getSource().getDamageType()))
-            return;
+
         EntityLivingBase entity = event.getEntityLiving();
         DamageSource source = event.getSource();
-        if (!entity.world.isRemote)
-            setMaxCooldown(entity.getUniqueID(), COOLDOWN * 3);
-        ScaleEvent scaleEvent = new ScaleEvent(entity, event.getAmount(), event.getSource(),ConfigManager.scaleDamageRates.getOrDefault(source.getDamageType(),1.0),ConfigManager.scaleDamagePasses.getOrDefault(source.getDamageType(),0.0));
-        MinecraftForge.EVENT_BUS.post(scaleEvent);
-        double totalDamage = event.getAmount();
-        double extraDamage = totalDamage * scaleEvent.getScalePassRate();
-        totalDamage -= extraDamage;
-        double multiplier = scaleEvent.getScaleDamageRate();
-        double damage = totalDamage * multiplier;
-        double scales = EmbersAPI.getScales(entity);
-        double absorbed = Math.min(scales, damage);
-        double prevScales = scales;
-        scales -= absorbed;
-        damage -= absorbed;
-        if((int)scales < (int)prevScales) {
-            entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundManager.SHIFTING_SCALES_BREAK, entity instanceof EntityPlayer ? SoundCategory.PLAYERS : SoundCategory.HOSTILE, 10.0f, 1.0f);
+        if (unaffectedDamageTypes.contains(source.getDamageType()))
+            return;
+
+        int scaleLevel = ItemModUtil.getArmorModifierLevel(entity, EmbersAPI.SHIFTING_SCALES) * 2;
+        if (scaleLevel > 0) {
+            if (!entity.world.isRemote)
+                setMaxCooldown(entity.getUniqueID(), COOLDOWN * 3);
+            ScaleEvent scaleEvent = new ScaleEvent(entity, event.getAmount(), source, ConfigManager.scaleDamageRates.getOrDefault(source.getDamageType(), 1.0), ConfigManager.scaleDamagePasses.getOrDefault(source.getDamageType(), 0.0));
+            MinecraftForge.EVENT_BUS.post(scaleEvent);
+            double totalDamage = event.getAmount();
+            double extraDamage = totalDamage * scaleEvent.getScalePassRate();
+            totalDamage -= extraDamage;
+            double multiplier = scaleEvent.getScaleDamageRate();
+            double damage = totalDamage * multiplier;
+            double scales = EmbersAPI.getScales(entity);
+            double absorbed = Math.min(scales, damage);
+            double prevScales = scales;
+            scales -= absorbed;
+            damage -= absorbed;
+            if ((int) scales < (int) prevScales) {
+                entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundManager.SHIFTING_SCALES_BREAK, entity instanceof EntityPlayer ? SoundCategory.PLAYERS : SoundCategory.HOSTILE, 10.0f, 1.0f);
+            }
+            EmbersAPI.setScales(entity, scales);
+            event.setAmount((float) ((damage == 0 ? 0 : damage / multiplier) + extraDamage));
         }
-        EmbersAPI.setScales(entity, scales);
-        event.setAmount((float) ((damage == 0 ? 0 : damage / multiplier) + extraDamage));
     }
 
     @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onDrawScreenPre(RenderGameOverlayEvent.Pre event) {
         ScaledResolution resolution = event.getResolution();
         if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {

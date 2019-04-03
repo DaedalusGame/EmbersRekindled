@@ -181,10 +181,10 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
                 capability.removeAmount(emberCost, true);
                 if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
                     progress = 0;
-                    inventory.extractItem(0, 1, false);
                     TileEntity tile = getWorld().getTileEntity(getPos().down());
                     List<ItemStack> outputs = Lists.newArrayList(new ItemStack(RegistryManager.dust_ash, 1));
                     UpgradeUtil.transformOutput(this, outputs, upgrades);
+                    inventory.extractItem(0, 1, false);
                     for (ItemStack remainder : outputs) {
                         if (tile instanceof IBin) {
                             remainder = ((IBin) tile).getInventory().insertItem(0, remainder, false);

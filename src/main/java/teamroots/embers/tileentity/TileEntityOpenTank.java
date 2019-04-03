@@ -45,7 +45,6 @@ public abstract class TileEntityOpenTank extends TileFluidHandler {
         if(lastEscapedTickClient < lastEscapedTickServer) {
             lastEscapedTickClient = lastEscapedTickServer;
             return true;
-
         }
         long dTime = world.getTotalWorldTime() - lastEscapedTickClient;
         if(dTime < lastEscaped.amount+5)

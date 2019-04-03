@@ -77,7 +77,7 @@ public class ItemGrandhammer extends ItemTool implements IModeledItem, IEmberCha
 	
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant){
-		return enchant != Enchantments.FORTUNE && enchant != Enchantments.SILK_TOUCH && (enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER);
+		return enchant.type != EnumEnchantmentType.BREAKABLE && enchant != Enchantments.FORTUNE && enchant != Enchantments.SILK_TOUCH && (enchant.type == EnumEnchantmentType.WEAPON || enchant.type == EnumEnchantmentType.DIGGER);
 	}
 	
 	@Override
