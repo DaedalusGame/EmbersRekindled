@@ -55,6 +55,7 @@ public class OreTransmutationUtil {
         registerTransmutationSet(BETWEEN_GEM, new ResourceLocation("thebetweenlands:mud"), 0);
 
         registerOre(STONE, Blocks.LIT_REDSTONE_ORE.getDefaultState()); //workaround for a vanilla issue
+        registerOre(BETWEEN_PIT, new ResourceLocation("betweenores:lit_redstone_ore"), 0);
 
         ALTERNATE_ORES.put("minecraft:quartz_ore", NETHER);
         ALTERNATE_ORES.put("tconstruct:ore", NETHER);
@@ -68,17 +69,17 @@ public class OreTransmutationUtil {
         ALTERNATE_ORES.put("thebetweenlands:aqua_middle_gem_ore", BETWEEN_GEM);
         ALTERNATE_ORES.put("thebetweenlands:crimson_middle_gem_ore", BETWEEN_GEM);
         ALTERNATE_ORES.put("thebetweenlands:green_middle_gem_ore", BETWEEN_GEM);
-        ALTERNATE_ORES.put("betweenores:between_iron_ore", BETWEEN_STONE);
-        ALTERNATE_ORES.put("betweenores:between_copper_ore", BETWEEN_STONE);
-        ALTERNATE_ORES.put("betweenores:between_tin_ore", BETWEEN_STONE);
-        ALTERNATE_ORES.put("betweenores:between_gold_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_redstone_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_lapis_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_diamond_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_lead_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_nickel_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_silver_ore", BETWEEN_PIT);
-        ALTERNATE_ORES.put("betweenores:between_quartz_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:iron_ore", BETWEEN_STONE);
+        ALTERNATE_ORES.put("betweenores:copper_ore", BETWEEN_STONE);
+        ALTERNATE_ORES.put("betweenores:tin_ore", BETWEEN_STONE);
+        ALTERNATE_ORES.put("betweenores:gold_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:redstone_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:lapis_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:diamond_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:lead_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:nickel_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:silver_ore", BETWEEN_PIT);
+        ALTERNATE_ORES.put("betweenores:quartz_ore", BETWEEN_PIT);
         
         //How about this
         //You click the make pr button if you want more support
