@@ -57,6 +57,7 @@ public class ConfigManager {
 	public static float miniBoilerHeatMultiplier;
 	public static boolean miniBoilerCanExplode;
 	public static int geoSeparatorCapacity;
+	public static double ancientGolemKnockbackResistance;
 
 	static Pattern damageRatePattern = Pattern.compile("(\\w+):(\\d+(?:\\.\\d+|))");
 
@@ -120,7 +121,8 @@ public class ConfigManager {
 		config.addCustomCategoryComment("mobs", "Settings related to ore generation.");
 		
 		ancientGolemSpawnWeight = config.getInt("ancientGolemSpawnWeight", "mobs", 25, 0, 32767, "Spawning weight of the Ancient Golem mob. Higher values make golems spawn more frequently.");
-		
+		ancientGolemKnockbackResistance = config.getFloat("ancientGolemKnockbackResistance", "mobs", 1.0f, 0.0f, 1.0f, "How much knockback resistance Ancient Golems have.");
+
 		config.addCustomCategoryComment("structures", "Settings related to structure generation.");
 		
 		smallRuinChance = config.getInt("smallRuinChance", "structures", 5, 0, 32767, "Spawning frequency of the small ruin structure. A value of 0 will prevent spawning altogether.");
@@ -168,7 +170,7 @@ public class ConfigManager {
 		miniBoilerCapacity = config.getInt("miniBoilerCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1000, Integer.MAX_VALUE, "How much fluid (in mb) fits into a mini boiler.");
 		miniBoilerHeatMultiplier = config.getFloat("miniBoilerHeatMultiplier", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, heat-wise, the mini boiler is at making steam.");
 		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
-		geoSeparatorCapacity = reservoirCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME * 4, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
+		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME * 4, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
 
 		scaleDamagePasses.clear();
 		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))
