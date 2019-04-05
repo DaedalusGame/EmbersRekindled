@@ -14,13 +14,18 @@ import java.util.stream.Collectors;
 
 public class AnvilBreakdownRecipe extends DawnstoneAnvilRecipe implements IFocusRecipe {
     public AnvilBreakdownRecipe() {
-        super(new IngredientSpecial(stack -> stack.getItem().getIsRepairable(stack,Misc.getRepairItem(stack)) && Misc.getResourceCount(stack) != -1 && !RecipeRegistry.isBlacklistedFromBreakdown(stack)), Ingredient.EMPTY, new ItemStack[0]);
+        super(new IngredientSpecial(stack -> canBreakdown(stack)), Ingredient.EMPTY, new ItemStack[0]);
+    }
+
+    public static boolean canBreakdown(ItemStack stack) {
+        ItemStack repairItem = Misc.getRepairItem(stack);
+        return !repairItem.isEmpty() && stack.getItem().getIsRepairable(stack, Misc.getRepairItem(stack)) && Misc.getResourceCount(stack) != -1 && !RecipeRegistry.isBlacklistedFromBreakdown(stack);
     }
 
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
         ItemStack repairItem = Misc.getRepairItem(input1);
-        return !input1.isEmpty() && !ItemModUtil.hasHeat(input1) && input1.getItem().getIsRepairable(input1,repairItem) && input2.isEmpty() && Misc.getResourceCount(input1) != -1 && !RecipeRegistry.isBlacklistedFromBreakdown(input1);
+        return !input1.isEmpty() && !repairItem.isEmpty() && !ItemModUtil.hasHeat(input1) && input1.getItem().getIsRepairable(input1,repairItem) && input2.isEmpty() && Misc.getResourceCount(input1) != -1 && !RecipeRegistry.isBlacklistedFromBreakdown(input1);
     }
 
     @Override

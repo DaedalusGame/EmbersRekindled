@@ -1,28 +1,17 @@
 package teamroots.embers.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.tileentity.ITileEntityBase;
-import teamroots.embers.tileentity.TileEntityLargeTank;
 import teamroots.embers.tileentity.TileEntityStoneValve;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BlockStoneValve extends BlockStoneEdge {
 	public BlockStoneValve(Material material, String name, boolean addToTab) {
@@ -59,6 +48,7 @@ public class BlockStoneValve extends BlockStoneEdge {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof ITileEntityBase)
 			((ITileEntityBase)tile).breakBlock(world,pos,state,player);
+		super.onBlockHarvested(world, pos, state, player);
 	}
 
 	public BlockPos getMainBlock(World world, BlockPos pos)

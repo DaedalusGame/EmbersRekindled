@@ -1,6 +1,5 @@
 package teamroots.embers.util;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
@@ -12,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.*;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMap;
@@ -261,10 +259,10 @@ public class Misc {
 
     public static void syncTE(TileEntity tile) {
         //IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-        //tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 0); //Does a good job I hope
+        //tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 22); //Does a good job I hope
 
         World world = tile.getWorld();
-        if(world instanceof WorldServer) {
+        if(!tile.isInvalid() && world instanceof WorldServer) {
             SPacketUpdateTileEntity packet = tile.getUpdatePacket();
             if (packet != null) {
                 PlayerChunkMap chunkMap = ((WorldServer) world).getPlayerChunkMap();
