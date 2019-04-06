@@ -33,20 +33,16 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.itemmod.ItemModUtil;
-import teamroots.embers.api.itemmod.ModifierBase;
-import teamroots.embers.block.BlockSeed;
 import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.EnumStampType;
-import teamroots.embers.upgrade.UpgradeGeoSeparator;
 import teamroots.embers.util.AlchemyUtil;
 import teamroots.embers.util.IngredientSpecial;
 import teamroots.embers.util.WeightedItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RecipeRegistry {
 	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<>();
@@ -213,9 +209,14 @@ public class RecipeRegistry {
 		meltingRecipes.addAll(meltingOreRecipes);
 	}
 
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void initLater(RegistryEvent.Register<Item> event){
+		initOreDict();
+	}
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void initEarly(RegistryEvent.Register<IRecipe> event) {
-		initOreDict();
+		//initOreDict();
 
 		AlchemyUtil.registerAspect("iron", Ingredient.fromItem(RegistryManager.aspectus_iron));
 		AlchemyUtil.registerAspect("copper", Ingredient.fromItem(RegistryManager.aspectus_copper));
