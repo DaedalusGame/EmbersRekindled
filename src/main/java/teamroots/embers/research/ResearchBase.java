@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.gui.GuiCodex;
 import teamroots.embers.util.Vec2i;
 
@@ -49,6 +50,7 @@ public class ResearchBase {
 
 	public List<ResearchCategory> getNeededFor() {
 		ArrayList<ResearchCategory> neededFor = new ArrayList<>();
+		if(ConfigManager.codexCategoryIsProgress)
 		for (ResearchCategory category : ResearchManager.researches) {
 			if(category.prerequisites.contains(this))
 				neededFor.add(category);
@@ -150,7 +152,10 @@ public class ResearchBase {
 	}
 
 	public boolean areAncestorsChecked() {
-		return isChecked() || ancestors.stream().allMatch(ResearchBase::isChecked)/*ancestors.isEmpty() || ancestors.stream().anyMatch(ResearchBase::isChecked)*/;
+		if(ConfigManager.codexEntryIsProgress)
+			return isChecked() || ancestors.stream().allMatch(ResearchBase::isChecked)/*ancestors.isEmpty() || ancestors.stream().anyMatch(ResearchBase::isChecked)*/;
+		else
+			return true;
 	}
 
 	@SideOnly(Side.CLIENT)

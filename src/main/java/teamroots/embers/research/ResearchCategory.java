@@ -1,15 +1,19 @@
 package teamroots.embers.research;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.util.Vec2i;
 
 import java.util.*;
 
 public class ResearchCategory {
+	public static final ArrayList<ResearchBase> NO_PREREQUISITES = Lists.newArrayList();
+
 	public String name = "";
 	public double u = 192.0;
 	public double v = 0;
@@ -62,8 +66,15 @@ public class ResearchCategory {
 		return this;
 	}
 
+	public List<ResearchBase> getPrerequisites() {
+		if(ConfigManager.codexCategoryIsProgress)
+			return prerequisites;
+		else
+			return NO_PREREQUISITES;
+	}
+
 	public boolean isChecked() {
-		return prerequisites.stream().allMatch(ResearchBase::isChecked);
+		return getPrerequisites().stream().allMatch(ResearchBase::isChecked);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -77,7 +88,7 @@ public class ResearchCategory {
 		ArrayList<String> tooltip = new ArrayList<>();
 		boolean isChecked = isChecked();
 		if(showTooltips || !isChecked)
-		for (ResearchBase prerequisite : prerequisites) {
+		for (ResearchBase prerequisite : getPrerequisites()) {
 			String checkmark;
 			if(prerequisite.isChecked())
 				checkmark = TextFormatting.GREEN+"\u2714"+TextFormatting.RESET;

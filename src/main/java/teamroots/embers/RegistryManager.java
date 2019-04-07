@@ -275,7 +275,7 @@ public class RegistryManager {
 		blocks.add(seed_lead = createSimpleSeed(Material.ROCK, "seed_lead", new ResourceLocation(Embers.MODID + ":textures/blocks/material_lead.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_lead)));
 		blocks.add(seed_dawnstone = createSimpleSeed(Material.ROCK, "seed_dawnstone", new ResourceLocation(Embers.MODID + ":textures/blocks/material_dawnstone.png"),(tile,i) -> new ItemStack(RegistryManager.nugget_dawnstone)));
 		blocks.add(stone_valve = (new BlockStoneValve(unpushable,"stone_valve",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
-		blocks.add(archaic_geysir = (new BlockArchaicGeysir(Material.ROCK,"archaic_geysir",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+		//blocks.add(archaic_geysir = (new BlockArchaicGeysir(Material.ROCK,"archaic_geysir",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(archaic_mech_edge = (new BlockMechEdge(unpushable,"archaic_mech_edge",false)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 		blocks.add(geo_separator = (new BlockGeoSeparator(Material.IRON,"geo_separator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 

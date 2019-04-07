@@ -46,6 +46,8 @@ public class ConfigManager {
 
 	//MISC
 	public static boolean pvpEverybodyIsEnemy;
+	public static boolean codexCategoryIsProgress;
+	public static boolean codexEntryIsProgress;
 
 	//PARAMETERS
 	public static int melterOreAmount;
@@ -159,6 +161,8 @@ public class ConfigManager {
 		enableMysticalMechanicsIntegration = config.getBoolean("enableMysticalMechanics", "compat", true, "If true, Embers will register items, blocks and recipes providing Mystical Mechanics integration.");
 
 		pvpEverybodyIsEnemy = config.getBoolean("everybodyIsAnEnemy", "misc", false, "If true, Embers homing projectiles will go for neutral players.");
+		codexCategoryIsProgress = config.getBoolean("codexCategoryIsProgress", "misc", true, "Codex category is shut. Progression is open.");
+		codexEntryIsProgress = config.getBoolean("codexEntryIsProgress", "misc", true, "Codex entry is shut and hide. Progression is open and show.");
 
 		melterOreAmount = config.getInt("melterOreAmount", "parameters", 144, 0, Integer.MAX_VALUE, "How many mb of fluid are obtained per ore output in the melter. This is multiplied by the amount of output a melter would produce, so by default 144mb * 2 ingots.");
 		stampPlateAmount = config.getInt("stampPlateAmount", "parameters", 1, 1, Integer.MAX_VALUE, "How many ingots are required to make one plate in the stamper.");
@@ -170,7 +174,7 @@ public class ConfigManager {
 		miniBoilerCapacity = config.getInt("miniBoilerCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1000, Integer.MAX_VALUE, "How much fluid (in mb) fits into a mini boiler.");
 		miniBoilerHeatMultiplier = config.getFloat("miniBoilerHeatMultiplier", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, heat-wise, the mini boiler is at making steam.");
 		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
-		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME * 4, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
+		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
 
 		scaleDamagePasses.clear();
 		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))

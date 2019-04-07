@@ -1,7 +1,7 @@
 package teamroots.embers.compat.jei.wrapper;
 
+import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.compat.jei.EmbersJEIPlugin;
@@ -15,6 +15,6 @@ public class MeltingRecipeWrapper extends BaseRecipeWrapper<ItemMeltingRecipe> {
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputLists(ItemStack.class, EmbersJEIPlugin.expandIngredients(recipe.getInput()));
-		ingredients.setOutput(FluidStack.class, recipe.getFluid());
+		ingredients.setOutputs(FluidStack.class, Lists.newArrayList(recipe.getFluid(),recipe.getBonusOutput()));
 	}
 }

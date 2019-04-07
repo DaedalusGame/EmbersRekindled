@@ -8,10 +8,7 @@ import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.event.UpgradeEvent;
 import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.tileentity.TileEntityGeoSeparator;
-import teamroots.embers.tileentity.TileEntityMiniBoiler;
 import teamroots.embers.util.DefaultUpgradeProvider;
-
-import java.util.Dictionary;
 
 public class UpgradeGeoSeparator extends DefaultUpgradeProvider {
     public UpgradeGeoSeparator(TileEntity tile) {
@@ -23,7 +20,7 @@ public class UpgradeGeoSeparator extends DefaultUpgradeProvider {
         if(event instanceof MachineRecipeEvent.Success) {
             Object recipe = ((MachineRecipeEvent<?>) event).getRecipe();
             if(recipe instanceof ItemMeltingRecipe) {
-                FluidStack bonus = ((ItemMeltingRecipe) recipe).bonus;
+                FluidStack bonus = ((ItemMeltingRecipe) recipe).getBonusOutput();
                 if (bonus != null && this.tile instanceof TileEntityGeoSeparator && this.tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,null)) {
                     IFluidHandler fluidHandler = this.tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                     fluidHandler.fill(bonus.copy(),true);

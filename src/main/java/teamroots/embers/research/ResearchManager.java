@@ -185,7 +185,8 @@ public class ResearchManager {
         dropper = new ResearchBase("dropper", new ItemStack(RegistryManager.item_dropper), 8, 6).addAncestor(pipes);
         bin = new ResearchBase("bin", new ItemStack(RegistryManager.bin), 4, 3).addAncestor(pipes);
         tank = new ResearchBase("tank", new ItemStack(RegistryManager.block_tank), 3, 1).addAncestor(pipes);
-        reservoir = new ResearchBase("reservoir", new ItemStack(RegistryManager.large_tank), 6, 0).addAncestor(tank);
+        reservoir = new ResearchBase("reservoir", new ItemStack(RegistryManager.large_tank), 6, 0).addAncestor(tank)
+                .addPage(new ResearchShowItem("reservoir_valve", new ItemStack(RegistryManager.stone_valve), 0, 0).addItem(new DisplayItem(new ItemStack(RegistryManager.stone_valve))));
 
         //MECHANISMS
         emitters = new ResearchShowItem("emitters", new ItemStack(RegistryManager.ember_emitter), 0, 2).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_emitter)))
@@ -241,7 +242,10 @@ public class ResearchManager {
         motive_core = new ResearchBase("motive_core", new ItemStack(RegistryManager.ancient_motive_core), 4, 4).addAncestor(archaic_brick);
 
         wildfire = new ResearchBase("wildfire", new ItemStack(RegistryManager.wildfire_core), 1, 5);
-        injector = new ResearchBase("injector", new ItemStack(RegistryManager.ember_injector), 0, 7).addAncestor(wildfire);
+        injector = new ResearchBase("injector", new ItemStack(RegistryManager.ember_injector), 0, 7).addAncestor(wildfire)
+                .addPage(new ResearchShowItem("crystal_level",ItemStack.EMPTY,0,0)
+                        .addItem(new DisplayItem(new ItemStack(RegistryManager.seed_iron), new ItemStack(RegistryManager.seed_gold), new ItemStack(RegistryManager.seed_copper), new ItemStack(RegistryManager.seed_tin)))
+                        .addItem(new DisplayItem(new ItemStack(RegistryManager.seed_silver), new ItemStack(RegistryManager.seed_lead), new ItemStack(RegistryManager.seed_nickel), new ItemStack(RegistryManager.seed_aluminum))));
         combustor = new ResearchBase("combustor", new ItemStack(RegistryManager.combustor), 6, 5).addAncestor(wildfire);
         combustor.addPage(new ResearchShowItem("empty", ItemStack.EMPTY, 0, 0)
                 .addItem(new DisplayItem("combustor_coal",new ItemStack(Items.COAL)))

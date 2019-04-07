@@ -49,6 +49,11 @@ public class ItemMeltingRecipe {
 		return fluid;
 	}
 
+	public FluidStack getBonusOutput(){
+		return bonus;
+	}
+
+
 	public List<ItemStack> getInputs()
 	{
 		return Lists.newArrayList(input.getMatchingStacks());

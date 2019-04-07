@@ -18,8 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -31,7 +29,6 @@ import teamroots.embers.research.ResearchManager;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.RenderUtil;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
@@ -496,6 +493,7 @@ public class GuiCodex extends GuiScreen {
 			}
 			else if(mouseX > basePosX-16 && mouseY > basePosY+224 && mouseX < basePosX-16+48 && mouseY < basePosY+224+48)
 			{
+				List<String> tooltip = Lists.newArrayList("".split(";;"));
 				renderTooltip(Lists.newArrayList("Right-click entries to mark them as "+TextFormatting.GREEN+ "\u2714" +TextFormatting.RESET+" complete.","Categories will open as you complete entries.","","Enter text to search and highlight entries.","You can search entries matching multiple words with "+TextFormatting.WHITE+"|"+TextFormatting.RESET+".","ex: "+TextFormatting.WHITE+"Ember|Generator"+TextFormatting.RESET), mouseX, mouseY);
 			}
 		}

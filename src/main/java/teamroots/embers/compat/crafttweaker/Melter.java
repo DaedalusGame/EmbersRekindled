@@ -1,6 +1,5 @@
 package teamroots.embers.compat.crafttweaker;
 
-import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
@@ -28,6 +27,12 @@ public class Melter {
     @ZenMethod
     public static void add(ILiquidStack output, IIngredient input) {
         ItemMeltingRecipe recipe = new ItemMeltingRecipe(CTUtil.toIngredient(input), CraftTweakerMC.getLiquidStack(output));
+        CraftTweaker.LATE_ACTIONS.add(new Add(recipe));
+    }
+
+    @ZenMethod
+    public static void add(ILiquidStack output, IIngredient input, ILiquidStack bonus) {
+        ItemMeltingRecipe recipe = new ItemMeltingRecipe(CTUtil.toIngredient(input), CraftTweakerMC.getLiquidStack(output)).addBonusOutput(CraftTweakerMC.getLiquidStack(bonus));
         CraftTweaker.LATE_ACTIONS.add(new Add(recipe));
     }
 

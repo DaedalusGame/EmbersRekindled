@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class BlockNodeBase extends BlockTEBase {
-    public static final PropertyDirection facing = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyDirection facing = PropertyDirection.create("facing");
 
     public BlockNodeBase(Material material, String name, boolean addToTab) {
         super(material, name, addToTab);
@@ -33,12 +33,7 @@ public abstract class BlockNodeBase extends BlockTEBase {
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        EnumFacing facing;
-        if (face.getAxis() != EnumFacing.Axis.Y)
-            facing = face.getOpposite();
-        else
-            facing = placer.getHorizontalFacing();
-        return getDefaultState().withProperty(BlockNodeBase.facing, facing);
+        return getDefaultState().withProperty(BlockNodeBase.facing, face.getOpposite());
     }
 }
 
