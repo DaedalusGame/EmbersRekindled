@@ -3,7 +3,6 @@ package teamroots.embers.research;
 import com.google.common.collect.Lists;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.ConfigManager;
@@ -91,10 +90,10 @@ public class ResearchCategory {
 		for (ResearchBase prerequisite : getPrerequisites()) {
 			String checkmark;
 			if(prerequisite.isChecked())
-				checkmark = TextFormatting.GREEN+"\u2714"+TextFormatting.RESET;
+				tooltip.add(I18n.format("embers.research.prerequisite.unlocked",prerequisite.getName()));
 			else
-				checkmark = TextFormatting.DARK_RED+"\u2715"+TextFormatting.DARK_GRAY;
-			tooltip.add(checkmark+" Needs "+prerequisite.getName());
+				tooltip.add(I18n.format("embers.research.prerequisite.locked",prerequisite.getName()));
+
 		}
 		return tooltip;
 	}

@@ -39,10 +39,10 @@ public class MixingRecipeCategory implements IRecipeCategory<MixingRecipeWrapper
     @Override
     public void setRecipe(IRecipeLayout layout, MixingRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiFluidStackGroup fluid = layout.getFluidStacks();
-        fluid.init(0, true, 46, 7, 16, 32, 16, true, null);
-        fluid.init(1, true, 8, 46, 16, 32, 16, true, null);
-        fluid.init(2, true, 46, 84, 16, 32, 16, true, null);
-        fluid.init(3, false, 84, 46, 16, 32, 16, true, null);
+        fluid.init(0, true, 46, 7, 16, 32, 16, false, null);
+        fluid.init(1, true, 8, 46, 16, 32, 16, false, null);
+        fluid.init(2, true, 46, 84, 16, 32, 16, false, null);
+        fluid.init(3, false, 84, 46, 16, 32, 16, false, null);
 
         int size = ingredients.getInputs(FluidStack.class).size();
         if (size >= 1){

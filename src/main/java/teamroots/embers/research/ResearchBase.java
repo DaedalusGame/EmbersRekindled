@@ -164,7 +164,7 @@ public class ResearchBase {
 		ArrayList<String> tooltip = new ArrayList<>();
 		if(showTooltips || !isChecked()) {
 			for (ResearchCategory neededFor : getNeededFor()) {
-				tooltip.add("Needed for "+neededFor.getName());
+				tooltip.add(I18n.format("embers.research.prerequisite",neededFor.getName()));
 			}
 		}
 		return tooltip;

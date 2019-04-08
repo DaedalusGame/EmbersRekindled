@@ -53,7 +53,7 @@ public class MelterRecipeCategory implements IRecipeCategory<MeltingRecipeWrappe
         }
 
         IGuiFluidStackGroup fluid = recipeLayout.getFluidStacks();
-        fluid.init(1, true, 84, 20, 16, 32, 1500, true, null);
+        fluid.init(1, true, 84, 20, 16, 32, 1500, false, null);
         fluid.set(1, ingredients.getOutputs(FluidStack.class).get(0));
     }
 

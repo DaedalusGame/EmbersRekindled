@@ -15,6 +15,6 @@ public class MeltingRecipeWrapper extends BaseRecipeWrapper<ItemMeltingRecipe> {
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		ingredients.setInputLists(ItemStack.class, EmbersJEIPlugin.expandIngredients(recipe.getInput()));
-		ingredients.setOutputs(FluidStack.class, Lists.newArrayList(recipe.getFluid(),recipe.getBonusOutput()));
+		ingredients.setOutputs(FluidStack.class, Lists.newArrayList(recipe.getFluid(), recipe.getBonusOutput()));
 	}
 }

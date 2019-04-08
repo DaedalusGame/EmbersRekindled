@@ -53,8 +53,8 @@ public class GeologicSeparatorRecipeCategory implements IRecipeCategory<MeltingR
         }
 
         IGuiFluidStackGroup fluid = recipeLayout.getFluidStacks();
-        fluid.init(1, true, 63, 20, 16, 32, 1500, true, null);
-        fluid.init(2, true, 84, 40, 16, 12, 100, true, null);
+        fluid.init(1, true, 63, 20, 16, 32, 1500, false, null);
+        fluid.init(2, true, 84, 40, 16, 12, 500/9, false, null);
         fluid.set(1, ingredients.getOutputs(FluidStack.class).get(0));
         fluid.set(2, ingredients.getOutputs(FluidStack.class).get(1));
     }

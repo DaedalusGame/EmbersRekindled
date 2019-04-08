@@ -493,8 +493,9 @@ public class GuiCodex extends GuiScreen {
 			}
 			else if(mouseX > basePosX-16 && mouseY > basePosY+224 && mouseX < basePosX-16+48 && mouseY < basePosY+224+48)
 			{
-				List<String> tooltip = Lists.newArrayList("".split(";;"));
-				renderTooltip(Lists.newArrayList("Right-click entries to mark them as "+TextFormatting.GREEN+ "\u2714" +TextFormatting.RESET+" complete.","Categories will open as you complete entries.","","Enter text to search and highlight entries.","You can search entries matching multiple words with "+TextFormatting.WHITE+"|"+TextFormatting.RESET+".","ex: "+TextFormatting.WHITE+"Ember|Generator"+TextFormatting.RESET), mouseX, mouseY);
+				List<String> tooltip = Lists.newArrayList(I18n.format("embers.research.controls").split(";"));
+				//renderTooltip(Lists.newArrayList("Right-click entries to mark them as "+TextFormatting.GREEN+ "\u2714" +TextFormatting.RESET+" complete.","Categories will open as you complete entries.","","Enter text to search and highlight entries.","You can search entries matching multiple words with "+TextFormatting.WHITE+"|"+TextFormatting.RESET+".","ex: "+TextFormatting.WHITE+"Ember|Generator"+TextFormatting.RESET), mouseX, mouseY);
+				renderTooltip(tooltip, mouseX, mouseY);
 			}
 		}
 		else {

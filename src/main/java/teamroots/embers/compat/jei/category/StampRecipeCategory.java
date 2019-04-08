@@ -57,7 +57,7 @@ public class StampRecipeCategory implements IRecipeCategory<StampingRecipeWrappe
         stacks.set(2,isFocused ? recipeWrapper.getFocusRecipe().getOutputs(focus,2) : ingredients.getOutputs(ItemStack.class).get(0));
 
         IGuiFluidStackGroup fluid = recipeLayout.getFluidStacks();
-        fluid.init(3, true, 47, 48, 16, 32, 1500, true, null);
+        fluid.init(3, true, 47, 48, 16, 32, 1500, false, null);
         fluid.set(3, ingredients.getInputs(FluidStack.class).get(0));
     }
 
