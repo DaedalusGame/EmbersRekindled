@@ -25,7 +25,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import net.minecraftforge.registries.ForgeRegistry;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
@@ -272,7 +271,7 @@ public class RecipeRegistry {
 
 	@SubscribeEvent
 	public void init(RegistryEvent.Register<IRecipe> event){
-		((ForgeRegistry<IRecipe>)event.getRegistry()).remove(new ResourceLocation("brewing_stand"));
+		//((ForgeRegistry<IRecipe>)event.getRegistry()).remove(new ResourceLocation("brewing_stand"));
 
 		event.getRegistry().register(new ShapedOreRecipe(getRL("crystal_ember"),new ItemStack(RegistryManager.crystal_ember,1),true,new Object[]{
 				"XXX",
