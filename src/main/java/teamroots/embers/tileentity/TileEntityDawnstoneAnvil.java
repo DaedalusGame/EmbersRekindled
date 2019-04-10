@@ -17,9 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.EventManager;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.network.PacketHandler;
@@ -29,6 +27,7 @@ import teamroots.embers.recipe.DawnstoneAnvilRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.Misc;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +40,11 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
         protected void onContentsChanged(int slot) {
         	TileEntityDawnstoneAnvil.this.markDirty();
         }
+
+		@Override
+		protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+			return 1; //CURSED
+		}
 	};
 	Random random = new Random();
 	
