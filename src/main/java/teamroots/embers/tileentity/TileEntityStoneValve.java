@@ -110,7 +110,7 @@ public class TileEntityStoneValve extends TileEntity implements ITileEntityBase,
 
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && facing == null || facing == getFacing())
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && (facing == null || facing == getFacing()))
             return true;
         return super.hasCapability(capability, facing);
     }
