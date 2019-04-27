@@ -1,0 +1,54 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"parent": "block/block",
+	"textures": {
+		"silver": "embers:blocks/node_silver",
+		"plates": "embers:blocks/plates",
+		"particle": "embers:blocks/node_silver",
+		"nozzle": "embers:blocks/brick_nozzle",
+		"pipe": "embers:blocks/pipe_tex"
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"from": [4, 4, 4],
+			"to": [12, 12, 12],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#silver"},
+				"east": {"uv": [0, 0, 8, 8], "texture": "#silver"},
+				"south": {"uv": [0, 0, 8, 8], "texture": "#silver"},
+				"west": {"uv": [0, 0, 8, 8], "texture": "#silver"},
+				"up": {"uv": [0, 8, 8, 16], "texture": "#silver"},
+				"down": {"uv": [8, 8, 16, 16], "texture": "#silver"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [6, -3, 6],
+			"to": [10, 4, 10],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [12, 5, 16, 12], "texture": "#pipe"},
+				"east": {"uv": [12, 5, 16, 12], "texture": "#pipe"},
+				"south": {"uv": [12, 5, 16, 12], "texture": "#pipe"},
+				"west": {"uv": [12, 5, 16, 12], "texture": "#pipe"},
+				"down": {"uv": [12, 12, 16, 16], "texture": "#pipe"}
+			}
+		},
+		{
+			"name": "cube",
+			"from": [5, 3, 5],
+			"to": [11, 4, 11],
+			"shade": true,
+			"faces": {
+				"north": {"uv": [1, 14, 7, 15], "texture": "#plates"},
+				"east": {"uv": [1, 14, 7, 15], "texture": "#plates"},
+				"south": {"uv": [1, 14, 7, 15], "texture": "#plates"},
+				"west": {"uv": [1, 14, 7, 15], "texture": "#plates"},
+				"up": {"uv": [0, 0, 6, 6], "texture": "#nozzle"},
+				"down": {"uv": [1, 9, 7, 15], "texture": "#plates"}
+			}
+		}
+	]
+}

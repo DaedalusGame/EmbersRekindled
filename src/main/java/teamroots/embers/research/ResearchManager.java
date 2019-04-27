@@ -40,7 +40,7 @@ public class ResearchManager {
     public static List<ResearchCategory> researches = new ArrayList<ResearchCategory>();
 
     public static ResearchBase dials, boiler, mini_boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, tinker_lens,//WORLD
-            copper_cell, emitters, dawnstone, melter, stamper, mixer, breaker, hearth_coil, access, pump, clockwork_attenuator, //MECHANISMS
+            copper_cell, emitters, dawnstone, melter, stamper, mixer, breaker, hearth_coil, access, pump, clockwork_attenuator, geo_separator, //MECHANISMS
             beam_cannon, pulser, splitter, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, catalytic_plug, ember_siphon, //METALLURGY
             tyrfing, waste, cluster, ashen_cloak, inflictor, materia, field_chart, glimmer, metallurgic_dust, //ALCHEMY
             modifiers, inferno_forge, heat, dawnstone_anvil, autohammer, dismantling //SMITHING
@@ -193,6 +193,7 @@ public class ResearchManager {
                 .addPage(new ResearchShowItem("receivers", new ItemStack(RegistryManager.ember_receiver), 0, 0).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_receiver))))
                 .addPage(new ResearchShowItem("linking", ItemStack.EMPTY, 0, 0).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_receiver),new ItemStack(RegistryManager.tinker_hammer),new ItemStack(RegistryManager.ember_emitter))));
         melter = new ResearchBase("melter", new ItemStack(RegistryManager.block_furnace), 2, 0).addAncestor(emitters);
+        geo_separator = new ResearchBase("geo_separator", new ItemStack(RegistryManager.geo_separator), 0, 0).addAncestor(melter);
         stamper = new ResearchBase("stamper", new ItemStack(RegistryManager.stamper), 2, 4).addAncestor(melter).addAncestor(emitters);
         access = new ResearchBase("access", new ItemStack(RegistryManager.mech_core), 7, 5).addAncestor(stamper);
         hearth_coil = new ResearchBase("hearth_coil", new ItemStack(RegistryManager.heat_coil), 10, 1).addAncestor(access);
@@ -395,7 +396,8 @@ public class ResearchManager {
                 .addResearch(dawnstone)
                 .addResearch(emitters)
                 .addResearch(copper_cell)
-                .addResearch(clockwork_attenuator);
+                .addResearch(clockwork_attenuator)
+                .addResearch(geo_separator);
         categoryMetallurgy
                 .addResearch(splitter)
                 .addResearch(pulser)

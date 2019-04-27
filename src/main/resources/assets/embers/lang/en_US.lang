@@ -348,7 +348,7 @@ embers.tooltip.crystal.level=Level %s
 embers.tooltip.crystal.xp=Refinement %s/%s
 
 embers.tooltip.atmosEmber=Atmospheric Ember:
-embers.tooltip.targetingBlock=Targeting:
+embers.tooltip.targetingBlock=Targeting: %s
 embers.tooltip.itemdial.slot=Slot %s: %s
 embers.tooltip.itemdial.item=%s %s
 embers.tooltip.itemdial.noitem=NONE
@@ -376,6 +376,12 @@ embers.tooltip.attenuator.on=When active: %s Speed
 embers.tooltip.attenuator.off=When inactive: %s Speed
 embers.tooltip.forge.cannot_start=There is not enough Ember to ignite the forge.
 embers.tooltip.broken=Broken
+embers.tooltip.item_request.linked=Linked to %s (%s,%s,%s)
+embers.tooltip.item_request.filter=Wants %2$sx %1$s
+embers.tooltip.item_request.order=§aWaiting for %s items
+embers.tooltip.item_request.order.none=
+
+embers.filter.any=Anything
 
 embers.tooltip.modifier.superheater=Superheating %s
 embers.tooltip.modifier.jet_augment=Cinder Jet %s

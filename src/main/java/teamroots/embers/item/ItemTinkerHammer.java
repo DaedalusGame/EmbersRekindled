@@ -1,5 +1,6 @@
 package teamroots.embers.item;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -38,28 +39,44 @@ public class ItemTinkerHammer extends ItemBase {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ){
 		ItemStack stack = player.getHeldItem(hand);
-		TileEntity tile = world.getTileEntity(pos);
+		NBTTagCompound tagCompound = stack.getTagCompound();
 		if (player.isSneaking()){
-			stack.getTagCompound().setInteger("targetX", pos.getX());
-			stack.getTagCompound().setInteger("targetY", pos.getY());
-			stack.getTagCompound().setInteger("targetZ", pos.getZ());
+			tagCompound.setInteger("targetWorld", world.provider.getDimension());
+			tagCompound.setInteger("targetX", pos.getX());
+			tagCompound.setInteger("targetY", pos.getY());
+			tagCompound.setInteger("targetZ", pos.getZ());
 			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 1.9f+Misc.random.nextFloat()*0.2f, false);
 			return EnumActionResult.SUCCESS;
-		}
-		else if (tile instanceof IEmberPacketProducer && stack.getTagCompound().hasKey("targetX")){
-			if (world.getTileEntity(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ"))) instanceof IEmberPacketReceiver){
-				((IEmberPacketProducer)tile).setTargetPosition(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")), face);
-				world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.95f+Misc.random.nextFloat()*0.1f, false);
+		} else if (tagCompound.hasKey("targetX")) {
+			boolean success = targetBlock(world, pos, face, stack);
+			if (success)
 				return EnumActionResult.SUCCESS;
-			}
-		}
-		else if (tile instanceof ITargetable && stack.getTagCompound().hasKey("targetX")){
-			((ITargetable)tile).setTarget(new BlockPos(stack.getTagCompound().getInteger("targetX"),stack.getTagCompound().getInteger("targetY"),stack.getTagCompound().getInteger("targetZ")));
-			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.FAIL;
 	}
-	
+
+	public boolean targetBlock(World world, BlockPos pos, EnumFacing face, ItemStack stack) {
+		NBTTagCompound tagCompound = stack.getTagCompound();
+		int dimension = tagCompound.getInteger("targetWorld");
+		if (world.provider.getDimension() != dimension)
+			return false;
+		TileEntity tile = world.getTileEntity(pos);
+		BlockPos targetPos = new BlockPos(tagCompound.getInteger("targetX"), tagCompound.getInteger("targetY"), tagCompound.getInteger("targetZ"));
+		if (tile instanceof IEmberPacketProducer) {
+			TileEntity targetTile = world.getTileEntity(targetPos);
+			if (targetTile instanceof IEmberPacketReceiver) {
+                ((IEmberPacketProducer) tile).setTargetPosition(targetPos, face);
+                world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.95f + Misc.random.nextFloat() * 0.1f, false);
+				return true;
+            }
+        } else if (tile instanceof ITargetable) {
+			ITargetable targetable = (ITargetable) tile;
+			targetable.setTarget(targetPos);
+			return true;
+        }
+		return false;
+	}
+
 	@Override
 	public boolean hasContainerItem(ItemStack stack){
 		return true;
@@ -83,11 +100,17 @@ public class ItemTinkerHammer extends ItemBase {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced){
 		if (stack.hasTagCompound()){
-			if (stack.getTagCompound().hasKey("targetX")){
-				tooltip.add(I18n.format("embers.tooltip.targetingBlock"));
-				tooltip.add(" X=" + stack.getTagCompound().getInteger("targetX"));
-				tooltip.add(" Y=" + stack.getTagCompound().getInteger("targetY"));
-				tooltip.add(" Z=" + stack.getTagCompound().getInteger("targetZ"));
+			NBTTagCompound tagCompound = stack.getTagCompound();
+			if (tagCompound.hasKey("targetX")){
+				int dimension = tagCompound.getInteger("targetWorld");
+				if(world.provider.getDimension() == dimension) {
+					BlockPos pos = new BlockPos(tagCompound.getInteger("targetX"), tagCompound.getInteger("targetY"), tagCompound.getInteger("targetZ"));
+					IBlockState blockState = world.getBlockState(pos);
+					tooltip.add(I18n.format("embers.tooltip.targetingBlock",blockState.getBlock().getLocalizedName()));
+					tooltip.add(" X=" + pos.getX());
+					tooltip.add(" Y=" + pos.getY());
+					tooltip.add(" Z=" + pos.getZ());
+				}
 			}
 		}
 	}

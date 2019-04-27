@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import teamroots.embers.SoundManager;
+import teamroots.embers.api.tile.IOrderable;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
@@ -22,12 +23,13 @@ import teamroots.embers.util.Misc;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class TileEntityItemExtractor extends TileEntityItemPipeBase {
+public class TileEntityItemExtractor extends TileEntityItemPipeBase implements IOrderable {
     Random random = new Random();
     EnumPipeConnection[] connections = new EnumPipeConnection[EnumFacing.VALUES.length];
     IItemHandler[] sideHandlers;
     boolean syncConnections;
     boolean active;
+    int currentOrder;
 
     public TileEntityItemExtractor() {
         super();
@@ -85,6 +87,7 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         writeConnections(tag);
+        tag.setInteger("order", currentOrder);
         return tag;
     }
 
@@ -112,6 +115,7 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
             setInternalConnection(EnumFacing.WEST, EnumPipeConnection.fromIndex(tag.getInteger("west")));
         if (tag.hasKey("east"))
             setInternalConnection(EnumFacing.EAST, EnumPipeConnection.fromIndex(tag.getInteger("east")));
+        currentOrder = tag.getInteger("order");
     }
 
     @Override
@@ -282,6 +286,15 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
         world.setTileEntity(pos, null);
     }
 
+    public void order(int orderSize) {
+        currentOrder += orderSize;
+    }
+
+    @Override
+    public void resetOrder() {
+        currentOrder = 0;
+    }
+
     @Override
     public void update() {
         if (world.isRemote && clogged)
@@ -293,7 +306,7 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
                     continue;
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
                 if (tile != null && !(tile instanceof TileEntityItemPipeBase) && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
-                    if (active) {
+                    if (active || currentOrder > 0) {
                         IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
                         int slot = -1;
                         for (int j = 0; j < handler.getSlots() && slot == -1; j++) {
@@ -306,6 +319,7 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase {
                             if (this.inventory.insertItem(0, extracted, true).isEmpty()) {
                                 handler.extractItem(slot, 1, false);
                                 this.inventory.insertItem(0, extracted, false);
+                                currentOrder = Math.max(0, currentOrder -extracted.getCount());
                             }
                         }
                         setFrom(facing, true);
