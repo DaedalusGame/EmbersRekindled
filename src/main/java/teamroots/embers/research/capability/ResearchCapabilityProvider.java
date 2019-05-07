@@ -1,14 +1,16 @@
 package teamroots.embers.research.capability;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ResearchCapabilityProvider implements ICapabilityProvider {
+public class ResearchCapabilityProvider implements ICapabilityProvider, INBTSerializable<NBTTagCompound> {
     private IResearchCapability capability = null;
 
     public ResearchCapabilityProvider(){
@@ -33,5 +35,17 @@ public class ResearchCapabilityProvider implements ICapabilityProvider {
         if (researchCapability != null && capability == researchCapability)
             return researchCapability.cast(this.capability);
         return null;
+    }
+
+    @Override
+    public NBTTagCompound serializeNBT() {
+        NBTTagCompound compound = new NBTTagCompound();
+        capability.writeToNBT(compound);
+        return compound;
+    }
+
+    @Override
+    public void deserializeNBT(NBTTagCompound compound) {
+        capability.readFromNBT(compound);
     }
 }
