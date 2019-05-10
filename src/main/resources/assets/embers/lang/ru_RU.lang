@@ -1,4 +1,4 @@
-itemGroup.embers=Эмберс
+itemGroup.embers=Эмберс: Основы
 itemGroup.embers_resources=Эмберс: Металлы
 
 tile.block_copper.name=Медный блок
@@ -77,11 +77,15 @@ tile.wrapped_sealed_planks.name=Укреплённые запечатанные 
 tile.vacuum.name=Предметный вакуум
 tile.breaker.name=Автоматический разрушитель
 tile.ember_injector.name=Эмбер-инжектор
-tile.seed.0.name=Кристаллическое семя железа
-tile.seed.1.name=Кристаллическое семя золота
-tile.seed.2.name=Кристаллическое семя меди
-tile.seed.3.name=Кристаллическое семя свинца
-tile.seed.4.name=Кристаллическое семя серебра
+tile.seed_iron.name=Железное кристаллическое семя
+tile.seed_gold.name=Золотое кристаллическое семя
+tile.seed_copper.name=Медное кристаллическое семя
+tile.seed_lead.name=Свинцовое кристаллическое семя
+tile.seed_silver.name=Серебряное кристаллическое семя
+tile.seed_aluminum.name=Алюминиевое кристаллическое семя
+tile.seed_nickel.name=Никелевое кристаллическое семя
+tile.seed_tin.name=Оловяное кристаллическое семя
+tile.seed_dawnstone.name=Золотитовое кристаллическое семя
 tile.boiler.name=Очистительный завод
 tile.archaic_edge.name=Архаическая кромка
 tile.archaic_tile.name=Архаическая плитка
@@ -102,6 +106,12 @@ tile.catalytic_plug.name=Каталитический затвор
 tile.ember_funnel.name=Эмбер-воронка
 tile.mini_boiler.name=Мини-Бойлер
 tile.mech_actuator.name=Механический привод
+tile.ember_siphon.name=Эмбер-сифон
+tile.stirling.name=Вайлдфаер очиститель
+tile.clockwork_attenuator.name=Часовой измиритель
+tile.explosion_pedestal.name=Пьедестал взрывного амулета
+tile.stone_valve.name=Каминитовый кран
+tile.geo_separator.name=Геологический сепаратор
 
 fluid.iron=Расплавленное железо
 fluid.gold=Расплавленное золото
@@ -110,7 +120,7 @@ fluid.lead=Расплавленный свинец
 fluid.silver=Расплавленное серебро
 fluid.astralite=Расплавленный астралит
 fluid.dawnstone=Расплавленный золотит
-fluid.umberSteel=Расплавленная жженая сталь
+fluid.umber_steel=Расплавленная жженая сталь
 fluid.alchemical_redstone=Разжиженный красный камень
 fluid.steam=Пар
 
@@ -225,6 +235,10 @@ item.ashen_amulet.name=Пепельный амулет
 item.dawnstone_mail.name=Золотитовая кольчуга
 item.tinker_lens.name=Линза Лудильщика
 item.anti_tinker_lens.name=Закоптившаяся Линза Лудильшика
+item.shifting_scales.name=Живая материя
+item.winding_gears.name=Вращающиеся шестерёнки
+item.core_stone.name=Каменное ядро
+item.creative_heat.name=Творческий модификатор температуры
 
 tile.block_aluminum.name=Алюминиевый блок
 tile.ore_aluminum.name=Алюминиевая руда
@@ -298,12 +312,13 @@ embers.decimal_format.ember_multiplier=0.##x
 embers.decimal_format.inaccuracy=0
 embers.decimal_format.heat=0.00
 embers.decimal_format.item_amount=0x
+embers.decimal_format.attenuator_multiplier=0.##x
 
 embers.tooltip.goggles.input=§9⬊§r %s
 embers.tooltip.goggles.output=§6⬉§r %s
 embers.tooltip.goggles.storage=• %s
 
-embers.tooltip.goggles.item=Вещи
+embers.tooltip.goggles.item=Предметы
 embers.tooltip.goggles.fluid=Жидкости
 embers.tooltip.goggles.ember=Эмбер
 embers.tooltip.goggles.mechanical=Механическая сила
@@ -329,12 +344,15 @@ embers.tooltip.goggles.upgrade=• Улучшение Машины
 embers.tooltip.goggles.accessor_slot=• Слот для Аксессора Машины
 embers.tooltip.goggles.actuator_slot=• Выключатель Привода
 
+embers.tooltip.crystal.level=Уровень %s
+embers.tooltip.crystal.xp=Отделка %s/%s
+
 embers.tooltip.atmosEmber=Атмосферный эмбер:
 embers.tooltip.targetingBlock=Цель:
-embers.tooltip.itemdial.slot=Слот {0}
+embers.tooltip.itemdial.slot=Слот %s: %s
 embers.tooltip.itemdial.item=%s %s
 embers.tooltip.itemdial.noitem=ПУСТО
-embers.tooltip.emberdial.ember=Эмбер: 
+embers.tooltip.emberdial.ember=Эмбер: %s/%s
 embers.tooltip.fluiddial.fluid=%s: %s/%s
 embers.tooltip.fluiddial.nofluid=0/%s
 embers.tooltip.side.center=Центр
@@ -354,6 +372,10 @@ embers.tooltip.upgrade.actuator=Механическая скорость: %s
 embers.tooltip.dial.ember_multiplier=Коэффициент продукции: %s
 embers.tooltip.dial.heat=Нагрев: %s/%s
 embers.tooltip.item.ember=Эмбер: %s/%s
+embers.tooltip.attenuator.on=Когда активно: %s
+embers.tooltip.attenuator.off=Когда неактивно: %s
+embers.tooltip.forge.cannot_start=Недостаточно эмбера для разогрева кузни.
+embers.tooltip.broken=Сломано
 
 embers.tooltip.modifier.superheater=Перегрев
 embers.tooltip.modifier.jet_augment=Шлаковоз
@@ -367,6 +389,9 @@ embers.tooltip.modifier.diffraction=Дифракционная %s
 embers.tooltip.modifier.focal_lens=Сфокусированный %s
 embers.tooltip.modifier.tinker_lens=Взгляд Лудильщика
 embers.tooltip.modifier.anti_tinker_lens=Слепота Лудильщика
+embers.tooltip.modifier.shifting_scales=Чешуйчатость %s
+embers.tooltip.modifier.winding_gears=Завершённость %s
+embers.tooltip.modifier.core_stone=Глубинно-чувствительность %s
 
 embers.tooltip.num1=I
 embers.tooltip.num2=II
@@ -382,20 +407,26 @@ embers.jei.recipe.melter=Плавление
 embers.jei.recipe.mixer=Смешивание
 embers.jei.recipe.alchemy=Алхимия
 embers.jei.recipe.dawnstone_anvil=Рецепт золотитовой наковальни
+embers.jei.recipe.geologic_separator=Geologic Separator Bonus
 
 entity.ancient_golem.name=Древний голем
 
 death.attack.ember=%1$s испепелён.
 death.attack.ember.player=%1$s испепелён %2$s.
 
+embers.research.controls=Right-click entries to mark them as §a✔§r complete.;Categories will open as you complete entries.;;Enter text to search and highlight entries.;You can search entries matching multiple words with §f|§r.;ex: §fEmber|Generator§r
+embers.research.prerequisite=Needed for %s
+embers.research.prerequisite.locked=§4✕§8 Needs %s
+embers.research.prerequisite.unlocked=§a✔§r Needs %s
+
 embers.research.null=
-embers.research.page=Природная энергия
-embers.research.page=Махинации с огнем
-embers.research.page=Металлургические конструкции
-embers.research.page=Трансмутация
-embers.research.materia=Мистическая материя
-embers.research.core=Свечение сердечника
-embers.research.page=Аугментальная Ковка
+embers.research.world=Природная энергия
+embers.research.mechanisms=Махинации с огнём
+embers.research.metallurgy=Металлургические конструкции
+embers.research.alchemy=Трансмутация
+embers.research.materia=Тайная материя
+embers.research.core=Свечение ядра
+embers.research.smithing=Стихийное литьё
 
 embers.research.multipage=%s (%s/%s)
 
