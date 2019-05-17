@@ -1,7 +1,10 @@
 package teamroots.embers.api.tile;
 
-public interface IOrderable {
-    void order(int orderSize);
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
-    void resetOrder();
+public interface IOrderable {
+    void order(TileEntity source, ItemStack filter, int orderSize);
+
+    void resetOrder(TileEntity source);
 }

@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -17,6 +18,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
@@ -56,17 +58,25 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
                 if (!filterItem.isEmpty()) {
-                    if (!stack.isEmpty()) {
-                        if (filterItem.getItem() == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage()) {
-                            return super.insertItem(slot, stack, simulate);
-                        }
-                    }
-                    return stack;
+                    if (acceptsItem(stack))
+                        return super.insertItem(slot, stack, simulate);
+                    else
+                        return stack;
                 }
                 return super.insertItem(slot, stack, simulate);
             }
         };
         outputSide = Misc.makeRestrictedItemHandler(inventory,false,true);
+    }
+
+    public boolean acceptsItem(ItemStack stack) {
+        if (filterItem.isEmpty())
+            return true;
+        Item item = filterItem.getItem();
+        if (item instanceof IFilterItem)
+            return ((IFilterItem) item).acceptsItem(filterItem,stack);
+        else
+            return item == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage();
     }
 
     @Override

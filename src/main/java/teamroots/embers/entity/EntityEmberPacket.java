@@ -93,8 +93,8 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 		
 		lifetime --;
 		if (lifetime <= 0){
+			this.dead = true;
 			getEntityWorld().removeEntity(this);
-			this.setDead();
 		}
 		if (!dead){
 			if (dest.getX() != 0 || dest.getY() != 0 || dest.getZ() != 0){
@@ -155,6 +155,7 @@ public class EntityEmberPacket extends Entity/* implements ILightProvider*/ {
 					this.motionZ = 0;
 					this.lifetime = 20;
 					this.dead = true;
+					getEntityWorld().removeEntity(this);
 					world.playSound(null, posX, posY, posZ, this.value >= 100 ? SoundManager.EMBER_RECEIVE_BIG : SoundManager.EMBER_RECEIVE, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				}
 			}

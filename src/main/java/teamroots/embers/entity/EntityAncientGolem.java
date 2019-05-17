@@ -2,10 +2,14 @@ package teamroots.embers.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -13,11 +17,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.projectile.EffectDamage;
 import teamroots.embers.damage.DamageEmber;
 
 public class EntityAncientGolem extends EntityMob {
+    public long lastPickaxeHit;
 
 	public EntityAncientGolem(World worldIn) {
 		super(worldIn);
@@ -56,7 +62,16 @@ public class EntityAncientGolem extends EntityMob {
     {
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
     }
-    
+
+    @Override
+    protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+        super.dropLoot(wasRecentlyHit, lootingModifier, source);
+
+        if(world.getTotalWorldTime() - lastPickaxeHit < 400 || isPickaxeHit(source)) {
+            dropItem(RegistryManager.golems_eye,1);
+        }
+    }
+
     @Override
     public void onUpdate(){
     	super.onUpdate();
@@ -72,6 +87,25 @@ public class EntityAncientGolem extends EntityMob {
     			getEntityWorld().spawnEntity(proj);
     		}
     	}
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        boolean result = super.attackEntityFrom(source, amount);
+        if (result && isPickaxeHit(source))
+            lastPickaxeHit = world.getTotalWorldTime();
+        return result;
+    }
+
+    public boolean isPickaxeHit(DamageSource source) {
+        Entity attacker = source.getImmediateSource();
+        boolean isNormalAttack = source.damageType.equals("player") || source.damageType.equals("mob");
+        if (isNormalAttack && attacker instanceof EntityLivingBase) {
+            ItemStack weapon = ((EntityLivingBase) attacker).getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+            if (weapon.getItem().getToolClasses(weapon).contains("pickaxe"))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -105,4 +139,16 @@ public class EntityAncientGolem extends EntityMob {
 	public ResourceLocation getLootTable(){
 		return new ResourceLocation(Embers.MODID,"entity/ancient_golem");
 	}
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setLong("lastPickaxeHit",lastPickaxeHit);
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        lastPickaxeHit = compound.getLong("lastPickaxeHit");
+    }
 }

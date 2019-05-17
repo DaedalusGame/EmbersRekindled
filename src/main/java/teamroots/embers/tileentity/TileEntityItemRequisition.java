@@ -2,6 +2,7 @@ package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -18,7 +19,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import teamroots.embers.Embers;
-import teamroots.embers.api.tile.IExtraCapabilityInformation;
+import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.api.tile.IOrderable;
 import teamroots.embers.api.tile.ITargetable;
 import teamroots.embers.block.BlockItemRequisition;
@@ -30,7 +31,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileEntityItemRequisition extends TileEntity implements ITileEntityBase, ITickable, IItemPipeConnectable, ITargetable {
+public class TileEntityItemRequisition extends TileEntity implements ITileEntityBase, ITickable, IItemPipePriority, IItemPipeConnectable, ITargetable {
+    public static final int PRIORITY_REQUEST = -100;
+
     EnumPipeConnection[] connections = new EnumPipeConnection[EnumFacing.VALUES.length];
     public IItemHandler itemHandler;
     public ItemStack filterItem = ItemStack.EMPTY;
@@ -39,6 +42,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
     public BlockPos target = null;
     double angle = 0;
     double turnRate = 1;
+    boolean lastPowered;
 
     public TileEntityItemRequisition() {
         itemHandler = new IItemHandler() {
@@ -61,18 +65,26 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
                 TileEntity attached = getAttached();
                 if (attached != null && attached.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite())) {
                     IItemHandler handler = attached.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite());
-                    int count = countItems(handler);
-                    int filterSize = getFilterSize() - count;
-                    if (filterSize > 0) {
-                        ItemStack whole = stack.copy();
-                        ItemStack split = whole.splitStack(filterSize);
-
+                    if(isIntelligent()) {
+                        ItemStack split = stack.copy();
                         for (int j = 0; j < handler.getSlots() && !split.isEmpty(); j++) {
                             split = handler.insertItem(j, split, simulate);
                         }
+                        return split;
+                    } else {
+                        int count = countItems(handler);
+                        int filterSize = getFilterSize() - count;
+                        if (filterSize > 0) {
+                            ItemStack whole = stack.copy();
+                            ItemStack split = whole.splitStack(filterSize);
 
-                        ItemStack merged = merge(whole, split);
-                        return merged;
+                            for (int j = 0; j < handler.getSlots() && !split.isEmpty(); j++) {
+                                split = handler.insertItem(j, split, simulate);
+                            }
+
+                            ItemStack merged = merge(whole, split);
+                            return merged;
+                        }
                     }
                 }
                 return stack;
@@ -133,16 +145,32 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
         return EnumPipeConnection.NONE;
     }
 
+    public boolean isIntelligent() { //Aka takes anything that is already in the inventory
+        return filterItem.isEmpty();
+    }
+
     public int getFilterSize() {
-        if (filterItem.isEmpty())
-            return 1;
         return filterSize;
     }
 
     public boolean acceptsItem(ItemStack stack) {
-        if (filterItem.isEmpty())
-            return true;
-        return filterItem.getItem() == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage();
+        if (isIntelligent()) {
+            TileEntity attached = getAttached();
+            if (attached != null && attached.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite())) {
+                IItemHandler itemHandler = attached.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite());
+                for (int i = 0; i < itemHandler.getSlots(); i++) {
+                    ItemStack slotStack = itemHandler.getStackInSlot(i);
+                    if (ItemHandlerHelper.canItemStacksStack(slotStack, stack))
+                        return true;
+                }
+            }
+            return false;
+        }
+        Item item = filterItem.getItem();
+        if (item instanceof IFilterItem)
+            return ((IFilterItem) item).acceptsItem(filterItem, stack);
+        else
+            return item == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage();
     }
 
     private EnumFacing getFacing() {
@@ -155,7 +183,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
     }
 
     public TileEntityItemExtractor getSource() {
-        if(target == null)
+        if (target == null)
             return null;
         TileEntity tile = world.getTileEntity(target);
         if (tile instanceof TileEntityItemExtractor)
@@ -180,19 +208,26 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
 
     @Override
     public void update() {
-        if(!world.isRemote) {
-            int filterSize = getFilterSize();
-            TileEntity attached = getAttached();
-            int count = 0;
-            if (attached != null && attached.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite())) {
-                IItemHandler handler = attached.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite());
-                count = countItems(handler);
+        if (!world.isRemote) {
+            boolean isPowered = false;
+            if (!isIntelligent()) {
+                isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+                int filterSize = getFilterSize();
+                TileEntity attached = getAttached();
+                int count = 0;
+                if (attached != null && attached.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite())) {
+                    IItemHandler handler = attached.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getFacing().getOpposite());
+                    count = countItems(handler);
+                }
+                //if (isPowered && !lastPowered) //TODO
+                //    forceOrder(filterSize);
+                if (currentOrder < filterSize - count) {
+                    order(filterSize - count - currentOrder);
+                } else if (currentOrder > filterSize - count) {
+                    currentOrder = Math.max(0, filterSize - count); //Reduce order by however much we inserted
+                }
             }
-            if (currentOrder < filterSize - count) {
-                order(filterSize - count - currentOrder);
-            } else if(currentOrder > filterSize - count) {
-                currentOrder = Math.max(0, filterSize-count); //Reduce order by however much we inserted
-            }
+            lastPowered = isPowered;
         } else {
             angle += turnRate;
         }
@@ -211,7 +246,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
     public void order(int orderSize) {
         IOrderable source = getSource();
         if (source != null) {
-            source.order(orderSize);
+            source.order(this, filterItem, orderSize);
             currentOrder += orderSize;
         }
     }
@@ -219,7 +254,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
     public void resetOrder() {
         IOrderable source = getSource();
         if (source != null) {
-            source.resetOrder();
+            source.resetOrder(this);
         }
         currentOrder = 0;
     }
@@ -245,6 +280,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
         tag.setInteger("south", getInternalConnection(EnumFacing.SOUTH).getIndex());
         tag.setInteger("west", getInternalConnection(EnumFacing.WEST).getIndex());
         tag.setInteger("east", getInternalConnection(EnumFacing.EAST).getIndex());
+        tag.setBoolean("lastPowered", lastPowered);
         return tag;
     }
 
@@ -271,6 +307,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
             setInternalConnection(EnumFacing.WEST, EnumPipeConnection.fromIndex(tag.getInteger("west")));
         if (tag.hasKey("east"))
             setInternalConnection(EnumFacing.EAST, EnumPipeConnection.fromIndex(tag.getInteger("east")));
+        lastPowered = tag.getBoolean("lastPowered");
     }
 
     @Override
@@ -293,17 +330,16 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
     public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
                             EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = player.getHeldItem(hand);
-        if(heldItem.getItem() instanceof ItemTinkerHammer)
+        if (heldItem.getItem() instanceof ItemTinkerHammer)
             return false;
-        if(player.isSneaking())
+        if (player.isSneaking())
             return false;
         if (!world.isRemote) {
             if (heldItem != ItemStack.EMPTY) {
                 if (!filterItem.isItemEqual(heldItem)) {
                     filterItem = heldItem.copy();
                     filterSize = filterItem.getCount();
-                }
-                else
+                } else
                     filterSize += heldItem.getCount();
             } else {
                 filterItem = ItemStack.EMPTY;
@@ -319,13 +355,13 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-
+        resetOrder();
     }
 
     @Override
     public void setTarget(BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
-        if(tile instanceof IOrderable) {
+        if (tile instanceof IOrderable) {
             resetOrder();
             target = pos;
         }
@@ -339,7 +375,9 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
 
     private String formatFilter() {
         if (filterItem.isEmpty())
-            return Embers.proxy.formatLocalize("embers.filter.any");
+            return Embers.proxy.formatLocalize("embers.filter.existing");
+        if (filterItem.getItem() instanceof IFilterItem)
+            return ((IFilterItem) filterItem.getItem()).formatFilter(filterItem);
         return filterItem.getDisplayName();
     }
 
@@ -351,9 +389,14 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
             strings.add(Embers.proxy.formatLocalize("embers.tooltip.item_request.linked", blockState.getBlock().getLocalizedName(), pos.getX(), pos.getY(), pos.getZ()));
         }
         strings.add(Embers.proxy.formatLocalize("embers.tooltip.item_request.filter", formatFilter(), getFilterSize()));
-        if(currentOrder > 0)
+        if (currentOrder > 0)
             strings.add(Embers.proxy.formatLocalize("embers.tooltip.item_request.order", currentOrder));
         else
             strings.add(Embers.proxy.formatLocalize("embers.tooltip.item_request.order.none"));
+    }
+
+    @Override
+    public int getPriority(EnumFacing facing) {
+        return PRIORITY_REQUEST;
     }
 }

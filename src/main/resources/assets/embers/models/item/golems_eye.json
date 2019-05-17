@@ -2,5 +2,31 @@
     "parent" : "item/generated",
     "textures" : {
         "layer0" : "embers:items/golems_eye"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "embers:eye_open": 0.2
+            },
+            "model": "embers:item/golems_eye_opening1"
+        },
+        {
+            "predicate": {
+                "embers:eye_open": 0.4
+            },
+            "model": "embers:item/golems_eye_opening2"
+        },
+        {
+            "predicate": {
+                "embers:eye_open": 0.6
+            },
+            "model": "embers:item/golems_eye_opening3"
+        },
+        {
+            "predicate": {
+                "embers:eye_open": 0.8
+            },
+            "model": "embers:item/golems_eye_opening4"
+        }
+    ]
 }

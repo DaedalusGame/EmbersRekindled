@@ -61,7 +61,11 @@ public class BlockItemRequisition extends BlockTEBase implements IDial {
 	
 	@Override
 	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return side == state.getValue(facing);
+		return side == getFacing(state);
+	}
+
+	public EnumFacing getFacing(IBlockState state) {
+		return state.getValue(facing);
 	}
 
 	@Override
@@ -101,7 +105,7 @@ public class BlockItemRequisition extends BlockTEBase implements IDial {
 	public RayTraceResult collisionRayTrace(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d start, @Nonnull Vec3d end) {
 		List<AxisAlignedBB> subBoxes = new ArrayList<>();
 
-		subBoxes.add(new AxisAlignedBB(0.3125, 0.3125, 0.3125, 0.6875, 0.6875, 0.6875));
+		subBoxes.add(getBaseBox(state));
 
 		if (world.getTileEntity(pos) instanceof TileEntityItemRequisition) {
 			TileEntityItemRequisition pipe = ((TileEntityItemRequisition) world.getTileEntity(pos));
@@ -125,34 +129,56 @@ public class BlockItemRequisition extends BlockTEBase implements IDial {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		double x1 = 0.3125;
-		double y1 = 0.3125;
-		double z1 = 0.3125;
-		double x2 = 0.6875;
-		double y2 = 0.6875;
-		double z2 = 0.6875;
+		double x1 = 0.25;
+		double y1 = 0.25;
+		double z1 = 0.25;
+		double x2 = 0.75;
+		double y2 = 0.75;
+		double z2 = 0.75;
+
+		EnumFacing facing = getFacing(state);
 
 		if (source.getTileEntity(pos) instanceof TileEntityItemRequisition) {
 			TileEntityItemRequisition pipe = ((TileEntityItemRequisition) source.getTileEntity(pos));
-			if (pipe.getInternalConnection(EnumFacing.UP) != EnumPipeConnection.NONE) {
+			if (pipe.getInternalConnection(EnumFacing.UP) != EnumPipeConnection.NONE || facing == EnumFacing.UP)
 				y2 = 1;
-			}
-			if (pipe.getInternalConnection(EnumFacing.DOWN) != EnumPipeConnection.NONE) {
+			if (pipe.getInternalConnection(EnumFacing.DOWN) != EnumPipeConnection.NONE|| facing == EnumFacing.DOWN)
 				y1 = 0;
-			}
-			if (pipe.getInternalConnection(EnumFacing.NORTH) != EnumPipeConnection.NONE) {
+			if (pipe.getInternalConnection(EnumFacing.NORTH) != EnumPipeConnection.NONE|| facing == EnumFacing.NORTH)
 				z1 = 0;
-			}
-			if (pipe.getInternalConnection(EnumFacing.SOUTH) != EnumPipeConnection.NONE) {
+			if (pipe.getInternalConnection(EnumFacing.SOUTH) != EnumPipeConnection.NONE|| facing == EnumFacing.SOUTH)
 				z2 = 1;
-			}
-			if (pipe.getInternalConnection(EnumFacing.WEST) != EnumPipeConnection.NONE) {
+			if (pipe.getInternalConnection(EnumFacing.WEST) != EnumPipeConnection.NONE|| facing == EnumFacing.WEST)
 				x1 = 0;
-			}
-			if (pipe.getInternalConnection(EnumFacing.EAST) != EnumPipeConnection.NONE) {
+			if (pipe.getInternalConnection(EnumFacing.EAST) != EnumPipeConnection.NONE|| facing == EnumFacing.EAST)
 				x2 = 1;
-			}
 		}
+
+		return new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
+	}
+
+	public AxisAlignedBB getBaseBox(IBlockState state) {
+		double x1 = 0.25;
+		double y1 = 0.25;
+		double z1 = 0.25;
+		double x2 = 0.75;
+		double y2 = 0.75;
+		double z2 = 0.75;
+
+		EnumFacing facing = getFacing(state);
+
+			if (facing == EnumFacing.UP)
+				y2 = 1;
+			if (facing == EnumFacing.DOWN)
+				y1 = 0;
+			if (facing == EnumFacing.NORTH)
+				z1 = 0;
+			if (facing == EnumFacing.SOUTH)
+				z2 = 1;
+			if (facing == EnumFacing.WEST)
+				x1 = 0;
+			if (facing == EnumFacing.EAST)
+				x2 = 1;
 
 		return new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 	}

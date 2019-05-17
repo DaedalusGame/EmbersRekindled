@@ -3,6 +3,7 @@ package teamroots.embers.recipe;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -15,12 +16,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -31,14 +38,15 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
+import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.api.itemmod.ItemModUtil;
+import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.EnumStampType;
-import teamroots.embers.util.AlchemyUtil;
-import teamroots.embers.util.IngredientSpecial;
-import teamroots.embers.util.WeightedItemStack;
+import teamroots.embers.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1094,6 +1102,9 @@ public class RecipeRegistry {
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
 		event.getRegistry().register(new AshenCloakUnsocketRecipe().setRegistryName(getRL("cloak_unsocketing")));
+		event.getRegistry().register(new GolemEyeFilterRecipe().setRegistryName(getRL("eye_filter")));
+		event.getRegistry().register(new GolemEyeOffsetRecipe().setRegistryName(getRL("eye_offset")));
+		event.getRegistry().register(new GolemEyeMergeRecipe().setRegistryName(getRL("eye_merge")));
 
 		if(ConfigManager.isBaublesIntegrationEnabled())
 			BaublesIntegration.registerRecipes(event);
@@ -1411,6 +1422,322 @@ public class RecipeRegistry {
 				return Lists.newArrayList();
 			}
 		}); //Creative Heat
+
+		FilterUtil.registerComparator(new IFilterComparator() {
+			@Override
+			public int getPriority() {
+				return 0;
+			}
+
+			@Override
+			public String getName() {
+				return "or";
+			}
+
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.getItem() instanceof IFilterItem && stack2.getItem() instanceof IFilterItem;
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				return 0;
+			}
+
+			@Override
+			public boolean isBetween(ItemStack stack1, ItemStack stack2, ItemStack testStack, EnumFilterSetting setting) {
+				IFilterItem filterItem1 = (IFilterItem) stack1.getItem();
+				IFilterItem filterItem2 = (IFilterItem) stack2.getItem();
+				return filterItem1.acceptsItem(stack1,testStack) || filterItem2.acceptsItem(stack2,testStack);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				IFilterItem filterItem1 = (IFilterItem) stack1.getItem();
+				IFilterItem filterItem2 = (IFilterItem) stack2.getItem();
+				return I18n.format("embers.filter.or",filterItem1.formatFilter(stack1), filterItem2.formatFilter(stack2));
+			}
+		}); //OR
+		FilterUtil.registerComparator(new IFilterComparator() {
+			@Override
+			public int getPriority() {
+				return 1;
+			}
+
+			@Override
+			public String getName() {
+				return "and";
+			}
+
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.getItem() instanceof IFilterItem && stack2.getItem() instanceof IFilterItem;
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				return 0;
+			}
+
+			@Override
+			public boolean isBetween(ItemStack stack1, ItemStack stack2, ItemStack testStack, EnumFilterSetting setting) {
+				IFilterItem filterItem1 = (IFilterItem) stack1.getItem();
+				IFilterItem filterItem2 = (IFilterItem) stack2.getItem();
+				return filterItem1.acceptsItem(stack1,testStack) && filterItem2.acceptsItem(stack2,testStack);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				IFilterItem filterItem1 = (IFilterItem) stack1.getItem();
+				IFilterItem filterItem2 = (IFilterItem) stack2.getItem();
+				return I18n.format("embers.filter.and",filterItem1.formatFilter(stack1), filterItem2.formatFilter(stack2));
+			}
+		}); //AND
+		FilterUtil.registerComparator(new ComparatorMatch("strict",35) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return ItemHandlerHelper.canItemStacksStack(stack1,stack2);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.strict",stack1.getDisplayName());
+			}
+		}); //STRICT (ITEM + META + TAG)
+		FilterUtil.registerComparator(new ComparatorMatch("normal",30) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.isItemEqual(stack2);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.normal",stack1.getDisplayName());
+			}
+		}); //NORMAL (ITEM + META)
+		FilterUtil.registerComparator(new ComparatorMatch("item",15) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.getItem() == stack2.getItem();
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.item",stack1.getDisplayName());
+			}
+		}); //ITEM
+		FilterUtil.registerComparator(new ComparatorMatch("meta",20) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.getHasSubtypes() && stack1.getMetadata() == stack2.getMetadata();
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.metadata",stack1.getMetadata());
+			}
+		}); //META
+		FilterUtil.registerComparator(new ComparatorMatch("nbt",25) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasTagCompound() && ItemStack.areItemStackTagsEqual(stack1,stack2);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.nbt");
+			}
+		}); //NBT
+		FilterUtil.registerComparator(new ComparatorMatch("name",50) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasDisplayName() && stack2.hasDisplayName() && stack1.getDisplayName().equals(stack2.getDisplayName());
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.name",stack1.getDisplayName());
+			}
+		}); //NBT
+		FilterUtil.registerComparator(new ComparatorNormal("durability",30) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.isItemStackDamageable() && stack2.isItemStackDamageable();
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				return stack.getMaxDamage() - stack.getItemDamage();
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				String format;
+				Comparable a = getCompare(stack1);
+				Comparable b = getCompare(stack2);
+				if (a.compareTo(b) != 0)
+					format = I18n.format("embers.filter.durability", min(a, b), max(a, b));
+				else if (setting == EnumFilterSetting.STRICT)
+					format = I18n.format("embers.filter.durability.strict", min(a, b), max(a, b));
+				else
+					format = I18n.format("embers.filter.durability.fuzzy", min(a, b), max(a, b));
+				if(inverted)
+					return I18n.format("embers.filter.invert",format);
+				else
+					return format;
+			}
+		}); //DURABILITY
+		FilterUtil.registerComparator(new ComparatorMatch("has_fluid",120) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,null) && stack2.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,null);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.has_fluid");
+			}
+		}); //HAS EMBER
+		FilterUtil.registerComparator(new ComparatorNormal("fluid",125) {
+			private boolean areFluidsEqual(FluidStack a, FluidStack b) {
+				if(a == null && b == null)
+					return true;
+				else if(a != null && b != null && a.isFluidEqual(b))
+					return true;
+				else
+					return false;
+			}
+
+			private int getAmount(FluidStack fluid) {
+				return fluid != null ? fluid.amount : 0;
+			}
+
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				IFluidHandler capability1 = FluidUtil.getFluidHandler(stack1);
+				IFluidHandler capability2 = FluidUtil.getFluidHandler(stack2);
+				if(capability1 != null && capability2 != null) {
+					FluidStack fluid1 = capability1.drain(Integer.MAX_VALUE, false);
+					FluidStack fluid2 = capability2.drain(Integer.MAX_VALUE, false);
+					return areFluidsEqual(fluid1,fluid2);
+				}
+				return false;
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				IFluidHandler capability = FluidUtil.getFluidHandler(stack);
+				FluidStack fluid = capability.drain(Integer.MAX_VALUE,false);
+				return getAmount(fluid);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				IFluidHandler capability = FluidUtil.getFluidHandler(stack1);
+				FluidStack fluid = capability.drain(Integer.MAX_VALUE, false);
+				Comparable a = getCompare(stack1);
+				Comparable b = getCompare(stack2);
+				String name = fluid != null ? fluid.getLocalizedName() : "";
+				if (a.compareTo(b) != 0)
+					return I18n.format("embers.filter.fluid", min(a, b), max(a, b), name);
+				else if (setting == EnumFilterSetting.STRICT)
+					return I18n.format("embers.filter.fluid.strict", min(a, b), max(a, b), name);
+				else
+					return I18n.format("embers.filter.fluid.fuzzy", min(a, b), max(a, b), name);
+			}
+		}); //EMBER
+		FilterUtil.registerComparator(new ComparatorMatch("has_ember",150) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null) && stack2.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.has_ember");
+			}
+		}); //HAS EMBER
+		FilterUtil.registerComparator(new ComparatorNormal("ember",155) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null) && stack2.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				if(stack.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
+					IEmberCapability capability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY, null);
+					return capability.getEmber();
+				} else {
+					return 0;
+				}
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				Comparable a = getCompare(stack1);
+				Comparable b = getCompare(stack2);
+				if (a.compareTo(b) != 0)
+					return I18n.format("embers.filter.ember", min(a, b), max(a, b));
+				else if (setting == EnumFilterSetting.STRICT)
+					return I18n.format("embers.filter.ember.strict", min(a, b), max(a, b));
+				else
+					return I18n.format("embers.filter.ember.fuzzy", min(a, b), max(a, b));
+			}
+		}); //EMBER
+		FilterUtil.registerComparator(new ComparatorMatch("has_forge_energy",200) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasCapability(CapabilityEnergy.ENERGY,null) && stack2.hasCapability(CapabilityEnergy.ENERGY,null);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.has_forge_energy");
+			}
+		}); //HAS FE
+		FilterUtil.registerComparator(new ComparatorNormal("forge_energy",205) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return stack1.hasCapability(CapabilityEnergy.ENERGY,null) && stack2.hasCapability(CapabilityEnergy.ENERGY,null);
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				if(stack.hasCapability(CapabilityEnergy.ENERGY,null)) {
+					IEnergyStorage capability = stack.getCapability(CapabilityEnergy.ENERGY, null);
+					return capability.getEnergyStored();
+				} else {
+					return 0;
+				}
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				Comparable a = getCompare(stack1);
+				Comparable b = getCompare(stack2);
+				if (a.compareTo(b) != 0)
+					return I18n.format("embers.filter.forge_energy", min(a, b), max(a, b));
+				else if (setting == EnumFilterSetting.STRICT)
+					return I18n.format("embers.filter.forge_energy.strict", min(a, b), max(a, b));
+				else
+					return I18n.format("embers.filter.forge_energy.fuzzy", min(a, b), max(a, b));
+			}
+		}); //FE
+	}
+
+	private Comparable min(Comparable a, Comparable b) {
+		if(a.compareTo(b) < 0)
+			return a;
+		else
+			return b;
+	}
+
+	private Comparable max(Comparable a, Comparable b) {
+		if(a.compareTo(b) > 0)
+			return a;
+		else
+			return b;
 	}
 
 	public static BoreOutput getBoreOutput(World world, BlockPos pos) {

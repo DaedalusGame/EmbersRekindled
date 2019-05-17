@@ -64,6 +64,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 			tag.setInteger("targetY", target.getY());
 			tag.setInteger("targetZ", target.getZ());
 		}
+		tag.setBoolean("lastPowered", lastPowered);
 		capability.writeToNBT(tag);
 		return tag;
 	}
@@ -74,6 +75,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		if (tag.hasKey("targetX")){
 			target = new BlockPos(tag.getInteger("targetX"), tag.getInteger("targetY"), tag.getInteger("targetZ"));
 		}
+		lastPowered = tag.getBoolean("lastPowered");
 		capability.readFromNBT(tag);
 	}
 

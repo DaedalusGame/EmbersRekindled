@@ -382,6 +382,33 @@ embers.tooltip.item_request.order=§aWaiting for %s items
 embers.tooltip.item_request.order.none=
 
 embers.filter.any=Anything
+embers.filter.existing=Existing
+embers.filter.and=%s and %s
+embers.filter.or=%s or %s
+embers.filter.invert=not %s
+embers.filter.strict=%s
+embers.filter.normal=%s (Ignores NBT)
+embers.filter.item=%s (Ignores Metadata)
+embers.filter.metadata=Items with Metadata %s
+embers.filter.nbt=Items with specific NBT
+embers.filter.nbt.fuzzy=Items with NBT
+embers.filter.name=Items named "%s"
+embers.filter.durability=Items with %s-%s Durability
+embers.filter.durability.strict=Items with %s Durability
+embers.filter.durability.fuzzy=Damageable Items
+embers.filter.has_fluid=Fluid Containers
+embers.filter.has_ember=Mantle Containers
+embers.filter.has_forge_energy=Batteries
+embers.filter.fluid=Items with %s-%s mb of %3$s
+embers.filter.fluid.strict=Items with %s mb of %3$s
+embers.filter.fluid.fuzzy=Items with %3$s
+embers.filter.ember=Items with %s-%s Ember
+embers.filter.ember.strict=Items with %s Ember
+embers.filter.ember.fuzzy=Items with Ember
+embers.filter.forge_energy=Items with %s-%s FE
+embers.filter.forge_energy.strict=Items with %s FE
+embers.filter.forge_energy.fuzzy=Items with FE
+
 
 embers.tooltip.modifier.superheater=Superheating %s
 embers.tooltip.modifier.jet_augment=Cinder Jet %s

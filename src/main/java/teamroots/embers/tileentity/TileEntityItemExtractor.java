@@ -286,12 +286,13 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
         world.setTileEntity(pos, null);
     }
 
-    public void order(int orderSize) {
+    @Override
+    public void order(TileEntity source, ItemStack filter, int orderSize) {
         currentOrder += orderSize;
     }
 
     @Override
-    public void resetOrder() {
+    public void resetOrder(TileEntity source) {
         currentOrder = 0;
     }
 

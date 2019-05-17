@@ -415,6 +415,7 @@ public class RegistryManager {
 		items.add(winding_gears = new ItemBase("winding_gears",true));
 		//items.add(core_stone = new ItemBase("core_stone",true));
 		items.add(creative_heat = new ItemHidden("creative_heat"));
+		items.add(golems_eye = new ItemGolemEye("golems_eye"));
 		
 		if (ConfigManager.enableAluminum){
 			tool_mat_aluminum = EnumHelper.addToolMaterial(Embers.MODID+":aluminum", 2, 220, 5.2f, 1.5f, 14);
