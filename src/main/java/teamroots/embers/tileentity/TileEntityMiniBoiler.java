@@ -113,7 +113,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
 	{
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return facing != null && facing.getAxis() == EnumFacing.Axis.Y;
+			return facing != null && (facing.getAxis() == EnumFacing.Axis.Y || facing == getFacing().getOpposite());
 		}
 		else if(capability == EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY) {
 			return facing == getFacing();
@@ -126,7 +126,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
 	{
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			if(facing == EnumFacing.DOWN) return (T) fluidTank;
+			if(facing == EnumFacing.DOWN || facing == getFacing().getOpposite()) return (T) fluidTank;
 			if(facing == EnumFacing.UP) return (T) gasTank;
 		}
 		if(capability == EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY && facing == getFacing()) {
