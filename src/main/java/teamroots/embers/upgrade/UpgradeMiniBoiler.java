@@ -21,9 +21,6 @@ public class UpgradeMiniBoiler extends DefaultUpgradeProvider {
         super("mini_boiler", tile);
     }
 
-    boolean active;
-    double heat;
-
     @Override
     public int getLimit(TileEntity tile) {
         return tile instanceof IMechanicallyPowered ? 0 : 4;
@@ -32,23 +29,7 @@ public class UpgradeMiniBoiler extends DefaultUpgradeProvider {
     @Override
     public void throwEvent(TileEntity tile, UpgradeEvent event) {
         if(event instanceof EmberEvent) {
-            setHeat(((EmberEvent) event).getAmount());
+            ((TileEntityMiniBoiler) this.tile).boil(((EmberEvent) event).getAmount());
         }
-    }
-
-    public void setHeat(double heat) {
-        this.heat = heat;
-        this.active = true;
-    }
-
-    @Override
-    public boolean doWork(TileEntity tile, List<IUpgradeProvider> upgrades) {
-        if(active) {
-            if (this.tile instanceof TileEntityMiniBoiler)
-                ((TileEntityMiniBoiler) this.tile).boil(heat);
-            active = false;
-        }
-
-        return false; //No cancel
     }
 }
