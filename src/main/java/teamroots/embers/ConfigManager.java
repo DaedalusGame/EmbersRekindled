@@ -60,6 +60,12 @@ public class ConfigManager {
 	public static boolean miniBoilerCanExplode;
 	public static int geoSeparatorCapacity;
 	public static double ancientGolemKnockbackResistance;
+	public static int steamEngineFluidThreshold;
+	public static float steamEngineSolidFuelEfficiency;
+	public static int steamEngineLiquidConsumptionPerTick;
+	public static int steamEnginePowerGenerated;
+	public static int steamEngineGasConsumptionPerTick;
+	public static int steamEngineCapacity;
 
 	static Pattern damageRatePattern = Pattern.compile("(\\w+):(\\d+(?:\\.\\d+|))");
 
@@ -175,6 +181,12 @@ public class ConfigManager {
 		miniBoilerHeatMultiplier = config.getFloat("miniBoilerHeatMultiplier", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, heat-wise, the mini boiler is at making steam.");
 		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
+		steamEngineFluidThreshold = config.getInt("steamEngineFluidThreshold", "parameters", Fluid.BUCKET_VOLUME, 1000, Integer.MAX_VALUE, "How much water (in mb) is necessary to start burning solid fuel.");
+		steamEngineSolidFuelEfficiency = config.getFloat("steamEngineSolidFuelEfficiency", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.");
+		steamEngineLiquidConsumptionPerTick = config.getInt("steamEngineLiquidConsumptionPerTick", "parameters", 4, 0, Integer.MAX_VALUE, "How much water (in mb) is consumed every tick while burning solid fuel.");
+		steamEnginePowerGenerated = config.getInt("steamEnginePowerGenerated", "parameters", 20, 0, Integer.MAX_VALUE, "How much mechanical power is generated while burning solid fuel.");
+		steamEngineGasConsumptionPerTick = config.getInt("steamEngineGasConsumptionPerTick", "parameters", 20, 0, Integer.MAX_VALUE, "How much gas (in mb), such as steam, is consumed every tick.");
+		steamEngineCapacity = config.getInt("steamEngineCapacity", "parameters", Fluid.BUCKET_VOLUME * 8, Fluid.BUCKET_VOLUME, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Steam Engine.");
 
 		scaleDamagePasses.clear();
 		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))

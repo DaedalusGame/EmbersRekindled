@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
@@ -38,11 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
-    public static int NORMAL_FLUID_THRESHOLD = 10;
-    public static int NORMAL_FLUID_CONSUMPTION = 4;
-    public static int GAS_CONSUMPTION = 20;
     public static double MAX_POWER = 50;
-    public static int FUEL_MULTIPLIER = 2;
 
     public static final int SOUND_BURN = 1;
     public static final int SOUND_STEAM = 2;
@@ -53,7 +50,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     int steamProgress = 0;
     HashSet<Integer> soundsPlaying = new HashSet<>();
     EnumFacing front = EnumFacing.UP;
-    public FluidTank tank = new FluidTank(8000);
+    public FluidTank tank = new FluidTank(ConfigManager.steamEngineCapacity);
     public DefaultMechCapability capability = new DefaultMechCapability() {
         @Override
         public void setPower(double value, EnumFacing from) {
@@ -212,7 +209,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
             handleSound();
         }
         if (fluid != null && fuelHandler != null) { //Overclocked steam power
-            fluid = tank.drain(Math.min(GAS_CONSUMPTION, Math.max(fluid.amount - 1, 1)), false);
+            fluid = tank.drain(Math.min(ConfigManager.steamEngineGasConsumptionPerTick, Math.max(fluid.amount - 1, 1)), false);
             if (!world.isRemote) {
                 steamProgress++;
                 powerGenerated = Misc.getDiminishedPower(fuelHandler.getPower(fluid), MAX_POWER, 1);
@@ -225,13 +222,13 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                 markDirty();
             }
             if (burnProgress == 0) { //Otherwise try normal power generation from water and coal
-                if (!world.isRemote && !inventory.getStackInSlot(0).isEmpty() && fluid != null && fluid.getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= NORMAL_FLUID_THRESHOLD) {
+                if (!world.isRemote && !inventory.getStackInSlot(0).isEmpty() && fluid != null && fluid.getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= ConfigManager.steamEngineFluidThreshold) {
                     ItemStack fuel = inventory.getStackInSlot(0);
                     if (!fuel.isEmpty()) {
                         ItemStack fuelCopy = fuel.copy();
                         int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
                         if (burnTime > 0) {
-                            burnProgress = burnTime * FUEL_MULTIPLIER;
+                            burnProgress = (int)(burnTime * ConfigManager.steamEngineSolidFuelEfficiency);
                             fuel.shrink(1);
                             if (fuel.isEmpty())
                                 inventory.setStackInSlot(0, fuelCopy.getItem().getContainerItem(fuelCopy));
@@ -241,10 +238,10 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                 }
             } else {
                 burnProgress--;
-                if (tank.getFluidAmount() >= NORMAL_FLUID_CONSUMPTION) {
+                if (tank.getFluidAmount() >= ConfigManager.steamEngineLiquidConsumptionPerTick) {
                     if (!world.isRemote) {
-                        tank.drain(NORMAL_FLUID_CONSUMPTION, true);
-                        powerGenerated = 20;
+                        tank.drain(ConfigManager.steamEngineLiquidConsumptionPerTick, true);
+                        powerGenerated = ConfigManager.steamEnginePowerGenerated;
                         markDirty();
                     }
                 } else {
