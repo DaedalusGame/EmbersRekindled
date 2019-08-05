@@ -414,7 +414,7 @@ entity.ancient_golem.name=太古魔像
 death.attack.ember=%1$s 已被焚化
 death.attack.ember.player=%1$s 被 %2$s 焚化了
 
-embers.research.controls=右键单击手册上的条目，将其标记为✔来解锁完成。;解锁完成相应的条目后，其他锁定的条目将打开。;;可以把需要搜索的条目相匹配的文本输入进手册来高亮相应条目;您可以使用§f|§r符号，来使单个单词匹配高亮多个条目;例如：§f灰烬能量|能量发生器§r;支持中文输入
+embers.research.controls=右键单击手册上的条目，将其标记为✔来解锁完成。;解锁完成相应的条目后，其他锁定的条目将打开。;;可以把需要搜索的条目相匹配的文本输入进手册来高亮相应条目;您可以使用 §f|§r 符号，来使多个单词匹配高亮单个条目;例如：§f野火|能量发生器§r;支持中文输入
 embers.research.prerequisite=此条目可以解锁 %s
 embers.research.prerequisite.locked=§4✕§8需要解锁条目 %s
 embers.research.prerequisite.unlocked=§a✔§r已解锁条目%s
