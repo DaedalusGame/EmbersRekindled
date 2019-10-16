@@ -31,6 +31,10 @@ public class ConfigManager {
 	public static HashSet<Integer> smallRuinGraylist = new HashSet<>();
 	public static boolean smallRuinIsWhiteList;
 
+	//MACHINES
+	public static HashSet<Integer> emberBoreGraylist = new HashSet<>();
+	public static boolean emberBoreIsWhiteList;
+
 	@Deprecated
 	public static List<Integer> orespawnBlacklist = new ArrayList<>();
 	@Deprecated
@@ -134,6 +138,13 @@ public class ConfigManager {
 		}
 		smallRuinIsWhiteList = config.getBoolean("smallRuinBlacklistIsWhitelist","structures",true,"Whether the small ruin generation blacklist is a whitelist.");
 
+		config.addCustomCategoryComment("machines", "Settings related to machines in the mod.");
+
+		for (String s : config.getStringList("emberBoreBlacklist", "machines", new String[] {}, "A list of all dimension IDs in which Embers Ember Bore will not mine.")){
+			emberBoreGraylist.add(Integer.valueOf(s));
+		}
+		emberBoreIsWhiteList = config.getBoolean("emberBoreIsWhiteList","machines",false,"Whether the Ember Bore blacklist is a whitelist.");
+
 		config.addCustomCategoryComment("compat", "Settings related to compatibility with other mods.");
 
 		enableNickel = config.getBoolean("enableNickel", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' nickel.");
@@ -206,6 +217,10 @@ public class ConfigManager {
 
 	public static boolean isOreSpawnEnabled(int dimension) {
 		return !(orespawnGraylist.contains(dimension) != orespawnIsWhiteList || orespawnBlacklist.contains(dimension));
+	}
+
+	public static boolean isEmberBoreEnabled(int dimension) {
+		return !(emberBoreGraylist.contains(dimension) != emberBoreIsWhiteList);
 	}
 
 	@SubscribeEvent
