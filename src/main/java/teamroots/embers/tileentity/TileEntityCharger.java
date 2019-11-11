@@ -44,7 +44,12 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 	int angle = 0;
 	int turnRate = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(1){
-        @Override
+		@Override
+		public int getSlotLimit(int slot) {
+			return 1;
+		}
+
+		@Override
         protected void onContentsChanged(int slot) {
             // We need to tell the tile entity that something has changed so
             // that the chest contents is persisted

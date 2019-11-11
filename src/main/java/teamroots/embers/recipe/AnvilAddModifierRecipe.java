@@ -10,7 +10,7 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AnvilAddModifierRecipe extends DawnstoneAnvilRecipe {
+public class AnvilAddModifierRecipe extends DawnstoneAnvilRecipe implements IWrappableRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
         ModifierBase modifier = ItemModUtil.getModifier(input2);
@@ -28,7 +28,7 @@ public class AnvilAddModifierRecipe extends DawnstoneAnvilRecipe {
     }
 
     @Override
-    public List<IWrappableRecipe> getWrappers() {
+    public List<DawnstoneAnvilRecipe> getWrappers() {
         return ItemModUtil.getAllModifierItems().stream().filter(stack -> stack.getItem() != RegistryManager.ancient_motive_core).map(AnvilAddModifierFakeRecipe::new).collect(Collectors.toList());
     }
 }

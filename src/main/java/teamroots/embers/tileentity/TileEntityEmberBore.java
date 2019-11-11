@@ -182,6 +182,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
                 isRunning = true;
                 ticksFueled -= fuelConsumption;
                 cancel = UpgradeUtil.doWork(this, upgrades);
+            } else {
+                ticksFueled = 0;
             }
 
             if (!cancel) {

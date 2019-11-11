@@ -8,7 +8,7 @@ import teamroots.embers.api.itemmod.ItemModUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilRemoveModifierRecipe extends DawnstoneAnvilRecipe {
+public class AnvilRemoveModifierRecipe extends DawnstoneAnvilRecipe implements IWrappableRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
         return ItemModUtil.hasHeat(input1) && ItemModUtil.getModifiers(input1).stream().filter(x -> x.canRemove).count() > 0 && input2.isEmpty();

@@ -50,6 +50,7 @@ public class GolemEyeFilterRecipe extends IForgeRegistryEntry.Impl<IRecipe> impl
                 stack2 = stack;
         }
         eye = eye.copy();
+        eye.setCount(1);
         ItemGolemEye item = (ItemGolemEye) eye.getItem();
         item.reset(eye);
         if(stack2.isEmpty())

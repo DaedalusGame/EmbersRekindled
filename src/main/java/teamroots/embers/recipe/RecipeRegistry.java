@@ -1404,24 +1404,7 @@ public class RecipeRegistry {
 		dawnstoneAnvilRecipes.add(new AnvilRepairRecipe()); //Repair with repair item
 		dawnstoneAnvilRecipes.add(new AnvilRepairMateriaRecipe()); //Repair with Isolated Materia
 		dawnstoneAnvilRecipes.add(new AnvilBreakdownRecipe()); //BREAKDOWN BREAKDOWN
-		dawnstoneAnvilRecipes.add(new DawnstoneAnvilRecipe() {
-			@Override
-			public boolean matches(ItemStack input1, ItemStack input2) {
-				return ItemModUtil.hasHeat(input1) && input2.getItem() == RegistryManager.creative_heat;
-			}
-
-			@Override
-			public List<ItemStack> getResult(TileEntity tile, ItemStack input1, ItemStack input2) {
-				ItemStack result = input1.copy();
-				ItemModUtil.setHeat(result,ItemModUtil.getMaxHeat(result));
-				return Lists.newArrayList(result);
-			}
-
-			@Override
-			public List<IWrappableRecipe> getWrappers() {
-				return Lists.newArrayList();
-			}
-		}); //Creative Heat
+		dawnstoneAnvilRecipes.add(new CreativeHeatRecipe()); //Creative Heat
 
 		FilterUtil.registerComparator(new IFilterComparator() {
 			@Override
@@ -1854,5 +1837,25 @@ public class RecipeRegistry {
 		}
 
 		return null;
+	}
+
+	private static class CreativeHeatRecipe extends DawnstoneAnvilRecipe implements IWrappableRecipe {
+
+		@Override
+		public boolean matches(ItemStack input1, ItemStack input2) {
+			return ItemModUtil.hasHeat(input1) && input2.getItem() == RegistryManager.creative_heat;
+		}
+
+		@Override
+		public List<ItemStack> getResult(TileEntity tile, ItemStack input1, ItemStack input2) {
+			ItemStack result = input1.copy();
+			ItemModUtil.setHeat(result,ItemModUtil.getMaxHeat(result));
+			return Lists.newArrayList(result);
+		}
+
+		@Override
+		public List<DawnstoneAnvilRecipe> getWrappers() {
+			return Lists.newArrayList();
+		}
 	}
 }

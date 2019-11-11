@@ -11,5 +11,13 @@ public class ModelManager {
 		models.put("ancientGolem",new ModelGolem());
 		models.put("beamCannon",new ModelBeamCannon());
 		models.put("ashenCloak", new ModelArmorHolder("ashenCloak"));
+
+		ModelNull.instance = new ModelNull();
+		ModelMagmaWormHead.instance = new ModelMagmaWormHead();
+		ModelMagmaWormSegment.instance = new ModelMagmaWormSegment();
+		ModelMagmaWormSegmentLarge.instance = new ModelMagmaWormSegmentLarge();
+		ModelMagmaWormSegmentFirst.instance = new ModelMagmaWormSegmentFirst();
+		ModelMagmaWormTail.instance = new ModelMagmaWormTail();
+
 	}
 }

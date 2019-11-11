@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import teamroots.embers.RegistryManager;
@@ -60,9 +61,20 @@ public class BlockAdvancedEdge extends BlockBase {
 	
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
-		if (!world.isRemote && !player.capabilities.isCreativeMode){
+		boolean drop = !player.capabilities.isCreativeMode;
+		yeetBlocks(world, pos, player, drop);
+	}
+
+	@Override
+	public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+		yeetBlocks(world,pos,null,true);
+	}
+
+	public void yeetBlocks(World world, BlockPos pos, EntityPlayer player, boolean drop) {
+		if (!world.isRemote && drop){
 			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(RegistryManager.crystal_cell,1,0)));
 		}
+		IBlockState state = world.getBlockState(pos);
 		if (state.getValue(BlockAdvancedEdge.state) == 9){
 			breakBlockSafe(world,pos.south(),player);
 			breakBlockSafe(world,pos.south(2),player);
@@ -154,7 +166,7 @@ public class BlockAdvancedEdge extends BlockBase {
 			breakBlockSafe(world,pos.east(),player);
 		}
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos){
 		if (world.isAirBlock(pos.east())

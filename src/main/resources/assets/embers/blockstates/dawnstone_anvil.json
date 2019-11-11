@@ -1,6 +1,8 @@
 {
     "variants":{
-        "xaligned=false":  { "model": "embers:dawnstone_anvil", "y": 90 },
-        "xaligned=true":  { "model": "embers:dawnstone_anvil", "y": 0 }
+        "facing=north":  { "model": "embers:dawnstone_anvil", "y": 0 },
+        "facing=east":  { "model": "embers:dawnstone_anvil", "y": 90 },
+        "facing=south":  { "model": "embers:dawnstone_anvil", "y": 180 },
+        "facing=west":  { "model": "embers:dawnstone_anvil", "y": -90 }
     }
 }

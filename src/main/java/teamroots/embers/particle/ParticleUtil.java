@@ -9,6 +9,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.network.message.MessageParticle;
 import teamroots.embers.proxy.ClientProxy;
 
+import java.awt.*;
 import java.util.Random;
 
 public class ParticleUtil {
@@ -122,4 +123,12 @@ public class ParticleUtil {
             ClientProxy.particleRenderer.addParticle(new ParticleAsh(world, aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, lifetime));
         }
     }
+
+    public static void spawnFireBlast(World world, double x, double y, double z, Color color, float scale, int lifetime)
+    {
+        if (Embers.proxy instanceof ClientProxy) {
+            ClientProxy.particleRenderer.addParticle(new ParticleFireBlast(world, x, y, z, color, scale, lifetime));
+        }
+    }
+
 }

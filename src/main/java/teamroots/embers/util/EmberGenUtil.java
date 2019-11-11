@@ -16,23 +16,25 @@ public class EmberGenUtil {
 	public static int offX = 0;
 	public static int offZ = 0;
 	public static float getEmberDensity(long seed, int x, int z){
-		return getEmberStability(seed,x,z)*(float)Math.pow((
-				80.0f*NoiseGenUtil.getOctave(seed, x+offX, z+offZ, 112)
-				+20.0f*NoiseGenUtil.getOctave(seed, x+offX, z+offZ, 68)
-				+6.0f*NoiseGenUtil.getOctave(seed, x+offX, z+offZ, 34)
-				+4.0f*NoiseGenUtil.getOctave(seed, x+offX, z+offZ, 21)
-				+2.0f*NoiseGenUtil.getOctave(seed, x+offX, z+offZ, 11)
-				+1.0f*NoiseGenUtil.getOctave(seed, x+offX, z+offZ, 4)
-				)/93.0f,1.6f);
+		float emberVelocity = 10;
+		return (getEmberStability(seed,x,z)+(float)Math.pow((
+				80.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 112)
+				+20.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 68)
+				+6.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 34)
+				+4.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 21)
+				+2.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 11)
+				+1.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 4)
+				)/93.0f,1.6f)) * 0.5f;
 	}
 	
 	public static float getEmberStability(long seed, int x, int z){
-		return 1.0f-(float)Math.pow((32.0f*NoiseGenUtil.getOctave(seed, x, z, 120)
-				+16.0f*NoiseGenUtil.getOctave(seed, x, z, 76)
-				+6.0f*NoiseGenUtil.getOctave(seed, x, z, 45)
-				+3.0f*NoiseGenUtil.getOctave(seed, x, z, 21)
-				+1.0f*NoiseGenUtil.getOctave(seed, x, z, 5)
-				)/58.0f,3.0f);
+		float v = 1.0f - (float) Math.pow((32.0f * NoiseGenUtil.getOctave(seed, x, z, 120)
+				+ 16.0f * NoiseGenUtil.getOctave(seed, x, z, 76)
+				+ 6.0f * NoiseGenUtil.getOctave(seed, x, z, 45)
+				+ 3.0f * NoiseGenUtil.getOctave(seed, x, z, 21)
+				+ 1.0f * NoiseGenUtil.getOctave(seed, x, z, 5)
+		) / 58.0f, 3.0f);
+		return v;
 	}
 
 	@Deprecated

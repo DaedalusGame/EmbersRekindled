@@ -70,6 +70,26 @@ public class ResearchManager {
     public static ResearchCategory subCategorySimpleAlchemy;
     public static ResearchCategory subCategoryWildfire;
 
+    public static boolean isPathToLock(ResearchBase entry) {
+        for(ResearchCategory category : researches) {
+            for (ResearchBase target : category.prerequisites) {
+                if(isPathTowards(entry,target))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPathTowards(ResearchBase entry, ResearchBase target) {
+        if(entry.isPathTowards(target))
+            return true;
+        for (ResearchBase ancestor : target.ancestors) {
+            if(isPathTowards(entry,ancestor))
+                return true;
+        }
+        return false;
+    }
+
     @SubscribeEvent
     public void onJoin(EntityJoinWorldEvent event) {
         if(event.getEntity() instanceof EntityPlayerMP && !event.getWorld().isRemote) {

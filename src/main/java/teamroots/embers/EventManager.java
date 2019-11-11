@@ -501,7 +501,8 @@ public class EventManager {
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.START) {
             ticks++;
-            ClientProxy.particleRenderer.updateParticles();
+            if(!Minecraft.getMinecraft().isGamePaused())
+                ClientProxy.particleRenderer.updateParticles();
 
             EntityPlayer player = Minecraft.getMinecraft().player;
             if (player != null) {

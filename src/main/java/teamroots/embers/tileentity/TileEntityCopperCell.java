@@ -75,7 +75,7 @@ public class TileEntityCopperCell extends TileEntity implements ITileEntityBase 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
-		if (!world.isRemote && !player.capabilities.isCreativeMode){
+		if (!world.isRemote && (player == null || !player.capabilities.isCreativeMode)){
 			ItemStack toDrop = new ItemStack(RegistryManager.copper_cell,1);
 			if(toDrop.hasCapability(EmbersCapabilities.EMBER_CAPABILITY,null)) {
 				IEmberCapability capability = toDrop.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);

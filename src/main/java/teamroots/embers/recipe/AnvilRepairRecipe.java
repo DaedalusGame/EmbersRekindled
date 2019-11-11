@@ -9,7 +9,7 @@ import teamroots.embers.util.Misc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilRepairRecipe extends DawnstoneAnvilRecipe {
+public class AnvilRepairRecipe extends DawnstoneAnvilRecipe implements IWrappableRecipe {
     @Override
     public boolean matches(ItemStack input1, ItemStack input2) {
         return !input1.isEmpty() && !input2.isEmpty() && input1.getItem().getIsRepairable(input1,input2) && !RecipeRegistry.isBlacklistedFromRepair(input1);
@@ -23,8 +23,8 @@ public class AnvilRepairRecipe extends DawnstoneAnvilRecipe {
     }
 
     @Override
-    public List<IWrappableRecipe> getWrappers() {
-        ArrayList<IWrappableRecipe> recipes = Lists.newArrayList();
+    public List<DawnstoneAnvilRecipe> getWrappers() {
+        ArrayList<DawnstoneAnvilRecipe> recipes = Lists.newArrayList();
         for(Item item : Item.REGISTRY) {
             ItemStack stack = item.getDefaultInstance();
             ItemStack repairStack = Misc.getRepairItem(stack);

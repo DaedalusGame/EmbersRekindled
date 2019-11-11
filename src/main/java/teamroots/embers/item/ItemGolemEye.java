@@ -65,6 +65,8 @@ public class ItemGolemEye extends ItemBase implements IFilterItem {
     }
 
     private IFilterComparator findComparator(ItemStack stack1, ItemStack stack2, int offset) {
+        if(stack1.isEmpty() && stack2.isEmpty())
+            return FilterUtil.ANY;
         List<IFilterComparator> comparators = FilterUtil.getComparators(stack1, stack2);
         return comparators.get(offset % comparators.size());
     }

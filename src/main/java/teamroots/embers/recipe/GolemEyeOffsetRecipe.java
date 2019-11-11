@@ -32,6 +32,7 @@ public class GolemEyeOffsetRecipe extends IForgeRegistryEntry.Impl<IRecipe> impl
                 eye = stack;
         }
         eye = eye.copy();
+        eye.setCount(1);
         ItemGolemEye item = (ItemGolemEye) eye.getItem();
         item.incrementOffset(eye);
         return eye;

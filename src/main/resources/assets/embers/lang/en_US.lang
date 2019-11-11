@@ -112,6 +112,7 @@ tile.clockwork_attenuator.name=Clockwork Attenuator
 tile.explosion_pedestal.name=Explosion Charm Pedestal
 tile.stone_valve.name=Caminite Valve
 tile.geo_separator.name=Geologic Separator
+tile.item_request.name=Item Requisition
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -443,6 +444,7 @@ embers.jei.recipe.dawnstone_anvil=Dawnstone Anvil Recipe
 embers.jei.recipe.geologic_separator=Geologic Separator Bonus
 
 entity.ancient_golem.name=Ancient Golem
+entity.magma_worm.name=Magma Worm [WIP]
 
 death.attack.ember=%1$s was incinerated
 death.attack.ember.player=%1$s was incinerated by %2$s
@@ -549,6 +551,11 @@ embers.research.page.melter=Melter
 embers.research.page.melter.title=Melting Things Down
 embers.research.page.melter.tags=Ore;Machine;Melt;Duplication;Processing;Liquid;Fluid;Item;Multiblock;Multi Block;
 embers.research.page.melter.desc=Using the power of activated Ember, you have devised a way to melt down objects. When the Melter's bottom block is provided with Ember, it will melt down meltable items in its top block into their liquid state, where the molten fluid can be piped out for external use.
+
+embers.research.page.geo_separator=Geologic Separator
+embers.research.page.geo_separator.title=Electrum Ore
+embers.research.page.geo_separator.tags=Extra;Liquid;Fluid;Upgrade;
+embers.research.page.geo_separator.desc=Many ores and minerals found in the earth aren't just pure metal. They're amalgamated with impurities like other minerals. The Geologic Separator is a machine upgrade devised to filter out some of those impurities when melting ores and thus providing a little bit of extra output. It must be placed besides a melter, with the tap facing towards the bottom block of the melter to work.
 
 embers.research.page.stamper=Stamper
 embers.research.page.stamper.title=Pound It Flat

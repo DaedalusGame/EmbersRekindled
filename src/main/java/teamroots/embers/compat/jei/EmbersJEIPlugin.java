@@ -43,11 +43,11 @@ public class EmbersJEIPlugin implements IModPlugin {
         reg.handleRecipes(AlchemyRecipe.class,AlchemyRecipeWrapper::new,AlchemyRecipeCategory.UID);
         reg.handleRecipes(DawnstoneAnvilRecipe.class, DawnstoneAnvilWrapper::new,DawnstoneAnvilCategory.UID);
 
-        reg.addRecipes(RecipeRegistry.stampingRecipes,StampRecipeCategory.UID);
-        reg.addRecipes(RecipeRegistry.meltingRecipes,MelterRecipeCategory.UID);
+        reg.addRecipes(expandRecipes(RecipeRegistry.stampingRecipes),StampRecipeCategory.UID);
+        reg.addRecipes(expandRecipes(RecipeRegistry.meltingRecipes),MelterRecipeCategory.UID);
         reg.addRecipes(RecipeRegistry.meltingRecipes.stream().filter(recipe -> recipe.getBonusOutput() != null).collect(Collectors.toList()), GeologicSeparatorRecipeCategory.UID);
-        reg.addRecipes(RecipeRegistry.mixingRecipes,MixingRecipeCategory.UID);
-        reg.addRecipes(RecipeRegistry.alchemyRecipes,AlchemyRecipeCategory.UID);
+        reg.addRecipes(expandRecipes(RecipeRegistry.mixingRecipes),MixingRecipeCategory.UID);
+        reg.addRecipes(expandRecipes(RecipeRegistry.alchemyRecipes),AlchemyRecipeCategory.UID);
         reg.addRecipes(expandRecipes(RecipeRegistry.dawnstoneAnvilRecipes),DawnstoneAnvilCategory.UID);
 
         reg.addRecipeCatalyst(new ItemStack(RegistryManager.stamper),StampRecipeCategory.UID);
@@ -68,7 +68,14 @@ public class EmbersJEIPlugin implements IModPlugin {
         return stackHelper.expandRecipeItemStackInputs(ingredients);
     }
 
-    public static List<IWrappableRecipe> expandRecipes(List<? extends IWrappableRecipe> recipes) {
-        return recipes.stream().map(IWrappableRecipe::getWrappers).flatMap(Collection::stream).collect(Collectors.toList());
+    public static List<Object> expandRecipes(List<?> recipes) {
+        return recipes.stream().map(EmbersJEIPlugin::expandRecipe).flatMap(Collection::stream).collect(Collectors.toList());
+    }
+
+    public static List<?> expandRecipe(Object recipe) {
+        if(recipe instanceof IWrappableRecipe)
+            return ((IWrappableRecipe) recipe).getWrappers();
+        else
+            return Lists.newArrayList(recipe);
     }
 }

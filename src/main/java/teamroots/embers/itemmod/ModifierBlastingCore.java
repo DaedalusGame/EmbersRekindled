@@ -1,6 +1,7 @@
 package teamroots.embers.itemmod;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -20,6 +21,7 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.Misc;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class ModifierBlastingCore extends ModifierBase {
@@ -53,47 +55,56 @@ public class ModifierBlastingCore extends ModifierBase {
 			}
 		}
 	}
+
+	private HashSet<Entity> blastedEntities = new HashSet<>();
 	
 	@SubscribeEvent
 	public void onHit(LivingHurtEvent event){
-		if (event.getSource().getTrueSource() instanceof EntityPlayer){
-			EntityPlayer damager = (EntityPlayer)event.getSource().getTrueSource();
-			ItemStack s = damager.getHeldItemMainhand();
-			if (!s.isEmpty()){
-				int blastingLevel = ItemModUtil.getModifierLevel(s, EmbersAPI.BLASTING_CORE);
-				float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
-				if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
+		if(!blastedEntities.contains(event.getEntity()))
+		try {
+			if (event.getSource().getTrueSource() instanceof EntityPlayer) {
+				EntityPlayer damager = (EntityPlayer) event.getSource().getTrueSource();
+				blastedEntities.add(damager);
+				ItemStack s = damager.getHeldItemMainhand();
+				if (!s.isEmpty()) {
+					int blastingLevel = ItemModUtil.getModifierLevel(s, EmbersAPI.BLASTING_CORE);
+					float strength = (float) (2.0 * (Math.atan(0.6 * (blastingLevel)) / (Math.PI)));
+					if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost) {
+						EmberInventoryUtil.removeEmber(damager, cost);
+						List<EntityLivingBase> entities = damager.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX - 4.0 * strength, event.getEntityLiving().posY - 4.0 * strength, event.getEntityLiving().posZ - 4.0 * strength,
+								event.getEntityLiving().posX + 4.0 * strength, event.getEntityLiving().posY + 4.0 * strength, event.getEntityLiving().posZ + 4.0 * strength));
+						for (EntityLivingBase e : entities) {
+							if (e.getUniqueID().compareTo(damager.getUniqueID()) != 0) {
+								e.attackEntityFrom(DamageSource.causeExplosionDamage(damager), event.getAmount() * strength);
+								e.hurtResistantTime = 0;
+							}
+						}
+						event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY + event.getEntityLiving().height / 2.0, event.getEntityLiving().posZ, 0.5f, true);
+					}
+				}
+			}
+			if (event.getEntity() instanceof EntityPlayer) {
+				EntityPlayer damager = (EntityPlayer) event.getEntity();
+				int blastingLevel = ItemModUtil.getArmorModifierLevel(damager, EmbersAPI.BLASTING_CORE);
+
+				if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost) {
+					float strength = (float) (2.0 * (Math.atan(0.6 * (blastingLevel)) / (Math.PI)));
 					EmberInventoryUtil.removeEmber(damager, cost);
-					List<EntityLivingBase> entities = damager.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX-4.0*strength,event.getEntityLiving().posY-4.0*strength,event.getEntityLiving().posZ-4.0*strength,
-																																	event.getEntityLiving().posX+4.0*strength,event.getEntityLiving().posY+4.0*strength,event.getEntityLiving().posZ+4.0*strength));
-					for (EntityLivingBase e : entities){
-						if (e.getUniqueID().compareTo(damager.getUniqueID()) != 0){
-							e.attackEntityFrom(DamageSource.causeExplosionDamage(damager), event.getAmount()*strength);
+					List<EntityLivingBase> entities = damager.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX - 4.0 * strength, event.getEntityLiving().posY - 4.0 * strength, event.getEntityLiving().posZ - 4.0 * strength,
+							event.getEntityLiving().posX + 4.0 * strength, event.getEntityLiving().posY + 4.0 * strength, event.getEntityLiving().posZ + 4.0 * strength));
+					for (EntityLivingBase e : entities) {
+						if (e.getUniqueID().compareTo(event.getEntity().getUniqueID()) != 0) {
+							blastedEntities.add(e);
+							e.attackEntityFrom(DamageSource.causeExplosionDamage(damager), event.getAmount() * strength * 0.25f);
+							e.knockBack(event.getEntity(), 2.0f * strength, -e.posX + damager.posX, -e.posZ + damager.posZ);
 							e.hurtResistantTime = 0;
 						}
 					}
-					event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY+event.getEntityLiving().height/2.0, event.getEntityLiving().posZ, 0.5f, true);
+					event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY + event.getEntityLiving().height / 2.0, event.getEntityLiving().posZ, 0.5f, true);
 				}
 			}
-		}
-		if (event.getEntity() instanceof EntityPlayer){
-			EntityPlayer damager = (EntityPlayer)event.getEntity();
-			int blastingLevel = ItemModUtil.getArmorModifierLevel(damager, EmbersAPI.BLASTING_CORE);
-
-			if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
-				float strength = (float)(2.0*(Math.atan(0.6*(blastingLevel))/(Math.PI)));
-				EmberInventoryUtil.removeEmber(damager, cost);
-				List<EntityLivingBase> entities = damager.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX-4.0*strength,event.getEntityLiving().posY-4.0*strength,event.getEntityLiving().posZ-4.0*strength,
-																																event.getEntityLiving().posX+4.0*strength,event.getEntityLiving().posY+4.0*strength,event.getEntityLiving().posZ+4.0*strength));
-				for (EntityLivingBase e : entities){
-					if (e.getUniqueID().compareTo(event.getEntity().getUniqueID()) != 0){
-						e.attackEntityFrom(DamageSource.causeExplosionDamage(damager), event.getAmount()*strength*0.25f);
-						e.knockBack(event.getEntity(), 2.0f*strength, -e.posX+damager.posX, -e.posZ+damager.posZ);
-						e.hurtResistantTime = 0;
-					}
-				}
-				event.getEntityLiving().world.createExplosion(event.getEntityLiving(), event.getEntityLiving().posX, event.getEntityLiving().posY+event.getEntityLiving().height/2.0, event.getEntityLiving().posZ, 0.5f, true);
-			}
+		} finally {
+			blastedEntities.clear();
 		}
 	}
 	

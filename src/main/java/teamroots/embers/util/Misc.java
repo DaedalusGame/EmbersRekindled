@@ -1,5 +1,7 @@
 package teamroots.embers.util;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
@@ -8,10 +10,13 @@ import net.minecraft.block.BlockRedstoneTorch;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -194,6 +199,26 @@ public class Misc {
         return (float) Math.toDegrees(Math.atan2(posY2 - posY, Math.sqrt((posX2 - posX) * (posX2 - posX) + (posZ2 - posZ) * (posZ2 - posZ))));
     }
 
+    public static float yawDegreesBetweenPointsSafe(double posX, double posY, double posZ, double posX2, double posY2, double posZ2, double previousYaw) {
+        float f = (float) ((180.0f * Math.atan2(posX2 - posX, posZ2 - posZ)) / (float) Math.PI);
+        if (Math.abs(f - previousYaw) > 90) {
+            if (f < previousYaw) {
+                f += 360.0;
+            }
+            else {
+                f -= 360.0;
+            }
+        }
+        return f;
+    }
+
+    public static Vec3d lookVector(float rotYaw, float rotPitch) {
+        return new Vec3d(
+                Math.sin(rotYaw) * Math.cos(rotPitch),
+                Math.sin(rotPitch),
+                Math.cos(rotYaw) * Math.cos(rotPitch));
+    }
+
     public static int getResourceCount(ItemStack stack) {
         int baseCount = 0;
         if (stack.getItem() instanceof ItemArmor) {
@@ -331,6 +356,18 @@ public class Misc {
         entities.sort((o1, o2) -> Double.compare(start.squareDistanceTo(o1.hitVec), start.squareDistanceTo(o2.hitVec)));
 
         return entities;
+    }
+
+    public static List<EntityPlayer> getNonCreativePlayers(World world, AxisAlignedBB box) {
+        return world.getEntitiesWithinAABB(EntityPlayer.class, box);
+        //return world.getEntitiesWithinAABB(EntityPlayer.class, box, Predicates.not(EntityPlayer::isCreative));
+    }
+
+    public static boolean isCreativePlayer(EntityLivingBase e) {
+        if (e instanceof EntityPlayer) {
+            return ((EntityPlayer) e).isCreative();
+        }
+        return false;
     }
 
     public static double getDiminishedPower(double power, double softcap, double slope) {

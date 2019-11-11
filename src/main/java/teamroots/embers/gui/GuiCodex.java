@@ -542,7 +542,7 @@ public class GuiCodex extends GuiScreen {
 						r.selectionTarget = r.selectionTarget*(1.0f-partialTicks) + (r.selectionTarget * 0.9f) *partialTicks;
 					}
 					//Highlight search results
-					if (isShown && searchResult.contains(r)){
+					if (isShown && (searchResult.contains(r) || ResearchManager.isPathToLock(r))){
 						Tessellator tess = Tessellator.getInstance();
 						BufferBuilder b = tess.getBuffer();
 						float x = r.x;

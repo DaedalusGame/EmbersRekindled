@@ -281,4 +281,8 @@ public class ResearchBase {
 			return;
 		result.add(this);
 	}
+
+	public boolean isPathTowards(ResearchBase target) {
+		return this == target;
+	}
 }

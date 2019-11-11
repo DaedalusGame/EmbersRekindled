@@ -126,7 +126,7 @@ public class TileEntityTank extends TileEntityOpenTank implements ITileEntityBas
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.invalidate();
-		if (!world.isRemote && !player.capabilities.isCreativeMode){
+		if (!world.isRemote && (player == null || !player.capabilities.isCreativeMode)){
 			ItemStack toDrop = new ItemStack(RegistryManager.block_tank,1);
 			if (getTank().getFluidAmount() > 0){
 				NBTTagCompound tag = new NBTTagCompound();

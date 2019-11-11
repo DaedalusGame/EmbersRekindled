@@ -545,6 +545,9 @@ public class RegistryManager {
 		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ancient_golem"),EntityAncientGolem.class, "ancient_golem", id++, Embers.instance, 64, 1, true);
 		EntityRegistry.registerEgg(new ResourceLocation(Embers.MODID+":ancient_golem"), Misc.intColor(48, 38, 35), Misc.intColor(79, 66, 61));
 		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID+":ember_light"),EntityEmberLight.class, "ember_light", id++, Embers.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID,"magma_worm"),EntityMagmaWorm.class, "magma_worm", id++, Embers.instance, 128, 1, true);
+		EntityRegistry.registerEgg(new ResourceLocation(Embers.MODID,"magma_worm"), Misc.intColor(48, 38, 35), Misc.intColor(79, 66, 61));
+		EntityRegistry.registerModEntity(new ResourceLocation(Embers.MODID,"magma_projectile"),EntityMagmaProjectile.class, "magma_projectile", id++, Embers.instance, 64, 1, true);
 	}
 
 	private static void registerTileEntities() {
@@ -803,6 +806,8 @@ public class RegistryManager {
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAncientGolem.class, new RenderAncientGolem.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberLight.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMagmaWorm.class, new RenderMagmaWorm.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMagmaProjectile.class, new RenderEmberPacket(Minecraft.getMinecraft().getRenderManager()));
 	}
 
 	@SideOnly(Side.CLIENT)

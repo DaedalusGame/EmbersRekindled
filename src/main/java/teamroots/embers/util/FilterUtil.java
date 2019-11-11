@@ -9,7 +9,7 @@ public class FilterUtil {
     static List<IFilterComparator> comparators = new ArrayList<>();
     static Map<String, IFilterComparator> comparatorMap = new HashMap<>();
 
-    static IFilterComparator ANY = new ComparatorMatch("any",999999) {
+    public static IFilterComparator ANY = new ComparatorMatch("any",999999) {
         @Override
         public boolean match(ItemStack stack1, ItemStack stack2) {
             return true;

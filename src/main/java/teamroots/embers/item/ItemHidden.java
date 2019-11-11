@@ -10,6 +10,11 @@ public class ItemHidden extends ItemBase {
     }
 
     @Override
+    public boolean getHasSubtypes() {
+        return true;
+    }
+
+    @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         //NOOP
     }

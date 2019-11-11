@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DawnstoneAnvilRecipe implements IWrappableRecipe {
+public class DawnstoneAnvilRecipe {
     public Ingredient bottom = Ingredient.EMPTY;
     public Ingredient top = Ingredient.EMPTY;
     public List<ItemStack> result = Lists.newArrayList();
@@ -41,10 +41,5 @@ public class DawnstoneAnvilRecipe implements IWrappableRecipe {
     public List<ItemStack> getResult(TileEntity tile, ItemStack input1, ItemStack input2) //For when you need your own handling
     {
         return result.stream().map(ItemStack::copy).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<IWrappableRecipe> getWrappers() {
-        return Lists.newArrayList(this);
     }
 }
