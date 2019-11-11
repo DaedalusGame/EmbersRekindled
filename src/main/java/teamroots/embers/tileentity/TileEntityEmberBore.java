@@ -18,6 +18,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
@@ -133,7 +134,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     }
 
     public boolean canMine() {
-        return getPos().getY() <= MAX_LEVEL;
+        return ConfigManager.isEmberBoreEnabled(world.provider.getDimension()) && getPos().getY() <= MAX_LEVEL;
     }
 
     public boolean canInsert(ArrayList<ItemStack> returns) {
