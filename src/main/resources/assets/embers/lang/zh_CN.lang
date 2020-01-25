@@ -121,7 +121,7 @@ fluid.silver=熔融银
 fluid.astralite=熔融硝酸甘油
 fluid.dawnstone=熔融黎明石
 fluid.umber_steel=熔融锈钢
-fluid.alchemical_redstone=炼金浆液
+fluid.alchemical_redstone=炼金红石浆液
 fluid.steam=蒸汽
 
 item.ingot_copper.name=铜锭
@@ -349,11 +349,11 @@ embers.tooltip.crystal.xp=正在提纯 %s /%s
 
 embers.tooltip.atmosEmber=大气灰烬：
 embers.tooltip.targetingBlock=指向定位：
-embers.tooltip.itemdial.slot=存储槽 %s: %s
+embers.tooltip.itemdial.slot=存储槽 %s：%s
 embers.tooltip.itemdial.item=%sx %s
 embers.tooltip.itemdial.noitem=无
-embers.tooltip.emberdial.ember=灰烬能量: %s/%s
-embers.tooltip.fluiddial.fluid=%s: %s/%s
+embers.tooltip.emberdial.ember=灰烬能量：%s/%s
+embers.tooltip.fluiddial.fluid=%s：%s/%s
 embers.tooltip.fluiddial.nofluid=0/%s
 embers.tooltip.side.center=中央
 embers.tooltip.side.north=北
@@ -372,8 +372,8 @@ embers.tooltip.upgrade.actuator=运行速率：%s
 embers.tooltip.dial.ember_multiplier=产能倍数：%s
 embers.tooltip.dial.heat=热量：%s/%s
 embers.tooltip.item.ember=灰烬能量：%s/%s
-embers.tooltip.attenuator.on=红石信号开:%s倍速度
-embers.tooltip.attenuator.off=红石信号关:%s倍速度
+embers.tooltip.attenuator.on=红石信号开：%s倍速度
+embers.tooltip.attenuator.off=红石信号关：%s倍速度
 embers.tooltip.forge.cannot_start=没有足够的灰烬来点燃锻造炉。
 embers.tooltip.broken=损坏的
 
