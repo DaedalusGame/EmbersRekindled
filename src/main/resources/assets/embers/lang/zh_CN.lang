@@ -28,7 +28,7 @@ tile.mech_accessor.name=机械核心连接器
 tile.mech_core.name=机械核心
 tile.stairs_caminite_brick.name=方镁矾砖楼梯
 tile.wall_caminite_brick.name=方镁矾砖墙
-tile.ember_activator.name=灰烬能量激发器
+tile.ember_activator.name=灰烬能量催化器
 tile.mixer.name=混合离心器
 tile.heat_coil.name=线圈炉
 tile.item_dropper.name=物品投掷口
@@ -457,7 +457,7 @@ embers.research.page.caminite.title=坚固的陶瓷
 embers.research.page.caminite.tags=陶瓷;方镁矾;红砖;粘土;沙子;
 embers.research.page.caminite.desc=方镁矾是一种非常坚固的陶瓷，混合了一点粘土和沙子。这种混合物经过烧制后会变成一种非常不错的材料。你认为这种材料完全可以满足你在制作机械时的各种需求。
 
-embers.research.page.activator=灰烬能量激发器
+embers.research.page.activator=灰烬能量催化器
 embers.research.page.activator.title=萃取
 embers.research.page.activator.tags=灰烬;发射器;发生机;
 embers.research.page.activator.desc=挖掘灰烬水晶中蕴含能量的关键设备。当灰烬晶体或灰烬晶体碎片被泵入设备下半部分时，设备将进行一系列复杂的反应，使得灰烬水晶内部蕴含的能量被挥发到上半部分的铜质网笼中。从铜质网笼中就可以使用灰烬能量发射器提取珍贵的灰烬能量。我们有理由相信，这种挥发性的灰烬能量可以作用于各种设备。
@@ -716,7 +716,7 @@ embers.research.page.catalytic_plug.desc=如果你等的不耐烦的话，催化
 embers.research.page.ember_siphon=灰烬能量虹吸器
 embers.research.page.ember_siphon.title=能量逆流
 embers.research.page.ember_siphon.tags=升级;反转;虹吸;灰烬能量;充能;放出;
-embers.research.page.ember_siphon.desc=灰烬吸取器是一种机器升级，可放置在任何使用灰烬能量的机器下方以反转其功能。与其将灰烬能量白白的存储在耗能机器中，还不如作为中继器让别的要用能量的机器来消耗灰烬能量。它会与它上方使用灰烬能量的机器的能量缓存连接，相当于共用一个能量缓存，然后你就可以使用通常的方式从虹吸器的侧面提取灰烬能量了。虹吸器下面不能放虹吸器。
+embers.research.page.ember_siphon.desc=能量虹吸器是一种机器升级，可放置在任何使用灰烬能量的机器下方以反转其功能。与其将灰烬能量白白的存储在耗能机器中，还不如作为中继器让别的要用能量的机器来消耗灰烬能量。它会与它上方使用灰烬能量的机器的能量缓存连接，相当于共用一个能量缓存，然后你就可以使用通常的方式从虹吸器的侧面提取灰烬能量了。虹吸器下面不能放虹吸器。
 
 
 
