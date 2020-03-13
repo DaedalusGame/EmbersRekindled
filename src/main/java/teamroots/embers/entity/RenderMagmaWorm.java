@@ -21,7 +21,7 @@ public class RenderMagmaWorm extends RenderLiving<EntityMagmaWorm> {
 
         @Override
         public RenderMagmaWorm createRenderFor(RenderManager manager) {
-            return new RenderMagmaWorm(manager, ModelNull.instance, 0.5f);
+            return new RenderMagmaWorm(manager, ModelNull.INSTANCE, 0.5f);
         }
     }
 
@@ -40,19 +40,19 @@ public class RenderMagmaWorm extends RenderLiving<EntityMagmaWorm> {
 
             for (int i = 1; i < entity.getSegments(); i++) {
                 if (i == entity.getSegments() -1) {
-                    ModelMagmaWormTail.instance.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
+                    ModelMagmaWormTail.INSTANCE.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
                 }
                 else if (i == 1) {
-                    ModelMagmaWormSegmentFirst.instance.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
+                    ModelMagmaWormSegmentFirst.INSTANCE.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
                 }
                 else if (i == 2) {
-                    ModelMagmaWormSegmentLarge.instance.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
+                    ModelMagmaWormSegmentLarge.INSTANCE.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
                 }
                 else {
-                    ModelMagmaWormSegment.instance.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
+                    ModelMagmaWormSegment.INSTANCE.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, i);
                 }
             }
-            ModelMagmaWormHead.instance.render(entity,limbSwing,limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+            ModelMagmaWormHead.INSTANCE.render(entity,limbSwing,limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
             if (flag1) {
                 GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }

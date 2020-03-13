@@ -55,9 +55,9 @@ public class ModelArmorBase extends ModelBiped {
 	    legL = new ModelRenderer(this);
 	    
 	    legsTop = new ModelRenderer(this);
-	    
+
 	    bootR = new ModelRenderer(this);
-	    
+
 	    bootL = new ModelRenderer(this);
 	}
 	

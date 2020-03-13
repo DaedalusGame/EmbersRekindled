@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.item.IInflictorGem;
 import teamroots.embers.api.item.IInflictorGemHolder;
 import teamroots.embers.api.item.IInfoGoggles;
-import teamroots.embers.model.ModelAshenCloak;
+import teamroots.embers.model.ModelAshenArmor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,7 +41,20 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped _default){
-		return new ModelAshenCloak(slot);
+		switch(slot){
+
+			default:
+				return null;
+			case FEET:
+				return ModelAshenArmor.FEET;
+			case LEGS:
+				return ModelAshenArmor.LEGS;
+			case CHEST:
+				return ModelAshenArmor.BODY;
+			case HEAD:
+				return ModelAshenArmor.HEAD;
+		}
+		//return new ModelAshenCloak(slot);
 	}
 
 	@Override
@@ -110,7 +123,7 @@ public class ItemAshenCloak extends ItemArmorBase implements IInflictorGemHolder
         if(armor.getItem() instanceof ItemAshenCloak)
         {
             ItemAshenCloak cloak = (ItemAshenCloak) armor.getItem();
-            return cloak.isBroken(armor);
+            return !cloak.isBroken(armor);
         }
         return false;
     }

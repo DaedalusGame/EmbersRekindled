@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 
 public class ModelNull extends ModelBase {
 
-    public static ModelNull instance;
+    public static ModelNull INSTANCE;
 
     public ModelNull() {
         textureWidth = 128;

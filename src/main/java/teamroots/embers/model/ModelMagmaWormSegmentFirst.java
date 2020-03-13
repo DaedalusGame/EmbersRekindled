@@ -10,7 +10,7 @@ import teamroots.embers.util.Misc;
 
 public class ModelMagmaWormSegmentFirst extends ModelBase {
 
-    public static ModelMagmaWormSegmentFirst instance;
+    public static ModelMagmaWormSegmentFirst INSTANCE;
     //fields
     ModelRenderer head1;
     ModelRenderer stonehead1;

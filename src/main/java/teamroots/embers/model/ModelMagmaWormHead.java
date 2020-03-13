@@ -10,7 +10,7 @@ import teamroots.embers.util.Misc;
 
 public class ModelMagmaWormHead extends ModelBase {
 
-    public static ModelMagmaWormHead instance;
+    public static ModelMagmaWormHead INSTANCE;
     //fields
     ModelRenderer head1;
     ModelRenderer head2;
