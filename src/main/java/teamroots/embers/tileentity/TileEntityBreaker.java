@@ -3,6 +3,7 @@ package teamroots.embers.tileentity;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
+import net.minecraft.block.BlockPistonMoving;
 import net.minecraft.block.BlockStructure;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -129,7 +130,7 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 
 			NonNullList<ItemStack> drops = null;
 
-			if ((block instanceof BlockCommandBlock || block instanceof BlockStructure) && !player.canUseCommandBlock())
+			if (state.getBlockHardness(world,pos) < 0 || (isBlacklisted(block) && !player.canUseCommandBlock()))
 			{
 				world.notifyBlockUpdate(breakPos, state, state, 3);
 			}
@@ -156,6 +157,10 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 			if(drops != null)
 				collectDrops(drops);
 		}
+	}
+
+	private boolean isBlacklisted(Block block) {
+		return block instanceof BlockCommandBlock || block instanceof BlockStructure;
 	}
 
 	public EnumFacing getFacing() {
