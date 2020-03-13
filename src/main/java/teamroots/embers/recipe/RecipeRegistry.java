@@ -1287,9 +1287,11 @@ public class RecipeRegistry {
 		Ingredient emberShard = Ingredient.fromItem(RegistryManager.shard_ember);
 		Ingredient emberCrystal = Ingredient.fromItem(RegistryManager.crystal_ember);
 		Ingredient stampFlat = Ingredient.fromItem(RegistryManager.stamp_flat);
+		Ingredient blazeRod = Ingredient.fromItem(Items.BLAZE_ROD);
 
 		//stampingRecipes.add(new ItemStampingRecipe(emberShard,null,stampFlat,new ItemStack(RegistryManager.dust_ember,1))); //Maybe one day
 		stampingRecipes.add(new ItemStampingRecipe(emberCrystal,null,stampFlat,new ItemStack(RegistryManager.shard_ember,6)));
+		stampingRecipes.add(new ItemStampingRecipe(blazeRod,null,stampFlat,new ItemStack(Items.BLAZE_POWDER,4)));
 
 		int aspectusAmount = ConfigManager.stampAspectusAmount * INGOT_AMOUNT;
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_iron, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_iron,1)));
