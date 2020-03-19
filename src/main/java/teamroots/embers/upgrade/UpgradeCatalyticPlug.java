@@ -4,10 +4,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import teamroots.embers.Embers;
+import teamroots.embers.api.event.DialInformationEvent;
+import teamroots.embers.api.event.UpgradeEvent;
+import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
+import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.tileentity.TileEntityCatalyticPlug;
 import teamroots.embers.util.DefaultUpgradeProvider;
 
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.List;
 
@@ -58,5 +64,17 @@ public class UpgradeCatalyticPlug extends DefaultUpgradeProvider {
             return;
         IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,null);
         handler.drain(FluidRegistry.getFluidStack("alchemical_redstone",amt),true);
+    }
+
+    @Override
+    public void throwEvent(TileEntity tile, UpgradeEvent event) {
+        if(event instanceof DialInformationEvent) {
+            DialInformationEvent dialEvent = (DialInformationEvent) event;
+            if(hasCatalyst() && BlockEmberGauge.DIAL_TYPE.equals(dialEvent.getDialType())) {
+                double speedModifier = 2.0;
+                DecimalFormat multiplierFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.speed_multiplier");
+                dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.catalytic_plug", multiplierFormat.format(speedModifier))); //Proxy this because it runs in shared code
+            }
+        }
     }
 }

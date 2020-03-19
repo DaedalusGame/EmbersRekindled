@@ -33,11 +33,13 @@ import teamroots.embers.network.message.MessageBeamCannonFX;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.Misc;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
 public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase, ITickable, ITargetable {
+	public static final double PULL_RATE = 2000.0;
 	public static final int FIRE_THRESHOLD = 400;
 	public static final float DAMAGE = 25.0f;
 	public static final int MAX_DISTANCE = 64;
@@ -55,7 +57,13 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		this.onLoad();
 		capability.setEmberCapacity(2000);
 	}
-	
+
+	@Nonnull
+	public EnumFacing getFacing() {
+		IBlockState state = getWorld().getBlockState(getPos());
+		return state.getValue(BlockBeamCannon.facing);
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		super.writeToNBT(tag);
@@ -115,8 +123,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public void update() {
-		IBlockState cannonstate = getWorld().getBlockState(getPos());
-		EnumFacing facing = cannonstate.getValue(BlockBeamCannon.facing);
+		EnumFacing facing = getFacing();
 		if (this.target == null && this.ticksExisted == 0){
 			this.target = getPos().offset(facing);
 		}
@@ -127,10 +134,24 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		boolean isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
 		boolean redstoneEnabled = UpgradeUtil.getOtherParameter(this,"redstone_enabled",true,upgrades);
 		int threshold = UpgradeUtil.getOtherParameter(this,"fire_threshold",FIRE_THRESHOLD,upgrades);
-		if (!cancel && this.capability.getEmber() >= threshold && redstoneEnabled && isPowered && !lastPowered){
+		if (!cancel && this.capability.getEmber() >= threshold && (!redstoneEnabled || (isPowered && !lastPowered))){
 			fire();
 		}
 		lastPowered = isPowered;
+	}
+
+	private void pullEmber() {
+		EnumFacing facing = getFacing();
+		TileEntity attachedTile = getWorld().getTileEntity(getPos().offset(facing.getOpposite()));
+		if (attachedTile != null){
+			if (attachedTile.hasCapability(EmbersCapabilities.EMBER_CAPABILITY, facing)){
+				IEmberCapability cap = attachedTile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing);
+				if (cap.getEmber() > 0 && capability.getEmber() < capability.getEmberCapacity()){
+					double removed = cap.removeAmount(PULL_RATE, true);
+					capability.addAmount(removed, true);
+				}
+			}
+		}
 	}
 	
 	@Override

@@ -73,7 +73,7 @@ public class UpgradeActuator extends DefaultUpgradeProvider {
         if(event instanceof DialInformationEvent) {
             DialInformationEvent dialEvent = (DialInformationEvent) event;
             if(BlockEmberGauge.DIAL_TYPE.equals(dialEvent.getDialType())) {
-                DecimalFormat multiplierFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.mechanical_multiplier");
+                DecimalFormat multiplierFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.speed_multiplier");
                 double power = getPower();
                 double speedModifier = mechTile.getMechanicalSpeed(power) / mechTile.getNominalSpeed();
                 dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.actuator", multiplierFormat.format(speedModifier))); //Proxy this because it runs in shared code
