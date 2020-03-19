@@ -308,7 +308,7 @@ embers.aspect.lead=Lead
 embers.aspect.silver=Silver
 
 embers.decimal_format.ember=0.0
-embers.decimal_format.mechanical_multiplier=0.##x
+embers.decimal_format.speed_multiplier=0.##x
 embers.decimal_format.ember_multiplier=0.##x
 embers.decimal_format.inaccuracy=0
 embers.decimal_format.heat=0.00
@@ -370,6 +370,7 @@ embers.tooltip.heat_amount=Heat:
 embers.tooltip.heat_level=Level:
 embers.tooltip.modifiers=Modifiers:
 embers.tooltip.upgrade.actuator=Mechanical Speed: %s
+embers.tooltip.upgrade.catalytic_plug=Catalytic Plug Speed: %s
 embers.tooltip.dial.ember_multiplier=Production Multiplier: %s
 embers.tooltip.dial.heat=Heat: %s/%s
 embers.tooltip.item.ember=Ember: %s/%s

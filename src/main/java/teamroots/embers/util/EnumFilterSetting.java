@@ -5,7 +5,14 @@ public enum EnumFilterSetting {
     FUZZY;
 
     public EnumFilterSetting rotate(int i) {
+        return get(ordinal()+i);
+    }
+
+    public static EnumFilterSetting get(int i)
+    {
         EnumFilterSetting[] settings = values();
-        return settings[(ordinal()+i) % settings.length];
+        if(i < 0)
+            i = (i % settings.length) + settings.length;
+        return settings[i % settings.length];
     }
 }

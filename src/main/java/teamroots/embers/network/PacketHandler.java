@@ -41,5 +41,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(MessageResearchTick.MessageHolder.class,MessageResearchTick.class,id ++,Side.SERVER);
 
         INSTANCE.registerMessage(MessageFireBlastFX.MessageHolder.class,MessageFireBlastFX.class,id ++,Side.CLIENT);
+
+        INSTANCE.registerMessage(MessageEyeButton.MessageHolder.class,MessageEyeButton.class,id ++,Side.SERVER);
     }
 }

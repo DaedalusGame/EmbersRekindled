@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
 import teamroots.embers.api.item.IFilterItem;
+import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.util.EnumFilterSetting;
 import teamroots.embers.util.FilterUtil;
 import teamroots.embers.util.IFilterComparator;
@@ -33,7 +34,7 @@ public class ItemGolemEye extends ItemBase implements IFilterItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+        /*ItemStack stack = playerIn.getHeldItem(handIn);
         if(stack.hasTagCompound()) {
             if(playerIn.isSneaking())
                 setInvert(stack,!getInvert(stack));
@@ -41,7 +42,9 @@ public class ItemGolemEye extends ItemBase implements IFilterItem {
                 setSetting(stack,getSetting(stack).rotate(1));
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.onItemRightClick(worldIn, playerIn, handIn);*/
+        playerIn.openGui(Embers.instance, GuiHandler.EYE, worldIn, playerIn.getPosition().getX(), playerIn.getPosition().getY(), playerIn.getPosition().getZ());
+        return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
     }
 
     @Override

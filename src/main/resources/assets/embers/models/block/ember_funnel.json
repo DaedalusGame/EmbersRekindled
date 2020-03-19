@@ -1,6 +1,7 @@
 {
 	"parent": "block/block",
 	"textures": {
+		"particle": "embers:blocks/ember_funnel_side",
 		"0": "embers:blocks/ember_funnel_top",
 		"1": "embers:blocks/ember_funnel_side",
 		"2": "embers:blocks/ember_funnel_bottom"
