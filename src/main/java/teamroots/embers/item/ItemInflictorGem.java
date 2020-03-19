@@ -30,7 +30,7 @@ public class ItemInflictorGem extends ItemBase implements IInflictorGem {
 		if (player.isSneaking() && stack.getItemDamage() == 1){
 			stack.setItemDamage(0);
 			stack.getTagCompound().removeTag("type");
-			player.setHealth(player.getHealth()-10.0f);
+			player.setHealth(Math.max(player.getHealth()-10.0f,1f));
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 		return new ActionResult<>(EnumActionResult.FAIL, stack);
