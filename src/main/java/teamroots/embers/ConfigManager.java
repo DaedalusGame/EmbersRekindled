@@ -39,7 +39,14 @@ public class ConfigManager {
 	public static List<Integer> orespawnBlacklist = new ArrayList<>();
 	@Deprecated
 	public static List<Integer> smallRuinBlacklist = new ArrayList<>();
-	
+
+	public static int chargerSpeedMod;
+	public static int cinderPlinthSpeedMod;
+	public static int emberBoreSpeedMod;
+	public static int furnaceSpeedMod;
+
+	public static int emberBoreMaxYLevel;
+
 	//COMPAT
 	public static boolean enableNickel, enableTin, enableAluminum, enableBronze, enableElectrum;
 	public static int nickelVeinSize, nickelMinY, nickelMaxY, nickelVeinsPerChunk,
@@ -144,6 +151,13 @@ public class ConfigManager {
 			emberBoreGraylist.add(Integer.valueOf(s));
 		}
 		emberBoreIsWhiteList = config.getBoolean("emberBoreIsWhiteList","machines",false,"Whether the Ember Bore blacklist is a whitelist.");
+
+		chargerSpeedMod = config.getInt("chargerSpeedMod", "machines", 1, 1, 10, "The speed modifier of the Copper Charger before upgrades.");
+		cinderPlinthSpeedMod = config.getInt("cinderPlinthSpeedMod", "machines", 1, 1, 40, "The speed modifier of the Cinder Plinth before upgrades.");
+		emberBoreSpeedMod = config.getInt("emberBoreSpeedMod", "machines", 1, 1, 50, "The speed modifier of the Ember Bore before upgrades.");
+		furnaceSpeedMod = config.getInt("furnaceSpeedMod", "machines", 1, 1, 100, "The speed modifier of the Melter before upgrades.");
+
+		emberBoreMaxYLevel = config.getInt("emberBoreMaxYLevel", "machines", 7, 1, 255, "The maximum y-level at which the Ember Bore can mine ember.");
 
 		config.addCustomCategoryComment("compat", "Settings related to compatibility with other mods.");
 
