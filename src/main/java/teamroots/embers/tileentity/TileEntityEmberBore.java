@@ -134,7 +134,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     }
 
     public boolean canMine() {
-        return ConfigManager.isEmberBoreEnabled(world.provider.getDimension()) && getPos().getY() <= MAX_LEVEL;
+        return ConfigManager.isEmberBoreEnabled(world.provider.getDimension()) && getPos().getY() <= ConfigManager.emberBoreMaxYLevel;
     }
 
     public boolean canInsert(ArrayList<ItemStack> returns) {
@@ -167,7 +167,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
             return;
         if (getWorld().isRemote)
             handleSound();
-        speedMod = UpgradeUtil.getTotalSpeedModifier(this, upgrades);
+        speedMod = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * ConfigManager.emberBoreSpeedMod;
         lastAngle = angle;
         if (isRunning) {
             angle += 12.0f * speedMod;

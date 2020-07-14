@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
@@ -166,7 +167,7 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
 			if(!cancel) {
 				IEmberCapability itemCapability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
-				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER;
+				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER * ConfigManager.chargerSpeedMod;
 				double emberAdded;
 				if(transferRate > 0) {
 					emberAdded = itemCapability.addAmount(Math.min(Math.abs(transferRate), capability.getEmber()), true);

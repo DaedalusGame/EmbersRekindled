@@ -20,10 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.SoundManager;
+import teamroots.embers.*;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
@@ -179,7 +176,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
                 double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
                 UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
                 capability.removeAmount(emberCost, true);
-                if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
+                if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME / ConfigManager.cinderPlinthSpeedMod, upgrades)) {
                     progress = 0;
                     TileEntity tile = getWorld().getTileEntity(getPos().down());
                     List<ItemStack> outputs = Lists.newArrayList(new ItemStack(RegistryManager.dust_ash, 1));

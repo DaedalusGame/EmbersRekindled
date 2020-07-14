@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
@@ -151,7 +152,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 						isWorking = true;
 						progress++;
 						markDirty();
-						if (progress >= UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
+						if (progress >= UpgradeUtil.getWorkTime(this, PROCESS_TIME / ConfigManager.furnaceSpeedMod, upgrades)) {
 							ItemStack recipeStack = top.inventory.getStackInSlot(0);
 							ItemMeltingRecipe recipe = getRecipe(recipeStack);
 							if (recipe != null && !world.isRemote) {
