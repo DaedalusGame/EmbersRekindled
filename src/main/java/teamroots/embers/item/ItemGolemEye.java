@@ -5,14 +5,16 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
+import teamroots.embers.api.item.FilterSieve;
+import teamroots.embers.api.item.IFilter;
 import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.gui.GuiHandler;
+import teamroots.embers.tileentity.ISpecialFilter;
 import teamroots.embers.util.EnumFilterSetting;
 import teamroots.embers.util.FilterUtil;
 import teamroots.embers.util.IFilterComparator;
@@ -34,88 +36,33 @@ public class ItemGolemEye extends ItemBase implements IFilterItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        /*ItemStack stack = playerIn.getHeldItem(handIn);
-        if(stack.hasTagCompound()) {
-            if(playerIn.isSneaking())
-                setInvert(stack,!getInvert(stack));
-            else
-                setSetting(stack,getSetting(stack).rotate(1));
-            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
-        }
-        return super.onItemRightClick(worldIn, playerIn, handIn);*/
         playerIn.openGui(Embers.instance, GuiHandler.EYE, worldIn, playerIn.getPosition().getX(), playerIn.getPosition().getY(), playerIn.getPosition().getZ());
         return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
     }
 
     @Override
-    public boolean acceptsItem(ItemStack filterStack, ItemStack stack) {
-        NBTTagCompound compound = filterStack.getTagCompound();
-        if (compound == null)
-            return true;
-        ItemStack stack1 = new ItemStack(compound.getCompoundTag("stack1"));
-        ItemStack stack2 = new ItemStack(compound.getCompoundTag("stack2"));
-        String comparatorName = compound.getString("comparator");
-        int offset = compound.getInteger("offset");
-        EnumFilterSetting setting = EnumFilterSetting.values()[compound.getInteger("setting")];
-        boolean inverted = compound.getBoolean("invert");
-
-        IFilterComparator comparator = FilterUtil.getComparator(comparatorName);
-        if (comparator == null) {
-            comparator = findComparator(stack1, stack2, offset);
-            compound.setString("comparator", comparator.getName());
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof ISpecialFilter && player.isSneaking()) {
+            ItemStack held = player.getHeldItem(hand);
+            setFilter(held, ((ISpecialFilter) tile).getSpecialFilter());
+            player.setHeldItem(hand,held);
+            return EnumActionResult.SUCCESS;
         }
-        return comparator.isBetween(stack1, stack2, stack, setting) == inverted;
+        return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
     }
 
-    private IFilterComparator findComparator(ItemStack stack1, ItemStack stack2, int offset) {
-        if(stack1.isEmpty() && stack2.isEmpty())
-            return FilterUtil.ANY;
-        List<IFilterComparator> comparators = FilterUtil.getComparators(stack1, stack2);
-        return comparators.get(offset % comparators.size());
-    }
-
-    public void incrementOffset(ItemStack filterStack) {
+    public void setFilter(ItemStack filterStack, IFilter filter) {
         NBTTagCompound compound = getOrCreateTagCompound(filterStack);
-        ItemStack stack1 = new ItemStack(compound.getCompoundTag("stack1"));
-        ItemStack stack2 = new ItemStack(compound.getCompoundTag("stack2"));
-        int offset = compound.getInteger("offset");
-        IFilterComparator comparator = findComparator(stack1, stack2, offset + 1);
-        compound.setInteger("offset", offset + 1);
-        compound.setString("comparator", comparator.getName());
+        compound.setTag("filter",filter.writeToNBT(new NBTTagCompound()));
     }
 
-    public void setInvert(ItemStack filterStack, boolean inverted) {
-        NBTTagCompound compound = getOrCreateTagCompound(filterStack);
-        compound.setBoolean("invert", inverted);
-    }
-
-    public boolean getInvert(ItemStack filterStack) {
+    @Override
+    public IFilter getFilter(ItemStack filterStack) {
         NBTTagCompound compound = filterStack.getTagCompound();
         if (compound == null)
-            return false;
-        return compound.getBoolean("invert");
-    }
-
-    public void setSetting(ItemStack filterStack, EnumFilterSetting setting) {
-        NBTTagCompound compound = getOrCreateTagCompound(filterStack);
-        compound.setInteger("setting", setting.ordinal());
-    }
-
-    public EnumFilterSetting getSetting(ItemStack filterStack) {
-        NBTTagCompound compound = filterStack.getTagCompound();
-        if (compound == null)
-            return EnumFilterSetting.STRICT;
-        return EnumFilterSetting.values()[compound.getInteger("setting")];
-    }
-
-    public void setStacks(ItemStack filterStack, ItemStack stack1, ItemStack stack2) {
-        NBTTagCompound compound = getOrCreateTagCompound(filterStack);
-        compound.setTag("stack1", stack1.serializeNBT());
-        compound.setTag("stack2", stack2.serializeNBT());
-    }
-
-    public void setStacks(ItemStack filterStack, ItemStack stack) {
-        setStacks(filterStack, stack, stack);
+            return FilterUtil.FILTER_ANY;
+        return FilterUtil.deserializeFilter(compound.getCompoundTag("filter"));
     }
 
     private NBTTagCompound getOrCreateTagCompound(ItemStack filterStack) {
@@ -128,29 +75,11 @@ public class ItemGolemEye extends ItemBase implements IFilterItem {
     }
 
     @Override
-    public String formatFilter(ItemStack filterStack) {
-        NBTTagCompound compound = filterStack.getTagCompound();
-        if (compound == null)
-            return I18n.format("embers.filter.any");
-        ItemStack stack1 = new ItemStack(compound.getCompoundTag("stack1"));
-        ItemStack stack2 = new ItemStack(compound.getCompoundTag("stack2"));
-        String comparatorName = compound.getString("comparator");
-        int offset = compound.getInteger("offset");
-        EnumFilterSetting setting = EnumFilterSetting.values()[compound.getInteger("setting")];
-        boolean inverted = compound.getBoolean("invert");
-
-        IFilterComparator comparator = FilterUtil.getComparator(comparatorName);
-        if (comparator == null) {
-            comparator = findComparator(stack1, stack2, offset);
-        }
-        return comparator.format(stack1,stack2,setting,inverted);
-    }
-
-    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if (!stack.hasTagCompound())
             return;
-        tooltip.add(formatFilter(stack));
+        IFilter filter = getFilter(stack);
+        tooltip.add(filter.formatFilter());
     }
 
     public void reset(ItemStack filterStack) {

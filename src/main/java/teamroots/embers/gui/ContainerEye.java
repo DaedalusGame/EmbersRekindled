@@ -36,9 +36,11 @@ public class ContainerEye extends Container {
 
     IInventory filterInventory = new InventoryBasic("EyeFilter", true,2);
 
+    ItemStack stack1;
+    ItemStack stack2;
     boolean inverted;
     EnumFilterSetting flag = EnumFilterSetting.STRICT;
-    IFilterComparator filter;
+    IFilterComparator comparator;
     int filterOffset;
 
     public ContainerEye(EntityPlayer player) {
@@ -79,7 +81,9 @@ public class ContainerEye extends Container {
         NBTTagCompound compound = stack.getTagCompound();
         if(compound != null) {
             String comparatorName = compound.getString("comparator");
-            filter = FilterUtil.getComparator(comparatorName);
+            stack1 = new ItemStack(compound.getCompoundTag("stack1"));
+            stack2 = new ItemStack(compound.getCompoundTag("stack2"));
+            comparator = FilterUtil.getComparator(comparatorName);
             filterOffset = compound.getInteger("offset");
             inverted = compound.getBoolean("inverted");
             flag = EnumFilterSetting.get(compound.getInteger("setting"));
@@ -90,6 +94,7 @@ public class ContainerEye extends Container {
         switch(button)
         {
             case FINISH:
+                writeToStack();
                 break;
             case LEFT:
                 moveLeft();
@@ -104,6 +109,19 @@ public class ContainerEye extends Container {
                 toggleInvert();
                 break;
         }
+    }
+
+    public void writeToStack() {
+        NBTTagCompound compound = stack.getTagCompound();
+        if(compound == null)
+            compound = new NBTTagCompound();
+        compound.setString("comparator", comparator.getName());
+        compound.setInteger("offset", filterOffset);
+        compound.setBoolean("inverted", inverted);
+        compound.setInteger("setting", flag.ordinal());
+        compound.setTag("stack1", stack1.serializeNBT());
+        compound.setTag("stack2", stack2.serializeNBT());
+        stack.setTagCompound(compound);
     }
 
     public void toggleInvert() {
@@ -129,7 +147,9 @@ public class ContainerEye extends Container {
     }
 
     private void refresh() {
-        filter = findComparator(filterInventory.getStackInSlot(0), filterInventory.getStackInSlot(1), filterOffset);
+        stack1 = filterInventory.getStackInSlot(0);
+        stack2 = filterInventory.getStackInSlot(1);
+        comparator = findComparator(stack1, stack2, filterOffset);
     }
 
     private IFilterComparator findComparator(ItemStack stack1, ItemStack stack2, int offset) {

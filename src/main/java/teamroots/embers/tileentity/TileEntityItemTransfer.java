@@ -18,9 +18,13 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
+import teamroots.embers.api.item.FilterAny;
+import teamroots.embers.api.item.FilterItem;
+import teamroots.embers.api.item.IFilter;
 import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.FilterUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
@@ -37,6 +41,8 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
     Random random = new Random();
     boolean syncFilter;
     IItemHandler outputSide;
+
+    IFilter filter = FilterUtil.FILTER_ANY;
 
     public TileEntityItemTransfer() {
         super();
@@ -57,26 +63,17 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
 
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                if (!filterItem.isEmpty()) {
-                    if (acceptsItem(stack))
-                        return super.insertItem(slot, stack, simulate);
-                    else
-                        return stack;
-                }
-                return super.insertItem(slot, stack, simulate);
+                if (acceptsItem(stack))
+                    return super.insertItem(slot, stack, simulate);
+                else
+                    return stack;
             }
         };
         outputSide = Misc.makeRestrictedItemHandler(inventory,false,true);
     }
 
     public boolean acceptsItem(ItemStack stack) {
-        if (filterItem.isEmpty())
-            return true;
-        Item item = filterItem.getItem();
-        if (item instanceof IFilterItem)
-            return ((IFilterItem) item).acceptsItem(filterItem,stack);
-        else
-            return item == stack.getItem() && filterItem.getItemDamage() == stack.getItemDamage();
+        return filter.acceptsItem(stack);
     }
 
     @Override
@@ -100,6 +97,7 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
         if (tag.hasKey("filter")) {
             filterItem = new ItemStack(tag.getCompoundTag("filter"));
         }
+        setupFilter();
     }
 
     @Override
@@ -168,11 +166,23 @@ public class TileEntityItemTransfer extends TileEntityItemPipeBase {
                 this.filterItem = ItemStack.EMPTY;
                 world.setBlockState(pos, state.withProperty(BlockItemTransfer.filter, false), 10);
             }
+            setupFilter();
+
             syncFilter = true;
             markDirty();
             return true;
         }
         return true;
+    }
+
+    private void setupFilter() {
+        Item item = this.filterItem.getItem();
+        if(item instanceof IFilterItem)
+            filter = ((IFilterItem) item).getFilter(this.filterItem);
+        else if(!this.filterItem.isEmpty())
+            filter = new FilterItem(this.filterItem);
+        else
+            filter = FilterUtil.FILTER_ANY;
     }
 
     @Override

@@ -3,7 +3,9 @@ package teamroots.embers.tileentity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -15,21 +17,28 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import teamroots.embers.SoundManager;
-import teamroots.embers.api.tile.IOrderable;
+import teamroots.embers.api.item.IFilter;
+import teamroots.embers.api.tile.IOrderDestination;
+import teamroots.embers.api.tile.IOrderSource;
+import teamroots.embers.api.tile.OrderStack;
 import teamroots.embers.item.ItemTinkerHammer;
 import teamroots.embers.util.EnumPipeConnection;
+import teamroots.embers.util.FilterUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
-public class TileEntityItemExtractor extends TileEntityItemPipeBase implements IOrderable {
+public class TileEntityItemExtractor extends TileEntityItemPipeBase implements IOrderDestination {
     Random random = new Random();
     EnumPipeConnection[] connections = new EnumPipeConnection[EnumFacing.VALUES.length];
     IItemHandler[] sideHandlers;
     boolean syncConnections;
     boolean active;
-    int currentOrder;
+    List<OrderStack> orders = new ArrayList<>();
 
     public TileEntityItemExtractor() {
         super();
@@ -87,7 +96,11 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         writeConnections(tag);
-        tag.setInteger("order", currentOrder);
+        NBTTagList tagOrders = new NBTTagList();
+        for (OrderStack order : orders) {
+            tagOrders.appendTag(order.writeToNBT(new NBTTagCompound()));
+        }
+        tag.setTag("orders", tagOrders);
         return tag;
     }
 
@@ -115,7 +128,13 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
             setInternalConnection(EnumFacing.WEST, EnumPipeConnection.fromIndex(tag.getInteger("west")));
         if (tag.hasKey("east"))
             setInternalConnection(EnumFacing.EAST, EnumPipeConnection.fromIndex(tag.getInteger("east")));
-        currentOrder = tag.getInteger("order");
+        if (tag.hasKey("orders")) {
+            NBTTagList tagOrders = tag.getTagList("orders",10);
+            orders.clear();
+            for (NBTBase tagOrder : tagOrders) {
+                orders.add(new OrderStack((NBTTagCompound) tagOrder));
+            }
+        }
     }
 
     @Override
@@ -287,13 +306,36 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
     }
 
     @Override
-    public void order(TileEntity source, ItemStack filter, int orderSize) {
-        currentOrder += orderSize;
+    public void order(TileEntity source, IFilter filter, int orderSize) {
+        OrderStack order = getOrder(source);
+        if(order == null)
+            orders.add(new OrderStack(source.getPos(), filter, orderSize));
+        else if(Objects.equals(order.getFilter(), filter))
+            order.increment(orderSize);
+        else {
+            order.reset(filter, orderSize);
+        }
     }
 
     @Override
     public void resetOrder(TileEntity source) {
-        currentOrder = 0;
+        orders.removeIf(order -> order.getPos().equals(source.getPos()));
+    }
+
+    public OrderStack getOrder(TileEntity source) {
+        for (OrderStack order : orders) {
+            if(order.getPos().equals(source.getPos()))
+                return order;
+        }
+        return null;
+    }
+
+    private void cleanupOrders() {
+        orders.removeIf(this::isOrderInvalid);
+    }
+
+    private boolean isOrderInvalid(OrderStack order) {
+        return order.getSize() <= 0 || order.getSource(world) == null;
     }
 
     @Override
@@ -301,17 +343,33 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
         if (world.isRemote && clogged)
             Misc.spawnClogParticles(world, pos, 1, 0.25f);
         if (!world.isRemote) {
+            cleanupOrders();
             active = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+            OrderStack currentOrder = orders.isEmpty() ? null : orders.get(0);
+            IFilter filter = FilterUtil.FILTER_ANY;
+            if(active)
+                currentOrder = null;
+            else if(currentOrder != null)
+                filter = currentOrder.getFilter();
+
+            IItemHandler invDest = null;
+            if(currentOrder != null) {
+                IOrderSource destination = currentOrder.getSource(world);
+                if(destination != null)
+                    invDest = destination.getItemHandler();
+            }
+
             for (EnumFacing facing : EnumFacing.VALUES) {
                 if (!isConnected(facing))
                     continue;
                 TileEntity tile = world.getTileEntity(pos.offset(facing));
                 if (tile != null && !(tile instanceof TileEntityItemPipeBase) && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
-                    if (active || currentOrder > 0) {
+                    if (active || (currentOrder != null && currentOrder.getSize() > 0)) {
                         IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
                         int slot = -1;
                         for (int j = 0; j < handler.getSlots() && slot == -1; j++) {
-                            if (!handler.extractItem(j, 1, true).isEmpty()) {
+                            ItemStack extracted = handler.extractItem(j, 1, true);
+                            if (!extracted.isEmpty() && filter.acceptsItem(extracted,invDest)) {
                                 slot = j;
                             }
                         }
@@ -320,7 +378,8 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
                             if (this.inventory.insertItem(0, extracted, true).isEmpty()) {
                                 handler.extractItem(slot, 1, false);
                                 this.inventory.insertItem(0, extracted, false);
-                                currentOrder = Math.max(0, currentOrder -extracted.getCount());
+                                if(currentOrder != null)
+                                    currentOrder.deplete(extracted.getCount());
                             }
                         }
                         setFrom(facing, true);

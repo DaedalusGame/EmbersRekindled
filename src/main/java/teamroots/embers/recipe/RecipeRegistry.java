@@ -12,6 +12,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,6 +40,8 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.item.FilterItem;
+import teamroots.embers.api.item.FilterSieve;
 import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.power.IEmberCapability;
@@ -50,6 +53,8 @@ import teamroots.embers.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Filter;
 
 public class RecipeRegistry {
 	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<>();
@@ -1102,9 +1107,6 @@ public class RecipeRegistry {
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
 		event.getRegistry().register(new AshenCloakUnsocketRecipe().setRegistryName(getRL("cloak_unsocketing")));
-		event.getRegistry().register(new GolemEyeFilterRecipe().setRegistryName(getRL("eye_filter")));
-		event.getRegistry().register(new GolemEyeOffsetRecipe().setRegistryName(getRL("eye_offset")));
-		event.getRegistry().register(new GolemEyeMergeRecipe().setRegistryName(getRL("eye_merge")));
 
 		if(ConfigManager.isBaublesIntegrationEnabled())
 			BaublesIntegration.registerRecipes(event);
@@ -1408,7 +1410,8 @@ public class RecipeRegistry {
 		dawnstoneAnvilRecipes.add(new AnvilBreakdownRecipe()); //BREAKDOWN BREAKDOWN
 		dawnstoneAnvilRecipes.add(new CreativeHeatRecipe()); //Creative Heat
 
-		FilterUtil.registerComparator(new IFilterComparator() {
+		FilterUtil.registerComparator(FilterUtil.ANY);
+		/*FilterUtil.registerComparator(new IFilterComparator() {
 			@Override
 			public int getPriority() {
 				return 0;
@@ -1477,7 +1480,7 @@ public class RecipeRegistry {
 				IFilterItem filterItem2 = (IFilterItem) stack2.getItem();
 				return I18n.format("embers.filter.and",filterItem1.formatFilter(stack1), filterItem2.formatFilter(stack2));
 			}
-		}); //AND
+		}); //AND*/
 		FilterUtil.registerComparator(new ComparatorMatch("strict",35) {
 			@Override
 			public boolean match(ItemStack stack1, ItemStack stack2) {
@@ -1543,7 +1546,20 @@ public class RecipeRegistry {
 			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
 				return I18n.format("embers.filter.name",stack1.getDisplayName());
 			}
-		}); //NBT
+		}); //Name
+		FilterUtil.registerComparator(new ComparatorMatch("mod",50) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				ResourceLocation resLoc1 = stack1.getItem().getRegistryName();
+				ResourceLocation resLoc2 = stack2.getItem().getRegistryName();
+				return resLoc1.getResourceDomain().equals(resLoc2.getResourceDomain());
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				return I18n.format("embers.filter.mod",stack1.getItem().getRegistryName().getResourceDomain());
+			}
+		});
 		FilterUtil.registerComparator(new ComparatorNormal("durability",30) {
 			@Override
 			public boolean match(ItemStack stack1, ItemStack stack2) {
@@ -1572,6 +1588,34 @@ public class RecipeRegistry {
 					return format;
 			}
 		}); //DURABILITY
+		FilterUtil.registerComparator(new ComparatorNormal("fuel",40) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return TileEntityFurnace.getItemBurnTime(stack1) > 0 && TileEntityFurnace.getItemBurnTime(stack2) > 0;
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				return TileEntityFurnace.getItemBurnTime(stack);
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				String format;
+				Comparable a = getCompare(stack1);
+				Comparable b = getCompare(stack2);
+				if (a.compareTo(b) != 0)
+					format = I18n.format("embers.filter.fuel", min(a, b), max(a, b));
+				else if (setting == EnumFilterSetting.STRICT)
+					format = I18n.format("embers.filter.fuel.strict", min(a, b), max(a, b));
+				else
+					format = I18n.format("embers.filter.fuel.fuzzy", min(a, b), max(a, b));
+				if(inverted)
+					return I18n.format("embers.filter.invert",format);
+				else
+					return format;
+			}
+		}); //FUEL
 		FilterUtil.registerComparator(new ComparatorMatch("has_fluid",120) {
 			@Override
 			public boolean match(ItemStack stack1, ItemStack stack2) {
@@ -1582,7 +1626,7 @@ public class RecipeRegistry {
 			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
 				return I18n.format("embers.filter.has_fluid");
 			}
-		}); //HAS EMBER
+		}); //HAS FLUID
 		FilterUtil.registerComparator(new ComparatorNormal("fluid",125) {
 			private boolean areFluidsEqual(FluidStack a, FluidStack b) {
 				if(a == null && b == null)
@@ -1630,7 +1674,7 @@ public class RecipeRegistry {
 				else
 					return I18n.format("embers.filter.fluid.fuzzy", min(a, b), max(a, b), name);
 			}
-		}); //EMBER
+		}); //FLUID
 		FilterUtil.registerComparator(new ComparatorMatch("has_ember",150) {
 			@Override
 			public boolean match(ItemStack stack1, ItemStack stack2) {
@@ -1670,6 +1714,34 @@ public class RecipeRegistry {
 					return I18n.format("embers.filter.ember.fuzzy", min(a, b), max(a, b));
 			}
 		}); //EMBER
+		FilterUtil.registerComparator(new ComparatorNormal("ember_fuel",160) {
+			@Override
+			public boolean match(ItemStack stack1, ItemStack stack2) {
+				return EmbersAPI.getEmberValue(stack1) > 0 && EmbersAPI.getEmberValue(stack2) > 0;
+			}
+
+			@Override
+			public Comparable getCompare(ItemStack stack) {
+				double ember = EmbersAPI.getEmberValue(stack);
+				if(ember > 0) {
+					return ember;
+				} else {
+					return 0;
+				}
+			}
+
+			@Override
+			public String format(ItemStack stack1, ItemStack stack2, EnumFilterSetting setting, boolean inverted) {
+				Comparable a = getCompare(stack1);
+				Comparable b = getCompare(stack2);
+				if (a.compareTo(b) != 0)
+					return I18n.format("embers.filter.ember_fuel", min(a, b), max(a, b));
+				else if (setting == EnumFilterSetting.STRICT)
+					return I18n.format("embers.filter.ember_fuel.strict", min(a, b), max(a, b));
+				else
+					return I18n.format("embers.filter.ember_fuel.fuzzy", min(a, b), max(a, b));
+			}
+		}); //EMBER FUEL
 		FilterUtil.registerComparator(new ComparatorMatch("has_forge_energy",200) {
 			@Override
 			public boolean match(ItemStack stack1, ItemStack stack2) {
@@ -1709,6 +1781,12 @@ public class RecipeRegistry {
 					return I18n.format("embers.filter.forge_energy.fuzzy", min(a, b), max(a, b));
 			}
 		}); //FE
+
+		FilterUtil.registerFilter(FilterUtil.FILTER_ANY);
+		FilterUtil.registerFilter(FilterUtil.FILTER_EXISTING);
+		FilterUtil.registerFilter(FilterUtil.FILTER_NOT_EXISTING);
+		FilterUtil.registerFilter(FilterSieve.RESOURCE_LOCATION, FilterSieve::new);
+		FilterUtil.registerFilter(FilterItem.RESOURCE_LOCATION, FilterItem::new);
 	}
 
 	private Comparable min(Comparable a, Comparable b) {

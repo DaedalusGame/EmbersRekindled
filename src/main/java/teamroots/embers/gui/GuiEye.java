@@ -1,7 +1,6 @@
 package teamroots.embers.gui;
 
 import com.google.common.collect.Lists;
-import com.sun.xml.internal.ws.api.server.Container;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -124,7 +123,7 @@ public class GuiEye extends GuiContainer {
         drawTexturedModalRect(textX, textY, 0, 86, 212, 33);
 
         ContainerEye eye = (ContainerEye)inventorySlots;
-        IFilterComparator comparator = eye.filter;
+        IFilterComparator comparator = eye.comparator;
         if(comparator != null) {
             ItemStack left = eye.filterInventory.getStackInSlot(0);
             ItemStack right = eye.filterInventory.getStackInSlot(1);

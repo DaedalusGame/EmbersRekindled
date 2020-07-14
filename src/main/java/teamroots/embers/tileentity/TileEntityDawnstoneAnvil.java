@@ -18,6 +18,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.api.item.IFilter;
 import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.network.PacketHandler;
@@ -25,6 +26,7 @@ import teamroots.embers.network.message.MessageAnvilSparksFX;
 import teamroots.embers.network.message.MessageStamperFX;
 import teamroots.embers.recipe.DawnstoneAnvilRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.FilterUtil;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nonnull;
@@ -32,7 +34,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityBase, IHammerable {
+public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityBase, IHammerable, ISpecialFilter {
 	int ticksExisted = 0;
 	int progress = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(2){
@@ -290,5 +292,10 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 	@Override
 	public boolean isValid() {
 		return isValid(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
+	}
+
+	@Override
+	public IFilter getSpecialFilter() {
+		return FilterUtil.FILTER_NOT_EXISTING;
 	}
 }

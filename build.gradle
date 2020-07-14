@@ -5,14 +5,17 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven { url = "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.wynprice.cursemaven:CurseMaven:1.2.3'
     }
 }
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
+apply plugin: 'com.wynprice.cursemaven'
 
 version = "1.13-hotfix3"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -52,6 +55,7 @@ dependencies {
     compile "mezz.jei:jei_1.12.2:4.8.3.128"
     compile "com.azanor.baubles:Baubles:1.12-1.5.2"
     compile "com.teamwizardry.librarianlib:librarianlib-1.12:4.0-SNAPSHOT:deobf"
+    deobfCompile curse.resolveUrl("https://www.curseforge.com/minecraft/mc-mods/mysticalmechanics/files/3001227")
 }
 
 task deobfJar(type: Jar) {
