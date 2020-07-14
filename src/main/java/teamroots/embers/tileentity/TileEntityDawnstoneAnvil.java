@@ -18,7 +18,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.RegistryManager;
-import teamroots.embers.api.item.IFilter;
+import teamroots.embers.api.filter.IFilter;
 import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IHammerable;
 import teamroots.embers.network.PacketHandler;

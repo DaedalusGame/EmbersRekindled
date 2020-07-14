@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import teamroots.embers.Embers;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEyeButton;
-import teamroots.embers.util.IFilterComparator;
+import teamroots.embers.api.filter.IFilterComparator;
 import teamroots.embers.util.Vec2i;
 
 import java.io.IOException;

@@ -1,13 +1,12 @@
-package teamroots.embers.api.item;
+package teamroots.embers.api.filter;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import teamroots.embers.Embers;
 
 public class FilterAny implements IFilter {
-    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(Embers.MODID, "any");
+    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation("embers", "any");
 
     @Override
     public ResourceLocation getType() {

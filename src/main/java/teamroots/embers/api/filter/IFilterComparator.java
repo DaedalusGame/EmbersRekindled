@@ -1,4 +1,4 @@
-package teamroots.embers.util;
+package teamroots.embers.api.filter;
 
 import net.minecraft.item.ItemStack;
 

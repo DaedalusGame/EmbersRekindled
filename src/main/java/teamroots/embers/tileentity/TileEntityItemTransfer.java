@@ -5,32 +5,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.EventManager;
-import teamroots.embers.api.item.FilterAny;
-import teamroots.embers.api.item.FilterItem;
-import teamroots.embers.api.item.IFilter;
+import teamroots.embers.api.filter.FilterItem;
+import teamroots.embers.api.filter.IFilter;
 import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.block.BlockItemTransfer;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.FilterUtil;
 import teamroots.embers.util.Misc;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 public class TileEntityItemTransfer extends TileEntityItemPipeBase {

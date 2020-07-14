@@ -8,9 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import teamroots.embers.util.EnumFilterSetting;
+import teamroots.embers.api.filter.EnumFilterSetting;
 import teamroots.embers.util.FilterUtil;
-import teamroots.embers.util.IFilterComparator;
+import teamroots.embers.api.filter.IFilterComparator;
 import teamroots.embers.util.Vec2i;
 
 import java.util.List;

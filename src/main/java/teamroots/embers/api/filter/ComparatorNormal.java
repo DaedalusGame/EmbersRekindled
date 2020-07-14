@@ -1,6 +1,4 @@
-package teamroots.embers.util;
-
-import net.minecraft.item.ItemStack;
+package teamroots.embers.api.filter;
 
 public abstract class ComparatorNormal implements IFilterComparator {
     private String name;

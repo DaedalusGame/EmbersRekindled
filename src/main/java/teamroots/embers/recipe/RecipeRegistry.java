@@ -40,9 +40,11 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
-import teamroots.embers.api.item.FilterItem;
-import teamroots.embers.api.item.FilterSieve;
-import teamroots.embers.api.item.IFilterItem;
+import teamroots.embers.api.filter.ComparatorMatch;
+import teamroots.embers.api.filter.ComparatorNormal;
+import teamroots.embers.api.filter.EnumFilterSetting;
+import teamroots.embers.api.filter.FilterItem;
+import teamroots.embers.api.filter.FilterSieve;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.block.BlockSeedNew;
@@ -53,8 +55,6 @@ import teamroots.embers.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.logging.Filter;
 
 public class RecipeRegistry {
 	public static ArrayList<ItemMeltingRecipe> meltingRecipes = new ArrayList<>();

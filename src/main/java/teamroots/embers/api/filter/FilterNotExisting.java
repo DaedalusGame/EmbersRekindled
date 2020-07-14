@@ -1,13 +1,12 @@
-package teamroots.embers.api.item;
+package teamroots.embers.api.filter;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
-import teamroots.embers.Embers;
 
 public class FilterNotExisting extends FilterExisting {
-    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(Embers.MODID, "not_existing");
+    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation("embers", "not_existing");
 
     @Override
     public ResourceLocation getType() {

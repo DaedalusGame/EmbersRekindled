@@ -1,18 +1,15 @@
-package teamroots.embers.api.item;
+package teamroots.embers.api.filter;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import teamroots.embers.Embers;
-import teamroots.embers.util.EnumFilterSetting;
 import teamroots.embers.util.FilterUtil;
-import teamroots.embers.util.IFilterComparator;
 
 import java.util.List;
 import java.util.Objects;
 
 public class FilterSieve implements IFilter {
-    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(Embers.MODID, "sieve");
+    public static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation("embers", "sieve");
 
     private ItemStack stack1;
     private ItemStack stack2;

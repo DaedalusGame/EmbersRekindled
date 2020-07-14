@@ -1,4 +1,4 @@
-package teamroots.embers.api.item;
+package teamroots.embers.api.filter;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

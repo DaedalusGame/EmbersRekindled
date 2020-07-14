@@ -1,14 +1,16 @@
 package teamroots.embers.util;
 
-import mysticalmechanics.api.lubricant.ILubricant;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import teamroots.embers.api.item.FilterAny;
-import teamroots.embers.api.item.FilterExisting;
-import teamroots.embers.api.item.FilterNotExisting;
-import teamroots.embers.api.item.IFilter;
+import teamroots.embers.api.filter.ComparatorMatch;
+import teamroots.embers.api.filter.EnumFilterSetting;
+import teamroots.embers.api.filter.IFilterComparator;
+import teamroots.embers.api.filter.FilterAny;
+import teamroots.embers.api.filter.FilterExisting;
+import teamroots.embers.api.filter.FilterNotExisting;
+import teamroots.embers.api.filter.IFilter;
 
 import java.util.*;
 import java.util.function.Function;

@@ -1,6 +1,5 @@
 package teamroots.embers.item;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,14 +9,11 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import teamroots.embers.Embers;
-import teamroots.embers.api.item.FilterSieve;
-import teamroots.embers.api.item.IFilter;
+import teamroots.embers.api.filter.IFilter;
 import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.gui.GuiHandler;
 import teamroots.embers.tileentity.ISpecialFilter;
-import teamroots.embers.util.EnumFilterSetting;
 import teamroots.embers.util.FilterUtil;
-import teamroots.embers.util.IFilterComparator;
 
 import javax.annotation.Nullable;
 import java.util.List;

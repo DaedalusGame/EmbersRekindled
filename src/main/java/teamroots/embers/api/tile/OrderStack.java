@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
-import teamroots.embers.api.item.IFilter;
+import teamroots.embers.api.filter.IFilter;
 import teamroots.embers.util.FilterUtil;
 
 public class OrderStack {
