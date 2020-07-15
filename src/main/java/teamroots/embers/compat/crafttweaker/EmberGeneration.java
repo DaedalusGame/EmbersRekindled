@@ -16,6 +16,7 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.util.Misc;
 
+import java.awt.*;
 import java.util.function.Predicate;
 
 @ZenRegister
@@ -60,8 +61,8 @@ public class EmberGeneration {
     }
 
     @ZenMethod
-    public static void addBoilerFluid(ILiquidStack liquid, ILiquidStack gas, double multiplier) {
-        CraftTweakerAPI.apply(new AddBoilerFluid(liquid, gas, multiplier));
+    public static void addBoilerFluid(ILiquidStack liquid, ILiquidStack gas, double multiplier, int[] color) {
+        CraftTweakerAPI.apply(new AddBoilerFluid(liquid, gas, multiplier, CTUtil.parseColor(color)));
     }
 
     @ZenMethod
@@ -70,8 +71,8 @@ public class EmberGeneration {
     }
 
     @ZenMethod
-    public static void addSteamEngineFuel(ILiquidStack liquid, double multiplier) {
-        CraftTweakerAPI.apply(new AddSteamEngineFuel(liquid, multiplier));
+    public static void addSteamEngineFuel(ILiquidStack liquid, double multiplier, int time, int[] color) {
+        CraftTweakerAPI.apply(new AddSteamEngineFuel(liquid, multiplier, time, CTUtil.parseColor(color)));
     }
 
     @ZenMethod
@@ -237,16 +238,18 @@ public class EmberGeneration {
         double multiplier;
         ILiquidStack liquid;
         ILiquidStack gas;
+        Color color;
 
-        public AddBoilerFluid(ILiquidStack liquid, ILiquidStack gas, double multiplier) {
+        public AddBoilerFluid(ILiquidStack liquid, ILiquidStack gas, double multiplier, Color color) {
             this.liquid = liquid;
             this.gas = gas;
             this.multiplier = multiplier;
+            this.color = color;
         }
 
         @Override
         public void apply() {
-            EmbersAPI.registerBoilerFluid(CraftTweakerMC.getLiquidStack(liquid).getFluid(),CraftTweakerMC.getLiquidStack(gas).getFluid(),multiplier);
+            EmbersAPI.registerBoilerFluid(CraftTweakerMC.getLiquidStack(liquid).getFluid(),CraftTweakerMC.getLiquidStack(gas).getFluid(),multiplier,color);
         }
 
         @Override
@@ -277,21 +280,25 @@ public class EmberGeneration {
     public static class AddSteamEngineFuel implements IAction
     {
         double power;
+        int time;
         ILiquidStack liquid;
+        Color color;
 
-        public AddSteamEngineFuel(ILiquidStack liquid, double power) {
+        public AddSteamEngineFuel(ILiquidStack liquid, double power, int time, Color color) {
             this.liquid = liquid;
             this.power = power;
+            this.time = time;
+            this.color = color;
         }
 
         @Override
         public void apply() {
-            EmbersAPI.registerSteamEngineFuel(CraftTweakerMC.getLiquidStack(liquid).getFluid(),power);
+            EmbersAPI.registerSteamEngineFuel(CraftTweakerMC.getLiquidStack(liquid).getFluid(),power,time,color);
         }
 
         @Override
         public String describe() {
-            return "Adding steam engine fuel "+liquid.toString()+" -> "+power;
+            return "Adding steam engine fuel "+liquid.toString()+" -> "+power+" for "+time+"ticks";
         }
     }
 

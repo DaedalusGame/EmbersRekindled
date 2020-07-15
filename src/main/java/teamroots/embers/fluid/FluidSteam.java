@@ -16,10 +16,6 @@ public class FluidSteam extends Fluid {
         setTemperature(750);
         setGaseous(true);
         setUnlocalizedName("steam");
-    }
-
-    @Override
-    public int getColor() {
-        return Color.WHITE.getRGB();
+        setColor(Color.WHITE);
     }
 }

@@ -15,6 +15,8 @@ import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.util.FluidUtil;
 
+import java.awt.*;
+
 public class EmbersAPI {
     public static IEmbersAPI IMPL;
 
@@ -111,8 +113,8 @@ public class EmbersAPI {
         return IMPL.getMetalCoefficient(state);
     }
 
-    public static void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier) {
-        IMPL.registerBoilerFluid(fluid, gas, multiplier);
+    public static void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier, Color color) {
+        IMPL.registerBoilerFluid(fluid, gas, multiplier, color);
     }
 
     public static void registerBoilerFluid(ILiquidFuel fuel) {
@@ -127,8 +129,8 @@ public class EmbersAPI {
         return IMPL.getBoilerFluid(fluidstack);
     }
 
-    public static void registerSteamEngineFuel(Fluid fluid, double power) {
-        IMPL.registerSteamEngineFuel(fluid, power);
+    public static void registerSteamEngineFuel(Fluid fluid, double power, int time, Color color) {
+        IMPL.registerSteamEngineFuel(fluid, power, time, color);
     }
 
     public static void registerSteamEngineFuel(ILiquidFuel fuel) {

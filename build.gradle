@@ -55,7 +55,7 @@ dependencies {
     compile "mezz.jei:jei_1.12.2:4.8.3.128"
     compile "com.azanor.baubles:Baubles:1.12-1.5.2"
     compile "com.teamwizardry.librarianlib:librarianlib-1.12:4.0-SNAPSHOT:deobf"
-    deobfCompile curse.resolveUrl("https://www.curseforge.com/minecraft/mc-mods/mysticalmechanics/files/3001227")
+    deobfCompile curse.resolveUrl("https://www.curseforge.com/minecraft/mc-mods/mysticalmechanics/files/3003263")
 }
 
 task deobfJar(type: Jar) {

@@ -34,10 +34,81 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 
 public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
+    class BurningFuel {
+        ItemStack solidFuel = ItemStack.EMPTY;
+        FluidStack liquidFuel;
+        int timeLeft;
+
+        public BurningFuel() {
+
+        }
+
+        public BurningFuel(ItemStack solidFuel, int timeLeft) {
+            this.solidFuel = solidFuel;
+            this.timeLeft = timeLeft;
+        }
+
+        public BurningFuel(FluidStack liquidFuel, int timeLeft) {
+            this.liquidFuel = liquidFuel;
+            this.timeLeft = timeLeft;
+        }
+
+        public void tick() {
+            timeLeft--;
+        }
+
+        public void reset() {
+            solidFuel = ItemStack.EMPTY;
+            liquidFuel = null;
+            timeLeft = 0;
+        }
+
+        public boolean isSolid() {
+            return !solidFuel.isEmpty();
+        }
+
+        public boolean isLiquid() {
+            return liquidFuel != null;
+        }
+
+        public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+            if(liquidFuel != null)
+                tag.setTag("fluid", liquidFuel.writeToNBT(new NBTTagCompound()));
+            if(!solidFuel.isEmpty())
+                tag.setTag("item", solidFuel.serializeNBT());
+            tag.setInteger("timeLeft",timeLeft);
+            return tag;
+        }
+
+        public void readFromNBT(NBTTagCompound tag) {
+            if(tag.hasKey("fluid"))
+                liquidFuel = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("fluid"));
+            if(tag.hasKey("item"))
+                solidFuel = new ItemStack(tag.getCompoundTag("item"));
+            timeLeft = tag.getInteger("timeLeft");
+        }
+
+        public boolean isEmpty() {
+            return timeLeft <= 0;
+        }
+
+        public Color getColor() {
+            if(isSolid())
+                return new Color(72,72,72, 128);
+            if(isLiquid()) {
+                ILiquidFuel fuelHandler = EmbersAPI.getSteamEngineFuel(liquidFuel);
+                if(fuelHandler != null)
+                    return fuelHandler.getBurnColor(liquidFuel);
+            }
+            return new Color(0,0,0,0);
+        }
+    }
+
     public static int NORMAL_FLUID_THRESHOLD = 10;
     public static int NORMAL_FLUID_CONSUMPTION = 4;
     public static int GAS_CONSUMPTION = 20;
@@ -48,9 +119,11 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     public static final int SOUND_STEAM = 2;
     public static final int[] SOUND_IDS = new int[]{SOUND_BURN, SOUND_STEAM};
 
+    BurningFuel currentFuel = new BurningFuel();
+
     int ticksExisted = 0;
-    int burnProgress = 0;
-    int steamProgress = 0;
+    //int burnProgress = 0;
+    //int steamProgress = 0;
     HashSet<Integer> soundsPlaying = new HashSet<>();
     EnumFacing front = EnumFacing.UP;
     public FluidTank tank = new FluidTank(8000);
@@ -96,8 +169,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         super.writeToNBT(tag);
         tag.setDouble("mech_power", capability.power);
         tag.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
-        tag.setInteger("burnProgress", burnProgress);
-        tag.setInteger("steamProgress", steamProgress);
+        tag.setTag("progress", currentFuel.writeToNBT(new NBTTagCompound()));
         tag.setInteger("front", front.getIndex());
         tag.setTag("inventory", inventory.serializeNBT());
         return tag;
@@ -108,8 +180,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         super.readFromNBT(tag);
         capability.power = tag.getDouble("mech_power");
         tank.readFromNBT(tag.getCompoundTag("tank"));
-        burnProgress = tag.getInteger("burnProgress");
-        steamProgress = tag.getInteger("steamProgress");
+        currentFuel.readFromNBT(tag.getCompoundTag("progress"));
         inventory.deserializeNBT(tag.getCompoundTag("inventory"));
         front = EnumFacing.getFront(tag.getInteger("front"));
     }
@@ -198,60 +269,83 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         }
     }
 
+    private ItemStack copyWithSize(ItemStack stack, int size) {
+        stack = stack.copy();
+        stack.setCount(size);
+        return stack;
+    }
+
     @Override
     public void update() {
         IBlockState state = world.getBlockState(getPos());
         if (state.getBlock() instanceof BlockSteamEngine) {
             this.front = state.getValue(BlockSteamEngine.facing);
         }
-        FluidStack fluid = tank.getFluid();
-        ILiquidFuel fuelHandler = EmbersAPI.getSteamEngineFuel(fluid);
+
+        boolean dirty = false;
         double powerGenerated = 0;
         if (world.isRemote) {
             spawnParticles();
             handleSound();
         }
-        if (fluid != null && fuelHandler != null) { //Overclocked steam power
-            fluid = tank.drain(Math.min(GAS_CONSUMPTION, Math.max(fluid.amount - 1, 1)), false);
-            if (!world.isRemote) {
-                steamProgress++;
-                powerGenerated = Misc.getDiminishedPower(fuelHandler.getPower(fluid), MAX_POWER, 1);
-                tank.drain(fluid, true);
-                markDirty();
+
+        if(!world.isRemote && !currentFuel.isEmpty()) {
+            currentFuel.tick();
+            if (currentFuel.isEmpty()) {
+                currentFuel.reset();
+                dirty = true;
             }
-        } else {
-            if (steamProgress > 0) {
-                steamProgress = 0;
-                markDirty();
-            }
-            if (burnProgress == 0) { //Otherwise try normal power generation from water and coal
+        }
+
+        if (currentFuel.isEmpty()) {
+            FluidStack fluid = tank.getFluid();
+            ILiquidFuel fuelHandler = EmbersAPI.getSteamEngineFuel(fluid);
+            if (fluid != null && fuelHandler != null) { //Overclocked steam power
+                fluid = tank.drain(Math.min(GAS_CONSUMPTION, Math.max(fluid.amount - 1, 1)), false);
+                if (!world.isRemote) {
+                    currentFuel = new BurningFuel(fluid, fuelHandler.getTime(fluid));
+                    tank.drain(fluid, true);
+                    dirty = true;
+                }
+            } else { //Otherwise try normal power generation from water and coal
                 if (!world.isRemote && !inventory.getStackInSlot(0).isEmpty() && fluid != null && fluid.getFluid() == FluidRegistry.WATER && tank.getFluidAmount() >= NORMAL_FLUID_THRESHOLD) {
                     ItemStack fuel = inventory.getStackInSlot(0);
                     if (!fuel.isEmpty()) {
                         ItemStack fuelCopy = fuel.copy();
                         int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
                         if (burnTime > 0) {
-                            burnProgress = burnTime * FUEL_MULTIPLIER;
+                            currentFuel = new BurningFuel(copyWithSize(fuelCopy, 1), burnTime * FUEL_MULTIPLIER);
                             fuel.shrink(1);
                             if (fuel.isEmpty())
                                 inventory.setStackInSlot(0, fuelCopy.getItem().getContainerItem(fuelCopy));
-                            markDirty();
+                            dirty = true;
                         }
                     }
                 }
-            } else {
-                burnProgress--;
-                if (tank.getFluidAmount() >= NORMAL_FLUID_CONSUMPTION) {
-                    if (!world.isRemote) {
-                        tank.drain(NORMAL_FLUID_CONSUMPTION, true);
-                        powerGenerated = 20;
-                        markDirty();
-                    }
-                } else {
-                    burnProgress = 0; //Waste the rest of the fuel
-                }
             }
         }
+
+        if (currentFuel.isLiquid()) { //Generate liquid power
+            FluidStack fluid = currentFuel.liquidFuel;
+            ILiquidFuel fuelHandler = EmbersAPI.getSteamEngineFuel(fluid);
+            powerGenerated = Misc.getDiminishedPower(fuelHandler.getPower(fluid), MAX_POWER, 1);
+        }
+
+        if (currentFuel.isSolid()) { //Generate solid power
+            FluidStack fluid = tank.getFluid();
+            if (tank.getFluidAmount() >= NORMAL_FLUID_CONSUMPTION && fluid != null && fluid.getFluid() == FluidRegistry.WATER) {
+                if (!world.isRemote) {
+                    tank.drain(NORMAL_FLUID_CONSUMPTION, true);
+                    powerGenerated = 20;
+                    dirty = true;
+                }
+            } else {
+                currentFuel.reset(); //Waste the rest of the fuel
+            }
+        }
+
+        if(dirty)
+            markDirty();
 
         if (!world.isRemote && capability.getPower(null) != powerGenerated) {
             capability.setPower(powerGenerated, null);
@@ -260,9 +354,9 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     }
 
     private void spawnParticles() {
-        if (steamProgress == 0 && burnProgress == 0)
+        if (currentFuel.isEmpty())
             return;
-        boolean vapor = steamProgress > 0;
+        boolean vapor = currentFuel.isLiquid();
         for (int i = 0; i < 4; i++) {
             float offX = 0.09375f + 0.8125f * (float) Misc.random.nextInt(2);
             float offZ = 0.28125f + 0.4375f * (float) Misc.random.nextInt(2);
@@ -272,16 +366,18 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                 offZ = h;
             }
 
+            Color color = currentFuel.getColor();
+
             if (vapor)
                 ParticleUtil.spawnParticleVapor(world,
                         getPos().getX() + offX, getPos().getY() + 1.0f, getPos().getZ() + offZ,
                         0.025f * (Misc.random.nextFloat() - 0.5f), 0.125f * (Misc.random.nextFloat()), 0.025f * (Misc.random.nextFloat() - 0.5f),
-                        72, 72, 72, 0.5f, 0.5f, 2.0f + Misc.random.nextFloat(), 24);
+                        color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() / 255f, 0.5f, 2.0f + Misc.random.nextFloat(), 24);
             else
                 ParticleUtil.spawnParticleSmoke(world,
                         getPos().getX() + offX, getPos().getY() + 1.0f, getPos().getZ() + offZ,
                         0.025f * (Misc.random.nextFloat() - 0.5f), 0.125f * (Misc.random.nextFloat()), 0.025f * (Misc.random.nextFloat() - 0.5f),
-                        72, 72, 72, 0.5f, 2.0f + Misc.random.nextFloat(), 24);
+                        color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() / 255f, 2.0f + Misc.random.nextFloat(), 24);
         }
     }
 
@@ -323,9 +419,9 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     public boolean shouldPlaySound(int id) {
         switch (id) {
             case SOUND_BURN:
-                return burnProgress > 0;
+                return currentFuel.isSolid();
             case SOUND_STEAM:
-                return steamProgress > 0;
+                return currentFuel.isLiquid();
         }
         return false;
     }

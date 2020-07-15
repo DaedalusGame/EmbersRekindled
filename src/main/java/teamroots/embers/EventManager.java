@@ -248,6 +248,9 @@ public class EventManager {
         stitchFluid(event.getMap(), RegistryManager.fluid_molten_nickel);
         stitchFluid(event.getMap(), RegistryManager.fluid_molten_silver);
         stitchFluid(event.getMap(), RegistryManager.fluid_steam);
+        stitchFluid(event.getMap(), RegistryManager.fluid_crude_oil);
+        stitchFluid(event.getMap(), RegistryManager.fluid_oil);
+        stitchFluid(event.getMap(), RegistryManager.fluid_gas);
     }
 
     @SideOnly(Side.CLIENT)

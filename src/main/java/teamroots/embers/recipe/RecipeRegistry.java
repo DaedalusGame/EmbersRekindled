@@ -53,6 +53,7 @@ import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -277,9 +278,11 @@ public class RecipeRegistry {
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("gunpowder"),3.0);
 		EmbersAPI.registerCatalysisFuel(new OreIngredient("dustGlowstone"),4.0);
 
-		EmbersAPI.registerBoilerFluid(FluidRegistry.WATER,FluidRegistry.getFluid("steam"),5.0);
+		EmbersAPI.registerBoilerFluid(FluidRegistry.WATER,FluidRegistry.getFluid("steam"),5.0, new Color(255,255,255));
+		EmbersAPI.registerBoilerFluid(FluidRegistry.getFluid("oil_dwarf"), FluidRegistry.getFluid("gas_dwarf"),1.0, new Color(192, 255, 128));
 
-		EmbersAPI.registerSteamEngineFuel(FluidRegistry.getFluid("steam"),2.0);
+		EmbersAPI.registerSteamEngineFuel(FluidRegistry.getFluid("steam"),2.0,1, new Color(255,255,255));
+		EmbersAPI.registerSteamEngineFuel(FluidRegistry.getFluid("gas_dwarf"),2.5,5, new Color(128,192,255));
 	}
 
 	@SubscribeEvent
@@ -1238,6 +1241,8 @@ public class RecipeRegistry {
 		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("dustRedstone"),new FluidStack(RegistryManager.fluid_alchemical_redstone, 144)));
 		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("blockRedstone"),new FluidStack(RegistryManager.fluid_alchemical_redstone,1296)));
 
+		meltingRecipes.add(new ItemMeltingRecipe(Ingredient.fromStacks(new ItemStack(Blocks.SOUL_SAND)),new FluidStack(RegistryManager.fluid_crude_oil,100)));
+
 		Ingredient stampBar = Ingredient.fromItem(RegistryManager.stamp_bar);
 		Ingredient stampPlate = Ingredient.fromItem(RegistryManager.stamp_plate);
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_iron, INGOT_AMOUNT), stampBar,new ItemStack(Items.IRON_INGOT,1)));
@@ -1309,6 +1314,8 @@ public class RecipeRegistry {
 		if (ConfigManager.enableTin && ConfigManager.enableBronze){
 			mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,6),new FluidStack(RegistryManager.fluid_molten_tin,2)}, new FluidStack(RegistryManager.fluid_molten_bronze,8)));
 		}
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,5),new FluidStack(RegistryManager.fluid_steam,20)}, new FluidStack(RegistryManager.fluid_oil,10)));
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,10),new FluidStack(RegistryManager.fluid_gas,5)}, new FluidStack(RegistryManager.fluid_oil,30)));
 
 		OreIngredient quartz = new OreIngredient("gemQuartz");
 		OreIngredient ash = new OreIngredient("dustAsh");

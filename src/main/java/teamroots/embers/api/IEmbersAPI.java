@@ -15,6 +15,7 @@ import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.projectile.IProjectilePreset;
 
+import java.awt.*;
 import java.util.List;
 
 public interface IEmbersAPI {
@@ -56,7 +57,7 @@ public interface IEmbersAPI {
 
     IMetalCoefficient getMetalCoefficient(IBlockState state);
 
-    void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier);
+    void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier, Color color);
 
     void registerBoilerFluid(ILiquidFuel fuel);
 
@@ -64,7 +65,7 @@ public interface IEmbersAPI {
 
     ILiquidFuel getBoilerFluid(FluidStack fluidstack);
 
-    void registerSteamEngineFuel(Fluid fluid, double power);
+    void registerSteamEngineFuel(Fluid fluid, double power, int time, Color color);
 
     void registerSteamEngineFuel(ILiquidFuel fuel);
 

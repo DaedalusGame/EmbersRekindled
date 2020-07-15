@@ -23,6 +23,7 @@ import teamroots.embers.tileentity.TileEntityCatalyzer;
 import teamroots.embers.tileentity.TileEntityCombustor;
 import teamroots.embers.util.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class EmbersAPIImpl implements IEmbersAPI {
@@ -199,7 +200,7 @@ public class EmbersAPIImpl implements IEmbersAPI {
     }
 
     @Override
-    public void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier) {
+    public void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier, Color color) {
         registerBoilerFluid(new ILiquidFuel() {
             @Override
             public boolean matches(FluidStack stack) {
@@ -214,6 +215,16 @@ public class EmbersAPIImpl implements IEmbersAPI {
             @Override
             public double getPower(FluidStack stack) {
                 return 0;
+            }
+
+            @Override
+            public int getTime(FluidStack stack) {
+                return 0;
+            }
+
+            @Override
+            public Color getBurnColor(FluidStack stack) {
+                return color;
             }
         });
     }
@@ -237,7 +248,7 @@ public class EmbersAPIImpl implements IEmbersAPI {
     }
 
     @Override
-    public void registerSteamEngineFuel(Fluid fluid, double power) {
+    public void registerSteamEngineFuel(Fluid fluid, double power, int time, Color color) {
         registerSteamEngineFuel(new ILiquidFuel() {
             @Override
             public boolean matches(FluidStack stack) {
@@ -252,6 +263,16 @@ public class EmbersAPIImpl implements IEmbersAPI {
             @Override
             public double getPower(FluidStack stack) {
                 return power * stack.amount;
+            }
+
+            @Override
+            public int getTime(FluidStack stack) {
+                return time;
+            }
+
+            @Override
+            public Color getBurnColor(FluidStack stack) {
+                return color;
             }
         });
     }

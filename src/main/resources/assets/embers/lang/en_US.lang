@@ -124,6 +124,9 @@ fluid.dawnstone=Molten Dawnstone
 fluid.umber_steel=Molten Umber Steel
 fluid.alchemical_redstone=Alchemical Slurry
 fluid.steam=Steam
+fluid.oil_soul=Soul Crude
+fluid.oil_dwarf=Dwarven Oil
+fluid.gas_dwarf=Dwarven Fuel Gas
 
 item.ingot_copper.name=Copper Ingot
 item.ingot_silver.name=Silver Ingot
