@@ -111,8 +111,10 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
     }
 
     public TileEntity getAttachedMultiblock(EnumFacing facing) {
-        if (facing != null)
-            return world.getTileEntity(pos.offset(facing.getOpposite()));
+        if (facing != null) {
+            TileEntity tileEntity = world.getTileEntity(pos.offset(facing.getOpposite()));
+            return tileEntity;
+        }
         return null;
     }
 
@@ -128,7 +130,7 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
     public boolean hasCapabilityDescription(Capability<?> capability) {
         EnumFacing accessFace = getFacing();
         TileEntity tile = getAttachedMultiblock(accessFace);
-        if (tile instanceof IExtraCapabilityInformation)
+        if (tile instanceof IExtraCapabilityInformation && canAccess(tile))
             return ((IExtraCapabilityInformation) tile).hasCapabilityDescription(capability);
         return false;
     }
@@ -137,7 +139,7 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
     public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
         EnumFacing accessFace = getFacing();
         TileEntity tile = getAttachedMultiblock(accessFace);
-        if (tile instanceof IExtraCapabilityInformation)
+        if (tile instanceof IExtraCapabilityInformation && canAccess(tile))
             ((IExtraCapabilityInformation) tile).addCapabilityDescription(strings, capability, accessFace);
     }
 
@@ -145,7 +147,7 @@ public class TileEntityMechAccessor extends TileEntity implements ITileEntityBas
     public void addOtherDescription(List<String> strings, EnumFacing facing) {
         EnumFacing accessFace = getFacing();
         TileEntity tile = getAttachedMultiblock(accessFace);
-        if (tile instanceof IExtraCapabilityInformation)
+        if (tile instanceof IExtraCapabilityInformation && canAccess(tile))
             ((IExtraCapabilityInformation) tile).addOtherDescription(strings, accessFace);
     }
 }
