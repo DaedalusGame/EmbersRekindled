@@ -373,6 +373,7 @@ embers.tooltip.heat_amount=Heat:
 embers.tooltip.heat_level=Level:
 embers.tooltip.modifiers=Modifiers:
 embers.tooltip.upgrade.actuator=Mechanical Speed: %s
+embers.tooltip.upgrade.actuator.other=Mechanical Ember Production Efficiency: %s
 embers.tooltip.upgrade.catalytic_plug=Catalytic Plug Speed: %s
 embers.tooltip.dial.ember_multiplier=Production Multiplier: %s
 embers.tooltip.dial.heat=Heat: %s/%s

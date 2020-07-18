@@ -28,7 +28,7 @@ public class UpgradeActuator extends DefaultUpgradeProvider {
 
     @Override
     public int getLimit(TileEntity tile) {
-        return tile instanceof IMechanicallyPowered ? 1 : 0;
+        return tile instanceof IMechanicallyPowered ? 1 : 1;
     }
 
     @Override
@@ -71,21 +71,29 @@ public class UpgradeActuator extends DefaultUpgradeProvider {
     @Override
     public boolean doWork(TileEntity tile, List<IUpgradeProvider> upgrades) {
         double power = getPower();
-        IMechanicallyPowered mechTile = (IMechanicallyPowered) tile;
-
-        return !(power > mechTile.getMinimumPower() && power <= mechTile.getMaximumPower());
+        if(tile instanceof IMechanicallyPowered) {
+            IMechanicallyPowered mechTile = (IMechanicallyPowered) tile;
+            return !(power > mechTile.getMinimumPower() && power <= mechTile.getMaximumPower());
+        }
+        return false;
     }
 
     @Override
     public void throwEvent(TileEntity tile, UpgradeEvent event) {
-        IMechanicallyPowered mechTile = (IMechanicallyPowered) tile;
         if(event instanceof DialInformationEvent) {
             DialInformationEvent dialEvent = (DialInformationEvent) event;
             if(BlockEmberGauge.DIAL_TYPE.equals(dialEvent.getDialType())) {
                 DecimalFormat multiplierFormat = Embers.proxy.getDecimalFormat("embers.decimal_format.speed_multiplier");
-                double power = getPower();
-                double speedModifier = mechTile.getMechanicalSpeed(power) / mechTile.getNominalSpeed();
-                dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.actuator", multiplierFormat.format(speedModifier))); //Proxy this because it runs in shared code
+                if (tile instanceof IMechanicallyPowered) {
+                    IMechanicallyPowered mechTile = (IMechanicallyPowered) tile;
+                    double power = getPower();
+                    double speedModifier = mechTile.getMechanicalSpeed(power) / mechTile.getNominalSpeed();
+                    dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.actuator", multiplierFormat.format(speedModifier))); //Proxy this because it runs in shared code
+                } else {
+                    double power = getPower();
+                    double productionModifier = power > 15 ? 1.5 : 1.0;
+                    dialEvent.getInformation().add(Embers.proxy.formatLocalize("embers.tooltip.upgrade.actuator.other", multiplierFormat.format(productionModifier)));
+                }
             }
         }
     }

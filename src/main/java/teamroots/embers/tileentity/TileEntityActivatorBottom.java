@@ -20,8 +20,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
+import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
@@ -29,10 +31,11 @@ import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable, IExtraCapabilityInformation {
+public class TileEntityActivatorBottom extends TileEntity implements ITileEntityBase, ITickable, IExtraCapabilityInformation, IExtraDialInformation {
     public static final int PROCESS_TIME = 40;
     Random random = new Random();
     int progress = -1;
@@ -50,6 +53,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
             return super.insertItem(slot, stack, simulate);
         }
     };
+    private List<IUpgradeProvider> upgrades = new ArrayList<>();
 
     public TileEntityActivatorBottom() {
         super();
@@ -119,7 +123,7 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
 
     @Override
     public void update() {
-        List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+        upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if(UpgradeUtil.doTick(this,upgrades))
             return;
@@ -171,5 +175,10 @@ public class TileEntityActivatorBottom extends TileEntity implements ITileEntity
     public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.item",I18n.format("embers.tooltip.goggles.item.ember")));
+    }
+
+    @Override
+    public void addDialInformation(EnumFacing facing, List<String> information, String dialType) {
+        UpgradeUtil.throwEvent(this, new DialInformationEvent(this, information, dialType), upgrades);
     }
 }

@@ -26,6 +26,7 @@ import teamroots.embers.Embers;
 import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
@@ -39,6 +40,7 @@ import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -64,6 +66,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
             return super.insertItem(slot, stack, simulate);
         }
     };
+    private List<IUpgradeProvider> upgrades = new ArrayList<>();
 
     public TileEntityBoilerBottom() {
         super();
@@ -158,7 +161,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
 
     @Override
     public void update() {
-        List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+        upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if (UpgradeUtil.doTick(this, upgrades))
             return;
@@ -206,6 +209,7 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
             double multiplier = getMultiplier();
             information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplierFormat.format(multiplier)));
         }
+        UpgradeUtil.throwEvent(this, new DialInformationEvent(this, information, dialType), upgrades);
     }
 
     @Override

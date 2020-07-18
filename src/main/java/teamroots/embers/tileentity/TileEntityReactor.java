@@ -24,6 +24,7 @@ import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
+import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
@@ -40,6 +41,7 @@ import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -55,6 +57,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
     };
     Random random = new Random();
     int progress = -1;
+    private List<IUpgradeProvider> upgrades = new ArrayList<>();
 
     public static final int SOUND_HAS_EMBER = 1;
     public static final int[] SOUND_IDS = new int[]{SOUND_HAS_EMBER};
@@ -153,7 +156,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 
     @Override
     public void update() {
-        List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
+        upgrades = UpgradeUtil.getUpgrades(world, pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if (getWorld().isRemote)
             handleSound();
@@ -256,6 +259,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
             double multiplier = BASE_MULTIPLIER + combustorMult + catalyzerMult;
             information.add(I18n.format("embers.tooltip.dial.ember_multiplier",multiplierFormat.format(multiplier)));
         }
+        UpgradeUtil.throwEvent(this, new DialInformationEvent(this, information, dialType), upgrades);
     }
 
     @Override
