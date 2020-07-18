@@ -68,6 +68,8 @@ public class RecipeRegistry {
 
 	public static ArrayList<FluidMixingRecipe> mixingRecipes = new ArrayList<>();
 
+	public static ArrayList<FluidReactionRecipe> fluidReactionRecipes = new ArrayList<>();
+
 	public static ArrayList<AlchemyRecipe> alchemyRecipes = new ArrayList<>();
 
 	public static ArrayList<DawnstoneAnvilRecipe> dawnstoneAnvilRecipes = new ArrayList<>();
@@ -1314,8 +1316,11 @@ public class RecipeRegistry {
 		if (ConfigManager.enableTin && ConfigManager.enableBronze){
 			mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,6),new FluidStack(RegistryManager.fluid_molten_tin,2)}, new FluidStack(RegistryManager.fluid_molten_bronze,8)));
 		}
-		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,5),new FluidStack(RegistryManager.fluid_steam,20)}, new FluidStack(RegistryManager.fluid_oil,10)));
-		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,10),new FluidStack(RegistryManager.fluid_gas,5)}, new FluidStack(RegistryManager.fluid_oil,30)));
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,5),new FluidStack(RegistryManager.fluid_steam,20)}, new FluidStack(RegistryManager.fluid_oil,10), 0));
+		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,10),new FluidStack(RegistryManager.fluid_gas,5)}, new FluidStack(RegistryManager.fluid_oil,30), 0));
+
+		fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(FluidRegistry.WATER, 1), new Color(255,255,255)));
+		fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_gas, 1), new FluidStack(RegistryManager.fluid_steam, 5), new Color(128,192,255)));
 
 		OreIngredient quartz = new OreIngredient("gemQuartz");
 		OreIngredient ash = new OreIngredient("dustAsh");
@@ -1874,6 +1879,15 @@ public class RecipeRegistry {
 		for (int i = 0; i < mixingRecipes.size(); i ++){
 			if (mixingRecipes.get(i).matches(fluids)){
 				return mixingRecipes.get(i);
+			}
+		}
+		return null;
+	}
+
+	public static FluidReactionRecipe getFluidReactionRecipe(FluidStack fluid){
+		for (int i = 0; i < fluidReactionRecipes.size(); i ++){
+			if (fluidReactionRecipes.get(i).matches(fluid)){
+				return fluidReactionRecipes.get(i);
 			}
 		}
 		return null;

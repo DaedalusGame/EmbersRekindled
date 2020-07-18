@@ -1,6 +1,7 @@
 package teamroots.embers.compat;
 
 import mysticalmechanics.api.IGearBehavior;
+import mysticalmechanics.api.IGearData;
 import mysticalmechanics.api.IMechCapability;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.handler.RegistryHandler;
@@ -32,6 +33,7 @@ import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockMechActuator;
+import teamroots.embers.block.BlockMechActuatorSingle;
 import teamroots.embers.block.BlockSteamEngine;
 import teamroots.embers.item.ItemBase;
 import teamroots.embers.particle.ParticleUtil;
@@ -43,6 +45,7 @@ import teamroots.embers.research.subtypes.ResearchFakePage;
 import teamroots.embers.research.subtypes.ResearchShowItem;
 import teamroots.embers.tileentity.TileEntityMechActuator;
 import teamroots.embers.tileentity.TileEntityMechActuatorRenderer;
+import teamroots.embers.tileentity.TileEntityMechActuatorSingle;
 import teamroots.embers.tileentity.TileEntitySteamEngine;
 import teamroots.embers.util.Misc;
 
@@ -64,6 +67,7 @@ public class MysticalMechanicsIntegration {
 
     public static Block steam_engine;
     public static Block mech_actuator;
+    public static Block mech_actuator_single;
 
     static Random random = new Random();
 
@@ -79,8 +83,15 @@ public class MysticalMechanicsIntegration {
                 " N ",
                 'C', "nuggetDawnstone",
                 'N', "ingotDawnstone"}).setRegistryName(getRL("gear_dawnstone")));
-        event.getRegistry().register(new ShapedOreRecipe(getRL("mech_actuator"),new ItemStack(mech_actuator,1),true,new Object[]{
+        event.getRegistry().register(new ShapedOreRecipe(getRL("mech_actuator_single"),new ItemStack(mech_actuator_single,1),true,new Object[]{
                 "SPI",
+                'P', "gearIron",
+                'S', RegistryManager.mech_accessor,
+                'I', axle_iron}).setRegistryName(getRL("mech_actuator_single")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("mech_actuator"),new ItemStack(mech_actuator,1),true,new Object[]{
+                " I ",
+                "IPI",
+                "SI ",
                 'P', "gearIron",
                 'S', RegistryManager.mech_accessor,
                 'I', axle_iron}).setRegistryName(getRL("mech_actuator")));
@@ -105,11 +116,13 @@ public class MysticalMechanicsIntegration {
     {
         RegistryManager.blocks.add(steam_engine = (new BlockSteamEngine(Material.ROCK,"steam_engine",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
         RegistryManager.blocks.add(mech_actuator = (new BlockMechActuator(Material.ROCK,"mech_actuator",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
+        RegistryManager.blocks.add(mech_actuator_single = (new BlockMechActuatorSingle(Material.ROCK,"mech_actuator_single",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.0f));
 
         RegistryManager.items.add(gear_dawnstone = new ItemBase("gear_dawnstone",true));
 
         GameRegistry.registerTileEntity(TileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
         GameRegistry.registerTileEntity(TileEntityMechActuator.class, Embers.MODID+":tile_entity_mech_actuator");
+        GameRegistry.registerTileEntity(TileEntityMechActuatorSingle.class, Embers.MODID+":tile_entity_mech_actuator_single");
     }
 
     public static void init()
@@ -118,17 +131,14 @@ public class MysticalMechanicsIntegration {
 
         MysticalMechanicsAPI.IMPL.registerGear(DAWNSTONE_GEAR_BEHAVIOR, new OreIngredient("gearDawnstone"), new IGearBehavior() {
             @Override
-            public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, double power) {
+            public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, IGearData data, double power) {
                 return power;
             }
 
             @Override
-            public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear) {
-                if(facing != null && tile.getWorld().isRemote && tile.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY,facing)) {
-                    IMechCapability capability = tile.getCapability(MysticalMechanicsAPI.MECH_CAPABILITY,facing);
-                    double power = capability.getPower(facing);
-                    int particles = Math.min((int)Math.ceil(power / 40),5);
-                    if(power >= IRON_GEAR_MAX_POWER)
+            public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, IGearData data, double powerIn, double powerOut) {
+                int particles = Math.min((int)Math.ceil(powerIn / 40),5);
+                if(powerIn >= IRON_GEAR_MAX_POWER)
                     for(int i = 0; i < particles; i++) {
                         float xOff = 0.1f+random.nextFloat()*0.8f;
                         float yOff = 0.1f+random.nextFloat()*0.8f;
@@ -143,7 +153,6 @@ public class MysticalMechanicsIntegration {
                         }
                         ParticleUtil.spawnParticleGlow(tile.getWorld(), tile.getPos().getX() + xOff, tile.getPos().getY() + yOff, tile.getPos().getZ() + zOff, 0, 0, 0, 255, 64, 16, 2.0f, 24);
                     }
-                }
             }
         });
 
@@ -163,14 +172,14 @@ public class MysticalMechanicsIntegration {
     private static IGearBehavior wrapPowerLevelBehavior(IGearBehavior behavior, double max_power, double slope) {
         return new IGearBehavior() {
             @Override
-            public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, double power) {
-                power = behavior.transformPower(tile, facing, gear, power);
+            public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, IGearData data, double power) {
+                power = behavior.transformPower(tile, facing, gear, data, power);
                 return Misc.getDiminishedPower(power,max_power,slope); //Diminishing returns
             }
 
             @Override
-            public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear) {
-                behavior.visualUpdate(tile,facing,gear);
+            public void visualUpdate(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, IGearData data, double powerIn, double powerOut) {
+                behavior.visualUpdate(tile,facing,gear,data,powerIn,powerOut);
             }
         };
     }

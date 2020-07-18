@@ -87,6 +87,7 @@ public class RegistryManager {
 	public static Block ember_funnel;
 	public static Block block_alchemical_redstone;
 	public static Block mini_boiler;
+	public static Block reaction_chamber;
 	public static Block fluid_transfer;
 	public static Block ember_siphon;
 	public static Block stirling;
@@ -266,6 +267,7 @@ public class RegistryManager {
 		blocks.add(catalytic_plug = (new BlockCatalyticPlug(Material.ROCK,"catalytic_plug",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ember_funnel = (new BlockEmberFunnel(Material.IRON,"ember_funnel",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(mini_boiler = (new BlockMiniBoiler(Material.IRON,"mini_boiler",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(reaction_chamber = (new BlockReactionChamber(Material.IRON,"reaction_chamber",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(fluid_transfer = (new BlockFluidTransfer(Material.ROCK, "fluid_transfer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ember_siphon = (new BlockEmberSiphon(Material.ROCK, "ember_siphon",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(stirling = (new BlockStirling(Material.ROCK, "stirling",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
@@ -607,6 +609,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityCatalyticPlug.class, Embers.MODID+":tile_entity_catalytic_plug");
 		GameRegistry.registerTileEntity(TileEntityEmberFunnel.class, Embers.MODID+":tile_entity_ember_funnel");
 		GameRegistry.registerTileEntity(TileEntityMiniBoiler.class, Embers.MODID+":tile_entity_mini_boiler");
+		GameRegistry.registerTileEntity(TileEntityReactionChamber.class, Embers.MODID+":tile_entity_reaction_chamber");
 		GameRegistry.registerTileEntity(TileEntityEmberGauge.class, Embers.MODID+":tile_entity_ember_gauge");
 		GameRegistry.registerTileEntity(TileEntityFluidGauge.class, Embers.MODID+":tile_entity_fluid_gauge");
 		//GameRegistry.registerTileEntity(TileEntityItemGauge.class, Embers.MODID+":tile_entity_item_gauge");

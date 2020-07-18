@@ -1,11 +1,8 @@
 package teamroots.embers.tileentity;
 
-import mysticalmechanics.api.IGearBehavior;
-import mysticalmechanics.api.IGearbox;
-import mysticalmechanics.api.MysticalMechanicsAPI;
-import mysticalmechanics.block.BlockGearbox;
+import mysticalmechanics.api.*;
+import mysticalmechanics.tileentity.TileEntityMergebox;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,7 +16,6 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockMechActuator;
@@ -28,62 +24,87 @@ import teamroots.embers.util.ConsumerMechCapability;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TileEntityMechActuator extends TileEntity implements ITickable, ITileEntityBase, IGearbox, IExtraCapabilityInformation {
     public UpgradeActuator upgrade;
-    public ItemStack[] gears = new ItemStack[]{
-            ItemStack.EMPTY,
-            ItemStack.EMPTY,
-            ItemStack.EMPTY,
-            ItemStack.EMPTY,
-            ItemStack.EMPTY,
-            ItemStack.EMPTY
-    };
-    public double angle, lastAngle;
+    public GearHelperTile[] gears = new mysticalmechanics.api.GearHelperTile[6];
+
+    public boolean shouldUpdate;
+
     private Random random = new Random();
     public ConsumerMechCapability capability = new ConsumerMechCapability() {
         @Override
         public void onPowerChange() {
             TileEntityMechActuator box = TileEntityMechActuator.this;
-            box.updateNeighbors();
+            shouldUpdate = true;
             box.markDirty();
         }
 
         @Override
-        public double getPower(EnumFacing from) {
-            ItemStack gearStack = getGear(from);
-            if (from != null && gearStack.isEmpty()) {
+        public double getVisualPower(EnumFacing from) {
+            GearHelper gearHelper = getGearHelper(from);
+            if (gearHelper != null && gearHelper.isEmpty()) {
                 return 0;
             }
-            IGearBehavior behavior = MysticalMechanicsAPI.IMPL.getGearBehavior(gearStack);
-            return behavior.transformPower(TileEntityMechActuator.this, from, gearStack, super.getPower(from));
+
+            double unchangedPower = getExternalPower(from);
+
+            if (gearHelper == null)
+                return unchangedPower;
+
+            IGearBehavior behavior = gearHelper.getBehavior();
+            return behavior.transformVisualPower(TileEntityMechActuator.this, from, gearHelper.getGear(), gearHelper.getData(), unchangedPower);
+        }
+
+        @Override
+        public double getPower(EnumFacing from) {
+            GearHelper gearHelper = getGearHelper(from);
+            if (gearHelper != null && gearHelper.isEmpty()) {
+                return 0;
+            }
+            return super.getPower(from);
         }
 
         @Override
         public void setPower(double value, EnumFacing from) {
-            ItemStack gearStack = getGear(from);
-            if (from != null && gearStack.isEmpty()) {
+            GearHelper gearHelper = getGearHelper(from);
+            if (isInput(from) && gearHelper.isEmpty()) {
                 super.setPower(0, from);
             }
-            super.setPower(value, from);
+            if(isInput(from)) {
+                powerExternal[from.getIndex()] = value;
+                if(!gearHelper.isEmpty()) {
+                    IGearBehavior behavior = gearHelper.getBehavior();
+                    value = behavior.transformPower(TileEntityMechActuator.this, from,gearHelper.getGear(),gearHelper.getData(),value);
+                    super.setPower(value, from);
+                }
+            }
+        }
+
+        @Override
+        public boolean isInput(EnumFacing from) {
+            return canAttachGear(from);
         }
     };
 
+    private GearHelper getGearHelper(EnumFacing facing) {
+        if (facing == null)
+            return null;
+        return gears[facing.getIndex()];
+    }
+
     public TileEntityMechActuator() {
         upgrade = new UpgradeActuator(this);
+        for(int i = 0; i < gears.length; i++)
+            gears[i] = new GearHelperTile(this, EnumFacing.getFront(i));
         capability.setAdditive(true); //Possible balance mistake but we shall see
     }
 
     public void updateNeighbors() {
         for (EnumFacing f : EnumFacing.VALUES) {
-            TileEntity t = world.getTileEntity(getPos().offset(f));
-            if (t != null && t.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY, f.getOpposite()) && !getGear(f).isEmpty())
-                capability.setPower(t.getCapability(MysticalMechanicsAPI.MECH_CAPABILITY, f.getOpposite()).getPower(f.getOpposite()), f);
-            else
-                capability.setPower(0, f);
+            MysticalMechanicsAPI.IMPL.pullPower(this, f, capability, !getGear(f).isEmpty());
         }
         markDirty();
     }
@@ -92,8 +113,9 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         for (int i = 0; i < 6; i++) {
-            tag.setTag("gear" + i, gears[i].writeToNBT(new NBTTagCompound()));
+            tag.setTag("side" + i, gears[i].writeToNBT(new NBTTagCompound()));
         }
+        capability.writeToNBT(tag);
         for (int i = 0; i < 6; i++) {
             tag.setDouble("mech_power" + i, capability.power[i]);
         }
@@ -104,12 +126,21 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         for (int i = 0; i < 6; i++) {
-            gears[i] = new ItemStack(tag.getCompoundTag("gear" + i));
+            gears[i].readFromNBT(tag.getCompoundTag("side" + i));
         }
+        readLegacyGears(tag);
         for (int i = 0; i < 6; i++) {
             capability.power[i] = tag.getDouble("mech_power" + i);
         }
+        capability.readFromNBT(tag);
         capability.markDirty();
+    }
+
+    private void readLegacyGears(NBTTagCompound tag) {
+        for (int i = 0; i < 6; i++) {
+            if(tag.hasKey("gear"+i))
+                gears[i].setGear(new ItemStack(tag.getCompoundTag("gear" + i)));
+        }
     }
 
     @Override
@@ -140,7 +171,7 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
         if (capability == EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY)
             return getFacing().getOpposite() == facing;
         if (capability == MysticalMechanicsAPI.MECH_CAPABILITY)
-            return facing == null || getFacing().getAxis() != facing.getAxis();
+            return facing == null || canAttachGear(facing);
         return super.hasCapability(capability, facing);
     }
 
@@ -149,21 +180,33 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY && getFacing().getOpposite() == facing)
             return (T) upgrade;
-        if (capability == MysticalMechanicsAPI.MECH_CAPABILITY && (facing == null || getFacing().getAxis() != facing.getAxis()))
+        if (capability == MysticalMechanicsAPI.MECH_CAPABILITY && (facing == null || canAttachGear(facing)))
             return (T) this.capability;
         return super.getCapability(capability, facing);
     }
 
+    private double getGearInPower(EnumFacing facing) {
+        return capability.getExternalPower(facing);
+    }
+
+    private double getGearOutPower(EnumFacing facing) {
+        return capability.getInternalPower(facing);
+    }
+
     @Override
     public void update() {
-        if (world.isRemote) {
-            lastAngle = angle;
-            angle += capability.getPower(null);
-            for (EnumFacing facing : EnumFacing.VALUES) {
-                ItemStack gear = getGear(facing);
-                IGearBehavior behavior = MysticalMechanicsAPI.IMPL.getGearBehavior(gear);
-                behavior.visualUpdate(this, facing, gear);
+        if (shouldUpdate) {
+            updateNeighbors();
+            shouldUpdate = false;
+        }
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            int i = facing.getIndex();
+            if (world.isRemote) {
+                gears[i].visualUpdate(getGearInPower(facing), capability.getVisualPower(facing));
             }
+            gears[i].tick(getGearInPower(facing), getGearOutPower(facing));
+            if (gears[i].isDirty())
+                shouldUpdate = true;
         }
     }
 
@@ -174,7 +217,7 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
             if (getGear(side).isEmpty() && MysticalMechanicsAPI.IMPL.isValidGear(heldItem)) {
                 ItemStack gear = heldItem.copy();
                 gear.setCount(1);
-                attachGear(side, gear);
+                attachGear(side, gear, player);
                 heldItem.shrink(1);
                 if (heldItem.isEmpty()) {
                     player.setHeldItem(hand, ItemStack.EMPTY);
@@ -183,7 +226,7 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
                 return true;
             }
         } else if (!getGear(side).isEmpty()) {
-            ItemStack gear = detachGear(side);
+            ItemStack gear = detachGear(side, player);
             if (!world.isRemote) {
                 world.spawnEntity(new EntityItem(world, player.posX, player.posY + player.height / 2.0f, player.posZ, gear));
             }
@@ -196,10 +239,10 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         for (int i = 0; i < 6; i++) {
+            ItemStack stack = gears[i].detach(player);
             if (!world.isRemote) {
-                world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, gears[i]));
+                world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
             }
-            gears[i] = ItemStack.EMPTY;
         }
         capability.setPower(0f, null);
         updateNeighbors();
@@ -212,33 +255,36 @@ public class TileEntityMechActuator extends TileEntity implements ITickable, ITi
     }
 
     @Override
-    public void attachGear(EnumFacing facing, ItemStack stack) {
-        if (facing == null)
+    public void attachGear(EnumFacing facing, ItemStack stack, @Nullable EntityPlayer player) {
+        if (!canAttachGear(facing))
             return;
-        gears[facing.getIndex()] = stack;
+        gears[facing.getIndex()].attach(player, stack);
         markDirty();
     }
 
     @Override
-    public ItemStack detachGear(EnumFacing facing) {
-        if (facing == null || getFacing().getAxis() == facing.getAxis())
+    public ItemStack detachGear(EnumFacing facing, @Nullable EntityPlayer player) {
+        if (!canAttachGear(facing))
             return ItemStack.EMPTY;
-        int index = facing.getIndex();
-        ItemStack gear = gears[index];
-        gears[index] = ItemStack.EMPTY;
+        ItemStack stack = gears[facing.getIndex()].detach(player);
         markDirty();
-        return gear;
+        return stack;
     }
 
     public ItemStack getGear(EnumFacing facing) {
-        if (facing == null || getFacing().getAxis() == facing.getAxis())
+        if (!canAttachGear(facing))
             return ItemStack.EMPTY;
-        return gears[facing.getIndex()];
+        return gears[facing.getIndex()].getGear();
     }
 
     @Override
     public boolean canAttachGear(EnumFacing facing, ItemStack stack) {
-        return getFacing().getAxis() != facing.getAxis();
+        return canAttachGear(facing);
+    }
+
+    @Override
+    public boolean canAttachGear(EnumFacing facing) {
+        return facing != null && getFacing().getAxis() != facing.getAxis();
     }
 
     @Override

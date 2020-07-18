@@ -1,6 +1,9 @@
 package teamroots.embers.apiimpl;
 
+import com.google.common.collect.Lists;
+import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,10 +24,12 @@ import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.itemmod.ModifierShiftingScales;
 import teamroots.embers.tileentity.TileEntityCatalyzer;
 import teamroots.embers.tileentity.TileEntityCombustor;
+import teamroots.embers.tileentity.TileEntitySteamEngine;
 import teamroots.embers.util.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmbersAPIImpl implements IEmbersAPI {
     //TODO: Move to more suitable spot? Directly into the API package?
@@ -201,7 +206,13 @@ public class EmbersAPIImpl implements IEmbersAPI {
 
     @Override
     public void registerBoilerFluid(Fluid fluid, Fluid gas, double multiplier, Color color) {
+        int inputAmount = (int)(multiplier >= 1 ? 1 : (1 / multiplier));
         registerBoilerFluid(new ILiquidFuel() {
+            @Override
+            public List<FluidStack> getMatchingFluids() {
+                return Lists.newArrayList(new FluidStack(fluid, inputAmount));
+            }
+
             @Override
             public boolean matches(FluidStack stack) {
                 return stack != null && FluidUtil.areFluidsEqual(stack.getFluid(),fluid);
@@ -250,6 +261,20 @@ public class EmbersAPIImpl implements IEmbersAPI {
     @Override
     public void registerSteamEngineFuel(Fluid fluid, double power, int time, Color color) {
         registerSteamEngineFuel(new ILiquidFuel() {
+            @Override
+            public List<FluidStack> getMatchingFluids() {
+                return Lists.newArrayList(new FluidStack(fluid, TileEntitySteamEngine.GAS_CONSUMPTION));
+            }
+
+            @Override
+            public void addInfo(FluidStack input, List<String> tooltip) {
+                double power = getPower(input);
+                int time = getTime(input);
+
+                tooltip.add(I18n.format("embers.tooltip.liquid_fuel.power", MysticalMechanicsAPI.IMPL.getDefaultUnit().format(power)));
+                tooltip.add(I18n.format("embers.tooltip.liquid_fuel.time", time));
+            }
+
             @Override
             public boolean matches(FluidStack stack) {
                 return stack != null && FluidUtil.areFluidsEqual(stack.getFluid(),fluid);

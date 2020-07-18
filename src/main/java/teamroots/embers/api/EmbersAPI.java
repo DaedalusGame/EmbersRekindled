@@ -13,7 +13,6 @@ import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.api.misc.IFuel;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
-import teamroots.embers.util.FluidUtil;
 
 import java.awt.*;
 

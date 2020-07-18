@@ -41,6 +41,7 @@ import teamroots.embers.particle.ParticleUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -378,6 +379,10 @@ public class Misc {
     }
 
     public static void spawnClogParticles(World world, BlockPos pos, int spouts, float radius) {
+        spawnClogParticles(world, pos, spouts, radius, new Color(64,64,64));
+    }
+
+    public static void spawnClogParticles(World world, BlockPos pos, int spouts, float radius, Color color) {
         Random localRandom = new Random(pos.hashCode());
 
         for (int i = 0; i < spouts; i++) {
@@ -390,7 +395,7 @@ public class Misc {
             float vx = xOffset * speed + random.nextFloat() * speed * 0.3f;
             float vy = yOffset * speed + random.nextFloat() * speed * 0.3f;
             float vz = zOffset * speed + random.nextFloat() * speed * 0.3f;
-            ParticleUtil.spawnParticleVapor(world, pos.getX() + 0.5f + xOffset * radius, pos.getY() + 0.5f + yOffset * radius, pos.getZ() + 0.5f + zOffset * radius, vx, vy, vz, 64, 64, 64, 1.0f, 0.2f, 3.0f, 40);
+            ParticleUtil.spawnParticleVapor(world, pos.getX() + 0.5f + xOffset * radius, pos.getY() + 0.5f + yOffset * radius, pos.getZ() + 0.5f + zOffset * radius, vx, vy, vz, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() / 255f, 0.2f, 3.0f, 40);
         }
     }
 

@@ -13,10 +13,8 @@ import teamroots.embers.api.misc.ICoefficientFuel;
 import teamroots.embers.api.misc.IFuel;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.misc.IMetalCoefficient;
-import teamroots.embers.api.projectile.IProjectilePreset;
 
 import java.awt.*;
-import java.util.List;
 
 public interface IEmbersAPI {
     void registerModifier(Item item, ModifierBase modifier);

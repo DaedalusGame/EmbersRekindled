@@ -421,6 +421,8 @@ embers.filter.forge_energy=Items with %s-%s FE
 embers.filter.forge_energy.strict=Items with %s FE
 embers.filter.forge_energy.fuzzy=Items with FE
 
+embers.tooltip.liquid_fuel.power=Produces %s of power
+embers.tooltip.liquid_fuel.time=for %s ticks
 
 embers.tooltip.modifier.superheater=Superheating %s
 embers.tooltip.modifier.jet_augment=Cinder Jet %s
@@ -453,6 +455,9 @@ embers.jei.recipe.mixer=Mixing Recipe
 embers.jei.recipe.alchemy=Alchemy Recipe
 embers.jei.recipe.dawnstone_anvil=Dawnstone Anvil Recipe
 embers.jei.recipe.geologic_separator=Geologic Separator Bonus
+embers.jei.recipe.boiler=Boiler
+embers.jei.recipe.steam_engine=Steam Engine
+embers.jei.recipe.reaction_chamber=Reaction Chamber
 
 entity.ancient_golem.name=Ancient Golem
 entity.magma_worm.name=Magma Worm [WIP]

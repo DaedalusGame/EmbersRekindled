@@ -12,14 +12,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import teamroots.embers.Embers;
-import teamroots.embers.util.EnumPipeConnection;
-import teamroots.embers.util.RenderUtil;
-import teamroots.embers.util.StructBox;
-import teamroots.embers.util.StructUV;
+import teamroots.embers.util.*;
 
 public class TileEntityItemExtractorRenderer extends TileEntitySpecialRenderer<TileEntityItemExtractor> {
 	public ResourceLocation texture = new ResourceLocation(Embers.MODID + ":textures/blocks/item_pipe_tex.png");
-	public int lightx = 0, lighty = 0;
+	/*public int lightx = 0, lighty = 0;
 	public StructBox up = new StructBox(0.375,0.625,0.375,0.625,1.0,0.625,new StructUV[]{new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16)});
 	public StructBox down = new StructBox(0.375,0.375,0.375,0.625,0,0.625,new StructUV[]{new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16),new StructUV(12,12,16,6,16,16)});
 	public StructBox north = new StructBox(0.375,0.375,0.375,0.625,0.625,0,new StructUV[]{new StructUV(0,12,6,16,16,16),new StructUV(0,12,6,16,16,16),new StructUV(12,12,16,16,16,16),new StructUV(12,12,16,16,16,16),new StructUV(0,12,6,16,16,16),new StructUV(0,12,6,16,16,16)});
@@ -32,7 +29,8 @@ public class TileEntityItemExtractorRenderer extends TileEntitySpecialRenderer<T
 	public StructBox southEnd = new StructBox(0.3125,0.3125,0.75,0.6875,0.6875,1.0,new StructUV[]{new StructUV(6,6,10,0,16,16),new StructUV(6,6,10,0,16,16),new StructUV(0,0,6,6,16,16),new StructUV(0,0,6,6,16,16),new StructUV(6,6,10,0,16,16),new StructUV(6,6,10,0,16,16)});
 	public StructBox westEnd = new StructBox(0.25,0.3125,0.3125,0,0.6875,0.6875,new StructUV[]{new StructUV(0,6,6,10,16,16),new StructUV(0,6,6,10,16,16),new StructUV(6,6,10,0,16,16),new StructUV(6,6,10,0,16,16),new StructUV(0,0,6,6,16,16),new StructUV(0,0,6,6,16,16)});
 	public StructBox eastEnd = new StructBox(0.75,0.3125,0.3125,1.0,0.6875,0.6875,new StructUV[]{new StructUV(0,6,6,10,16,16),new StructUV(0,6,6,10,16,16),new StructUV(6,6,10,0,16,16),new StructUV(6,6,10,0,16,16),new StructUV(0,0,6,6,16,16),new StructUV(0,0,6,6,16,16)});
-	public TileEntityItemExtractorRenderer(){
+
+	*/public TileEntityItemExtractorRenderer(){
 		super();
 	}
 	
@@ -45,7 +43,13 @@ public class TileEntityItemExtractorRenderer extends TileEntitySpecialRenderer<T
             Tessellator tess = Tessellator.getInstance();
             BufferBuilder buffer = tess.getBuffer();
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-            if (shouldRenderPipe(tile,EnumFacing.UP)){
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				if(shouldRenderPipe(tile, facing))
+					PipeRenderUtil.addPipe(buffer, x, y, z, facing);
+				if(shouldRenderLip(tile, facing))
+					PipeRenderUtil.addPipeLip(buffer, x, y, z, facing);
+			}
+            /*if (shouldRenderPipe(tile,EnumFacing.UP)){
             	RenderUtil.addBox(buffer, up.x1+x, up.y1+y, up.z1+z, up.x2+x, up.y2+y, up.z2+z, up.textures, new int[]{1,1,1,1,1,1});
             }
             if (shouldRenderPipe(tile,EnumFacing.DOWN)){
@@ -80,7 +84,7 @@ public class TileEntityItemExtractorRenderer extends TileEntitySpecialRenderer<T
             }
             if (shouldRenderLip(tile,EnumFacing.EAST)){
             	RenderUtil.addBox(buffer, eastEnd.x1+x, eastEnd.y1+y, eastEnd.z1+z, eastEnd.x2+x, eastEnd.y2+y, eastEnd.z2+z, eastEnd.textures, new int[]{1,1,1,1,-1,-1});
-            }
+            }*/
             tess.draw();
         }
 	}

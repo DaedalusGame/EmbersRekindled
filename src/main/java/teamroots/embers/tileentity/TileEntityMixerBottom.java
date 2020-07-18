@@ -32,6 +32,7 @@ import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockFluidGauge;
 import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.FluidUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
@@ -58,6 +59,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
     HashSet<Integer> soundsPlaying = new HashSet<>();
     private List<IUpgradeProvider> upgrades;
+    private double powerRatio;
 
     public TileEntityMixerBottom() {
         super();
@@ -186,10 +188,14 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
             UpgradeUtil.verifyUpgrades(this, upgrades);
             if (UpgradeUtil.doTick(this, upgrades))
                 return;
+            ArrayList<FluidStack> fluids = getFluids();
+            FluidMixingRecipe recipe = getRecipe(fluids);
+            if (recipe != null)
+                powerRatio = recipe.getPowerRatio();
+            else
+                powerRatio = 0;
             double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
             if (top.capability.getEmber() >= emberCost) {
-                ArrayList<FluidStack> fluids = getFluids();
-                FluidMixingRecipe recipe = getRecipe(fluids);
                 if (recipe != null) {
                     boolean cancel = UpgradeUtil.doWork(this, upgrades);
                     if(!cancel) {
@@ -224,7 +230,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
             FluidStack recipeFluid = recipe.inputs.get(j).copy();
             for (FluidTank tank : tanks) {
                 FluidStack tankFluid = tank.getFluid();
-                if (recipeFluid != null && tankFluid != null && recipeFluid.getFluid() == tankFluid.getFluid()) {
+                if (recipeFluid != null && tankFluid != null && FluidUtil.areFluidsEqual(recipeFluid.getFluid(),tankFluid.getFluid())) {
                     FluidStack stack = tank.drain(recipeFluid.amount, true);
                     recipeFluid.amount -= stack != null ? stack.amount : 0;
                 }
@@ -306,6 +312,6 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
 
     @Override
     public double getStandardPowerRatio() {
-        return 0.5;
+        return powerRatio;
     }
 }

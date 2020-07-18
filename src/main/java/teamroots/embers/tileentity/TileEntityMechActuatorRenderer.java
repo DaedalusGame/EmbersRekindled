@@ -1,5 +1,8 @@
 package teamroots.embers.tileentity;
 
+import mysticalmechanics.api.GearHelper;
+import mysticalmechanics.api.GearHelperTile;
+import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.block.BlockGearbox;
 import mysticalmechanics.tileentity.TileEntityGearbox;
 import net.minecraft.block.state.IBlockState;
@@ -7,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import teamroots.embers.block.BlockMechActuator;
 
@@ -20,45 +25,46 @@ public class TileEntityMechActuatorRenderer extends TileEntitySpecialRenderer<Ti
         if (tile != null){
             IBlockState state = tile.getWorld().getBlockState(tile.getPos());
             if (state.getBlock() instanceof BlockMechActuator){
-                double normPower = tile.capability.getPower(null);
-                for (int i = 0; i < 6; i ++){
-                    if (!tile.gears[i].isEmpty()){
-                        EnumFacing face = EnumFacing.getFront(i);
+                EntityPlayer player = Minecraft.getMinecraft().player;
+                ItemStack gearHologram = player.getHeldItemMainhand();
 
+                for (int i = 0; i < 6; i ++){
+                    EnumFacing face = EnumFacing.getFront(i);
+                    GearHelperTile gear = tile.gears[i];
+
+                    boolean sideHit = MysticalMechanicsAPI.IMPL.isGearHit(tile, face);
+                    boolean renderHologram = MysticalMechanicsAPI.IMPL.shouldRenderHologram(gearHologram, !gear.isEmpty(), sideHit, tile.canAttachGear(face, gearHologram));
+
+                    if (!gear.isEmpty() || renderHologram){
                         GlStateManager.disableCull();
                         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-                        double powerratio = tile.capability.getPower(face) / normPower;
-
                         GlStateManager.pushMatrix();
                         GlStateManager.translate(x+0.5, y+0.5, z+0.5);
-                        if (face == EnumFacing.DOWN){
-                            GlStateManager.rotate(-90, 1, 0, 0);
+
+                        switch (face) {
+
+                            case DOWN:
+                                GlStateManager.rotate(-90, 1, 0, 0);
+                                break;
+                            case UP:
+                                GlStateManager.rotate(90, 1, 0, 0);
+                                break;
+                            case NORTH:
+                                break;
+                            case SOUTH:
+                                GlStateManager.rotate(180, 0, 1, 0);
+                                break;
+                            case WEST:
+                                GlStateManager.rotate(90, 0, 1, 0);
+                                break;
+                            case EAST:
+                                GlStateManager.rotate(270, 0, 1, 0);
+                                break;
                         }
 
-                        if (face == EnumFacing.UP){
-                            GlStateManager.rotate(90, 1, 0, 0);
-                        }
+                        MysticalMechanicsAPI.IMPL.renderGear(gear.getGear(), gearHologram, renderHologram, partialTicks, -0.375, 0.875, (float) gear.getPartialAngle(partialTicks));
 
-                        if (face == EnumFacing.NORTH){
-
-                        }
-
-                        if (face == EnumFacing.WEST){
-                            GlStateManager.rotate(90, 0, 1, 0);
-                        }
-
-                        if (face == EnumFacing.SOUTH){
-                            GlStateManager.rotate(180, 0, 1, 0);
-                        }
-
-                        if (face == EnumFacing.EAST){
-                            GlStateManager.rotate(270, 0, 1, 0);
-                        }
-                        GlStateManager.translate(0, 0, -0.375);
-                        GlStateManager.scale(0.875, 0.875, 0.875);
-                        GlStateManager.rotate(((float)(partialTicks * tile.angle)+(1 - partialTicks)*(float)tile.lastAngle)*(float)powerratio, 0, 0, 1);
-                        Minecraft.getMinecraft().getRenderItem().renderItem(tile.gears[i], ItemCameraTransforms.TransformType.FIXED);
                         GlStateManager.popMatrix();
                     }
                 }

@@ -51,6 +51,15 @@ public class UpgradeActuator extends DefaultUpgradeProvider {
     }
 
     @Override
+    public double transformEmberProduction(TileEntity tile, double ember) {
+        double power = getPower();
+        if(power > 15)
+            return ember * 1.5;
+        else
+            return ember;
+    }
+
+    @Override
     public double getOtherParameter(TileEntity tile, String type, double value) {
         if(tile instanceof IMechanicallyPowered) {
             if(type.equals("fuel_consumption"))
