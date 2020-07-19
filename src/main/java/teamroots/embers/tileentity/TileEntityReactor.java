@@ -54,6 +54,11 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
         public void onContentsChanged() {
             TileEntityReactor.this.markDirty();
         }
+
+        @Override
+        public boolean acceptsVolatile() {
+            return true;
+        }
     };
     Random random = new Random();
     int progress = -1;

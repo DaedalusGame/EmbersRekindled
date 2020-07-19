@@ -32,6 +32,11 @@ public class TileEntityReceiver extends TileEntity implements ITileEntityBase, I
 		public void onContentsChanged() {
 			markDirty();
 		}
+
+		@Override
+		public boolean acceptsVolatile() {
+			return false;
+		}
 	};
 	Random random = new Random();
 	long ticksExisted = 0;

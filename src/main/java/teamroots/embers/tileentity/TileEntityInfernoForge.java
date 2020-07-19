@@ -44,7 +44,12 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	public static final double EMBER_COST = 16.0;
 	public static final int MAX_LEVEL = 5;
 	public static final int PROCESS_TIME = 200;
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public boolean acceptsVolatile() {
+			return true;
+		}
+	};
 	Random random = new Random();
 	int progress = 0;
 	int heat = 0;

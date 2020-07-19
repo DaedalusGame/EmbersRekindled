@@ -52,6 +52,11 @@ public class TileEntityCrystalCell extends TileEntity implements ITileEntityBase
         public void onContentsChanged() {
             markDirty();
         }
+
+        @Override
+        public boolean acceptsVolatile() {
+            return true;
+        }
     };
     public ItemStackHandler inventory = new ItemStackHandler(1) {
         @Override

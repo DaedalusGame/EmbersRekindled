@@ -29,6 +29,11 @@ public class TileEntityEmberFunnel extends TileEntity implements ITileEntityBase
         public void onContentsChanged() {
             markDirty();
         }
+
+        @Override
+        public boolean acceptsVolatile() {
+            return false;
+        }
     };
     long ticksExisted = 0L;
 

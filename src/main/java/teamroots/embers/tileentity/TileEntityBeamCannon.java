@@ -43,7 +43,12 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 	public static final int FIRE_THRESHOLD = 400;
 	public static final float DAMAGE = 25.0f;
 	public static final int MAX_DISTANCE = 64;
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public boolean acceptsVolatile() {
+			return true;
+		}
+	};
 	public BlockPos target = null;
 	public BlockPos lastTarget = null;
 	public long ticksExisted = 0;

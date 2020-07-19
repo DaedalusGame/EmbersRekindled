@@ -38,6 +38,11 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 		public void onContentsChanged() {
 			markDirty();
 		}
+
+		@Override
+		public boolean acceptsVolatile() {
+			return false;
+		}
 	};
 	public BlockPos target = null;
 	public long ticksExisted = 0;

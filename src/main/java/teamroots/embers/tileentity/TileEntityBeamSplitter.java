@@ -26,7 +26,12 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBase, ITickable, IEmberPacketProducer, IEmberPacketReceiver {
-	public IEmberCapability capability = new DefaultEmberCapability();
+	public IEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public boolean acceptsVolatile() {
+			return false;
+		}
+	};
 	Random random = new Random();
 	public BlockPos targetLeft = null;
 	public BlockPos targetRight = null;

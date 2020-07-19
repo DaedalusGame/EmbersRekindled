@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.tileentity.TileEntityStampBase;
 import teamroots.embers.tileentity.TileEntityTank;
 
@@ -200,6 +201,7 @@ public class ConfigManager {
 		miniBoilerHeatMultiplier = config.getFloat("miniBoilerHeatMultiplier", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, heat-wise, the mini boiler is at making steam.");
 		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
+		DefaultEmberCapability.allAcceptVolatile = config.getBoolean("allAcceptVolatile", "parameters", false, "Whether ember conduits can attach to any ember consumer/producer");
 
 		scaleDamagePasses.clear();
 		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))

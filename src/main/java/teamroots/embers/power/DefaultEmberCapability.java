@@ -5,6 +5,8 @@ import net.minecraft.util.math.MathHelper;
 import teamroots.embers.Embers;
 
 public class DefaultEmberCapability implements IEmberCapability {
+	public static boolean allAcceptVolatile = false;
+
 	private double ember = 0;
 	private double capacity = 0;
 	@Override
@@ -70,5 +72,10 @@ public class DefaultEmberCapability implements IEmberCapability {
 	@Override
 	public void onContentsChanged() {
 
+	}
+
+	@Override
+	public boolean acceptsVolatile() {
+		return allAcceptVolatile;
 	}
 }

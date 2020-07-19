@@ -12,4 +12,7 @@ public interface IEmberCapability {
 	void writeToNBT(NBTTagCompound tag);
 	void readFromNBT(NBTTagCompound tag);
 	void onContentsChanged();
+	default boolean acceptsVolatile() {
+		return false;
+	}
 }
