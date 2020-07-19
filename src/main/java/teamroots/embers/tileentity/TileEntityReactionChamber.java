@@ -271,9 +271,6 @@ public class TileEntityReactionChamber extends TileEntity implements ITileEntity
 
 	@Override
 	public EnumPipeConnection getConnection(EnumFacing facing) {
-		if(facing.getAxis() == EnumFacing.Axis.Y)
-			return EnumPipeConnection.BLOCK;
-		else
-			return EnumPipeConnection.PIPE;
+		return EnumPipeConnection.BLOCK;
 	}
 }

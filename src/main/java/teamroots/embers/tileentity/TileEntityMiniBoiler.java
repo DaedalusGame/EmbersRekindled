@@ -114,7 +114,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing)
 	{
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return facing != null && facing.getAxis() == EnumFacing.Axis.Y;
+			return facing != null && facing != getFacing();
 		}
 		else if(capability == EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY) {
 			return facing == getFacing();
@@ -127,7 +127,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing)
 	{
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			if(facing == EnumFacing.DOWN) return (T) fluidTank;
+			if(facing == EnumFacing.DOWN || (facing != null && facing != getFacing() && facing.getAxis() != EnumFacing.Axis.Y)) return (T) fluidTank;
 			if(facing == EnumFacing.UP) return (T) gasTank;
 		}
 		if(capability == EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY && facing == getFacing()) {
@@ -362,7 +362,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
-		if(facing == EnumFacing.DOWN)
+		if(facing == EnumFacing.DOWN || (facing != null && facing.getAxis() != EnumFacing.Axis.Y && facing != getFacing()))
 			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.water")));
 		if(facing == EnumFacing.UP)
 			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.steam")));
@@ -370,7 +370,9 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 
 	@Override
 	public EnumPipeConnection getConnection(EnumFacing facing) {
-		if(facing.getAxis() == EnumFacing.Axis.Y)
+		if(facing == getFacing())
+			return EnumPipeConnection.NONE;
+		else if(facing.getAxis() == EnumFacing.Axis.Y)
 			return EnumPipeConnection.BLOCK;
 		else
 			return EnumPipeConnection.PIPE;

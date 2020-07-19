@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.tileentity.TileEntityStampBase;
+import teamroots.embers.tileentity.TileEntitySteamEngine;
 import teamroots.embers.tileentity.TileEntityTank;
 
 import java.io.File;
@@ -158,7 +159,7 @@ public class ConfigManager {
 		emberBoreSpeedMod = config.getInt("emberBoreSpeedMod", "machines", 1, 1, 50, "The speed modifier of the Ember Bore before upgrades.");
 		furnaceSpeedMod = config.getInt("furnaceSpeedMod", "machines", 1, 1, 100, "The speed modifier of the Melter before upgrades.");
 
-		emberBoreMaxYLevel = config.getInt("emberBoreMaxYLevel", "machines", 7, 1, 255, "The maximum y-level at which the Ember Bore can mine ember.");
+		emberBoreMaxYLevel = config.getInt("emberBoreMaxYLevel", "machines", 7, 0, 255, "The maximum y-level at which the Ember Bore can mine ember.");
 
 		config.addCustomCategoryComment("compat", "Settings related to compatibility with other mods.");
 
@@ -202,6 +203,15 @@ public class ConfigManager {
 		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
 		DefaultEmberCapability.allAcceptVolatile = config.getBoolean("allAcceptVolatile", "parameters", false, "Whether ember conduits can attach to any ember consumer/producer");
+		TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD = config.getInt("steamEngineFluidThreshold", "parameters", 10, 1000, Integer.MAX_VALUE, "How much water (in mb) is necessary to start burning solid fuel.");
+		TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION = config.getInt("steamEngineFluidConsumption", "parameters", 4, 0, Integer.MAX_VALUE, "How much water (in mb) is consumed every tick while burning solid fuel.");
+		TileEntitySteamEngine.FUEL_MULTIPLIER = config.getFloat("steamEngineFuelEfficiency", "parameters", 2.0f, 0.0f, Float.MAX_VALUE, "How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.");
+		TileEntitySteamEngine.SOLID_POWER = config.getInt("steamEngineFuelPower", "parameters", 20, 0, Integer.MAX_VALUE, "How much mechanical power is generated while burning solid fuel.");
+		TileEntitySteamEngine.MAX_POWER = config.getFloat("steamEngineMaximumPower", "parameters", 50, 0, Float.MAX_VALUE, "How much mechanical power can be generated at max.");
+		TileEntitySteamEngine.GAS_CONSUMPTION = config.getInt("steamEngineGasConsumption", "parameters", 20, 0, Integer.MAX_VALUE, "How much gas (in mb), such as steam, is consumed every tick.");
+		TileEntitySteamEngine.CAPACITY = config.getInt("steamEngineCapacity", "parameters", Fluid.BUCKET_VOLUME * 8, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Steam Engine.");
+
+
 
 		scaleDamagePasses.clear();
 		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))

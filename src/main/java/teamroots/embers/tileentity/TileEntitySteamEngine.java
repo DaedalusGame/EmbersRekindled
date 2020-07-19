@@ -113,7 +113,9 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     public static int NORMAL_FLUID_CONSUMPTION = 4;
     public static int GAS_CONSUMPTION = 20;
     public static double MAX_POWER = 50;
-    public static int FUEL_MULTIPLIER = 2;
+    public static int CAPACITY = 8000;
+    public static double SOLID_POWER = 20;
+    public static double FUEL_MULTIPLIER = 2;
 
     public static final int SOUND_BURN = 1;
     public static final int SOUND_STEAM = 2;
@@ -126,7 +128,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
     //int steamProgress = 0;
     HashSet<Integer> soundsPlaying = new HashSet<>();
     EnumFacing front = EnumFacing.UP;
-    public FluidTank tank = new FluidTank(8000);
+    public FluidTank tank = new FluidTank(CAPACITY);
     public DefaultMechCapability capability = new DefaultMechCapability() {
         @Override
         public void setPower(double value, EnumFacing from) {
@@ -314,7 +316,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                         ItemStack fuelCopy = fuel.copy();
                         int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
                         if (burnTime > 0) {
-                            currentFuel = new BurningFuel(copyWithSize(fuelCopy, 1), burnTime * FUEL_MULTIPLIER);
+                            currentFuel = new BurningFuel(copyWithSize(fuelCopy, 1), (int)(burnTime * FUEL_MULTIPLIER));
                             fuel.shrink(1);
                             if (fuel.isEmpty())
                                 inventory.setStackInSlot(0, fuelCopy.getItem().getContainerItem(fuelCopy));
@@ -336,7 +338,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
             if (tank.getFluidAmount() >= NORMAL_FLUID_CONSUMPTION && fluid != null && fluid.getFluid() == FluidRegistry.WATER) {
                 if (!world.isRemote) {
                     tank.drain(NORMAL_FLUID_CONSUMPTION, true);
-                    powerGenerated = 20;
+                    powerGenerated = SOLID_POWER;
                     dirty = true;
                 }
             } else {
