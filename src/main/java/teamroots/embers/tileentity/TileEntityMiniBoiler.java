@@ -37,6 +37,7 @@ import teamroots.embers.block.BlockMiniBoiler;
 import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.upgrade.UpgradeMiniBoiler;
+import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
@@ -46,7 +47,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase, ISoundController, ITickable, IExtraDialInformation, IExtraCapabilityInformation {
+public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase, ISoundController, ITickable, IExtraDialInformation, IExtraCapabilityInformation, IFluidPipeConnectable {
 
 	public static final int SOUND_SLOW = 1;
 	public static final int SOUND_MEDIUM = 2;
@@ -365,5 +366,13 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.INPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.water")));
 		if(facing == EnumFacing.UP)
 			strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.OUTPUT,"embers.tooltip.goggles.fluid",I18n.format("embers.tooltip.goggles.fluid.steam")));
+	}
+
+	@Override
+	public EnumPipeConnection getConnection(EnumFacing facing) {
+		if(facing.getAxis() == EnumFacing.Axis.Y)
+			return EnumPipeConnection.BLOCK;
+		else
+			return EnumPipeConnection.PIPE;
 	}
 }

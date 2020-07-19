@@ -24,6 +24,7 @@ import teamroots.embers.block.BlockFluidGauge;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.recipe.FluidReactionRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
@@ -31,7 +32,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
-public class TileEntityReactionChamber extends TileEntity implements ITileEntityBase, ITickable, IExtraDialInformation, IExtraCapabilityInformation {
+public class TileEntityReactionChamber extends TileEntity implements ITileEntityBase, ITickable, IExtraDialInformation, IExtraCapabilityInformation, IFluidPipeConnectable {
 	Random random = new Random();
 	protected FluidTank fluidTank = new FluidTank(getCapacity());
 	protected FluidTank gasTank = new FluidTank(getCapacity());
@@ -266,5 +267,13 @@ public class TileEntityReactionChamber extends TileEntity implements ITileEntity
 	@Override
 	public void addCapabilityDescription(List<String> strings, Capability<?> capability, EnumFacing facing) {
 		strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.BOTH,"embers.tooltip.goggles.fluid",null));
+	}
+
+	@Override
+	public EnumPipeConnection getConnection(EnumFacing facing) {
+		if(facing.getAxis() == EnumFacing.Axis.Y)
+			return EnumPipeConnection.BLOCK;
+		else
+			return EnumPipeConnection.PIPE;
 	}
 }
