@@ -60,6 +60,10 @@ public class ModifierResonatingBell extends ModifierBase {
             int level = ItemModUtil.getModifierLevel(heldStack, EmbersAPI.RESONATING_BELL);
             UUID uuid = player.getUniqueID();
             if (!world.isRemote && level > 0 && EmberInventoryUtil.getEmberTotal(player) >= EmbersAPI.RESONATING_BELL.cost && !ModifierResonatingBell.hasCooldown(uuid)) {
+                double resonance = EmbersAPI.getEmberEfficiency(heldStack);
+                int blockLimit = (int) (150 * level * resonance);
+                int radius = (int) (1 + 3 * level * resonance);
+
                 ModifierResonatingBell.setCooldown(uuid, 80);
                 IBlockState state = world.getBlockState(pos);
                 int count = 0;
@@ -68,10 +72,9 @@ public class ModifierResonatingBell extends ModifierBase {
                 int baseX = pos.getX();
                 int baseY = pos.getY();
                 int baseZ = pos.getZ();
-                int blockLimit = 200 * level;
-                for (int i = -(1 + 3 * level); i < (2 + 3 * level); i++) {
-                    for (int j = -(1 + 3 * level); j < (2 + 3 * level); j++) {
-                        for (int k = -(1 + 3 * level); k < (2 + 3 * level); k++) {
+                for (int i = -radius; i <= radius; i++) {
+                    for (int j = -radius; j <= radius; j++) {
+                        for (int k = -radius; k <= radius; k++) {
                             mutablePos.setPos(baseX + i, baseY + j, baseZ + k);
                             if (world.getBlockState(mutablePos) == state) {
                                 positions.add(mutablePos.toImmutable());
