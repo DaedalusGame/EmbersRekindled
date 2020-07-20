@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
@@ -39,15 +40,15 @@ public class ResearchManager {
     public static final double PAGE_ICON_SIZE = 0.09375;
     public static List<ResearchCategory> researches = new ArrayList<ResearchCategory>();
 
-    public static ResearchBase dials, boiler, mini_boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, tinker_lens,//WORLD
+    public static ResearchBase dials, boiler, mini_boiler, ores, hammer, ancient_golem, gauge, caminite, bore, crystals, activator, tinker_lens, reaction_chamber,//WORLD
             copper_cell, emitters, dawnstone, melter, stamper, mixer, breaker, hearth_coil, access, pump, clockwork_attenuator, geo_separator, //MECHANISMS
             beam_cannon, pulser, splitter, crystal_cell, cinder_staff, clockwork_tools, blazing_ray, charger, jars, alchemy, cinder_plinth, aspecti, catalytic_plug, ember_siphon, //METALLURGY
             tyrfing, waste, cluster, ashen_cloak, inflictor, materia, field_chart, glimmer, metallurgic_dust, //ALCHEMY
             modifiers, inferno_forge, heat, dawnstone_anvil, autohammer, dismantling //SMITHING
             ;
-    public static ResearchBase pipes, tank, bin, dropper, reservoir, vacuum, transfer; //PIPES
-    public static ResearchBase adhesive, hellish_synthesis, archaic_brick, motive_core; //SIMPLE ALCHEMY
-    public static ResearchBase wildfire, combustor, catalyzer, reactor, injector, stirling; //WILDFIRE
+    public static ResearchBase pipes, tank, bin, dropper, reservoir, vacuum, transfer, golem_eye, requisition; //PIPES
+    public static ResearchBase adhesive, hellish_synthesis, archaic_brick, motive_core, dwarven_oil; //SIMPLE ALCHEMY
+    public static ResearchBase wildfire, combustor, catalyzer, reactor, injector, stirling, ember_pipe; //WILDFIRE
     public static ResearchBase superheater, caster_orb, resonating_bell, blasting_core, /*core_stone,*/ winding_gears; //WEAPON AUGMENTS
     public static ResearchBase cinder_jet, eldritch_insignia, intelligent_apparatus, flame_barrier, tinker_lens_augment, anti_tinker_lens, shifting_scales; //ARMOR_AUGMENTS
     public static ResearchBase diffraction_barrel, focal_lens; //PROJECTILE_AUGMENTS
@@ -194,12 +195,16 @@ public class ResearchManager {
         mini_boiler = new ResearchBase("mini_boiler", new ItemStack(RegistryManager.mini_boiler), 11, 7).addAncestor(activator);
         dials = new ResearchBase("dials", new ItemStack(RegistryManager.ember_gauge), 5, 5).addAncestor(hammer);
         tinker_lens = new ResearchBase("tinker_lens", new ItemStack(RegistryManager.tinker_lens),4,7).addAncestor(hammer);
+        reaction_chamber = new ResearchBase("reaction_chamber", new ItemStack(RegistryManager.reaction_chamber), 12, 5).addAncestor(mini_boiler);
 
         pipes = new ResearchBase("pipes", new ItemStack(RegistryManager.pump), 2, 4);
         pipes.addPage(new ResearchShowItem("routing",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_pipe),new ItemStack(RegistryManager.pipe))));
         pipes.addPage(new ResearchShowItem("valves",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_pump),new ItemStack(RegistryManager.pump))));
         pipes.addPage(new ResearchShowItem("pipe_tools",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.tinker_hammer),new ItemStack(Items.STICK))));
-        transfer = new ResearchBase("transfer", new ItemStack(RegistryManager.item_transfer), 5, 5).addAncestor(pipes);
+        golem_eye = new ResearchBase("golem_eye", new ItemStack(RegistryManager.golems_eye), 5, 7)
+                .addPage(new ResearchShowItem("filter_existing", new ItemStack(RegistryManager.item_request), 0, 0).addItem(new DisplayItem(new ItemStack(RegistryManager.item_request))))
+                .addPage(new ResearchShowItem("filter_not_existing", new ItemStack(RegistryManager.dawnstone_anvil), 0, 0).addItem(new DisplayItem(new ItemStack(RegistryManager.dawnstone_anvil))));
+        transfer = new ResearchBase("transfer", new ItemStack(RegistryManager.item_transfer), 5, 5).addAncestor(pipes).addAncestor(golem_eye);
         transfer.addPage(new ResearchShowItem("fluid_transfer",ItemStack.EMPTY,0,0).addItem(new DisplayItem(new ItemStack(RegistryManager.fluid_transfer))));
         vacuum = new ResearchBase("vacuum", new ItemStack(RegistryManager.vacuum), 8, 4).addPage(new ResearchBase("vacuum_transfer",ItemStack.EMPTY,0,0)).addAncestor(pipes);
         dropper = new ResearchBase("dropper", new ItemStack(RegistryManager.item_dropper), 8, 6).addAncestor(pipes);
@@ -207,6 +212,7 @@ public class ResearchManager {
         tank = new ResearchBase("tank", new ItemStack(RegistryManager.block_tank), 3, 1).addAncestor(pipes);
         reservoir = new ResearchBase("reservoir", new ItemStack(RegistryManager.large_tank), 6, 0).addAncestor(tank)
                 .addPage(new ResearchShowItem("reservoir_valve", new ItemStack(RegistryManager.stone_valve), 0, 0).addItem(new DisplayItem(new ItemStack(RegistryManager.stone_valve))));
+        requisition = new ResearchBase("requisition", new ItemStack(RegistryManager.item_request), 3, 6).addAncestor(pipes).addAncestor(golem_eye);
 
         //MECHANISMS
         emitters = new ResearchShowItem("emitters", new ItemStack(RegistryManager.ember_emitter), 0, 2).addItem(new DisplayItem(new ItemStack(RegistryManager.ember_emitter)))
@@ -261,6 +267,7 @@ public class ResearchManager {
         hellish_synthesis = new ResearchBase("hellish_synthesis", new ItemStack(Blocks.NETHERRACK), 2, 1);
         archaic_brick = new ResearchBase("archaic_brick", new ItemStack(RegistryManager.archaic_brick), 5, 2).addAncestor(hellish_synthesis);
         motive_core = new ResearchBase("motive_core", new ItemStack(RegistryManager.ancient_motive_core), 4, 4).addAncestor(archaic_brick);
+        dwarven_oil = new ResearchBase("dwarven_oil", FluidUtil.getFilledBucket(new FluidStack(RegistryManager.fluid_oil, Fluid.BUCKET_VOLUME)), 1, 4).addAncestor(hellish_synthesis);
 
         wildfire = new ResearchBase("wildfire", new ItemStack(RegistryManager.wildfire_core), 1, 5);
         injector = new ResearchBase("injector", new ItemStack(RegistryManager.ember_injector), 0, 7).addAncestor(wildfire)
@@ -281,6 +288,7 @@ public class ResearchManager {
         );
         reactor = new ResearchBase("reactor", new ItemStack(RegistryManager.reactor), 9, 7).addAncestor(combustor).addAncestor(catalyzer);
         stirling = new ResearchBase("stirling", new ItemStack(RegistryManager.stirling), 0, 2).addAncestor(ResearchManager.wildfire);
+        ember_pipe = new ResearchBase("ember_pipe", new ItemStack(RegistryManager.ember_pipe), 12, 6).addAncestor(ResearchManager.reactor);
 
         //SMITHING
         dawnstone_anvil = new ResearchBase("dawnstone_anvil", new ItemStack(RegistryManager.dawnstone_anvil), 12, 7);
@@ -347,11 +355,14 @@ public class ResearchManager {
         subCategoryPipes.addResearch(transfer);
         subCategoryPipes.addResearch(vacuum);
         subCategoryPipes.addResearch(dropper);
+        subCategoryPipes.addResearch(requisition);
+        subCategoryPipes.addResearch(golem_eye);
 
         subCategorySimpleAlchemy.addResearch(hellish_synthesis);
         subCategorySimpleAlchemy.addResearch(archaic_brick);
         subCategorySimpleAlchemy.addResearch(motive_core);
         subCategorySimpleAlchemy.addResearch(adhesive);
+        subCategorySimpleAlchemy.addResearch(dwarven_oil);
 
         subCategoryWildfire.addResearch(wildfire);
         subCategoryWildfire.addResearch(injector);
@@ -359,6 +370,7 @@ public class ResearchManager {
         subCategoryWildfire.addResearch(catalyzer);
         subCategoryWildfire.addResearch(reactor);
         subCategoryWildfire.addResearch(stirling);
+        subCategoryWildfire.addResearch(ember_pipe);
 
 
         ResearchBase mechanicalPowerSwitch;
@@ -403,6 +415,7 @@ public class ResearchManager {
                 .addResearch(activator)
                 .addResearch(boiler)
                 .addResearch(mini_boiler)
+                .addResearch(reaction_chamber)
                 .addResearch(dials);
         categoryMechanisms
                 .addResearch(melter)

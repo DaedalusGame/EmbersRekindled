@@ -118,6 +118,7 @@ public class RegistryManager {
 	public static Item tinker_lens, anti_tinker_lens;
 	public static Item winding_gears;
 	public static Item shifting_scales;
+	public static Item spark_plug;
 	//public static Item core_stone;
 	public static Item creative_heat;
 
@@ -420,6 +421,7 @@ public class RegistryManager {
 		items.add(winding_gears = new ItemBase("winding_gears",true));
 		//items.add(core_stone = new ItemBase("core_stone",true));
 		items.add(creative_heat = new ItemHidden("creative_heat"));
+		items.add(spark_plug = new ItemBase("spark_plug", true));
 		items.add(golems_eye = new ItemGolemEye("golems_eye"));
 		
 		if (ConfigManager.enableAluminum){

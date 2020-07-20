@@ -127,8 +127,6 @@ public abstract class TileEntityEmberPipeBase extends TileEntity implements ITil
                         int priority = PRIORITY_BLOCK;
                         if (tile instanceof IEmberPipePriority)
                             priority = ((IEmberPipePriority) tile).getPriority(facing.getOpposite());
-                        if (isFrom(facing.getOpposite()))
-                            priority -= 5; //aka always try opposite first
                         if(handler != null && handler.acceptsVolatile()) {
                             possibleDirections.put(priority, facing);
                             emberCapabilities[facing.getIndex()] = handler;

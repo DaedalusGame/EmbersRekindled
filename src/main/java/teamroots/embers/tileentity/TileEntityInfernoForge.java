@@ -198,7 +198,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 							}
 						} else {
 							if (EmbersAPI.getEmberValue(item.getItem()) > 0) {
-								emberValue += EmbersAPI.getEmberValue(item.getItem());
+								emberValue += EmbersAPI.getEmberValue(item.getItem()) * item.getItem().getCount();
 							} else {
 								progress = 0;
 								markDirty();

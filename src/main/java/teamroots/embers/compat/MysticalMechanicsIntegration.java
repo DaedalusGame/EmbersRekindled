@@ -203,7 +203,8 @@ public class MysticalMechanicsIntegration {
                 .addPage(new ResearchShowItem("gear_gold", gearGold,0,0).addItem(new ResearchShowItem.DisplayItem(gearGold)))
                 .addPage(new ResearchShowItem("gear_redstone", gearGoldOn,0,0).addItem(new ResearchShowItem.DisplayItem(gearGoldOff,gearGoldOn)))
                 .addPage(new ResearchShowItem("gear_dawnstone", gearDawnstone,0,0).addItem(new ResearchShowItem.DisplayItem(gearDawnstone)));
-        ResearchManager.actuator = new ResearchBase("actuator", new ItemStack(mech_actuator), 9, 5).addAncestor(ResearchManager.gearbox)
+        ResearchManager.actuator = new ResearchBase("actuator", new ItemStack(mech_actuator_single), 9, 5).addAncestor(ResearchManager.gearbox)
+                .addPage(new ResearchShowItem("actuator_multi",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(mech_actuator))))
                 .addPage(new ResearchShowItem("actuator_bore",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.ember_bore))))
                 .addPage(new ResearchShowItem("actuator_pump",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.mechanical_pump))))
                 .addPage(new ResearchShowItem("actuator_stamper",ItemStack.EMPTY,0,0).addItem(new ResearchShowItem.DisplayItem(new ItemStack(RegistryManager.stamper))))

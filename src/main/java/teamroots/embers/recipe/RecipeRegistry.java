@@ -1108,6 +1108,28 @@ public class RecipeRegistry {
 				'I', RegistryManager.block_tank,
 				'B', "blockNickel",
 				'G', RegistryManager.brick_caminite}).setRegistryName(getRL("geo_separator")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("reaction_chamber"),new ItemStack(RegistryManager.reaction_chamber,1),true,new Object[]{
+				"DDD",
+				"D D",
+				"BIB",
+				'I', RegistryManager.spark_plug,
+				'B', "ingotBronze",
+				'D', "plateBronze"}).setRegistryName(getRL("reaction_chamber")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("spark_plug"),new ItemStack(RegistryManager.spark_plug,1),true,new Object[]{
+				"N N",
+				" I ",
+				" B ",
+				'I', "plateIron",
+				'B', RegistryManager.aspectus_silver,
+				'N', "ingotAluminium"}).setRegistryName(getRL("spark_plug")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("item_request"),new ItemStack(RegistryManager.item_request,1),true,new Object[]{
+				"ASA",
+				"IPS",
+				"ASA",
+				'P', RegistryManager.item_pump,
+				'I', RegistryManager.intelligent_apparatus,
+				'S', "plateSilver",
+				'A', RegistryManager.aspectus_silver}).setRegistryName(getRL("item_request")));
 
 		event.getRegistry().register(new TankClearingRecipe(getRL("block_tank_clear"),new ItemStack(RegistryManager.block_tank)).setRegistryName(getRL("block_tank_clear")));
 		event.getRegistry().register(new AshenCloakSocketRecipe().setRegistryName(getRL("cloak_socketing")));
@@ -1399,6 +1421,10 @@ public class RecipeRegistry {
 				ingotBronze,
 				Lists.newArrayList(plateBronze, plateBronze, plateBronze, plateBronze),
 				new ItemStack(RegistryManager.winding_gears,1)));
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("iron", 8, 16).setRange("silver", 8, 16).setRange("dawnstone", 8, 16).setRange("lead", 8, 16).setRange("copper",  8, 16).fixMathematicalError(),
+				Ingredient.fromItem(RegistryManager.wildfire_core),
+				Lists.newArrayList(ingotSilver, plateDawnstone, ingotSilver, plateDawnstone),
+				new ItemStack(RegistryManager.ember_pipe,8)));
 
 		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList().setRange("dawnstone", 20, 30).setRange("silver", 32, 64),
 				ingotSilver,

@@ -105,7 +105,8 @@ tile.caminite_lever.name=Caminite Lever
 tile.catalytic_plug.name=Catalytic Plug
 tile.ember_funnel.name=Ember Funnel
 tile.mini_boiler.name=Mini Boiler
-tile.mech_actuator.name=Mechanical Actuator
+tile.mech_actuator_single.name=Mechanical Actuator
+tile.mech_actuator.name=Mechanical Gearbox
 tile.ember_siphon.name=Ember Siphon
 tile.stirling.name=Wildfire Stirling
 tile.clockwork_attenuator.name=Clockwork Attenuator
@@ -113,6 +114,8 @@ tile.explosion_pedestal.name=Explosion Charm Pedestal
 tile.stone_valve.name=Caminite Valve
 tile.geo_separator.name=Geologic Separator
 tile.item_request.name=Item Requisition
+tile.reaction_chamber.name=Reaction Chamber
+tile.ember_pipe.name=Volatile Ember Conduit
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
@@ -242,6 +245,7 @@ item.anti_tinker_lens.name=Smoky Tinker's Lens
 item.shifting_scales.name=Shifting Scales
 item.winding_gears.name=Winding Gears
 item.core_stone.name=Core Stone
+item.spark_plug.name=Spark Plug
 item.creative_heat.name=Creative Heat Modifier
 
 tile.block_aluminum.name=Aluminium Block
@@ -532,6 +536,19 @@ embers.research.page.routing.desc=Items and Fluids in pipes follow simple rules 
 embers.research.page.valves.desc=Extractors have a number of special properties, listed here: They never connect to other Extractors. When turned off, they can receive items instead of only extracting from containers. When turned on by a redstone signal, they will never accept items from pipes. This makes Extractors useful as valves in pipe systems, for flow control.
 embers.research.page.pipe_tools.desc=Pipes will automatically connect to other adjacent pipes. When this is not wanted, your Tinker's Hammer can be used to disconnect them. (Note that both sides can be disconnected individually) Sometimes, routing in a pipe network can go awry. When this happens, pipes will expel smoke to show that they are clogged. To unclog a pipe, simply right-click it with a stick.
 
+embers.research.page.requisition=Item Requisition
+embers.research.page.requisition.title=Storage System?
+embers.research.page.requisition.tags=Pipe;Storage;Pull;Item;Filter;
+embers.research.page.requisition.desc=Normally, an item pipe system is push-only. This intricate nodule allows inventories to keep a stock of items in an inventory. Simply right-click with an item to set a filter. You can also link this node to a distant Item Extractor to automatically extract items from the extractor to satisfy the stock requirements.
+
+embers.research.page.golem_eye=Eye of the Ancients
+embers.research.page.golem_eye.title=Advanced Filters
+embers.research.page.golem_eye.tags=Filter;Eye;Golem;
+embers.research.page.golem_eye.desc=Sometimes filtering by items is not enough for advanced item transfer systems. An eye of a golem can be obtained by killing it with a pickaxe. You can then use the eye in hand to have it remember any 2 items alongside a filter characteristic based on what the two items have in common.
+embers.research.page.filter_existing.desc=By sneak-right-clicking an Item Requisition, you can attune a golem eye to filter items that exist in an attached inventory. This filter will not work in Item Transfers, as they have no attached inventory.
+embers.research.page.filter_not_existing.desc=By sneak-right-clicking a Dawnstone Anvil, you can attune a golem eye to filter items that don't exist in an attached inventory. This filter will not work in Item Transfers, as they have no attached inventory.
+
+
 embers.research.page.tank=Fluid Vessel
 embers.research.page.tank.title=Liquid Container
 embers.research.page.tank.tags=Tank;Storage;Liquid;Fluid;Portable;Caminite;
@@ -549,8 +566,14 @@ embers.research.page.boiler.desc=While the Activator can refine crystalline Embe
 
 embers.research.page.mini_boiler=Mini Boiler
 embers.research.page.mini_boiler.title=Piggy-backing for explosions
-embers.research.page.mini_boiler.tags=Boiler;Pressure;Water;Steam;Heat;Explosion;
+embers.research.page.mini_boiler.tags=Boiler;Pressure;Water;Steam;Heat;Explosion;Oil;Gas;
 embers.research.page.mini_boiler.desc=Ember is a highly energetic substance, that produces heat both, when consumed and when produced. It would be a shame to let that heat go to waste. By attaching this pressure vessel to the side of an Ember-consuming or -producing machine, you can boil water into steam for other purposes. But beware that at high pressures, the boiler can easily rupture...
+
+embers.research.page.reaction_chamber=Reaction Chamber
+embers.research.page.reaction_chamber.title=It's a condenser! It's a combuster!
+embers.research.page.reaction_chamber.tags=Boiler;Pressure;Reaction;Water;Steam;Gas;Condensation;
+embers.research.page.reaction_chamber.desc=By applying a Spark Plug to a hollow metal vessel you've created a device that can react certain fluids into other fluids. Its main purpose is burning fuel gas into large amounts of steam, but it can also be used to condense excess steam back into water. You can insert reactive fluid from any side and extract the result from any other side. Excess fluid will be safely vented.
+
 
 embers.research.page.dials=Dials
 embers.research.page.dials.title=Careful Measurements
@@ -677,11 +700,12 @@ embers.research.page.gear_dawnstone.desc=Dawnstone Gears are more suitable for h
 embers.research.page.actuator=Mechanical Actuator
 embers.research.page.actuator.title=Alternate Energy
 embers.research.page.actuator.tags=Gear;Mechanical;Machine;Upgrade;Bore;Pump;Stamp;Mixer;Hammer;
-embers.research.page.actuator.desc=Some machines that are powered using Ember could potentially be powered by mechanical energy instead. This machine attachment has 4 input sides for mechanical energy. Similar to a gearbox, a gear needs to be attached to a side in order to attach an axle to it. The power from each side is combined together internally, but most machines have diminishing returns for the amount of power provided, so more power may not always be better.
+embers.research.page.actuator.desc=Some machines that are powered using Ember could potentially be powered by mechanical energy instead. In order to function, it must be attached to a machine that can accept machine upgrades. Similar to a gearbox, a gear needs to be attached to the opposing side in order to attach an axle to it.
+embers.research.page.actuator_multi.desc=This altered version has 4 input sides for mechanical energy. The power from each side is combined together internally, but most machines have diminishing returns for the amount of power provided, so more power may not always be better.
 embers.research.page.actuator_bore.desc=The Ember Bore is almost purely mechanical and lends itself well to being powered by mechanical energy. Powering it this way is more coal efficient, but initially a bit slower.
 embers.research.page.actuator_pump.desc=The Pump is a machine that really suffers from being powered by Ember. Even small amounts of mechanical power speed it up significantly, and it can be pushed to become quite fast.
 embers.research.page.actuator_stamper.desc=The Stamper is another machine with moving parts, but the fact that Ember is so energetic and the motion of the Stamper is so simple mean that directly applying mechanical power will only speed it up a little bit. It is quite a bit more efficient in terms of Ember cost however.
-embers.research.page.actuator_mixer.desc=Mixer Centrifuges use Ember and moving parts to bind liquid metal together, and while the moving parts can certainly be powered by mechanical energy, not all of the process can be powered by mechanical energy.
+embers.research.page.actuator_mixer.desc=Mixer Centrifuges use Ember and moving parts to bind liquid metal together, and while the moving parts can certainly be powered by mechanical energy, not all recipe processes can be powered purely by mechanical energy.
 embers.research.page.actuator_auto_hammer.desc=The Automatic Hammer is very similar to the Stamper, and similar speedup and ember savings can be achieved by hooking up mechanical power instead.
 
 embers.research.page.steam_engine=Steam Engine
@@ -787,6 +811,11 @@ embers.research.page.hellish_synthesis.title=Strange Materials
 embers.research.page.hellish_synthesis.tags=Alchemy;Transmutation;Nether;Netherrack;Soulsand;Soul;Sand;
 embers.research.page.hellish_synthesis.desc=Through alchemical processes, you have discovered a way to create several new substances. These include strange red rock and sand, which you have read in ancient documents make up the land of a strange faraway realm.
 
+embers.research.page.dwarven_oil=Dwarven Oil
+embers.research.page.dwarven_oil.title=Black Gold
+embers.research.page.dwarven_oil.tags=Alchemy;Nether;Soulsand;Soul;Sand;Oil;Gas;Fuel;
+embers.research.page.dwarven_oil.desc=Melting the strange brown sand you've synthesized prior yields a thick black sludge. Through further processing in a centrifuge with steam or other gas, you can turn this sludge into dwarven oil. The oil does not expand as much when boiled and can thus be used to create much safer boiler setups.
+
 embers.research.page.archaic_brick=Archaic Bricks
 embers.research.page.archaic_brick.title=Ancient Building Material
 embers.research.page.archaic_brick.tags=Alchemy;Transmutation;Archaic;Brick;
@@ -870,6 +899,11 @@ embers.research.page.reactor=Ignem Reactor
 embers.research.page.reactor.title=Ember Chemistry
 embers.research.page.reactor.tags=Wildfire;Core;Catalysis;Catalyst;Combustion;Combust;Generator;Reactor;Chamber;Multiblock;Multi Block;
 embers.research.page.reactor.desc=The Ignem Reactor is a very powerful means of refining Ember crystals. It must be placed adjacent to the top parts of both a Combustion and Catalysis Chamber. When both the Combustion Chamber and Catalysis Chamber are active, the Reactor will refine crystalline Ember with a multiplier equal to the fuel level and catalyst level of the attached chambers added together, plus one. The catalyst level and combustion level must also be fairly close.
+
+embers.research.page.ember_pipe=Volatile Ember Conduit
+embers.research.page.ember_pipe.title=Rigged From The Start
+embers.research.page.ember_pipe.tags=Ember;Pipe;Wildfire;Volatile;Conduit;
+embers.research.page.ember_pipe.desc=You've reached the point where the Ignem Reactor produces so much Ember that it cannot be extracted in a timely manner anymore. This ludicrously expensive conduit can be powered directly with a redstone signal to extract larger and larger packets of Ember. This comes at the cost of being completely uncontrollable, and when two ember packets collide, the conduit segment will detonate!
 
 embers.research.page.materia=Isolated Materia
 embers.research.page.materia.title=Universal Repair
