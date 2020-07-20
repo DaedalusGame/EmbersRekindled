@@ -22,7 +22,12 @@ import javax.annotation.Nullable;
 public class TileEntityCreativeEmberSource extends TileEntity implements ITileEntityBase, ITickable {
 	int ticksExisted = 0;
 	BlockPos receivedFrom = null;
-	public DefaultEmberCapability capability = new DefaultEmberCapability();
+	public DefaultEmberCapability capability = new DefaultEmberCapability() {
+		@Override
+		public boolean acceptsVolatile() {
+			return true;
+		}
+	};
 	
 	public TileEntityCreativeEmberSource(){
 		super();

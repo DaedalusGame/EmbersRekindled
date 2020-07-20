@@ -1,5 +1,7 @@
 package teamroots.embers.api.itemmod;
 
+import com.google.common.collect.Multimap;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 
@@ -42,7 +44,7 @@ public class ModifierBase {
 			case TOOL_OR_ARMOR:
 				if(item instanceof ItemArmor) return true;
 			case TOOL:
-				return !item.getToolClasses(stack).isEmpty() || item instanceof ItemSword || item instanceof ItemHoe || item instanceof ItemTool;
+				return !item.getToolClasses(stack).isEmpty() || item instanceof ItemSword || item instanceof ItemHoe || item instanceof ItemTool || isSecretlyAWeapon(stack);
 			case ARMOR:
 				return item instanceof ItemArmor;
 			case HELMET:
@@ -56,6 +58,11 @@ public class ModifierBase {
 			default:
 				return false;
 		}
+	}
+
+	private boolean isSecretlyAWeapon(ItemStack stack) {
+		Multimap<String, AttributeModifier> attributeMap = stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
+		return !attributeMap.isEmpty();
 	}
 
 	public void onApply(ItemStack stack) {
