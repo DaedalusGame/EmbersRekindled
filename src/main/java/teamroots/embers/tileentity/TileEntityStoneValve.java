@@ -118,7 +118,7 @@ public class TileEntityStoneValve extends TileEntity implements ITileEntityBase,
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && (facing == null || facing == getFacing()))
             return (T) fluidHandler;
         return super.getCapability(capability, facing);
     }
@@ -146,8 +146,6 @@ public class TileEntityStoneValve extends TileEntity implements ITileEntityBase,
 
     @Override
     public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote)
-            return true;
         if (tank != null)
             return tank.activate(world, tank.getPos(), world.getBlockState(tank.getPos()), player, hand, side, hitX, hitY, hitZ);
         return false;
