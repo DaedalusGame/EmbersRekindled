@@ -88,7 +88,7 @@ public class TileEntityReactor extends TileEntity implements ITileEntityBase, IT
 
     public TileEntityReactor() {
         super();
-        capability.setEmberCapacity(64000);
+        capability.setEmberCapacity(128000);
     }
 
     @Override
