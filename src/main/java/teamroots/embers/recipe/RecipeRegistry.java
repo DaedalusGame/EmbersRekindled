@@ -251,6 +251,9 @@ public class RecipeRegistry {
 		EmbersAPI.registerEmberFuel(Ingredient.fromItem(RegistryManager.crystal_ember),2400);
 		EmbersAPI.registerEmberFuel(Ingredient.fromItem(RegistryManager.ember_cluster),3600);
 
+		Ingredient anyDawnstoneTool = Ingredient.fromItems(RegistryManager.axe_dawnstone, RegistryManager.hoe_dawnstone, RegistryManager.sword_dawnstone, RegistryManager.shovel_dawnstone, RegistryManager.pickaxe_dawnstone);
+		EmbersAPI.registerEmberToolEffeciency(anyDawnstoneTool, 2.0);
+
 		EmbersAPI.registerMetalCoefficient("blockGold",1.0);
 		EmbersAPI.registerMetalCoefficient("blockSilver",1.0);
 		EmbersAPI.registerMetalCoefficient("blockCopper",1.0);

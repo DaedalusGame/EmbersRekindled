@@ -34,6 +34,7 @@ import java.util.List;
 public class EmbersAPIImpl implements IEmbersAPI {
     //TODO: Move to more suitable spot? Directly into the API package?
     public static ArrayList<IFuel> emberFuels = new ArrayList<>();
+    public static ArrayList<IFuel> emberEfficiency = new ArrayList<>();
     public static ArrayList<ICoefficientFuel> catalysisFuels = new ArrayList<>();
     public static ArrayList<ICoefficientFuel> combustionFuels = new ArrayList<>();
     public static ArrayList<IMetalCoefficient> metalCoefficients = new ArrayList<>();
@@ -93,6 +94,45 @@ public class EmbersAPIImpl implements IEmbersAPI {
     public double getEmberValue(ItemStack stack) {
         IFuel fuel = getEmberFuel(stack);
         return fuel != null ? fuel.getFuelValue(stack) : 0;
+    }
+
+    @Override
+    public void registerEmberToolEffeciency(Ingredient ingredient, double efficiency) {
+        registerEmberToolEffeciency(new IFuel() { //TODO: move to actual class in apiimpl
+            @Override
+            public boolean matches(ItemStack stack) {
+                return ingredient.apply(stack);
+            }
+
+            @Override
+            public double getFuelValue(ItemStack stack) {
+                return efficiency;
+            }
+        });
+    }
+
+    @Override
+    public void registerEmberToolEffeciency(IFuel fuel) {
+        emberEfficiency.add(fuel);
+    }
+
+    @Override
+    public void unregisterEmberToolEffeciency(IFuel fuel) {
+        emberEfficiency.remove(fuel);
+    }
+
+    @Override
+    public IFuel getEmberToolEfficiency(ItemStack stack) {
+        for(IFuel fuel : emberEfficiency)
+            if(fuel.matches(stack))
+                return fuel;
+        return null;
+    }
+
+    @Override
+    public double getEmberEfficiency(ItemStack stack) {
+        IFuel fuel = getEmberToolEfficiency(stack);
+        return fuel != null ? fuel.getFuelValue(stack) : 1;
     }
 
     @Override

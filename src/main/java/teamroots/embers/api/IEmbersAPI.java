@@ -31,6 +31,16 @@ public interface IEmbersAPI {
 
     double getEmberValue(ItemStack stack);
 
+    void registerEmberToolEffeciency(Ingredient ingredient, double efficiency);
+
+    void registerEmberToolEffeciency(IFuel fuel);
+
+    void unregisterEmberToolEffeciency(IFuel fuel);
+
+    IFuel getEmberToolEfficiency(ItemStack stack);
+
+    double getEmberEfficiency(ItemStack stack);
+
     void registerCatalysisFuel(Ingredient ingredient, double coefficient);
 
     void registerCatalysisFuel(ICoefficientFuel fuel);

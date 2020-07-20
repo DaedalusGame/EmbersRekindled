@@ -83,8 +83,9 @@ public class MessageCasterOrb implements IMessage {
                         double yOrigin = player.posY + player.getEyeHeight();
                         double zOrigin = player.posZ + offZ;
 
-
+                        double resonance = EmbersAPI.getEmberEfficiency(heldStack);
                         double value = 8.0 * (Math.atan(0.6 * (level)) / (1.25));
+                        value *= resonance;
                         EffectDamage effect = new EffectDamage((float) value, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0);
                         ProjectileFireball fireball = new ProjectileFireball(player, new Vec3d(xOrigin, yOrigin, zOrigin), new Vec3d(xVel, yVel, zVel), value, 160, effect);
                         EmberProjectileEvent event = new EmberProjectileEvent(player, heldStack, 0.0, fireball);

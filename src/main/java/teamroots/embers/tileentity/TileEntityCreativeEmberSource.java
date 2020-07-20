@@ -27,6 +27,16 @@ public class TileEntityCreativeEmberSource extends TileEntity implements ITileEn
 		public boolean acceptsVolatile() {
 			return true;
 		}
+
+		@Override
+		public double addAmount(double value, boolean doAdd) {
+			return value;
+		}
+
+		@Override
+		public double removeAmount(double value, boolean doRemove) {
+			return value;
+		}
 	};
 	
 	public TileEntityCreativeEmberSource(){

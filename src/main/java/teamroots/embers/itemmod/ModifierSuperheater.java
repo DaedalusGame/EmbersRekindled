@@ -51,6 +51,20 @@ public class ModifierSuperheater extends ModifierBase {
 			}
 		}
 	}
+
+	private double getBurnBonus(double resonance) {
+		if(resonance > 1)
+			return 1 + (resonance - 1) * 0.5;
+		else
+			return resonance;
+	}
+
+	private double getDamageBonus(double resonance) {
+		if(resonance > 1)
+			return 1 + (resonance - 1) * 1.0;
+		else
+			return resonance;
+	}
 	
 	@SubscribeEvent
 	public void onHit(LivingHurtEvent event){
@@ -59,14 +73,19 @@ public class ModifierSuperheater extends ModifierBase {
 			ItemStack s = damager.getHeldItemMainhand();
 			if (!s.isEmpty()){
 				if (ItemModUtil.hasHeat(s)){
-					int superheatLevel = ItemModUtil.getModifierLevel(s, EmbersAPI.SUPERHEATER);
-					if (superheatLevel > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
-						event.getEntityLiving().setFire(1);
+					int level = ItemModUtil.getModifierLevel(s, EmbersAPI.SUPERHEATER);
+					if (level > 0 && EmberInventoryUtil.getEmberTotal(damager) >= cost){
+						double resonance = EmbersAPI.getEmberEfficiency(s);
+
+						int burnTime = (int) (Math.pow(2, level - 1) * 5 * getBurnBonus(resonance));
+						float extraDamage = (float) (level * getDamageBonus(resonance));
+
+						event.getEntityLiving().setFire(burnTime);
 						if (!damager.world.isRemote){
 							PacketHandler.INSTANCE.sendToAll(new MessageSuperheatFX(event.getEntity().posX,event.getEntity().posY+event.getEntity().height/2.0,event.getEntity().posZ));
 						}
 						EmberInventoryUtil.removeEmber(damager, cost);
-						event.setAmount(event.getAmount()+superheatLevel);
+						event.setAmount(event.getAmount() + extraDamage);
 					}
 				}
 			}

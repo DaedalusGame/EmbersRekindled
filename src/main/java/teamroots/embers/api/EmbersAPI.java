@@ -64,6 +64,26 @@ public class EmbersAPI {
         return IMPL.getEmberValue(stack);
     }
 
+    public static void registerEmberToolEffeciency(Ingredient ingredient, double efficiency) {
+        IMPL.registerEmberToolEffeciency(ingredient, efficiency);
+    }
+
+    public static void registerEmberToolEffeciency(IFuel fuel) {
+        IMPL.registerEmberToolEffeciency(fuel);
+    }
+
+    public static void unregisterEmberToolEffeciency(IFuel fuel) {
+        IMPL.unregisterEmberToolEffeciency(fuel);
+    }
+
+    public static IFuel getEmberToolEfficiency(ItemStack stack) {
+        return IMPL.getEmberToolEfficiency(stack);
+    }
+
+    public static double getEmberEfficiency(ItemStack stack) {
+        return IMPL.getEmberEfficiency(stack);
+    }
+
     public static void registerCatalysisFuel(Ingredient ingredient, double coefficient){
         IMPL.registerCatalysisFuel(ingredient, coefficient);
     }

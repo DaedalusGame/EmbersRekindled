@@ -286,8 +286,9 @@ public class ModifierWindingGears extends ModifierBase {
             if (level > 0) {
                 if (stack.getTagCompound() == null)
                     stack.setTagCompound(new NBTTagCompound()); //I promise you this has a 0% chance of ever running
+                double resonance = EmbersAPI.getEmberEfficiency(stack);
                 double charge = getCharge(player.world, stack);
-                double addAmount = Math.max((0.025 + 0.01 * level) * (maxCharge - charge), 5);
+                double addAmount = Math.max((0.025 + 0.01 * level) * (maxCharge - charge), 5 * resonance);
                 addCharge(player.world, stack, addAmount);
                 player.swingArm(event.getHand());
                 event.setCancellationResult(EnumActionResult.PASS);
