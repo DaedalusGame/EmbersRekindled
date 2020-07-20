@@ -158,7 +158,8 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
-		if(getWorld().isRemote)
+		World world = getWorld();
+		if(world.isRemote)
 			handleSound();
 		ItemStack stack = inventory.getStackInSlot(0);
 		isWorking = false;
@@ -170,18 +171,18 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER * ConfigManager.chargerSpeedMod;
 				double emberAdded;
 				if(transferRate > 0) {
-					emberAdded = itemCapability.addAmount(Math.min(Math.abs(transferRate), capability.getEmber()), true);
-					capability.removeAmount(emberAdded, true);
+					emberAdded = itemCapability.addAmount(Math.min(Math.abs(transferRate), capability.getEmber()), !world.isRemote);
+					capability.removeAmount(emberAdded, !world.isRemote);
 				} else {
-					emberAdded = capability.addAmount(Math.min(Math.abs(transferRate), itemCapability.getEmber()), true);
-					itemCapability.removeAmount(emberAdded, true);
+					emberAdded = capability.addAmount(Math.min(Math.abs(transferRate), itemCapability.getEmber()), !world.isRemote);
+					itemCapability.removeAmount(emberAdded, !world.isRemote);
 				}
 				if (emberAdded > 0)
 					isWorking = true;
 				markDirty();
-				if (getWorld().isRemote && isWorking && this.capability.getEmber() > 0 && getWorld().isRemote) {
+				if (world.isRemote && isWorking && this.capability.getEmber() > 0) {
 					for (int i = 0; i < Math.ceil(this.capability.getEmber() / 500.0); i++) {
-						ParticleUtil.spawnParticleGlow(getWorld(), getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
+						ParticleUtil.spawnParticleGlow(world, getPos().getX() + 0.25f + random.nextFloat() * 0.5f, getPos().getY() + 0.25f + random.nextFloat() * 0.5f, getPos().getZ() + 0.25f + random.nextFloat() * 0.5f, 0, 0, 0, 255, 64, 16, 2.0f, 24);
 					}
 				}
 			}
