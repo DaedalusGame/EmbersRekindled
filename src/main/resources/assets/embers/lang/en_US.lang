@@ -998,7 +998,7 @@ embers.research.page.caster_orb_addendum.desc=Since the Caster Orb allows tools 
 embers.research.page.flame_barrier=Flame Barrier
 embers.research.page.flame_barrier.title=Fiery Defenses
 embers.research.page.flame_barrier.tags=Modifier;Augment;Armor;Fire;Shield;Barrier;Defense;
-embers.research.page.flame_barrier.desc=The Flame Barrier is an armor augment that creates a shield of flames around the wearer when struck. Upon taking a hit, if this augment is present on a player's armor, the attacker will be ignited and take some damage. This damage increases with modifier level.
+embers.research.page.flame_barrier.desc=The Flame Barrier is an armor augment that creates a shield of flames around the wearer when struck. Upon taking a hit, if this augment is present on a player's armor, the attacker will be ignited and take some damage. Each flame blast requires some Ember. This damage increases with modifier level.
 
 embers.research.page.eldritch_insignia=Eldritch Insignia
 embers.research.page.eldritch_insignia.title=Eerie Mark
