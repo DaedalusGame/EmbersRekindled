@@ -5,10 +5,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import teamroots.embers.item.ItemCinderStaff;
+import teamroots.embers.item.ItemIgnitionCannon;
 import teamroots.embers.power.DefaultEmberCapability;
-import teamroots.embers.tileentity.TileEntityStampBase;
-import teamroots.embers.tileentity.TileEntitySteamEngine;
-import teamroots.embers.tileentity.TileEntityTank;
+import teamroots.embers.tileentity.*;
 
 import java.io.File;
 import java.util.*;
@@ -42,11 +42,7 @@ public class ConfigManager {
 	@Deprecated
 	public static List<Integer> smallRuinBlacklist = new ArrayList<>();
 
-	public static int chargerSpeedMod;
-	public static int cinderPlinthSpeedMod;
 	public static int emberBoreSpeedMod;
-	public static int furnaceSpeedMod;
-
 	public static int emberBoreMaxYLevel;
 
 	//COMPAT
@@ -147,20 +143,6 @@ public class ConfigManager {
 		}
 		smallRuinIsWhiteList = config.getBoolean("smallRuinBlacklistIsWhitelist","structures",true,"Whether the small ruin generation blacklist is a whitelist.");
 
-		config.addCustomCategoryComment("machines", "Settings related to machines in the mod.");
-
-		for (String s : config.getStringList("emberBoreBlacklist", "machines", new String[] {}, "A list of all dimension IDs in which Embers Ember Bore will not mine.")){
-			emberBoreGraylist.add(Integer.valueOf(s));
-		}
-		emberBoreIsWhiteList = config.getBoolean("emberBoreIsWhiteList","machines",false,"Whether the Ember Bore blacklist is a whitelist.");
-
-		chargerSpeedMod = config.getInt("chargerSpeedMod", "machines", 1, 1, 10, "The speed modifier of the Copper Charger before upgrades.");
-		cinderPlinthSpeedMod = config.getInt("cinderPlinthSpeedMod", "machines", 1, 1, 40, "The speed modifier of the Cinder Plinth before upgrades.");
-		emberBoreSpeedMod = config.getInt("emberBoreSpeedMod", "machines", 1, 1, 50, "The speed modifier of the Ember Bore before upgrades.");
-		furnaceSpeedMod = config.getInt("furnaceSpeedMod", "machines", 1, 1, 100, "The speed modifier of the Melter before upgrades.");
-
-		emberBoreMaxYLevel = config.getInt("emberBoreMaxYLevel", "machines", 7, 0, 255, "The maximum y-level at which the Ember Bore can mine ember.");
-
 		config.addCustomCategoryComment("compat", "Settings related to compatibility with other mods.");
 
 		enableNickel = config.getBoolean("enableNickel", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' nickel.");
@@ -191,30 +173,87 @@ public class ConfigManager {
 		codexCategoryIsProgress = config.getBoolean("codexCategoryIsProgress", "misc", true, "Codex category is shut. Progression is open.");
 		codexEntryIsProgress = config.getBoolean("codexEntryIsProgress", "misc", true, "Codex entry is shut and hide. Progression is open and show.");
 
-		melterOreAmount = config.getInt("melterOreAmount", "parameters", 144, 0, Integer.MAX_VALUE, "How many mb of fluid are obtained per ore output in the melter. This is multiplied by the amount of output a melter would produce, so by default 144mb * 2 ingots.");
-		stampPlateAmount = config.getInt("stampPlateAmount", "parameters", 1, 1, Integer.MAX_VALUE, "How many ingots are required to make one plate in the stamper.");
-		stampAspectusAmount = config.getInt("stampAspectusAmount", "parameters", 1, 1, Integer.MAX_VALUE, "How many ingots are required to make one aspectus in the stamper.");
-		stampGearAmount = config.getInt("stampGearAmount", "parameters", 2, 1, Integer.MAX_VALUE, "How many ingots are required to make one gear in the stamper.");
-		TileEntityStampBase.capacity = config.getInt("stampBaseCapacity", "parameters", (Fluid.BUCKET_VOLUME*3) / 2, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into the Stamp Base.");
-		TileEntityTank.capacity = config.getInt("tankCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into the Fluid Vessel.");
-		reservoirCapacity = config.getInt("reservoirCapacity", "parameters", Fluid.BUCKET_VOLUME * 40, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
-		miniBoilerCapacity = config.getInt("miniBoilerCapacity", "parameters", Fluid.BUCKET_VOLUME * 16, 1000, Integer.MAX_VALUE, "How much fluid (in mb) fits into a mini boiler.");
-		miniBoilerHeatMultiplier = config.getFloat("miniBoilerHeatMultiplier", "parameters", 1.0f, 0.0f, Float.MAX_VALUE, "How efficient, heat-wise, the mini boiler is at making steam.");
-		miniBoilerCanExplode = config.getBoolean("miniBoilerCanExplode", "parameters", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
-		geoSeparatorCapacity = config.getInt("geoSeparatorCapacity", "parameters", Fluid.BUCKET_VOLUME, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Geologic Seperator");
-		DefaultEmberCapability.allAcceptVolatile = config.getBoolean("allAcceptVolatile", "parameters", false, "Whether ember conduits can attach to any ember consumer/producer");
-		TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD = config.getInt("steamEngineFluidThreshold", "parameters", 10, 1000, Integer.MAX_VALUE, "How much water (in mb) is necessary to start burning solid fuel.");
-		TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION = config.getInt("steamEngineFluidConsumption", "parameters", 4, 0, Integer.MAX_VALUE, "How much water (in mb) is consumed every tick while burning solid fuel.");
-		TileEntitySteamEngine.FUEL_MULTIPLIER = config.getFloat("steamEngineFuelEfficiency", "parameters", 2.0f, 0.0f, Float.MAX_VALUE, "How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.");
-		TileEntitySteamEngine.SOLID_POWER = config.getInt("steamEngineFuelPower", "parameters", 20, 0, Integer.MAX_VALUE, "How much mechanical power is generated while burning solid fuel.");
-		TileEntitySteamEngine.MAX_POWER = config.getFloat("steamEngineMaximumPower", "parameters", 50, 0, Float.MAX_VALUE, "How much mechanical power can be generated at max.");
-		TileEntitySteamEngine.GAS_CONSUMPTION = config.getInt("steamEngineGasConsumption", "parameters", 20, 0, Integer.MAX_VALUE, "How much gas (in mb), such as steam, is consumed every tick.");
-		TileEntitySteamEngine.CAPACITY = config.getInt("steamEngineCapacity", "parameters", Fluid.BUCKET_VOLUME * 8, 1, Integer.MAX_VALUE, "How much fluid (in mb) fits into a Steam Engine.");
+		DefaultEmberCapability.allAcceptVolatile = loadBoolean("parameters.allAcceptVolatile", false, "Whether ember conduits can attach to any ember consumer/producer");
 
+		//Melter
+		melterOreAmount = loadInteger("parameters.melter.oreAmount", 144, "How many mb of fluid are obtained per ore output in the melter. This is multiplied by the amount of output a melter would produce, so by default 144mb * 2 ingots.");
+		TileEntityFurnaceBottom.PROCESS_TIME = loadInteger("parameters.melter.processTime",  TileEntityFurnaceBottom.PROCESS_TIME, "The time in ticks it takes to process one recipe.");
+		TileEntityFurnaceBottom.EMBER_COST = loadDouble("parameters.melter.cost",  TileEntityFurnaceBottom.EMBER_COST, "The ember cost per tick.");
 
+		//Geo Seperator
+		geoSeparatorCapacity = loadInteger("parameters.geoSeparator.capacity",  Fluid.BUCKET_VOLUME, "How much fluid (in mb) fits into a Geologic Seperator");
 
+		//Stamper
+		stampPlateAmount = loadInteger("parameters.stamper.plateAmount", 1, "How many ingots are required to make one plate in the stamper.");
+		stampAspectusAmount = loadInteger("parameters.stamper.aspectusAmount",  1, "How many ingots are required to make one aspectus in the stamper.");
+		stampGearAmount = loadInteger("parameters.stamper.gearAmount",  2, "How many ingots are required to make one gear in the stamper.");
+		TileEntityStampBase.capacity = loadInteger("parameters.stamper.capacity",  TileEntityStampBase.capacity,  "How much fluid (in mb) fits into the Stamp Base.");
+
+		//Ember Bore
+		for (String s : loadStringList("parameters.emberBore.blacklist", new String[] {}, "A list of all dimension IDs in which Embers Ember Bore will not mine.")){
+			emberBoreGraylist.add(Integer.valueOf(s));
+		}
+		emberBoreIsWhiteList = loadBoolean("parameters.emberBore.isWhiteList",false,"Whether the Ember Bore blacklist is a whitelist.");
+		emberBoreMaxYLevel = loadInteger("parameters.emberBore.yMax", 7, "The maximum y-level at which the Ember Bore can mine ember.");
+		emberBoreSpeedMod = loadInteger("parameters.emberBore.speedMod", 1,  "The speed modifier of the Ember Bore before upgrades.");
+		TileEntityEmberBore.BORE_TIME = loadInteger("parameters.emberBore.processTime", TileEntityEmberBore.BORE_TIME, "The time in ticks it takes to try one dig attempt.");
+		TileEntityEmberBore.FUEL_CONSUMPTION = loadDouble("parameters.emberBore.fuelCost", TileEntityEmberBore.FUEL_CONSUMPTION, "The amount of fuel consumed each tick");
+
+		//Charger
+		TileEntityCharger.MAX_TRANSFER = loadDouble("parameters.charger.transfer", TileEntityCharger.MAX_TRANSFER, "How much ember is transferred between item and charger per tick");
+
+		//Cinder Plinth
+		TileEntityCinderPlinth.PROCESS_TIME = loadInteger("parameters.cinderPlinth.processTime", TileEntityCinderPlinth.PROCESS_TIME, "The time in ticks it takes to process one item.");
+		TileEntityCinderPlinth.EMBER_COST = loadDouble("parameters.cinderPlinth.cost", TileEntityCinderPlinth.EMBER_COST, "The ember cost per tick.");
+
+		//Dawnstone Anvil
+		TileEntityDawnstoneAnvil.MAX_HITS = loadInteger("parameters.dawnstoneAnvil.maxHits", TileEntityDawnstoneAnvil.MAX_HITS, "Number of hammer hits it takes to finish one process");
+
+		//Inferno Forge
+		TileEntityInfernoForge.PROCESS_TIME = loadInteger("parameters.infernoForge.processTime", TileEntityInfernoForge.PROCESS_TIME, "The time in ticks it takes to process one item.");
+		TileEntityInfernoForge.EMBER_COST = loadDouble("parameters.infernoForge.cost", TileEntityInfernoForge.EMBER_COST, "The ember cost per tick.");
+		TileEntityInfernoForge.MAX_LEVEL = loadInteger("parameters.infernoForge.maxLevel", TileEntityInfernoForge.MAX_LEVEL, "The maximum augment level that can be reforged to.");
+
+		//Tank
+		TileEntityTank.capacity = loadInteger("parameters.tank.capacity", TileEntityTank.capacity, "How much fluid (in mb) fits into the Fluid Vessel.");
+
+		//Reservoir
+		reservoirCapacity = loadInteger("parameters.reservoir.capacity", Fluid.BUCKET_VOLUME * 40, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
+
+		//Mini Boiler
+		miniBoilerCapacity = loadInteger("parameters.miniBoiler.capacity", Fluid.BUCKET_VOLUME * 16, "How much fluid (in mb) fits into a mini boiler.");
+		miniBoilerHeatMultiplier = loadFloat("parameters.miniBoiler.heatMultiplier",  1.0f, "How efficient, heat-wise, the mini boiler is at making steam.");
+		miniBoilerCanExplode = loadBoolean("parameters.miniBoiler.canExplode",  true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
+
+		//Steam Engine
+		TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD = loadInteger("parameters.steamEngine.fluidThreshold",  TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD, "How much water (in mb) is necessary to start burning solid fuel.");
+		TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION = loadInteger("parameters.steamEngine.fluidConsumption", TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION,  "How much water (in mb) is consumed every tick while burning solid fuel.");
+		TileEntitySteamEngine.FUEL_MULTIPLIER = loadDouble("parameters.steamEngine.fuelEfficiency", TileEntitySteamEngine.FUEL_MULTIPLIER,  "How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.");
+		TileEntitySteamEngine.SOLID_POWER = loadDouble("parameters.steamEngine.fuelPower",  TileEntitySteamEngine.SOLID_POWER,  "How much mechanical power is generated while burning solid fuel.");
+		TileEntitySteamEngine.MAX_POWER = loadDouble("parameters.steamEngine.maximumPower",  TileEntitySteamEngine.MAX_POWER,  "How much mechanical power can be generated at max.");
+		TileEntitySteamEngine.GAS_CONSUMPTION = loadInteger("parameters.steamEngine.gasConsumption",  TileEntitySteamEngine.GAS_CONSUMPTION,  "How much gas (in mb), such as steam, is consumed every tick.");
+		TileEntitySteamEngine.CAPACITY = loadInteger("parameters.steamEngine.capacity",  TileEntitySteamEngine.CAPACITY,  "How much fluid (in mb) fits into a Steam Engine.");
+
+		//Blazing Ray
+		ItemIgnitionCannon.EMBER_COST = loadDouble("parameters.blazingRay.cost", ItemIgnitionCannon.EMBER_COST, "Ember used up by each shot.");
+		ItemIgnitionCannon.MAX_CHARGE = loadDouble("parameters.blazingRay.charge", ItemIgnitionCannon.MAX_CHARGE, "Time in ticks to fully charge.");
+		ItemIgnitionCannon.COOLDOWN = loadInteger("parameters.blazingRay.cooldown", ItemIgnitionCannon.COOLDOWN, "Cooldown in ticks between each shot.");
+		ItemIgnitionCannon.DAMAGE = loadFloat( "parameters.blazingRay.damage", ItemIgnitionCannon.DAMAGE, "Damage dealt by one shot.");
+		ItemIgnitionCannon.MAX_DISTANCE = loadFloat("parameters.blazingRay.distance", ItemIgnitionCannon.MAX_DISTANCE,  "Maximum shot distance.");
+		ItemIgnitionCannon.MAX_SPREAD = loadDouble( "parameters.blazingRay.spread", ItemIgnitionCannon.MAX_SPREAD, "Maximum spread.");
+
+		//Cinder Staff
+		ItemCinderStaff.EMBER_COST = loadDouble("parameters.cinderStaff.cost", ItemCinderStaff.EMBER_COST, "Ember used up by each shot.");
+		ItemCinderStaff.MAX_CHARGE = loadDouble("parameters.cinderStaff.charge", ItemCinderStaff.MAX_CHARGE, "Time in ticks to fully charge.");
+		ItemCinderStaff.COOLDOWN = loadInteger("parameters.cinderStaff.cooldown", ItemCinderStaff.COOLDOWN, "Cooldown in ticks between each shot.");
+		ItemCinderStaff.DAMAGE = loadFloat( "parameters.cinderStaff.damage", ItemCinderStaff.DAMAGE, "Damage dealt by one shot.");
+		ItemCinderStaff.SIZE = loadFloat("parameters.cinderStaff.size", ItemCinderStaff.SIZE,  "Size of the projectile.");
+		ItemCinderStaff.AOE_SIZE = loadFloat("parameters.cinderStaff.aoe", ItemCinderStaff.AOE_SIZE,  "Area of Effect on impact.");
+		ItemCinderStaff.LIFETIME = loadInteger("parameters.cinderStaff.lifetime", ItemCinderStaff.LIFETIME,  "Lifetime in ticks of projectile.");
+
+		//Shifting Scales
 		scaleDamagePasses.clear();
-		for(String pair : config.getStringList("scaleDamagePasses","parameters",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))
+		for(String pair : loadStringList("parameters.shiftingScales.damagePasses",defaultScaleDamagePasses,"Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment."))
 		{
 			Matcher matcher = damageRatePattern.matcher(pair);
 			if(matcher.matches()) {
@@ -223,7 +262,7 @@ public class ConfigManager {
 		}
 
 		scaleDamageRates.clear();
-		for(String pair : config.getStringList("scaleDamageRates","parameters",defaultScaleDamageRates,"Syntax is 'damagetype:rate'. Specifies a separate damage rate for depleting the scales."))
+		for(String pair : loadStringList("parameters.shiftingScales.damageRates",defaultScaleDamageRates,"Syntax is 'damagetype:rate'. Specifies a separate damage rate for depleting the scales."))
 		{
 			Matcher matcher = damageRatePattern.matcher(pair);
 			if(matcher.matches()) {
@@ -235,6 +274,46 @@ public class ConfigManager {
 		{
 			config.save();
 		}
+	}
+
+	private static String[] splitName(String toSplit) {
+		String[] splitString = new String[2];
+		int i = toSplit.lastIndexOf(".");
+
+		if (i >= 0) {
+			splitString[1] = toSplit.substring(i + 1);
+
+			if (i > 1) {
+				splitString[0] = toSplit.substring(0, i);
+			}
+		}
+
+		return splitString;
+	}
+
+	public static double loadDouble(String name, double defaultValue, String comment) {
+		String[] splitName = splitName(name);
+		return config.getFloat(splitName[1], splitName[0], (float) defaultValue, Float.NEGATIVE_INFINITY,  Float.POSITIVE_INFINITY, comment);
+	}
+
+	public static float loadFloat(String name, float defaultValue, String comment) {
+		String[] splitName = splitName(name);
+		return config.getFloat(splitName[1], splitName[0], defaultValue, Float.NEGATIVE_INFINITY,  Float.POSITIVE_INFINITY, comment);
+	}
+
+	public static int loadInteger(String name, int defaultValue, String comment) {
+		String[] splitName = splitName(name);
+		return config.getInt(splitName[1], splitName[0], defaultValue, Integer.MIN_VALUE,  Integer.MAX_VALUE, comment);
+	}
+
+	public static boolean loadBoolean(String name, boolean defaultValue, String comment) {
+		String[] splitName = splitName(name);
+		return config.getBoolean(splitName[1], splitName[0], defaultValue, comment);
+	}
+
+	public static String[] loadStringList(String name, String[] defaultValue, String comment) {
+		String[] splitName = splitName(name);
+		return config.getStringList(splitName[1], splitName[0], defaultValue, comment);
 	}
 
 	public static boolean isSmallRuinEnabled(int dimension) {

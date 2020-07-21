@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
-	public static final double MAX_TRANSFER = 10.0;
+	public static double MAX_TRANSFER = 10.0;
 
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
@@ -168,7 +168,7 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 			boolean cancel = UpgradeUtil.doWork(this,upgrades);
 			if(!cancel) {
 				IEmberCapability itemCapability = stack.getCapability(EmbersCapabilities.EMBER_CAPABILITY,null);
-				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER * ConfigManager.chargerSpeedMod;
+				double transferRate = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * MAX_TRANSFER;
 				double emberAdded;
 				if(transferRate > 0) {
 					emberAdded = itemCapability.addAmount(Math.min(Math.abs(transferRate), capability.getEmber()), !world.isRemote);

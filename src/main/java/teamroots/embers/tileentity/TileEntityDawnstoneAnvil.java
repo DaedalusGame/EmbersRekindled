@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityBase, IHammerable, ISpecialFilter {
+	public static int MAX_HITS = 40;
 	int ticksExisted = 0;
 	int progress = 0;
 	public ItemStackHandler inventory = new ItemStackHandler(2){
@@ -251,7 +252,7 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 		if (isValid(inventory.getStackInSlot(0),inventory.getStackInSlot(1))){
 			progress += 1;
 			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.25f, 2.0f+random.nextFloat(), false);
-			if (progress > 40){
+			if (progress > MAX_HITS){
 				progress = 0;
 				ItemStack[] results = getResult(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
 				for (int i = 0; i < results.length; i ++){
@@ -285,7 +286,7 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 
 	@Override
 	public void onHit(TileEntity hammer) {
-		progress = 40;
+		progress = MAX_HITS;
 		onHit();
 	}
 

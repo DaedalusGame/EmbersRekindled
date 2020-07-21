@@ -41,9 +41,9 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityInfernoForge extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
-	public static final double EMBER_COST = 16.0;
-	public static final int MAX_LEVEL = 5;
-	public static final int PROCESS_TIME = 200;
+	public static double EMBER_COST = 16.0;
+	public static int MAX_LEVEL = 5;
+	public static int PROCESS_TIME = 200;
 	public IEmberCapability capability = new DefaultEmberCapability() {
 		@Override
 		public boolean acceptsVolatile() {

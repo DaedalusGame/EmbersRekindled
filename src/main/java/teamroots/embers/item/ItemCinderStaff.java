@@ -29,9 +29,13 @@ import teamroots.embers.util.Misc;
 import java.awt.*;
 
 public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
-
-    public static final double EMBER_COST = 25.0;
-    public static final int COOLDOWN = 10;
+    public static double EMBER_COST = 25.0;
+    public static int COOLDOWN = 10;
+    public static double MAX_CHARGE = 60;
+    public static float DAMAGE = 17;
+    public static float SIZE = 17;
+    public static float AOE_SIZE = 17 * 0.125f;
+    public static int LIFETIME = 160;
 
     public static boolean soundPlaying = false; //Clientside anyway so whatever
 
@@ -43,16 +47,17 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft) {
         if (!world.isRemote) {
-            double charge = ((Math.min(60, 72000 - timeLeft)) / 60.0) * 17.0;
+            double charge = (Math.min(MAX_CHARGE, getMaxItemUseDuration(stack) - timeLeft)) / MAX_CHARGE;
             float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
             double posX = entity.posX + entity.getLookVec().x * spawnDistance;
             double posY = entity.posY + entity.getEyeHeight() + entity.getLookVec().y * spawnDistance;
             double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
-            double value = Math.max(charge, 0.5);
-            float aoeSize = (float) value * 0.125f;
-            int lifetime = charge >= 1.0 ? 160 : 5;
-            EffectArea effect = new EffectArea(new EffectDamage((float) value, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0), aoeSize, false);
-            ProjectileFireball fireball = new ProjectileFireball(entity, new Vec3d(posX, posY, posZ), new Vec3d(entity.getLookVec().x * 0.85, entity.getLookVec().y * 0.85, entity.getLookVec().z * 0.85), value, lifetime, effect);
+            float damage = (float) Math.max(charge * DAMAGE, 0.5f);
+            float size = (float) Math.max(charge * SIZE, 0.5f);
+            float aoeSize = (float) charge * AOE_SIZE;
+            int lifetime = charge * DAMAGE >= 1.0 ? LIFETIME : 5;
+            EffectArea effect = new EffectArea(new EffectDamage(damage, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0), aoeSize, false);
+            ProjectileFireball fireball = new ProjectileFireball(entity, new Vec3d(posX, posY, posZ), new Vec3d(entity.getLookVec().x * 0.85, entity.getLookVec().y * 0.85, entity.getLookVec().z * 0.85), size, lifetime, effect);
             EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, charge, fireball);
             MinecraftForge.EVENT_BUS.post(event);
             if (!event.isCanceled()) {
@@ -61,9 +66,9 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
                 }
             }
             SoundEvent sound;
-            if (charge >= 10.0)
+            if (charge * DAMAGE >= 10.0)
                 sound = SoundManager.FIREBALL_BIG;
-            else if (charge >= 1.0)
+            else if (charge * DAMAGE >= 1.0)
                 sound = SoundManager.FIREBALL;
             else
                 sound = SoundManager.CINDER_STAFF_FAIL;

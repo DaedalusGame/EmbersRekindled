@@ -41,8 +41,8 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
-    public static final double EMBER_COST = 0.5;
-    public static final int PROCESS_TIME = 40;
+    public static double EMBER_COST = 0.5;
+    public static int PROCESS_TIME = 40;
     public IEmberCapability capability = new DefaultEmberCapability();
     int angle = 0;
     int turnRate = 0;
@@ -176,7 +176,7 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
                 double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
                 UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
                 capability.removeAmount(emberCost, true);
-                if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME / ConfigManager.cinderPlinthSpeedMod, upgrades)) {
+                if (progress > UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
                     progress = 0;
                     TileEntity tile = getWorld().getTileEntity(getPos().down());
                     List<ItemStack> outputs = Lists.newArrayList(new ItemStack(RegistryManager.dust_ash, 1));

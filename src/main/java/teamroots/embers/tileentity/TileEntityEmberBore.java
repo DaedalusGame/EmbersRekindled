@@ -43,9 +43,9 @@ import java.util.Random;
 
 public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered, IExtraDialInformation, IExtraCapabilityInformation {
     public static final int MAX_LEVEL = 7;
-    public static final int BORE_TIME = 200;
+    public static int BORE_TIME = 200;
     public static final int SLOT_FUEL = 8;
-    public static final double FUEL_CONSUMPTION = 3;
+    public static double FUEL_CONSUMPTION = 3;
 
     public static final int SOUND_ON = 1;
     public static final int SOUND_ON_DRILL = 2;

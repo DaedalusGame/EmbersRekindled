@@ -28,11 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemIgnitionCannon extends ItemBase implements IProjectileWeapon {
-	public static final int COOLDOWN = 10;
-	public static final float DAMAGE = 7.0f;
-	public static final double MAX_SPREAD = 30.0;
-	public static final float MAX_DISTANCE = 96.0f;
-	public static final double EMBER_COST = 25.0;
+	public static double EMBER_COST = 25.0;
+	public static int COOLDOWN = 10;
+	public static double MAX_CHARGE = 20;
+	public static float DAMAGE = 7.0f;
+	public static double MAX_SPREAD = 30.0;
+	public static float MAX_DISTANCE = 96.0f;
+
 
 	public ItemIgnitionCannon() {
 		super("ignition_cannon", true);
@@ -42,7 +44,7 @@ public class ItemIgnitionCannon extends ItemBase implements IProjectileWeapon {
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft){
 		if (!world.isRemote) {
-			double charge = (Math.min(20, getMaxItemUseDuration(stack) - timeLeft)) / 20.0;
+			double charge = (Math.min(MAX_CHARGE, getMaxItemUseDuration(stack) - timeLeft)) / MAX_CHARGE;
 			double handmod = entity.getActiveHand() == EnumHand.MAIN_HAND ? 1.0 : -1.0;
 			handmod *= entity.getPrimaryHand() == EnumHandSide.RIGHT ? 1.0 : -1.0;
 			double posX = entity.posX + entity.getLookVec().x + handmod * (entity.width / 2.0) * Math.sin(Math.toRadians(-entity.rotationYaw - 90));

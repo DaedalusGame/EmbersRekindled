@@ -38,11 +38,11 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
-	public static final int PROCESS_TIME = 200;
+	public static int PROCESS_TIME = 200;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
-	public static final double EMBER_COST = 1.0;
+	public static double EMBER_COST = 1.0;
 
 	public static final int SOUND_PROCESS = 1;
 	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
@@ -152,7 +152,7 @@ public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBa
 						isWorking = true;
 						progress++;
 						markDirty();
-						if (progress >= UpgradeUtil.getWorkTime(this, PROCESS_TIME / ConfigManager.furnaceSpeedMod, upgrades)) {
+						if (progress >= UpgradeUtil.getWorkTime(this, PROCESS_TIME, upgrades)) {
 							ItemStack recipeStack = top.inventory.getStackInSlot(0);
 							ItemMeltingRecipe recipe = getRecipe(recipeStack);
 							if (recipe != null && !world.isRemote) {
