@@ -196,4 +196,8 @@ public class BaublesIntegration {
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.dawnstone_mail);
         ResearchManager.subCategoryBaubles.addResearch(ResearchManager.explosion_pedestal);
     }
+
+    public static void loadConfig() {
+        //NOOP
+    }
 }

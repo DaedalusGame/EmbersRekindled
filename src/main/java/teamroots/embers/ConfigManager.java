@@ -5,6 +5,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import teamroots.embers.compat.BaublesIntegration;
+import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.item.ItemCinderStaff;
 import teamroots.embers.item.ItemIgnitionCannon;
 import teamroots.embers.power.DefaultEmberCapability;
@@ -175,6 +177,8 @@ public class ConfigManager {
 
 		DefaultEmberCapability.allAcceptVolatile = loadBoolean("parameters.allAcceptVolatile", false, "Whether ember conduits can attach to any ember consumer/producer");
 
+		config.addCustomCategoryComment("parameters", "Settings for machine/item/misc parameters");
+
 		//Melter
 		melterOreAmount = loadInteger("parameters.melter.oreAmount", 144, "How many mb of fluid are obtained per ore output in the melter. This is multiplied by the amount of output a melter would produce, so by default 144mb * 2 ingots.");
 		TileEntityFurnaceBottom.PROCESS_TIME = loadInteger("parameters.melter.processTime",  TileEntityFurnaceBottom.PROCESS_TIME, "The time in ticks it takes to process one recipe.");
@@ -225,15 +229,6 @@ public class ConfigManager {
 		miniBoilerHeatMultiplier = loadFloat("parameters.miniBoiler.heatMultiplier",  1.0f, "How efficient, heat-wise, the mini boiler is at making steam.");
 		miniBoilerCanExplode = loadBoolean("parameters.miniBoiler.canExplode",  true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 
-		//Steam Engine
-		TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD = loadInteger("parameters.steamEngine.fluidThreshold",  TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD, "How much water (in mb) is necessary to start burning solid fuel.");
-		TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION = loadInteger("parameters.steamEngine.fluidConsumption", TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION,  "How much water (in mb) is consumed every tick while burning solid fuel.");
-		TileEntitySteamEngine.FUEL_MULTIPLIER = loadDouble("parameters.steamEngine.fuelEfficiency", TileEntitySteamEngine.FUEL_MULTIPLIER,  "How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.");
-		TileEntitySteamEngine.SOLID_POWER = loadDouble("parameters.steamEngine.fuelPower",  TileEntitySteamEngine.SOLID_POWER,  "How much mechanical power is generated while burning solid fuel.");
-		TileEntitySteamEngine.MAX_POWER = loadDouble("parameters.steamEngine.maximumPower",  TileEntitySteamEngine.MAX_POWER,  "How much mechanical power can be generated at max.");
-		TileEntitySteamEngine.GAS_CONSUMPTION = loadInteger("parameters.steamEngine.gasConsumption",  TileEntitySteamEngine.GAS_CONSUMPTION,  "How much gas (in mb), such as steam, is consumed every tick.");
-		TileEntitySteamEngine.CAPACITY = loadInteger("parameters.steamEngine.capacity",  TileEntitySteamEngine.CAPACITY,  "How much fluid (in mb) fits into a Steam Engine.");
-
 		//Blazing Ray
 		ItemIgnitionCannon.EMBER_COST = loadDouble("parameters.blazingRay.cost", ItemIgnitionCannon.EMBER_COST, "Ember used up by each shot.");
 		ItemIgnitionCannon.MAX_CHARGE = loadDouble("parameters.blazingRay.charge", ItemIgnitionCannon.MAX_CHARGE, "Time in ticks to fully charge.");
@@ -269,6 +264,11 @@ public class ConfigManager {
 				scaleDamageRates.put(matcher.group(1),Double.parseDouble(matcher.group(2)));
 			}
 		}
+
+		if(isMysticalMechanicsIntegrationEnabled())
+			MysticalMechanicsIntegration.loadConfig();
+		if(isBaublesIntegrationEnabled())
+			BaublesIntegration.loadConfig();
 
 		if (config.hasChanged())
 		{

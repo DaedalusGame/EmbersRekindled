@@ -256,4 +256,16 @@ public class MysticalMechanicsIntegration {
             ioType = IExtraCapabilityInformation.EnumIOType.NONE;
         return ioType;
     }
+
+    public static void loadConfig() {
+        //Steam Engine
+        TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD = ConfigManager.loadInteger("parameters.steamEngine.fluidThreshold",  TileEntitySteamEngine.NORMAL_FLUID_THRESHOLD, "How much water (in mb) is necessary to start burning solid fuel.");
+        TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION = ConfigManager.loadInteger("parameters.steamEngine.fluidConsumption", TileEntitySteamEngine.NORMAL_FLUID_CONSUMPTION,  "How much water (in mb) is consumed every tick while burning solid fuel.");
+        TileEntitySteamEngine.FUEL_MULTIPLIER = ConfigManager.loadDouble("parameters.steamEngine.fuelEfficiency", TileEntitySteamEngine.FUEL_MULTIPLIER,  "How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.");
+        TileEntitySteamEngine.SOLID_POWER = ConfigManager.loadDouble("parameters.steamEngine.fuelPower",  TileEntitySteamEngine.SOLID_POWER,  "How much mechanical power is generated while burning solid fuel.");
+        TileEntitySteamEngine.MAX_POWER = ConfigManager.loadDouble("parameters.steamEngine.maximumPower",  TileEntitySteamEngine.MAX_POWER,  "How much mechanical power can be generated at max.");
+        TileEntitySteamEngine.GAS_CONSUMPTION = ConfigManager.loadInteger("parameters.steamEngine.gasConsumption",  TileEntitySteamEngine.GAS_CONSUMPTION,  "How much gas (in mb), such as steam, is consumed every tick.");
+        TileEntitySteamEngine.CAPACITY = ConfigManager.loadInteger("parameters.steamEngine.capacity",  TileEntitySteamEngine.CAPACITY,  "How much fluid (in mb) fits into a Steam Engine.");
+
+    }
 }
