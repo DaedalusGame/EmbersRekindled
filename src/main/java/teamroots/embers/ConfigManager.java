@@ -42,7 +42,7 @@ public class ConfigManager {
 	@Deprecated
 	public static List<Integer> smallRuinBlacklist = new ArrayList<>();
 
-	public static int emberBoreSpeedMod;
+	public static float emberBoreSpeedMod;
 	public static int emberBoreMaxYLevel;
 
 	//COMPAT
@@ -195,7 +195,7 @@ public class ConfigManager {
 		}
 		emberBoreIsWhiteList = loadBoolean("parameters.emberBore.isWhiteList",false,"Whether the Ember Bore blacklist is a whitelist.");
 		emberBoreMaxYLevel = loadInteger("parameters.emberBore.yMax", 7, "The maximum y-level at which the Ember Bore can mine ember.");
-		emberBoreSpeedMod = loadInteger("parameters.emberBore.speedMod", 1,  "The speed modifier of the Ember Bore before upgrades.");
+		emberBoreSpeedMod = loadFloat("parameters.emberBore.speedMod", 1,  "The speed modifier of the Ember Bore before upgrades.");
 		TileEntityEmberBore.BORE_TIME = loadInteger("parameters.emberBore.processTime", TileEntityEmberBore.BORE_TIME, "The time in ticks it takes to try one dig attempt.");
 		TileEntityEmberBore.FUEL_CONSUMPTION = loadDouble("parameters.emberBore.fuelCost", TileEntityEmberBore.FUEL_CONSUMPTION, "The amount of fuel consumed each tick");
 
