@@ -353,6 +353,10 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
                         ItemStack stack = event.isFailure() ? event.getFailureStack() : recipe.getResult(this);
                         SoundEvent finishSound = event.isFailure() ? SoundManager.ALCHEMY_FAIL : SoundManager.ALCHEMY_SUCCESS;
                         world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, finishSound, SoundCategory.BLOCKS, 1.0f, 1.0f);
+
+                        if(!event.isFailure())
+                            UpgradeUtil.throwEvent(this, new MachineRecipeEvent.Success<>(this, recipe), upgrades);
+
                         getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0f, getPos().getZ() + 0.5, stack));
                         PacketHandler.INSTANCE.sendToAll(new MessageEmberSphereFX(getPos().getX() + 0.5, getPos().getY() + 0.875, getPos().getZ() + 0.5));
 

@@ -204,6 +204,7 @@ public class TileEntityMixerBottom extends TileEntity implements ITileEntityBase
                         output = UpgradeUtil.transformOutput(this, output, upgrades);
                         int amount = tank.fill(output, false);
                         if (amount != 0) {
+                            UpgradeUtil.throwEvent(this, new MachineRecipeEvent.Success<>(this, recipe), upgrades);
                             isWorking = true;
                             tank.fill(output, true);
                             consumeFluids(recipe);

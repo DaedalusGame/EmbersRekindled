@@ -208,6 +208,7 @@ public class TileEntityHeatCoil extends TileEntity implements ITileEntityBase, I
 					ArrayList<ItemStack> returns = Lists.newArrayList(recipe.getResult(this, entityItem.getItem()));
 					int inputCount = recipe.getInputConsumed();
 					boolean dirty = false;
+					UpgradeUtil.throwEvent(this, new MachineRecipeEvent.Success<>(this, recipe), upgrades);
 					UpgradeUtil.transformOutput(this,returns, upgrades);
 					depleteItem(entityItem, inputCount);
 					for(ItemStack stack : returns) {

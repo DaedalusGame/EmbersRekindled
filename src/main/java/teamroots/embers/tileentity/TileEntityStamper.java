@@ -171,6 +171,8 @@ public class TileEntityStamper extends TileEntity implements ITileEntityBase, IT
                         powered = true;
                         ticksExisted = 0;
 
+                        UpgradeUtil.throwEvent(this, new MachineRecipeEvent.Success<>(this, recipe), upgrades);
+
                         List<ItemStack> results = Lists.newArrayList(recipe.getResult(this, stamp.inputs.getStackInSlot(0), stamp.getFluid() != null ? new FluidStack(stamp.getFluid(), stamp.getAmount()) : null, this.stamp.getStackInSlot(0)));
                         UpgradeUtil.transformOutput(this, results, upgrades);
                         stamp.inputs.extractItem(0, recipe.getInputConsumed(), false);
