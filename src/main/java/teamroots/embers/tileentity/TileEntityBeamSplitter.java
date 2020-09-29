@@ -117,112 +117,37 @@ public class TileEntityBeamSplitter extends TileEntity implements ITileEntityBas
 	@Override
 	public void update() {
 		this.ticksExisted ++;
-		if (ticksExisted % 20 == 0 && !getWorld().isRemote && this.capability.getEmber() > 0){
+		if (ticksExisted % 20 == 0 && !getWorld().isRemote && this.capability.getEmber() > 0) {
 			TileEntity tileLeft = targetLeft != null ? getWorld().getTileEntity(targetLeft) : null;
 			TileEntity tileRight = targetRight != null ? getWorld().getTileEntity(targetRight) : null;
-			if (targetLeft != null && targetRight != null){
-				double amount = this.capability.getEmber()/2.0;
-				boolean didSend = false;
-				IBlockState state = getWorld().getBlockState(getPos());
-				if (state.getValue(BlockBeamSplitter.isXAligned)){
-					if (tileLeft instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileLeft).isFull()){
-							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
-							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
-							getWorld().spawnEntity(packetLeft);
-							didSend = true;
-						}
-					}
-					if (tileRight instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileRight).isFull()){
-							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
-							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
-							getWorld().spawnEntity(packetRight);
-							didSend = true;
-						}
-					}
+			boolean sendLeft = (tileLeft instanceof IEmberPacketReceiver && !((IEmberPacketReceiver) tileLeft).isFull());
+			boolean sendRight = (tileRight instanceof IEmberPacketReceiver && !((IEmberPacketReceiver) tileRight).isFull());
+			if (!sendLeft && !sendRight)
+				return;
+			double amount = this.capability.getEmber();
+			if (sendLeft && sendRight)
+				amount /= 2.0;
+			boolean isXAligned = getWorld().getBlockState(getPos()).getValue(BlockBeamSplitter.isXAligned);
+			if (sendLeft) {
+				EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
+				if (isXAligned) {
+					packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
+				} else {
+					packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
 				}
-				else {
-					if (tileLeft instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileLeft).isFull()){
-							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
-							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
-							getWorld().spawnEntity(packetLeft);
-							didSend = true;
-						}
-					}
-					if (tileRight instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileRight).isFull()){
-							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
-							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
-							getWorld().spawnEntity(packetRight);
-							didSend = true;
-						}
-					}
-				}
-				if (didSend){
-					this.capability.setEmber(0);
-					markDirty();
-				}
+				getWorld().spawnEntity(packetLeft);
 			}
-			else if (targetLeft != null){
-				double amount = capability.getEmber();
-				boolean didSend = false;
-				IBlockState state = getWorld().getBlockState(getPos());
-				if (state.getValue(BlockBeamSplitter.isXAligned)){
-					if (tileLeft instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileLeft).isFull()){
-							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
-							packetLeft.initCustom(getPos(), targetLeft, 0, -0.01, -0.5, amount);
-							getWorld().spawnEntity(packetLeft);
-							didSend = true;
-						}
-					}
+			if (sendRight) {
+				EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
+				if (isXAligned) {
+					packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
+				} else {
+					packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
 				}
-				else {
-					if (tileLeft instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileLeft).isFull()){
-							EntityEmberPacket packetLeft = new EntityEmberPacket(getWorld());
-							packetLeft.initCustom(getPos(), targetLeft, -0.5, -0.01, 0, amount);
-							getWorld().spawnEntity(packetLeft);
-							didSend = true;
-						}
-					}
-				}
-				if (didSend){
-					this.capability.setEmber(0);
-					markDirty();
-				}
+				getWorld().spawnEntity(packetRight);
 			}
-			else if (targetRight != null){
-				double amount = this.capability.getEmber();
-				boolean didSend = false;
-				IBlockState state = getWorld().getBlockState(getPos());
-				if (state.getValue(BlockBeamSplitter.isXAligned)){
-					if (tileRight instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileRight).isFull()){
-							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
-							packetRight.initCustom(getPos(), targetRight, 0, -0.01, 0.5, amount);
-							getWorld().spawnEntity(packetRight);
-							didSend = true;
-						}
-					}
-				}
-				else {
-					if (tileRight instanceof IEmberPacketReceiver){
-						if (!((IEmberPacketReceiver) tileRight).isFull()){
-							EntityEmberPacket packetRight = new EntityEmberPacket(getWorld());
-							packetRight.initCustom(getPos(), targetRight, 0.5, -0.01, 0, amount);
-							getWorld().spawnEntity(packetRight);
-							didSend = true;
-						}
-					}
-				}
-				if (didSend){
-					this.capability.setEmber(0);
-					markDirty();
-				}
-			}
+			this.capability.setEmber(0);
+			markDirty();
 		}
 	}
 
