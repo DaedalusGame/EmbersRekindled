@@ -64,6 +64,7 @@ public class TileEntityGeoSeparatorRenderer extends TileEntitySpecialRenderer<Ti
 				buffer.pos(x+0.25, y+0.25+0.1875*((float)amount/(float)amount), z+0.75).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
 				tess.draw();
 
+				GlStateManager.disableAlpha();
 				GlStateManager.disableBlend();
 				GlStateManager.enableLighting();
 			}

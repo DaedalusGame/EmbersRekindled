@@ -56,6 +56,7 @@ public class TileEntityFieldChartRenderer extends TileEntitySpecialRenderer<Tile
             GlStateManager.depthFunc(dfunc);
             GlStateManager.enableLighting();
             GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.disableAlpha();
             GlStateManager.disableBlend();
         }
     }
