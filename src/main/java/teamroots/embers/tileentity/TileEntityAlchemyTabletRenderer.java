@@ -58,6 +58,7 @@ public class TileEntityAlchemyTabletRenderer extends TileEntitySpecialRenderer<T
 				tess.draw();
 				GlStateManager.alphaFunc(func, ref);
 				GlStateManager.depthFunc(dfunc);
+				GlStateManager.disableAlpha();
 				GlStateManager.disableBlend();
 				GlStateManager.enableLighting();
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

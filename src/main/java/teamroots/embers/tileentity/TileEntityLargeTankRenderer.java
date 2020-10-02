@@ -77,6 +77,7 @@ public class TileEntityLargeTankRenderer extends TileEntitySpecialRenderer<TileE
 				buffer.pos(x-0.5, y+0.875+1.0*((float)amount/40000), z+1.5).tex(minU, maxV).lightmap(lightx,lighty).color(red,green,blue,alpha).endVertex();
 				tess.draw();
 
+				GlStateManager.disableAlpha();
 				GlStateManager.disableBlend();
 				GlStateManager.enableLighting();
 			}

@@ -106,6 +106,7 @@ public class ParticleRenderer {
             GlStateManager.enableCull();
             GlStateManager.depthMask(true);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.disableAlpha();
             GlStateManager.disableBlend();
             GlStateManager.alphaFunc(516, 0.1F);
         }
