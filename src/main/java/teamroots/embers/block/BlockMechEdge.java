@@ -18,7 +18,7 @@ import teamroots.embers.tileentity.ITileEntityBase;
 import java.util.ArrayList;
 
 public class BlockMechEdge extends BlockBase {
-	public static final PropertyInteger state = PropertyInteger.create("state", 0, 8);
+	public static final PropertyInteger state = PropertyInteger.create("state", 0, 7);
 	
 	public BlockMechEdge(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
@@ -141,6 +141,10 @@ public class BlockMechEdge extends BlockBase {
 	@Override
 	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
 		return new ArrayList<ItemStack>();
+	}
+
+	@Override
+	public void initModel() {
 	}
 
 	@Override

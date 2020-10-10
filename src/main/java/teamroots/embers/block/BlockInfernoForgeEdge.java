@@ -78,6 +78,10 @@ public class BlockInfernoForgeEdge extends BlockBase {
 	}
 
 	@Override
+	public void initModel() {
+	}
+
+	@Override
 	public Item getItemBlock() {
 		return null;
 	}
