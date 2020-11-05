@@ -1,6 +1,5 @@
 package teamroots.embers.tileentity;
 
-import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,12 +14,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
@@ -365,13 +362,17 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            int burntime = TileEntityFurnace.getItemBurnTime(stack);
-            if (slot == SLOT_FUEL && burntime != 0) {
-                return super.insertItem(slot, stack, simulate);
-            } else if (burntime != 0) {
-                return super.insertItem(SLOT_FUEL, stack, simulate);
+            ItemStack currentFuel = this.getStackInSlot(SLOT_FUEL);
+            if (currentFuel.isEmpty()) {
+                int burnTime = TileEntityFurnace.getItemBurnTime(stack);
+                if (burnTime != 0)
+                    return super.insertItem(SLOT_FUEL, stack, simulate);
+                else
+                    return stack;
             }
-            return stack;
+
+            //if the item stacks then it has the same burn time, therefore we don't need to check it
+            return super.insertItem(SLOT_FUEL, stack, simulate);
         }
 
         public ItemStack insertItemInternal(int slot, ItemStack stack, boolean simulate) {
@@ -380,9 +381,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            ItemStack currentFuel = super.extractItem(slot, amount, true);
-            int burntime = TileEntityFurnace.getItemBurnTime(currentFuel);
-            if (slot == SLOT_FUEL && burntime != 0) {
+            //disallow extraction from fuel slot
+            if (slot == SLOT_FUEL) {
                 return ItemStack.EMPTY;
             }
             return super.extractItem(slot, amount, simulate);
