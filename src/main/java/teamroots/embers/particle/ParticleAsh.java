@@ -1,11 +1,10 @@
 package teamroots.embers.particle;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.proxy.ClientProxy;
 
 public class ParticleAsh extends Particle implements IEmberParticle {
@@ -17,6 +16,8 @@ public class ParticleAsh extends Particle implements IEmberParticle {
         height = y2 - y1;
         depth = z2 - z1;
         this.particleMaxAge = (int)(lifetime *0.5f);
+
+        this.canCollide = ConfigManager.enableParticleCollisions;
     }
 
     @Override
