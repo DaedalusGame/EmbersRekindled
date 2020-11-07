@@ -381,9 +381,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            //disallow extraction from fuel slot
+            //disallow extraction from fuel slot if it's a stacked item or it doesn't have burn time
             if (slot == SLOT_FUEL) {
-                return ItemStack.EMPTY;
+                ItemStack fuelStack = getStackInSlot(SLOT_FUEL);
+                if (fuelStack.getCount() > 1 || TileEntityFurnace.getItemBurnTime(fuelStack) != 0)
+                    return ItemStack.EMPTY;
             }
             return super.extractItem(slot, amount, simulate);
         }
