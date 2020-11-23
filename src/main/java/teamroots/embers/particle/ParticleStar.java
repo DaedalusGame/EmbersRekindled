@@ -5,6 +5,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.util.Misc;
 
 public class ParticleStar extends Particle implements IEmberParticle{
@@ -38,6 +39,8 @@ public class ParticleStar extends Particle implements IEmberParticle{
 		this.particleAngle = 2.0f*(float)Math.PI;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
 	    this.setParticleTexture(sprite);
+
+		this.canCollide = ConfigManager.enableParticleCollisions;
 	}
 	/*
 	@Override
@@ -46,22 +49,22 @@ public class ParticleStar extends Particle implements IEmberParticle{
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		super.renderParticle(buffer, entity, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
 	}*/
-	
+
 	@Override
 	public int getBrightnessForRender(float pTicks){
 		return 255;
 	}
-	
+
 	@Override
 	public boolean shouldDisableDepth(){
 		return true;
 	}
-	
+
 	@Override
 	public int getFXLayer(){
 		return 1;
 	}
-	
+
 	@Override
 	public void onUpdate(){
 		super.onUpdate();

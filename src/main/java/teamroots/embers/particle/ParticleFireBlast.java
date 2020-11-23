@@ -4,6 +4,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import teamroots.embers.ConfigManager;
 
 import java.awt.*;
 
@@ -16,6 +17,7 @@ public class ParticleFireBlast extends Particle implements IEmberParticle {
         this.particleScale = scale;
         this.particleMaxAge = lifetime;
 
+        this.canCollide = ConfigManager.enableParticleCollisions;
     }
 
     @Override
