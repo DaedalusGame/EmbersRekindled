@@ -81,6 +81,7 @@ public class BlockInfernoForge extends BlockTEBase {
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos){
 		if (isReplaceable(world,pos.east())
+				&& isReplaceable(world,pos.up())
 				&& isReplaceable(world,pos.west())
 				&& isReplaceable(world,pos.north())
 				&& isReplaceable(world,pos.south())
