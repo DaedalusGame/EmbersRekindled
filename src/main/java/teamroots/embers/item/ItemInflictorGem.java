@@ -56,8 +56,8 @@ public class ItemInflictorGem extends ItemBase implements IInflictorGem {
 	@Override
 	public void initModel(){
 		ModelBakery.registerItemVariants(this,
-				new ModelResourceLocation(getRegistryName().toString()+"Empty"),
-				new ModelResourceLocation(getRegistryName().toString()+"Full"));
+				new ModelResourceLocation(getRegistryName().toString()+"_empty"),
+				new ModelResourceLocation(getRegistryName().toString()+"_full"));
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName().toString()+"_empty"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName().toString()+"_full"));
 	}
