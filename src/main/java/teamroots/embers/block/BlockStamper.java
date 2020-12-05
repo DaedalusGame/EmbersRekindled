@@ -45,11 +45,6 @@ public class BlockStamper extends BlockTEBase {
 	}
 	
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return true;
-	}
-
-	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityStamper();
 	}

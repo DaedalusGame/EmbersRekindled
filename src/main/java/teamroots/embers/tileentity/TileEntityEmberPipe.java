@@ -46,7 +46,7 @@ public class TileEntityEmberPipe extends TileEntityEmberPipeBase {
 		//if (world.isRemote && clogged && isAnySideUnclogged())
 		//	Misc.spawnClogParticles(world, pos, 1, 0.25f);
 		if (!world.isRemote) {
-			active = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+			active = getWorld().isBlockPowered(getPos());
 			if(clogged || !active) {
 				currentPush = INIT_PUSH;
 			} else {

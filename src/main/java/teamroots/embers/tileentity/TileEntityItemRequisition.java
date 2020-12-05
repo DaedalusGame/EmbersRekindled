@@ -230,7 +230,7 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
         if (!world.isRemote) {
             boolean isPowered = false;
             //if (!isIntelligent()) {
-                isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+                isPowered = getWorld().isBlockPowered(getPos());
                 int filterSize = getFilterSize();
                 TileEntity attached = getAttached();
                 int count = 0;
