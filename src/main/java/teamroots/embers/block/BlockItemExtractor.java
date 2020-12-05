@@ -57,11 +57,6 @@ public class BlockItemExtractor extends BlockTEBase {
 	}
 	
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return true;
-	}
-
-	@Override
 	public RayTraceResult collisionRayTrace(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d start, @Nonnull Vec3d end) {
 		List<AxisAlignedBB> subBoxes = new ArrayList<>();
 

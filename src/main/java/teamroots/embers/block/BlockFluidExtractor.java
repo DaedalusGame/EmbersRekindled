@@ -40,11 +40,6 @@ public class BlockFluidExtractor extends BlockTEBase {
 	}
 	
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return true;
-	}
-	
-	@Override
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side){
 		return true;
 	}
