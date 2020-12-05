@@ -344,7 +344,7 @@ public class TileEntityItemExtractor extends TileEntityItemPipeBase implements I
             Misc.spawnClogParticles(world, pos, 1, 0.25f);
         if (!world.isRemote) {
             cleanupOrders();
-            active = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+            active = getWorld().isBlockPowered(getPos());
             OrderStack currentOrder = orders.isEmpty() ? null : orders.get(0);
             IFilter filter = FilterUtil.FILTER_ANY;
             if(active)

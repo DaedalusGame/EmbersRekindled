@@ -136,7 +136,7 @@ public class TileEntityBeamCannon extends TileEntity implements ITileEntityBase,
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		ticksExisted++;
 		boolean cancel = UpgradeUtil.doWork(this,upgrades);
-		boolean isPowered = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+		boolean isPowered = getWorld().isBlockPowered(getPos());
 		boolean redstoneEnabled = UpgradeUtil.getOtherParameter(this,"redstone_enabled",true,upgrades);
 		int threshold = UpgradeUtil.getOtherParameter(this,"fire_threshold",FIRE_THRESHOLD,upgrades);
 		if (!cancel && this.capability.getEmber() >= threshold && (!redstoneEnabled || (isPowered && !lastPowered))){
