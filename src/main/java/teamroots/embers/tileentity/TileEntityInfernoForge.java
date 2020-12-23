@@ -220,7 +220,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 								world.removeEntity(item1);
 								item1.setDead();
 							} else {
-								double chance = UpgradeUtil.getOtherParameter(this,"reforge_chance",Math.atan(emberValue / (3600.0 * 4.0))/(Math.PI / 2.0),upgrades); //clockwork arcane business
+								double chance = UpgradeUtil.getOtherParameter(this,"reforge_chance",Math.atan(emberValue / CHANCE_MIDPOINT)/(Math.PI / 2.0),upgrades); //clockwork arcane business
 								if (Misc.random.nextDouble() < chance) {
                                     ItemStack stack = item1.getItem();
                                     ItemModUtil.setHeat(stack, 0);
