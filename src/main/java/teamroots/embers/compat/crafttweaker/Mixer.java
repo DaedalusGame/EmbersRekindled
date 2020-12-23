@@ -8,6 +8,7 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.mc1120.CraftTweaker;
 import net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.NotNull;
+import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import teamroots.embers.recipe.FluidMixingRecipe;
@@ -24,8 +25,8 @@ public class Mixer {
     public static final String CLASS = "mods.embers.Mixer";
 
     @ZenMethod
-    public static void add(ILiquidStack output, @NotNull ILiquidStack[] inputs) {
-        FluidMixingRecipe recipe = new FluidMixingRecipe(CraftTweakerMC.getLiquidStacks(inputs), CraftTweakerMC.getLiquidStack(output));
+    public static void add(ILiquidStack output, @NotNull ILiquidStack[] inputs, @Optional(valueDouble = 0.5) double powerRatio) {
+        FluidMixingRecipe recipe = new FluidMixingRecipe(CraftTweakerMC.getLiquidStacks(inputs), CraftTweakerMC.getLiquidStack(output), powerRatio);
         CraftTweakerAPI.apply(new Add(recipe));
     }
 
