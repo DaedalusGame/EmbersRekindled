@@ -97,7 +97,8 @@ public class MessageAshenAmuletFX implements IMessage {
                         return;
                     case 2:
                         Entity entity = world.getEntityByID(message.entityID);
-                        ParticleUtil.spawnParticleAsh(world,entity,20);
+                        if(entity != null)
+                            ParticleUtil.spawnParticleAsh(world,entity,20);
                         return;
                 }
             });
