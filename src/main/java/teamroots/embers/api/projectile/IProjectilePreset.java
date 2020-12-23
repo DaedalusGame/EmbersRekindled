@@ -1,6 +1,7 @@
 package teamroots.embers.api.projectile;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 

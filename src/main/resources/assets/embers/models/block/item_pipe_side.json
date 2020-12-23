@@ -1,0 +1,20 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "embers:blocks/item_pipe_tex",
+		"particle": "embers:blocks/item_pipe_tex"
+	},
+	"elements": [
+		{
+			"from": [6, 10, 6],
+			"to": [10, 16, 10],
+			"faces": {
+				"north": {"uv": [12, 6, 16, 12], "texture": "#0"},
+				"east": {"uv": [12, 6, 16, 12], "texture": "#0"},
+				"south": {"uv": [12, 6, 16, 12], "texture": "#0"},
+				"west": {"uv": [12, 6, 16, 12], "texture": "#0"},
+				"up": {"uv": [12, 12, 16, 16], "texture": "#0"}
+			}
+		}
+	]
+}

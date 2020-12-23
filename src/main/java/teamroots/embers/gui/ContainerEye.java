@@ -1,11 +1,13 @@
 package teamroots.embers.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.filter.EnumFilterSetting;
@@ -269,7 +271,20 @@ public class ContainerEye extends Container {
 
     @Override
     public void onContainerClosed(EntityPlayer playerIn) {
-        //TODO
+        super.onContainerClosed(playerIn);
+        World world = playerIn.getEntityWorld();
+        if (!world.isRemote) {
+            returnSlot(playerIn, world, getSlot(0));
+            returnSlot(playerIn, world, getSlot(1));
+        }
+    }
+
+    private void returnSlot(EntityPlayer playerIn, World worldIn, Slot slot) {
+        if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected()) {
+            playerIn.dropItem(slot.getStack(), false);
+        } else {
+            playerIn.inventory.placeItemBackInInventory(worldIn, slot.getStack());
+        }
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {

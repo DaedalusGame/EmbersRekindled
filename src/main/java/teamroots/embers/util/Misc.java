@@ -23,10 +23,7 @@ import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -37,6 +34,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.util.vector.Quaternion;
 import teamroots.embers.particle.ParticleUtil;
 
 import javax.annotation.Nonnull;
@@ -530,6 +528,71 @@ public class Misc {
         Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
         RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
         return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
+    }
+
+    public static Quaternion slerp(Quaternion a, Quaternion b, float slide) {
+        a = a.normalise(null);
+        b = b.normalise(null);
+
+        if(slide <= 0)
+            return a;
+        if(slide >= 1)
+            return b;
+
+        float dot = Quaternion.dot(a,b);
+
+        if(dot < 0)
+        {
+            a = new Quaternion(-a.x,-a.y,-a.z,-a.w);
+            dot = -dot;
+        }
+
+        final float dotThreshold = 0.9995f;
+        if(dot > dotThreshold) {
+            Quaternion result = new Quaternion(
+                    (float) MathHelper.clampedLerp(a.x,b.x,slide),
+                    (float)MathHelper.clampedLerp(a.y,b.y,slide),
+                    (float)MathHelper.clampedLerp(a.z,b.z,slide),
+                    (float)MathHelper.clampedLerp(a.w,b.w,slide)
+            );
+            return result.normalise(null);
+        }
+
+        double theta0 = Math.acos(dot);
+        double theta = theta0 * slide;
+        double sin_theta = Math.sin(theta);
+        double sin_theta0 = Math.sin(theta0);
+
+        float s0 = (float) (Math.cos(theta) - dot * sin_theta / sin_theta0);  // == sin(theta_0 - theta) / sin(theta_0)
+        float s1 = (float) (sin_theta / sin_theta0);
+
+        return new Quaternion(
+                a.x * s0 + b.x * s1,
+                a.y * s0 + b.y * s1,
+                a.z * s0 + b.z * s1,
+                a.w * s0 + b.w * s1
+        );
+    }
+
+    public static Quaternion toQuaternion(float x, float y, float z) {
+        float f = (float) Math.toRadians(x);
+        float f1 = (float) Math.toRadians(y);
+        float f2 = (float) Math.toRadians(z);
+
+        float f3 = MathHelper.sin(0.5F * f);
+        float f4 = MathHelper.cos(0.5F * f);
+        float f5 = MathHelper.sin(0.5F * f1);
+        float f6 = MathHelper.cos(0.5F * f1);
+        float f7 = MathHelper.sin(0.5F * f2);
+        float f8 = MathHelper.cos(0.5F * f2);
+        return new Quaternion(f3 * f6 * f8 + f4 * f5 * f7, f4 * f5 * f8 - f3 * f6 * f7, f3 * f5 * f8 + f4 * f6 * f7, f4 * f6 * f8 - f3 * f5 * f7);
+    }
+
+    public static Vec3d rotateVector(Vec3d vec, Quaternion quat) {
+        Vec3d quatVec = new Vec3d(quat.x,quat.y,quat.z);
+        float quatScalar = quat.w;
+
+        return quatVec.scale(2 * quatVec.dotProduct(vec)).add(vec.scale(quatScalar * quatScalar - quatVec.dotProduct(quatVec))).add(quatVec.crossProduct(vec).scale(2.0 * quatScalar));
     }
 
     public static EnumFacing readNullableFacing(int index) {

@@ -125,10 +125,12 @@ public class MysticalMechanicsIntegration {
         GameRegistry.registerTileEntity(TileEntityMechActuatorSingle.class, Embers.MODID+":tile_entity_mech_actuator_single");
     }
 
+    public static void initOreDict() {
+        OreDictionary.registerOre("gearDawnstone",gear_dawnstone);
+    }
+
     public static void init()
     {
-        OreDictionary.registerOre("gearDawnstone",gear_dawnstone);
-
         MysticalMechanicsAPI.IMPL.registerGear(DAWNSTONE_GEAR_BEHAVIOR, new OreIngredient("gearDawnstone"), new IGearBehavior() {
             @Override
             public double transformPower(TileEntity tile, @Nullable EnumFacing facing, ItemStack gear, IGearData data, double power) {

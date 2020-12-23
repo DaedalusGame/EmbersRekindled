@@ -227,6 +227,9 @@ public class RecipeRegistry {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void initLater(RegistryEvent.Register<Item> event){
 		initOreDict();
+
+		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+			MysticalMechanicsIntegration.initOreDict();
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
