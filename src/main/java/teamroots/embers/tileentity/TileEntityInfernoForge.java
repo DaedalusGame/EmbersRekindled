@@ -36,6 +36,7 @@ import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -208,12 +209,12 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 							}
 						}
 					}
+					boolean forgeSuccess = false;
+					TileEntityInfernoForgeOpening opening = getOpening();
+					if (opening != null){
+						opening.open();
+					}
 					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= MAX_CRYSTAL_VALUE){
-						TileEntityInfernoForgeOpening opening = getOpening();
-						if (opening != null){
-							opening.open();
-						}
-						boolean success = false;
 						for (EntityItem item1 : items) {
 							if (!ItemModUtil.hasHeat(item1.getItem())) {
 								world.removeEntity(item1);
@@ -226,14 +227,21 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
                                     ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
                                     item1.setItem(stack);
                                     progress = 0;
-                                    success = true;
+									forgeSuccess = true;
                                 }
 							}
 						}
-						if (!world.isRemote){
-							world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, success ? SoundManager.INFERNO_FORGE_SUCCESS : SoundManager.INFERNO_FORGE_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
-							PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5));
-						}
+					}
+					if (!world.isRemote){
+						world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, forgeSuccess ? SoundManager.INFERNO_FORGE_SUCCESS : SoundManager.INFERNO_FORGE_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
+						Color flameColor = new Color(255,64,16);
+						if(!forgeSuccess)
+							flameColor = new Color(0,0,0);
+						if(emberValue > MAX_CRYSTAL_VALUE)
+							flameColor = new Color(16, 64, 255);
+						Color sparkColor = new Color(255,64,16);
+
+						PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5,flameColor,sparkColor));
 					}
 				}
 			}
