@@ -43,6 +43,8 @@ import java.util.Random;
 public class TileEntityInfernoForge extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
 	public static double EMBER_COST = 16.0;
 	public static int MAX_LEVEL = 5;
+	public static double MAX_CRYSTAL_VALUE = 3600 * 32.0;
+	public static double CHANCE_MIDPOINT = 3600 * 4.0;
 	public static int PROCESS_TIME = 200;
 	public IEmberCapability capability = new DefaultEmberCapability() {
 		@Override
@@ -206,7 +208,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 							}
 						}
 					}
-					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= EmbersAPI.getEmberValue(new ItemStack(RegistryManager.ember_cluster))*3.0){ //TODO: Replace cluster reference with actual value methinks
+					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= MAX_CRYSTAL_VALUE){
 						TileEntityInfernoForgeOpening opening = getOpening();
 						if (opening != null){
 							opening.open();
@@ -217,7 +219,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 								world.removeEntity(item1);
 								item1.setDead();
 							} else {
-								double chance = UpgradeUtil.getOtherParameter(this,"reforge_chance",Math.atan(emberValue / 1200.0)/(Math.PI / 2.0),upgrades); //clockwork arcane business
+								double chance = UpgradeUtil.getOtherParameter(this,"reforge_chance",Math.atan(emberValue / (3600.0 * 4.0))/(Math.PI / 2.0),upgrades); //clockwork arcane business
 								if (Misc.random.nextDouble() < chance) {
                                     ItemStack stack = item1.getItem();
                                     ItemModUtil.setHeat(stack, 0);

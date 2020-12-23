@@ -224,7 +224,8 @@ public class ConfigManager {
 		TileEntityInfernoForge.PROCESS_TIME = loadInteger("parameters.infernoForge.processTime", TileEntityInfernoForge.PROCESS_TIME, "The time in ticks it takes to process one item.");
 		TileEntityInfernoForge.EMBER_COST = loadDouble("parameters.infernoForge.cost", TileEntityInfernoForge.EMBER_COST, "The ember cost per tick.");
 		TileEntityInfernoForge.MAX_LEVEL = loadInteger("parameters.infernoForge.maxLevel", TileEntityInfernoForge.MAX_LEVEL, "The maximum augment level that can be reforged to.");
-
+		TileEntityInfernoForge.MAX_CRYSTAL_VALUE = loadDouble("parameters.infernoForge.maxCrystalValue", TileEntityInfernoForge.MAX_CRYSTAL_VALUE, "The maximum amount of ember items that can be placed in the forge, in ember energy. Ember clusters are worth 3600 ember, and so the default value is 32 clusters worth.");
+		TileEntityInfernoForge.CHANCE_MIDPOINT = loadDouble("parameters.infernoForge.chanceMidPoint", TileEntityInfernoForge.CHANCE_MIDPOINT, "At exactly this amount of ember items, the chance to successfully reforge is exactly 50%. The default value is 4 clusters worth.");
 		//Tank
 		TileEntityTank.capacity = loadInteger("parameters.tank.capacity", TileEntityTank.capacity, "How much fluid (in mb) fits into the Fluid Vessel.");
 
