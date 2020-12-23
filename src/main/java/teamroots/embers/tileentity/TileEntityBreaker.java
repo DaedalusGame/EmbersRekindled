@@ -112,33 +112,8 @@ public class TileEntityBreaker extends TileEntity implements ITileEntityBase, IT
 		}
 	}
 
-	public int getRedstonePower()
-	{
-		int maxPower = 0;
-
-		for (EnumFacing facing : EnumFacing.values())
-		{
-			if(facing == getFacing())
-				continue;
-
-			int power = getWorld().getRedstonePower(getPos().offset(facing), facing);
-
-			if (power >= 15)
-			{
-				return 15;
-			}
-
-			if (power > maxPower)
-			{
-				maxPower = power;
-			}
-		}
-
-		return maxPower;
-	}
-
 	public boolean isActive() {
-		return getRedstonePower() == 0;
+		return !getWorld().isBlockPowered(getPos());
 	}
 
 	protected void mineBlock(BlockPos breakPos) {

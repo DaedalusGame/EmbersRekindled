@@ -108,6 +108,7 @@ public class TileEntityCrystalCellRenderer extends TileEntitySpecialRenderer<Til
 
             GlStateManager.enableCull();
             GlStateManager.enableLighting();
+            GlStateManager.disableAlpha();
             GlStateManager.disableBlend();
             GlStateManager.popAttrib();
         }

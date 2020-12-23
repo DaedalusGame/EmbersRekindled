@@ -50,11 +50,6 @@ public class BlockPump extends BlockTEBase {
 	}
 	
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side){
-		return state.getBlock() instanceof BlockPump && !state.getValue(isTop);
-	}
-	
-	@Override
 	public void onBlockExploded(World world, BlockPos pos, Explosion explosion){
 		if (!world.isRemote){
 			world.spawnEntity(new EntityItem(world,pos.getX()+0.5,pos.getY()+0.5,pos.getZ()+0.5,new ItemStack(this,1,0)));

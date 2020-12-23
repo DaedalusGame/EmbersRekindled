@@ -58,11 +58,6 @@ public class BlockEmberFunnel extends BlockTEBase {
     }
 
     @Override
-    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return true;
-    }
-
-    @Override
     public BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, facing);
     }

@@ -64,17 +64,22 @@ public class BlockInfernoForgeEdge extends BlockBase {
 	
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player){
-		for (int i = -1; i < 2; i ++){
-			for (int j = -1; j < 2; j ++){
-				for (int k = -1; k < 2; k ++){
+		for (int i = -1; i <= 1; i ++){
+			for (int j = -1; j <= 0; j ++){
+				for (int k = -1; k <= 1; k ++){
 					if (world.getBlockState(pos.add(i,j,k)).getBlock() == RegistryManager.inferno_forge){
 						if (!world.getBlockState(pos.add(i, j, k)).getValue(BlockInfernoForge.isTop)){
-							breakBlockSafe(world,pos.add(i,j+1,k),player);
+							breakBlockSafe(world,pos.add(i, j, k),player);
+							break;  // we found The Forge
 						}
 					}
 				}
 			}
 		}
+	}
+
+	@Override
+	public void initModel() {
 	}
 
 	@Override

@@ -167,7 +167,7 @@ public class TileEntityPulser extends TileEntity implements ITileEntityBase, ITi
 				}
 			}
 		}
-		if ((this.ticksExisted+offset) % 20 == 0 && getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0 && target != null && !getWorld().isRemote && this.capability.getEmber() > PULL_RATE){
+		if ((this.ticksExisted+offset) % 20 == 0 && getWorld().isBlockPowered(getPos()) && target != null && !getWorld().isRemote && this.capability.getEmber() > PULL_RATE){
 			TileEntity targetTile = getWorld().getTileEntity(target);
 			if (targetTile instanceof IEmberPacketReceiver){
 				if (!(((IEmberPacketReceiver) targetTile).isFull())){

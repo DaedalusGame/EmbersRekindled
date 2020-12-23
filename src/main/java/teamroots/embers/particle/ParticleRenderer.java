@@ -1,6 +1,5 @@
 package teamroots.embers.particle;
 
-import com.google.common.collect.Queues;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -11,15 +10,19 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
+import teamroots.embers.ConfigManager;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Queue;
 
 public class ParticleRenderer {
-    ArrayDeque<Particle> normalParticles = new ArrayDeque<>();
-    ArrayDeque<Particle> additiveParticles = new ArrayDeque<>();
-    ArrayDeque<Particle> throughParticles = new ArrayDeque<>();
-    ArrayDeque<Particle> additiveThroughParticles = new ArrayDeque<>();
-    Queue<Particle> queue = Queues.<Particle>newArrayDeque();
+    private final ArrayDeque<Particle> normalParticles = new ArrayDeque<>();
+    private final ArrayDeque<Particle> additiveParticles = new ArrayDeque<>();
+    private final ArrayDeque<Particle> throughParticles = new ArrayDeque<>();
+    private final ArrayDeque<Particle> additiveThroughParticles = new ArrayDeque<>();
+    private final Queue<Particle> queue = new ArrayDeque<>();
 
     public void updateParticles() {
         updateParticles(normalParticles);
@@ -42,11 +45,10 @@ public class ParticleRenderer {
         Iterator<Particle> iterator = particles.iterator();
         while (iterator.hasNext()) {
             Particle particle = iterator.next();
-            if (((IEmberParticle) particle).alive())
+            if (((IEmberParticle) particle).alive() && (ConfigManager.enableParticles || particle instanceof ParticleGlow))
                 particle.onUpdate();
-            else {
+            else
                 iterator.remove();
-            }
         }
     }
 
@@ -106,12 +108,16 @@ public class ParticleRenderer {
             GlStateManager.enableCull();
             GlStateManager.depthMask(true);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.disableAlpha();
             GlStateManager.disableBlend();
             GlStateManager.alphaFunc(516, 0.1F);
         }
     }
 
     public void addParticle(Particle particle) {
+        if (!ConfigManager.enableParticles && !(particle instanceof ParticleGlow))
+            return;
+
         if (particle instanceof IEmberParticle) {
             queue.add(particle);
         }

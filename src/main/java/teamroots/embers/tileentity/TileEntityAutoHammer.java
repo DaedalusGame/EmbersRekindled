@@ -120,7 +120,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITileEntityBase,
 		TileEntity tile = world.getTileEntity(getPos().down().offset(facing));
 		if (tile instanceof IHammerable) {
 			IHammerable hammerable = (IHammerable) tile;
-			boolean redstoneEnabled = getWorld().isBlockIndirectlyGettingPowered(getPos()) != 0;
+			boolean redstoneEnabled = getWorld().isBlockPowered(getPos());
 			if (hammerable.isValid() && redstoneEnabled && capability.getEmber() >= ember_cost) {
 				boolean cancel = UpgradeUtil.doWork(this, upgrades);
 				if (!cancel && progress == -1 && ticksExisted % UpgradeUtil.getWorkTime(this,PROCESS_TIME, upgrades) == 0) {
