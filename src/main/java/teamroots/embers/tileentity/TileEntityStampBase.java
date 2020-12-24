@@ -91,12 +91,12 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (!heldItem.isEmpty()){
-			if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket){
-				boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
+			boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
+
+			if (didFill){
 				this.markDirty();
-				return didFill;
-			}
-			else {
+				return true;
+			} else {
 				player.setHeldItem(hand, this.inputs.insertItem(0,heldItem,false));
 				markDirty();
 				return true;

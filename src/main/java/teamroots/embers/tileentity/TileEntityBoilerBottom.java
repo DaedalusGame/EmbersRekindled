@@ -113,11 +113,10 @@ public class TileEntityBoilerBottom extends TileFluidHandler implements ITileEnt
     public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
                             EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = player.getHeldItem(hand);
-        //TODO: Any fluid container
-        if (heldItem.getItem() instanceof ItemBucket || heldItem.getItem() instanceof UniversalBucket) {
-            boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, tank);
+        boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, tank);
+        if (didFill) {
             this.markDirty();
-            return didFill;
+            return true;
         }
         return false;
     }
