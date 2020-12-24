@@ -100,6 +100,7 @@ public class RegistryManager {
 	public static Block item_request;
 	public static Block ember_pipe;
 	public static Block turret;
+	public static Block fluid_dropper;
 	
 	public static Fluid fluid_steam, fluid_molten_dawnstone, fluid_molten_gold, fluid_molten_copper, fluid_molten_lead, fluid_molten_silver, fluid_molten_iron,
 						fluid_molten_aluminum, fluid_molten_tin, fluid_molten_bronze, fluid_molten_electrum, fluid_molten_nickel, fluid_alchemical_redstone;
@@ -202,6 +203,7 @@ public class RegistryManager {
 		blocks.add(mixer = (new BlockMixer(Material.ROCK,"mixer",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(heat_coil = (new BlockHeatCoil(Material.ROCK,"heat_coil",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(item_dropper = (new BlockDropper(Material.ROCK,"item_dropper",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
+		blocks.add(fluid_dropper = (new BlockFluidDropper(Material.ROCK,"fluid_dropper",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(large_tank = (new BlockLargeTank(Material.ROCK,"large_tank",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		blocks.add(ember_gauge = (new BlockEmberGauge(Material.ROCK,"ember_gauge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
 		//blocks.add(item_gauge = (new BlockItemGauge(Material.ROCK,"item_gauge",true)).setIsFullCube(false).setIsOpaqueCube(false).setHarvestProperties("pickaxe", 0).setHardness(1.6f));
@@ -629,6 +631,7 @@ public class RegistryManager {
 		GameRegistry.registerTileEntity(TileEntityItemRequisition.class, Embers.MODID+":tile_entity_item_request");
 		GameRegistry.registerTileEntity(TileEntityEmberPipe.class, Embers.MODID+":tile_entity_ember_pipe");
 		GameRegistry.registerTileEntity(TileEntityTurret.class, Embers.MODID+":tile_entity_turret");
+		GameRegistry.registerTileEntity(TileEntityFluidDropper.class, Embers.MODID+":tile_entity_fluid_dropper");
 	}
 
 	private static void registerCapabilities() {

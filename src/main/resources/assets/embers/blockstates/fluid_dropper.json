@@ -1,0 +1,11 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "embers:item_dropper",
+        "transform": "forge:default-block"
+    },
+    "variants":{
+        "inventory": [{}],
+        "normal": [{}]
+    }
+}

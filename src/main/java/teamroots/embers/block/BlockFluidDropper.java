@@ -9,12 +9,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.tileentity.TileEntityDropper;
+import teamroots.embers.tileentity.TileEntityFluidDropper;
 
-public class BlockDropper extends BlockTEBase {
+public class BlockFluidDropper extends BlockTEBase {
 	public static AxisAlignedBB AABB_BASE = new AxisAlignedBB(0.25,0.625,0.25,0.75,1.0,0.75);
-	
-	public BlockDropper(Material material, String name, boolean addToTab) {
+
+	public BlockFluidDropper(Material material, String name, boolean addToTab) {
 		super(material, name, addToTab);
 	}
 	
@@ -25,7 +25,7 @@ public class BlockDropper extends BlockTEBase {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDropper();
+		return new TileEntityFluidDropper();
 	}
 
 	@Override

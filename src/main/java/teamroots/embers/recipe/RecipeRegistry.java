@@ -659,7 +659,12 @@ public class RecipeRegistry {
 				" P ",
 				"I I",
 				'P', RegistryManager.item_pipe,
-				'I', "ingotIron"}).setRegistryName(getRL("item_dropper")));
+				'I', "ingotLead"}).setRegistryName(getRL("item_dropper")));
+		event.getRegistry().register(new ShapedOreRecipe(getRL("fluid_dropper"),new ItemStack(RegistryManager.fluid_dropper,1),true,new Object[]{
+				" P ",
+				"I I",
+				'P', RegistryManager.pipe,
+				'I', "ingotIron"}).setRegistryName(getRL("fluid_dropper")));
 		event.getRegistry().register(new ShapedOreRecipe(getRL("large_tank"),new ItemStack(RegistryManager.large_tank,1),true,new Object[]{
 				"Y Y",
 				"I I",

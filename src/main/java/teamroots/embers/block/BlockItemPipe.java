@@ -2,6 +2,7 @@ package teamroots.embers.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -112,5 +113,16 @@ public class BlockItemPipe extends BlockTEBase {
         }
 
         return new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        if (worldIn.getTileEntity(pos) instanceof TileEntityItemPipe) {
+            TileEntityItemPipe pipe = ((TileEntityItemPipe) worldIn.getTileEntity(pos));
+            if (pipe.getInternalConnection(face) != EnumPipeConnection.NONE) {
+                return BlockFaceShape.MIDDLE_POLE;
+            }
+        }
+        return BlockFaceShape.UNDEFINED;
     }
 }
