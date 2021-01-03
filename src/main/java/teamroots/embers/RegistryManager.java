@@ -37,6 +37,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.DataSerializerEntry;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
@@ -851,5 +852,10 @@ public class RegistryManager {
 				((IModeledItem)items.get(i)).initModel();
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public void init(RegistryEvent.Register<DataSerializerEntry> event) {
+		event.getRegistry().register(new DataSerializerEntry(ExtraSerializers.FLOAT_ARRAY).setRegistryName(Embers.MODID, "serializer_float_array"));
 	}
 }

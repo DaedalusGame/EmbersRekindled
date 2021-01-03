@@ -34,8 +34,4 @@ public class ExtraSerializers {
             return value.clone();
         }
     };
-
-    static {
-        DataSerializers.registerSerializer(FLOAT_ARRAY);
-    }
 }
