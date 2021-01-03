@@ -57,8 +57,8 @@ public class EffectDamage implements IProjectileEffect {
     public void onEntityImpact(Entity entity, @Nullable IProjectilePreset projectile) {
         Entity shooter = projectile != null ? projectile.getShooter() : null;
         Entity projectileEntity = projectile != null ? projectile.getEntity() : null;
-        entity.attackEntityFrom(source.apply(projectile),damage);
-        entity.setFire(fire);
+        if (entity.attackEntityFrom(source.apply(projectile),damage))
+            entity.setFire(fire);
         if(entity instanceof EntityLivingBase) {
             EntityLivingBase livingTarget = (EntityLivingBase) entity;
             livingTarget.setLastAttackedEntity(shooter);

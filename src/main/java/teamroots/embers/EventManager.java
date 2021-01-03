@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -540,28 +541,27 @@ public class EventManager {
                 event.setAmount(event.getAmount() * 0.5f);
             }
         }
-        if (event.getSource().getTrueSource() != null) {
-            if (event.getSource().getTrueSource() instanceof EntityPlayer) {
-                if (((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand().getItem() == RegistryManager.tyrfing) {
-                    event.getEntity().playSound(SoundManager.TYRFING_HIT,1.0f,1.0f);
-                    if (!event.getEntity().world.isRemote) {
-                        PacketHandler.INSTANCE.sendToAll(new MessageTyrfingBurstFX(event.getEntity().posX, event.getEntity().posY + event.getEntity().height / 2.0f, event.getEntity().posZ));
-                    }
-                    EntityPlayer p = ((EntityPlayer) event.getSource().getTrueSource());
-                    event.setAmount((event.getAmount() / 4.0f) * (4.0f + (float) event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue() * 1.0f));
-                }
-                if (!((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand().isEmpty()) {
-                    if (((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand().getItem() instanceof IEmberChargedTool) {
-                        if (((IEmberChargedTool) ((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand().getItem()).hasEmber(((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand()) || ((EntityPlayer) event.getSource().getTrueSource()).capabilities.isCreativeMode) {
-                            event.getEntityLiving().setFire(1);
-                            if (!event.getEntityLiving().getEntityWorld().isRemote) {
-                                PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getEntityLiving().posX, event.getEntityLiving().posY + event.getEntityLiving().getEyeHeight() / 1.5, event.getEntityLiving().posZ));
-                                ((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand().getTagCompound().setBoolean("didUse", true);
-                            }
-                        } else {
-                            event.setCanceled(true);
-                        }
-                    }
+        final Entity trueSource = event.getSource().getTrueSource();
+        if (!(trueSource instanceof EntityPlayer))
+            return;
+        final EntityPlayer player = (EntityPlayer) trueSource;
+        final ItemStack heldStack = player.getHeldItemMainhand();
+        if (heldStack.isEmpty())
+            return;
+        if (heldStack.getItem() == RegistryManager.tyrfing) {
+            event.getEntity().playSound(SoundManager.TYRFING_HIT,1.0f,1.0f);
+            if (!event.getEntity().world.isRemote)
+                PacketHandler.INSTANCE.sendToAll(new MessageTyrfingBurstFX(event.getEntity().posX, event.getEntity().posY + event.getEntity().height / 2.0f, event.getEntity().posZ));
+            event.setAmount((event.getAmount() / 4.0f) * (4.0f + (float) event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue() * 1.0f));
+        }
+        if (heldStack.getItem() instanceof IEmberChargedTool) {
+            if (!player.capabilities.isCreativeMode && !((IEmberChargedTool) heldStack.getItem()).hasEmber(heldStack))
+                event.setCanceled(true);
+            if (!event.isCanceled() && event.getAmount() > 0) {
+                event.getEntityLiving().setFire(1);
+                if (!event.getEntityLiving().getEntityWorld().isRemote) {
+                    PacketHandler.INSTANCE.sendToAll(new MessageEmberBurstFX(event.getEntityLiving().posX, event.getEntityLiving().posY + event.getEntityLiving().getEyeHeight() / 1.5, event.getEntityLiving().posZ));
+                    heldStack.getTagCompound().setBoolean("didUse", true);
                 }
             }
         }
