@@ -199,20 +199,22 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 		TileEntityInfernoForgeOpening opening = getOpening();
 		if (opening != null)
 			opening.open();
-		for (EntityItem item : items)
-			if (!ItemModUtil.hasHeat(item.getItem())) {
-				world.removeEntity(item);
-				item.setDead();
-			} else if (Misc.random.nextDouble() < UpgradeUtil.getOtherParameter(this, "reforge_chance",
-					Math.atan(emberValue / CHANCE_MIDPOINT) / (Math.PI / 2.0), upgrades)  //clockwork arcane business
-			) {
-				ItemStack stack = item.getItem();
-				ItemModUtil.setHeat(stack, 0);
-				ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
-				item.setItem(stack);
-				progress = 0;
-				forgeSuccess = true;
-			}
+		if(emberValue > 0) {
+			for (EntityItem item : items)
+				if (!ItemModUtil.hasHeat(item.getItem())) {
+					world.removeEntity(item);
+					item.setDead();
+				} else if (emberValue <= MAX_CRYSTAL_VALUE && Misc.random.nextDouble() < UpgradeUtil.getOtherParameter(this, "reforge_chance",
+						Math.atan(emberValue / CHANCE_MIDPOINT) / (Math.PI / 2.0), upgrades)  //clockwork arcane business
+				) {
+					ItemStack stack = item.getItem();
+					ItemModUtil.setHeat(stack, 0);
+					ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
+					item.setItem(stack);
+					progress = 0;
+					forgeSuccess = true;
+				}
+		}
 		if (!world.isRemote) {
 			world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, forgeSuccess ? SoundManager.INFERNO_FORGE_SUCCESS : SoundManager.INFERNO_FORGE_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
 			Color flameColor = new Color(255, 64, 16);
@@ -258,7 +260,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 				emberValue += EmbersAPI.getEmberValue(stack) * stack.getCount();
 			else return Lists.newArrayList();
 		}
-		if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= MAX_CRYSTAL_VALUE)
+		if (!pickedItem.isEmpty() && emberValue > 0)
 			return items;
 		return Lists.newArrayList();
 	}
