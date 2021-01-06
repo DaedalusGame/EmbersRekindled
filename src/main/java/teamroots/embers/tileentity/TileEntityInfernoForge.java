@@ -1,5 +1,6 @@
 package teamroots.embers.tileentity;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,6 +58,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 	int progress = 0;
 	int heat = 0;
 	int ticksExisted = 0;
+	double emberValue = 0;
 
 	public static final int SOUND_PROCESS = 1;
 	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};
@@ -136,120 +138,93 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 
 	@Override
 	public void update() {
-		if(getWorld().isRemote)
+		if (getWorld().isRemote)
 			handleSound();
 		List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.DOWN});
 		UpgradeUtil.verifyUpgrades(this, upgrades);
 		if (UpgradeUtil.doTick(this, upgrades))
 			return;
-		ticksExisted ++;
-		if (progress > 0){
-			boolean cancel = UpgradeUtil.doWork(this,upgrades);
-			double emberCost = UpgradeUtil.getTotalEmberConsumption(this,EMBER_COST,upgrades);
-			if (!cancel && capability.getEmber() >= emberCost){
-				UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
-				capability.removeAmount(emberCost, true);
-				progress --;
-				if (getWorld().isRemote){
-					if (random.nextInt(10) == 0){
-						if (random.nextInt(3) == 0){
-							ParticleUtil.spawnParticleSpark(world, getPos().getX()-0.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.75f, getPos().getZ()-0.5f+0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);
-						}
-						if (random.nextInt(3) == 0){
-							ParticleUtil.spawnParticleSpark(world, getPos().getX()+1.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.75f, getPos().getZ()-0.5f+0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);
-						}
-						if (random.nextInt(3) == 0){
-							ParticleUtil.spawnParticleSpark(world, getPos().getX()+1.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.75f, getPos().getZ()+1.5f+0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);
-						}
-						if (random.nextInt(3) == 0){
-							ParticleUtil.spawnParticleSpark(world, getPos().getX()-0.5f+0.125f*(random.nextFloat()-0.5f), getPos().getY()+1.75f, getPos().getZ()+1.5f+0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()-0.5f), 0.125f*(random.nextFloat()), 0.125f*(random.nextFloat()-0.5f), 255, 64, 16, random.nextFloat()*0.75f+0.45f, 80);
-						}
-					}
-					ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()-0.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()-0.3f, 0.025f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.025f*(random.nextFloat()-0.5f), 72, 72, 72, 1.0f, 3.0f+3.0f*random.nextFloat(), 48);
-					ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()+1.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()-0.3f, 0.025f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.025f*(random.nextFloat()-0.5f), 72, 72, 72, 1.0f, 3.0f+3.0f*random.nextFloat(), 48);
-					ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()+1.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()+1.3f, 0.025f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.025f*(random.nextFloat()-0.5f), 72, 72, 72, 1.0f, 3.0f+3.0f*random.nextFloat(), 48);
-					ParticleUtil.spawnParticleSmoke(getWorld(), (float)getPos().getX()-0.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()+1.3f, 0.025f*(random.nextFloat()-0.5f), 0.05f*(random.nextFloat()+1.0f), 0.025f*(random.nextFloat()-0.5f), 72, 72, 72, 1.0f, 3.0f+3.0f*random.nextFloat(), 48);
-					/*if (random.nextInt(3) == 0){
-						ParticleUtil.spawnParticleGlow(getWorld(), (float)getPos().getX()-0.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()-0.3f, 0.0125f*(random.nextFloat()-0.5f), 0.025f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 48);
-					}
-					if (random.nextInt(3) == 0){
-						ParticleUtil.spawnParticleGlow(getWorld(), (float)getPos().getX()+1.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()-0.3f, 0.0125f*(random.nextFloat()-0.5f), 0.025f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 48);
-					}
-					if (random.nextInt(3) == 0){
-						ParticleUtil.spawnParticleGlow(getWorld(), (float)getPos().getX()+1.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()+1.3f, 0.0125f*(random.nextFloat()-0.5f), 0.025f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 48);
-					}
-					if (random.nextInt(3) == 0){
-						ParticleUtil.spawnParticleGlow(getWorld(), (float)getPos().getX()-0.3f, (float)getPos().getY()+1.85f, (float)getPos().getZ()+1.3f, 0.0125f*(random.nextFloat()-0.5f), 0.025f*(random.nextFloat()+1.0f), 0.0125f*(random.nextFloat()-0.5f), 255, 64, 16, 2.0f, 48);
-					}*/
-				}
-				List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY()+0.25,getPos().getZ(),getPos().getX()+1,getPos().getY()+1,getPos().getZ()+1));
-				for (EntityItem e : items){
-					e.setPickupDelay(20);
-				}
-				if (progress == 0 && !world.isRemote){
-					ItemStack pickedItem = ItemStack.EMPTY;
-					double emberValue = 0;
-					for (EntityItem item : items) {
-						if (ItemModUtil.hasHeat(item.getItem())) {
-							int maxLevel = UpgradeUtil.getOtherParameter(this,"max_level",MAX_LEVEL,upgrades);
-							if (pickedItem.isEmpty() && ItemModUtil.getLevel(item.getItem()) <= maxLevel && ItemModUtil.getHeat(item.getItem()) >= ItemModUtil.getMaxHeat(item.getItem())) {
-								pickedItem = item.getItem();
-							} else {
-								progress = 0;
-								markDirty();
-								return;
-							}
-						} else {
-							if (EmbersAPI.getEmberValue(item.getItem()) > 0) {
-								emberValue += EmbersAPI.getEmberValue(item.getItem()) * item.getItem().getCount();
-							} else {
-								progress = 0;
-								markDirty();
-								return;
-							}
-						}
-					}
-					boolean forgeSuccess = false;
-					TileEntityInfernoForgeOpening opening = getOpening();
-					if (opening != null){
-						opening.open();
-					}
-					if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= MAX_CRYSTAL_VALUE){
-						for (EntityItem item1 : items) {
-							if (!ItemModUtil.hasHeat(item1.getItem())) {
-								world.removeEntity(item1);
-								item1.setDead();
-							} else {
-								double chance = UpgradeUtil.getOtherParameter(this,"reforge_chance",Math.atan(emberValue / CHANCE_MIDPOINT)/(Math.PI / 2.0),upgrades); //clockwork arcane business
-								if (Misc.random.nextDouble() < chance) {
-                                    ItemStack stack = item1.getItem();
-                                    ItemModUtil.setHeat(stack, 0);
-                                    ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
-                                    item1.setItem(stack);
-                                    progress = 0;
-									forgeSuccess = true;
-                                }
-							}
-						}
-					}
-					if (!world.isRemote){
-						world.playSound(null,getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5, forgeSuccess ? SoundManager.INFERNO_FORGE_SUCCESS : SoundManager.INFERNO_FORGE_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
-						Color flameColor = new Color(255,64,16);
-						if(!forgeSuccess)
-							flameColor = new Color(0,0,0);
-						if(emberValue > MAX_CRYSTAL_VALUE)
-							flameColor = new Color(16, 64, 255);
-						Color sparkColor = new Color(255,64,16);
-
-						PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX()+0.5,getPos().getY()+1.5,getPos().getZ()+0.5,flameColor,sparkColor));
-					}
-				}
-			}
-			else {
-				progress = 0;
-			}
+		ticksExisted++;
+		if (progress <= 0)
+			return;
+		boolean cancel = UpgradeUtil.doWork(this, upgrades);
+		double emberCost = UpgradeUtil.getTotalEmberConsumption(this, EMBER_COST, upgrades);
+		if (cancel || capability.getEmber() < emberCost) {
+			progress = 0;
 			markDirty();
+			return;
 		}
+		UpgradeUtil.throwEvent(this, new EmberEvent(this, EmberEvent.EnumType.CONSUME, emberCost), upgrades);
+		capability.removeAmount(emberCost, true);
+		progress--;
+		if (getWorld().isRemote) {
+			if (random.nextInt(10) == 0) {
+				if (random.nextInt(3) == 0)
+					ParticleUtil.spawnParticleSpark(world, getPos().getX() - 0.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.75f, getPos().getZ() - 0.5f + 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
+				if (random.nextInt(3) == 0)
+					ParticleUtil.spawnParticleSpark(world, getPos().getX() + 1.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.75f, getPos().getZ() - 0.5f + 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
+				if (random.nextInt(3) == 0)
+					ParticleUtil.spawnParticleSpark(world, getPos().getX() + 1.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.75f, getPos().getZ() + 1.5f + 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
+				if (random.nextInt(3) == 0)
+					ParticleUtil.spawnParticleSpark(world, getPos().getX() - 0.5f + 0.125f * (random.nextFloat() - 0.5f), getPos().getY() + 1.75f, getPos().getZ() + 1.5f + 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat() - 0.5f), 0.125f * (random.nextFloat()), 0.125f * (random.nextFloat() - 0.5f), 255, 64, 16, random.nextFloat() * 0.75f + 0.45f, 80);
+			}
+			ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() - 0.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() - 0.3f, 0.025f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.025f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + 3.0f * random.nextFloat(), 48);
+			ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() + 1.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() - 0.3f, 0.025f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.025f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + 3.0f * random.nextFloat(), 48);
+			ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() + 1.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() + 1.3f, 0.025f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.025f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + 3.0f * random.nextFloat(), 48);
+			ParticleUtil.spawnParticleSmoke(getWorld(), (float) getPos().getX() - 0.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() + 1.3f, 0.025f * (random.nextFloat() - 0.5f), 0.05f * (random.nextFloat() + 1.0f), 0.025f * (random.nextFloat() - 0.5f), 72, 72, 72, 1.0f, 3.0f + 3.0f * random.nextFloat(), 48);
+			/*
+			if (random.nextInt(3) == 0)
+				ParticleUtil.spawnParticleGlow(getWorld(), (float) getPos().getX() - 0.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() - 0.3f, 0.0125f * (random.nextFloat() - 0.5f), 0.025f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 48);
+			if (random.nextInt(3) == 0)
+				ParticleUtil.spawnParticleGlow(getWorld(), (float) getPos().getX() + 1.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() - 0.3f, 0.0125f * (random.nextFloat() - 0.5f), 0.025f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 48);
+			if (random.nextInt(3) == 0)
+				ParticleUtil.spawnParticleGlow(getWorld(), (float) getPos().getX() + 1.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() + 1.3f, 0.0125f * (random.nextFloat() - 0.5f), 0.025f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 48);
+			if (random.nextInt(3) == 0)
+				ParticleUtil.spawnParticleGlow(getWorld(), (float) getPos().getX() - 0.3f, (float) getPos().getY() + 1.85f, (float) getPos().getZ() + 1.3f, 0.0125f * (random.nextFloat() - 0.5f), 0.025f * (random.nextFloat() + 1.0f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 48);
+			*/
+		}
+		List<EntityItem> items = getValidItems();
+		for (EntityItem e : items)
+			e.setPickupDelay(20);
+		if (progress != 0 || world.isRemote) {
+			markDirty();
+			return;
+		}
+		if (items.isEmpty()) {
+			progress = 0;
+			markDirty();
+			return;
+		}
+		boolean forgeSuccess = false;
+		TileEntityInfernoForgeOpening opening = getOpening();
+		if (opening != null)
+			opening.open();
+		for (EntityItem item : items)
+			if (!ItemModUtil.hasHeat(item.getItem())) {
+				world.removeEntity(item);
+				item.setDead();
+			} else if (Misc.random.nextDouble() < UpgradeUtil.getOtherParameter(this, "reforge_chance",
+					Math.atan(emberValue / CHANCE_MIDPOINT) / (Math.PI / 2.0), upgrades)  //clockwork arcane business
+			) {
+				ItemStack stack = item.getItem();
+				ItemModUtil.setHeat(stack, 0);
+				ItemModUtil.setLevel(stack, ItemModUtil.getLevel(stack) + 1);
+				item.setItem(stack);
+				progress = 0;
+				forgeSuccess = true;
+			}
+		if (!world.isRemote) {
+			world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, forgeSuccess ? SoundManager.INFERNO_FORGE_SUCCESS : SoundManager.INFERNO_FORGE_FAIL, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			Color flameColor = new Color(255, 64, 16);
+			if (!forgeSuccess)
+				flameColor = new Color(0, 0, 0);
+			if (emberValue > MAX_CRYSTAL_VALUE)
+				flameColor = new Color(16, 64, 255);
+			Color sparkColor = new Color(255, 64, 16);
+
+			PacketHandler.INSTANCE.sendToAll(new MessageEmberActivationFX(getPos().getX() + 0.5, getPos().getY() + 1.5, getPos().getZ() + 0.5, flameColor, sparkColor));
+		}
+		markDirty();
 	}
 
 	private TileEntityInfernoForgeOpening getOpening() {
@@ -257,41 +232,41 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 		return tile instanceof TileEntityInfernoForgeOpening ? (TileEntityInfernoForgeOpening) tile : null;
 	}
 
-	public void updateProgress(){
-		if (progress == 0){
-			List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(),getPos().getY()+0.25,getPos().getZ(),getPos().getX()+1,getPos().getY()+1,getPos().getZ()+1));
-			ItemStack pickedItem = ItemStack.EMPTY;
-			double emberValue = 0;
-			for (EntityItem item : items) {
-				if (ItemModUtil.hasHeat(item.getItem())) {
-					if (pickedItem.isEmpty() && ItemModUtil.getLevel(item.getItem()) < MAX_LEVEL && ItemModUtil.getHeat(item.getItem()) >= ItemModUtil.getMaxHeat(item.getItem())) {
-						pickedItem = item.getItem();
-					} else {
-						return;
-					}
-				} else {
-					if (EmbersAPI.getEmberValue(item.getItem()) > 0) {
-						emberValue += EmbersAPI.getEmberValue(item.getItem());
-					} else {
-						return;
-					}
-				}
-			}
-			if (!pickedItem.isEmpty() && emberValue > 0 && emberValue < EmbersAPI.getEmberValue(new ItemStack(RegistryManager.ember_cluster))*3.0){ //TODO: Ditto, replace cluster with actual value
-				progress = PROCESS_TIME;
-				world.playSound(null,getPos().getX()+0.5,getPos().getY()+0.5,getPos().getZ()+0.5, SoundManager.INFERNO_FORGE_START, SoundCategory.BLOCKS, 1.0f, 1.0f);
-				markDirty();
-			}
+	public void updateProgress() {
+		if (progress != 0) return;
+		List<EntityItem> items = getValidItems();
+		if (!items.isEmpty()) {
+			progress = PROCESS_TIME;
+			world.playSound(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, SoundManager.INFERNO_FORGE_START, SoundCategory.BLOCKS, 1.0f, 1.0f);
+			markDirty();
 		}
+	}
+
+	private List<EntityItem> getValidItems() {
+		List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(), getPos().getY() + 0.25, getPos().getZ(), getPos().getX() + 1, getPos().getY() + 1, getPos().getZ() + 1));
+		ItemStack pickedItem = ItemStack.EMPTY;
+		emberValue = 0;
+		for (EntityItem item : items) {
+			final ItemStack stack = item.getItem();
+			if (ItemModUtil.hasHeat(stack))
+				if (pickedItem.isEmpty()
+						&& ItemModUtil.getLevel(stack) < MAX_LEVEL
+						&& ItemModUtil.getHeat(stack) >= ItemModUtil.getMaxHeat(stack))
+					pickedItem = stack;
+				else return Lists.newArrayList();
+			else if (EmbersAPI.getEmberValue(stack) > 0)
+				emberValue += EmbersAPI.getEmberValue(stack) * stack.getCount();
+			else return Lists.newArrayList();
+		}
+		if (!pickedItem.isEmpty() && emberValue > 0 && emberValue <= MAX_CRYSTAL_VALUE)
+			return items;
+		return Lists.newArrayList();
 	}
 
 	@Override
 	public void playSound(int id) {
-		switch (id) {
-			case SOUND_PROCESS:
-				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.INFERNO_FORGE_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
-				break;
-		}
+		if (id == SOUND_PROCESS)
+			Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.INFERNO_FORGE_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f);
 		soundsPlaying.add(id);
 	}
 
