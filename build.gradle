@@ -17,7 +17,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 apply plugin: 'com.wynprice.cursemaven'
 
-version = "1.15"
+version = "1.16"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "EmbersRekindled"
 
