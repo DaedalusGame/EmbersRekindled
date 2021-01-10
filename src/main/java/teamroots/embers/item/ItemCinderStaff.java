@@ -7,6 +7,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,15 +50,17 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
         if (!world.isRemote) {
             double charge = (Math.min(MAX_CHARGE, getMaxItemUseDuration(stack) - timeLeft)) / MAX_CHARGE;
             float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
-            double posX = entity.posX + entity.getLookVec().x * spawnDistance;
-            double posY = entity.posY + entity.getEyeHeight() + entity.getLookVec().y * spawnDistance;
-            double posZ = entity.posZ + entity.getLookVec().z * spawnDistance;
+            Vec3d eyesPos = entity.getPositionEyes(1.0f);
+            RayTraceResult traceResult = this.rayTrace(world, (EntityPlayer) entity, false);
+            if (traceResult != null && traceResult.typeOfHit == RayTraceResult.Type.BLOCK)
+                spawnDistance = (float) Math.min(spawnDistance, traceResult.hitVec.distanceTo(eyesPos));
+            Vec3d launchPos = eyesPos.add(entity.getLookVec().scale(spawnDistance));
             float damage = (float) Math.max(charge * DAMAGE, 0.5f);
             float size = (float) Math.max(charge * SIZE, 0.5f);
             float aoeSize = (float) charge * AOE_SIZE;
             int lifetime = charge * DAMAGE >= 1.0 ? LIFETIME : 5;
             EffectArea effect = new EffectArea(new EffectDamage(damage, DamageEmber.EMBER_DAMAGE_SOURCE_FACTORY, 1, 1.0), aoeSize, false);
-            ProjectileFireball fireball = new ProjectileFireball(entity, new Vec3d(posX, posY, posZ), new Vec3d(entity.getLookVec().x * 0.85, entity.getLookVec().y * 0.85, entity.getLookVec().z * 0.85), size, lifetime, effect);
+            ProjectileFireball fireball = new ProjectileFireball(entity, launchPos, entity.getLookVec().scale(0.85), size, lifetime, effect);
             EmberProjectileEvent event = new EmberProjectileEvent(entity, stack, charge, fireball);
             MinecraftForge.EVENT_BUS.post(event);
             if (!event.isCanceled()) {
@@ -72,7 +75,7 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
                 sound = SoundManager.FIREBALL;
             else
                 sound = SoundManager.CINDER_STAFF_FAIL;
-            world.playSound(null, posX, posY, posZ, sound, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            world.playSound(null, launchPos.x, launchPos.y, launchPos.z, sound, SoundCategory.PLAYERS, 1.0f, 1.0f);
         }
         entity.swingArm(entity.getActiveHand());
         stack.getTagCompound().setInteger("cooldown", COOLDOWN);
@@ -117,12 +120,17 @@ public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
             }
         }
 
-        if(event.hasParticles())
-            for (int i = 0; i < 4; i++) {
-                float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
-                Color color = event.getColor();
-                ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float) player.posX + spawnDistance * (float) player.getLookVec().x + (itemRand.nextFloat() * 0.1f - 0.05f), (float) player.posY + player.getEyeHeight() + spawnDistance * (float) player.getLookVec().y + (itemRand.nextFloat() * 0.1f - 0.05f), (float) player.posZ + spawnDistance * (float) player.getLookVec().z + (itemRand.nextFloat() * 0.1f - 0.05f), 0, 0, 0, color.getRed(), color.getGreen(), color.getBlue(), (float) charge / 1.75f, 24);
-            }
+        if(event.hasParticles()) {
+            Color color = event.getColor();
+            float spawnDistance = 2.0f;//Math.max(1.0f, (float)charge/5.0f);
+            Vec3d eyesPos = player.getPositionEyes(1.0f);
+            RayTraceResult traceResult = this.rayTrace(player.world, (EntityPlayer) player, false);
+            if (traceResult != null && traceResult.typeOfHit == RayTraceResult.Type.BLOCK)
+                spawnDistance = (float) Math.min(spawnDistance, traceResult.hitVec.distanceTo(eyesPos));
+            Vec3d launchPos = eyesPos.add(player.getLookVec().scale(spawnDistance));
+            for (int i = 0; i < 4; i++)
+                ParticleUtil.spawnParticleGlow(player.getEntityWorld(), (float) launchPos.x + (itemRand.nextFloat() * 0.1f - 0.05f), (float) launchPos.y + (itemRand.nextFloat() * 0.1f - 0.05f), (float) launchPos.z + (itemRand.nextFloat() * 0.1f - 0.05f), 0, 0, 0, color.getRed(), color.getGreen(), color.getBlue(), (float) charge / 1.75f, 24);
+        }
     }
 
     @Override
