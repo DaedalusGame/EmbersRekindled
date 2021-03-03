@@ -1,11 +1,14 @@
 package teamroots.embers.proxy;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -28,6 +31,7 @@ import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.*;
 import teamroots.embers.util.OreTransmutationUtil;
 
+import java.awt.*;
 import java.text.DecimalFormat;
 
 public class CommonProxy {
@@ -86,6 +90,59 @@ public class CommonProxy {
 	}
 
 	public void playMachineSound(TileEntity tile, int id, SoundEvent soundIn, SoundCategory categoryIn, boolean repeat, float volume, float pitch, float xIn, float yIn, float zIn) {
+		//NOOP
+	}
+
+	//Particles
+	public void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleGlowThroughBlocks(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleLineGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleTyrfing(World world, float x, float y, float z, float vx, float vy, float vz, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleStar(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleSpark(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleSmoke(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleVapor(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scaleMin, float scaleMax, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticlePipeFlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleAsh(World world, Entity entity, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnParticleAsh(World world, AxisAlignedBB aabb, int lifetime) {
+		//NOOP
+	}
+
+	public void spawnFireBlast(World world, double x, double y, double z, Color color, float scale, int lifetime) {
 		//NOOP
 	}
 }

@@ -25,110 +25,55 @@ public class ParticleUtil {
     }
 
     public static void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleGlow(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleGlow(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime);
     }
 
     public static void spawnParticleGlowThroughBlocks(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleGlowThroughBlocks(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleGlowThroughBlocks(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime);
     }
 
     public static void spawnParticleGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleGlow(world, x, y, z, vx, vy, vz, r, g, b, 1.0f, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleGlow(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime);
     }
 
     public static void spawnParticleLineGlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleLineGlow(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleLineGlow(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime);
     }
 
     public static void spawnParticleTyrfing(World world, float x, float y, float z, float vx, float vy, float vz, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleTyrfing(world, x, y, z, vx, vy, vz, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleTyrfing(world, x, y, z, vx, vy, vz, scale, lifetime);
     }
 
     public static void spawnParticleStar(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleStar(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleStar(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime);
     }
 
     public static void spawnParticleSpark(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleSpark(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleSpark(world, x, y, z, vx, vy, vz, r, g, b, scale, lifetime);
     }
 
     public static void spawnParticleSmoke(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleSmoke(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleSmoke(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime);
     }
 
     public static void spawnParticleVapor(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scaleMin, float scaleMax, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticleVapor(world, x, y, z, vx, vy, vz, r, g, b, a, scaleMin, scaleMax, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticleVapor(world, x, y, z, vx, vy, vz, r, g, b, a, scaleMin, scaleMax, lifetime);
     }
 
     public static void spawnParticlePipeFlow(World world, float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float a, float scale, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            counter += random.nextInt(3);
-            if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0) {
-                ClientProxy.particleRenderer.addParticle(new ParticlePipeFlow(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime));
-            }
-        }
+        Embers.proxy.spawnParticlePipeFlow(world, x, y, z, vx, vy, vz, r, g, b, a, scale, lifetime);
     }
 
     public static void spawnParticleAsh(World world, Entity entity, int lifetime) {
-        spawnParticleAsh(world,entity.getEntityBoundingBox(),lifetime);
+        Embers.proxy.spawnParticleAsh(world, entity, lifetime);
     }
 
     public static void spawnParticleAsh(World world, AxisAlignedBB aabb, int lifetime) {
-        if (Embers.proxy instanceof ClientProxy) {
-            ClientProxy.particleRenderer.addParticle(new ParticleAsh(world, aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, lifetime));
-        }
+        Embers.proxy.spawnParticleAsh(world, aabb, lifetime);
     }
 
-    public static void spawnFireBlast(World world, double x, double y, double z, Color color, float scale, int lifetime)
-    {
-        if (Embers.proxy instanceof ClientProxy) {
-            ClientProxy.particleRenderer.addParticle(new ParticleFireBlast(world, x, y, z, color, scale, lifetime));
-        }
+    public static void spawnFireBlast(World world, double x, double y, double z, Color color, float scale, int lifetime) {
+        Embers.proxy.spawnFireBlast(world, x, y, z, color, scale, lifetime);
     }
 
 }

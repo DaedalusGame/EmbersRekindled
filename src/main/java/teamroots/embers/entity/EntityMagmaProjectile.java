@@ -12,6 +12,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
+import teamroots.embers.Embers;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageFireBlastFX;

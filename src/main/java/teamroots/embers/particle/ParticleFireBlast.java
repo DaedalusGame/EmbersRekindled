@@ -11,7 +11,7 @@ import java.awt.*;
 public class ParticleFireBlast extends Particle implements IEmberParticle {
     Color color;
 
-    protected ParticleFireBlast(World worldIn, double posXIn, double posYIn, double posZIn, Color color, float scale, int lifetime) {
+    public ParticleFireBlast(World worldIn, double posXIn, double posYIn, double posZIn, Color color, float scale, int lifetime) {
         super(worldIn, posXIn, posYIn, posZIn);
         this.color = color;
         this.particleScale = scale;

@@ -108,7 +108,7 @@ public class ModifierBlastingCore extends ModifierBase {
 	
 	@SubscribeEvent
 	public void onHit(LivingHurtEvent event){
-		if(!blastedEntities.contains(event.getEntity()))
+		if(!blastedEntities.contains(event.getEntity()) && event.getSource().getTrueSource() != event.getEntity() && event.getSource().getImmediateSource() != event.getEntity())
 		try {
 			if (event.getSource().getTrueSource() instanceof EntityPlayer) {
 				EntityPlayer damager = (EntityPlayer) event.getSource().getTrueSource();
