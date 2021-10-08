@@ -295,7 +295,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 
     @Override
     public void update() {
-        angle += 1.0f;
+        angle += 1;
         List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.DOWN}); //Defer to when events are added to the upgrade system
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if (getWorld().isRemote)
