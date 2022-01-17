@@ -15,7 +15,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
-apply plugin: 'com.wynprice.cursemaven'
 
 version = "1.17"
 group = "teamroots.embers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -46,14 +45,15 @@ repositories {
     maven { url 'http://dvs1.progwml6.com/files/maven' }
     maven { url "https://maven.blamejared.com/" }
     maven { url "http://www.ryanliptak.com/maven/" }
-    maven { url "https://maven.thiakil.com/" }
+    maven { url "https://maven.thiakil.com" }
+	maven { url "https://www.cursemaven.com" }
 }
 
 dependencies {
     compile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.476"
-    compile "mezz.jei:jei_1.12.2:4.8.3.128"
+    compile "mezz.jei:jei_1.12.2:4.16.1.302"
     compile "com.azanor.baubles:Baubles:1.12-1.5.2"
-    deobfCompile curse.resolveUrl("https://www.curseforge.com/minecraft/mc-mods/mysticalmechanics/files/3006392")
+    deobfCompile "curse.maven:mysticalmechanics-300742:3006392"
 }
 
 task deobfJar(type: Jar) {
