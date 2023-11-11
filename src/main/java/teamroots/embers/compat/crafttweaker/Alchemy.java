@@ -16,7 +16,6 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.recipe.AlchemyRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
-import teamroots.embers.util.AlchemyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
