@@ -2,7 +2,7 @@
 
 A dwarven magic mod
 
-## v1.20 - UEL
+## v1.20.0 - UEL
 ### Changes
 - added CHANGELOG.md
 - added Heat Coil as smelting catalyst in HEI
