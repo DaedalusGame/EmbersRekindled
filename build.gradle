@@ -95,6 +95,9 @@ repositories {
     maven { url "https://www.ryanliptak.com/maven/" }
     maven { url "https://maven.thiakil.com/" }
     maven {
+        url 'https://maven.cleanroommc.com'
+    }
+    maven {
         name 'CurseMaven'
         url 'https://cursemaven.com'
         content {
@@ -105,12 +108,28 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
+    annotationProcessor 'com.google.guava:guava:32.1.2-jre'
+    annotationProcessor 'com.google.code.gson:gson:2.8.9'
+
+    // RetroFuturaGradle:
+    String mixinBooter = modUtils.enableMixins('zone.rong:mixinbooter:8.9')
+    api (mixinBooter) {
+        transitive = false
+    }
+    annotationProcessor (mixinBooter) {
+        transitive = false
+    }
+
     implementation "CraftTweaker2:CraftTweaker2-API:4.1.8.476"
     implementation "CraftTweaker2:ZenScript:4.1.8.476"
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.8.476"
-    implementation "mezz.jei:jei_1.12.2:4.8.3.128"
     implementation "com.azanor.baubles:Baubles:1.12-1.5.2"
+    implementation rfg.deobf("curse.maven:had-enough-items-557549:4810661")
+    // implementation rfg.deobf("curse.maven:baubles-lts-655747:3916343")
     implementation rfg.deobf("curse.maven:mysticalmechanics-300742:3006392")
+    implementation rfg.deobf("curse.maven:the-one-probe-community-edition-885670:4746213")
+    implementation rfg.deobf("curse.maven:groovyscript-687577:4691853")
 }
 
 // Adds Access Transformer files to tasks
