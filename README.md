@@ -2,7 +2,7 @@
 
 # Embers - Unofficial Extended Life
 
-[![License](https://img.shields.io/github/licenseEnder-Development/Embers-Extended-Life.svg)](LICENSE) ![Versions](http://cf.way2muchnoise.eu/versions/minecraft_embers-extended-life_all.svg) [![Downloads](http://cf.way2muchnoise.eu/https://legacy.curseforge.com/minecraft/mc-mods/embers-extended-life.svg)](https://www.curseforge.com/minecraft/mc-mods/embers-extended-life)
+[![License](https://img.shields.io/github/license/Ender-Development/Embers-Extended-Life.svg)](LICENSE) ![Versions](http://cf.way2muchnoise.eu/versions/minecraft_embers-extended-life_all.svg) [![Downloads](http://cf.way2muchnoise.eu/embers-extended-life.svg)](https://www.curseforge.com/minecraft/mc-mods/embers-extended-life)
 
 *A dwarven magic mod* • [CurseForge](https://legacy.curseforge.com/minecraft/mc-mods/embers-extended-life) • [Changelog](CHANGELOG.md) • [Bugtracker](https://github.com/Ender-Development/Embers-Extended-Life/issues)
 
