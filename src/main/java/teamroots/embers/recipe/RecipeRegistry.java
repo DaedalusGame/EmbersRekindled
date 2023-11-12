@@ -1444,7 +1444,7 @@ public class RecipeRegistry {
 
 		Ingredient anyMetalSeed = new IngredientSpecial(stack -> Block.getBlockFromItem(stack.getItem()) instanceof BlockSeedNew);
 
-		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList(AspectList.createStandard(0, 0, 0, 0, 0), AspectList.createStandard(16, 16, 16, 16, 16)),
+		alchemyRecipes.add(new AlchemyRecipe(new AspectRangeList(AspectList.createStandard(1, 1, 1, 1, 1), AspectList.createStandard(16, 16, 16, 16, 16)).fixMathematicalError(),
 				anyMetalSeed,
 				Lists.newArrayList(Ingredient.fromItem(RegistryManager.dust_ember), new OreIngredient("dustRedstone")),
 				new ItemStack(RegistryManager.dust_metallurgic,3)));
