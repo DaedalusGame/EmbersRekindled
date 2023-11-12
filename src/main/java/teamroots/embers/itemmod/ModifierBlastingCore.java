@@ -22,46 +22,43 @@ import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.util.EmberInventoryUtil;
 import teamroots.embers.util.Misc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 
 public class ModifierBlastingCore extends ModifierBase {
-
+	private final HashSet<Entity> blastedEntities = new HashSet<>();
 	public ModifierBlastingCore() {
 		super(EnumType.TOOL_OR_ARMOR,"blasting_core",2.0,true);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	private double getChanceBonus(double resonance) {
-		if(resonance > 1)
-			return 1 + (resonance - 1) * 0.5;
-		else
-			return resonance;
+		if (resonance > 1.0) {
+			return 1.0 + (resonance - 1.0) * 0.5;
+		}
+		return resonance;
 	}
 
 	@SubscribeEvent
 	public void onDrops(BreakEvent event){
+		ItemStack s;
+		int blastingLevel;
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
-		if (event.getPlayer() != null){
-			if (!event.getPlayer().getHeldItem(EnumHand.MAIN_HAND).isEmpty()){
-				ItemStack s = event.getPlayer().getHeldItem(EnumHand.MAIN_HAND);
-				int blastingLevel = ItemModUtil.getModifierLevel(s, EmbersAPI.BLASTING_CORE);
-				if (blastingLevel > 0 && EmberInventoryUtil.getEmberTotal(event.getPlayer()) >= cost){
-					world.createExplosion(event.getPlayer(), pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 0.5f, true);
-					double resonance = EmbersAPI.getEmberEfficiency(s);
-					double chance = (double) blastingLevel / (blastingLevel + 1) * getChanceBonus(resonance);
-
-					for(BlockPos toExplode : getBlastCube(world, pos, event.getPlayer(), chance)) {
-						IBlockState state = world.getBlockState(toExplode);
-						if (state.getBlockHardness(world, toExplode) >= 0 && event.getPlayer().canHarvestBlock(world.getBlockState(toExplode))){
-							world.destroyBlock(toExplode, true);
-							world.notifyBlockUpdate(toExplode, state, Blocks.AIR.getDefaultState(), 8);
-						}
-					}
-					EmberInventoryUtil.removeEmber(event.getPlayer(), cost);
-				}
-			}
-		}
+		if (event.getPlayer() != null && !event.getPlayer().getHeldItem(EnumHand.MAIN_HAND).isEmpty() && (blastingLevel = ItemModUtil.getModifierLevel(s = event.getPlayer().getHeldItem(EnumHand.MAIN_HAND), EmbersAPI.BLASTING_CORE)) > 0 && EmberInventoryUtil.getEmberTotal(event.getPlayer()) >= this.cost) {
+            world.createExplosion(event.getPlayer(), (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, 0.5f, true);
+            double resonance = EmbersAPI.getEmberEfficiency(s);
+            double chance = (double)blastingLevel / (double)(blastingLevel + 1) * this.getChanceBonus(resonance);
+            for (BlockPos toExplode : this.getBlastCube(world, pos, event.getPlayer(), chance)) {
+                IBlockState state = world.getBlockState(toExplode);
+                if (!(state.getBlockHardness(world, toExplode) >= 0.0f) || !event.getPlayer().canHarvestBlock(world.getBlockState(toExplode))) continue;
+                world.destroyBlock(toExplode, true);
+                world.notifyBlockUpdate(toExplode, state, Blocks.AIR.getDefaultState(), 8);
+            }
+            EmberInventoryUtil.removeEmber(event.getPlayer(), this.cost);
+        }
 	}
 
 	public Iterable<BlockPos> getBlastAdjacent(World world, BlockPos pos, EntityPlayer player, double chance) {
@@ -104,11 +101,9 @@ public class ModifierBlastingCore extends ModifierBase {
 		return posList;
 	}
 
-	private HashSet<Entity> blastedEntities = new HashSet<>();
-	
 	@SubscribeEvent
 	public void onHit(LivingHurtEvent event){
-		if(!blastedEntities.contains(event.getEntity()) && event.getSource().getTrueSource() != event.getEntity() && event.getSource().getImmediateSource() != event.getEntity())
+		if(!this.blastedEntities.contains(event.getEntity()) && event.getSource().getTrueSource() != event.getEntity() && event.getSource().getImmediateSource() != event.getEntity())
 		try {
 			if (event.getSource().getTrueSource() instanceof EntityPlayer) {
 				EntityPlayer damager = (EntityPlayer) event.getSource().getTrueSource();
