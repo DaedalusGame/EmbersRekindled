@@ -30,7 +30,7 @@ public class TileEntityFluidExtractor extends TileEntityFluidPipeBase {
     IFluidHandler[] sideHandlers;
     boolean syncConnections;
     boolean active;
-    public static final int MAX_DRAIN = 120;
+    public static final int MAX_DRAIN = 250;
 
     public TileEntityFluidExtractor() {
         super();
