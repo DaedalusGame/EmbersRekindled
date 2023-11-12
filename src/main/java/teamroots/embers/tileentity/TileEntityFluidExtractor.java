@@ -132,7 +132,7 @@ public class TileEntityFluidExtractor extends TileEntityFluidPipeBase {
 
     @Override
     int getCapacity() {
-        return 240;
+        return 250;
     }
 
     public EnumPipeConnection getConnection(EnumFacing side) {

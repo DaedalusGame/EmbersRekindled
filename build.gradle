@@ -130,6 +130,8 @@ dependencies {
     implementation rfg.deobf("curse.maven:mysticalmechanics-300742:3006392")
     implementation rfg.deobf("curse.maven:the-one-probe-community-edition-885670:4746213")
     implementation rfg.deobf("curse.maven:groovyscript-687577:4691853")
+    implementation rfg.deobf("curse.maven:mantle-74924:2713386")
+    implementation rfg.deobf("curse.maven:inspirations-284007:2843007")
 }
 
 // Adds Access Transformer files to tasks

@@ -1,7 +1,6 @@
 package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -156,7 +155,7 @@ public class TileEntityFluidPipe extends TileEntityFluidPipeBase {
 
 	@Override
 	int getCapacity() {
-		return 240;
+		return 250;
 	}
 
 	public EnumPipeConnection getConnection(EnumFacing side) {

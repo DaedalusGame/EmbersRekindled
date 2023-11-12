@@ -99,16 +99,13 @@ public class TileEntityFluidTransfer extends TileEntityFluidPipeBase {
 
     @Override
     int getCapacity() {
-        return 240;
+        return 250;
     }
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            if (facing == null || facing.getAxis() == getFacing().getAxis())
-                return true;
-            else
-                return false;
+            return facing == null || facing.getAxis() == getFacing().getAxis();
         }
         return super.hasCapability(capability, facing);
     }

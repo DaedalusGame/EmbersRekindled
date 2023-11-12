@@ -23,7 +23,7 @@ import java.util.Random;
 public abstract class TileEntityFluidPipeBase extends TileEntity implements ITileEntityBase, ITickable, IFluidPipeConnectable, IFluidPipePriority {
     public static final int PRIORITY_BLOCK = 0;
     public static final int PRIORITY_PIPE = PRIORITY_BLOCK;
-    public static final int MAX_PUSH = 120;
+    public static final int MAX_PUSH = 250;
 
     Random random = new Random();
     boolean[] from = new boolean[EnumFacing.VALUES.length];
@@ -178,9 +178,9 @@ public abstract class TileEntityFluidPipeBase extends TileEntity implements ITil
                 for (int i = 0; i < 3; i++) {
                     float dist = random.nextFloat() * 0.0f;
                     int lifetime = 10;
-                    float vx = lastTransfer.getFrontOffsetX() / (float) (lifetime / (1 - dist));
-                    float vy = lastTransfer.getFrontOffsetY() / (float) (lifetime / (1 - dist));
-                    float vz = lastTransfer.getFrontOffsetZ() / (float) (lifetime / (1 - dist));
+                    float vx = lastTransfer.getFrontOffsetX() / (lifetime / (1 - dist));
+                    float vy = lastTransfer.getFrontOffsetY() / (lifetime / (1 - dist));
+                    float vz = lastTransfer.getFrontOffsetZ() / (lifetime / (1 - dist));
                     float x = pos.getX() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetX() * dist;
                     float y = pos.getY() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetY() * dist;
                     float z = pos.getZ() + 0.4f + random.nextFloat() * 0.2f + lastTransfer.getFrontOffsetZ() * dist;
