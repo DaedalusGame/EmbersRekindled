@@ -117,6 +117,10 @@ tile.geo_separator.name=Geologic Separator
 tile.item_request.name=Item Requisition
 tile.reaction_chamber.name=Reaction Chamber
 tile.ember_pipe.name=Volatile Ember Conduit
+tile.advanced_edge.name=Crystal Cell Edge
+tile.inferno_forge_edge.name=Inferno Forge Edge
+tile.mech_edge.name=Mechanical Edge
+tile.turret.name=Turret
 
 fluid.iron=Molten Iron
 fluid.gold=Molten Gold
