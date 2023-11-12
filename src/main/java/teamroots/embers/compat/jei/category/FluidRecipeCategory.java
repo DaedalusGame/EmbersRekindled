@@ -1,20 +1,15 @@
 package teamroots.embers.compat.jei.category;
 
 import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.*;
+import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.gui.IGuiFluidStackGroup;
+import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.plugins.vanilla.ingredients.FluidStackRenderer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import teamroots.embers.Embers;
 import teamroots.embers.compat.jei.wrapper.FluidRecipeWrapper;
-import teamroots.embers.compat.jei.wrapper.MeltingRecipeWrapper;
-
-import java.util.List;
 
 public abstract class FluidRecipeCategory implements IRecipeCategory<FluidRecipeWrapper> {
     private final IDrawable background;
