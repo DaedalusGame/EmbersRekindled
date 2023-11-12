@@ -2,10 +2,7 @@ package teamroots.embers.compat.jei;
 
 import com.google.common.collect.Lists;
 import mezz.jei.api.*;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.api.recipe.IRecipeWrapperFactory;
-import mezz.jei.api.recipe.IStackHelper;
+import mezz.jei.api.recipe.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
@@ -85,6 +82,7 @@ public class EmbersJEIPlugin implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(RegistryManager.dawnstone_anvil),DawnstoneAnvilCategory.UID);
         reg.addRecipeCatalyst(new ItemStack(RegistryManager.mini_boiler),BoilerRecipeCategory.UID);
         reg.addRecipeCatalyst(new ItemStack(RegistryManager.reaction_chamber),ReactionChamberCategory.UID);
+        reg.addRecipeCatalyst(new ItemStack(RegistryManager.heat_coil), VanillaRecipeCategoryUid.SMELTING);
 
         if(ConfigManager.isMysticalMechanicsIntegrationEnabled()) {
             reg.handleRecipes(LiquidFuelWithInput.class, recipe -> new EngineRecipeWrapper(recipe.handler, recipe.input), EngineRecipeCategory.UID);
@@ -115,7 +113,7 @@ public class EmbersJEIPlugin implements IModPlugin {
             return Lists.newArrayList(recipe);
     }
 
-    public static List<LiquidFuelWithInput> expandLiquidFuels(List<ILiquidFuel> liquidFuels) {
+    private static List<LiquidFuelWithInput> expandLiquidFuels(List<ILiquidFuel> liquidFuels) {
         List<LiquidFuelWithInput> rList = new ArrayList<>();
         for (ILiquidFuel handler : liquidFuels) {
             for (FluidStack input : handler.getMatchingFluids()) {
