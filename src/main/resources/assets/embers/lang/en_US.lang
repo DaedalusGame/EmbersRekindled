@@ -320,6 +320,7 @@ embers.aspect.lead=Lead
 embers.aspect.silver=Silver
 
 embers.decimal_format.ember=0.0
+embers.decimal_format.mechanical_multiplier=0.##x
 embers.decimal_format.speed_multiplier=0.##x
 embers.decimal_format.ember_multiplier=0.##x
 embers.decimal_format.inaccuracy=0
@@ -606,7 +607,7 @@ embers.research.page.geo_separator.desc=Many ores and minerals found in the eart
 embers.research.page.stamper=Stamper
 embers.research.page.stamper.title=Pound It Flat
 embers.research.page.stamper.tags=Ore;Machine;Melt;Aspectus;Plate;Duplication;Processing;Stamp;Liquid;Fluid;Item;Multiblock;Multi Block;Bin;
-embers.research.page.stamper.desc=To shape molten metal into useful forms, you have devised the Stamper. To stamp molten metal requires two parts: the Stamper itself and the Stamper Base. Place the Stamper two blocks above the Stamper Base, give it Ember, as well as a particular Stamp. Pipe molten metal into the Stamper Base and the Stamper should begin to process it. You may place a Bin beneath the Stamper Base to automatically collect the products.
+embers.research.page.stamper.desc=To shape molten metal into useful forms, you have devised the Stamper. To stamp molten metal requires two parts: the Stamper itself and the Stamper Base. Place the Stamper one block above the Stamper Base, give it Ember, as well as a particular Stamp. Pipe molten metal into the Stamper Base and the Stamper should begin to process it. You may place a Bin beneath the Stamper Base to automatically collect the products.
 
 embers.research.page.hearth_coil=Hearth Coil
 embers.research.page.hearth_coil.title=Open Fire
