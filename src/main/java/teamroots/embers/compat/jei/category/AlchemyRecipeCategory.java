@@ -17,11 +17,11 @@ import teamroots.embers.util.AspectRenderUtil;
 import javax.annotation.Nonnull;
 
 public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapper> {
-	public static final int WIDTH = 108;
+	public static final int WIDTH = 128;
 	public static final int HEIGHT = 121;
 	public static final String UID = "embers.alchemy";
 	public static final String L18N_KEY = "embers.jei.recipe.alchemy";
-	public static final int ASPECTBARS_X = 16;
+	public static final int ASPECTBARS_X = 10;
 	public static final int ASPECTBARS_Y = 64;
 	@Nonnull
 	private final IDrawable background;
@@ -34,7 +34,7 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 	{
 		background = helper.createDrawable(resourceLocation, 0, 0, WIDTH, HEIGHT);
 		localizedName = Translator.translateToLocal(L18N_KEY);
-		this.helper = new AspectRenderUtil(helper,5,ASPECTBARS_X,ASPECTBARS_Y,108,0,54,7,resourceLocation);
+		this.helper = new AspectRenderUtil(helper,5,ASPECTBARS_X,ASPECTBARS_Y,128,0,54,7,resourceLocation);
 	}
 
 	@Override
@@ -60,12 +60,12 @@ public class AlchemyRecipeCategory implements IRecipeCategory<AlchemyRecipeWrapp
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, AlchemyRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup stacks = recipeLayout.getItemStacks();
-		stacks.init(0, true, 27, 18);
-		stacks.init(1, true, 9, 18);
-		stacks.init(2, true, 27, 0);
-		stacks.init(3, true, 45, 18);
-		stacks.init(4, true, 27, 36);
-		stacks.init(5, false, 81, 18);
+		stacks.init(0, true, 37, 18);
+		stacks.init(1, true, 19, 18);
+		stacks.init(2, true, 37, 0);
+		stacks.init(3, true, 55, 18);
+		stacks.init(4, true, 37, 36);
+		stacks.init(5, false, 91, 18);
 
 		IFocus focus = recipeLayout.getFocus();
 		boolean isFocused = recipeWrapper.isFocusRecipe() && focus != null && focus.getValue() instanceof ItemStack;

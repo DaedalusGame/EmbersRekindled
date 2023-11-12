@@ -54,6 +54,7 @@ public class ConfigManager {
 					aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
 	public static boolean enableBaublesIntegration;
 	public static boolean enableMysticalMechanicsIntegration;
+	public static boolean enableJeiCheat;
 
 	//MISC
 	public static boolean pvpEverybodyIsEnemy;
@@ -172,6 +173,7 @@ public class ConfigManager {
 		tinMaxY = config.getInt("tinMaxY", "compat", 48, 1, 255, "Maximum height under which tin ore will spawn.");
 		tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 6, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
 
+		enableJeiCheat = config.getBoolean("enableJeiCheat", "compat", false, "If true, JEI will show the exact amount of Ash needed in an Alchemy recipe.");
 		enableBaublesIntegration = config.getBoolean("enableBaubles", "compat", true, "If true, Embers will register items, blocks and recipes providing Baubles integration.");
 		enableMysticalMechanicsIntegration = config.getBoolean("enableMysticalMechanics", "compat", true, "If true, Embers will register items, blocks and recipes providing Mystical Mechanics integration.");
 

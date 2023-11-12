@@ -5,21 +5,22 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import teamroots.embers.ConfigManager;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 
 import java.util.ArrayList;
 
 public class AspectRenderUtil {
-    private IGuiHelper helper;
-    private int aspectbarsX;
-    private int aspectbarsY;
-    private int aspectbars;
+    private final IGuiHelper helper;
+    private final int aspectbarsX;
+    private final int aspectbarsY;
+    private final int aspectbars;
     private int u;
     private int v;
     private int width;
     private int height;
-    private int spacing = 4;
-    private ResourceLocation resourceLocation;
+    private final int spacing = 4;
+    private final ResourceLocation resourceLocation;
 
     public AspectRenderUtil(IGuiHelper helper, int aspectbars, int aspectbarsX, int aspectbarsY, int u, int v, int width, int height, ResourceLocation resourceLocation) {
         this.helper = helper;
@@ -39,7 +40,7 @@ public class AspectRenderUtil {
         for(int i = 0; i < Math.min(aspects.size(),aspectbars); i++)
         {
             String aspect = aspects.get(i);
-            stacks.init(id+i, false, 0, aspectbarsY +height/2-8+(height+spacing)*i);
+            stacks.init(id+i, false, -4, aspectbarsY +height/2-8+(height+spacing)*i);
             stacks.set(id+i, AlchemyUtil.getAspectStacks(aspect));
         }
     }
@@ -55,7 +56,7 @@ public class AspectRenderUtil {
 
     public void drawAspectBar(Minecraft minecraft, AspectRangeList aspectRange, int x, int y, String aspect) {
         int max = aspectRange.getMax(aspect);
-        u = 108;
+        u = 128;
         v = 0;
         width = 54;
         height = 7;
@@ -64,11 +65,13 @@ public class AspectRenderUtil {
         if (max > 0){
             int min = aspectRange.getMin(aspect);
             int aspectTotal = aspectRange.getMaxAspects().getTotal();
-            IDrawable ashBar = helper.createDrawable(resourceLocation, u, v, ((width *min)/aspectTotal), height);
+            int exact = aspectRange.getExact(aspect, Minecraft.getMinecraft().world);
+            String cheatsheet = ConfigManager.enableJeiCheat ? String.format(" §e(%d)§r", exact) : "";
+            IDrawable ashBar = helper.createDrawable(resourceLocation, u, v, ((width * min)/aspectTotal), height);
             IDrawable ashPartialBar = helper.createDrawable(resourceLocation, u, v + height, ((width * max)/aspectTotal), height);
             ashPartialBar.draw(minecraft, x, y);
             ashBar.draw(minecraft, x, y);
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(min+"-"+max, x + width +6, y-1, 0xFFFFFF);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(min+"-"+max+cheatsheet, x + width + 3, y-1, 0xFFFFFF);
         }
     }
 }
