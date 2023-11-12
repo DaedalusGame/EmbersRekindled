@@ -179,6 +179,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
         return super.getCapability(capability, facing);
     }
 
+    @Deprecated
     public int getSlotForPos(float hitX, float hitZ) {
         return ((int) (hitX / 0.3333)) * 3 + ((int) (hitZ / 0.3333));
     }
@@ -270,6 +271,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
         world.setTileEntity(pos, null);
     }
 
+    @Deprecated
     public List<TileEntityAlchemyPedestal> getNearbyPedestals() {
         ArrayList<TileEntityAlchemyPedestal> pedestals = new ArrayList<TileEntityAlchemyPedestal>();
         for (int i = -3; i < 4; i++) {
@@ -295,7 +297,7 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 
     @Override
     public void update() {
-        angle += 1.0f;
+        angle += 1;
         List<IUpgradeProvider> upgrades = UpgradeUtil.getUpgrades(world, pos, new EnumFacing[]{EnumFacing.DOWN}); //Defer to when events are added to the upgrade system
         UpgradeUtil.verifyUpgrades(this, upgrades);
         if (getWorld().isRemote)
@@ -310,12 +312,13 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
                 if (pedestal != null && !pedestal.inventory.getStackInSlot(1).isEmpty()) //If there's ash in the pedestal
                     pedestal.setActive(3);
                 if (getWorld().isRemote) {
+                    assert pedestal != null;
                     ParticleUtil.spawnParticleStar(getWorld(), pedestal.getPos().getX() + 0.5f, pedestal.getPos().getY() + 1.0f, pedestal.getPos().getZ() + 0.5f, 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 3.5f + 0.5f * random.nextFloat(), 40);
                     for (int j = 0; j < 8; j++) {
-                        float coeff = random.nextFloat();
-                        float x = (getPos().getX() + 0.5f) * coeff + (1.0f - coeff) * (pedestal.getPos().getX() + 0.5f);
-                        float y = (getPos().getY() + 0.875f) * coeff + (1.0f - coeff) * (pedestal.getPos().getY() + 1.0f);
-                        float z = (getPos().getZ() + 0.5f) * coeff + (1.0f - coeff) * (pedestal.getPos().getZ() + 0.5f);
+                        float coefficient = random.nextFloat();
+                        float x = (getPos().getX() + 0.5f) * coefficient + (1.0f - coefficient) * (pedestal.getPos().getX() + 0.5f);
+                        float y = (getPos().getY() + 0.875f) * coefficient + (1.0f - coefficient) * (pedestal.getPos().getY() + 1.0f);
+                        float z = (getPos().getZ() + 0.5f) * coefficient + (1.0f - coefficient) * (pedestal.getPos().getZ() + 0.5f);
                         ParticleUtil.spawnParticleGlow(getWorld(), x, y, z, 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 0.0125f * (random.nextFloat() - 0.5f), 255, 64, 16, 2.0f, 24);
                     }
                 }
@@ -393,10 +396,8 @@ public class TileEntityAlchemyTablet extends TileEntity implements ITileEntityBa
 
     @Override
     public void playSound(int id) {
-        switch (id) {
-            case SOUND_PROCESS:
-                Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.ALCHEMY_LOOP, SoundCategory.BLOCKS, true, 1.5f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 1.0f, (float) pos.getZ() + 0.5f);
-                break;
+        if (id == SOUND_PROCESS) {
+            Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.ALCHEMY_LOOP, SoundCategory.BLOCKS, true, 1.5f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 1.0f, (float) pos.getZ() + 0.5f);
         }
         soundsPlaying.add(id);
     }
