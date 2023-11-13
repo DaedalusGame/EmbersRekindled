@@ -190,6 +190,7 @@ idea {
 publishing {
     publications {
         maven(MavenPublication) {
+            artifactId archivesBaseName
             from components.java
         }
     }
