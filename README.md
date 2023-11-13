@@ -13,6 +13,11 @@ Embers is best described as a dwarven magic mod. It features a smattering of mag
 ## Builds
 You can download the latest files here on [curseforge](https://curseforge.com/minecraft/mc-mods/embers-extended-life).
 
+## Maven Dependency
+We use GitHub packages. If you need our mod as a dependency:
+
+See https://github.com/Ender-Development/Embers-Extended-Life/packages/
+
 ## Changes
 
 Current Changes to Embers Rekindled v1.19:
