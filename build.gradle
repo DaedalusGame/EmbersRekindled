@@ -158,6 +158,7 @@ processResources {
 idea {
     module {
         inheritOutputDirs = true
+        downloadSources = true
     }
     project {
         settings {
