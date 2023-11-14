@@ -2,11 +2,16 @@
 
 # Embers - Unofficial Extended Life
 
-[![License](https://img.shields.io/github/license/Ender-Development/Embers-Extended-Life.svg)](LICENSE) ![Versions](http://cf.way2muchnoise.eu/versions/minecraft_embers-extended-life_all.svg) [![Downloads](http://cf.way2muchnoise.eu/embers-extended-life.svg)](https://www.curseforge.com/minecraft/mc-mods/embers-extended-life)
+[![License](https://img.shields.io/github/license/Ender-Development/Embers-Extended-Life.svg?label=License)](LICENSE)
+[![Versions](https://img.shields.io/curseforge/game-versions/936489?logo=curseforge&label=Game%20Version)](https://www.curseforge.com/minecraft/mc-mods/embers-extended-life)
+[![Downloads](https://img.shields.io/curseforge/dt/936489?logo=curseforge&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/embers-extended-life)
 
-*A dwarven magic mod* • [CurseForge](https://legacy.curseforge.com/minecraft/mc-mods/embers-extended-life) • [Changelog](CHANGELOG.md) • [Bugtracker](https://github.com/Ender-Development/Embers-Extended-Life/issues)
+*A dwarven magic mod*
+• [CurseForge](https://curseforge.com/minecraft/mc-mods/embers-extended-life)
+• [Changelog](CHANGELOG.md)
+• [Bugtracker](https://github.com/Ender-Development/Embers-Extended-Life/issues)
 
-<p>&nbsp;</p>
+<br />
 
 Embers is best described as a dwarven magic mod. It features a smattering of magical and technical content, from staples such as ore doubling and item transport to alchemy and magical ray guns. All centered around the core mechanic of Ember, a limited form of power that you must extract from the world's core near bedrock.
 
@@ -15,6 +20,19 @@ You can download the latest files here on [curseforge](https://curseforge.com/mi
 
 ## Maven Dependency
 We use GitHub packages. If you need our mod as a dependency:
+
+```groovy
+repositories {
+    maven {
+        name "GitHubPackages.Ender-Development.Embers-Extended-Life"
+        url "https://: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@maven.pkg.github.com/Ender-Development/Embers-Extended-Life"
+    }
+}
+
+dependencies {
+    implementation "teamroots.embers:embers_extended_life:1.20.0:dev"
+}
+```
 
 See https://github.com/Ender-Development/Embers-Extended-Life/packages/
 
