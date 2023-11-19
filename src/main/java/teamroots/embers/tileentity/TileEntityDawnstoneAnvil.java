@@ -255,23 +255,21 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			if (progress > MAX_HITS){
 				progress = 0;
 				ItemStack[] results = getResult(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
-				for (int i = 0; i < results.length; i ++){
-					ItemStack result = results[i];
-					TileEntity bin = getWorld().getTileEntity(getPos().down());
-					if (bin instanceof IBin){
-						ItemStack remainder = ((TileEntityBin) bin).getInventory().insertItem(0, result, false);
-						if (!remainder.isEmpty() && !getWorld().isRemote){
-							EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,remainder);
-							getWorld().spawnEntity(item);
-						}
-						bin.markDirty();
-						markDirty();
-					}
-					else if (!world.isRemote){
-						EntityItem item = new EntityItem(getWorld(),getPos().getX()+0.5,getPos().getY()+1.0625f,getPos().getZ()+0.5,result);
-						getWorld().spawnEntity(item);
-					}
-				}
+                for (ItemStack result : results) {
+                    TileEntity bin = getWorld().getTileEntity(getPos().down());
+                    if (bin instanceof IBin) {
+                        ItemStack remainder = ((TileEntityBin) bin).getInventory().insertItem(0, result, false);
+                        if (!remainder.isEmpty() && !getWorld().isRemote) {
+                            EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0625f, getPos().getZ() + 0.5, remainder);
+                            getWorld().spawnEntity(item);
+                        }
+                        bin.markDirty();
+                        markDirty();
+                    } else if (!world.isRemote) {
+                        EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 1.0625f, getPos().getZ() + 0.5, result);
+                        getWorld().spawnEntity(item);
+                    }
+                }
 				if (!getWorld().isRemote){
 					PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().getX()+0.5,getPos().getY()+1.0625,getPos().getZ()+0.5));
 				}

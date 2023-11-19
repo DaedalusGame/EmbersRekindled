@@ -2,6 +2,10 @@
 
 A dwarven magic mod
 
+## v1.20.1
+### Bugfixes
+- fixed crash when using the Dawnstone Anvil (KorewaLidesu)
+
 ## v1.20.0 - UEL
 ### Changes
 - added CHANGELOG.md

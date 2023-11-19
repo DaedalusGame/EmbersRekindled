@@ -1,7 +1,5 @@
 package teamroots.embers.util;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
@@ -16,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -81,9 +78,7 @@ public class Misc {
 
     public static boolean isValidPipeConnector(IBlockAccess world, BlockPos pos, EnumFacing side) {
         IBlockState state = world.getBlockState(pos);
-        if(state.getBlockFaceShape(world,pos,side.getOpposite()) == BlockFaceShape.CENTER_BIG)
-            return true;
-        return false;
+        return state.getBlockFaceShape(world, pos, side.getOpposite()) == BlockFaceShape.CENTER_BIG;
     }
 
     //TODO: DANNY DELETO
@@ -157,7 +152,7 @@ public class Misc {
             y += dirY / 20.0f;
             z += dirZ / 20.0f;
             List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(x - 0.2, y - 0.2, z - 0.2, x + 0.2, y + 0.2, z + 0.2));
-            if (items.size() > 0) {
+            if (!items.isEmpty()) {
                 return items.get(0);
             }
         }
@@ -171,9 +166,9 @@ public class Misc {
     public static boolean matchOreDict(ItemStack stack1, ItemStack stack2) {
         int[] keys1 = OreDictionary.getOreIDs(stack1);
         int[] keys2 = OreDictionary.getOreIDs(stack2);
-        for (int i = 0; i < keys1.length; i++) {
-            for (int j = 0; j < keys2.length; j++) {
-                if (keys1[i] == keys2[j]) {
+        for (int k : keys1) {
+            for (int i : keys2) {
+                if (k == i) {
                     return true;
                 }
             }
@@ -202,10 +197,10 @@ public class Misc {
         float f = (float) ((180.0f * Math.atan2(posX2 - posX, posZ2 - posZ)) / (float) Math.PI);
         if (Math.abs(f - previousYaw) > 90) {
             if (f < previousYaw) {
-                f += 360.0;
+                f += 360.0F;
             }
             else {
-                f -= 360.0;
+                f -= 360.0F;
             }
         }
         return f;
@@ -524,10 +519,10 @@ public class Misc {
     }
 
     private static RayTraceResult rayTrace2(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
-        Vec3d vec3d = start.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
-        Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
+        Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
         RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
-        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
+        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector(pos.getX(), pos.getY(), pos.getZ()), raytraceresult.sideHit, pos);
     }
 
     public static Quaternion slerp(Quaternion a, Quaternion b, float slide) {
