@@ -11,12 +11,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.item.ItemTinkerHammer;
-import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 
@@ -60,8 +58,7 @@ public class TileEntityEmberPipe extends TileEntityEmberPipeBase {
 					if (active) {
 						IEmberCapability handler = tile.getCapability(EmbersCapabilities.EMBER_CAPABILITY, facing.getOpposite());
 						if (handler.getEmber() > 0 && packet == 0){
-							double removed = handler.removeAmount(Math.min(currentPush, handler.getEmberCapacity() / 10), true);
-							packet = removed;
+                            packet = handler.removeAmount(Math.min(currentPush, handler.getEmberCapacity() / 10), true);
 							syncPacket = true;
 						}
 						setFrom(facing, true);

@@ -18,8 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import teamroots.embers.Embers;
-import teamroots.embers.EventManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
@@ -29,6 +27,7 @@ import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockInfernoForge;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -43,11 +42,11 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityInfernoForge extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController {
-	public static double EMBER_COST = 16.0;
-	public static int MAX_LEVEL = 5;
-	public static double MAX_CRYSTAL_VALUE = 3600 * 32.0;
-	public static double CHANCE_MIDPOINT = 3600 * 4.0;
-	public static int PROCESS_TIME = 200;
+	public static double EMBER_COST = ConfigMachine.INFERNO_FORGE_CATEGORY.emberCost;
+	public static int MAX_LEVEL = ConfigMachine.INFERNO_FORGE_CATEGORY.maxLevel;
+	public static double MAX_CRYSTAL_VALUE = ConfigMachine.INFERNO_FORGE_CATEGORY.maxCrystalValue;
+	public static double CHANCE_MIDPOINT = ConfigMachine.INFERNO_FORGE_CATEGORY.chanceMidpoint;
+	public static int PROCESS_TIME = ConfigMachine.INFERNO_FORGE_CATEGORY.processTime;
 	public IEmberCapability capability = new DefaultEmberCapability() {
 		@Override
 		public boolean acceptsVolatile() {
@@ -67,7 +66,7 @@ public class TileEntityInfernoForge extends TileEntity implements ITileEntityBas
 
 	public TileEntityInfernoForge(){
 		super();
-		capability.setEmberCapacity(32000);
+		capability.setEmberCapacity(ConfigMachine.INFERNO_FORGE_CATEGORY.capacity);
 	}
 	
 	@Override

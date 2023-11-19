@@ -5,7 +5,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import teamroots.embers.ConfigManager;
+import teamroots.embers.config.ConfigMain;
 import teamroots.embers.util.Misc;
 
 public class ParticleSmoke extends Particle implements IEmberParticle {
@@ -42,7 +42,7 @@ public class ParticleSmoke extends Particle implements IEmberParticle {
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
         this.setParticleTexture(sprite);
 
-        this.canCollide = ConfigManager.enableParticleCollisions;
+        this.canCollide = ConfigMain.CLIENT_CATEGORY.enableParticleCollisions;
     }
 	/*
 	@Override

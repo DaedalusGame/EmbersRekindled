@@ -5,7 +5,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import teamroots.embers.ConfigManager;
+import teamroots.embers.config.ConfigMain;
 import teamroots.embers.util.Misc;
 
 public class ParticleSpark extends Particle implements IEmberParticle{
@@ -41,7 +41,7 @@ public class ParticleSpark extends Particle implements IEmberParticle{
 	    this.setParticleTexture(sprite);
 	    this.particleGravity = 0.04f;
 
-		this.canCollide = ConfigManager.enableParticleCollisions;
+		this.canCollide = ConfigMain.CLIENT_CATEGORY.enableParticleCollisions;
 	}
 	/*
 	@Override

@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
@@ -25,6 +24,7 @@ import teamroots.embers.api.event.MachineRecipeEvent;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.recipe.ItemMeltingRecipe;
@@ -38,11 +38,11 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityFurnaceBottom extends TileEntity implements ITileEntityBase, ITickable, ISoundController {
-	public static int PROCESS_TIME = 200;
+	public static int PROCESS_TIME = ConfigMachine.MELTER_CATEGORY.processTime;
 	public IEmberCapability capability = new DefaultEmberCapability();
 	Random random = new Random();
 	int progress = -1;
-	public static double EMBER_COST = 1.0;
+	public static double EMBER_COST = ConfigMachine.MELTER_CATEGORY.emberCost;
 
 	public static final int SOUND_PROCESS = 1;
 	public static final int[] SOUND_IDS = new int[]{SOUND_PROCESS};

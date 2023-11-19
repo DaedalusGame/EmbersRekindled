@@ -4,7 +4,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -14,22 +13,25 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.EventManager;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockStampBase;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.util.Misc;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileEntityStampBase extends TileFluidHandler implements ITileEntityBase, IExtraCapabilityInformation {
-	public static int capacity = (Fluid.BUCKET_VOLUME*3) / 2; //1500
+	public static int capacity = ConfigMachine.STAMPER_CATEGORY.capacity;
 	public ItemStackHandler inputs = new ItemStackHandler(1){
         @Override
         protected void onContentsChanged(int slot) {
@@ -93,15 +95,12 @@ public class TileEntityStampBase extends TileFluidHandler implements ITileEntity
 		if (!heldItem.isEmpty()){
 			boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side));
 
-			if (didFill){
-				this.markDirty();
-				return true;
-			} else {
-				player.setHeldItem(hand, this.inputs.insertItem(0,heldItem,false));
-				markDirty();
-				return true;
-			}
-		}
+            if (!didFill) {
+                player.setHeldItem(hand, this.inputs.insertItem(0, heldItem, false));
+            }
+            this.markDirty();
+            return true;
+        }
 		else {
 			if (!inputs.getStackInSlot(0).isEmpty() && !world.isRemote){
 				world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inputs.getStackInSlot(0)));

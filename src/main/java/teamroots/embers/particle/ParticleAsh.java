@@ -4,7 +4,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import teamroots.embers.ConfigManager;
+import teamroots.embers.config.ConfigMain;
 import teamroots.embers.proxy.ClientProxy;
 
 public class ParticleAsh extends Particle implements IEmberParticle {
@@ -17,7 +17,7 @@ public class ParticleAsh extends Particle implements IEmberParticle {
         depth = z2 - z1;
         this.particleMaxAge = (int)(lifetime *0.5f);
 
-        this.canCollide = ConfigManager.enableParticleCollisions;
+        this.canCollide = ConfigMain.CLIENT_CATEGORY.enableParticleCollisions;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ParticleAsh extends Particle implements IEmberParticle {
             double y = this.posY + height * rand.nextDouble();
             double z = this.posZ + depth * rand.nextDouble();
             double speed = rand.nextDouble() * 0.1 + 0.1;
-            float sizeSmall = rand.nextFloat() * 1f + 1f;
+            float sizeSmall = rand.nextFloat() + 1f;
             float sizeBig = rand.nextFloat() * 2f + 2f;
             ClientProxy.particleRenderer.addParticle(new ParticleSmoke(world,x,y,z,0,-speed,0,0f,0f,0f,0.7f,sizeSmall,20));
             ClientProxy.particleRenderer.addParticle(new ParticleSmoke(world,x,y,z,(rand.nextDouble()-0.5)*0.1,(rand.nextDouble()-0.5)*0.1,(rand.nextDouble()-0.5)*0.1,0f,0f,0f,0.2f,sizeBig,40));

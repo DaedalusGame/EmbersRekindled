@@ -40,18 +40,18 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.alchemy.AspectList;
 import teamroots.embers.api.alchemy.AspectList.AspectRangeList;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
-import teamroots.embers.api.filter.ComparatorMatch;
-import teamroots.embers.api.filter.ComparatorNormal;
-import teamroots.embers.api.filter.EnumFilterSetting;
-import teamroots.embers.api.filter.FilterItem;
-import teamroots.embers.api.filter.FilterSieve;
+import teamroots.embers.api.filter.*;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.item.EnumStampType;
-import teamroots.embers.util.*;
+import teamroots.embers.util.AlchemyUtil;
+import teamroots.embers.util.FilterUtil;
+import teamroots.embers.util.IngredientSpecial;
+import teamroots.embers.util.WeightedItemStack;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -81,8 +81,8 @@ public class RecipeRegistry {
 
 	public static ArrayList<BoreOutput> boreOutputSets = new ArrayList<>();
 	public static BoreOutput defaultBoreOutput;
-	public static final int INGOT_AMOUNT = 144;
-	public static final int NUGGET_AMOUNT = 16;
+	public static final int INGOT_AMOUNT = ConfigMachine.ingotFluidAmount;
+	public static final int NUGGET_AMOUNT = ConfigMachine.nuggetFluidAmount;
 
 	public static ResourceLocation getRL(String s){
     	return new ResourceLocation(Embers.MODID,s);
@@ -1172,11 +1172,11 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.stamp_flat_raw), new ItemStack(RegistryManager.stamp_flat), 0.35f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.stamp_gear_raw), new ItemStack(RegistryManager.stamp_gear), 0.35f);
 
-		int plateAmount = ConfigManager.stampPlateAmount * INGOT_AMOUNT;
+		int plateAmount = ConfigMachine.STAMPER_CATEGORY.stampPlateAmount * INGOT_AMOUNT;
 
 		OreIngredient ingotIron = new OreIngredient("ingotIron");
 		OreIngredient plateIron = new OreIngredient("plateIron");
-		int oreMeltAmount = 2 * ConfigManager.melterOreAmount;
+		int oreMeltAmount = ConfigMachine.MELTER_CATEGORY.melterOreAmount;
 		meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("oreIron"), new FluidStack(RegistryManager.fluid_molten_iron, oreMeltAmount))
 				.addBonusOutput(new FluidStack(RegistryManager.fluid_molten_nickel, NUGGET_AMOUNT))
 		);
@@ -1335,7 +1335,7 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemStampingRecipe(emberCrystal,null,stampFlat,new ItemStack(RegistryManager.shard_ember,6)));
 		stampingRecipes.add(new ItemStampingRecipe(blazeRod,null,stampFlat,new ItemStack(Items.BLAZE_POWDER,4)));
 
-		int aspectusAmount = ConfigManager.stampAspectusAmount * INGOT_AMOUNT;
+		int aspectusAmount = ConfigMachine.STAMPER_CATEGORY.stampAspectusAmount * INGOT_AMOUNT;
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_iron, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_iron,1)));
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_lead, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_lead,1)));
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_silver, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_silver,1)));
@@ -1680,10 +1680,7 @@ public class RecipeRegistry {
 			private boolean areFluidsEqual(FluidStack a, FluidStack b) {
 				if(a == null && b == null)
 					return true;
-				else if(a != null && b != null && a.isFluidEqual(b))
-					return true;
-				else
-					return false;
+				else return a != null && b != null && a.isFluidEqual(b);
 			}
 
 			private int getAmount(FluidStack fluid) {

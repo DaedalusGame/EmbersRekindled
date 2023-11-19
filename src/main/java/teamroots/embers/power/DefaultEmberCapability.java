@@ -1,11 +1,11 @@
 package teamroots.embers.power;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.MathHelper;
 import teamroots.embers.Embers;
+import teamroots.embers.config.ConfigMachine;
 
-public class DefaultEmberCapability implements IEmberCapability {
-	public static boolean allAcceptVolatile = false;
+public class DefaultEmberCapability implements teamroots.embers.api.power.IEmberCapability {
+	public static boolean allAcceptVolatile = ConfigMachine.EMBER_CONDUIT_CATEGORY.allAcceptVolatile;
 
 	private double ember = 0;
 	private double capacity = 0;

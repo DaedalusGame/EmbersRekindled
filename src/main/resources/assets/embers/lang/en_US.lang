@@ -1,6 +1,19 @@
 itemGroup.embers=Embers
 itemGroup.embers_resources=Embers (Metals)
 
+cfg.embers.main=Main
+cfg.embers.main.tooltip=(Client, Compatibility)
+cfg.embers.main.client=Client
+cfg.embers.main.compat=Compatibility
+
+cfg.embers.machine=Machines
+cfg.embers.machine.tooltip=(Tweak various Parameters)
+cfg.embers.machine.ember_conduit=Ember Conduit
+cfg.embers.machine.melter=Melter
+cfg.embers.machine.stamper=Stamper
+cfg.embers.machine.infernoforge=Inferno Forge
+cfg.embers.machine.geoseparator=Geo Separator
+
 tile.block_copper.name=Copper Block
 tile.block_lead.name=Lead Block
 tile.block_dawnstone.name=Dawnstone Block
