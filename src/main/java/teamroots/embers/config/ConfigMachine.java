@@ -45,7 +45,7 @@ public class ConfigMachine {
 
     @Config.RequiresMcRestart
     @Config.Name("Nugget to Fluid ratio")
-    @Config.Comment("What is the liquid equivalent to an nugget in mb?")
+    @Config.Comment("What is the liquid equivalent to a nugget in mb?")
     public static int nuggetFluidAmount = 16;
 
     public static class EmberConduitCategory {
