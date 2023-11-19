@@ -3,7 +3,7 @@ package teamroots.embers.config;
 import net.minecraftforge.common.config.Config;
 import teamroots.embers.Embers;
 
-@Config(modid = Embers.MODID, name = Embers.CFG_FOLDER + "machine")
+@Config(modid = Embers.MODID, category = "machine", name = Embers.CFG_FOLDER + "machine")
 @Config.LangKey("cfg.embers.machine")
 public class ConfigMachine {
 

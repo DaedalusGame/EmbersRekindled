@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import teamroots.embers.Embers;
 
-@Config(modid = Embers.MODID, name = Embers.CFG_FOLDER + "main")
+@Config(modid = Embers.MODID, category = "main", name = Embers.CFG_FOLDER + "main")
 @Config.LangKey("cfg.embers.main")
 @Mod.EventBusSubscriber(modid = Embers.MODID)
 public class ConfigMain {
