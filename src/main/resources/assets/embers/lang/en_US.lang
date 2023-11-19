@@ -13,6 +13,7 @@ cfg.embers.machine.melter=Melter
 cfg.embers.machine.stamper=Stamper
 cfg.embers.machine.infernoforge=Inferno Forge
 cfg.embers.machine.geoseparator=Geo Separator
+cfg.embers.machine.dawnstoneanvil=Dawnstone Anvil
 
 tile.block_copper.name=Copper Block
 tile.block_lead.name=Lead Block

@@ -32,6 +32,11 @@ public class ConfigMachine {
     @Config.Comment("Options about the Geo Separator")
     public static final GeoSeparatorCategory GEO_SEPARATOR_CATEGORY = new GeoSeparatorCategory();
 
+    @Config.Name("Dawnstone Anvil")
+    @Config.LangKey("cfg.embers.machine.dawnstoneanvil")
+    @Config.Comment("Options about the Dawnstone Anvil")
+    public static final DawnStoneAnvilCategory DAWN_STONE_ANVIL_CATEGORY = new DawnStoneAnvilCategory();
+
 
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
@@ -124,5 +129,12 @@ public class ConfigMachine {
         @Config.Name("Separator Capacity")
         @Config.Comment("How much fluid (in mb) fits into a Geologic Separator?")
         public int capacity = 1000;
+    }
+
+    public static class DawnStoneAnvilCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Hits per process")
+        @Config.Comment("Number of hammer hits it takes to finish one process")
+        public int maxHits = 40;
     }
 }

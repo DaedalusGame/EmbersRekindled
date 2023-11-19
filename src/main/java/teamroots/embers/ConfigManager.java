@@ -8,7 +8,10 @@ import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.config.ConfigMain;
 import teamroots.embers.item.ItemCinderStaff;
 import teamroots.embers.item.ItemIgnitionCannon;
-import teamroots.embers.tileentity.*;
+import teamroots.embers.tileentity.TileEntityCharger;
+import teamroots.embers.tileentity.TileEntityCinderPlinth;
+import teamroots.embers.tileentity.TileEntityEmberBore;
+import teamroots.embers.tileentity.TileEntityTank;
 
 import java.io.File;
 import java.util.*;
@@ -215,7 +218,7 @@ public class ConfigManager {
         TileEntityCinderPlinth.EMBER_COST = loadDouble("parameters.cinderPlinth.cost", TileEntityCinderPlinth.EMBER_COST, "The ember cost per tick.");
 
         //Dawnstone Anvil
-        TileEntityDawnstoneAnvil.MAX_HITS = loadInteger("parameters.dawnstoneAnvil.maxHits", TileEntityDawnstoneAnvil.MAX_HITS, "Number of hammer hits it takes to finish one process");
+        //TileEntityDawnstoneAnvil.MAX_HITS = loadInteger("parameters.dawnstoneAnvil.maxHits", TileEntityDawnstoneAnvil.MAX_HITS, "Number of hammer hits it takes to finish one process");
 
         //Inferno Forge
         //TileEntityInfernoForge.PROCESS_TIME = loadInteger("parameters.infernoForge.processTime", TileEntityInfernoForge.PROCESS_TIME, "The time in ticks it takes to process one item.");

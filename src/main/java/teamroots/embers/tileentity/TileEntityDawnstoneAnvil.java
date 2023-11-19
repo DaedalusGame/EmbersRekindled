@@ -21,6 +21,7 @@ import teamroots.embers.RegistryManager;
 import teamroots.embers.api.filter.IFilter;
 import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IHammerable;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAnvilSparksFX;
 import teamroots.embers.network.message.MessageStamperFX;
@@ -35,124 +36,122 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityBase, IHammerable, ISpecialFilter {
-	public static int MAX_HITS = 40;
-	int ticksExisted = 0;
-	int progress = 0;
-	public ItemStackHandler inventory = new ItemStackHandler(2){
+    public static int MAX_HITS = ConfigMachine.DAWN_STONE_ANVIL_CATEGORY.maxHits;
+    int ticksExisted = 0;
+    int progress = 0;
+    public ItemStackHandler inventory = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
-        	TileEntityDawnstoneAnvil.this.markDirty();
+            TileEntityDawnstoneAnvil.this.markDirty();
         }
 
-		@Override
-		protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-			return 1; //CURSED
-		}
-	};
-	Random random = new Random();
-	
-	public TileEntityDawnstoneAnvil(){
-		super();
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tag){
-		super.writeToNBT(tag);
-		tag.setTag("inventory", inventory.serializeNBT());
-		tag.setInteger("progress", progress);
-		return tag;
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound tag){
-		super.readFromNBT(tag);
-		inventory.deserializeNBT(tag.getCompoundTag("inventory"));
-		progress = tag.getInteger("progress");
-	}
+        @Override
+        protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+            return 1; //CURSED
+        }
+    };
+    Random random = new Random();
 
-	@Override
-	public NBTTagCompound getUpdateTag() {
-		return writeToNBT(new NBTTagCompound());
-	}
+    public TileEntityDawnstoneAnvil() {
+        super();
+    }
 
-	@Nullable
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
-	}
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        tag.setTag("inventory", inventory.serializeNBT());
+        tag.setInteger("progress", progress);
+        return tag;
+    }
 
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.getNbtCompound());
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		}
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return (T)this.inventory;
-		}
-		return super.getCapability(capability, facing);
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        inventory.deserializeNBT(tag.getCompoundTag("inventory"));
+        progress = tag.getInteger("progress");
+    }
 
-	@Override
-	public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack heldItem = player.getHeldItem(hand);
-		if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
-			boolean doContinue = true;
-			for (int i = 1; i >= 0 && doContinue; i --){
-				if (!inventory.getStackInSlot(i).isEmpty() && !world.isRemote){
-					world.spawnEntity(new EntityItem(world,player.posX,player.posY,player.posZ,inventory.getStackInSlot(i)));
-					inventory.setStackInSlot(i, ItemStack.EMPTY);
-					doContinue = false;
-					progress = 0;
-					markDirty();
-					return true;
-				}
-			}
-		}
-		else if (heldItem.getItem() == RegistryManager.tinker_hammer){
-			onHit();
-			return true;
-		}
-		else if (!heldItem.isEmpty() && hand == EnumHand.MAIN_HAND){
-			ItemStack stack = heldItem.copy();
-			ItemStack stack2 = heldItem.copy();
-			stack2.setCount(1);
-			boolean doContinue = true;
-			for (int i = 0; i < 2 && doContinue; i ++){
-				if (inventory.getStackInSlot(i).isEmpty()){
-					this.inventory.insertItem(i,stack2,false);
-					doContinue = false;
-					player.getHeldItem(hand).shrink(1);
-					if (player.getHeldItem(hand).getCount() == 0){
-						player.setHeldItem(hand, ItemStack.EMPTY);
-					}
-					progress = 0;
-					markDirty();
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
 
-	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		this.invalidate();
-		Misc.spawnInventoryInWorld(world, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, inventory);
-		world.setTileEntity(pos, null);
-	}
-	
-	public boolean isValid(ItemStack stack1, ItemStack stack2){
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) this.inventory;
+        }
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
+                            EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
+            boolean doContinue = true;
+            for (int i = 1; i >= 0 && doContinue; i--) {
+                if (!inventory.getStackInSlot(i).isEmpty() && !world.isRemote) {
+                    world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, inventory.getStackInSlot(i)));
+                    inventory.setStackInSlot(i, ItemStack.EMPTY);
+                    doContinue = false;
+                    progress = 0;
+                    markDirty();
+                    return true;
+                }
+            }
+        } else if (heldItem.getItem() == RegistryManager.tinker_hammer) {
+            onHit();
+            return true;
+        } else if (!heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
+            ItemStack stack = heldItem.copy();
+            ItemStack stack2 = heldItem.copy();
+            stack2.setCount(1);
+            boolean doContinue = true;
+            for (int i = 0; i < 2 && doContinue; i++) {
+                if (inventory.getStackInSlot(i).isEmpty()) {
+                    this.inventory.insertItem(i, stack2, false);
+                    doContinue = false;
+                    player.getHeldItem(hand).shrink(1);
+                    if (player.getHeldItem(hand).getCount() == 0) {
+                        player.setHeldItem(hand, ItemStack.EMPTY);
+                    }
+                    progress = 0;
+                    markDirty();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        this.invalidate();
+        Misc.spawnInventoryInWorld(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, inventory);
+        world.setTileEntity(pos, null);
+    }
+
+    public boolean isValid(ItemStack stack1, ItemStack stack2) {
 		/*if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
 			if (!ItemModUtil.hasHeat(stack1) && stack2.getItem() == RegistryManager.ancient_motive_core){
 				return true;
@@ -171,12 +170,12 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 		if (!Misc.getRepairItem(stack1).isEmpty() && stack1.getItem().getIsRepairable(stack1, Misc.getRepairItem(stack1)) && Misc.getResourceCount(stack1) != -1 && stack2.isEmpty()){
 			return true;
 		}*/
-		DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1,stack2);
+        DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1, stack2);
 
-		return recipe != null;
-	}
-	
-	public ItemStack[] getResult(ItemStack stack1, ItemStack stack2){
+        return recipe != null;
+    }
+
+    public ItemStack[] getResult(ItemStack stack1, ItemStack stack2) {
 		/*if (stack1.getItem() instanceof ItemTool || stack1.getItem() instanceof ItemSword || stack1.getItem() instanceof ItemArmor){
 			if ((!ItemModUtil.hasHeat(stack1) || !ItemModUtil.hasModifier(stack1, ItemModUtil.modifierRegistry.get(RegistryManager.ancient_motive_core).name)) && stack2.getItem() == RegistryManager.ancient_motive_core){
 				ItemModUtil.checkForTag(stack1);
@@ -231,30 +230,30 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
 			return new ItemStack[]{new ItemStack(Misc.getRepairItem(stack1).getItem(),resourceAmount,Misc.getRepairItem(stack1).getItemDamage())};		
 		}
 		return new ItemStack[]{};*/
-		DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1,stack2);
-		if(recipe != null) {
-			inventory.setStackInSlot(1, ItemStack.EMPTY);
-			inventory.setStackInSlot(0, ItemStack.EMPTY);
-			markDirty();
-			List<ItemStack> results = recipe.getResult(this, stack1, stack2);
-			return results.toArray(new ItemStack[results.size()]);
-		}
-		return new ItemStack[0];
-	}
+        DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1, stack2);
+        if (recipe != null) {
+            inventory.setStackInSlot(1, ItemStack.EMPTY);
+            inventory.setStackInSlot(0, ItemStack.EMPTY);
+            markDirty();
+            List<ItemStack> results = recipe.getResult(this, stack1, stack2);
+            return results.toArray(new ItemStack[results.size()]);
+        }
+        return new ItemStack[0];
+    }
 
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		Misc.syncTE(this);
-	}
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        Misc.syncTE(this);
+    }
 
-	public void onHit(){
-		if (isValid(inventory.getStackInSlot(0),inventory.getStackInSlot(1))){
-			progress += 1;
-			world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.25f, 2.0f+random.nextFloat(), false);
-			if (progress > MAX_HITS){
-				progress = 0;
-				ItemStack[] results = getResult(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
+    public void onHit() {
+        if (isValid(inventory.getStackInSlot(0), inventory.getStackInSlot(1))) {
+            progress += 1;
+            world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.25f, 2.0f + random.nextFloat(), false);
+            if (progress > MAX_HITS) {
+                progress = 0;
+                ItemStack[] results = getResult(inventory.getStackInSlot(0), inventory.getStackInSlot(1));
                 for (ItemStack result : results) {
                     TileEntity bin = getWorld().getTileEntity(getPos().down());
                     if (bin instanceof IBin) {
@@ -270,31 +269,31 @@ public class TileEntityDawnstoneAnvil extends TileEntity implements ITileEntityB
                         getWorld().spawnEntity(item);
                     }
                 }
-				if (!getWorld().isRemote){
-					PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().getX()+0.5,getPos().getY()+1.0625,getPos().getZ()+0.5));
-				}
-				world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.95f+random.nextFloat()*0.1f, false);
-			}
-			markDirty();
-			if (!getWorld().isRemote){
-				PacketHandler.INSTANCE.sendToAll(new MessageAnvilSparksFX(getPos().getX()+0.5,getPos().getY()+1.0625,getPos().getZ()+0.5));
-			}
-		}
-	}
+                if (!getWorld().isRemote) {
+                    PacketHandler.INSTANCE.sendToAll(new MessageStamperFX(getPos().getX() + 0.5, getPos().getY() + 1.0625, getPos().getZ() + 0.5));
+                }
+                world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 1.0f, 0.95f + random.nextFloat() * 0.1f, false);
+            }
+            markDirty();
+            if (!getWorld().isRemote) {
+                PacketHandler.INSTANCE.sendToAll(new MessageAnvilSparksFX(getPos().getX() + 0.5, getPos().getY() + 1.0625, getPos().getZ() + 0.5));
+            }
+        }
+    }
 
-	@Override
-	public void onHit(TileEntity hammer) {
-		progress = MAX_HITS;
-		onHit();
-	}
+    @Override
+    public void onHit(TileEntity hammer) {
+        progress = MAX_HITS;
+        onHit();
+    }
 
-	@Override
-	public boolean isValid() {
-		return isValid(inventory.getStackInSlot(0),inventory.getStackInSlot(1));
-	}
+    @Override
+    public boolean isValid() {
+        return isValid(inventory.getStackInSlot(0), inventory.getStackInSlot(1));
+    }
 
-	@Override
-	public IFilter getSpecialFilter() {
-		return FilterUtil.FILTER_NOT_EXISTING;
-	}
+    @Override
+    public IFilter getSpecialFilter() {
+        return FilterUtil.FILTER_NOT_EXISTING;
+    }
 }
