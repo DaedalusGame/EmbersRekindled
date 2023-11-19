@@ -23,17 +23,17 @@ public class ConfigMachine {
     public static final StamperCategory STAMPER_CATEGORY = new StamperCategory();
 
     @Config.Name("Inferno Forge")
-    @Config.LangKey("cfg.embers.machine.infernoforge")
+    @Config.LangKey("cfg.embers.machine.inferno_forge")
     @Config.Comment("Options about the Inferno Forge")
     public static final InfernoForgeCategory INFERNO_FORGE_CATEGORY = new InfernoForgeCategory();
 
     @Config.Name("Geo Separator")
-    @Config.LangKey("cfg.embers.machine.geoseparator")
+    @Config.LangKey("cfg.embers.machine.geo_separator")
     @Config.Comment("Options about the Geo Separator")
     public static final GeoSeparatorCategory GEO_SEPARATOR_CATEGORY = new GeoSeparatorCategory();
 
     @Config.Name("Dawnstone Anvil")
-    @Config.LangKey("cfg.embers.machine.dawnstoneanvil")
+    @Config.LangKey("cfg.embers.machine.dawnstone_anvil")
     @Config.Comment("Options about the Dawnstone Anvil")
     public static final DawnStoneAnvilCategory DAWN_STONE_ANVIL_CATEGORY = new DawnStoneAnvilCategory();
 

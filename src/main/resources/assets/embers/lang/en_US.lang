@@ -11,9 +11,9 @@ cfg.embers.machine.tooltip=(Tweak various Parameters)
 cfg.embers.machine.ember_conduit=Ember Conduit
 cfg.embers.machine.melter=Melter
 cfg.embers.machine.stamper=Stamper
-cfg.embers.machine.infernoforge=Inferno Forge
-cfg.embers.machine.geoseparator=Geo Separator
-cfg.embers.machine.dawnstoneanvil=Dawnstone Anvil
+cfg.embers.machine.inferno_forge=Inferno Forge
+cfg.embers.machine.geo_separator=Geo Separator
+cfg.embers.machine.dawn_stoneanvil=Dawnstone Anvil
 
 tile.block_copper.name=Copper Block
 tile.block_lead.name=Lead Block
