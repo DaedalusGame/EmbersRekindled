@@ -1,6 +1,8 @@
 package teamroots.embers;
 
-import com.google.common.collect.*;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -56,6 +58,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.lwjgl.opengl.GL11;
+import teamroots.embers.api.block.IDial;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.item.IEmberChargedTool;
@@ -63,13 +66,13 @@ import teamroots.embers.api.item.IInflictorGem;
 import teamroots.embers.api.item.IInflictorGemHolder;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
-import teamroots.embers.api.block.IDial;
 import teamroots.embers.api.power.IEmberCapability;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.gui.GuiCodex;
-import teamroots.embers.item.*;
+import teamroots.embers.item.ItemEmberGauge;
+import teamroots.embers.item.ItemGrandhammer;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberBurstFX;
 import teamroots.embers.network.message.MessageEmberGenOffset;
@@ -79,7 +82,10 @@ import teamroots.embers.research.ResearchBase;
 import teamroots.embers.tileentity.ITileEntitySpecialRendererLater;
 import teamroots.embers.tileentity.TileEntityExplosionPedestal;
 import teamroots.embers.tileentity.TileEntityMechAccessor;
-import teamroots.embers.util.*;
+import teamroots.embers.util.CompatUtil;
+import teamroots.embers.util.EmberGenUtil;
+import teamroots.embers.util.Misc;
+import teamroots.embers.util.RenderUtil;
 import teamroots.embers.world.EmberWorldData;
 
 import java.util.*;
@@ -196,8 +202,8 @@ public class EventManager {
         data.put(pos);
     }
 
-    private static ThreadLocal<Boolean> captureDrops = ThreadLocal.withInitial(() -> false);
-    private static ThreadLocal<NonNullList<ItemStack>> capturedDrops = ThreadLocal.withInitial(NonNullList::create);
+    private static final ThreadLocal<Boolean> captureDrops = ThreadLocal.withInitial(() -> false);
+    private static final ThreadLocal<NonNullList<ItemStack>> capturedDrops = ThreadLocal.withInitial(NonNullList::create);
 
     public static NonNullList<ItemStack> captureDrops(boolean start) {
         if (start) {
@@ -438,7 +444,7 @@ public class EventManager {
         addCapabilityItemDescription(text, tile, facing);
         addCapabilityFluidDescription(text, tile, facing);
         addCapabilityEmberDescription(text, tile, facing);
-        if (ConfigManager.isMysticalMechanicsIntegrationEnabled())
+        if (CompatUtil.isMysticalMechanicsIntegrationEnabled())
             MysticalMechanicsIntegration.addCapabilityInformation(text, tile, facing);
         if (tile.hasCapability(EmbersCapabilities.UPGRADE_PROVIDER_CAPABILITY, facing))
             text.add(I18n.format("embers.tooltip.goggles.upgrade"));
@@ -552,7 +558,7 @@ public class EventManager {
             event.getEntity().playSound(SoundManager.TYRFING_HIT,1.0f,1.0f);
             if (!event.getEntity().world.isRemote)
                 PacketHandler.INSTANCE.sendToAll(new MessageTyrfingBurstFX(event.getEntity().posX, event.getEntity().posY + event.getEntity().height / 2.0f, event.getEntity().posZ));
-            event.setAmount((event.getAmount() / 4.0f) * (4.0f + (float) event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue() * 1.0f));
+            event.setAmount((event.getAmount() / 4.0f) * (4.0f + (float) event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue()));
         }
         if (heldStack.getItem() instanceof IEmberChargedTool) {
             if (!player.capabilities.isCreativeMode && !((IEmberChargedTool) heldStack.getItem()).hasEmber(heldStack))
@@ -663,7 +669,7 @@ public class EventManager {
                         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
                         if (ItemModUtil.getLevel(stack) > 0) {
                             event.getFontRenderer().drawStringWithShadow(TextFormatting.GRAY + I18n.format("embers.tooltip.heat_level"), event.getX(), event.getY() + (event.getFontRenderer().FONT_HEIGHT + 1) * (i - 1) + 2, 0xFFFFFFFF);
-                            int level_x = (int) event.getFontRenderer().getStringWidth(I18n.format("embers.tooltip.heat_level")) + 2;
+                            int level_x = event.getFontRenderer().getStringWidth(I18n.format("embers.tooltip.heat_level")) + 2;
                             GlStateManager.enableBlend();
                             GlStateManager.enableAlpha();
                             int func = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
@@ -714,10 +720,10 @@ public class EventManager {
                         for (double k = 0; k < 4; k += 0.5) {
                             float thick = (float) (k / 4.0);
                             RenderUtil.drawColorRectBatched(b, point, baseY + k, 0, Math.min((x2 - point), ((x2 - x1) / 10.0)), 8.0 - 2.0 * k,
-                                    1.0f, 0.25f, 0.0625f, 1.0f * Math.min(1.0f, thick * 0.25f + thick * EmberGenUtil.getEmberDensity(6, (int) (ticks * 12 + 4 * (point)), 4 * (int) (baseY + k))),
+                                    1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick * 0.25f + thick * EmberGenUtil.getEmberDensity(6, (int) (ticks * 12 + 4 * (point)), 4 * (int) (baseY + k))),
                                     0.25f, 0.0625f, 0.015625f, 0.0f,
                                     0.25f, 0.0625f, 0.015625f, 0.0f,
-                                    1.0f, 0.25f, 0.0625f, 1.0f * Math.min(1.0f, thick * 0.25f + thick * EmberGenUtil.getEmberDensity(6, (int) (ticks * 12 + 4 * (point)), 4 * (int) (baseY + (8.0 - k)))));
+                                    1.0f, 0.25f, 0.0625f, Math.min(1.0f, thick * 0.25f + thick * EmberGenUtil.getEmberDensity(6, (int) (ticks * 12 + 4 * (point)), 4 * (int) (baseY + (8.0 - k)))));
                         }
                         tess.draw();
                         b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
@@ -799,10 +805,10 @@ public class EventManager {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder BufferBuilder = tessellator.getBuffer();
         BufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        BufferBuilder.pos((double) x, (double) (y + height), 0.0D).tex((double) (u * f), (double) ((v + (float) vHeight) * f1)).endVertex();
-        BufferBuilder.pos((double) (x + width), (double) (y + height), 0.0D).tex((double) ((u + (float) uWidth) * f), (double) ((v + (float) vHeight) * f1)).endVertex();
-        BufferBuilder.pos((double) (x + width), (double) y, 0.0D).tex((double) ((u + (float) uWidth) * f), (double) (v * f1)).endVertex();
-        BufferBuilder.pos((double) x, (double) y, 0.0D).tex((double) (u * f), (double) (v * f1)).endVertex();
+        BufferBuilder.pos(x, y + height, 0.0D).tex(u * f, (v + vHeight) * f1).endVertex();
+        BufferBuilder.pos(x + width, y + height, 0.0D).tex((u + uWidth) * f, (v + vHeight) * f1).endVertex();
+        BufferBuilder.pos(x + width, y, 0.0D).tex((u + uWidth) * f, v * f1).endVertex();
+        BufferBuilder.pos(x, y, 0.0D).tex(u * f, v * f1).endVertex();
         tessellator.draw();
     }
 

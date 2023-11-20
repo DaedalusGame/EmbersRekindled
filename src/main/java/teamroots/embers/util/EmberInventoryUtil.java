@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberRemoveEvent;
 import teamroots.embers.api.item.IHeldEmberCell;
@@ -35,7 +34,7 @@ public class EmberInventoryUtil {
             if (capability instanceof IHeldEmberCell)
                 amount += capability.getEmberCapacity();
         }
-        if (ConfigManager.isBaublesIntegrationEnabled()) {
+        if (CompatUtil.isBaublesIntegrationEnabled()) {
             amount += BaublesIntegration.getEmberCapacityTotal(player);
         }
         return amount;
@@ -63,7 +62,7 @@ public class EmberInventoryUtil {
             if (capability instanceof IHeldEmberCell)
                 amount += capability.getEmber();
         }
-        if (ConfigManager.isBaublesIntegrationEnabled()) {
+        if (CompatUtil.isBaublesIntegrationEnabled()) {
             amount += BaublesIntegration.getEmberTotal(player);
         }
         return amount;
@@ -86,7 +85,7 @@ public class EmberInventoryUtil {
             if (capability instanceof IHeldEmberCell)
                 temp -= capability.removeAmount(temp, true);
         }
-        if (ConfigManager.isBaublesIntegrationEnabled()) {
+        if (CompatUtil.isBaublesIntegrationEnabled()) {
             temp = BaublesIntegration.removeEmber(player, temp);
         }
         for (int i = 0; i < 36; i++) {

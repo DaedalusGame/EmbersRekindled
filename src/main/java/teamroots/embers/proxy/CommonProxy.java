@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.apiimpl.EmbersAPIImpl;
@@ -29,6 +28,7 @@ import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.reflection.Fields;
 import teamroots.embers.research.ResearchManager;
 import teamroots.embers.tileentity.*;
+import teamroots.embers.util.CompatUtil;
 import teamroots.embers.util.OreTransmutationUtil;
 
 import java.awt.*;
@@ -48,9 +48,9 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent event){
-		if(ConfigManager.isBaublesIntegrationEnabled())
+		if(CompatUtil.isBaublesIntegrationEnabled())
 			BaublesIntegration.init();
-		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+		if(CompatUtil.isMysticalMechanicsIntegrationEnabled())
 			MysticalMechanicsIntegration.init();
 	}
 	
@@ -79,9 +79,9 @@ public class CommonProxy {
 		return false;
 	}
 
-	public DecimalFormat getDecimalFormat(String key) { return null; };
+	public DecimalFormat getDecimalFormat(String key) { return null; }
 
-	public String formatLocalize(String translationKey, Object... parameters) {
+    public String formatLocalize(String translationKey, Object... parameters) {
 		return null;
 	}
 

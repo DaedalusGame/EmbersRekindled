@@ -11,9 +11,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.compat.BaublesIntegration;
@@ -25,14 +26,15 @@ import teamroots.embers.network.message.MessageResearchTick;
 import teamroots.embers.research.capability.DefaultResearchCapability;
 import teamroots.embers.research.capability.IResearchCapability;
 import teamroots.embers.research.capability.ResearchCapabilityProvider;
+import teamroots.embers.research.subtypes.ResearchFakePage;
 import teamroots.embers.research.subtypes.ResearchShowItem;
 import teamroots.embers.research.subtypes.ResearchSwitchCategory;
-import teamroots.embers.research.subtypes.ResearchFakePage;
+import teamroots.embers.util.CompatUtil;
 import teamroots.embers.util.Vec2i;
 
 import java.util.*;
 
-import static teamroots.embers.research.subtypes.ResearchShowItem.*;
+import static teamroots.embers.research.subtypes.ResearchShowItem.DisplayItem;
 
 public class ResearchManager {
     public static final ResourceLocation PLAYER_RESEARCH = new ResourceLocation(Embers.MODID, "research");
@@ -374,7 +376,7 @@ public class ResearchManager {
 
 
         ResearchBase mechanicalPowerSwitch;
-        if (ConfigManager.isMysticalMechanicsIntegrationEnabled()) {
+        if (CompatUtil.isMysticalMechanicsIntegrationEnabled()) {
             mechanicalPowerSwitch = makeCategorySwitch(subCategoryMechanicalPower, 8, 7, ItemStack.EMPTY, 4, 1);
 
             MysticalMechanicsIntegration.initMysticalMechanicsCategory();
@@ -384,7 +386,7 @@ public class ResearchManager {
         mechanicalPowerSwitch.addAncestor(access);
 
         ResearchBase baublesSwitch;
-        if (ConfigManager.isBaublesIntegrationEnabled()) {
+        if (CompatUtil.isBaublesIntegrationEnabled()) {
             baublesSwitch = makeCategorySwitch(subCategoryBaubles, 5, 7, ItemStack.EMPTY, 5, 1);
 
             BaublesIntegration.initBaublesCategory();

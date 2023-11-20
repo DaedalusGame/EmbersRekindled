@@ -1,18 +1,14 @@
 package teamroots.embers;
 
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
-import teamroots.embers.config.ConfigMachine;
-import teamroots.embers.config.ConfigMain;
-import teamroots.embers.item.ItemCinderStaff;
-import teamroots.embers.item.ItemIgnitionCannon;
+import teamroots.embers.util.CompatUtil;
 
 import java.io.File;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class ConfigManager {
 
@@ -32,8 +28,6 @@ public class ConfigManager {
     public static HashSet<Integer> smallRuinGraylist = new HashSet<>();
     public static boolean smallRuinIsWhiteList;
 
-    //MACHINES
-    public static HashSet<Integer> emberBoreGraylist = new HashSet<>();
     public static boolean emberBoreIsWhiteList;
 
     @Deprecated
@@ -74,7 +68,7 @@ public class ConfigManager {
     public static int geoSeparatorCapacity;
     public static double ancientGolemKnockbackResistance;
 
-    static Pattern damageRatePattern = Pattern.compile("(\\w+):(\\d+(?:\\.\\d+|))");
+
 
     public static String[] defaultScaleDamagePasses = new String[]{
             "drown:1.0",
@@ -84,16 +78,6 @@ public class ConfigManager {
 
     };
 
-    public static Map<String, Double> scaleDamagePasses = new HashMap<>();
-    public static Map<String, Double> scaleDamageRates = new HashMap<>();
-
-    public static boolean isBaublesIntegrationEnabled() {
-        return ConfigMain.COMPAT_CATEGORY.enableBaublesIntegration && Loader.isModLoaded("baubles") || ConfigMain.COMPAT_CATEGORY.forceBaublesIntegration;
-    }
-
-    public static boolean isMysticalMechanicsIntegrationEnabled() {
-        return ConfigMain.COMPAT_CATEGORY.enableMysticalMechanicsIntegration && Loader.isModLoaded("mysticalmechanics") || ConfigMain.COMPAT_CATEGORY.forceMysticalMechanicsIntegration;
-    }
 
     public static void init(File configFile) {
         if (config == null) {
@@ -234,14 +218,17 @@ public class ConfigManager {
         //miniBoilerCanExplode = loadBoolean("parameters.miniBoiler.canExplode", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 
         //Blazing Ray
+/*
         ItemIgnitionCannon.EMBER_COST = loadDouble("parameters.blazingRay.cost", ItemIgnitionCannon.EMBER_COST, "Ember used up by each shot.");
         ItemIgnitionCannon.MAX_CHARGE = loadDouble("parameters.blazingRay.charge", ItemIgnitionCannon.MAX_CHARGE, "Time in ticks to fully charge.");
         ItemIgnitionCannon.COOLDOWN = loadInteger("parameters.blazingRay.cooldown", ItemIgnitionCannon.COOLDOWN, "Cooldown in ticks between each shot.");
         ItemIgnitionCannon.DAMAGE = loadFloat("parameters.blazingRay.damage", ItemIgnitionCannon.DAMAGE, "Damage dealt by one shot.");
         ItemIgnitionCannon.MAX_DISTANCE = loadFloat("parameters.blazingRay.distance", ItemIgnitionCannon.MAX_DISTANCE, "Maximum shot distance.");
         ItemIgnitionCannon.MAX_SPREAD = loadDouble("parameters.blazingRay.spread", ItemIgnitionCannon.MAX_SPREAD, "Maximum spread.");
+*/
 
         //Cinder Staff
+/*
         ItemCinderStaff.EMBER_COST = loadDouble("parameters.cinderStaff.cost", ItemCinderStaff.EMBER_COST, "Ember used up by each shot.");
         ItemCinderStaff.MAX_CHARGE = loadDouble("parameters.cinderStaff.charge", ItemCinderStaff.MAX_CHARGE, "Time in ticks to fully charge.");
         ItemCinderStaff.COOLDOWN = loadInteger("parameters.cinderStaff.cooldown", ItemCinderStaff.COOLDOWN, "Cooldown in ticks between each shot.");
@@ -249,27 +236,14 @@ public class ConfigManager {
         ItemCinderStaff.SIZE = loadFloat("parameters.cinderStaff.size", ItemCinderStaff.SIZE, "Size of the projectile.");
         ItemCinderStaff.AOE_SIZE = loadFloat("parameters.cinderStaff.aoe", ItemCinderStaff.AOE_SIZE, "Area of Effect on impact.");
         ItemCinderStaff.LIFETIME = loadInteger("parameters.cinderStaff.lifetime", ItemCinderStaff.LIFETIME, "Lifetime in ticks of projectile.");
+*/
 
         //Shifting Scales
-        scaleDamagePasses.clear();
-        for (String pair : loadStringList("parameters.shiftingScales.damagePasses", defaultScaleDamagePasses, "Syntax is 'damagetype:rate'. Determines which damage types are partially unaffected by the shifting scales augment.")) {
-            Matcher matcher = damageRatePattern.matcher(pair);
-            if (matcher.matches()) {
-                scaleDamagePasses.put(matcher.group(1), Double.parseDouble(matcher.group(2)));
-            }
-        }
 
-        scaleDamageRates.clear();
-        for (String pair : loadStringList("parameters.shiftingScales.damageRates", defaultScaleDamageRates, "Syntax is 'damagetype:rate'. Specifies a separate damage rate for depleting the scales.")) {
-            Matcher matcher = damageRatePattern.matcher(pair);
-            if (matcher.matches()) {
-                scaleDamageRates.put(matcher.group(1), Double.parseDouble(matcher.group(2)));
-            }
-        }
 
-        if (isMysticalMechanicsIntegrationEnabled())
+        if (CompatUtil.isMysticalMechanicsIntegrationEnabled())
             MysticalMechanicsIntegration.loadConfig();
-        if (isBaublesIntegrationEnabled())
+        if (CompatUtil.isBaublesIntegrationEnabled())
             BaublesIntegration.loadConfig();
 
         if (config.hasChanged()) {
@@ -325,11 +299,7 @@ public class ConfigManager {
         return !(orespawnGraylist.contains(dimension) != orespawnIsWhiteList || orespawnBlacklist.contains(dimension));
     }
 
-    public static boolean isEmberBoreEnabled(int dimension) {
-        return emberBoreGraylist.contains(dimension) == ConfigMachine.EMBER_BORE_CATEGORY.isWhiteList;
-    }
-
-/*	@SubscribeEvent
+    /*	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
 		if(event.getModID().equalsIgnoreCase(Embers.MODID))

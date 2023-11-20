@@ -541,9 +541,9 @@ public class RegistryManager {
 
 		MinecraftForge.EVENT_BUS.register(EmbersFuelHandler.class);
 
-		if(ConfigManager.isBaublesIntegrationEnabled())
+		if(CompatUtil.isBaublesIntegrationEnabled())
 			BaublesIntegration.registerAll();
-		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+		if(CompatUtil.isMysticalMechanicsIntegrationEnabled())
 			MysticalMechanicsIntegration.registerAll();
 
 		UpgradeCatalyticPlug.registerBlacklistedTile(TileEntityBeamCannon.class);

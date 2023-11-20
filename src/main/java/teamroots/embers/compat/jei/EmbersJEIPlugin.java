@@ -2,11 +2,12 @@ package teamroots.embers.compat.jei;
 
 import com.google.common.collect.Lists;
 import mezz.jei.api.*;
-import mezz.jei.api.recipe.*;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.IStackHelper;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.apiimpl.EmbersAPIImpl;
@@ -14,6 +15,7 @@ import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.compat.jei.category.*;
 import teamroots.embers.compat.jei.wrapper.*;
 import teamroots.embers.recipe.*;
+import teamroots.embers.util.CompatUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +47,7 @@ public class EmbersJEIPlugin implements IModPlugin {
         registry.addRecipeCategories(new AlchemyRecipeCategory(guiHelper));
         registry.addRecipeCategories(new DawnstoneAnvilCategory(guiHelper));
         registry.addRecipeCategories(new BoilerRecipeCategory(guiHelper));
-        if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+        if(CompatUtil.isMysticalMechanicsIntegrationEnabled())
             registry.addRecipeCategories(new EngineRecipeCategory(guiHelper));
         registry.addRecipeCategories(new ReactionChamberCategory(guiHelper));
     }
@@ -84,7 +86,7 @@ public class EmbersJEIPlugin implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(RegistryManager.reaction_chamber),ReactionChamberCategory.UID);
         reg.addRecipeCatalyst(new ItemStack(RegistryManager.heat_coil), VanillaRecipeCategoryUid.SMELTING);
 
-        if(ConfigManager.isMysticalMechanicsIntegrationEnabled()) {
+        if(CompatUtil.isMysticalMechanicsIntegrationEnabled()) {
             reg.handleRecipes(LiquidFuelWithInput.class, recipe -> new EngineRecipeWrapper(recipe.handler, recipe.input), EngineRecipeCategory.UID);
 
             reg.addRecipes(expandLiquidFuels(EmbersAPIImpl.steamEngineFuels),EngineRecipeCategory.UID);

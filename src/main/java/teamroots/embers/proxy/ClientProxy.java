@@ -1,10 +1,8 @@
 package teamroots.embers.proxy;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.Locale;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,12 +15,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import teamroots.embers.ConfigManager;
-import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.event.InfoGogglesEvent;
 import teamroots.embers.api.item.IInfoGoggles;
@@ -30,6 +25,7 @@ import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.model.ModelManager;
 import teamroots.embers.particle.*;
+import teamroots.embers.util.CompatUtil;
 import teamroots.embers.util.DecimalFormats;
 import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.sound.ItemUseSound;
@@ -38,7 +34,6 @@ import teamroots.embers.util.sound.MachineSound;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 public class ClientProxy extends CommonProxy{
 
@@ -58,9 +53,9 @@ public class ClientProxy extends CommonProxy{
 	public void init(FMLInitializationEvent event){
 		super.init(event);
 		RegistryManager.registerColorHandlers();
-		if(ConfigManager.isBaublesIntegrationEnabled())
+		if(CompatUtil.isBaublesIntegrationEnabled())
 			BaublesIntegration.registerClientSide();
-		if(ConfigManager.isMysticalMechanicsIntegrationEnabled())
+		if(CompatUtil.isMysticalMechanicsIntegrationEnabled())
 			MysticalMechanicsIntegration.registerClientSide();
 
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new DecimalFormats());
