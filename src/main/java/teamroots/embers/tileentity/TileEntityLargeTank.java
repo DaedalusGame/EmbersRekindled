@@ -2,7 +2,6 @@ package teamroots.embers.tileentity;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,11 +12,13 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import teamroots.embers.ConfigManager;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockStoneEdge;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.FluidColorHelper;
 import teamroots.embers.util.Misc;
@@ -122,7 +123,7 @@ public class TileEntityLargeTank extends TileEntityOpenTank implements ITileEnti
 	public void updateCapacity(){
 		int capacity = 0;
 		for (int i = 1; isReservoirPart(getPos().add(0, i, 0)); i++){
-			capacity += ConfigManager.reservoirCapacity;
+			capacity += ConfigMachine.RESERVOIR_CATEGORY.capacity;
 		}
 		if(tank.getCapacity() != capacity) {
 			this.tank.setCapacity(capacity);
@@ -153,7 +154,7 @@ public class TileEntityLargeTank extends TileEntityOpenTank implements ITileEnti
 	protected void updateEscapeParticles() {
 		Color fluidColor = new Color(FluidColorHelper.getColor(lastEscaped), true);
 		Random random = new Random();
-		int height = getCapacity() / ConfigManager.reservoirCapacity;
+		int height = getCapacity() / ConfigMachine.RESERVOIR_CATEGORY.capacity;
 		for (int i = 0; i < 3; i++) {
 			float xOffset = 0.5f + (random.nextFloat() - 0.5f) * 2 * 0.6f;
 			float yOffset = height+0.9f;

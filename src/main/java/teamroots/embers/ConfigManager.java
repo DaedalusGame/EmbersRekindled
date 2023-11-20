@@ -227,7 +227,7 @@ public class ConfigManager {
         //TileEntityTank.capacity = loadInteger("parameters.tank.capacity", TileEntityTank.capacity, "How much fluid (in mb) fits into the Fluid Vessel.");
 
         //Reservoir
-        reservoirCapacity = loadInteger("parameters.reservoir.capacity", Fluid.BUCKET_VOLUME * 40, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
+        //reservoirCapacity = loadInteger("parameters.reservoir.capacity", Fluid.BUCKET_VOLUME * 40, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
 
         //Mini Boiler
         miniBoilerCapacity = loadInteger("parameters.miniBoiler.capacity", Fluid.BUCKET_VOLUME * 16, "How much fluid (in mb) fits into a mini boiler.");

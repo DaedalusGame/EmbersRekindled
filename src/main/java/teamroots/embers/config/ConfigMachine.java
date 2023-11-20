@@ -52,6 +52,10 @@ public class ConfigMachine {
     @Config.Comment("Options about the Fluid Vessel")
     public static final TankCategory TANK_CATEGORY = new TankCategory();
 
+    @Config.Name("Reservoir")
+    @Config.LangKey("cfg.embers.machine.reservoir")
+    @Config.Comment("Options about the Reservoir")
+    public static final ReservoirCategory RESERVOIR_CATEGORY = new ReservoirCategory();
 
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
@@ -177,5 +181,12 @@ public class ConfigMachine {
         @Config.Name("Capacity")
         @Config.Comment("How much fluid (in mb) fits into the Fluid Vessel?")
         public int capacity = 16000;
+    }
+
+    public static class ReservoirCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Capacity")
+        @Config.Comment("How much fluid (in mb) fits into each Caminite Ring on a Reservoir?")
+        public int capacity = 40000;
     }
 }
