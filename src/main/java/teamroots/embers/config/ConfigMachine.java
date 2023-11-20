@@ -57,6 +57,11 @@ public class ConfigMachine {
     @Config.Comment("Options about the Reservoir")
     public static final ReservoirCategory RESERVOIR_CATEGORY = new ReservoirCategory();
 
+    @Config.Name("Mini Boiler")
+    @Config.LangKey("cfg.embers.machine.mini_boiler")
+    @Config.Comment("Options about the Mini Boiler")
+    public static final MiniBoilerCategory MINI_BOILER_CATEGORY = new MiniBoilerCategory();
+
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
     @Config.Comment("What is the liquid equivalent to an ingot in mb?")
@@ -188,5 +193,22 @@ public class ConfigMachine {
         @Config.Name("Capacity")
         @Config.Comment("How much fluid (in mb) fits into each Caminite Ring on a Reservoir?")
         public int capacity = 40000;
+    }
+
+    public static class MiniBoilerCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Capacity")
+        @Config.Comment("How much fluid (in mb) fits into a mini boiler?")
+        public int capacity = 16000;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Capacity")
+        @Config.Comment("How efficient, heat-wise, the mini boiler is at making steam?")
+        public float heatMultiplier = 1.0f;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Capacity")
+        @Config.Comment("Whether or not the mini boiler should explode when at maximum steam pressure")
+        public boolean canExplode = true;
     }
 }

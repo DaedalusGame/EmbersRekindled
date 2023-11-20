@@ -15,33 +15,26 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
-import teamroots.embers.api.event.DialInformationEvent;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.projectile.EffectDamage;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
-import teamroots.embers.api.upgrades.UpgradeUtil;
-import teamroots.embers.block.BlockBreaker;
 import teamroots.embers.block.BlockFluidGauge;
 import teamroots.embers.block.BlockMiniBoiler;
-import teamroots.embers.damage.DamageEmber;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.entity.EntityEmberProjectile;
 import teamroots.embers.upgrade.UpgradeMiniBoiler;
 import teamroots.embers.util.EnumPipeConnection;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
@@ -59,8 +52,8 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 
 	Random random = new Random();
 	HashSet<Integer> soundsPlaying = new HashSet<>();
-	protected FluidTank fluidTank = new FluidTank(ConfigManager.miniBoilerCapacity);
-	protected FluidTank gasTank = new FluidTank(ConfigManager.miniBoilerCapacity);
+	protected FluidTank fluidTank = new FluidTank(ConfigMachine.MINI_BOILER_CATEGORY.capacity);
+	protected FluidTank gasTank = new FluidTank(ConfigMachine.MINI_BOILER_CATEGORY.capacity);
 	protected UpgradeMiniBoiler upgrade;
 	int lastBoil;
 	int boilTime;
@@ -148,7 +141,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 	}
 
 	public int getCapacity(){
-		return ConfigManager.miniBoilerCapacity;
+		return ConfigMachine.MINI_BOILER_CATEGORY.capacity;
 	}
 	
 	public int getFluidAmount(){
@@ -194,7 +187,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 		FluidStack fluid = getFluidStack();
 		ILiquidFuel fuelHandler = EmbersAPI.getBoilerFluid(fluid);
 		if(fuelHandler != null && fluid.amount > 0 && heat > 0) {
-			int fluidBoiled = MathHelper.clamp((int) (ConfigManager.miniBoilerHeatMultiplier  * heat),1,fluid.amount);
+			int fluidBoiled = MathHelper.clamp((int) (ConfigMachine.MINI_BOILER_CATEGORY.heatMultiplier  * heat),1,fluid.amount);
 
 			if(fluidBoiled > 0) {
 				fluid = fluidTank.drain(fluidBoiled,false);
@@ -202,7 +195,7 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 				if(gas != null) {
 					fluidTank.drain(fluidBoiled,true);
 					gas.amount -= gasTank.fill(gas,true);
-					if(ConfigManager.miniBoilerCanExplode && gas.amount > 0 && !world.isRemote) {
+					if(ConfigMachine.MINI_BOILER_CATEGORY.canExplode && gas.amount > 0 && !world.isRemote) {
 						explode();
 					}
 				}
@@ -247,9 +240,9 @@ public class TileEntityMiniBoiler extends TileEntity implements ITileEntityBase,
 		if(BlockFluidGauge.DIAL_TYPE.equals(dialType) && facing.getAxis() != EnumFacing.Axis.Y) {
 			String gasFormat = "";
 			if(getGasAmount() > getCapacity() * 0.8)
-				gasFormat = TextFormatting.RED.toString()+" ";
+				gasFormat = TextFormatting.RED +" ";
 			else if(getGasAmount() > getCapacity() * 0.5)
-				gasFormat = TextFormatting.YELLOW.toString()+" ";
+				gasFormat = TextFormatting.YELLOW +" ";
 			information.add(gasFormat+BlockFluidGauge.formatFluidStack(getGasStack(),getCapacity()));
 			information.add(BlockFluidGauge.formatFluidStack(getFluidStack(),getCapacity()));
 		}

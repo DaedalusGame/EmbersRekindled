@@ -1,7 +1,6 @@
 package teamroots.embers;
 
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Loader;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
@@ -230,9 +229,9 @@ public class ConfigManager {
         //reservoirCapacity = loadInteger("parameters.reservoir.capacity", Fluid.BUCKET_VOLUME * 40, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
 
         //Mini Boiler
-        miniBoilerCapacity = loadInteger("parameters.miniBoiler.capacity", Fluid.BUCKET_VOLUME * 16, "How much fluid (in mb) fits into a mini boiler.");
-        miniBoilerHeatMultiplier = loadFloat("parameters.miniBoiler.heatMultiplier", 1.0f, "How efficient, heat-wise, the mini boiler is at making steam.");
-        miniBoilerCanExplode = loadBoolean("parameters.miniBoiler.canExplode", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
+        //miniBoilerCapacity = loadInteger("parameters.miniBoiler.capacity", Fluid.BUCKET_VOLUME * 16, "How much fluid (in mb) fits into a mini boiler.");
+        //miniBoilerHeatMultiplier = loadFloat("parameters.miniBoiler.heatMultiplier", 1.0f, "How efficient, heat-wise, the mini boiler is at making steam.");
+        //miniBoilerCanExplode = loadBoolean("parameters.miniBoiler.canExplode", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
 
         //Blazing Ray
         ItemIgnitionCannon.EMBER_COST = loadDouble("parameters.blazingRay.cost", ItemIgnitionCannon.EMBER_COST, "Ember used up by each shot.");
