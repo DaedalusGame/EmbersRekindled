@@ -37,6 +37,10 @@ public class ConfigMachine {
     @Config.Comment("Options about the Dawnstone Anvil")
     public static final DawnStoneAnvilCategory DAWN_STONE_ANVIL_CATEGORY = new DawnStoneAnvilCategory();
 
+    @Config.Name("Charger")
+    @Config.LangKey("cfg.embers.machine.charger")
+    @Config.Comment("Options about the Charger")
+    public static final ChargerCategory CHARGER_CATEGORY = new ChargerCategory();
 
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
@@ -136,5 +140,12 @@ public class ConfigMachine {
         @Config.Name("Hits per process")
         @Config.Comment("Number of hammer hits it takes to finish one process")
         public int maxHits = 40;
+    }
+
+    public static class ChargerCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Max Transfer Rate")
+        @Config.Comment("How much ember is transferred between item and charger per tick")
+        public double maxTransfer = 10.0;
     }
 }

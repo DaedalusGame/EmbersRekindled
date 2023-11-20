@@ -8,7 +8,6 @@ import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.config.ConfigMain;
 import teamroots.embers.item.ItemCinderStaff;
 import teamroots.embers.item.ItemIgnitionCannon;
-import teamroots.embers.tileentity.TileEntityCharger;
 import teamroots.embers.tileentity.TileEntityCinderPlinth;
 import teamroots.embers.tileentity.TileEntityEmberBore;
 import teamroots.embers.tileentity.TileEntityTank;
@@ -211,7 +210,7 @@ public class ConfigManager {
         TileEntityEmberBore.FUEL_CONSUMPTION = loadDouble("parameters.emberBore.fuelCost", TileEntityEmberBore.FUEL_CONSUMPTION, "The amount of fuel consumed each tick");
 
         //Charger
-        TileEntityCharger.MAX_TRANSFER = loadDouble("parameters.charger.transfer", TileEntityCharger.MAX_TRANSFER, "How much ember is transferred between item and charger per tick");
+        //TileEntityCharger.MAX_TRANSFER = loadDouble("parameters.charger.transfer", TileEntityCharger.MAX_TRANSFER, "How much ember is transferred between item and charger per tick");
 
         //Cinder Plinth
         TileEntityCinderPlinth.PROCESS_TIME = loadInteger("parameters.cinderPlinth.processTime", TileEntityCinderPlinth.PROCESS_TIME, "The time in ticks it takes to process one item.");

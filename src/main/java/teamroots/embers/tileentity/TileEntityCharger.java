@@ -17,7 +17,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
@@ -28,6 +27,7 @@ import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.block.BlockEmberGauge;
 import teamroots.embers.block.BlockItemGauge;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.power.DefaultEmberCapability;
 import teamroots.embers.util.Misc;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityCharger extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraDialInformation, IExtraCapabilityInformation {
-	public static double MAX_TRANSFER = 10.0;
+	public static double MAX_TRANSFER = ConfigMachine.CHARGER_CATEGORY.maxTransfer;
 
 	public IEmberCapability capability = new DefaultEmberCapability();
 	int angle = 0;
@@ -192,11 +192,9 @@ public class TileEntityCharger extends TileEntity implements ITileEntityBase, IT
 
 	@Override
 	public void playSound(int id) {
-		switch (id) {
-			case SOUND_PROCESS:
-				Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.COPPER_CHARGER_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float)pos.getX()+0.5f,(float)pos.getY()+0.5f,(float)pos.getZ()+0.5f);
-				break;
-		}
+        if (id == SOUND_PROCESS) {
+            Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.COPPER_CHARGER_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f);
+        }
 		soundsPlaying.add(id);
 	}
 
