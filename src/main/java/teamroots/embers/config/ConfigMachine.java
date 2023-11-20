@@ -67,6 +67,14 @@ public class ConfigMachine {
     @Config.Comment("Options about the Ember Bore")
     public static final EmberBoreCategory EMBER_BORE_CATEGORY = new EmberBoreCategory();
 
+    @Config.Name("Steam Engine [MM]")
+    @Config.LangKey("cfg.embers.machine.steam_engine")
+    @Config.Comment({
+            "Requires Mystical Mechanics!",
+            "Options about the Steam Engine"
+    })
+    public static final SteamEngineCategory STEAM_ENGINE_CATEGORY = new SteamEngineCategory();
+
 
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
@@ -148,6 +156,7 @@ public class ConfigMachine {
         @Config.Name("Chance Midpoint")
         @Config.Comment("At exactly this amount of ember items, the chance to successfully reforge is exactly 50%.")
         public double chanceMidpoint = 14400.0;
+
         @Config.RequiresMcRestart
         @Config.Name("Forge Capacity")
         @Config.Comment("How much ember fits into the Inferno Forge?")
@@ -248,5 +257,42 @@ public class ConfigMachine {
         @Config.Name("Fuel Cost")
         @Config.Comment("The amount of fuel consumed each tick")
         public double fuelCost = 3.0;
+    }
+
+    public static class SteamEngineCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Fluid Threshold")
+        @Config.Comment("How much water (in mb) is necessary to start burning solid fuel.")
+        public int fluidThreshold = 10;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Fluid Consumption")
+        @Config.Comment("How much water (in mb) is consumed every tick while burning solid fuel.")
+        public int fluidConsumption = 4;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Fuel Efficiency")
+        @Config.Comment("How efficient, time-wise, solid fuel is in the steam turbine. 1 = fuel lasts as long as it would in a furnace.")
+        public double fuelEfficiency = 2.0;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Fuel Power")
+        @Config.Comment("How much mechanical power is generated while burning solid fuel.")
+        public double fuelPower = 20.0;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Max Power")
+        @Config.Comment("How much mechanical power can be generated at max.")
+        public double maximumPower = 50.0;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Gas Consumption")
+        @Config.Comment("How much gas (in mb), such as steam, is consumed every tick.")
+        public int gasConsumption = 20;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Capacity")
+        @Config.Comment("How much fluid (in mb) fits into a Steam Engine.")
+        public int capacity = 8000;
     }
 }

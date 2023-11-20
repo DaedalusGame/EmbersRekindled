@@ -1,9 +1,6 @@
 package teamroots.embers;
 
 import net.minecraftforge.common.config.Configuration;
-import teamroots.embers.compat.BaublesIntegration;
-import teamroots.embers.compat.MysticalMechanicsIntegration;
-import teamroots.embers.util.CompatUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,56 +25,20 @@ public class ConfigManager {
     public static HashSet<Integer> smallRuinGraylist = new HashSet<>();
     public static boolean smallRuinIsWhiteList;
 
-    public static boolean emberBoreIsWhiteList;
 
     @Deprecated
     public static List<Integer> orespawnBlacklist = new ArrayList<>();
     @Deprecated
     public static List<Integer> smallRuinBlacklist = new ArrayList<>();
 
-    public static float emberBoreSpeedMod;
-    public static int emberBoreMaxYLevel;
 
     //COMPAT
     public static boolean enableNickel, enableTin, enableAluminum, enableBronze, enableElectrum;
     public static int nickelVeinSize, nickelMinY, nickelMaxY, nickelVeinsPerChunk,
             tinVeinSize, tinMinY, tinMaxY, tinVeinsPerChunk,
             aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
-    //public static boolean enableBaublesIntegration;
-    //public static boolean enableMysticalMechanicsIntegration;
-    //public static boolean enableJeiCheat;
 
-    //MISC
-    public static boolean pvpEverybodyIsEnemy;
-    public static boolean codexCategoryIsProgress;
-    public static boolean codexEntryIsProgress;
-
-    //CLIENT
-    //public static boolean enableParticleCollisions;
-    //public static boolean enableParticles;
-
-    //PARAMETERS
-    public static int melterOreAmount;
-    public static int stampPlateAmount;
-    public static int stampAspectusAmount;
-    public static int stampGearAmount;
-    public static int reservoirCapacity;
-    public static int miniBoilerCapacity;
-    public static float miniBoilerHeatMultiplier;
-    public static boolean miniBoilerCanExplode;
-    public static int geoSeparatorCapacity;
     public static double ancientGolemKnockbackResistance;
-
-
-
-    public static String[] defaultScaleDamagePasses = new String[]{
-            "drown:1.0",
-            "starve:1.0",
-    };
-    public static String[] defaultScaleDamageRates = new String[]{
-
-    };
-
 
     public static void init(File configFile) {
         if (config == null) {
@@ -150,101 +111,6 @@ public class ConfigManager {
         tinMinY = config.getInt("tinMinY", "compat", 0, 0, 254, "Minimum height over which tin ore will spawn.");
         tinMaxY = config.getInt("tinMaxY", "compat", 48, 1, 255, "Maximum height under which tin ore will spawn.");
         tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 6, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
-
-        //enableJeiCheat = config.getBoolean("enableJeiCheat", "compat", false, "If true, JEI will show the exact amount of Ash needed in an Alchemy recipe.");
-        //enableBaublesIntegration = config.getBoolean("enableBaubles", "compat", true, "If true, Embers will register items, blocks and recipes providing Baubles integration.");
-        //enableMysticalMechanicsIntegration = config.getBoolean("enableMysticalMechanics", "compat", true, "If true, Embers will register items, blocks and recipes providing Mystical Mechanics integration.");
-
-        //pvpEverybodyIsEnemy = config.getBoolean("everybodyIsAnEnemy", "misc", false, "If true, Embers homing projectiles will go for neutral players.");
-        //codexCategoryIsProgress = config.getBoolean("codexCategoryIsProgress", "misc", true, "Codex category is shut. Progression is open.");
-        //codexEntryIsProgress = config.getBoolean("codexEntryIsProgress", "misc", true, "Codex entry is shut and hide. Progression is open and show.");
-
-        //enableParticleCollisions = config.getBoolean("enableParticleCollisions", "client", true, "Whether or not particles should collide with blocks. Disabling this might significantly improve performance.");
-        //enableParticles = config.getBoolean("enableParticles", "client", true, "Whether or not particles are enabled. Disabling this will change the gameplay experience but significantly improve performance.");
-
-        //DefaultEmberCapability.allAcceptVolatile = loadBoolean("parameters.allAcceptVolatile", false, "Whether ember conduits can attach to any ember consumer/producer");
-
-        config.addCustomCategoryComment("parameters", "Settings for machine/item/misc parameters");
-
-        //Melter
-        //melterOreAmount = loadInteger("parameters.melter.oreAmount", 144, "How many mb of fluid are obtained per ore output in the melter. This is multiplied by the amount of output a melter would produce, so by default 144mb * 2 ingots.");
-        //TileEntityFurnaceBottom.PROCESS_TIME = loadInteger("parameters.melter.processTime",  TileEntityFurnaceBottom.PROCESS_TIME, "The time in ticks it takes to process one recipe.");
-        //TileEntityFurnaceBottom.EMBER_COST = loadDouble("parameters.melter.cost",  TileEntityFurnaceBottom.EMBER_COST, "The ember cost per tick.");
-
-        //Geo Seperator
-        //geoSeparatorCapacity = loadInteger("parameters.geoSeparator.capacity", Fluid.BUCKET_VOLUME, "How much fluid (in mb) fits into a Geologic Seperator");
-
-        //Stamper
-        //stampPlateAmount = loadInteger("parameters.stamper.plateAmount", 1, "How many ingots are required to make one plate in the stamper.");
-        //stampAspectusAmount = loadInteger("parameters.stamper.aspectusAmount",  1, "How many ingots are required to make one aspectus in the stamper.");
-        //stampGearAmount = loadInteger("parameters.stamper.gearAmount",  2, "How many ingots are required to make one gear in the stamper.");
-        //TileEntityStampBase.capacity = loadInteger("parameters.stamper.capacity",  TileEntityStampBase.capacity,  "How much fluid (in mb) fits into the Stamp Base.");
-
-        //Ember Bore
-        /*for (String s : loadStringList("parameters.emberBore.blacklist", new String[]{}, "A list of all dimension IDs in which Embers Ember Bore will not mine.")) {
-            emberBoreGraylist.add(Integer.valueOf(s));
-        }
-        emberBoreIsWhiteList = loadBoolean("parameters.emberBore.isWhiteList", false, "Whether the Ember Bore blacklist is a whitelist.");
-        emberBoreMaxYLevel = loadInteger("parameters.emberBore.yMax", 7, "The maximum y-level at which the Ember Bore can mine ember.");
-        emberBoreSpeedMod = loadFloat("parameters.emberBore.speedMod", 1, "The speed modifier of the Ember Bore before upgrades.");
-        TileEntityEmberBore.BORE_TIME = loadInteger("parameters.emberBore.processTime", TileEntityEmberBore.BORE_TIME, "The time in ticks it takes to try one dig attempt.");
-        TileEntityEmberBore.FUEL_CONSUMPTION = loadDouble("parameters.emberBore.fuelCost", TileEntityEmberBore.FUEL_CONSUMPTION, "The amount of fuel consumed each tick");*/
-
-        //Charger
-        //TileEntityCharger.MAX_TRANSFER = loadDouble("parameters.charger.transfer", TileEntityCharger.MAX_TRANSFER, "How much ember is transferred between item and charger per tick");
-
-        //Cinder Plinth
-        //TileEntityCinderPlinth.PROCESS_TIME = loadInteger("parameters.cinderPlinth.processTime", TileEntityCinderPlinth.PROCESS_TIME, "The time in ticks it takes to process one item.");
-        //TileEntityCinderPlinth.EMBER_COST = loadDouble("parameters.cinderPlinth.cost", TileEntityCinderPlinth.EMBER_COST, "The ember cost per tick.");
-
-        //Dawnstone Anvil
-        //TileEntityDawnstoneAnvil.MAX_HITS = loadInteger("parameters.dawnstoneAnvil.maxHits", TileEntityDawnstoneAnvil.MAX_HITS, "Number of hammer hits it takes to finish one process");
-
-        //Inferno Forge
-        //TileEntityInfernoForge.PROCESS_TIME = loadInteger("parameters.infernoForge.processTime", TileEntityInfernoForge.PROCESS_TIME, "The time in ticks it takes to process one item.");
-        //TileEntityInfernoForge.EMBER_COST = loadDouble("parameters.infernoForge.cost", TileEntityInfernoForge.EMBER_COST, "The ember cost per tick.");
-        //TileEntityInfernoForge.MAX_LEVEL = loadInteger("parameters.infernoForge.maxLevel", TileEntityInfernoForge.MAX_LEVEL, "The maximum augment level that can be reforged to.");
-        //TileEntityInfernoForge.MAX_CRYSTAL_VALUE = loadDouble("parameters.infernoForge.maxCrystalValue", TileEntityInfernoForge.MAX_CRYSTAL_VALUE, "The maximum amount of ember items that can be placed in the forge, in ember energy. Ember clusters are worth 3600 ember, and so the default value is 32 clusters worth.");
-        //TileEntityInfernoForge.CHANCE_MIDPOINT = loadDouble("parameters.infernoForge.chanceMidPoint", TileEntityInfernoForge.CHANCE_MIDPOINT, "At exactly this amount of ember items, the chance to successfully reforge is exactly 50%. The default value is 4 clusters worth.");
-        //Tank
-        //TileEntityTank.capacity = loadInteger("parameters.tank.capacity", TileEntityTank.capacity, "How much fluid (in mb) fits into the Fluid Vessel.");
-
-        //Reservoir
-        //reservoirCapacity = loadInteger("parameters.reservoir.capacity", Fluid.BUCKET_VOLUME * 40, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
-
-        //Mini Boiler
-        //miniBoilerCapacity = loadInteger("parameters.miniBoiler.capacity", Fluid.BUCKET_VOLUME * 16, "How much fluid (in mb) fits into a mini boiler.");
-        //miniBoilerHeatMultiplier = loadFloat("parameters.miniBoiler.heatMultiplier", 1.0f, "How efficient, heat-wise, the mini boiler is at making steam.");
-        //miniBoilerCanExplode = loadBoolean("parameters.miniBoiler.canExplode", true, "Whether or not the mini boiler should explode when at maximum steam pressure.");
-
-        //Blazing Ray
-/*
-        ItemIgnitionCannon.EMBER_COST = loadDouble("parameters.blazingRay.cost", ItemIgnitionCannon.EMBER_COST, "Ember used up by each shot.");
-        ItemIgnitionCannon.MAX_CHARGE = loadDouble("parameters.blazingRay.charge", ItemIgnitionCannon.MAX_CHARGE, "Time in ticks to fully charge.");
-        ItemIgnitionCannon.COOLDOWN = loadInteger("parameters.blazingRay.cooldown", ItemIgnitionCannon.COOLDOWN, "Cooldown in ticks between each shot.");
-        ItemIgnitionCannon.DAMAGE = loadFloat("parameters.blazingRay.damage", ItemIgnitionCannon.DAMAGE, "Damage dealt by one shot.");
-        ItemIgnitionCannon.MAX_DISTANCE = loadFloat("parameters.blazingRay.distance", ItemIgnitionCannon.MAX_DISTANCE, "Maximum shot distance.");
-        ItemIgnitionCannon.MAX_SPREAD = loadDouble("parameters.blazingRay.spread", ItemIgnitionCannon.MAX_SPREAD, "Maximum spread.");
-*/
-
-        //Cinder Staff
-/*
-        ItemCinderStaff.EMBER_COST = loadDouble("parameters.cinderStaff.cost", ItemCinderStaff.EMBER_COST, "Ember used up by each shot.");
-        ItemCinderStaff.MAX_CHARGE = loadDouble("parameters.cinderStaff.charge", ItemCinderStaff.MAX_CHARGE, "Time in ticks to fully charge.");
-        ItemCinderStaff.COOLDOWN = loadInteger("parameters.cinderStaff.cooldown", ItemCinderStaff.COOLDOWN, "Cooldown in ticks between each shot.");
-        ItemCinderStaff.DAMAGE = loadFloat("parameters.cinderStaff.damage", ItemCinderStaff.DAMAGE, "Damage dealt by one shot.");
-        ItemCinderStaff.SIZE = loadFloat("parameters.cinderStaff.size", ItemCinderStaff.SIZE, "Size of the projectile.");
-        ItemCinderStaff.AOE_SIZE = loadFloat("parameters.cinderStaff.aoe", ItemCinderStaff.AOE_SIZE, "Area of Effect on impact.");
-        ItemCinderStaff.LIFETIME = loadInteger("parameters.cinderStaff.lifetime", ItemCinderStaff.LIFETIME, "Lifetime in ticks of projectile.");
-*/
-
-        //Shifting Scales
-
-
-        if (CompatUtil.isMysticalMechanicsIntegrationEnabled())
-            MysticalMechanicsIntegration.loadConfig();
-        if (CompatUtil.isBaublesIntegrationEnabled())
-            BaublesIntegration.loadConfig();
 
         if (config.hasChanged()) {
             config.save();

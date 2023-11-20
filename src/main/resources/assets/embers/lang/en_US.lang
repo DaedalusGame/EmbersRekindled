@@ -20,6 +20,7 @@ cfg.embers.machine.tank=Tank
 cfg.embers.machine.reservoir=Reservoir
 cfg.embers.machine.mini_boiler=Mini Boiler
 cfg.embers.machine.ember_bore=Ember Bore
+cfg.embers.machine.steam_engine=Steam Engine
 
 cfg.embers.tool=Tools
 cfg.embers.tool.tooltip=(Tweak various Tool parameters)

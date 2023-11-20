@@ -5,7 +5,6 @@ import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -19,7 +18,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -29,6 +31,7 @@ import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.misc.ILiquidFuel;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.block.BlockSteamEngine;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.Misc;
 import teamroots.embers.util.sound.ISoundController;
@@ -39,7 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
-    class BurningFuel {
+    static class BurningFuel {
         ItemStack solidFuel = ItemStack.EMPTY;
         FluidStack liquidFuel;
         int timeLeft;
@@ -109,13 +112,13 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
         }
     }
 
-    public static int NORMAL_FLUID_THRESHOLD = 10;
-    public static int NORMAL_FLUID_CONSUMPTION = 4;
-    public static int GAS_CONSUMPTION = 20;
-    public static double MAX_POWER = 50;
-    public static int CAPACITY = 8000;
-    public static double SOLID_POWER = 20;
-    public static double FUEL_MULTIPLIER = 2;
+    public static int NORMAL_FLUID_THRESHOLD = ConfigMachine.STEAM_ENGINE_CATEGORY.fluidThreshold;
+    public static int NORMAL_FLUID_CONSUMPTION = ConfigMachine.STEAM_ENGINE_CATEGORY.fluidConsumption;
+    public static int GAS_CONSUMPTION = ConfigMachine.STEAM_ENGINE_CATEGORY.gasConsumption;
+    public static double MAX_POWER = ConfigMachine.STEAM_ENGINE_CATEGORY.maximumPower;
+    public static int CAPACITY = ConfigMachine.STEAM_ENGINE_CATEGORY.capacity;
+    public static double SOLID_POWER = ConfigMachine.STEAM_ENGINE_CATEGORY.fuelPower;
+    public static double FUEL_MULTIPLIER = ConfigMachine.STEAM_ENGINE_CATEGORY.fuelEfficiency;
 
     public static final int SOUND_BURN = 1;
     public static final int SOUND_STEAM = 2;
@@ -316,7 +319,7 @@ public class TileEntitySteamEngine extends TileEntity implements ITileEntityBase
                         ItemStack fuelCopy = fuel.copy();
                         int burnTime = TileEntityFurnace.getItemBurnTime(fuelCopy);
                         if (burnTime > 0) {
-                            currentFuel = new BurningFuel(copyWithSize(fuelCopy, 1), (int)(burnTime * FUEL_MULTIPLIER));
+                            currentFuel = new BurningFuel(copyWithSize(fuelCopy, 1), (int) (burnTime * FUEL_MULTIPLIER));
                             fuel.shrink(1);
                             if (fuel.isEmpty())
                                 inventory.setStackInSlot(0, fuelCopy.getItem().getContainerItem(fuelCopy));
