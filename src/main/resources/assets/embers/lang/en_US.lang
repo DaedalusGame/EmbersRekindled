@@ -7,7 +7,7 @@ cfg.embers.main.client=Client
 cfg.embers.main.compat=Compatibility
 
 cfg.embers.machine=Machines
-cfg.embers.machine.tooltip=(Tweak various Parameters)
+cfg.embers.machine.tooltip=(Tweak various Machine parameters)
 cfg.embers.machine.ember_conduit=Ember Conduit
 cfg.embers.machine.melter=Melter
 cfg.embers.machine.stamper=Stamper
@@ -20,6 +20,12 @@ cfg.embers.machine.tank=Tank
 cfg.embers.machine.reservoir=Reservoir
 cfg.embers.machine.mini_boiler=Mini Boiler
 cfg.embers.machine.ember_bore=Ember Bore
+
+cfg.embers.tool=Tools
+cfg.embers.tool.tooltip=(Tweak various Tool parameters)
+cfg.embers.tool.blazing_ray=Blazing Ray
+cfg.embers.tool.cinder_staff=Cinder Staff
+cfg.embers.tool.shifting_scales=Shifting Scales
 
 tile.block_copper.name=Copper Block
 tile.block_lead.name=Lead Block

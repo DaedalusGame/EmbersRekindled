@@ -22,6 +22,7 @@ import teamroots.embers.api.projectile.EffectArea;
 import teamroots.embers.api.projectile.EffectDamage;
 import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.api.projectile.ProjectileFireball;
+import teamroots.embers.config.ConfigTool;
 import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.util.EmberInventoryUtil;
@@ -30,13 +31,13 @@ import teamroots.embers.util.Misc;
 import java.awt.*;
 
 public class ItemCinderStaff extends ItemBase implements IProjectileWeapon {
-    public static double EMBER_COST = 25.0;
-    public static int COOLDOWN = 10;
-    public static double MAX_CHARGE = 60;
-    public static float DAMAGE = 17;
-    public static float SIZE = 17;
-    public static float AOE_SIZE = 17 * 0.125f;
-    public static int LIFETIME = 160;
+    public static double EMBER_COST = ConfigTool.CINDER_STAFF_CATEGORY.cost;
+    public static int COOLDOWN = ConfigTool.CINDER_STAFF_CATEGORY.cooldown;
+    public static double MAX_CHARGE = ConfigTool.CINDER_STAFF_CATEGORY.charge;
+    public static float DAMAGE = ConfigTool.CINDER_STAFF_CATEGORY.damage;
+    public static float SIZE = ConfigTool.CINDER_STAFF_CATEGORY.size;
+    public static float AOE_SIZE = ConfigTool.CINDER_STAFF_CATEGORY.aoe;
+    public static int LIFETIME = ConfigTool.CINDER_STAFF_CATEGORY.lifetime;
 
     public static boolean soundPlaying = false; //Clientside anyway so whatever
 

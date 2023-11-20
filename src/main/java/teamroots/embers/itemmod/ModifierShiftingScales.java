@@ -23,15 +23,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.ScaleEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
 import teamroots.embers.api.itemmod.ModifierBase;
+import teamroots.embers.config.ConfigTool;
 import teamroots.embers.util.RenderUtil;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModifierShiftingScales extends ModifierBase {
     private static class ShardParticle {
@@ -67,8 +69,7 @@ public class ModifierShiftingScales extends ModifierBase {
             x += xSpeed;
             y += ySpeed;
 
-            if (ySpeed < 12)
-                ySpeed += gravity;
+            if (ySpeed < 12) ySpeed += gravity;
 
             frame++;
         }
@@ -80,6 +81,10 @@ public class ModifierShiftingScales extends ModifierBase {
     public static final IAttribute SCALES = new RangedAttribute(null, "generic.scales", 0.0D, 0.0D, 2048.0D).setShouldWatch(true);
     public static final int COOLDOWN = 33;
     public static final double MOVE_PER_SECOND_THRESHOLD = 0.5;
+
+
+    public static Map<String, Double> scaleDamagePasses = generateMapFromConfig(ConfigTool.SHIFTING_SCALES_CATEGORY.damagePasses);
+    public static Map<String, Double> scaleDamageRates = generateMapFromConfig(ConfigTool.SHIFTING_SCALES_CATEGORY.damageRates);
 
     public static HashSet<String> unaffectedDamageTypes = new HashSet<>();
     public static HashMap<UUID, Integer> cooldownTicksServer = new HashMap<>();
@@ -169,14 +174,12 @@ public class ModifierShiftingScales extends ModifierBase {
 
         EntityLivingBase entity = event.getEntityLiving();
         DamageSource source = event.getSource();
-        if (unaffectedDamageTypes.contains(source.getDamageType()))
-            return;
+        if (unaffectedDamageTypes.contains(source.getDamageType())) return;
 
         int scaleLevel = ItemModUtil.getArmorModifierLevel(entity, EmbersAPI.SHIFTING_SCALES) * 2;
         if (scaleLevel > 0) {
-            if (!entity.world.isRemote)
-                setMaxCooldown(entity.getUniqueID(), COOLDOWN * 3);
-            ScaleEvent scaleEvent = new ScaleEvent(entity, event.getAmount(), source, ConfigManager.scaleDamageRates.getOrDefault(source.getDamageType(), 1.0), ConfigManager.scaleDamagePasses.getOrDefault(source.getDamageType(), 0.0));
+            if (!entity.world.isRemote) setMaxCooldown(entity.getUniqueID(), COOLDOWN * 3);
+            ScaleEvent scaleEvent = new ScaleEvent(entity, event.getAmount(), source, scaleDamageRates.getOrDefault(source.getDamageType(), 1.0), scaleDamagePasses.getOrDefault(source.getDamageType(), 0.0));
             MinecraftForge.EVENT_BUS.post(scaleEvent);
             double totalDamage = event.getAmount();
             double extraDamage = totalDamage * scaleEvent.getScalePassRate();
@@ -211,14 +214,12 @@ public class ModifierShiftingScales extends ModifierBase {
 
             int segs = scales / 3;
             int last = scales % 3;
-            if (last > 0)
-                segs++;
+            if (last > 0) segs++;
             int u = 18;
             int v = 0;
 
             for (int i = 0; i < segs; i++) {
-                if (i == segs - 1)
-                    u = ((last + 2) % 3) * 9;
+                if (i == segs - 1) u = ((last + 2) % 3) * 9;
 
                 RenderUtil.drawTexturedModalRect(x + 8 * (i % 10), y - 10 * (i / 10), 0, u / 256.0, v / 256.0, (u + 9) / 256.0, (v + 9) / 256.0, 9, 9);
             }
@@ -243,9 +244,7 @@ public class ModifierShiftingScales extends ModifierBase {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
-            Iterator<ShardParticle> iterator = shards.iterator();
-            while (iterator.hasNext()) {
-                ShardParticle particle = iterator.next();
+            for (ShardParticle particle : shards) {
                 particle.update();
             }
         }
@@ -262,8 +261,7 @@ public class ModifierShiftingScales extends ModifierBase {
         GlStateManager.enableAlpha();
         while (iterator.hasNext()) {
             ShardParticle particle = iterator.next();
-            if (particle.getY() > resolution.getScaledHeight())
-                iterator.remove();
+            if (particle.getY() > resolution.getScaledHeight()) iterator.remove();
             int u = particle.getFrame() % 8 > 4 ? 5 : 0;
             int v = 9;
             RenderUtil.drawTexturedModalRect((int) particle.getX() - 2, (int) particle.getY() - 2, 0, u / 256.0, v / 256.0, (u + 5) / 256.0, (v + 5) / 256.0, 5, 5);
@@ -276,27 +274,35 @@ public class ModifierShiftingScales extends ModifierBase {
 
             int segsLast = scalesLast / 3;
             int lastLast = scalesLast % 3;
-            if (lastLast > 0)
-                segsLast++;
+            if (lastLast > 0) segsLast++;
             int segs = scales / 3;
             int last = scales % 3;
-            if (last > 0)
-                segs++;
+            if (last > 0) segs++;
 
             for (int i = 0; i < Math.max(segs, segsLast); i++) {
                 int currentScale = i * 3 + last;
-                if (currentScale < scales)
-                    continue;
+                if (currentScale < scales) continue;
                 int xHeart = x + 8 * (i % 10) + 4;
                 int yHeart = y - 10 * (i / 10) + 4;
                 int pieces = 2;
-                if (lastLast == 1 && i == Math.max(segs, segsLast) - 1)
-                    pieces = 1;
+                if (lastLast == 1 && i == Math.max(segs, segsLast) - 1) pieces = 1;
                 for (int e = 0; e < pieces; e++)
                     shards.add(new ShardParticle(xHeart, yHeart, random.nextInt(8), (random.nextDouble() - 0.5) * 10, (random.nextDouble() - 0.5) * 10, 0.5));
             }
         }
         scalesLast = scales;
         mc.renderEngine.bindTexture(Gui.ICONS);
+    }
+
+    private static Map<String, Double> generateMapFromConfig(String[] config) {
+        Map<String,Double> map = new HashMap<>();
+        Pattern damageRatePattern = Pattern.compile("(\\w+):(\\d+(?:\\.\\d+|))");
+        for (String pair : config) {
+            Matcher matcher = damageRatePattern.matcher(pair);
+            if (matcher.matches()) {
+                map.put(matcher.group(1), Double.parseDouble(matcher.group(2)));
+            }
+        }
+        return map;
     }
 }

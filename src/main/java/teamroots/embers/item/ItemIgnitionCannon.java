@@ -1,6 +1,5 @@
 package teamroots.embers.item;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +7,6 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,21 +16,17 @@ import teamroots.embers.api.item.IProjectileWeapon;
 import teamroots.embers.api.projectile.EffectDamage;
 import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.api.projectile.ProjectileRay;
+import teamroots.embers.config.ConfigTool;
 import teamroots.embers.damage.DamageEmber;
-import teamroots.embers.network.PacketHandler;
-import teamroots.embers.network.message.MessageCannonBeamFX;
 import teamroots.embers.util.EmberInventoryUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ItemIgnitionCannon extends ItemBase implements IProjectileWeapon {
-	public static double EMBER_COST = 25.0;
-	public static int COOLDOWN = 10;
-	public static double MAX_CHARGE = 20;
-	public static float DAMAGE = 7.0f;
-	public static double MAX_SPREAD = 30.0;
-	public static float MAX_DISTANCE = 96.0f;
+	public static double EMBER_COST = ConfigTool.BLAZING_RAY_CATEGORY.cost;
+	public static int COOLDOWN = ConfigTool.BLAZING_RAY_CATEGORY.cooldown;
+	public static double MAX_CHARGE = ConfigTool.BLAZING_RAY_CATEGORY.charge;
+	public static float DAMAGE = ConfigTool.BLAZING_RAY_CATEGORY.damage;
+	public static double MAX_SPREAD = ConfigTool.BLAZING_RAY_CATEGORY.spread;
+	public static float MAX_DISTANCE = ConfigTool.BLAZING_RAY_CATEGORY.distance;
 
 
 	public ItemIgnitionCannon() {
