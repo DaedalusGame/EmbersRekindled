@@ -12,10 +12,7 @@ public class ConfigManager {
     public static Configuration config;
 
     //ORES
-    public static int copperVeinSize, copperMinY, copperMaxY, copperVeinsPerChunk,
-            leadVeinSize, leadMinY, leadMaxY, leadVeinsPerChunk,
-            silverVeinSize, silverMinY, silverMaxY, silverVeinsPerChunk,
-            quartzVeinSize, quartzMinY, quartzMaxY, quartzVeinsPerChunk,
+    public static int
             ancientGolemSpawnWeight;
     public static HashSet<Integer> orespawnGraylist = new HashSet<>();
     public static boolean orespawnIsWhiteList;
@@ -34,9 +31,6 @@ public class ConfigManager {
 
     //COMPAT
     public static boolean enableNickel, enableTin, enableAluminum, enableBronze, enableElectrum;
-    public static int nickelVeinSize, nickelMinY, nickelMaxY, nickelVeinsPerChunk,
-            tinVeinSize, tinMinY, tinMaxY, tinVeinsPerChunk,
-            aluminumVeinSize, aluminumMinY, aluminumMaxY, aluminumVeinsPerChunk;
 
     public static double ancientGolemKnockbackResistance;
 
@@ -54,26 +48,6 @@ public class ConfigManager {
             orespawnGraylist.add(Integer.valueOf(s));
         }
         orespawnIsWhiteList = config.getBoolean("oreBlacklistIsWhitelist", "ores", false, "Whether the orespawn blacklist is a whitelist.");
-
-        copperVeinSize = config.getInt("copperVeinSize", "ores", 12, 0, 255, "Maximum size of a copper ore vein (in blocks)");
-        copperMinY = config.getInt("copperMinY", "ores", 0, 0, 254, "Minimum height over which copper ore will spawn.");
-        copperMaxY = config.getInt("copperMaxY", "ores", 64, 1, 255, "Maximum height under which copper ore will spawn.");
-        copperVeinsPerChunk = config.getInt("copperVeinsPerChunk", "ores", 6, 0, 255, "Number of attempts to spawn copper ore the world generator will make for each chunk.");
-
-        leadVeinSize = config.getInt("leadVeinSize", "ores", 8, 0, 255, "Maximum size of a lead ore vein (in blocks)");
-        leadMinY = config.getInt("leadMinY", "ores", 0, 0, 254, "Minimum height over which lead ore will spawn.");
-        leadMaxY = config.getInt("leadMaxY", "ores", 28, 1, 255, "Maximum height under which lead ore will spawn.");
-        leadVeinsPerChunk = config.getInt("leadVeinsPerChunk", "ores", 4, 0, 255, "Number of attempts to spawn lead ore the world generator will make for each chunk.");
-
-        silverVeinSize = config.getInt("silverVeinSize", "ores", 6, 0, 255, "Maximum size of a silver ore vein (in blocks)");
-        silverMinY = config.getInt("silverMinY", "ores", 0, 0, 254, "Minimum height over which silver ore will spawn.");
-        silverMaxY = config.getInt("silverMaxY", "ores", 28, 1, 255, "Maximum height under which silver ore will spawn.");
-        silverVeinsPerChunk = config.getInt("silverVeinsPerChunk", "ores", 4, 0, 255, "Number of attempts to spawn silver ore the world generator will make for each chunk.");
-
-        quartzVeinSize = config.getInt("quartzVeinSize", "ores", 8, 0, 255, "Maximum size of a quartz ore vein (in blocks)");
-        quartzMinY = config.getInt("quartzMinY", "ores", 0, 0, 254, "Minimum height over which quartz ore will spawn.");
-        quartzMaxY = config.getInt("quartzMaxY", "ores", 18, 1, 255, "Maximum height under which quartz ore will spawn.");
-        quartzVeinsPerChunk = config.getInt("quartzVeinsPerChunk", "ores", 4, 0, 255, "Number of attempts to spawn quartz ore the world generator will make for each chunk.");
 
         config.addCustomCategoryComment("mobs", "Settings related to ore generation.");
 
@@ -97,21 +71,6 @@ public class ConfigManager {
         enableBronze = config.getBoolean("enableBronze", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' bronze.");
         enableElectrum = config.getBoolean("enableElectrum", "compat", true, "If true, Embers will register items, blocks, and recipes providing support for other mods' electrum.");
 
-        aluminumVeinSize = config.getInt("aluminumVeinSize", "compat", 6, 0, 255, "Maximum size of a aluminum ore vein (in blocks)");
-        aluminumMinY = config.getInt("aluminumMinY", "compat", 0, 0, 254, "Minimum height over which aluminum ore will spawn.");
-        aluminumMaxY = config.getInt("aluminumMaxY", "compat", 58, 1, 255, "Maximum height under which aluminum ore will spawn.");
-        aluminumVeinsPerChunk = config.getInt("aluminumVeinsPerChunk", "compat", 4, 0, 255, "Number of attempts to spawn aluminum ore the world generator will make for each chunk.");
-
-        nickelVeinSize = config.getInt("nickelVeinSize", "compat", 6, 0, 255, "Maximum size of a nickel ore vein (in blocks)");
-        nickelMinY = config.getInt("nickelMinY", "compat", 0, 0, 254, "Minimum height over which nickel ore will spawn.");
-        nickelMaxY = config.getInt("nickelMaxY", "compat", 24, 1, 255, "Maximum height under which nickel ore will spawn.");
-        nickelVeinsPerChunk = config.getInt("nickelVeinsPerChunk", "compat", 4, 0, 255, "Number of attempts to spawn nickel ore the world generator will make for each chunk.");
-
-        tinVeinSize = config.getInt("tinVeinSize", "compat", 6, 0, 255, "Maximum size of a tin ore vein (in blocks)");
-        tinMinY = config.getInt("tinMinY", "compat", 0, 0, 254, "Minimum height over which tin ore will spawn.");
-        tinMaxY = config.getInt("tinMaxY", "compat", 48, 1, 255, "Maximum height under which tin ore will spawn.");
-        tinVeinsPerChunk = config.getInt("tinVeinsPerChunk", "compat", 6, 0, 255, "Number of attempts to spawn tin ore the world generator will make for each chunk.");
-
         if (config.hasChanged()) {
             config.save();
         }
@@ -130,31 +89,6 @@ public class ConfigManager {
         }
 
         return splitString;
-    }
-
-    public static double loadDouble(String name, double defaultValue, String comment) {
-        String[] splitName = splitName(name);
-        return config.getFloat(splitName[1], splitName[0], (float) defaultValue, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, comment);
-    }
-
-    public static float loadFloat(String name, float defaultValue, String comment) {
-        String[] splitName = splitName(name);
-        return config.getFloat(splitName[1], splitName[0], defaultValue, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, comment);
-    }
-
-    public static int loadInteger(String name, int defaultValue, String comment) {
-        String[] splitName = splitName(name);
-        return config.getInt(splitName[1], splitName[0], defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE, comment);
-    }
-
-    public static boolean loadBoolean(String name, boolean defaultValue, String comment) {
-        String[] splitName = splitName(name);
-        return config.getBoolean(splitName[1], splitName[0], defaultValue, comment);
-    }
-
-    public static String[] loadStringList(String name, String[] defaultValue, String comment) {
-        String[] splitName = splitName(name);
-        return config.getStringList(splitName[1], splitName[0], defaultValue, comment);
     }
 
     public static boolean isSmallRuinEnabled(int dimension) {
