@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.event.DialInformationEvent;
@@ -25,6 +24,7 @@ import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.api.tile.IMechanicallyPowered;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.recipe.BoreOutput;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.util.EmberGenUtil;
@@ -40,9 +40,9 @@ import java.util.Random;
 
 public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered, IExtraDialInformation, IExtraCapabilityInformation {
     public static final int MAX_LEVEL = 7;
-    public static int BORE_TIME = 200;
+    public static int BORE_TIME = ConfigMachine.EMBER_BORE_CATEGORY.processTime;
     public static final int SLOT_FUEL = 8;
-    public static double FUEL_CONSUMPTION = 3;
+    public static double FUEL_CONSUMPTION = ConfigMachine.EMBER_BORE_CATEGORY.fuelCost;
 
     public static final int SOUND_ON = 1;
     public static final int SOUND_ON_DRILL = 2;
@@ -131,7 +131,11 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     }
 
     public boolean canMine() {
-        return ConfigManager.isEmberBoreEnabled(world.provider.getDimension()) && getPos().getY() <= ConfigManager.emberBoreMaxYLevel;
+        boolean onBlacklist = ConfigMachine.EMBER_BORE_CATEGORY.blacklist.contains(world.provider.getDimension());
+        boolean isWhitelist = ConfigMachine.EMBER_BORE_CATEGORY.isWhiteList;
+        boolean isAvailable = onBlacklist == isWhitelist; // XNOR
+        boolean underYMax = getPos().getY() <= ConfigMachine.EMBER_BORE_CATEGORY.yMax;
+        return isAvailable && underYMax;
     }
 
     public boolean canInsert(ArrayList<ItemStack> returns) {
@@ -164,10 +168,10 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
             return;
         if (getWorld().isRemote)
             handleSound();
-        speedMod = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * ConfigManager.emberBoreSpeedMod;
+        speedMod = UpgradeUtil.getTotalSpeedModifier(this, upgrades) * ConfigMachine.EMBER_BORE_CATEGORY.speedMod;
         lastAngle = angle;
         if (isRunning) {
-            angle += 12.0f * speedMod;
+            angle += (float) (12.0f * speedMod);
         }
         boolean previousRunning = isRunning;
         if (!getWorld().isRemote) {

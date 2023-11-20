@@ -3,6 +3,8 @@ package teamroots.embers.config;
 import net.minecraftforge.common.config.Config;
 import teamroots.embers.Embers;
 
+import java.util.ArrayList;
+
 @Config(modid = Embers.MODID, category = "machine", name = Embers.CFG_FOLDER + "machine")
 @Config.LangKey("cfg.embers.machine")
 public class ConfigMachine {
@@ -61,6 +63,12 @@ public class ConfigMachine {
     @Config.LangKey("cfg.embers.machine.mini_boiler")
     @Config.Comment("Options about the Mini Boiler")
     public static final MiniBoilerCategory MINI_BOILER_CATEGORY = new MiniBoilerCategory();
+
+    @Config.Name("Ember Bore")
+    @Config.LangKey("cfg.embers.machine.ember_bore")
+    @Config.Comment("Options about the Ember Bore")
+    public static final EmberBoreCategory EMBER_BORE_CATEGORY = new EmberBoreCategory();
+
 
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
@@ -210,5 +218,37 @@ public class ConfigMachine {
         @Config.Name("Capacity")
         @Config.Comment("Whether or not the mini boiler should explode when at maximum steam pressure")
         public boolean canExplode = true;
+    }
+
+    public static class EmberBoreCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Dimension Blacklist")
+        @Config.Comment("A list of all dimension IDs in which Embers Ember Bore will not mine.")
+        public ArrayList<Integer> blacklist = new ArrayList<>();
+
+        @Config.RequiresMcRestart
+        @Config.Name("Is Whitelist?")
+        @Config.Comment("Whether the Ember Bore blacklist is a whitelist.")
+        public boolean isWhiteList = false;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Max Y-Height")
+        @Config.Comment("The maximum y-level at which the Ember Bore can mine ember.")
+        public int yMax = 7;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Speed Modifier")
+        @Config.Comment("The speed modifier of the Ember Bore before upgrades.")
+        public float speedMod = 1.0f;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Process Time")
+        @Config.Comment("The time in ticks it takes to try one dig attempt.")
+        public int processTime = 200;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Fuel Cost")
+        @Config.Comment("The amount of fuel consumed each tick")
+        public double fuelCost = 3.0;
     }
 }
