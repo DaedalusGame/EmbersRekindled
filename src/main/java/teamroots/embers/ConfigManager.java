@@ -4,10 +4,10 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.config.ConfigMain;
 import teamroots.embers.item.ItemCinderStaff;
 import teamroots.embers.item.ItemIgnitionCannon;
-import teamroots.embers.tileentity.TileEntityEmberBore;
 
 import java.io.File;
 import java.util.*;
@@ -88,7 +88,7 @@ public class ConfigManager {
     public static Map<String, Double> scaleDamageRates = new HashMap<>();
 
     public static boolean isBaublesIntegrationEnabled() {
-        return ConfigMain.COMPAT_CATEGORY.enableBaublesIntegration && Loader.isModLoaded("baubles") || ConfigMain.COMPAT_CATEGORY.enableBaublesIntegration;
+        return ConfigMain.COMPAT_CATEGORY.enableBaublesIntegration && Loader.isModLoaded("baubles") || ConfigMain.COMPAT_CATEGORY.forceBaublesIntegration;
     }
 
     public static boolean isMysticalMechanicsIntegrationEnabled() {
@@ -197,14 +197,14 @@ public class ConfigManager {
         //TileEntityStampBase.capacity = loadInteger("parameters.stamper.capacity",  TileEntityStampBase.capacity,  "How much fluid (in mb) fits into the Stamp Base.");
 
         //Ember Bore
-        for (String s : loadStringList("parameters.emberBore.blacklist", new String[]{}, "A list of all dimension IDs in which Embers Ember Bore will not mine.")) {
+        /*for (String s : loadStringList("parameters.emberBore.blacklist", new String[]{}, "A list of all dimension IDs in which Embers Ember Bore will not mine.")) {
             emberBoreGraylist.add(Integer.valueOf(s));
         }
         emberBoreIsWhiteList = loadBoolean("parameters.emberBore.isWhiteList", false, "Whether the Ember Bore blacklist is a whitelist.");
         emberBoreMaxYLevel = loadInteger("parameters.emberBore.yMax", 7, "The maximum y-level at which the Ember Bore can mine ember.");
         emberBoreSpeedMod = loadFloat("parameters.emberBore.speedMod", 1, "The speed modifier of the Ember Bore before upgrades.");
         TileEntityEmberBore.BORE_TIME = loadInteger("parameters.emberBore.processTime", TileEntityEmberBore.BORE_TIME, "The time in ticks it takes to try one dig attempt.");
-        TileEntityEmberBore.FUEL_CONSUMPTION = loadDouble("parameters.emberBore.fuelCost", TileEntityEmberBore.FUEL_CONSUMPTION, "The amount of fuel consumed each tick");
+        TileEntityEmberBore.FUEL_CONSUMPTION = loadDouble("parameters.emberBore.fuelCost", TileEntityEmberBore.FUEL_CONSUMPTION, "The amount of fuel consumed each tick");*/
 
         //Charger
         //TileEntityCharger.MAX_TRANSFER = loadDouble("parameters.charger.transfer", TileEntityCharger.MAX_TRANSFER, "How much ember is transferred between item and charger per tick");
@@ -326,7 +326,7 @@ public class ConfigManager {
     }
 
     public static boolean isEmberBoreEnabled(int dimension) {
-        return emberBoreGraylist.contains(dimension) == emberBoreIsWhiteList;
+        return emberBoreGraylist.contains(dimension) == ConfigMachine.EMBER_BORE_CATEGORY.isWhiteList;
     }
 
 /*	@SubscribeEvent

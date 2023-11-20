@@ -8,11 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberProjectileEvent;
 import teamroots.embers.api.itemmod.ItemModUtil;
@@ -20,6 +18,7 @@ import teamroots.embers.api.itemmod.ModifierProjectileBase;
 import teamroots.embers.api.projectile.IProjectilePreset;
 import teamroots.embers.api.projectile.ProjectileFireball;
 import teamroots.embers.api.projectile.ProjectileRay;
+import teamroots.embers.config.ConfigMain;
 
 import java.util.ListIterator;
 
@@ -63,6 +62,6 @@ public class ModifierFocalLens extends ModifierProjectileBase {
 
 	public static boolean isPVPEnabled(World world) {
 		MinecraftServer server = world.getMinecraftServer();
-		return server != null && server.isPVPEnabled() && ConfigManager.pvpEverybodyIsEnemy;
+		return server != null && server.isPVPEnabled() && ConfigMain.pvpEverybodyIsEnemy;
 	}
 }

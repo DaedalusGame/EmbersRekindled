@@ -3,8 +3,6 @@ package teamroots.embers.config;
 import net.minecraftforge.common.config.Config;
 import teamroots.embers.Embers;
 
-import java.util.ArrayList;
-
 @Config(modid = Embers.MODID, category = "machine", name = Embers.CFG_FOLDER + "machine")
 @Config.LangKey("cfg.embers.machine")
 public class ConfigMachine {
@@ -210,12 +208,12 @@ public class ConfigMachine {
         public int capacity = 16000;
 
         @Config.RequiresMcRestart
-        @Config.Name("Capacity")
+        @Config.Name("Heat Multiplier")
         @Config.Comment("How efficient, heat-wise, the mini boiler is at making steam?")
         public float heatMultiplier = 1.0f;
 
         @Config.RequiresMcRestart
-        @Config.Name("Capacity")
+        @Config.Name("Can Explode?")
         @Config.Comment("Whether or not the mini boiler should explode when at maximum steam pressure")
         public boolean canExplode = true;
     }
@@ -224,7 +222,7 @@ public class ConfigMachine {
         @Config.RequiresMcRestart
         @Config.Name("Dimension Blacklist")
         @Config.Comment("A list of all dimension IDs in which Embers Ember Bore will not mine.")
-        public ArrayList<Integer> blacklist = new ArrayList<>();
+        public int[] blacklist = new int[]{};
 
         @Config.RequiresMcRestart
         @Config.Name("Is Whitelist?")

@@ -13,7 +13,13 @@ cfg.embers.machine.melter=Melter
 cfg.embers.machine.stamper=Stamper
 cfg.embers.machine.inferno_forge=Inferno Forge
 cfg.embers.machine.geo_separator=Geo Separator
-cfg.embers.machine.dawn_stoneanvil=Dawnstone Anvil
+cfg.embers.machine.dawnstone_anvil=Dawnstone Anvil
+cfg.embers.machine.charger=Charger
+cfg.embers.machine.cinder_plinth=Cinder Plinth
+cfg.embers.machine.tank=Tank
+cfg.embers.machine.reservoir=Reservoir
+cfg.embers.machine.mini_boiler=Mini Boiler
+cfg.embers.machine.ember_bore=Ember Bore
 
 tile.block_copper.name=Copper Block
 tile.block_lead.name=Lead Block

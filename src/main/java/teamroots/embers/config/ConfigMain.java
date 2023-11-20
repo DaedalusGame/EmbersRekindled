@@ -19,7 +19,7 @@ public class ConfigMain {
 
     @Config.Name("Compat")
     @Config.LangKey("cfg.embers.main.compat")
-    @Config.Comment("Integration with other mods")
+    @Config.Comment("Settings related to compatibility with other mods.")
     public static final CompatCategory COMPAT_CATEGORY = new CompatCategory();
 
     @Config.Name("Everybody is considered an Enemy")

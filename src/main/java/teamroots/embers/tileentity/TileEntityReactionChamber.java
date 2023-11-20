@@ -6,7 +6,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -17,10 +19,10 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.tile.IExtraDialInformation;
 import teamroots.embers.block.BlockFluidGauge;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.particle.ParticleUtil;
 import teamroots.embers.recipe.FluidReactionRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
@@ -134,7 +136,7 @@ public class TileEntityReactionChamber extends TileEntity implements ITileEntity
 	}
 
 	public int getCapacity(){
-		return ConfigManager.miniBoilerCapacity;
+		return ConfigMachine.MINI_BOILER_CATEGORY.capacity;
 	}
 	
 	public int getFluidAmount(){

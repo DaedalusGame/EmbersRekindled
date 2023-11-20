@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, ITickable, IMultiblockMachine, ISoundController, IMechanicallyPowered, IExtraDialInformation, IExtraCapabilityInformation {
     public static final int MAX_LEVEL = 7;
@@ -47,6 +49,8 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     public static final int SOUND_ON = 1;
     public static final int SOUND_ON_DRILL = 2;
     public static final int[] SOUND_IDS = new int[]{SOUND_ON, SOUND_ON_DRILL};
+
+    public static final List<Integer> BLACKLIST = IntStream.of(ConfigMachine.EMBER_BORE_CATEGORY.blacklist).boxed().collect(Collectors.toList());
 
     Random random = new Random();
     public long ticksExisted = 0;
@@ -131,7 +135,7 @@ public class TileEntityEmberBore extends TileEntity implements ITileEntityBase, 
     }
 
     public boolean canMine() {
-        boolean onBlacklist = ConfigMachine.EMBER_BORE_CATEGORY.blacklist.contains(world.provider.getDimension());
+        boolean onBlacklist = BLACKLIST.contains(world.provider.getDimension());
         boolean isWhitelist = ConfigMachine.EMBER_BORE_CATEGORY.isWhiteList;
         boolean isAvailable = onBlacklist == isWhitelist; // XNOR
         boolean underYMax = getPos().getY() <= ConfigMachine.EMBER_BORE_CATEGORY.yMax;
