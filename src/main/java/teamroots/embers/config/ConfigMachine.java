@@ -42,6 +42,17 @@ public class ConfigMachine {
     @Config.Comment("Options about the Charger")
     public static final ChargerCategory CHARGER_CATEGORY = new ChargerCategory();
 
+    @Config.Name("Cinder Plinth")
+    @Config.LangKey("cfg.embers.machine.cinder_plinth")
+    @Config.Comment("Options about the Cinder Plinth")
+    public static final CinderPlinthCategory CINDER_PLINTH_CATEGORY = new CinderPlinthCategory();
+
+    @Config.Name("Fluid Vessel")
+    @Config.LangKey("cfg.embers.machine.tank")
+    @Config.Comment("Options about the Fluid Vessel")
+    public static final TankCategory TANK_CATEGORY = new TankCategory();
+
+
     @Config.RequiresMcRestart
     @Config.Name("Ingot to Fluid ratio")
     @Config.Comment("What is the liquid equivalent to an ingot in mb?")
@@ -145,7 +156,26 @@ public class ConfigMachine {
     public static class ChargerCategory {
         @Config.RequiresMcRestart
         @Config.Name("Max Transfer Rate")
-        @Config.Comment("How much ember is transferred between item and charger per tick")
+        @Config.Comment("How much ember is transferred between item and charger per tick?")
         public double maxTransfer = 10.0;
+    }
+
+    public static class CinderPlinthCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Process Time")
+        @Config.Comment("The time in ticks it takes to process one item")
+        public int processTime = 40;
+
+        @Config.RequiresMcRestart
+        @Config.Name("Ember Cost")
+        @Config.Comment("The ember cost per tick")
+        public double emberCost = 0.5;
+    }
+
+    public static class TankCategory {
+        @Config.RequiresMcRestart
+        @Config.Name("Capacity")
+        @Config.Comment("How much fluid (in mb) fits into the Fluid Vessel?")
+        public int capacity = 16000;
     }
 }

@@ -20,7 +20,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import teamroots.embers.*;
+import teamroots.embers.Embers;
+import teamroots.embers.RegistryManager;
+import teamroots.embers.SoundManager;
 import teamroots.embers.api.capabilities.EmbersCapabilities;
 import teamroots.embers.api.event.EmberEvent;
 import teamroots.embers.api.power.IEmberCapability;
@@ -28,6 +30,7 @@ import teamroots.embers.api.tile.IBin;
 import teamroots.embers.api.tile.IExtraCapabilityInformation;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
+import teamroots.embers.config.ConfigMachine;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageAshenAmuletFX;
 import teamroots.embers.particle.ParticleUtil;
@@ -41,8 +44,8 @@ import java.util.List;
 import java.util.Random;
 
 public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBase, ITickable, ISoundController, IExtraCapabilityInformation {
-    public static double EMBER_COST = 0.5;
-    public static int PROCESS_TIME = 40;
+    public static double EMBER_COST = ConfigMachine.CINDER_PLINTH_CATEGORY.emberCost;
+    public static int PROCESS_TIME = ConfigMachine.CINDER_PLINTH_CATEGORY.processTime;
     public IEmberCapability capability = new DefaultEmberCapability();
     int angle = 0;
     int turnRate = 0;
@@ -218,10 +221,8 @@ public class TileEntityCinderPlinth extends TileEntity implements ITileEntityBas
 
     @Override
     public void playSound(int id) {
-        switch (id) {
-            case SOUND_PROCESS:
-                Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.PLINTH_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f);
-                break;
+        if (id == SOUND_PROCESS) {
+            Embers.proxy.playMachineSound(this, SOUND_PROCESS, SoundManager.PLINTH_LOOP, SoundCategory.BLOCKS, true, 1.0f, 1.0f, (float) pos.getX() + 0.5f, (float) pos.getY() + 0.5f, (float) pos.getZ() + 0.5f);
         }
         soundsPlaying.add(id);
     }

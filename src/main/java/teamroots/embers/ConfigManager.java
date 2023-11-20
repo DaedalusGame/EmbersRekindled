@@ -8,9 +8,7 @@ import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.config.ConfigMain;
 import teamroots.embers.item.ItemCinderStaff;
 import teamroots.embers.item.ItemIgnitionCannon;
-import teamroots.embers.tileentity.TileEntityCinderPlinth;
 import teamroots.embers.tileentity.TileEntityEmberBore;
-import teamroots.embers.tileentity.TileEntityTank;
 
 import java.io.File;
 import java.util.*;
@@ -213,8 +211,8 @@ public class ConfigManager {
         //TileEntityCharger.MAX_TRANSFER = loadDouble("parameters.charger.transfer", TileEntityCharger.MAX_TRANSFER, "How much ember is transferred between item and charger per tick");
 
         //Cinder Plinth
-        TileEntityCinderPlinth.PROCESS_TIME = loadInteger("parameters.cinderPlinth.processTime", TileEntityCinderPlinth.PROCESS_TIME, "The time in ticks it takes to process one item.");
-        TileEntityCinderPlinth.EMBER_COST = loadDouble("parameters.cinderPlinth.cost", TileEntityCinderPlinth.EMBER_COST, "The ember cost per tick.");
+        //TileEntityCinderPlinth.PROCESS_TIME = loadInteger("parameters.cinderPlinth.processTime", TileEntityCinderPlinth.PROCESS_TIME, "The time in ticks it takes to process one item.");
+        //TileEntityCinderPlinth.EMBER_COST = loadDouble("parameters.cinderPlinth.cost", TileEntityCinderPlinth.EMBER_COST, "The ember cost per tick.");
 
         //Dawnstone Anvil
         //TileEntityDawnstoneAnvil.MAX_HITS = loadInteger("parameters.dawnstoneAnvil.maxHits", TileEntityDawnstoneAnvil.MAX_HITS, "Number of hammer hits it takes to finish one process");
@@ -226,7 +224,7 @@ public class ConfigManager {
         //TileEntityInfernoForge.MAX_CRYSTAL_VALUE = loadDouble("parameters.infernoForge.maxCrystalValue", TileEntityInfernoForge.MAX_CRYSTAL_VALUE, "The maximum amount of ember items that can be placed in the forge, in ember energy. Ember clusters are worth 3600 ember, and so the default value is 32 clusters worth.");
         //TileEntityInfernoForge.CHANCE_MIDPOINT = loadDouble("parameters.infernoForge.chanceMidPoint", TileEntityInfernoForge.CHANCE_MIDPOINT, "At exactly this amount of ember items, the chance to successfully reforge is exactly 50%. The default value is 4 clusters worth.");
         //Tank
-        TileEntityTank.capacity = loadInteger("parameters.tank.capacity", TileEntityTank.capacity, "How much fluid (in mb) fits into the Fluid Vessel.");
+        //TileEntityTank.capacity = loadInteger("parameters.tank.capacity", TileEntityTank.capacity, "How much fluid (in mb) fits into the Fluid Vessel.");
 
         //Reservoir
         reservoirCapacity = loadInteger("parameters.reservoir.capacity", Fluid.BUCKET_VOLUME * 40, "How much fluid (in mb) fits into each Caminite Ring on a Reservoir.");
