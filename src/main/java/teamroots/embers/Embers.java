@@ -65,11 +65,9 @@ public class Embers {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
 		MinecraftForge.EVENT_BUS.register(new EventManager());
-		MinecraftForge.EVENT_BUS.register(new ConfigManager());
 		MinecraftForge.EVENT_BUS.register(new RegistryManager());
 		MinecraftForge.EVENT_BUS.register(new RecipeRegistry());
 		MinecraftForge.EVENT_BUS.register(new ResearchManager());
-        ConfigManager.init(event.getSuggestedConfigurationFile());
 		proxy.preInit(event);
 	}
 	
