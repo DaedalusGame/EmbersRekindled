@@ -22,6 +22,10 @@ cfg.embers.machine.mini_boiler=Mini Boiler
 cfg.embers.machine.ember_bore=Ember Bore
 cfg.embers.machine.steam_engine=Steam Engine
 
+cfg.embers.mob=Mobs
+cfg.embers.mob.tooltip=(Settings related to mobs)
+cfg.embers.mob.ember_golem=Ember Golem
+
 cfg.embers.tool=Tools
 cfg.embers.tool.tooltip=(Tweak various Tool parameters)
 cfg.embers.tool.blazing_ray=Blazing Ray
@@ -30,6 +34,8 @@ cfg.embers.tool.shifting_scales=Shifting Scales
 
 cfg.embers.world=World
 cfg.embers.world.tooltip=(Settings related to world generation)
+cfg.embers.world.small_ruin=Small Ruin
+cfg.embers.world.ore=Ore Generation
 cfg.embers.world.ore_aluminum=Aluminum Ore
 cfg.embers.world.ore_copper=Copper Ore
 cfg.embers.world.ore_lead=Lead Ore

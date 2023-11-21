@@ -44,6 +44,7 @@ import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.block.*;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
+import teamroots.embers.config.ConfigMob;
 import teamroots.embers.damage.DamageEmber;
 import teamroots.embers.entity.*;
 import teamroots.embers.fluid.*;
@@ -527,7 +528,7 @@ public class RegistryManager {
 		}
 		biomes.addAll(BiomeManager.oceanBiomes);
 		
-		EntityRegistry.addSpawn(EntityAncientGolem.class, ConfigManager.ancientGolemSpawnWeight, 1, 1, EnumCreatureType.MONSTER, biomes.toArray(new Biome[biomes.size()]));
+		EntityRegistry.addSpawn(EntityAncientGolem.class, ConfigMob.EMBER_GOLEM.spawnWeight, 1, 1, EnumCreatureType.MONSTER, biomes.toArray(new Biome[biomes.size()]));
 		
 		world_gen_ores = new WorldGenOres();
 		GameRegistry.registerWorldGenerator(world_gen_ores, 1);
