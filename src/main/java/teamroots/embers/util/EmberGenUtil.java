@@ -6,8 +6,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.config.ConfigMaterial;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class EmberGenUtil {
 				+6.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 34)
 				+4.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 21)
 				+2.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 11)
-				+1.0f*NoiseGenUtil.getOctave(seed, x+(int)(offX*emberVelocity), z+(int)(offZ*emberVelocity), 4)
+				+ NoiseGenUtil.getOctave(seed, x + (int) (offX * emberVelocity), z + (int) (offZ * emberVelocity), 4)
 				)/93.0f,1.6f)) * 0.5f;
 	}
 	
@@ -32,7 +32,7 @@ public class EmberGenUtil {
 				+ 16.0f * NoiseGenUtil.getOctave(seed, x, z, 76)
 				+ 6.0f * NoiseGenUtil.getOctave(seed, x, z, 45)
 				+ 3.0f * NoiseGenUtil.getOctave(seed, x, z, 21)
-				+ 1.0f * NoiseGenUtil.getOctave(seed, x, z, 5)
+				+ NoiseGenUtil.getOctave(seed, x, z, 5)
 		) / 58.0f, 3.0f);
 		return v;
 	}
@@ -119,21 +119,21 @@ public class EmberGenUtil {
 		registerMetalCoefficient("blockGold",1.0f);
 		registerMetalCoefficient("blockSilver",1.0f);
 		registerMetalCoefficient("blockCopper",1.0f);
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			registerMetalCoefficient("blockElectrum",1.0f);
 		}
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			registerMetalCoefficient("blockAluminum",0.9f);
 		}
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			registerMetalCoefficient("blockNickel",0.9f);
 		}
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			registerMetalCoefficient("blockTin",0.9f);
 		}
 		registerMetalCoefficient("blockIron",0.75f);
 		registerMetalCoefficient("blockLead",0.75f);
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.mustLoad()){
 			registerMetalCoefficient("blockBronze",0.75f);
 		}
 		

@@ -33,7 +33,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import teamroots.embers.ConfigManager;
 import teamroots.embers.Embers;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.api.EmbersAPI;
@@ -47,6 +46,7 @@ import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.compat.BaublesIntegration;
 import teamroots.embers.compat.MysticalMechanicsIntegration;
 import teamroots.embers.config.ConfigMachine;
+import teamroots.embers.config.ConfigMaterial;
 import teamroots.embers.item.EnumStampType;
 import teamroots.embers.util.*;
 
@@ -171,7 +171,7 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("oreQuartz", RegistryManager.ore_quartz);
 		OreDictionary.registerOre("slimeball", RegistryManager.adhesive);
 
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			OreDictionary.registerOre("blockAluminum", RegistryManager.block_aluminum);
 			OreDictionary.registerOre("ingotAluminum", RegistryManager.ingot_aluminum);
 			OreDictionary.registerOre("nuggetAluminum", RegistryManager.nugget_aluminum);
@@ -185,7 +185,7 @@ public class RecipeRegistry {
 			OreDictionary.registerOre("oreAluminium", RegistryManager.ore_aluminum);
 		}
 
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			OreDictionary.registerOre("blockTin", RegistryManager.block_tin);
 			OreDictionary.registerOre("ingotTin", RegistryManager.ingot_tin);
 			OreDictionary.registerOre("nuggetTin", RegistryManager.nugget_tin);
@@ -193,7 +193,7 @@ public class RecipeRegistry {
 			OreDictionary.registerOre("oreTin", RegistryManager.ore_tin);
 		}
 
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			OreDictionary.registerOre("blockNickel", RegistryManager.block_nickel);
 			OreDictionary.registerOre("ingotNickel", RegistryManager.ingot_nickel);
 			OreDictionary.registerOre("nuggetNickel", RegistryManager.nugget_nickel);
@@ -201,14 +201,14 @@ public class RecipeRegistry {
 			OreDictionary.registerOre("oreNickel", RegistryManager.ore_nickel);
 		}
 
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.mustLoad()){
 			OreDictionary.registerOre("blockBronze", RegistryManager.block_bronze);
 			OreDictionary.registerOre("ingotBronze", RegistryManager.ingot_bronze);
 			OreDictionary.registerOre("nuggetBronze", RegistryManager.nugget_bronze);
 			OreDictionary.registerOre("plateBronze", RegistryManager.plate_bronze);
 		}
 
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			OreDictionary.registerOre("blockElectrum", RegistryManager.block_electrum);
 			OreDictionary.registerOre("ingotElectrum", RegistryManager.ingot_electrum);
 			OreDictionary.registerOre("nuggetElectrum", RegistryManager.nugget_electrum);
@@ -253,25 +253,25 @@ public class RecipeRegistry {
 
 		Ingredient anyDawnstoneTool = Ingredient.fromItems(RegistryManager.axe_dawnstone, RegistryManager.hoe_dawnstone, RegistryManager.sword_dawnstone, RegistryManager.shovel_dawnstone, RegistryManager.pickaxe_dawnstone);
 		EmbersAPI.registerEmberToolEffeciency(anyDawnstoneTool, 2.0);
-
+		// TODO -> These can all be made into config options
 		EmbersAPI.registerMetalCoefficient("blockGold",1.0);
 		EmbersAPI.registerMetalCoefficient("blockSilver",1.0);
 		EmbersAPI.registerMetalCoefficient("blockCopper",1.0);
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.isNotOff()){
 			EmbersAPI.registerMetalCoefficient("blockElectrum",1.0);
 		}
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.isNotOff()){
 			EmbersAPI.registerMetalCoefficient("blockAluminum",0.9);
 		}
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.isNotOff()){
 			EmbersAPI.registerMetalCoefficient("blockNickel",0.9);
 		}
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.isNotOff()){
 			EmbersAPI.registerMetalCoefficient("blockTin",0.9);
 		}
 		EmbersAPI.registerMetalCoefficient("blockIron",0.75);
 		EmbersAPI.registerMetalCoefficient("blockLead",0.75);
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.isNotOff()){
 			EmbersAPI.registerMetalCoefficient("blockBronze",0.75);
 		}
 
@@ -353,7 +353,7 @@ public class RecipeRegistry {
 				RegistryManager.hoe_dawnstone,
 				RegistryManager.sword_dawnstone);
 
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			RecipeRegistry.registerMaterialSet(event,"ingotAluminum", "nuggetAluminum", "blockAluminum",
 					RegistryManager.ingot_aluminum,
 					RegistryManager.nugget_aluminum,
@@ -366,7 +366,7 @@ public class RecipeRegistry {
 					RegistryManager.sword_aluminum);
 		}
 
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.mustLoad()){
 			RecipeRegistry.registerMaterialSet(event,"ingotBronze", "nuggetBronze", "blockBronze",
 					RegistryManager.ingot_bronze,
 					RegistryManager.nugget_bronze,
@@ -379,7 +379,7 @@ public class RecipeRegistry {
 					RegistryManager.sword_bronze);
 		}
 
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			RecipeRegistry.registerMaterialSet(event,"ingotElectrum", "nuggetElectrum", "blockElectrum",
 					RegistryManager.ingot_electrum,
 					RegistryManager.nugget_electrum,
@@ -392,7 +392,7 @@ public class RecipeRegistry {
 					RegistryManager.sword_electrum);
 		}
 
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			RecipeRegistry.registerMaterialSet(event,"ingotNickel", "nuggetNickel", "blockNickel",
 					RegistryManager.ingot_nickel,
 					RegistryManager.nugget_nickel,
@@ -405,7 +405,7 @@ public class RecipeRegistry {
 					RegistryManager.sword_nickel);
 		}
 
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			RecipeRegistry.registerMaterialSet(event,"ingotTin", "nuggetTin", "blockTin",
 					RegistryManager.ingot_tin,
 					RegistryManager.nugget_tin,
@@ -1151,13 +1151,13 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_copper), new ItemStack(RegistryManager.ingot_copper), 0.65f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_silver), new ItemStack(RegistryManager.ingot_silver), 0.35f);
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_lead), new ItemStack(RegistryManager.ingot_lead), 0.35f);
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_aluminum), new ItemStack(RegistryManager.ingot_aluminum), 0.55f);
 		}
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_tin), new ItemStack(RegistryManager.ingot_tin), 0.55f);
 		}
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_nickel), new ItemStack(RegistryManager.ingot_nickel), 0.55f);
 		}
 		GameRegistry.addSmelting(new ItemStack(RegistryManager.ore_quartz), new ItemStack(Items.QUARTZ), 0.35f);
@@ -1218,7 +1218,7 @@ public class RecipeRegistry {
 		meltingRecipes.add(new ItemMeltingRecipe(plateLead,new FluidStack(RegistryManager.fluid_molten_lead, plateAmount)));
 
 		OreIngredient ingotAluminum = new OreIngredient("ingotAluminum");
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("oreAluminum"), new FluidStack(RegistryManager.fluid_molten_aluminum, oreMeltAmount))
 					.addBonusOutput(new FluidStack(RegistryManager.fluid_molten_iron, NUGGET_AMOUNT))
 			);
@@ -1228,7 +1228,7 @@ public class RecipeRegistry {
 		}
 
 		OreIngredient ingotNickel = new OreIngredient("ingotNickel");
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("oreNickel"), new FluidStack(RegistryManager.fluid_molten_nickel, oreMeltAmount))
 					.addBonusOutput(new FluidStack(RegistryManager.fluid_molten_iron, NUGGET_AMOUNT))
 			);
@@ -1238,7 +1238,7 @@ public class RecipeRegistry {
 		}
 
 		OreIngredient ingotTin = new OreIngredient("ingotTin");
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("oreTin"), new FluidStack(RegistryManager.fluid_molten_tin, oreMeltAmount))
 					.addBonusOutput(new FluidStack(RegistryManager.fluid_molten_lead, NUGGET_AMOUNT))
 			);
@@ -1255,13 +1255,13 @@ public class RecipeRegistry {
 
 		OreIngredient ingotBronze = new OreIngredient("ingotBronze");
 		OreIngredient plateBronze = new OreIngredient("plateBronze");
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.mustLoad()){
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("ingotBronze"),new FluidStack(RegistryManager.fluid_molten_bronze, INGOT_AMOUNT)));
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("nuggetBronze"),new FluidStack(RegistryManager.fluid_molten_bronze, NUGGET_AMOUNT)));
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("plateBronze"),new FluidStack(RegistryManager.fluid_molten_bronze, plateAmount)));
 		}
 
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("ingotElectrum"),new FluidStack(RegistryManager.fluid_molten_electrum, INGOT_AMOUNT)));
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("nuggetElectrum"),new FluidStack(RegistryManager.fluid_molten_electrum, NUGGET_AMOUNT)));
 			meltingRecipes.add(new ItemMeltingRecipe(new OreIngredient("plateElectrum"),new FluidStack(RegistryManager.fluid_molten_electrum, plateAmount)));
@@ -1283,19 +1283,19 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_silver, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_silver,1)));
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_copper, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_copper,1)));
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_dawnstone, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_dawnstone,1)));
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_aluminum, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_aluminum,1)));
 		}
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_bronze, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_bronze,1)));
 		}
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_electrum, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_electrum,1)));
 		}
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_nickel, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_nickel,1)));
 		}
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_tin, INGOT_AMOUNT),stampBar,new ItemStack(RegistryManager.ingot_tin,1)));
 		}
 
@@ -1305,19 +1305,19 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_silver, plateAmount), stampPlate,new ItemStack(RegistryManager.plate_silver,1)));
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_copper, plateAmount), stampPlate,new ItemStack(RegistryManager.plate_copper,1)));
 		stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_dawnstone, plateAmount), stampPlate,new ItemStack(RegistryManager.plate_dawnstone,1)));
-		if (ConfigManager.enableAluminum){
+		if (ConfigMaterial.ALUMINUM.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_aluminum, plateAmount),stampPlate,new ItemStack(RegistryManager.plate_aluminum,1)));
 		}
-		if (ConfigManager.enableBronze){
+		if (ConfigMaterial.BRONZE.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_bronze, plateAmount),stampPlate,new ItemStack(RegistryManager.plate_bronze,1)));
 		}
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_electrum, plateAmount),stampPlate,new ItemStack(RegistryManager.plate_electrum,1)));
 		}
-		if (ConfigManager.enableNickel){
+		if (ConfigMaterial.NICKEL.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_nickel, plateAmount),stampPlate,new ItemStack(RegistryManager.plate_nickel,1)));
 		}
-		if (ConfigManager.enableTin){
+		if (ConfigMaterial.TIN.mustLoad()){
 			stampingRecipes.add(new ItemStampingRecipe(Ingredient.EMPTY,new FluidStack(RegistryManager.fluid_molten_tin, plateAmount),stampPlate,new ItemStack(RegistryManager.plate_tin,1)));
 		}
 
@@ -1340,10 +1340,10 @@ public class RecipeRegistry {
 		stampingRecipes.add(new ItemStampingRecipe(emberShard,new FluidStack(RegistryManager.fluid_molten_dawnstone, aspectusAmount),stampPlate,new ItemStack(RegistryManager.aspectus_dawnstone,1)));
 
 		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,4),new FluidStack(RegistryManager.fluid_molten_gold,4)}, new FluidStack(RegistryManager.fluid_molten_dawnstone,8)));
-		if (ConfigManager.enableElectrum){
+		if (ConfigMaterial.ELECTRUM.mustLoad()){
 			mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_silver,4),new FluidStack(RegistryManager.fluid_molten_gold,4)}, new FluidStack(RegistryManager.fluid_molten_electrum,8)));
 		}
-		if (ConfigManager.enableTin && ConfigManager.enableBronze){
+		if (ConfigMaterial.TIN.mustLoad() && ConfigMaterial.BRONZE.mustLoad()){
 			mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_molten_copper,6),new FluidStack(RegistryManager.fluid_molten_tin,2)}, new FluidStack(RegistryManager.fluid_molten_bronze,8)));
 		}
 		mixingRecipes.add(new FluidMixingRecipe(new FluidStack[]{new FluidStack(RegistryManager.fluid_crude_oil,5),new FluidStack(RegistryManager.fluid_steam,20)}, new FluidStack(RegistryManager.fluid_oil,10), 0));
