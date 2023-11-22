@@ -15,13 +15,12 @@ import teamroots.embers.proxy.CommonProxy;
 import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.research.ResearchManager;
 
-@Mod(modid = Embers.MODID, name = Embers.MODNAME, dependencies = Embers.DEPENDENCIES/*,  guiFactory = Embers.GUI_FACTORY*/)
+@Mod(modid = Embers.MODID, name = Embers.MODNAME, dependencies = Embers.DEPENDENCIES)
 public class Embers {
 	public static final String MODID = "embers";
 	public static final String MODNAME = "Embers";
 	public static final String CFG_FOLDER = "Embers/";
 	public static final String DEPENDENCIES = "after:mysticalmechanics";
-	public static final String GUI_FACTORY = "teamroots.embers.gui.GuiFactory";
 
 	@SidedProxy(clientSide = "teamroots.embers.proxy.ClientProxy",serverSide = "teamroots.embers.proxy.ServerProxy")
     public static CommonProxy proxy;
