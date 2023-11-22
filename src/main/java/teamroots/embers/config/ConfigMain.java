@@ -34,6 +34,11 @@ public class ConfigMain {
     @Config.Comment("Codex entry is shut and hidden. Progression is open and shown.")
     public static boolean codexEntryIsProgress = true;
 
+    @Config.RequiresMcRestart
+    @Config.Name("Enable WIP stuff.")
+    @Config.Comment("Enable and register a few WIP things that were never fully implemented.")
+    public static boolean enableWipStuff = false;
+
     public static class ClientCategory {
         @Config.Name("Enable Particle Collision")
         @Config.Comment({
