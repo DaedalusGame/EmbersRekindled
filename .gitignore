@@ -22,3 +22,6 @@ eclipse
 run
 classes
 /gradle/gradle.properties
+
+# python
+.py
