@@ -24,4 +24,4 @@ classes
 /gradle/gradle.properties
 
 # python
-.py
+*.py
