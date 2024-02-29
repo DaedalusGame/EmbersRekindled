@@ -98,6 +98,8 @@ public class TileEntityItemRequisition extends TileEntity implements ITileEntity
             }
 
             ItemStack merge(ItemStack first, ItemStack second) {
+                if(first.isEmpty())
+                    return second;
                 if (!ItemHandlerHelper.canItemStacksStack(first, second))
                     return first;
                 first = first.copy();
