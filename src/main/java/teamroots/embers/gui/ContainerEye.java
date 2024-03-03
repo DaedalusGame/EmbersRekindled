@@ -11,8 +11,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import teamroots.embers.api.filter.EnumFilterSetting;
+import teamroots.embers.api.filter.FilterSieve;
+import teamroots.embers.api.filter.IFilter;
 import teamroots.embers.util.FilterUtil;
 import teamroots.embers.api.filter.IFilterComparator;
+import teamroots.embers.api.item.IFilterItem;
 import teamroots.embers.util.Vec2i;
 
 import java.util.List;
@@ -48,10 +51,13 @@ public class ContainerEye extends Container {
     public ContainerEye(EntityPlayer player) {
         stack = player.getHeldItemMainhand();
         hand = EnumHand.MAIN_HAND;
-        if (stack.isEmpty())
+        if (stack.isEmpty() || !(stack.getItem() instanceof IFilterItem))
         {
             stack = player.getHeldItemOffhand();
             hand = EnumHand.OFF_HAND;
+        }
+        if(!(stack.getItem() instanceof IFilterItem)) {
+        	throw new IllegalStateException();
         }
 
         readFromStack(stack);
@@ -80,8 +86,14 @@ public class ContainerEye extends Container {
 
     private void readFromStack(ItemStack stack)
     {
-        NBTTagCompound compound = stack.getTagCompound();
-        if(compound != null) {
+    	if(!(stack.getItem() instanceof IFilterItem))
+    		return;
+    	IFilter filter = ((IFilterItem)stack.getItem()).getFilter(stack);
+    	if(filter != null && filter.getType().equals(FilterSieve.RESOURCE_LOCATION)) {
+    		FilterSieve sieve = (FilterSieve)filter;
+    		//just how it's set up, don't want to invalidate any addons or modify the filter instance or anything
+    		NBTTagCompound compound = sieve.writeToNBT(new NBTTagCompound());
+    		
             String comparatorName = compound.getString("comparator");
             stack1 = new ItemStack(compound.getCompoundTag("stack1"));
             stack2 = new ItemStack(compound.getCompoundTag("stack2"));
@@ -114,16 +126,12 @@ public class ContainerEye extends Container {
     }
 
     public void writeToStack() {
-        NBTTagCompound compound = stack.getTagCompound();
-        if(compound == null)
-            compound = new NBTTagCompound();
-        compound.setString("comparator", comparator.getName());
-        compound.setInteger("offset", filterOffset);
-        compound.setBoolean("inverted", inverted);
-        compound.setInteger("setting", flag.ordinal());
-        compound.setTag("stack1", stack1.serializeNBT());
-        compound.setTag("stack2", stack2.serializeNBT());
-        stack.setTagCompound(compound);
+    	if(!(stack.getItem() instanceof IFilterItem))
+    		return;
+    	
+    	FilterSieve filter = new FilterSieve(stack1, stack2, filterOffset, flag, inverted);
+    	
+    	((IFilterItem)stack.getItem()).setFilter(stack, filter);
     }
 
     public void toggleInvert() {
